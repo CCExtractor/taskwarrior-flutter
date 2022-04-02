@@ -1,0 +1,15 @@
+{
+	"editor.minimap.enabled": false,
+	"html.format.wrapAttributesIndentSize": 4,
+	"[dart]": {
+		"editor.tabSize": 4,
+		"editor.insertSpaces": false,
+		"editor.detectIndentation": true,
+		"editor.suggest.insertMode": "replace",
+		"editor.formatOnSave": true
+	},
+	"editor.formatOnSave": true,
+	"editor.insertSpaces": false,
+	"editor.detectIndentation": false,
+	"editor.tabSize": 4
+}
