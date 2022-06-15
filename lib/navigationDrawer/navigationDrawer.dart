@@ -1,5 +1,6 @@
 // ignore_for_file: override_on_non_overriding_member, prefer_const_constructors
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:taskwarrior/widgets/createDrawerHeader.dart';
 import 'package:taskwarrior/widgets/createDrawerBodyItem.dart';
@@ -30,7 +31,12 @@ class NavigationDrawerState extends State<NavigationDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
       child: ListView(
+        dragStartBehavior: DragStartBehavior.start,
         padding: EdgeInsets.zero,
         children: <Widget>[
           createDrawerHeader(),
