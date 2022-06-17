@@ -28,52 +28,12 @@ class Task extends HiveObject {
   bool done;
   @HiveField(3)
   TaskPriority priority;
+  @HiveField(4)
+  DateTime dateTime;
   Task(
       {required this.name,
       required this.done,
       required this.description,
-      required this.priority});
-
-  // factory Task.fromMap(Map<String, dynamic> mp) {
-  //   return Task(
-  //       name: mp['name'],
-  //       done: mp['done'],
-  //       description: mp['description'],
-  //       priority: TaskPriority.values[mp['priority']]);
-  // }
-  // Map<String, dynamic> toMap() =>
-  //     {'name': name, 'done': done, 'description': description, 'priority': priority.index};
+      required this.priority,
+      required this.dateTime});
 }
-
-// const List<Map<String, dynamic>> defaultTasks = [
-//   {
-//     "name": "Get up at 6 PM",
-//     "done": true,
-//     "description": "Get up at 6 PM",
-//     "priority": "high"
-//   },
-//   {
-//     "name": "Take Breakfast",
-//     "done": false,
-//     "description": "Take Breakfast",
-//     "priority": "medium"
-//   },
-//   {
-//     "name": "Do exercise",
-//     "done": true,
-//     "description": "Do exercise",
-//     "priority": "low"
-//   },
-//   {"name": "Bath", "done": false, "description": "Bath", "priority": "medium"},
-//   {
-//     "name": "Morning Jogg",
-//     "done": true,
-//     "description": "Morning Jogg",
-//     "priority": "high"
-//   },
-// ];
-
-// class TaskList {
-//   static List<Task> Tasklist =
-//       List.from(defaultTasks).map<Task>((mp) => Task.fromMap(mp)).toList();
-// }

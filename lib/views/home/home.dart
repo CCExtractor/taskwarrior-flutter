@@ -1,17 +1,12 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, deprecated_member_use, avoid_unnecessary_containers, unused_element, prefer_const_literals_to_create_immutables
 
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:taskwarrior/model/task.dart';
 import 'package:taskwarrior/navigationDrawer/navigationDrawer.dart';
 import 'package:taskwarrior/services/addTask_service.dart';
 import 'package:taskwarrior/widgets/boxes.dart';
 import 'package:taskwarrior/widgets/buildContent.dart';
-import 'package:taskwarrior/widgets/data_list.dart';
-import 'package:taskwarrior/widgets/full_button.dart';
-import 'package:taskwarrior/routes/pageroute.dart';
 import 'package:taskwarrior/widgets/taskdialog.dart';
 
 class HomePage extends StatefulWidget {

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:taskwarrior/model/task.dart';
 import 'package:taskwarrior/views/home/home.dart';
 //import 'package:flutter_dotenv/flutter_dotenv.dart'
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:loggy/loggy.dart';
 import 'package:taskwarrior/routes/pageroute.dart';

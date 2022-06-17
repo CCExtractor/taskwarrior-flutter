@@ -1,4 +1,7 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
+import 'package:taskwarrior/widgets/datetimepicker.dart';
 
 import '../model/task.dart';
 
@@ -9,6 +12,7 @@ class TaskDialog extends StatefulWidget {
     String description,
     bool done,
     TaskPriority priority,
+    DateTime dateTime,
   ) onClickedDone;
 
   const TaskDialog({
@@ -28,7 +32,7 @@ class _TaskDialogState extends State<TaskDialog> {
 
   bool done = false;
   TaskPriority priority = TaskPriority.medium;
-
+  DateTime dateTime = DateTime.now();
   @override
   void initState() {
     super.initState();
@@ -40,6 +44,7 @@ class _TaskDialogState extends State<TaskDialog> {
       descriptionController.text = task.description;
       done = task.done;
       priority = task.priority;
+      dateTime = task.dateTime;
     }
   }
 
@@ -64,14 +69,14 @@ class _TaskDialogState extends State<TaskDialog> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               buildName(),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               buildDescription(),
-              SizedBox(height: 8),
-              buildRadioButtons(),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               buildPriority(),
+              const SizedBox(height: 8),
+              DateTimePicker(dateTime: dateTime),
             ],
           ),
         ),
@@ -85,7 +90,7 @@ class _TaskDialogState extends State<TaskDialog> {
 
   Widget buildName() => TextFormField(
         controller: nameController,
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           border: OutlineInputBorder(),
           hintText: 'Enter Name',
         ),
@@ -94,7 +99,7 @@ class _TaskDialogState extends State<TaskDialog> {
       );
 
   Widget buildDescription() => TextFormField(
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           border: OutlineInputBorder(),
           hintText: 'Enter Description',
         ),
@@ -103,26 +108,9 @@ class _TaskDialogState extends State<TaskDialog> {
             : null,
         controller: descriptionController,
       );
-
-  Widget buildRadioButtons() => Column(
-        children: [
-          RadioListTile<bool>(
-            title: Text('True'),
-            value: true,
-            groupValue: done,
-            onChanged: (value) => setState(() => done = value!),
-          ),
-          RadioListTile<bool>(
-            title: Text('False'),
-            value: false,
-            groupValue: done,
-            onChanged: (value) => setState(() => done = value!),
-          ),
-        ],
-      );
   Widget buildPriority() => Column(
         children: [
-          Text("Priority"),
+          const Text("Priority"),
           DropdownButton<TaskPriority>(
             items: prioritystring.keys.map((TaskPriority value) {
               return DropdownMenuItem<TaskPriority>(
@@ -131,7 +119,7 @@ class _TaskDialogState extends State<TaskDialog> {
               );
             }).toList(),
             value: priority,
-            hint: Text("Priority"),
+            hint: const Text("Priority"),
             onChanged: (value) {
               setState(() {
                 priority = value!;
@@ -140,9 +128,17 @@ class _TaskDialogState extends State<TaskDialog> {
           ),
         ],
       );
-
+  Widget buildDateTime() => TextFormField(
+        decoration: const InputDecoration(
+          border: OutlineInputBorder(),
+          hintText: 'Enter DateTime',
+        ),
+        validator: (dateTime) =>
+            dateTime != null && dateTime.isEmpty ? 'Enter a DateTime' : null,
+        controller: descriptionController,
+      );
   Widget buildCancelButton(BuildContext context) => TextButton(
-        child: Text('Cancel'),
+        child: const Text('Cancel'),
         onPressed: () => Navigator.of(context).pop(),
       );
 
@@ -158,7 +154,7 @@ class _TaskDialogState extends State<TaskDialog> {
           final name = nameController.text;
           final description = descriptionController.text;
 
-          widget.onClickedDone(name, description, done, priority);
+          widget.onClickedDone(name, description, done, priority, dateTime);
 
           Navigator.of(context).pop();
         }

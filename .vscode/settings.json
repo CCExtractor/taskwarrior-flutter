@@ -11,5 +11,8 @@
 	"editor.formatOnSave": true,
 	"editor.insertSpaces": false,
 	"editor.detectIndentation": false,
-	"editor.tabSize": 4
+	"editor.tabSize": 4,
+	"editor.codeActionsOnSave": {
+		"source.fixAll": true
+	}
 }

@@ -6,9 +6,7 @@ import 'package:taskwarrior/widgets/buildButtons.dart';
 
 class TasksBuilder extends StatefulWidget {
   final Task task;
-  final context;
-  const TasksBuilder({Key? key, required this.task, this.context})
-      : super(key: key);
+  const TasksBuilder({Key? key, required this.task}) : super(key: key);
   @override
   // ignore: library_private_types_in_public_api
   _TasksBuilderState createState() => _TasksBuilderState();
@@ -17,8 +15,7 @@ class TasksBuilder extends StatefulWidget {
 class _TasksBuilderState extends State<TasksBuilder> {
   late bool value;
   late Task task = widget.task;
-  @override
-  late BuildContext context = widget.context;
+  //late BuildContext context = widget.context;
   @override
   Widget build(context) {
     final color = task.done ? Colors.green : Colors.red;
@@ -32,11 +29,11 @@ class _TasksBuilderState extends State<TasksBuilder> {
     return Card(
       color: Colors.white,
       child: ExpansionTile(
-        tilePadding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+        tilePadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
         title: Text(
           task.name,
           maxLines: 2,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
         ),
         trailing: Text(
           prioritystring[priority].toString(),
@@ -57,12 +54,12 @@ class _TasksBuilderState extends State<TasksBuilder> {
               ? const Icon(Icons.radio_button_checked)
               : const Icon(Icons.radio_button_off_outlined),
           color: task.done
-              ? const Color.fromRGBO(175, 126, 235, 1)
-              : const Color.fromRGBO(151, 153, 167, 1),
+              ? const Color.fromARGB(255, 9, 223, 27)
+              : const Color.fromARGB(255, 255, 61, 12),
           iconSize: 26,
         ),
         subtitle: Text(
-          task.description,
+          task.done ? ("${task.description}- Completed") : task.description,
           style: TextStyle(
               color: color, fontWeight: FontWeight.bold, fontSize: 16),
         ),

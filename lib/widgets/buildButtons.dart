@@ -8,15 +8,15 @@ Widget buildButtons(BuildContext context, Task task) => Row(
       children: [
         Expanded(
           child: TextButton.icon(
-            label: Text('Edit'),
-            icon: Icon(Icons.edit),
+            label: const Text('Edit'),
+            icon: const Icon(Icons.edit),
             onPressed: () => Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => TaskDialog(
                   task: task,
-                  onClickedDone: (name, description, done, priority) =>
-                      editTask(task, name, description, done,
-                          priority as TaskPriority),
+                  onClickedDone:
+                      (name, description, done, priority, dateTime) =>
+                          editTask(task, name, description, done, priority),
                 ),
               ),
             ),
@@ -24,8 +24,8 @@ Widget buildButtons(BuildContext context, Task task) => Row(
         ),
         Expanded(
           child: TextButton.icon(
-            label: Text('Delete'),
-            icon: Icon(Icons.delete),
+            label: const Text('Delete'),
+            icon: const Icon(Icons.delete),
             onPressed: () => deleteTask(task),
           ),
         )
