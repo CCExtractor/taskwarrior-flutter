@@ -24,6 +24,8 @@ dependencies:
   hive_flutter: ^1.1.0
   intl: ^0.17.0
   date_format: ^2.0.6
+  uuid: ^3.0.6
+  google_fonts: ^3.0.1
 
 dev_dependencies:
   flutter_test:

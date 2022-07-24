@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, file_names, prefer_typing_uninitialized_variables, avoid_print
 
 import 'dart:async';
 import 'dart:convert';

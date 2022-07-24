@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, file_names
 
 import 'package:flutter/material.dart';
 
@@ -6,7 +6,7 @@ Widget createDrawerHeader() {
   return ListTile(
     contentPadding: EdgeInsets.all(8.0),
     leading: CircleAvatar(
-      backgroundColor: Colors.transparent, 
+      backgroundColor: Colors.transparent,
     ),
     title: Text(
       'Taskwarrior',

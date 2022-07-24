@@ -1,5 +1,8 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
-import 'package:taskwarrior/model/task.dart';
+import 'package:taskwarrior/model/json/task.dart';
+
 import 'package:taskwarrior/widgets/buildTasks.dart';
 
 Widget buildContent(List<Task> tasks) {
@@ -24,9 +27,12 @@ Widget buildContent(List<Task> tasks) {
             padding: const EdgeInsets.all(8),
             itemCount: tasks.length,
             itemBuilder: (BuildContext context, int index) {
-              final task = tasks[index];
+              //final task = tasks[index];
 
-              return TasksBuilder(task: task);
+              return TasksBuilder(
+                taskData: tasks,
+                pendingFilter: true,
+              );
             },
           ),
         ),
