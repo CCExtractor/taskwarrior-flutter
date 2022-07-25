@@ -9,10 +9,10 @@ int Function(Task, Task) compareTasks(String column) {
   return (a, b) {
     int? result;
     switch (column) {
-      case 'entry':
+      case 'Created':
         result = a.entry.compareTo(b.entry);
         break;
-      case 'modified':
+      case 'Modified':
         if (a.modified == null && b.modified == null) {
           result = 0;
         } else if (a.modified == null) {
@@ -23,7 +23,7 @@ int Function(Task, Task) compareTasks(String column) {
           result = a.modified!.compareTo(b.modified!);
         }
         break;
-      case 'start':
+      case 'Start Time':
         if (a.start == null && b.start == null) {
           result = 0;
         } else if (a.start == null) {
@@ -34,7 +34,7 @@ int Function(Task, Task) compareTasks(String column) {
           result = a.start!.compareTo(b.start!);
         }
         break;
-      case 'due':
+      case 'Due till':
         if (a.due == null && b.due == null) {
           result = 0;
         } else if (a.due == null) {
@@ -45,15 +45,15 @@ int Function(Task, Task) compareTasks(String column) {
           result = a.due!.compareTo(b.due!);
         }
         break;
-      case 'priority':
+      case 'Priority':
         var compare = {'H': 2, 'M': 1, 'L': 0};
         result =
             (compare[a.priority] ?? -1).compareTo(compare[b.priority] ?? -1);
         break;
-      case 'project':
+      case 'Project':
         result = (a.project ?? '').compareTo(b.project ?? '');
         break;
-      case 'tags':
+      case 'Tags':
         for (var i = 0;
             i < min(a.tags?.length ?? 0, b.tags?.length ?? 0);
             i++) {
@@ -65,7 +65,7 @@ int Function(Task, Task) compareTasks(String column) {
           result = (a.tags?.length ?? 0).compareTo(b.tags?.length ?? 0);
         }
         break;
-      case 'urgency':
+      case 'Urgency':
         result = -urgency(a).compareTo(urgency(b));
         break;
       default:

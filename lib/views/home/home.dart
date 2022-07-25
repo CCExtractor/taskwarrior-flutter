@@ -1,8 +1,9 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, deprecated_member_use, avoid_unnecessary_containers, unused_element, prefer_const_literals_to_create_immutables, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
+import 'package:taskwarrior/drawer/sortdrawer.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
-import 'package:taskwarrior/navigationDrawer/navigationDrawer.dart';
+import 'package:taskwarrior/drawer/navigationDrawer.dart';
 import 'package:taskwarrior/widgets/addTask.dart';
 import 'package:taskwarrior/widgets/buildTasks.dart';
 
@@ -21,6 +22,27 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Home Page'),
+        actions: [
+          //SortDrawer(),
+          IconButton(
+            icon: Icon(Icons.sort),
+            onPressed: () {
+              showModalBottomSheet(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.2,
+                ),
+                context: context,
+                builder: (context) => SortDrawer(),
+              );
+            },
+          ),
+          Builder(
+            builder: (context) => IconButton(
+              icon: const Icon(Icons.filter_list),
+              onPressed: () => Scaffold.of(context).openEndDrawer(),
+            ),
+          ),
+        ],
       ),
       body: Column(
         children: <Widget>[
