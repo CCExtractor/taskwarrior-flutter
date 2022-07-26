@@ -97,7 +97,7 @@ class _StorageWidgetState extends State<StorageWidget> {
           .where((task) => task.status == 'pending')
           .toList();
     } else {
-      queriedTasks = storage.data.allData();
+      queriedTasks = storage.data.completedData();
     }
 
     if (projectFilter.isNotEmpty) {

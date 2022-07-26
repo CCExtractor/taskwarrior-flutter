@@ -67,6 +67,17 @@ class Data {
     ];
   }
 
+  List<Task> completedData() {
+    var data = _allData().where(
+        (task) => task.status == 'completed' || task.status == 'deleted');
+    return data
+        .toList()
+        .asMap()
+        .entries
+        .map((entry) => entry.value.rebuild((b) => b..id = entry.key + 1))
+        .toList();
+  }
+
   List<Task> allData() {
     var data = pendingData()..addAll(_completedData());
     return data;

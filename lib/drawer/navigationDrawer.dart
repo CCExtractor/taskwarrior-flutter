@@ -2,31 +2,18 @@
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:taskwarrior/views/home/home.dart';
 import 'package:taskwarrior/widgets/createDrawerHeader.dart';
 import 'package:taskwarrior/widgets/createDrawerBodyItem.dart';
 import 'package:taskwarrior/routes/pageroute.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class NavigationDrawer extends StatefulWidget {
-  const NavigationDrawer({Key? key}) : super(key: key);
-
-  @override
-  State<StatefulWidget> createState() {
-    return NavigationDrawerState();
-  }
-}
-
-class NavigationDrawerState extends State<NavigationDrawer> {
-  late SharedPreferences prefs;
-  void loadPreferences() async {
-    prefs = await SharedPreferences.getInstance();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    loadPreferences();
-  }
+class NavigationDrawer extends StatelessWidget {
+  const NavigationDrawer(this.filters, {Key? key}) : super(key: key);
+  // late SharedPreferences prefs;
+  // void loadPreferences() async {
+  //   prefs = await SharedPreferences.getInstance();
+  // }
+  final Filters filters;
 
   @override
   Widget build(BuildContext context) {
@@ -41,12 +28,21 @@ class NavigationDrawerState extends State<NavigationDrawer> {
         children: <Widget>[
           createDrawerHeader(),
           createDrawerBodyItem(
-            icon: Icons.home,
-            text: 'Home',
-            onTap: () =>
-                Navigator.pushReplacementNamed(context, PageRoutes.home),
-          ),
+              icon: Icons.home,
+              text: 'Home',
+              onTap: () => {
+                    filters.togglePendingFilter(),
+                    Navigator.pushReplacementNamed(context, PageRoutes.home),
+                  }),
           Divider(),
+          createDrawerBodyItem(
+              icon: Icons.checklist,
+              text: 'Completed Tasks',
+              onTap: () => {
+                    filters.togglePendingFilter(),
+                    Navigator.pushReplacementNamed(
+                        context, PageRoutes.completedTasks)
+                  }),
         ],
       ),
     );
