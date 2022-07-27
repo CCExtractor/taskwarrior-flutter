@@ -1,16 +1,69 @@
-# taskwarrior
+# TaskWarrior
 
-A new Flutter project.
+This project aims to build an app that lets the caller decide if the call is urgent or not. It enables the user to determine that the specific call is critical and that the person should be disrupted from whatever they might be doing.
+
+# Timeline and Project Page
+
+
+[GSoC page](https://summerofcode.withgoogle.com/programs/2022/projects/8pYfxjXv)
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+1. Clone the repository from GitHub:
 
-A few resources to get you started if this is your first Flutter project:
+```bash
+git clone https://github.com/NishantSinghal19/taskwarrior-gsoc
+```
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+2. Navigate to project's root directory:
 
-For help getting started with Flutter, view our
+```bash
+cd taskwarrior-gsoc
+```
+
+3. Install dependencies:
+
+```bash
+flutter pub get
+``` 
+
+4. Check for Flutter setup and connected devices:
+
+```bash
+flutter doctor
+```
+
+5. Run the app:
+
+```bash
+flutter run
+```
+
+## Contributing
+
+Whether you have some feature requests/ideas, code improvements, refactoring, performance improvements, help is always Welcome. The more is done, better it gets.
+If you found any bugs, consider opening an [issue](https://github.com/NishantSinghal19/taskwarrior-gsoc/issues/new).
+Please make sure you specify the commit type when opening pull requests:
+
+```
+feat: The new feature you're proposing
+
+fix: A bug fix in the project
+
+
+test: Everything related to testing
+
+docs: Everything related to documentation
+```
+
+## Community
+
+We would love to hear from you! You may join gsoc-its-urgent channel of CCExtractor community through slack:
+
+[![Slack](https://img.shields.io/badge/chat-on_slack-purple.svg?style=for-the-badge&logo=slack)](https://ccextractor.org/public/general/support/)
+
+## Flutter
+
+For help getting started with Flutter, view
 [online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
