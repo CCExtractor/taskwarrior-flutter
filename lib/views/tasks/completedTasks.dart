@@ -1,6 +1,7 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, deprecated_member_use, avoid_unnecessary_containers, unused_element, prefer_const_literals_to_create_immutables, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:taskwarrior/drawer/sortdrawer.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
 import 'package:taskwarrior/drawer/navigationDrawer.dart';
@@ -57,7 +58,12 @@ class _CompletedTasksState extends State<CompletedTasks> {
       appBar: AppBar(
         title: Text('Completed Tasks'),
         actions: [
-          //SortDrawer(),
+          IconButton(
+            icon: (storageWidget.searchVisible)
+                ? const Icon(Icons.cancel)
+                : const Icon(Icons.search),
+            onPressed: storageWidget.toggleSearch,
+          ),
           IconButton(
             icon: Icon(Icons.sort),
             onPressed: () {
@@ -74,6 +80,17 @@ class _CompletedTasksState extends State<CompletedTasks> {
       ),
       body: Column(
         children: <Widget>[
+          if (storageWidget.searchVisible)
+            Card(
+              child: TextField(
+                autofocus: true,
+                style: GoogleFonts.firaMono(),
+                onChanged: (value) {
+                  storageWidget.search(value);
+                },
+                controller: storageWidget.searchController,
+              ),
+            ),
           Expanded(
             child: Scrollbar(
               child: TasksBuilder(

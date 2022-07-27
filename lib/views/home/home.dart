@@ -75,7 +75,12 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text('Home Page'),
         actions: [
-          //SortDrawer(),
+          IconButton(
+            icon: (storageWidget.searchVisible)
+                ? const Icon(Icons.cancel)
+                : const Icon(Icons.search),
+            onPressed: storageWidget.toggleSearch,
+          ),
           IconButton(
             icon: Icon(Icons.sort),
             onPressed: () {
@@ -98,6 +103,16 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Column(
         children: <Widget>[
+          if (storageWidget.searchVisible)
+            Card(
+              child: TextField(
+                autofocus: true,
+                onChanged: (value) {
+                  storageWidget.search(value);
+                },
+                controller: storageWidget.searchController,
+              ),
+            ),
           Expanded(
             child: Scrollbar(
               child: TasksBuilder(
