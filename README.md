@@ -1,6 +1,6 @@
 # TaskWarrior
 
-This project aims to build an app that lets the caller decide if the call is urgent or not. It enables the user to determine that the specific call is critical and that the person should be disrupted from whatever they might be doing.
+This project aims to build an app for Taskwarrior. It is your task management app across all platforms. THis help you manage your tasks and filter them as your need
 
 # Timeline and Project Page
 
@@ -12,7 +12,7 @@ This project aims to build an app that lets the caller decide if the call is urg
 1. Clone the repository from GitHub:
 
 ```bash
-git clone https://github.com/NishantSinghal19/taskwarrior-gsoc
+gh repo clone NishantSinghal19/taskwarrior-gsoc
 ```
 
 2. Navigate to project's root directory:
