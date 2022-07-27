@@ -12,4 +12,4 @@ In this ,I have completed all the milestones before the Mid-Term Evaluation
 
 5. Some basic widgets for setting up Taskserver and for profile system is also there. 
 
-
+6. Navigation Bar is implemented through which you can easily go from pending list to completed list
