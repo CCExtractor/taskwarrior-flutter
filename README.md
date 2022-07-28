@@ -1,6 +1,6 @@
 # TaskWarrior
 
-This project aims to build an app for Taskwarrior. It is your task management app across all platforms. THis help you manage your tasks and filter them as your need
+This project aims to build an app for Taskwarrior. It is your task management app across all platforms. This help you manage your tasks and filter them as your need
 
 # Timeline and Project Page
 
