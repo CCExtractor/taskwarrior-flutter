@@ -12,7 +12,7 @@ This project aims to build an app for Taskwarrior. It is your task management ap
 1. Clone the repository from GitHub:
 
 ```bash
-gh repo clone NishantSinghal19/taskwarrior-gsoc
+git clone https://github.com/NishantSinghal19/taskwarrior-gsoc.git
 ```
 
 2. Navigate to project's root directory:
