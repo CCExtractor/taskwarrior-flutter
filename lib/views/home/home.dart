@@ -2,9 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:taskwarrior/drawer/filter_drawer.dart';
-import 'package:taskwarrior/drawer/sortdrawer.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
-import 'package:taskwarrior/drawer/navigationDrawer.dart';
 import 'package:taskwarrior/widgets/addTask.dart';
 import 'package:taskwarrior/widgets/buildTasks.dart';
 import 'package:taskwarrior/widgets/tag_filter.dart';
@@ -81,18 +79,6 @@ class _HomePageState extends State<HomePage> {
                 : const Icon(Icons.search),
             onPressed: storageWidget.toggleSearch,
           ),
-          IconButton(
-            icon: Icon(Icons.sort),
-            onPressed: () {
-              showModalBottomSheet(
-                constraints: BoxConstraints(
-                  maxHeight: MediaQuery.of(context).size.height * 0.2,
-                ),
-                context: context,
-                builder: (context) => SortDrawer(),
-              );
-            },
-          ),
           Builder(
             builder: (context) => IconButton(
               icon: const Icon(Icons.filter_list),
@@ -131,7 +117,7 @@ class _HomePageState extends State<HomePage> {
           builder: (context) => const AddTaskBottomSheet(),
         ),
       ),
-      drawer: NavigationDrawer(filters),
+      //drawer: NavigationDrawer(filters),
       resizeToAvoidBottomInset: false,
     );
   }
