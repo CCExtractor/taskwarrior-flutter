@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:taskwarrior/drawer/filter_drawer.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
+import 'package:taskwarrior/routes/pageroute.dart';
 import 'package:taskwarrior/widgets/addTask.dart';
 import 'package:taskwarrior/widgets/buildTasks.dart';
 import 'package:taskwarrior/widgets/tag_filter.dart';
@@ -71,6 +72,14 @@ class _HomePageState extends State<HomePage> {
     );
     return Scaffold(
       appBar: AppBar(
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: Icon(Icons.person_rounded),
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, PageRoutes.profile);
+            },
+          ),
+        ),
         title: Text('Home Page'),
         actions: [
           IconButton(

@@ -1,6 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages
 
 import 'dart:io';
+import 'package:taskwarrior/views/profile/profile.dart';
 import 'package:uuid/uuid.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:taskwarrior/widgets/taskdetails/profiles_widget.dart';
@@ -69,6 +70,7 @@ class _MyAppState extends State<MyApp> {
       initialRoute: PageRoutes.home,
       routes: {
         PageRoutes.home: (context) => HomePage(),
+        PageRoutes.profile: (context) => ProfilePage(),
       },
     );
   }

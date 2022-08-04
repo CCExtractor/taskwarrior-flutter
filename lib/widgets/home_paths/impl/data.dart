@@ -3,8 +3,7 @@
 import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
-
-import 'package:taskwarrior/model/json/task.dart';
+import 'package:taskwarrior/model/json.dart';
 import 'package:taskwarrior/widgets/taskc/payload.dart';
 import 'package:taskwarrior/widgets/taskw.dart';
 
@@ -65,17 +64,6 @@ class Data {
     return [
       for (var task in data) task.rebuild((b) => b..id = 0),
     ];
-  }
-
-  List<Task> completedData() {
-    var data = _allData().where(
-        (task) => task.status == 'completed' || task.status == 'deleted');
-    return data
-        .toList()
-        .asMap()
-        .entries
-        .map((entry) => entry.value.rebuild((b) => b..id = entry.key + 1))
-        .toList();
   }
 
   List<Task> allData() {

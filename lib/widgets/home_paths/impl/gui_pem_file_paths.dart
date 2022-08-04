@@ -1,6 +1,5 @@
 import 'dart:io';
-
-import 'package:taskwarrior/taskserver/pem_file_paths.dart';
+import 'package:taskwarrior/widgets/taskserver.dart';
 
 class GUIPemFiles {
   GUIPemFiles(this.home);

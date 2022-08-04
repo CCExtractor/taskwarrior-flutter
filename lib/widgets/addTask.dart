@@ -18,6 +18,7 @@ class AddTaskBottomSheet extends StatefulWidget {
 class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   final formKey = GlobalKey<FormState>();
   final namecontroller = TextEditingController();
+  //final prioritycontroller;
   DateTime? due;
 
   @override
@@ -101,6 +102,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                   ),
                 ],
               ),
+              // const SizedBox(height: 8),
             ],
           ),
         ),
@@ -121,6 +123,33 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
         validator: (name) =>
             name != null && name.isEmpty ? 'Enter a name' : null,
       );
+  Widget buildPriority() => Column(children: [
+        const Text('Priority'),
+        const SizedBox(height: 8),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ActionChip(
+              label: const Text('L'),
+              onPressed: () {
+                setState(() {});
+              },
+            ),
+            ActionChip(
+              label: const Text('M'),
+              onPressed: () {
+                setState(() {});
+              },
+            ),
+            ActionChip(
+              label: const Text('H'),
+              onPressed: () {
+                setState(() {});
+              },
+            ),
+          ],
+        ),
+      ]);
   Widget buildCancelButton(BuildContext context) => TextButton(
         child: const Text('Cancel'),
         onPressed: () => Navigator.of(context).pop(),
@@ -139,11 +168,6 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
           setState(() {});
           Navigator.of(context).pop();
         } on FormatException catch (e) {
-          //   showExceptionDialog(
-          //     context: context,
-          //     e: e,
-          //     trace: trace,
-          //   );
           log(e.toString());
         }
       },
