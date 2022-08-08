@@ -5,6 +5,7 @@ import 'package:taskwarrior/model/storage/savefile.dart';
 import 'package:taskwarrior/taskserver/configure_taskserver.dart';
 import 'package:taskwarrior/widgets/profilefunctions.dart';
 import 'package:taskwarrior/widgets/taskdetails.dart';
+import 'package:taskwarrior/routes/pageroute.dart';
 
 class ProfilePage extends StatefulWidget {
   static const String routeName = '/profile';
@@ -23,6 +24,14 @@ class _ProfilePageState extends State<ProfilePage> {
     var currentProfile = ProfilesWidget.of(context).currentProfile;
 
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pushReplacementNamed(context, PageRoutes.home);
+          },
+          icon: const Icon(Icons.home_outlined),
+        ),
+      ),
       //primary: false,
       body: Column(
         children: [

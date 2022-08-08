@@ -2,8 +2,10 @@ import 'dart:collection';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:loggy/loggy.dart';
 import 'package:taskwarrior/model/json.dart';
 import 'package:taskwarrior/model/storage.dart';
+import 'package:taskwarrior/model/storage/client.dart';
 import 'package:taskwarrior/widgets/taskw.dart';
 
 class TagMetadata {
@@ -237,25 +239,21 @@ class _StorageWidgetState extends State<StorageWidget> {
     setState(() {});
   }
 
-//   Future<void> synchronize(BuildContext context) async {
-//     try {
-//       var header = await storage.home.synchronize(await client());
-//       _refreshTasks();
-//       pendingTags = _pendingTags();
-//       projects = _projects();
-//       setState(() {});
-//       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-//         content: Text('${header['code']}: ${header['status']}'),
-//       ));
-//       // ignore: avoid_catches_without_on_clauses
-//     } catch (e, trace) {
-//       showExceptionDialog(
-//         context: context,
-//         e: e,
-//         trace: trace,
-//       );
-//     }
-//   }
+  Future<void> synchronize(BuildContext context) async {
+    try {
+      var header = await storage.home.synchronize(await client());
+      _refreshTasks();
+      pendingTags = _pendingTags();
+      projects = _projects();
+      setState(() {});
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('${header['code']}: ${header['status']}'),
+      ));
+      // ignore: avoid_catches_without_on_clauses
+    } catch (e, trace) {
+      logError(e, trace);
+    }
+  }
 
   void toggleSortHeader() {
     sortHeaderVisible = !sortHeaderVisible;
@@ -337,7 +335,7 @@ class _StorageWidgetState extends State<StorageWidget> {
       selectedSort: selectedSort,
       getTask: getTask,
       mergeTask: mergeTask,
-      //synchronize: synchronize,
+      synchronize: synchronize,
       togglePendingFilter: togglePendingFilter,
       toggleProjectFilter: toggleProjectFilter,
       toggleTagUnion: toggleTagUnion,
@@ -377,7 +375,7 @@ class InheritedStorage extends InheritedModel<String> {
     required this.selectedTags,
     required this.getTask,
     required this.mergeTask,
-    //required this.synchronize,
+    required this.synchronize,
     required this.togglePendingFilter,
     required this.toggleProjectFilter,
     required this.toggleTagUnion,
@@ -411,7 +409,7 @@ class InheritedStorage extends InheritedModel<String> {
   final Set<String> selectedTags;
   final Task Function(String) getTask;
   final void Function(Task) mergeTask;
-  //final void Function(BuildContext) synchronize;
+  final void Function(BuildContext) synchronize;
   final void Function() togglePendingFilter;
   final void Function(String) toggleProjectFilter;
   final void Function() toggleTagUnion;

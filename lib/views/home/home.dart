@@ -90,6 +90,12 @@ class _HomePageState extends State<HomePage> {
           ),
           Builder(
             builder: (context) => IconButton(
+              icon: const Icon(Icons.refresh),
+              onPressed: () => storageWidget.synchronize(context),
+            ),
+          ),
+          Builder(
+            builder: (context) => IconButton(
               icon: const Icon(Icons.filter_list),
               onPressed: () => Scaffold.of(context).openEndDrawer(),
             ),
