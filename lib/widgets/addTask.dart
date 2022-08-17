@@ -52,6 +52,11 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                   Expanded(
                     child: Wrap(
                       children: [
+                        const Text(
+                          "Due : ",
+                          style:
+                              TextStyle(fontWeight: FontWeight.bold, height: 2),
+                        ),
                         GestureDetector(
                           onLongPress: () {
                             due = null;
@@ -59,7 +64,9 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                           },
                           child: ActionChip(
                             label: Text(
-                              'due:${(due != null) ? due!.toLocal().toIso8601String() : ''}',
+                              (due != null)
+                                  ? due!.toLocal().toIso8601String()
+                                  : "null",
                             ),
                             onPressed: () async {
                               var initialDate =
@@ -103,6 +110,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                 ],
               ),
               // const SizedBox(height: 8),
+              const SizedBox(height: 8),
             ],
           ),
         ),
