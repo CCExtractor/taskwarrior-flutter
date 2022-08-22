@@ -12,6 +12,6 @@ export 'taskfunctions/profiles.dart';
 export 'taskfunctions/projects.dart';
 export 'taskfunctions/query.dart';
 export 'taskfunctions/tags.dart';
-export 'taskfunctions/task_parser.dart';
+export 'taskfunctions/taskparser.dart';
 export 'taskfunctions/urgency.dart';
 export 'taskfunctions/validate.dart';

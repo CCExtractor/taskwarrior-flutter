@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
+import 'package:taskwarrior/widgets/taskfunctions/taskparser.dart';
 
 import 'package:taskwarrior/widgets/taskw.dart';
 
@@ -20,7 +21,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   final namecontroller = TextEditingController();
   //final prioritycontroller;
   DateTime? due;
-
+  String priority = 'M';
   @override
   void initState() {
     super.initState();
@@ -111,6 +112,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
               ),
               // const SizedBox(height: 8),
               const SizedBox(height: 8),
+              buildPriority(),
             ],
           ),
         ),
@@ -132,29 +134,35 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
             name != null && name.isEmpty ? 'Enter a name' : null,
       );
   Widget buildPriority() => Column(children: [
-        const Text('Priority'),
-        const SizedBox(height: 8),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            ActionChip(
-              label: const Text('L'),
-              onPressed: () {
-                setState(() {});
-              },
+            const Text(
+              'Priority : ',
+              style: TextStyle(fontWeight: FontWeight.bold),
+              textAlign: TextAlign.left,
             ),
-            ActionChip(
-              label: const Text('M'),
-              onPressed: () {
-                setState(() {});
+            DropdownButton<String>(
+              value: priority,
+              elevation: 16,
+              style: const TextStyle(color: Colors.black),
+              underline: Container(
+                height: 2,
+                color: Colors.black,
+              ),
+              onChanged: (String? newValue) {
+                setState(() {
+                  priority = newValue!;
+                });
               },
-            ),
-            ActionChip(
-              label: const Text('H'),
-              onPressed: () {
-                setState(() {});
-              },
-            ),
+              items: <String>['H', 'M', 'L']
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            )
           ],
         ),
       ]);
@@ -168,11 +176,15 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
       child: const Text("Add"),
       onPressed: () async {
         try {
-          var task =
-              taskParser(namecontroller.text).rebuild((b) => b..due = due);
+          var task = taskParser(namecontroller.text)
+              .rebuild((b) => b..due = due)
+              .rebuild((p) => p..priority = priority);
+
           StorageWidget.of(context).mergeTask(task);
+          //StorageWidget.of(context).mergeTask(prioritytask);
           namecontroller.text = '';
           due = null;
+          priority = 'M';
           setState(() {});
           Navigator.of(context).pop();
         } on FormatException catch (e) {

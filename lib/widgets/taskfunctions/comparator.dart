@@ -69,7 +69,8 @@ int Function(Task, Task) compareTasks(String column) {
         result = -urgency(a).compareTo(urgency(b));
         break;
       default:
+        result = 1;
     }
-    return result!;
+    return result;
   };
 }
