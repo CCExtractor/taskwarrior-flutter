@@ -80,6 +80,7 @@ Task taskParser(String task) {
       ..status = 'pending'
       ..uuid = uuid
       ..entry = now
+      ..start = now
       ..modified = now,
   );
   for (var match in add.parse(task).value) {
