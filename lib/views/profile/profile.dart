@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:taskwarrior/model/storage/savefile.dart';
 import 'package:taskwarrior/taskserver/configure_taskserver.dart';
+import 'package:taskwarrior/widgets/pallete.dart';
 import 'package:taskwarrior/widgets/profilefunctions.dart';
 import 'package:taskwarrior/widgets/taskdetails.dart';
 import 'package:taskwarrior/routes/pageroute.dart';
@@ -25,11 +26,12 @@ class _ProfilePageState extends State<ProfilePage> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Palette.kToDark,
         leading: IconButton(
           onPressed: () {
             Navigator.pushReplacementNamed(context, PageRoutes.home);
           },
-          icon: const Icon(Icons.home_outlined),
+          icon: const Icon(Icons.home_outlined, color: Colors.white),
         ),
       ),
       //primary: false,

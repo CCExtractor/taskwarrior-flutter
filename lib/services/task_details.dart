@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
+import 'package:taskwarrior/widgets/pallete.dart';
 import 'package:taskwarrior/widgets/taskdetails.dart';
 import 'package:taskwarrior/widgets/taskw.dart';
 
@@ -41,9 +42,12 @@ class _DetailRouteState extends State<DetailRoute> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
+        actionsIconTheme: const IconThemeData(color: Colors.white),
+        backgroundColor: Palette.kToDark,
         title: Text(
           'id: ${(modify.id == 0) ? '-' : modify.id}',
-          style: GoogleFonts.firaMono(),
+          style: GoogleFonts.firaMono(color: Colors.white),
         ),
       ),
       body: ListView(

@@ -2,6 +2,7 @@
 
 import 'dart:io';
 import 'package:taskwarrior/views/profile/profile.dart';
+import 'package:taskwarrior/widgets/pallete.dart';
 import 'package:uuid/uuid.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:taskwarrior/widgets/taskdetails/profiles_widget.dart';
@@ -64,13 +65,13 @@ class _MyAppState extends State<MyApp> {
       title: 'Taskwarrior',
       theme: ThemeData(
         useMaterial3: true,
-        primarySwatch: Colors.grey,
+        primarySwatch: Palette.kToDark,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       initialRoute: PageRoutes.home,
       routes: {
         PageRoutes.home: (context) => HomePage(),
-        PageRoutes.profile: (context) => ProfilePage(),
+        PageRoutes.profile: (context) => const ProfilePage(),
       },
     );
   }

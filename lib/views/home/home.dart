@@ -6,6 +6,7 @@ import 'package:taskwarrior/model/storage/storage_widget.dart';
 import 'package:taskwarrior/routes/pageroute.dart';
 import 'package:taskwarrior/widgets/addTask.dart';
 import 'package:taskwarrior/widgets/buildTasks.dart';
+import 'package:taskwarrior/widgets/pallete.dart';
 import 'package:taskwarrior/widgets/tag_filter.dart';
 
 class Filters {
@@ -72,31 +73,32 @@ class _HomePageState extends State<HomePage> {
     );
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Palette.kToDark,
         leading: Builder(
           builder: (context) => IconButton(
-            icon: Icon(Icons.person_rounded),
+            icon: Icon(Icons.person_rounded, color: Colors.white),
             onPressed: () {
               Navigator.pushReplacementNamed(context, PageRoutes.profile);
             },
           ),
         ),
-        title: Text('Home Page'),
+        title: Text('Home Page', style: TextStyle(color: Colors.white)),
         actions: [
           IconButton(
             icon: (storageWidget.searchVisible)
-                ? const Icon(Icons.cancel)
-                : const Icon(Icons.search),
+                ? const Icon(Icons.cancel, color: Colors.white)
+                : const Icon(Icons.search, color: Colors.white),
             onPressed: storageWidget.toggleSearch,
           ),
           Builder(
             builder: (context) => IconButton(
-              icon: const Icon(Icons.refresh),
+              icon: const Icon(Icons.refresh, color: Colors.white),
               onPressed: () => storageWidget.synchronize(context),
             ),
           ),
           Builder(
             builder: (context) => IconButton(
-              icon: const Icon(Icons.filter_list),
+              icon: const Icon(Icons.filter_list, color: Colors.white),
               onPressed: () => Scaffold.of(context).openEndDrawer(),
             ),
           ),
@@ -132,7 +134,6 @@ class _HomePageState extends State<HomePage> {
           builder: (context) => const AddTaskBottomSheet(),
         ),
       ),
-      //drawer: NavigationDrawer(filters),
       resizeToAvoidBottomInset: false,
     );
   }
