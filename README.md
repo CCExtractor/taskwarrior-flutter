@@ -12,13 +12,13 @@ This project aims to build an app for Taskwarrior. It is your task management ap
 1. Clone the repository from GitHub:
 
 ```bash
-git clone https://github.com/NishantSinghal19/taskwarrior-gsoc.git
+git clone https://github.com/NishantSinghal19/taskwarrior-flutter.git
 ```
 
 2. Navigate to project's root directory:
 
 ```bash
-cd taskwarrior-gsoc
+cd taskwarrior-flutter
 ```
 
 3. Install dependencies:
