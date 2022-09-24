@@ -42,8 +42,7 @@ class _DetailRouteState extends State<DetailRoute> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.white),
-        actionsIconTheme: const IconThemeData(color: Colors.white),
+        leading: const BackButton(color: Colors.white),
         backgroundColor: Palette.kToDark,
         title: Text(
           'id: ${(modify.id == 0) ? '-' : modify.id}',
