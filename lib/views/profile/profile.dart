@@ -35,49 +35,51 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
       //primary: false,
-      body: Column(
-        children: [
-          ProfilesColumn(
-            profilesMap,
-            currentProfile,
-            profilesWidget.addProfile,
-            profilesWidget.selectProfile,
-            () => showDialog(
-              context: context,
-              builder: (context) => RenameProfileDialog(
-                profile: currentProfile,
-                alias: profilesMap[currentProfile],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            ProfilesColumn(
+              profilesMap,
+              currentProfile,
+              profilesWidget.addProfile,
+              profilesWidget.selectProfile,
+              () => showDialog(
                 context: context,
+                builder: (context) => RenameProfileDialog(
+                  profile: currentProfile,
+                  alias: profilesMap[currentProfile],
+                  context: context,
+                ),
               ),
-            ),
-            () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const ConfigureTaskserverRoute(),
+              () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const ConfigureTaskserverRoute(),
+                ),
               ),
-            ),
-            () {
-              var tasks =
-                  profilesWidget.getStorage(currentProfile).data.export();
-              var now = DateTime.now()
-                  .toIso8601String()
-                  .replaceAll(RegExp(r'[-:]'), '')
-                  .replaceAll(RegExp(r'\..*'), '');
-              exportTasks(
-                contents: tasks,
-                suggestedName: 'tasks-$now.txt',
-              );
-            },
-            () => profilesWidget.copyConfigToNewProfile(currentProfile),
-            () => showDialog(
-              context: context,
-              builder: (context) => DeleteProfileDialog(
-                profile: currentProfile,
+              () {
+                var tasks =
+                    profilesWidget.getStorage(currentProfile).data.export();
+                var now = DateTime.now()
+                    .toIso8601String()
+                    .replaceAll(RegExp(r'[-:]'), '')
+                    .replaceAll(RegExp(r'\..*'), '');
+                exportTasks(
+                  contents: tasks,
+                  suggestedName: 'tasks-$now.txt',
+                );
+              },
+              () => profilesWidget.copyConfigToNewProfile(currentProfile),
+              () => showDialog(
                 context: context,
+                builder: (context) => DeleteProfileDialog(
+                  profile: currentProfile,
+                  context: context,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
