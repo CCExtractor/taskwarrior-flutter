@@ -58,7 +58,7 @@ docs: Everything related to documentation
 
 ## Community
 
-We would love to hear from you! You may join gsoc-its-urgent channel of CCExtractor community through slack:
+We would love to hear from you! You may join gsoc-taskwarrior channel of CCExtractor community through Slack:
 
 [![Slack](https://img.shields.io/badge/chat-on_slack-purple.svg?style=for-the-badge&logo=slack)](https://ccextractor.org/public/general/support/)
 
