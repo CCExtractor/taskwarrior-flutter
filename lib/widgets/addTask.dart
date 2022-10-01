@@ -130,8 +130,9 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
           border: OutlineInputBorder(),
           hintText: 'Enter Name',
         ),
-        validator: (name) =>
-            name != null && name.isEmpty ? 'Enter a name' : null,
+        validator: (name) => name != null && name.isEmpty
+            ? 'You cannot leave this field empty!'
+            : null,
       );
   Widget buildPriority() => Column(children: [
         Row(
@@ -176,6 +177,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
       child: const Text("Add"),
       onPressed: () async {
         try {
+          formKey.currentState!.validate();
           var task = taskParser(namecontroller.text)
               .rebuild((b) => b..due = due)
               .rebuild((p) => p..priority = priority);
