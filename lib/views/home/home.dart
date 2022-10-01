@@ -8,6 +8,7 @@ import 'package:taskwarrior/widgets/addTask.dart';
 import 'package:taskwarrior/widgets/buildTasks.dart';
 import 'package:taskwarrior/widgets/pallete.dart';
 import 'package:taskwarrior/widgets/tag_filter.dart';
+import 'package:taskwarrior/widgets/taskw.dart';
 
 class Filters {
   const Filters({
@@ -38,6 +39,15 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     var storageWidget = StorageWidget.of(context);
     var taskData = storageWidget.tasks;
+    taskData.sort((
+      (a, b) => urgency(a).compareTo(urgency(b))
+    ));
+    taskData = new List.from(taskData.reversed);
+    // taskData.forEach((element) {
+    //   print(urgency(element));
+    //   });
+
+
     var pendingFilter = storageWidget.pendingFilter;
     var pendingTags = storageWidget.pendingTags;
 
@@ -120,6 +130,7 @@ class _HomePageState extends State<HomePage> {
             child: Scrollbar(
               child: TasksBuilder(
                 taskData: taskData,
+                
                 pendingFilter: pendingFilter,
               ),
             ),
