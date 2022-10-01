@@ -78,7 +78,7 @@ class _HomePageState extends State<HomePage> {
           builder: (context) => IconButton(
             icon: Icon(Icons.person_rounded, color: Colors.white),
             onPressed: () {
-              Navigator.pushReplacementNamed(context, PageRoutes.profile);
+              Navigator.pushNamed(context, PageRoutes.profile);
             },
           ),
         ),
