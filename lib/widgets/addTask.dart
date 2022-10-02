@@ -130,19 +130,16 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   }
 
   Widget buildName() => TextFormField(
-    controller: namecontroller,
-    decoration: const InputDecoration(
-      // enabledBorder: OutlineInputBorder(
-      //   borderSide: BorderSide(color: Colors.white, width: 1.0),
-      // ),
-      enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.black)
-      ),
-      hintText: 'Enter Name',
-    ),
-    validator: (name) =>
-    name != null && name.isEmpty ? 'Enter a name' : null,
-  );
+
+        controller: namecontroller,
+        decoration: const InputDecoration(
+          border: OutlineInputBorder(),
+          hintText: 'Enter Name',
+        ),
+        validator: (name) => name != null && name.isEmpty
+            ? 'You cannot leave this field empty!'
+            : null,
+      );
   Widget buildPriority() => Column(children: [
     Row(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -187,6 +184,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
       child: const Text("Add"),
       onPressed: () async {
         try {
+          formKey.currentState!.validate();
           var task = taskParser(namecontroller.text)
               .rebuild((b) => b..due = due)
               .rebuild((p) => p..priority = priority);
