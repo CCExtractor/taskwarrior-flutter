@@ -7,6 +7,7 @@ import 'package:taskwarrior/widgets/pallete.dart';
 import 'package:taskwarrior/widgets/profilefunctions.dart';
 import 'package:taskwarrior/widgets/taskdetails.dart';
 import 'package:taskwarrior/routes/pageroute.dart';
+import 'package:taskwarrior/widgets/taskfunctions/taskparser.dart';
 
 class ProfilePage extends StatefulWidget {
   static const String routeName = '/profile';
@@ -111,18 +112,20 @@ class ProfilesColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ListTile(
-          title: const Text('Profiles'),
-          trailing: IconButton(
-            icon: const Icon(Icons.add),
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0),
+      child: Column(
+        children: [
+          ElevatedButton.icon(
             onPressed: addProfile,
+            icon: const Icon(Icons.add),
+            label: const Text('Add new profile'),
           ),
-        ),
-        SelectProfile(currentProfile, profilesMap, selectProfile),
-        ManageProfile(rename, configure, export, copy, delete),
-      ],
+          const SizedBox(height: 8,),
+          SelectProfile(currentProfile, profilesMap, selectProfile),
+          ManageProfile(rename, configure, export, copy, delete),
+        ],
+      ),
     );
   }
 }
