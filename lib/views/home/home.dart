@@ -39,13 +39,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     var storageWidget = StorageWidget.of(context);
     var taskData = storageWidget.tasks;
-    taskData.sort((
-      (a, b) => urgency(a).compareTo(urgency(b))
-    ));
-    taskData = new List.from(taskData.reversed);
-    // taskData.forEach((element) {
-    //   print(urgency(element));
-    //   });
 
 
     var pendingFilter = storageWidget.pendingFilter;
@@ -114,28 +107,32 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: Column(
-        children: <Widget>[
-          if (storageWidget.searchVisible)
-            Card(
-              child: TextField(
-                autofocus: true,
-                onChanged: (value) {
-                  storageWidget.search(value);
-                },
-                controller: storageWidget.searchController,
+      body: Container(
+        color: Color.fromARGB(255, 9, 15, 32),
+        child: Column(
+          
+          children: <Widget>[
+            if (storageWidget.searchVisible)
+              Card(
+                child: TextField(
+                  autofocus: true,
+                  onChanged: (value) {
+                    storageWidget.search(value);
+                  },
+                  controller: storageWidget.searchController,
+                ),
+              ),
+            Expanded(
+              child: Scrollbar(
+                child: TasksBuilder(
+                  taskData: taskData,
+                  
+                  pendingFilter: pendingFilter,
+                ),
               ),
             ),
-          Expanded(
-            child: Scrollbar(
-              child: TasksBuilder(
-                taskData: taskData,
-                
-                pendingFilter: pendingFilter,
-              ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
       endDrawer: FilterDrawer(filters),
       floatingActionButton: FloatingActionButton(

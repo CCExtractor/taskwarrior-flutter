@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
@@ -22,13 +23,13 @@ class TaskListItem extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               child: Text(
                 task.description,
-                style: GoogleFonts.firaMono(),
+                style: TextStyle(color: Colors.white,fontFamily: GoogleFonts.firaMono().fontFamily),
               ),
             ),
           ),
           Text(
             (task.annotations != null) ? ' [${task.annotations!.length}]' : '',
-            style: GoogleFonts.firaMono(),
+            style: TextStyle(color: Colors.white,fontFamily: GoogleFonts.firaMono().fontFamily),
           ),
         ],
       ),
@@ -50,13 +51,14 @@ class TaskListItem extends StatelessWidget {
                         '[${task.tags?.join(',') ?? ''}]'
                     .replaceFirst(RegExp(r' \[\]$'), '')
                     .replaceAll(RegExp(r' +'), ' '),
-                style: GoogleFonts.firaMono(),
+                style: TextStyle(color: Colors.white,fontFamily: GoogleFonts.firaMono().fontFamily),
+                
               ),
             ),
           ),
           Text(
             formatUrgency(urgency(task)),
-            style: GoogleFonts.firaMono(),
+            style: TextStyle(color: Colors.white,fontFamily: GoogleFonts.firaMono().fontFamily),
           ),
         ],
       ),
