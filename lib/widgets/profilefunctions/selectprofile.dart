@@ -17,7 +17,7 @@ class SelectProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ExpansionTile(
       key: const PageStorageKey<String>('task-list'),
-      title: const Text('Select profile'),
+      title: Text('Profile: $currentProfile', overflow: TextOverflow.fade,),
       children: [
         for (var entry in profilesMap.entries)
           SelectProfileListTile(
