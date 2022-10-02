@@ -8,6 +8,7 @@ import 'package:taskwarrior/widgets/addTask.dart';
 import 'package:taskwarrior/widgets/buildTasks.dart';
 import 'package:taskwarrior/widgets/pallete.dart';
 import 'package:taskwarrior/widgets/tag_filter.dart';
+import 'package:taskwarrior/widgets/taskw.dart';
 
 class Filters {
   const Filters({
@@ -38,6 +39,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     var storageWidget = StorageWidget.of(context);
     var taskData = storageWidget.tasks;
+
+
     var pendingFilter = storageWidget.pendingFilter;
     var pendingTags = storageWidget.pendingTags;
 
@@ -78,7 +81,7 @@ class _HomePageState extends State<HomePage> {
           builder: (context) => IconButton(
             icon: Icon(Icons.person_rounded, color: Colors.white),
             onPressed: () {
-              Navigator.pushReplacementNamed(context, PageRoutes.profile);
+              Navigator.pushNamed(context, PageRoutes.profile);
             },
           ),
         ),
@@ -104,27 +107,32 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: Column(
-        children: <Widget>[
-          if (storageWidget.searchVisible)
-            Card(
-              child: TextField(
-                autofocus: true,
-                onChanged: (value) {
-                  storageWidget.search(value);
-                },
-                controller: storageWidget.searchController,
+      body: Container(
+        color: Color.fromARGB(255, 9, 15, 32),
+        child: Column(
+          
+          children: <Widget>[
+            if (storageWidget.searchVisible)
+              Card(
+                child: TextField(
+                  autofocus: true,
+                  onChanged: (value) {
+                    storageWidget.search(value);
+                  },
+                  controller: storageWidget.searchController,
+                ),
+              ),
+            Expanded(
+              child: Scrollbar(
+                child: TasksBuilder(
+                  taskData: taskData,
+                  
+                  pendingFilter: pendingFilter,
+                ),
               ),
             ),
-          Expanded(
-            child: Scrollbar(
-              child: TasksBuilder(
-                taskData: taskData,
-                pendingFilter: pendingFilter,
-              ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
       endDrawer: FilterDrawer(filters),
       floatingActionButton: FloatingActionButton(
