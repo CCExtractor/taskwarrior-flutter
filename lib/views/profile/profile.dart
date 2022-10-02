@@ -113,17 +113,15 @@ class ProfilesColumn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 8.0),
+      padding: const EdgeInsets.only(top: 10.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          ElevatedButton.icon(
-            onPressed: addProfile,
-            icon: const Icon(Icons.add),
-            label: const Text('Add new profile'),
-          ),
-          const SizedBox(height: 8,),
           SelectProfile(currentProfile, profilesMap, selectProfile),
+          const SizedBox(height: 6,),
           ManageProfile(rename, configure, export, copy, delete),
+          const SizedBox(height: 6,),
+          ElevatedButton.icon(onPressed: addProfile, icon: const Icon(Icons.add), label: const Text('Add new Profile'))
         ],
       ),
     );
