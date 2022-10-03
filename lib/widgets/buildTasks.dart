@@ -5,6 +5,8 @@ import 'package:taskwarrior/model/json.dart';
 import 'package:taskwarrior/services/task_details.dart';
 import 'package:taskwarrior/services/task_list_tem.dart';
 
+import 'pallete.dart';
+
 class TasksBuilder extends StatelessWidget {
   const TasksBuilder({
     Key? key,
@@ -23,7 +25,7 @@ class TasksBuilder extends StatelessWidget {
       children: [
         for (var task in taskData)
           Card(
-            color: darkmode?Color.fromARGB(255, 10, 21, 58):Colors.white,
+            color: darkmode?Palette.kToDark:Colors.white,
             child: InkWell(
               splashColor: Colors.black,
               onTap: () => Navigator.push(

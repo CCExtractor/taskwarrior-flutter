@@ -77,7 +77,7 @@ class _HomePageState extends State<HomePage> {
     );
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Palette.kToDark,
+        backgroundColor: Palette.kToDark.shade200,
         leading: Builder(
           builder: (context) => IconButton(
             icon: Icon(Icons.person_rounded, color: Colors.white),
@@ -129,7 +129,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       body: Container(
-        color: _darkmode?Color.fromARGB(255, 9, 15, 32):Colors.white,
+        color: _darkmode?Palette.kToDark.shade200:Colors.white,
         child: Column(
           children: <Widget>[
             if (storageWidget.searchVisible)
