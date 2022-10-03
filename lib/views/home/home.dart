@@ -35,11 +35,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  static bool _darkmode = false;
   @override
   Widget build(BuildContext context) {
     var storageWidget = StorageWidget.of(context);
     var taskData = storageWidget.tasks;
-
+    
 
     var pendingFilter = storageWidget.pendingFilter;
     var pendingTags = storageWidget.pendingTags;
@@ -87,6 +88,26 @@ class _HomePageState extends State<HomePage> {
         ),
         title: Text('Home Page', style: TextStyle(color: Colors.white)),
         actions: [
+          GestureDetector(
+            child: _darkmode?const Icon(
+                Icons.light_mode,
+                color: Color.fromARGB(255, 216, 196, 15),
+                size: 25,
+              ): const Icon(
+                Icons.dark_mode,
+                color: Colors.white,
+                size: 25,
+              ),
+              onTap: (){
+                if(_darkmode){
+                  _darkmode = false;
+                }
+                else{
+                  _darkmode = true;
+                }
+                setState(() {});
+              },),
+
           IconButton(
             icon: (storageWidget.searchVisible)
                 ? const Icon(Icons.cancel, color: Colors.white)
@@ -108,9 +129,8 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       body: Container(
-        color: Color.fromARGB(255, 9, 15, 32),
+        color: _darkmode?Color.fromARGB(255, 9, 15, 32):Colors.white,
         child: Column(
-          
           children: <Widget>[
             if (storageWidget.searchVisible)
               Card(
@@ -125,8 +145,8 @@ class _HomePageState extends State<HomePage> {
             Expanded(
               child: Scrollbar(
                 child: TasksBuilder(
+                  darkmode: _darkmode,
                   taskData: taskData,
-                  
                   pendingFilter: pendingFilter,
                 ),
               ),
