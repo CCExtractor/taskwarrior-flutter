@@ -6,14 +6,17 @@ import 'package:taskwarrior/widgets/taskw.dart';
 import 'package:taskwarrior/model/json.dart';
 
 class TaskListItem extends StatelessWidget {
-  const TaskListItem(this.task, {this.pendingFilter = false, Key? key})
+  const TaskListItem(this.task, {this.pendingFilter = false, Key? key, required this.darkmode})
       : super(key: key);
 
   final Task task;
   final bool pendingFilter;
+  final bool darkmode;
+  
 
   @override
   Widget build(BuildContext context) {
+    var colour =darkmode? Colors.white:Colors.black;
     return ListTile(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -23,13 +26,13 @@ class TaskListItem extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               child: Text(
                 task.description,
-                style: TextStyle(color: Colors.white,fontFamily: GoogleFonts.firaMono().fontFamily),
+                style: TextStyle(color:colour,fontFamily: GoogleFonts.firaMono().fontFamily),
               ),
             ),
           ),
           Text(
             (task.annotations != null) ? ' [${task.annotations!.length}]' : '',
-            style: TextStyle(color: Colors.white,fontFamily: GoogleFonts.firaMono().fontFamily),
+            style: TextStyle(color:colour,fontFamily: GoogleFonts.firaMono().fontFamily),
           ),
         ],
       ),
@@ -51,14 +54,14 @@ class TaskListItem extends StatelessWidget {
                         '[${task.tags?.join(',') ?? ''}]'
                     .replaceFirst(RegExp(r' \[\]$'), '')
                     .replaceAll(RegExp(r' +'), ' '),
-                style: TextStyle(color: Colors.white,fontFamily: GoogleFonts.firaMono().fontFamily),
+                style: TextStyle(color: colour,fontFamily: GoogleFonts.firaMono().fontFamily),
                 
               ),
             ),
           ),
           Text(
             formatUrgency(urgency(task)),
-            style: TextStyle(color: Colors.white,fontFamily: GoogleFonts.firaMono().fontFamily),
+            style: TextStyle(color:colour,fontFamily: GoogleFonts.firaMono().fontFamily),
           ),
         ],
       ),
