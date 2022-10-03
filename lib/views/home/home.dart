@@ -1,6 +1,7 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, deprecated_member_use, avoid_unnecessary_containers, unused_element, prefer_const_literals_to_create_immutables, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:taskwarrior/drawer/filter_drawer.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
 import 'package:taskwarrior/routes/pageroute.dart';
@@ -35,7 +36,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  static bool _darkmode = false;
+  static bool _darkmode = SchedulerBinding.instance.window.platformBrightness == Brightness.dark;
   @override
   Widget build(BuildContext context) {
     var storageWidget = StorageWidget.of(context);
