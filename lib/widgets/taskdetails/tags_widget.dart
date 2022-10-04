@@ -73,8 +73,9 @@ class TagsRouteState extends State<TagsRoute> {
   }
 
   void _removeTag(String tag) {
-    draftTags!.remove(tag);
-    widget.callback(draftTags);
+    if (draftTags!.length == 1) draftTags = null;
+    else draftTags!.remove(tag);
+    widget.callback(draftTags ?? ListBuilder([]));
     setState(() {});
   }
 
@@ -109,16 +110,16 @@ class TagsRouteState extends State<TagsRoute> {
               spacing: 8,
               runSpacing: 4,
               children: [
-                if (draftTags!.isNotEmpty)
+                if (draftTags != null)
                   for (var tag in draftTags!.build())
                     FilterChip(
                       backgroundColor: Colors.grey.shade200,
                       onSelected: (_) => _removeTag(tag),
                       label: Text(
-                        '+ $tag ${_pendingTags?[tag]?.frequency ?? 0}',
+                        '+$tag ${_pendingTags?[tag]?.frequency ?? 0}',
                       ),
                     ),
-                if (draftTags!.isEmpty)
+                if (draftTags == null)
                   const Padding(
                     padding: EdgeInsets.fromLTRB(15, 18, 0, 10),
                     child: Text('Added tags will appear here', style: TextStyle(fontStyle: FontStyle.italic),),
