@@ -74,7 +74,7 @@ class TagsRouteState extends State<TagsRoute> {
 
   void _removeTag(String tag) {
     draftTags!.remove(tag);
-    widget.callback((draftTags!.isEmpty) ? null : draftTags);
+    widget.callback(draftTags);
     setState(() {});
   }
 
@@ -99,7 +99,7 @@ class TagsRouteState extends State<TagsRoute> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('tags'),
+        title: const Text('Tags'),
       ),
       body: SafeArea(
         child: Padding(
@@ -109,19 +109,26 @@ class TagsRouteState extends State<TagsRoute> {
               spacing: 8,
               runSpacing: 4,
               children: [
-                if (draftTags != null)
+                if (draftTags!.isNotEmpty)
                   for (var tag in draftTags!.build())
                     FilterChip(
+                      backgroundColor: Colors.grey.shade200,
                       onSelected: (_) => _removeTag(tag),
                       label: Text(
-                        '+$tag ${_pendingTags?[tag]?.frequency ?? 0}',
+                        '+ $tag ${_pendingTags?[tag]?.frequency ?? 0}',
                       ),
                     ),
-                const Divider(),
+                if (draftTags!.isEmpty)
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(15, 18, 0, 10),
+                    child: Text('Added tags will appear here', style: TextStyle(fontStyle: FontStyle.italic),),
+                  ),
+                const Divider(color: Colors.grey,),
                 if (_pendingTags != null)
                   for (var tag in _pendingTags!.entries.where((tag) =>
                       !(draftTags?.build().contains(tag.key) ?? false)))
                     FilterChip(
+                      backgroundColor: Colors.grey.shade200,
                       onSelected: (_) => _addTag(tag.key),
                       label: Text(
                         '${tag.key} ${tag.value.frequency}',
