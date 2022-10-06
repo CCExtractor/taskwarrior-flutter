@@ -122,10 +122,15 @@ class TagsRouteState extends State<TagsRoute> {
           color: Colors.white,
         ),
       ),
+      backgroundColor: AppSettings.isDarkMode
+          ? const Color.fromARGB(255, 31, 31, 31)
+          : Colors.white,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(4),
           child: SingleChildScrollView(
+            padding:
+                const EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 0),
             child: Wrap(
               spacing: 8,
               runSpacing: 4,
@@ -140,15 +145,21 @@ class TagsRouteState extends State<TagsRoute> {
                       ),
                     ),
                 if (draftTags == null)
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(15, 18, 0, 10),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 18, 0, 10),
                     child: Text(
                       'Added tags will appear here',
-                      style: TextStyle(fontStyle: FontStyle.italic),
+                      style: TextStyle(
+                          fontStyle: FontStyle.italic,
+                          color: AppSettings.isDarkMode
+                              ? Colors.white
+                              : Colors.black),
                     ),
                   ),
                 Divider(
-                  color: Palette.kToDark.shade200,
+                  color: AppSettings.isDarkMode
+                      ? const Color.fromARGB(255, 192, 192, 192)
+                      : Palette.kToDark.shade200,
                 ),
                 if (_pendingTags != null)
                   for (var tag in _pendingTags!.entries.where((tag) =>
