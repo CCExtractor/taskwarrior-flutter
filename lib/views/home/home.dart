@@ -9,7 +9,6 @@ import 'package:taskwarrior/widgets/addTask.dart';
 import 'package:taskwarrior/widgets/buildTasks.dart';
 import 'package:taskwarrior/widgets/pallete.dart';
 import 'package:taskwarrior/widgets/tag_filter.dart';
-import 'package:taskwarrior/widgets/taskw.dart';
 
 class Filters {
   const Filters({
@@ -36,12 +35,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  static bool _darkmode = SchedulerBinding.instance.window.platformBrightness == Brightness.dark;
+  static bool _darkmode =
+      SchedulerBinding.instance.window.platformBrightness == Brightness.dark;
   @override
   Widget build(BuildContext context) {
     var storageWidget = StorageWidget.of(context);
     var taskData = storageWidget.tasks;
-    
 
     var pendingFilter = storageWidget.pendingFilter;
     var pendingTags = storageWidget.pendingTags;
@@ -79,48 +78,20 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Palette.kToDark.shade200,
-        leading: Builder(
-          builder: (context) => IconButton(
-            icon: Icon(Icons.person_rounded, color: Colors.white),
-            onPressed: () {
-              Navigator.pushNamed(context, PageRoutes.profile);
-            },
-          ),
-        ),
         title: Text('Home Page', style: TextStyle(color: Colors.white)),
         actions: [
-          GestureDetector(
-            child: _darkmode?const Icon(
-                Icons.light_mode,
-                color: Color.fromARGB(255, 216, 196, 15),
-                size: 25,
-              ): const Icon(
-                Icons.dark_mode,
-                color: Colors.white,
-                size: 25,
-              ),
-              onTap: (){
-                if(_darkmode){
-                  _darkmode = false;
-                }
-                else{
-                  _darkmode = true;
-                }
-                setState(() {});
-              },),
-
-          IconButton(
-            icon: (storageWidget.searchVisible)
-                ? const Icon(Icons.cancel, color: Colors.white)
-                : const Icon(Icons.search, color: Colors.white),
-            onPressed: storageWidget.toggleSearch,
-          ),
-          Builder(
-            builder: (context) => IconButton(
-              icon: const Icon(Icons.refresh, color: Colors.white),
-              onPressed: () => storageWidget.synchronize(context),
-            ),
-          ),
+          //IconButton(
+          // icon: (storageWidget.searchVisible)
+          //     ? const Icon(Icons.cancel, color: Colors.white)
+          //     : const Icon(Icons.search, color: Colors.white),
+          // onPressed: storageWidget.toggleSearch,
+          //),
+          // Builder(
+          //   builder: (context) => IconButton(
+          //     icon: const Icon(Icons.refresh, color: Colors.white),
+          //     onPressed: () => storageWidget.synchronize(context),
+          //   ),
+          // ),
           Builder(
             builder: (context) => IconButton(
               icon: const Icon(Icons.filter_list, color: Colors.white),
@@ -128,9 +99,86 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ],
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: const Icon(Icons.menu, color: Colors.white),
+            onPressed: () => Scaffold.of(context).openDrawer(),
+          ),
+        ),
       ),
+      drawer: Drawer(
+          child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          ListTile(
+            tileColor: Colors.black,
+            textColor: Colors.white,
+            contentPadding: EdgeInsets.only(top: 20, left: 10),
+            title: const Text(
+              'Menu',
+              style: TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            onTap: () => Navigator.pop(context),
+          ),
+          ListTile(
+            leading: Icon(Icons.person_rounded, color: Colors.black),
+            title: const Text('Profile'),
+            onTap: () {
+              // Update the state of the app
+              // ...
+              Navigator.pushNamed(context, PageRoutes.profile);
+              // Then close the drawer
+              // Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            title: const Text('Search'),
+            leading: (storageWidget.searchVisible)
+                ? const Icon(Icons.cancel, color: Colors.black)
+                : const Icon(Icons.search, color: Colors.black),
+            onTap: () {
+              Navigator.pop(context);
+              storageWidget.toggleSearch();
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.refresh, color: Colors.black),
+            onTap: () {
+              storageWidget.synchronize(context);
+              Navigator.pop(context);
+            },
+            title: Text("Refresh"),
+          ),
+          ListTile(
+            leading: _darkmode
+                ? const Icon(
+                    Icons.light_mode,
+                    color: Color.fromARGB(255, 216, 196, 15),
+                    size: 25,
+                  )
+                : const Icon(
+                    Icons.dark_mode,
+                    color: Colors.black,
+                    size: 25,
+                  ),
+            title: Text("Theme"),
+            onTap: () {
+              if (_darkmode) {
+                _darkmode = false;
+              } else {
+                _darkmode = true;
+              }
+              setState(() {});
+              Navigator.pop(context);
+            },
+          )
+        ],
+      )),
       body: Container(
-        color: _darkmode?Palette.kToDark.shade200:Colors.white,
+        color: _darkmode ? Palette.kToDark.shade200 : Colors.white,
         child: Column(
           children: <Widget>[
             if (storageWidget.searchVisible)
