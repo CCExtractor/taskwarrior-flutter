@@ -182,6 +182,9 @@ class TagsRouteState extends State<TagsRoute> {
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
+              backgroundColor: AppSettings.isDarkMode
+                  ? const Color.fromARGB(255, 220, 216, 216)
+                  : Colors.white,
               scrollable: true,
               title: const Text('Add tag'),
               content: TextField(
