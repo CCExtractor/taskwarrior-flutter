@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loggy/loggy.dart';
+import 'package:taskwarrior/config/app_settings.dart';
 
 class DescriptionWidget extends StatelessWidget {
   const DescriptionWidget(
@@ -16,7 +17,13 @@ class DescriptionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: AppSettings.isDarkMode
+          ? const Color.fromARGB(255, 57, 57, 57)
+          : Colors.white,
       child: ListTile(
+        textColor: AppSettings.isDarkMode
+            ? Colors.white
+            : const Color.fromARGB(255, 48, 46, 46),
         title: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
@@ -83,7 +90,13 @@ class ProjectWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: AppSettings.isDarkMode
+          ? const Color.fromARGB(255, 57, 57, 57)
+          : Colors.white,
       child: ListTile(
+        textColor: AppSettings.isDarkMode
+            ? Colors.white
+            : const Color.fromARGB(255, 48, 46, 46),
         title: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:built_collection/built_collection.dart';
 import 'package:loggy/loggy.dart';
+import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
 
 import 'package:taskwarrior/widgets/taskw.dart';
@@ -25,6 +26,12 @@ class TagsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
+        tileColor: AppSettings.isDarkMode
+            ? const Color.fromARGB(255, 55, 54, 54)
+            : Colors.white,
+        textColor: AppSettings.isDarkMode
+            ? Colors.white
+            : const Color.fromARGB(255, 48, 46, 46),
         title: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
@@ -78,8 +85,9 @@ class TagsRouteState extends State<TagsRoute> {
     if (draftTags!.length == 1) {
       draftTags!.remove(tag);
       draftTags = null;
+    } else {
+      draftTags!.remove(tag);
     }
-    else draftTags!.remove(tag);
     widget.callback(draftTags ?? ListBuilder([]));
     setState(() {});
   }
@@ -106,7 +114,10 @@ class TagsRouteState extends State<TagsRoute> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Palette.kToDark.shade200,
-        title: const Text('Tags', style: TextStyle(color: Colors.white),),
+        title: const Text(
+          'Tags',
+          style: TextStyle(color: Colors.white),
+        ),
         leading: const BackButton(
           color: Colors.white,
         ),
@@ -131,9 +142,14 @@ class TagsRouteState extends State<TagsRoute> {
                 if (draftTags == null)
                   const Padding(
                     padding: EdgeInsets.fromLTRB(15, 18, 0, 10),
-                    child: Text('Added tags will appear here', style: TextStyle(fontStyle: FontStyle.italic),),
+                    child: Text(
+                      'Added tags will appear here',
+                      style: TextStyle(fontStyle: FontStyle.italic),
+                    ),
                   ),
-                Divider(color: Palette.kToDark.shade200,),
+                Divider(
+                  color: Palette.kToDark.shade200,
+                ),
                 if (_pendingTags != null)
                   for (var tag in _pendingTags!.entries.where((tag) =>
                       !(draftTags?.build().contains(tag.key) ?? false)))

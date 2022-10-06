@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, unused_import, library_private_types_in_public_api
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/model/storage/savefile.dart';
 import 'package:taskwarrior/taskserver/configure_taskserver.dart';
 import 'package:taskwarrior/widgets/pallete.dart';
@@ -36,6 +37,8 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
       //primary: false,
+      backgroundColor:
+          AppSettings.isDarkMode ? Palette.kToDark.shade200 : Colors.white,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -118,10 +121,17 @@ class ProfilesColumn extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SelectProfile(currentProfile, profilesMap, selectProfile),
-          const SizedBox(height: 6,),
+          const SizedBox(
+            height: 6,
+          ),
           ManageProfile(rename, configure, export, copy, delete),
-          const SizedBox(height: 6,),
-          ElevatedButton.icon(onPressed: addProfile, icon: const Icon(Icons.add), label: const Text('Add new Profile'))
+          const SizedBox(
+            height: 6,
+          ),
+          ElevatedButton.icon(
+              onPressed: addProfile,
+              icon: const Icon(Icons.add),
+              label: const Text('Add new Profile'))
         ],
       ),
     );

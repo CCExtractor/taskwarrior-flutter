@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
 import 'package:taskwarrior/widgets/pallete.dart';
 import 'package:taskwarrior/widgets/taskdetails.dart';
@@ -41,6 +42,9 @@ class _DetailRouteState extends State<DetailRoute> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppSettings.isDarkMode
+          ? const Color.fromARGB(255, 29, 29, 29)
+          : Colors.white,
       appBar: AppBar(
         leading: const BackButton(color: Colors.white),
         backgroundColor: Palette.kToDark,
@@ -212,15 +216,23 @@ class AttributeWidget extends StatelessWidget {
       //     );
       default:
         return Card(
-          color: const Color(0x00000000),
-          elevation: 0,
+          color: AppSettings.isDarkMode
+              ? const Color.fromARGB(255, 57, 57, 57)
+              : Colors.white,
           child: ListTile(
+            textColor: AppSettings.isDarkMode
+                ? Colors.white
+                : const Color.fromARGB(255, 48, 46, 46),
             title: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
                   Text(
                     '${'$name:'.padRight(13)}$localValue',
+                    style: TextStyle(
+                      color:
+                          AppSettings.isDarkMode ? Colors.white : Colors.black,
+                    ),
                   ),
                 ],
               ),
@@ -245,13 +257,19 @@ class TagsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: AppSettings.isDarkMode
+          ? const Color.fromARGB(255, 57, 57, 57)
+          : Colors.white,
       child: ListTile(
+        textColor: AppSettings.isDarkMode
+            ? Colors.white
+            : const Color.fromARGB(255, 48, 46, 46),
         title: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
               Text(
-                '${'$name:'.padRight(13)}${(value as ListBuilder?)?.build()}',
+                '${'$name:  '}${(value as ListBuilder?)?.build()}',
                 style: GoogleFonts.firaMono(),
               ),
             ],

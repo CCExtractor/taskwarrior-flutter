@@ -51,6 +51,12 @@ class ProjectsColumn extends StatelessWidget {
           style: GoogleFonts.firaMono(
               color: AppSettings.isDarkMode ? Colors.white : Colors.black),
         ),
+        backgroundColor: AppSettings.isDarkMode
+            ? const Color.fromARGB(255, 48, 46, 46)
+            : const Color.fromARGB(255, 220, 216, 216),
+        iconColor: AppSettings.isDarkMode ? Colors.white : Colors.black,
+        collapsedIconColor:
+            AppSettings.isDarkMode ? Colors.white : Colors.black,
         children: (Map.of(projects)
               ..removeWhere((_, nodeData) => nodeData.parent != null))
             .keys
@@ -93,6 +99,12 @@ class ProjectTile extends StatelessWidget {
     );
 
     var radio = Radio(
+      activeColor: AppSettings.isDarkMode
+          ? Colors.white
+          : const Color.fromARGB(255, 48, 46, 46),
+      focusColor: AppSettings.isDarkMode
+          ? Colors.white
+          : const Color.fromARGB(255, 48, 46, 46),
       toggleable: true,
       value: project,
       groupValue: projectFilter,

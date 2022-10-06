@@ -17,7 +17,7 @@ class FilterDrawer extends StatelessWidget {
     var storageWidget = StorageWidget.of(context);
     return Drawer(
       backgroundColor: AppSettings.isDarkMode
-          ? Color.fromARGB(137, 29, 29, 29)
+          ? Color.fromARGB(255, 29, 29, 29)
           : Colors.white,
       child: SafeArea(
         child: Padding(
