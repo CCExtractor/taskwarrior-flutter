@@ -27,7 +27,7 @@ class TasksBuilder extends StatelessWidget {
           Card(
             color: darkmode?Palette.kToDark:Colors.white,
             child: InkWell(
-              splashColor: Colors.black,
+              splashColor: darkmode?Colors.black:Colors.grey.shade200,
               onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(

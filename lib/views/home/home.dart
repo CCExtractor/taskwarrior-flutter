@@ -80,12 +80,12 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Palette.kToDark.shade200,
         title: Text('Home Page', style: TextStyle(color: Colors.white)),
         actions: [
-          //IconButton(
-          // icon: (storageWidget.searchVisible)
-          //     ? const Icon(Icons.cancel, color: Colors.white)
-          //     : const Icon(Icons.search, color: Colors.white),
-          // onPressed: storageWidget.toggleSearch,
-          //),
+          IconButton(
+          icon: (storageWidget.searchVisible)
+              ? const Icon(Icons.cancel, color: Colors.white)
+              : const Icon(Icons.search, color: Colors.white),
+          onPressed: storageWidget.toggleSearch,
+          ),
           // Builder(
           //   builder: (context) => IconButton(
           //     icon: const Icon(Icons.refresh, color: Colors.white),
@@ -107,13 +107,14 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       drawer: Drawer(
+        backgroundColor: _darkmode?Colors.black:Colors.white,
           child: ListView(
         padding: EdgeInsets.zero,
         children: [
           ListTile(
-            tileColor: Colors.black,
-            textColor: Colors.white,
-            contentPadding: EdgeInsets.only(top: 20, left: 10),
+            tileColor: _darkmode?Colors.black:Colors.white,
+            textColor: _darkmode?Colors.white:Colors.black,
+            contentPadding: EdgeInsets.only(top: 40, left: 10),
             title: const Text(
               'Menu',
               style: TextStyle(
@@ -124,7 +125,9 @@ class _HomePageState extends State<HomePage> {
             onTap: () => Navigator.pop(context),
           ),
           ListTile(
-            leading: Icon(Icons.person_rounded, color: Colors.black),
+            tileColor: _darkmode?Colors.black:Colors.white,
+            textColor: _darkmode?Colors.white:Colors.black,
+            leading: Icon(Icons.person_rounded, color: _darkmode?Colors.white:Colors.black,),
             title: const Text('Profile'),
             onTap: () {
               // Update the state of the app
@@ -135,17 +138,9 @@ class _HomePageState extends State<HomePage> {
             },
           ),
           ListTile(
-            title: const Text('Search'),
-            leading: (storageWidget.searchVisible)
-                ? const Icon(Icons.cancel, color: Colors.black)
-                : const Icon(Icons.search, color: Colors.black),
-            onTap: () {
-              Navigator.pop(context);
-              storageWidget.toggleSearch();
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.refresh, color: Colors.black),
+            tileColor: _darkmode?Colors.black:Colors.white,
+            textColor: _darkmode?Colors.white:Colors.black,
+            leading: Icon(Icons.refresh, color: _darkmode?Colors.white:Colors.black,),
             onTap: () {
               storageWidget.synchronize(context);
               Navigator.pop(context);
@@ -153,6 +148,8 @@ class _HomePageState extends State<HomePage> {
             title: Text("Refresh"),
           ),
           ListTile(
+            tileColor: _darkmode?Colors.black:Colors.white,
+            textColor: _darkmode?Colors.white:Colors.black,
             leading: _darkmode
                 ? const Icon(
                     Icons.light_mode,
@@ -164,7 +161,7 @@ class _HomePageState extends State<HomePage> {
                     color: Colors.black,
                     size: 25,
                   ),
-            title: Text("Theme"),
+            title: Text("Switch Theme"),
             onTap: () {
               if (_darkmode) {
                 _darkmode = false;
