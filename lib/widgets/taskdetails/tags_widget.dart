@@ -8,6 +8,8 @@ import 'package:taskwarrior/model/storage/storage_widget.dart';
 
 import 'package:taskwarrior/widgets/taskw.dart';
 
+import '../pallete.dart';
+
 class TagsWidget extends StatelessWidget {
   const TagsWidget({
     required this.name,
@@ -73,8 +75,12 @@ class TagsRouteState extends State<TagsRoute> {
   }
 
   void _removeTag(String tag) {
-    draftTags!.remove(tag);
-    widget.callback((draftTags!.isEmpty) ? null : draftTags);
+    if (draftTags!.length == 1) {
+      draftTags!.remove(tag);
+      draftTags = null;
+    }
+    else draftTags!.remove(tag);
+    widget.callback(draftTags ?? ListBuilder([]));
     setState(() {});
   }
 
@@ -99,7 +105,11 @@ class TagsRouteState extends State<TagsRoute> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('tags'),
+        backgroundColor: Palette.kToDark.shade200,
+        title: const Text('Tags', style: TextStyle(color: Colors.white),),
+        leading: const BackButton(
+          color: Colors.white,
+        ),
       ),
       body: SafeArea(
         child: Padding(
@@ -112,16 +122,23 @@ class TagsRouteState extends State<TagsRoute> {
                 if (draftTags != null)
                   for (var tag in draftTags!.build())
                     FilterChip(
+                      backgroundColor: Colors.grey.shade200,
                       onSelected: (_) => _removeTag(tag),
                       label: Text(
                         '+$tag ${_pendingTags?[tag]?.frequency ?? 0}',
                       ),
                     ),
-                const Divider(),
+                if (draftTags == null)
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(15, 18, 0, 10),
+                    child: Text('Added tags will appear here', style: TextStyle(fontStyle: FontStyle.italic),),
+                  ),
+                Divider(color: Palette.kToDark.shade200,),
                 if (_pendingTags != null)
                   for (var tag in _pendingTags!.entries.where((tag) =>
                       !(draftTags?.build().contains(tag.key) ?? false)))
                     FilterChip(
+                      backgroundColor: Colors.grey.shade200,
                       onSelected: (_) => _addTag(tag.key),
                       label: Text(
                         '${tag.key} ${tag.value.frequency}',
