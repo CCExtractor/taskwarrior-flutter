@@ -73,7 +73,24 @@ class _ProfilePageState extends State<ProfilePage> {
                   suggestedName: 'tasks-$now.txt',
                 );
               },
-              () => profilesWidget.copyConfigToNewProfile(currentProfile),
+              () {
+                try {
+                  profilesWidget.copyConfigToNewProfile(currentProfile);
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: const Text('Profile Config Copied'),
+                      backgroundColor: AppSettings.isDarkMode
+                          ? const Color.fromARGB(255, 61, 61, 61)
+                          : const Color.fromARGB(255, 39, 39, 39),
+                      duration: const Duration(seconds: 2)));
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: const Text('Profile Config Copy Failed'),
+                      backgroundColor: AppSettings.isDarkMode
+                          ? const Color.fromARGB(255, 61, 61, 61)
+                          : const Color.fromARGB(255, 39, 39, 39),
+                      duration: const Duration(seconds: 2)));
+                }
+              },
               () => showDialog(
                 context: context,
                 builder: (context) => DeleteProfileDialog(
@@ -129,7 +146,24 @@ class ProfilesColumn extends StatelessWidget {
             height: 6,
           ),
           ElevatedButton.icon(
-              onPressed: addProfile,
+              onPressed: () {
+                try {
+                  addProfile();
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: const Text('Profile Added Successfully'),
+                      backgroundColor: AppSettings.isDarkMode
+                          ? const Color.fromARGB(255, 61, 61, 61)
+                          : const Color.fromARGB(255, 39, 39, 39),
+                      duration: const Duration(seconds: 2)));
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: const Text('Profile Additon Failed'),
+                      backgroundColor: AppSettings.isDarkMode
+                          ? const Color.fromARGB(255, 61, 61, 61)
+                          : const Color.fromARGB(255, 39, 39, 39),
+                      duration: const Duration(seconds: 2)));
+                }
+              },
               icon: const Icon(Icons.add),
               label: const Text('Add new Profile'))
         ],

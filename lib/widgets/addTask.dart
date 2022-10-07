@@ -203,7 +203,19 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
           priority = 'M';
           setState(() {});
           Navigator.of(context).pop();
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: const Text('Task Added Successfully'),
+              backgroundColor: AppSettings.isDarkMode
+                  ? const Color.fromARGB(255, 61, 61, 61)
+                  : const Color.fromARGB(255, 39, 39, 39),
+              duration: const Duration(seconds: 2)));
         } on FormatException catch (e) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: const Text('Task Addition Failed'),
+              backgroundColor: AppSettings.isDarkMode
+                  ? const Color.fromARGB(255, 61, 61, 61)
+                  : const Color.fromARGB(255, 39, 39, 39),
+              duration: const Duration(seconds: 2)));
           log(e.toString());
         }
       },
