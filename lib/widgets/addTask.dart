@@ -108,7 +108,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                                   );
                                   due = dateTime.toUtc();
                                   dueString = Jiffy(dateTime)
-                                      .format('MMM do yyyy, h:mm:ss a');
+                                      .format('dd/MM/yyyy HH:mm');
                                 }
                               }
                               setState(() {});
@@ -189,20 +189,21 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   Widget buildAddButton(BuildContext context) {
     return TextButton(
       child: const Text("Add"),
-      onPressed: () async {
+      onPressed: () {
         try {
-          formKey.currentState!.validate();
-          var task = taskParser(namecontroller.text)
-              .rebuild((b) => b..due = due)
-              .rebuild((p) => p..priority = priority);
+          if (formKey.currentState!.validate()) {
+            var task = taskParser(namecontroller.text)
+                .rebuild((b) => b..due = due)
+                .rebuild((p) => p..priority = priority);
 
-          StorageWidget.of(context).mergeTask(task);
-          //StorageWidget.of(context).mergeTask(prioritytask);
-          namecontroller.text = '';
-          due = null;
-          priority = 'M';
-          setState(() {});
-          Navigator.of(context).pop();
+            StorageWidget.of(context).mergeTask(task);
+            //StorageWidget.of(context).mergeTask(prioritytask);
+            namecontroller.text = '';
+            due = null;
+            priority = 'M';
+            setState(() {});
+            Navigator.of(context).pop();
+          }
         } on FormatException catch (e) {
           log(e.toString());
         }

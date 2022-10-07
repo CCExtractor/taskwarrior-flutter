@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
 import 'package:taskwarrior/widgets/pallete.dart';
@@ -151,7 +152,8 @@ class AttributeWidget extends StatelessWidget {
         : DateTime.now().toUtc();
     var localValue = (value is DateTime)
         ? // now = (value as DateTime).toLocal(),
-        '${format.day}-${format.month}-${format.year} ${format.hour}:${format.minute}'
+        // '${format.day}-${format.month}-${format.year} ${format.hour}:${format.minute}'
+        DateFormat("dd-MM-yyyy HH:mm").format(value)
         : ((value is BuiltList) ? (value as BuiltList).toBuilder() : value);
     switch (name) {
       case 'description':
