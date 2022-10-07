@@ -69,7 +69,9 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                             setState(() {});
                           },
                           child: ActionChip(
-                            backgroundColor: Colors.grey.shade300,
+                            backgroundColor: AppSettings.isDarkMode
+                                ? Colors.white
+                                : const Color.fromARGB(255, 220, 216, 216),
                             label: Container(
                               child: Text(
                                 (due != null) ? dueString : "null",
