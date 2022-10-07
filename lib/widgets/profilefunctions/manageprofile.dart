@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taskwarrior/config/app_settings.dart';
 import 'package:tuple/tuple.dart';
 
 class ManageProfile extends StatelessWidget {
@@ -28,11 +29,26 @@ class ManageProfile extends StatelessWidget {
     ];
 
     return ExpansionTile(
+      backgroundColor: AppSettings.isDarkMode
+          ? const Color.fromARGB(255, 48, 46, 46)
+          : const Color.fromARGB(255, 220, 216, 216),
+      iconColor: AppSettings.isDarkMode ? Colors.white : Colors.black,
+      collapsedIconColor: AppSettings.isDarkMode ? Colors.white : Colors.black,
+      collapsedTextColor: AppSettings.isDarkMode
+          ? Colors.white
+          : const Color.fromARGB(255, 48, 46, 46),
+      textColor: AppSettings.isDarkMode ? Colors.white : Colors.black,
       key: const PageStorageKey<String>('manage-profile'),
       title: const Text('Manage selected profile'),
       children: [
         for (var triple in triples)
           ListTile(
+            textColor: AppSettings.isDarkMode
+                ? Colors.white
+                : const Color.fromARGB(255, 48, 46, 46),
+            iconColor: AppSettings.isDarkMode
+                ? Colors.white
+                : const Color.fromARGB(255, 48, 46, 46),
             leading: Padding(
               padding: const EdgeInsets.all(12),
               child: Icon(triple.item1),

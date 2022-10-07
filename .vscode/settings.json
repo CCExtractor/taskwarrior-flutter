@@ -1,5 +1,5 @@
 {
-	"editor.minimap.enabled": false,
+	// "editor.minimap.enabled": false,
 	"html.format.wrapAttributesIndentSize": 4,
 	"[dart]": {
 		"editor.tabSize": 4,

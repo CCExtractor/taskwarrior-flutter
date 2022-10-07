@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:taskwarrior/config/app_settings.dart';
 
 import 'package:taskwarrior/widgets/taskw.dart';
 
@@ -47,8 +48,15 @@ class ProjectsColumn extends StatelessWidget {
         key: const PageStorageKey('project-filter'),
         title: Text(
           'project:$projectFilter',
-          style: GoogleFonts.firaMono(),
+          style: GoogleFonts.firaMono(
+              color: AppSettings.isDarkMode ? Colors.white : Colors.black),
         ),
+        backgroundColor: AppSettings.isDarkMode
+            ? const Color.fromARGB(255, 48, 46, 46)
+            : const Color.fromARGB(255, 220, 216, 216),
+        iconColor: AppSettings.isDarkMode ? Colors.white : Colors.black,
+        collapsedIconColor:
+            AppSettings.isDarkMode ? Colors.white : Colors.black,
         children: (Map.of(projects)
               ..removeWhere((_, nodeData) => nodeData.parent != null))
             .keys
@@ -75,17 +83,28 @@ class ProjectTile extends StatelessWidget {
     var title = Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Flexible(child: Text(project, style: GoogleFonts.firaMono())),
+        Flexible(
+            child: Text(project,
+                style: GoogleFonts.firaMono(
+                    color:
+                        AppSettings.isDarkMode ? Colors.white : Colors.black))),
         Text(
           (node.children.isEmpty)
               ? '${node.subtasks}'
               : '(${node.tasks}) ${node.subtasks}',
-          style: GoogleFonts.firaMono(),
+          style: GoogleFonts.firaMono(
+              color: AppSettings.isDarkMode ? Colors.white : Colors.black),
         )
       ],
     );
 
     var radio = Radio(
+      activeColor: AppSettings.isDarkMode
+          ? Colors.white
+          : const Color.fromARGB(255, 48, 46, 46),
+      focusColor: AppSettings.isDarkMode
+          ? Colors.white
+          : const Color.fromARGB(255, 48, 46, 46),
       toggleable: true,
       value: project,
       groupValue: projectFilter,
@@ -97,12 +116,24 @@ class ProjectTile extends StatelessWidget {
             leading: radio,
             title: title,
             onTap: () => callback(project),
+            tileColor: AppSettings.isDarkMode
+                ? const Color.fromARGB(255, 48, 46, 46)
+                : const Color.fromARGB(255, 220, 216, 216),
+            textColor: AppSettings.isDarkMode
+                ? Colors.white
+                : const Color.fromARGB(255, 48, 46, 46),
           )
         : ExpansionTile(
-            textColor: Theme.of(context).textTheme.subtitle1!.color,
+            // textColor: Theme.of(context).textTheme.subtitle1!.color,
             controlAffinity: ListTileControlAffinity.leading,
             leading: radio,
             title: title,
+            backgroundColor: AppSettings.isDarkMode
+                ? const Color.fromARGB(255, 48, 46, 46)
+                : const Color.fromARGB(255, 220, 216, 216),
+            textColor: AppSettings.isDarkMode
+                ? Colors.white
+                : const Color.fromARGB(255, 48, 46, 46),
             children: node.children.map(ProjectTile.new).toList(),
           );
   }

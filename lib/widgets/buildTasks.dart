@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/model/json.dart';
 import 'package:taskwarrior/services/task_details.dart';
 import 'package:taskwarrior/services/task_list_tem.dart';
@@ -11,13 +12,13 @@ class TasksBuilder extends StatelessWidget {
   const TasksBuilder({
     Key? key,
     required this.taskData,
-    required this.pendingFilter, required this.darkmode,
+    required this.pendingFilter,
 
   }) : super(key: key);
 
   final List<Task> taskData;
   final bool pendingFilter;
-  final bool darkmode;
+  // final bool darkmode;
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -25,16 +26,16 @@ class TasksBuilder extends StatelessWidget {
       children: [
         for (var task in taskData)
           Card(
-            color: darkmode?Palette.kToDark:Colors.white,
+            color: AppSettings.isDarkMode?Palette.kToDark:Colors.white,
             child: InkWell(
-              splashColor: darkmode?Colors.black:Colors.grey.shade200,
+              splashColor: AppSettings.isDarkMode?Colors.black:Colors.grey.shade200,
               onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => DetailRoute(task.uuid),
                 ),
               ),
-              child: TaskListItem(task, pendingFilter: pendingFilter,darkmode:darkmode ,),
+              child: TaskListItem(task, pendingFilter: pendingFilter,darkmode:AppSettings.isDarkMode ,),
             ),
           ),
       ],
