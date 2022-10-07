@@ -133,7 +133,13 @@ class _HomePageState extends State<HomePage> {
       ),
       endDrawer: FilterDrawer(filters),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        backgroundColor:
+            AppSettings.isDarkMode ? Colors.white : Palette.kToDark.shade200,
+        child: Icon(
+          Icons.add,
+          color:
+              AppSettings.isDarkMode ? Palette.kToDark.shade200 : Colors.white,
+        ),
         onPressed: () => showDialog(
           context: context,
           builder: (context) => const AddTaskBottomSheet(),
