@@ -196,19 +196,20 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                 .rebuild((b) => b..due = due)
                 .rebuild((p) => p..priority = priority);
 
-          StorageWidget.of(context).mergeTask(task);
-          //StorageWidget.of(context).mergeTask(prioritytask);
-          namecontroller.text = '';
-          due = null;
-          priority = 'M';
-          setState(() {});
-          Navigator.of(context).pop();
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: const Text('Task Added Successfully'),
-              backgroundColor: AppSettings.isDarkMode
-                  ? const Color.fromARGB(255, 61, 61, 61)
-                  : const Color.fromARGB(255, 39, 39, 39),
-              duration: const Duration(seconds: 2)));
+            StorageWidget.of(context).mergeTask(task);
+            //StorageWidget.of(context).mergeTask(prioritytask);
+            namecontroller.text = '';
+            due = null;
+            priority = 'M';
+            setState(() {});
+            Navigator.of(context).pop();
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: const Text('Task Added Successfully'),
+                backgroundColor: AppSettings.isDarkMode
+                    ? const Color.fromARGB(255, 61, 61, 61)
+                    : const Color.fromARGB(255, 39, 39, 39),
+                duration: const Duration(seconds: 2)));
+          }
         } on FormatException catch (e) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: const Text('Task Addition Failed'),
