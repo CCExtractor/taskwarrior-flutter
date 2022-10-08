@@ -108,7 +108,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                                   );
                                   due = dateTime.toUtc();
                                   dueString = Jiffy(dateTime)
-                                      .format('MMM do yyyy, h:mm:ss a');
+                                      .format('dd/MM/yyyy HH:mm');
                                 }
                               }
                               setState(() {});
@@ -189,12 +189,12 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   Widget buildAddButton(BuildContext context) {
     return TextButton(
       child: const Text("Add"),
-      onPressed: () async {
+      onPressed: () {
         try {
-          formKey.currentState!.validate();
-          var task = taskParser(namecontroller.text)
-              .rebuild((b) => b..due = due)
-              .rebuild((p) => p..priority = priority);
+          if (formKey.currentState!.validate()) {
+            var task = taskParser(namecontroller.text)
+                .rebuild((b) => b..due = due)
+                .rebuild((p) => p..priority = priority);
 
           StorageWidget.of(context).mergeTask(task);
           //StorageWidget.of(context).mergeTask(prioritytask);
@@ -203,7 +203,19 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
           priority = 'M';
           setState(() {});
           Navigator.of(context).pop();
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: const Text('Task Added Successfully'),
+              backgroundColor: AppSettings.isDarkMode
+                  ? const Color.fromARGB(255, 61, 61, 61)
+                  : const Color.fromARGB(255, 39, 39, 39),
+              duration: const Duration(seconds: 2)));
         } on FormatException catch (e) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: const Text('Task Addition Failed'),
+              backgroundColor: AppSettings.isDarkMode
+                  ? const Color.fromARGB(255, 61, 61, 61)
+                  : const Color.fromARGB(255, 39, 39, 39),
+              duration: const Duration(seconds: 2)));
           log(e.toString());
         }
       },
