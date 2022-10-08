@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:taskwarrior/config/app_settings.dart';
 
 class DateTimeWidget extends StatelessWidget {
@@ -36,7 +37,9 @@ class DateTimeWidget extends StatelessWidget {
           ),
         ),
         onTap: () async {
-          var initialDate = DateTime.tryParse('$value') ?? DateTime.now();
+          var initialDate = DateFormat("dd-MM-yyyy HH:mm").parse(
+              value ?? DateFormat("dd-MM-yyyy HH:mm").format(DateTime.now()));
+          // var initialDate = DateTime.tryParse('$value') ?? DateTime.now();
           var date = await showDatePicker(
             context: context,
             initialDate: initialDate,
