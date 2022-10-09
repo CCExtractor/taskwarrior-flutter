@@ -241,15 +241,15 @@ class _StorageWidgetState extends State<StorageWidget> {
 
   Future<void> synchronize(BuildContext context) async {
     try {
+      final scaffoldMessenger = ScaffoldMessenger.of(context);
       var header = await storage.home.synchronize(await client());
       _refreshTasks();
       pendingTags = _pendingTags();
       projects = _projects();
       setState(() {});
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      scaffoldMessenger.showSnackBar(SnackBar(
         content: Text('${header['code']}: ${header['status']}'),
       ));
-      // ignore: avoid_catches_without_on_clauses
     } catch (e, trace) {
       logError(e, trace);
     }
