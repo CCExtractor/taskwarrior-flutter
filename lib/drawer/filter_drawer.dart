@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
@@ -17,7 +15,7 @@ class FilterDrawer extends StatelessWidget {
     var storageWidget = StorageWidget.of(context);
     return Drawer(
       backgroundColor: AppSettings.isDarkMode
-          ? Color.fromARGB(255, 29, 29, 29)
+          ? const Color.fromARGB(255, 29, 29, 29)
           : Colors.white,
       child: SafeArea(
         child: Padding(
@@ -33,11 +31,11 @@ class FilterDrawer extends StatelessWidget {
                   ),
                   onTap: filters.togglePendingFilter,
                   tileColor: AppSettings.isDarkMode
-                      ? Color.fromARGB(255, 48, 46, 46)
-                      : Color.fromARGB(255, 220, 216, 216),
+                      ? const Color.fromARGB(255, 48, 46, 46)
+                      : const Color.fromARGB(255, 220, 216, 216),
                   textColor: AppSettings.isDarkMode
                       ? Colors.white
-                      : Color.fromARGB(255, 48, 46, 46),
+                      : const Color.fromARGB(255, 48, 46, 46),
                 ),
               ),
               const Divider(),
@@ -92,8 +90,8 @@ class FilterDrawer extends StatelessWidget {
                               ? Colors.black
                               : Colors.white),
                       backgroundColor: AppSettings.isDarkMode
-                          ? Color.fromARGB(255, 220, 216, 216)
-                          : Color.fromARGB(255, 48, 46, 46),
+                          ? const Color.fromARGB(255, 220, 216, 216)
+                          : const Color.fromARGB(255, 48, 46, 46),
                     ),
                 ],
               ),

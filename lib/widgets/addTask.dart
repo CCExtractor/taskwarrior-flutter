@@ -72,11 +72,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                             backgroundColor: AppSettings.isDarkMode
                                 ? Colors.white
                                 : const Color.fromARGB(255, 220, 216, 216),
-                            label: Container(
-                              child: Text(
-                                (due != null) ? dueString : "null",
-                              ),
-                            ),
+                            label: Text((due != null) ? dueString : "null"),
                             onPressed: () async {
                               var initialDate =
                                   due?.toLocal() ?? DateTime.now();
