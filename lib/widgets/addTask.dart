@@ -3,10 +3,10 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
 import 'package:taskwarrior/widgets/taskfunctions/taskparser.dart';
-import 'package:jiffy/jiffy.dart';
 import 'package:taskwarrior/widgets/taskw.dart';
 
 class AddTaskBottomSheet extends StatefulWidget {
@@ -107,8 +107,8 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                                     ),
                                   );
                                   due = dateTime.toUtc();
-                                  dueString = Jiffy(dateTime)
-                                      .format('dd/MM/yyyy HH:mm');
+                                  dueString = DateFormat("dd-MM-yyyy HH:mm")
+                                      .format(dateTime);
                                 }
                               }
                               setState(() {});
