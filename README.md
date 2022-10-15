@@ -56,7 +56,7 @@ test: Everything related to testing
 docs: Everything related to documentation
 ```
 
-You can Check community guidlines at [Contributinh Guideline and Development](https://github.com/CCExtractor/taskwarrior-flutter/wiki/Contribution-Guidelines-&-Development-Practices) page in Wiki section
+You can Check community guidlines at [Contribution Guidelines & Development Practices](https://github.com/CCExtractor/taskwarrior-flutter/wiki/Contribution-Guidelines-&-Development-Practices) page in Wiki section
 ## Community
 
 We would love to hear from you! You may join gsoc-taskwarrior channel of CCExtractor community through Slack:
