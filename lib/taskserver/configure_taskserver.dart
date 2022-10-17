@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loggy/loggy.dart';
+import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/model/storage/client.dart';
 import 'package:taskwarrior/model/storage/set_config.dart';
 import 'package:taskwarrior/widgets/fingerprint.dart';
@@ -13,6 +14,7 @@ import 'package:taskwarrior/widgets/fingerprint.dart';
 import 'package:taskwarrior/widgets/home_paths.dart' as rc;
 import 'package:taskwarrior/model/storage.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
+import 'package:taskwarrior/widgets/pallete.dart';
 import 'package:taskwarrior/widgets/taskdetails.dart';
 import 'package:taskwarrior/widgets/taskserver.dart';
 
@@ -114,35 +116,49 @@ class _ConfigureTaskserverRouteState extends State<ConfigureTaskserverRoute> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(alias ?? profile),
+        backgroundColor: Palette.kToDark.shade200,
+        title:
+            Text(alias ?? profile, style: const TextStyle(color: Colors.white)),
         actions: [
           if (kDebugMode)
             IconButton(
-              icon: const Icon(Icons.bug_report),
+              icon: const Icon(
+                Icons.bug_report,
+                color: Colors.white,
+              ),
               onPressed: _setConfigurationFromFixtureForDebugging,
             ),
           Builder(
             builder: (context) => IconButton(
-              icon: const Icon(Icons.show_chart),
+              icon: const Icon(
+                Icons.show_chart,
+                color: Colors.white,
+              ),
               onPressed: () => _showStatistics(context),
             ),
           ),
         ],
+        leading: const BackButton(
+          color: Colors.white,
+        ),
       ),
-      body: ListView(
-        children: [
-          TaskrcWidget(storage),
-          for (var pem in [
-            'taskd.certificate',
-            'taskd.key',
-            'taskd.ca',
-            if (StorageWidget.of(context).serverCertExists) 'server.cert',
-          ])
-            PemWidget(
-              storage: storage,
-              pem: pem,
-            ),
-        ],
+      body: Container(
+        color: AppSettings.isDarkMode ? Palette.kToDark.shade200 : Colors.white,
+        child: ListView(
+          children: [
+            TaskrcWidget(storage),
+            for (var pem in [
+              'taskd.certificate',
+              'taskd.key',
+              'taskd.ca',
+              if (StorageWidget.of(context).serverCertExists) 'server.cert',
+            ])
+              PemWidget(
+                storage: storage,
+                pem: pem,
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -162,9 +178,12 @@ class PemWidget extends StatefulWidget {
 class _PemWidgetState extends State<PemWidget> {
   @override
   Widget build(BuildContext context) {
+    var color =
+        AppSettings.isDarkMode ? Colors.white : Palette.kToDark.shade200;
     var contents = widget.storage.guiPemFiles.pemContents(widget.pem);
     var name = widget.storage.guiPemFiles.pemFilename(widget.pem);
     return ListTile(
+      textColor: color,
       title: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Text(
@@ -239,6 +258,9 @@ class _TaskrcWidgetState extends State<TaskrcWidget> {
 
   @override
   Widget build(BuildContext context) {
+    var color =
+        AppSettings.isDarkMode ? Colors.white : Palette.kToDark.shade200;
+
     Server? server;
     Credentials? credentials;
     var contents = rc.Taskrc(widget.storage.home.home).readTaskrc();
@@ -261,6 +283,7 @@ class _TaskrcWidgetState extends State<TaskrcWidget> {
     return Column(
       children: [
         ListTile(
+          textColor: color,
           title: Text(
             'Select TASKRC',
             style: GoogleFonts.firaMono(),
@@ -274,6 +297,7 @@ class _TaskrcWidgetState extends State<TaskrcWidget> {
           },
         ),
         ListTile(
+            textColor: color,
             title: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Text(
@@ -299,6 +323,7 @@ class _TaskrcWidgetState extends State<TaskrcWidget> {
                     );
                   }),
         ListTile(
+          textColor: color,
           title: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Text(
