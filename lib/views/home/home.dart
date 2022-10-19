@@ -117,9 +117,6 @@ class _HomePageState extends State<HomePage> {
                     storageWidget.search(value);
                   },
                   controller: storageWidget.searchController,
-                  onSubmitted: ((value) {
-                    storageWidget.searchController.clear();
-                  }),
                 ),
               ),
             Expanded(
