@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
+import 'package:taskwarrior/views/home/home.dart';
 import 'package:taskwarrior/widgets/pallete.dart';
 import 'package:taskwarrior/widgets/taskdetails.dart';
 import 'package:taskwarrior/widgets/taskw.dart';
@@ -40,101 +41,148 @@ class _DetailRouteState extends State<DetailRoute> {
     };
   }
 
+  void saveChanges() async {
+    var now = DateTime.now().toUtc();
+    modify.save(
+      modified: () => now,
+    );
+    setState(() {});
+    Navigator.of(context).pop();
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: const Text('Task Updated'),
+        backgroundColor: AppSettings.isDarkMode
+            ? const Color.fromARGB(255, 61, 61, 61)
+            : const Color.fromARGB(255, 39, 39, 39),
+        duration: const Duration(seconds: 2)));
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppSettings.isDarkMode
-          ? const Color.fromARGB(255, 29, 29, 29)
-          : Colors.white,
-      appBar: AppBar(
-        leading: const BackButton(color: Colors.white),
-        backgroundColor: Palette.kToDark,
-        title: Text(
-          'id: ${(modify.id == 0) ? '-' : modify.id}',
-          style: GoogleFonts.firaMono(color: Colors.white),
+    return WillPopScope(
+      child: Scaffold(
+        backgroundColor: AppSettings.isDarkMode
+            ? const Color.fromARGB(255, 29, 29, 29)
+            : Colors.white,
+        appBar: AppBar(
+          leading: const BackButton(color: Colors.white),
+          backgroundColor: Palette.kToDark,
+          title: Text(
+            'id: ${(modify.id == 0) ? '-' : modify.id}',
+            style: GoogleFonts.firaMono(color: Colors.white),
+          ),
         ),
+        body: ListView(
+          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
+          children: [
+            for (var entry in {
+              'description': modify.draft.description,
+              'status': modify.draft.status,
+              'entry': modify.draft.entry,
+              'modified': modify.draft.modified,
+              'start': modify.draft.start,
+              'end': modify.draft.end,
+              'due': modify.draft.due,
+              'wait': modify.draft.wait,
+              'until': modify.draft.until,
+              'priority': modify.draft.priority,
+              'project': modify.draft.project,
+              'tags': modify.draft.tags,
+              //'annotations': modify.draft.annotations,
+              //'udas': modify.draft.udas,
+              'urgency': urgency(modify.draft),
+              //'uuid': modify.draft.uuid,
+            }.entries)
+              AttributeWidget(
+                name: entry.key,
+                value: entry.value,
+                callback: callback(entry.key),
+              ),
+          ],
+        ),
+        floatingActionButton: (modify.changes.isEmpty)
+            ? null
+            : FloatingActionButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        scrollable: true,
+                        title: const Text('Review changes:'),
+                        content: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Text(
+                            modify.changes.entries
+                                .map((entry) => '${entry.key}:\n'
+                                    '  old: ${entry.value['old']}\n'
+                                    '  new: ${entry.value['new']}')
+                                .toList()
+                                .join('\n'),
+                            style: GoogleFonts.firaMono(),
+                          ),
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text('Cancel'),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              saveChanges();
+                            },
+                            child: const Text('Submit'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: const Icon(Icons.save),
+              ),
       ),
-      body: ListView(
-        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
-        children: [
-          for (var entry in {
-            'description': modify.draft.description,
-            'status': modify.draft.status,
-            'entry': modify.draft.entry,
-            'modified': modify.draft.modified,
-            'start': modify.draft.start,
-            'end': modify.draft.end,
-            'due': modify.draft.due,
-            'wait': modify.draft.wait,
-            'until': modify.draft.until,
-            'priority': modify.draft.priority,
-            'project': modify.draft.project,
-            'tags': modify.draft.tags,
-            //'annotations': modify.draft.annotations,
-            //'udas': modify.draft.udas,
-            'urgency': urgency(modify.draft),
-            //'uuid': modify.draft.uuid,
-          }.entries)
-            AttributeWidget(
-              name: entry.key,
-              value: entry.value,
-              callback: callback(entry.key),
-            ),
-        ],
-      ),
-      floatingActionButton: (modify.changes.isEmpty)
-          ? null
-          : FloatingActionButton(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      scrollable: true,
-                      title: const Text('Review changes:'),
-                      content: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Text(
-                          modify.changes.entries
-                              .map((entry) => '${entry.key}:\n'
-                                  '  old: ${entry.value['old']}\n'
-                                  '  new: ${entry.value['new']}')
-                              .toList()
-                              .join('\n'),
-                          style: GoogleFonts.firaMono(),
-                        ),
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text('Cancel'),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            var now = DateTime.now().toUtc();
-                            modify.save(
-                              modified: () => now,
-                            );
-                            setState(() {});
-                            Navigator.of(context).pop();
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: const Text('Task Updated'),
-                                backgroundColor: AppSettings.isDarkMode
-                                    ? const Color.fromARGB(255, 61, 61, 61)
-                                    : const Color.fromARGB(255, 39, 39, 39),
-                                duration: const Duration(seconds: 2)));
-                          },
-                          child: const Text('Submit'),
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
-              child: const Icon(Icons.save),
-            ),
+      onWillPop: () async {
+        if (modify.changes.isNotEmpty) {
+          return await showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text('Do you want to save changes?'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      saveChanges();
+                      Navigator.of(context).pop();
+                      setState(() {});
+                    },
+                    child: const Text('Yes'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                        HomePage.routeName,
+                        (route) => false,
+                      );
+                    },
+                    child: const Text('No'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('Cancel'),
+                  ),
+                ],
+              );
+            },
+          );
+        } else {
+          return await Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => HomePage()),
+              (Route<dynamic> route) => false);
+        }
+      },
     );
   }
 }
@@ -153,14 +201,13 @@ class AttributeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DateTime format = (value is DateTime)
-        ? (value as DateTime).toLocal()
-        : DateTime.now().toUtc();
+    DateTime format =
+        (value is DateTime) ? (value).toLocal() : DateTime.now().toUtc();
     var localValue = (value is DateTime)
         ? // now = (value as DateTime).toLocal(),
         // '${format.day}-${format.month}-${format.year} ${format.hour}:${format.minute}'
         DateFormat("dd-MM-yyyy HH:mm").format(value)
-        : ((value is BuiltList) ? (value as BuiltList).toBuilder() : value);
+        : ((value is BuiltList) ? (value).toBuilder() : value);
     switch (name) {
       case 'description':
         return DescriptionWidget(
