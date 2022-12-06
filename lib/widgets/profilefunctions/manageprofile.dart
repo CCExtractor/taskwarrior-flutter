@@ -21,7 +21,7 @@ class ManageProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var triples = [
-      Tuple3(Icons.edit, 'Rename profile', rename),
+      Tuple3(Icons.edit, 'Rename Profile', rename),
       Tuple3(Icons.link, 'Configure Taskserver', configure),
       Tuple3(Icons.file_download, 'Export tasks', export),
       Tuple3(Icons.copy, 'Copy config to new profile', copy),
