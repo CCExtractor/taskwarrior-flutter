@@ -111,6 +111,7 @@ class _HomePageState extends State<HomePage> {
           children: <Widget>[
             if (storageWidget.searchVisible)
               Card( 
+                margin: EdgeInsets.symmetric(horizontal: 20),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 6.0),
                   child: TextField(
