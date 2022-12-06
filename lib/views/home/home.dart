@@ -112,13 +112,16 @@ class _HomePageState extends State<HomePage> {
             if (storageWidget.searchVisible)
               Card( 
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 6.0),
                   child: TextField(
                     autofocus: true,
                     onChanged: (value) {
                       storageWidget.search(value);
                     },
                     controller: storageWidget.searchController,
+                    decoration: InputDecoration(  
+                      prefixIcon: Icon(Icons.search_rounded)
+                    ),
                   ),
                 ),
               ),
