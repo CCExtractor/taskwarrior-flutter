@@ -120,7 +120,8 @@ class _HomePageState extends State<HomePage> {
                       storageWidget.search(value);
                     },
                     controller: storageWidget.searchController,
-                    decoration: InputDecoration(  
+                    decoration: InputDecoration( 
+                      hintText: 'Search', 
                       prefixIcon: Icon(Icons.search_rounded)
                     ),
                   ),
