@@ -10,7 +10,7 @@ you can do that and all these approaches can be found at [TaskWarrior-Flutter](h
 
 ## Steps
 
-### Installation
+### Installation 
 1. Clone the repository from GitHub:
 
 ```bash
