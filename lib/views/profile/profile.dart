@@ -33,7 +33,7 @@ class _ProfilePageState extends State<ProfilePage> {
           onPressed: () {
             Navigator.pushReplacementNamed(context, PageRoutes.home);
           },
-          icon: const Icon(Icons.home_outlined, color: Colors.white),
+          icon: const Icon(Icons.home_filled, color: Colors.white),
         ),
       ),
       //primary: false,
