@@ -49,10 +49,12 @@ class _ProfilePageState extends State<ProfilePage> {
               profilesWidget.selectProfile,
               () => showDialog(
                 context: context,
-                builder: (context) => RenameProfileDialog(
-                  profile: currentProfile,
-                  alias: profilesMap[currentProfile],
-                  context: context,
+                builder: (context) => Center(
+                  child: RenameProfileDialog(
+                    profile: currentProfile,
+                    alias: profilesMap[currentProfile],
+                    context: context,
+                  ),
                 ),
               ),
               () => Navigator.push(
