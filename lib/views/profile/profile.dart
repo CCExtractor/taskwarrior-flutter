@@ -33,7 +33,7 @@ class _ProfilePageState extends State<ProfilePage> {
           onPressed: () {
             Navigator.pushReplacementNamed(context, PageRoutes.home);
           },
-          icon: const Icon(Icons.home_outlined, color: Colors.white),
+          icon: const Icon(Icons.home_filled, color: Colors.white),
         ),
       ),
       //primary: false,
@@ -49,10 +49,12 @@ class _ProfilePageState extends State<ProfilePage> {
               profilesWidget.selectProfile,
               () => showDialog(
                 context: context,
-                builder: (context) => RenameProfileDialog(
-                  profile: currentProfile,
-                  alias: profilesMap[currentProfile],
-                  context: context,
+                builder: (context) => Center(
+                  child: RenameProfileDialog(
+                    profile: currentProfile,
+                    alias: profilesMap[currentProfile],
+                    context: context,
+                  ),
                 ),
               ),
               () => Navigator.push(

@@ -17,28 +17,32 @@ class RenameProfileDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     var controller = TextEditingController(text: alias);
 
-    return AlertDialog(
-      scrollable: true,
-      title: const Text('Rename Profile'),
-      content: TextField(controller: controller),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: const Text('Cancel'),
+    return SingleChildScrollView(
+      child: Center(
+        child: AlertDialog(
+          scrollable: true,
+          title: const Text('Rename Profile'),
+          content: TextField(controller: controller),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                ProfilesWidget.of(context).renameProfile(
+                  profile: profile,
+                  alias: controller.text,
+                );
+                Navigator.of(context).pop();
+              },
+              child: const Text('Submit'),
+            ),
+          ],
         ),
-        ElevatedButton(
-          onPressed: () {
-            ProfilesWidget.of(context).renameProfile(
-              profile: profile,
-              alias: controller.text,
-            );
-            Navigator.of(context).pop();
-          },
-          child: const Text('Submit'),
-        ),
-      ],
+      ),
     );
   }
 }

@@ -39,98 +39,102 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   Widget build(BuildContext context) {
     const title = 'Add Task';
 
-    return AlertDialog(
-      backgroundColor: AppSettings.isDarkMode
-          ? const Color.fromARGB(255, 220, 216, 216)
-          : Colors.white,
-      title: const Center(child: Text(title)),
-      content: Form(
-        key: formKey,
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              const SizedBox(height: 8),
-              buildName(),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  Expanded(
-                    child: Wrap(
-                      children: [
-                        const Text(
-                          "Due : ",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, height: 3.3),
-                        ),
-                        GestureDetector(
-                          onLongPress: () {
-                            due = null;
-                            setState(() {});
-                          },
-                          child: ActionChip(
-                            backgroundColor: AppSettings.isDarkMode
-                                ? Colors.white
-                                : const Color.fromARGB(255, 220, 216, 216),
-                            label: Container(
-                              child: Text(
-                                (due != null) ? dueString : "null",
+    return Center(
+      child: SingleChildScrollView(
+        child: AlertDialog(
+          backgroundColor: AppSettings.isDarkMode
+              ? const Color.fromARGB(255, 220, 216, 216)
+              : Colors.white,
+          title: const Center(child: Text(title)),
+          content: Form(
+            key: formKey,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  const SizedBox(height: 8),
+                  buildName(),
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Wrap(
+                          children: [
+                            const Text(
+                              "Due : ",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, height: 3.3),
+                            ),
+                            GestureDetector(
+                              onLongPress: () {
+                                due = null;
+                                setState(() {});
+                              },
+                              child: ActionChip(
+                                backgroundColor: AppSettings.isDarkMode
+                                    ? Colors.white
+                                    : const Color.fromARGB(255, 220, 216, 216),
+                                label: Container(
+                                  child: Text(
+                                    (due != null) ? dueString : "null",
+                                  ),
+                                ),
+                                onPressed: () async {
+                                  var initialDate =
+                                      due?.toLocal() ?? DateTime.now();
+                                  var date = await showDatePicker(
+                                    context: context,
+                                    initialDate: initialDate,
+                                    firstDate: DateTime(
+                                        1990), // >= 1980-01-01T00:00:00.000Z
+                                    lastDate: DateTime(
+                                        2037, 12, 31), // < 2038-01-19T03:14:08.000Z
+                                  );
+                                  if (date != null) {
+                                    var time = await showTimePicker(
+                                      context: context,
+                                      initialTime:
+                                          TimeOfDay.fromDateTime(initialDate),
+                                    );
+                                    if (time != null) {
+                                      var dateTime = date.add(
+                                        Duration(
+                                          hours: time.hour,
+                                          minutes: time.minute,
+                                        ),
+                                      );
+                                      dateTime = dateTime.add(
+                                        Duration(
+                                          hours: time.hour - dateTime.hour,
+                                        ),
+                                      );
+                                      due = dateTime.toUtc();
+                                      dueString = DateFormat("dd-MM-yyyy HH:mm")
+                                          .format(dateTime);
+                                    }
+                                  }
+                                  setState(() {});
+                                },
                               ),
                             ),
-                            onPressed: () async {
-                              var initialDate =
-                                  due?.toLocal() ?? DateTime.now();
-                              var date = await showDatePicker(
-                                context: context,
-                                initialDate: initialDate,
-                                firstDate: DateTime(
-                                    1990), // >= 1980-01-01T00:00:00.000Z
-                                lastDate: DateTime(
-                                    2037, 12, 31), // < 2038-01-19T03:14:08.000Z
-                              );
-                              if (date != null) {
-                                var time = await showTimePicker(
-                                  context: context,
-                                  initialTime:
-                                      TimeOfDay.fromDateTime(initialDate),
-                                );
-                                if (time != null) {
-                                  var dateTime = date.add(
-                                    Duration(
-                                      hours: time.hour,
-                                      minutes: time.minute,
-                                    ),
-                                  );
-                                  dateTime = dateTime.add(
-                                    Duration(
-                                      hours: time.hour - dateTime.hour,
-                                    ),
-                                  );
-                                  due = dateTime.toUtc();
-                                  dueString = DateFormat("dd-MM-yyyy HH:mm")
-                                      .format(dateTime);
-                                }
-                              }
-                              setState(() {});
-                            },
-                          ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
+                  // const SizedBox(height: 8),
+                  const SizedBox(height: 0),
+                  buildPriority(),
                 ],
               ),
-              // const SizedBox(height: 8),
-              const SizedBox(height: 0),
-              buildPriority(),
-            ],
+            ),
           ),
+          actions: <Widget>[
+            buildCancelButton(context),
+            buildAddButton(context),
+          ],
         ),
       ),
-      actions: <Widget>[
-        buildCancelButton(context),
-        buildAddButton(context),
-      ],
     );
   }
 

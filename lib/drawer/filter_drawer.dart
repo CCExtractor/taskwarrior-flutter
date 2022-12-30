@@ -47,55 +47,64 @@ class FilterDrawer extends StatelessWidget {
                 filters.toggleProjectFilter,
               ),
               const Divider(),
-              TagFiltersWrap(filters.tagFilters),
-              const Divider(),
-              Text(
-                'Sort By : ',
-                style: TextStyle(
-                    color:
-                        (AppSettings.isDarkMode ? Colors.white : Colors.black),
-                    fontStyle: FontStyle.normal,
-                    fontSize: 20),
-                textAlign: TextAlign.left,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: TagFiltersWrap(filters.tagFilters),
               ),
               const Divider(),
-              Wrap(
-                spacing: 8,
-                runSpacing: 4,
-                children: [
-                  for (var sort in [
-                    'Created',
-                    'Modified',
-                    'Start Time',
-                    'Due till',
-                    'Priority',
-                    'Project',
-                    'Tags',
-                    'Urgency',
-                  ])
-                    ChoiceChip(
-                      label: (storageWidget.selectedSort.startsWith(sort))
-                          ? Text(
-                              storageWidget.selectedSort,
-                            )
-                          : Text(sort),
-                      selected: false,
-                      onSelected: (_) {
-                        if (storageWidget.selectedSort == '$sort+') {
-                          storageWidget.selectSort('$sort-');
-                        } else {
-                          storageWidget.selectSort('$sort+');
-                        }
-                      },
-                      labelStyle: TextStyle(
-                          color: AppSettings.isDarkMode
-                              ? Colors.black
-                              : Colors.white),
-                      backgroundColor: AppSettings.isDarkMode
-                          ? Color.fromARGB(255, 220, 216, 216)
-                          : Color.fromARGB(255, 48, 46, 46),
-                    ),
-                ],
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Text(
+                  'Sort By : ',
+                  style: TextStyle(
+                      color:
+                          (AppSettings.isDarkMode ? Colors.white : Colors.black),
+                      fontStyle: FontStyle.normal,
+                      fontSize: 20),
+                  textAlign: TextAlign.left,
+                ),
+              ),
+              const Divider(),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Wrap(
+                  spacing: 8,
+                  runSpacing: 4,
+                  children: [
+                    for (var sort in [
+                      'Created',
+                      'Modified',
+                      'Start Time',
+                      'Due till',
+                      'Priority',
+                      'Project',
+                      'Tags',
+                      'Urgency',
+                    ])
+                      ChoiceChip(
+                        label: (storageWidget.selectedSort.startsWith(sort))
+                            ? Text(
+                                storageWidget.selectedSort,
+                              )
+                            : Text(sort),
+                        selected: false,
+                        onSelected: (_) {
+                          if (storageWidget.selectedSort == '$sort+') {
+                            storageWidget.selectSort('$sort-');
+                          } else {
+                            storageWidget.selectSort('$sort+');
+                          }
+                        },
+                        labelStyle: TextStyle(
+                            color: AppSettings.isDarkMode
+                                ? Colors.black
+                                : Colors.white),
+                        backgroundColor: AppSettings.isDarkMode
+                            ? Color.fromARGB(255, 220, 216, 216)
+                            : Color.fromARGB(255, 48, 46, 46),
+                      ),
+                  ],
+                ),
               ),
             ],
           ),

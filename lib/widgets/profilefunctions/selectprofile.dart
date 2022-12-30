@@ -27,9 +27,20 @@ class SelectProfile extends StatelessWidget {
           ? Colors.white
           : const Color.fromARGB(255, 48, 46, 46),
       textColor: AppSettings.isDarkMode ? Colors.white : Colors.black,
-      title: Text(
-        'Profile: $currentProfile',
-        overflow: TextOverflow.fade,
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Profile:',
+            overflow: TextOverflow.fade,
+          ),
+          Text(
+            currentProfile,
+            style: TextStyle(  
+              color: AppSettings.isDarkMode ? Colors.grey : Colors.grey[600],
+            )
+            )
+        ],
       ),
       children: [
         for (var entry in profilesMap.entries)
