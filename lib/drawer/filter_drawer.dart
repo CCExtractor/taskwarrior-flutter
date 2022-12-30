@@ -29,7 +29,7 @@ class FilterDrawer extends StatelessWidget {
               Card(
                 child: ListTile(
                   title: Text(
-                    'filter:${filters.pendingFilter ? 'status : pending' : ''}',
+                    'filter:${filters.pendingFilter ? 'status : pending' : 'status : archived'}',
                   ),
                   onTap: filters.togglePendingFilter,
                   tileColor: AppSettings.isDarkMode
