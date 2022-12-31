@@ -63,16 +63,40 @@ class _TasksBuilderState extends State<TasksBuilder> {
               ? Slidable(
                   key: ValueKey(task.uuid),
                   startActionPane: ActionPane(
-                    dismissible: DismissiblePane(
-                      onDismissed: (() {
-                        setStatus('completed', task.uuid);
-                      }),
-                    ),
                     motion: const BehindMotion(),
                     children: [
                       SlidableAction(
                         onPressed: (context) {
-                          setStatus('completed', task.uuid);
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title:
+                                    const Text('Do you want to save changes?'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      setStatus('completed', task.uuid);
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text('Yes'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text('No'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text('Cancel'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
                         },
                         icon: Icons.done,
                         label: "COMPLETE",
@@ -81,16 +105,40 @@ class _TasksBuilderState extends State<TasksBuilder> {
                     ],
                   ),
                   endActionPane: ActionPane(
-                    dismissible: DismissiblePane(
-                      onDismissed: (() {
-                        setStatus('deleted', task.uuid);
-                      }),
-                    ),
                     motion: const DrawerMotion(),
                     children: [
                       SlidableAction(
                         onPressed: (context) {
-                          setStatus('deleted', task.uuid);
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title:
+                                    const Text('Do you want to save changes?'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      setStatus('deleted', task.uuid);
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text('Yes'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text('No'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text('Cancel'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
                         },
                         icon: Icons.delete,
                         label: "DELETE",
