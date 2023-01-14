@@ -86,7 +86,6 @@ class _NavDrawerState extends State<NavDrawer> {
                 setState(() {});
                 await selectedTheme.saveMode(AppSettings.isDarkMode);
                 widget.notifyParent();
-                Navigator.pop(context);
               },
             )
           ],
