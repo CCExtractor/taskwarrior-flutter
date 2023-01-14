@@ -1,7 +1,22 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/scheduler.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
+
+
+class selectedTheme {
+
+  static SharedPreferences? _preferences;
+
+  static Future init() async =>
+      _preferences = await SharedPreferences.getInstance();
+
+  static Future saveMode(bool mode) async =>
+      await _preferences?.setBool('_isDark', mode);
+
+  static bool? getMode() => _preferences?.getBool('_isDark');
+}
 
 class AppSettings {
-  static bool isDarkMode =
-      (SchedulerBinding.instance.window.platformBrightness == Brightness.dark);
+  static bool isDarkMode = selectedTheme.getMode()?? true;
 }
+
+

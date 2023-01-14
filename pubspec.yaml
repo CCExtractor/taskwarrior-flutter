@@ -15,7 +15,7 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
-  shared_preferences: ^2.0.13
+  shared_preferences: ^2.0.15
   shared_preferences_web: ^2.0.3
   loggy: ^2.0.1+1
   flutter_native_splash: ^2.1.2+1

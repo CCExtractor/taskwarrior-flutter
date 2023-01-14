@@ -1,6 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages
 
 import 'dart:io';
+import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/views/profile/profile.dart';
 import 'package:taskwarrior/widgets/pallete.dart';
 import 'package:uuid/uuid.dart';
@@ -16,6 +17,7 @@ import 'package:taskwarrior/routes/pageroute.dart';
 Future main([List<String> args = const []]) async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await selectedTheme.init();
   Directory? testingDirectory;
   if (args.contains('flutter_driver_test')) {
     testingDirectory = Directory(
@@ -32,9 +34,9 @@ Future main([List<String> args = const []]) async {
       future: getApplicationDocumentsDirectory(),
       builder: (context, snapshot) => (snapshot.hasData)
           ? ProfilesWidget(
-              baseDirectory: testingDirectory ?? snapshot.data!,
-              child: const MyApp(),
-            )
+        baseDirectory: testingDirectory ?? snapshot.data!,
+        child: const MyApp(),
+      )
           : const Placeholder(),
     ),
   );
