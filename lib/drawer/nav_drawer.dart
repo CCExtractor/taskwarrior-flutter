@@ -89,7 +89,6 @@ class _NavDrawerState extends State<NavDrawer> {
                 }
                 setState(() {});
                 widget.notifyParent();
-                Navigator.pop(context);
               },
             )
           ],
