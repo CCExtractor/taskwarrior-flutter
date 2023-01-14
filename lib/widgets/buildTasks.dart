@@ -150,6 +150,9 @@ class _TasksBuilderState extends State<TasksBuilder> {
                     color:
                         AppSettings.isDarkMode ? Palette.kToDark : Colors.white,
                     child: InkWell(
+                      customBorder: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                       splashColor: AppSettings.isDarkMode
                           ? Colors.black
                           : Colors.grey.shade200,
@@ -171,6 +174,9 @@ class _TasksBuilderState extends State<TasksBuilder> {
                   color:
                       AppSettings.isDarkMode ? Palette.kToDark : Colors.white,
                   child: InkWell(
+                    customBorder: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                     splashColor: AppSettings.isDarkMode
                         ? Colors.black
                         : Colors.grey.shade200,
