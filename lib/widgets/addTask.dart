@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
+import 'package:taskwarrior/services/notification_services.dart';
 import 'package:taskwarrior/widgets/taskfunctions/taskparser.dart';
 import 'package:taskwarrior/widgets/taskw.dart';
 
@@ -87,14 +88,14 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                                     initialDate: initialDate,
                                     firstDate: DateTime(
                                         1990), // >= 1980-01-01T00:00:00.000Z
-                                    lastDate: DateTime(
-                                        2037, 12, 31), // < 2038-01-19T03:14:08.000Z
+                                    lastDate: DateTime(2037, 12,
+                                        31), // < 2038-01-19T03:14:08.000Z
                                   );
                                   if (date != null) {
                                     var time = await showTimePicker(
                                       context: context,
                                       initialTime:
-                                          TimeOfDay.fromDateTime(initialDate),
+                                      TimeOfDay.fromDateTime(initialDate),
                                     );
                                     if (time != null) {
                                       var dateTime = date.add(
@@ -109,6 +110,14 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                                         ),
                                       );
                                       due = dateTime.toUtc();
+                                      NotificationService notificationService =
+                                      NotificationService();
+                                      notificationService
+                                          .initiliazeNotification();
+
+                                      notificationService.sendNotification(
+                                          dateTime, namecontroller.text);
+
                                       dueString = DateFormat("dd-MM-yyyy HH:mm")
                                           .format(dateTime);
                                     }
@@ -139,56 +148,56 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   }
 
   Widget buildName() => TextFormField(
-        controller: namecontroller,
-        decoration: const InputDecoration(
-          border: OutlineInputBorder(),
-          hintText: 'Enter Name',
-        ),
-        validator: (name) => name != null && name.isEmpty
-            ? 'You cannot leave this field empty!'
-            : null,
-      );
+    controller: namecontroller,
+    decoration: const InputDecoration(
+      border: OutlineInputBorder(),
+      hintText: 'Enter Task',
+    ),
+    validator: (name) => name != null && name.isEmpty
+        ? 'You cannot leave this field empty!'
+        : null,
+  );
   Widget buildPriority() => Column(children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Text(
-              'Priority :  ',
-              style: TextStyle(fontWeight: FontWeight.bold),
-              textAlign: TextAlign.left,
-            ),
-            DropdownButton<String>(
-              dropdownColor: AppSettings.isDarkMode
-                  ? const Color.fromARGB(255, 220, 216, 216)
-                  : Colors.white,
-              value: priority,
-              elevation: 16,
-              style: const TextStyle(color: Colors.black),
-              underline: Container(
-                height: 1.5,
-                color: Colors.black,
-              ),
-              onChanged: (String? newValue) {
-                setState(() {
-                  priority = newValue!;
-                });
-              },
-              items: <String>['H', 'M', 'L']
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text('  $value'),
-                );
-              }).toList(),
-            )
-          ],
+    Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const Text(
+          'Priority :  ',
+          style: TextStyle(fontWeight: FontWeight.bold),
+          textAlign: TextAlign.left,
         ),
-      ]);
+        DropdownButton<String>(
+          dropdownColor: AppSettings.isDarkMode
+              ? const Color.fromARGB(255, 220, 216, 216)
+              : Colors.white,
+          value: priority,
+          elevation: 16,
+          style: const TextStyle(color: Colors.black),
+          underline: Container(
+            height: 1.5,
+            color: Colors.black,
+          ),
+          onChanged: (String? newValue) {
+            setState(() {
+              priority = newValue!;
+            });
+          },
+          items: <String>['H', 'M', 'L']
+              .map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text('  $value'),
+            );
+          }).toList(),
+        )
+      ],
+    ),
+  ]);
   Widget buildCancelButton(BuildContext context) => TextButton(
-        child: const Text('Cancel'),
-        onPressed: () => Navigator.of(context).pop(),
-      );
+    child: const Text('Cancel'),
+    onPressed: () => Navigator.of(context).pop(),
+  );
 
   Widget buildAddButton(BuildContext context) {
     return TextButton(

@@ -1,7 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages
 
 import 'dart:io';
-import 'package:taskwarrior/config/app_settings.dart';
+import 'package:taskwarrior/services/notification_services.dart';
 import 'package:taskwarrior/views/profile/profile.dart';
 import 'package:taskwarrior/widgets/pallete.dart';
 import 'package:uuid/uuid.dart';
@@ -17,7 +17,6 @@ import 'package:taskwarrior/routes/pageroute.dart';
 Future main([List<String> args = const []]) async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await selectedTheme.init();
   Directory? testingDirectory;
   if (args.contains('flutter_driver_test')) {
     testingDirectory = Directory(
@@ -55,9 +54,11 @@ class MyApp extends StatefulWidget {
 
 // ignore: use_key_in_widget_constructors
 class _MyAppState extends State<MyApp> {
+  NotificationService notificationService = NotificationService();
   @override
   void initState() {
     super.initState();
+    notificationService.initiliazeNotification();
   }
 
   @override
