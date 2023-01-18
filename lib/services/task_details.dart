@@ -206,7 +206,8 @@ class AttributeWidget extends StatelessWidget {
     var localValue = (value is DateTime)
         ? // now = (value as DateTime).toLocal(),
         // '${format.day}-${format.month}-${format.year} ${format.hour}:${format.minute}'
-        DateFormat("dd-MM-yyyy HH:mm").format(value)
+        //DateFormat("dd-MM-yyyy HH:mm").format(value)
+        "${DateFormat.MMMMEEEEd().format(value)} - ${DateFormat.Hms().format(value)}"
         : ((value is BuiltList) ? (value).toBuilder() : value);
     switch (name) {
       case 'description':
