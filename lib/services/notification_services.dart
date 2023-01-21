@@ -1,17 +1,16 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
-import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 
 class NotificationService {
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
-  FlutterLocalNotificationsPlugin();
+      FlutterLocalNotificationsPlugin();
   final AndroidInitializationSettings _androidInitializationSettings =
-  AndroidInitializationSettings('splash.png');
+      const AndroidInitializationSettings('taskwarrior');
 
   void initiliazeNotification() async {
     InitializationSettings initializationSettings =
-    InitializationSettings(android: _androidInitializationSettings);
+        InitializationSettings(android: _androidInitializationSettings);
 
     await _flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
@@ -19,32 +18,34 @@ class NotificationService {
   void sendNotification(DateTime dtb, String task) async {
     DateTime dateTime = DateTime.now();
     tz.initializeTimeZones();
-    print("date and time are:-" + dateTime.toString());
-    print("date and time are:-" + dtb.toString());
+    print("date and time are:-$dateTime");
+    print("date and time are:-$dtb");
 
     final tz.TZDateTime scheduledAt =
-    tz.TZDateTime.from(dtb.add(Duration(minutes: 1)), tz.local);
+        tz.TZDateTime.from(dtb.add(const Duration(minutes: 1)), tz.local);
     final tz.TZDateTime scheduledAt1 = tz.TZDateTime.local(dateTime.year,
         dateTime.month, dateTime.day, dateTime.hour, dateTime.minute);
     // print("date and time are:-" + dateTime.toString());
-    print("dtb is :-" + scheduledAt.toString());
-    print("date and time are scheduled2:-" + scheduledAt1.toString());
+    print("dtb is :-$scheduledAt");
+    print("date and time are scheduled2:-$scheduledAt1");
 
     AndroidNotificationDetails androidNotificationDetails =
-    AndroidNotificationDetails('channelId', 'TaskReminder',
-        importance: Importance.max, priority: Priority.max);
+        const AndroidNotificationDetails('channelId', 'TaskReminder',
+            icon: "taskwarrior",
+            importance: Importance.max,
+            priority: Priority.max);
 
     NotificationDetails notificationDetails =
-    NotificationDetails(android: androidNotificationDetails);
+        NotificationDetails(android: androidNotificationDetails);
 
     _flutterLocalNotificationsPlugin.zonedSchedule(
         scheduledAt.day * 100 + scheduledAt.hour * 10 + scheduledAt.minute,
         'Task Warrior Reminder',
-        'Hey! Your task of ' + task + ' is still pending',
+        'Hey! Your task of $task is still pending',
         scheduledAt,
         notificationDetails,
         uiLocalNotificationDateInterpretation:
-        UILocalNotificationDateInterpretation.absoluteTime,
+            UILocalNotificationDateInterpretation.absoluteTime,
         androidAllowWhileIdle: true);
     print(scheduledAt.day * 100 + scheduledAt.hour * 10 + scheduledAt.minute);
   }

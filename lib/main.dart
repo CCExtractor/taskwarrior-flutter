@@ -33,9 +33,9 @@ Future main([List<String> args = const []]) async {
       future: getApplicationDocumentsDirectory(),
       builder: (context, snapshot) => (snapshot.hasData)
           ? ProfilesWidget(
-        baseDirectory: testingDirectory ?? snapshot.data!,
-        child: const MyApp(),
-      )
+              baseDirectory: testingDirectory ?? snapshot.data!,
+              child: const MyApp(),
+            )
           : const Placeholder(),
     ),
   );
