@@ -7,10 +7,15 @@ class NotificationService {
       FlutterLocalNotificationsPlugin();
   final AndroidInitializationSettings _androidInitializationSettings =
       const AndroidInitializationSettings('taskwarrior');
+  DarwinInitializationSettings iosSettings = const DarwinInitializationSettings(
+      requestAlertPermission: true,
+      requestBadgePermission: true,
+      requestCriticalPermission: true,
+      requestSoundPermission: true);
 
   void initiliazeNotification() async {
-    InitializationSettings initializationSettings =
-        InitializationSettings(android: _androidInitializationSettings);
+    InitializationSettings initializationSettings = InitializationSettings(
+        android: _androidInitializationSettings, iOS: iosSettings);
 
     await _flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
