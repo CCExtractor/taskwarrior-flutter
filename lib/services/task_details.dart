@@ -71,33 +71,36 @@ class _DetailRouteState extends State<DetailRoute> {
             style: GoogleFonts.firaMono(color: Colors.white),
           ),
         ),
-        body: ListView(
-          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
-          children: [
-            for (var entry in {
-              'description': modify.draft.description,
-              'status': modify.draft.status,
-              'entry': modify.draft.entry,
-              'modified': modify.draft.modified,
-              'start': modify.draft.start,
-              'end': modify.draft.end,
-              'due': modify.draft.due,
-              'wait': modify.draft.wait,
-              'until': modify.draft.until,
-              'priority': modify.draft.priority,
-              'project': modify.draft.project,
-              'tags': modify.draft.tags,
-              //'annotations': modify.draft.annotations,
-              //'udas': modify.draft.udas,
-              'urgency': urgency(modify.draft),
-              //'uuid': modify.draft.uuid,
-            }.entries)
-              AttributeWidget(
-                name: entry.key,
-                value: entry.value,
-                callback: callback(entry.key),
-              ),
-          ],
+        body: Padding(
+          padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+          child: ListView(
+            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
+            children: [
+              for (var entry in {
+                'description': modify.draft.description,
+                'status': modify.draft.status,
+                'entry': modify.draft.entry,
+                'modified': modify.draft.modified,
+                'start': modify.draft.start,
+                'end': modify.draft.end,
+                'due': modify.draft.due,
+                'wait': modify.draft.wait,
+                'until': modify.draft.until,
+                'priority': modify.draft.priority,
+                'project': modify.draft.project,
+                'tags': modify.draft.tags,
+                //'annotations': modify.draft.annotations,
+                //'udas': modify.draft.udas,
+                'urgency': urgency(modify.draft),
+                //'uuid': modify.draft.uuid,
+              }.entries)
+                AttributeWidget(
+                  name: entry.key,
+                  value: entry.value,
+                  callback: callback(entry.key),
+                ),
+            ],
+          ),
         ),
         floatingActionButton: (modify.changes.isEmpty)
             ? null
@@ -206,7 +209,8 @@ class AttributeWidget extends StatelessWidget {
     var localValue = (value is DateTime)
         ? // now = (value as DateTime).toLocal(),
         // '${format.day}-${format.month}-${format.year} ${format.hour}:${format.minute}'
-        DateFormat("dd-MM-yyyy HH:mm").format(value)
+        //DateFormat("dd-MM-yyyy HH:mm").format(value)
+        DateFormat.yMEd().add_jms().format(DateTime.now())
         : ((value is BuiltList) ? (value).toBuilder() : value);
     switch (name) {
       case 'description':

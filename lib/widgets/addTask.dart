@@ -77,7 +77,9 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                                     : const Color.fromARGB(255, 220, 216, 216),
                                 label: Container(
                                   child: Text(
-                                    (due != null) ? dueString : "null",
+                                    (due != null)
+                                        ? dueString
+                                        : "select due date",
                                   ),
                                 ),
                                 onPressed: () async {
@@ -95,7 +97,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                                     var time = await showTimePicker(
                                       context: context,
                                       initialTime:
-                                      TimeOfDay.fromDateTime(initialDate),
+                                          TimeOfDay.fromDateTime(initialDate),
                                     );
                                     if (time != null) {
                                       var dateTime = date.add(
@@ -111,7 +113,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                                       );
                                       due = dateTime.toUtc();
                                       NotificationService notificationService =
-                                      NotificationService();
+                                          NotificationService();
                                       notificationService
                                           .initiliazeNotification();
 
@@ -148,56 +150,56 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   }
 
   Widget buildName() => TextFormField(
-    controller: namecontroller,
-    decoration: const InputDecoration(
-      border: OutlineInputBorder(),
-      hintText: 'Enter Task',
-    ),
-    validator: (name) => name != null && name.isEmpty
-        ? 'You cannot leave this field empty!'
-        : null,
-  );
-  Widget buildPriority() => Column(children: [
-    Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        const Text(
-          'Priority :  ',
-          style: TextStyle(fontWeight: FontWeight.bold),
-          textAlign: TextAlign.left,
+        controller: namecontroller,
+        decoration: const InputDecoration(
+          border: OutlineInputBorder(),
+          hintText: 'Enter Task',
         ),
-        DropdownButton<String>(
-          dropdownColor: AppSettings.isDarkMode
-              ? const Color.fromARGB(255, 220, 216, 216)
-              : Colors.white,
-          value: priority,
-          elevation: 16,
-          style: const TextStyle(color: Colors.black),
-          underline: Container(
-            height: 1.5,
-            color: Colors.black,
-          ),
-          onChanged: (String? newValue) {
-            setState(() {
-              priority = newValue!;
-            });
-          },
-          items: <String>['H', 'M', 'L']
-              .map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text('  $value'),
-            );
-          }).toList(),
-        )
-      ],
-    ),
-  ]);
+        validator: (name) => name != null && name.isEmpty
+            ? 'You cannot leave this field empty!'
+            : null,
+      );
+  Widget buildPriority() => Column(children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Text(
+              'Priority :  ',
+              style: TextStyle(fontWeight: FontWeight.bold),
+              textAlign: TextAlign.left,
+            ),
+            DropdownButton<String>(
+              dropdownColor: AppSettings.isDarkMode
+                  ? const Color.fromARGB(255, 220, 216, 216)
+                  : Colors.white,
+              value: priority,
+              elevation: 16,
+              style: const TextStyle(color: Colors.black),
+              underline: Container(
+                height: 1.5,
+                color: Colors.black,
+              ),
+              onChanged: (String? newValue) {
+                setState(() {
+                  priority = newValue!;
+                });
+              },
+              items: <String>['H', 'M', 'L']
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text('  $value'),
+                );
+              }).toList(),
+            )
+          ],
+        ),
+      ]);
   Widget buildCancelButton(BuildContext context) => TextButton(
-    child: const Text('Cancel'),
-    onPressed: () => Navigator.of(context).pop(),
-  );
+        child: const Text('Cancel'),
+        onPressed: () => Navigator.of(context).pop(),
+      );
 
   Widget buildAddButton(BuildContext context) {
     return TextButton(
