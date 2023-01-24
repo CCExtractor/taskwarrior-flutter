@@ -4,10 +4,9 @@ import 'package:taskwarrior/model/storage/storage_widget.dart';
 import 'package:taskwarrior/routes/pageroute.dart';
 
 class NavDrawer extends StatefulWidget {
-  InheritedStorage storageWidget;
   final Function() notifyParent;
 
-  NavDrawer({Key? key, required this.storageWidget, required this.notifyParent})
+  NavDrawer({Key? key, required this.notifyParent})
       : super(key: key);
 
   @override
@@ -15,7 +14,6 @@ class NavDrawer extends StatefulWidget {
 }
 
 class _NavDrawerState extends State<NavDrawer> {
-  late InheritedStorage storageWidget = widget.storageWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -52,19 +50,6 @@ class _NavDrawerState extends State<NavDrawer> {
                 // Then close the drawer
                 // Navigator.pop(context);
               },
-            ),
-            ListTile(
-              tileColor: AppSettings.isDarkMode ? Colors.black : Colors.white,
-              textColor: AppSettings.isDarkMode ? Colors.white : Colors.black,
-              leading: Icon(
-                Icons.refresh,
-                color: AppSettings.isDarkMode ? Colors.white : Colors.black,
-              ),
-              onTap: () {
-                storageWidget.synchronize(context);
-                Navigator.pop(context);
-              },
-              title: const Text("Refresh"),
             ),
             ListTile(
               tileColor: AppSettings.isDarkMode ? Colors.black : Colors.white,
