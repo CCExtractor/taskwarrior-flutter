@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:taskwarrior/config/app_settings.dart';
+import '../task_details_tableUI.dart';
 
 class PriorityWidget extends StatelessWidget {
   const PriorityWidget(
@@ -25,12 +26,9 @@ class PriorityWidget extends StatelessWidget {
             : const Color.fromARGB(255, 48, 46, 46),
         title: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              Text(
-                '${'$name:'.padRight(13)}$value',
-              ),
-            ],
+          child: TaskDetailsTableUI(
+            name: '$name',
+            value: '$value',
           ),
         ),
         onTap: () {

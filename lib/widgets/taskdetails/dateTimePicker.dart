@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:taskwarrior/config/app_settings.dart';
+import '../task_details_tableUI.dart';
+
 
 class DateTimeWidget extends StatelessWidget {
   const DateTimeWidget({
@@ -28,12 +30,9 @@ class DateTimeWidget extends StatelessWidget {
             : const Color.fromARGB(255, 48, 46, 46),
         title: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              Text(
-                '${'$name:'.padRight(13)}$value',
-              ),
-            ],
+          child: TaskDetailsTableUI(
+            name: '$name',
+            value: '$value',
           ),
         ),
         onTap: () async {
@@ -97,12 +96,9 @@ class StartWidget extends StatelessWidget {
             : const Color.fromARGB(255, 48, 46, 46),
         title: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              Text(
-                '${'$name:'.padRight(13)}$value',
-              ),
-            ],
+          child: TaskDetailsTableUI(
+            name: '$name',
+            value: '$value',
           ),
         ),
         onTap: () {
