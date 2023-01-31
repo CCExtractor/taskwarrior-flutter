@@ -71,15 +71,15 @@ class _NavDrawerState extends State<NavDrawer> {
               textColor: AppSettings.isDarkMode ? Colors.white : Colors.black,
               leading: AppSettings.isDarkMode
                   ? const Icon(
-                Icons.light_mode,
-                color: Color.fromARGB(255, 216, 196, 15),
-                size: 25,
-              )
+                      Icons.light_mode,
+                      color: Color.fromARGB(255, 216, 196, 15),
+                      size: 25,
+                    )
                   : const Icon(
-                Icons.dark_mode,
-                color: Colors.black,
-                size: 25,
-              ),
+                      Icons.dark_mode,
+                      color: Colors.black,
+                      size: 25,
+                    ),
               title: const Text("Switch Theme"),
               onTap: () async {
                 AppSettings.isDarkMode = !AppSettings.isDarkMode;
