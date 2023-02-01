@@ -99,7 +99,9 @@ class FilterDrawer extends StatelessWidget {
                             color: AppSettings.isDarkMode
                                 ? Colors.black
                                 : Colors.white),
-                        backgroundColor: AppSettings.isDarkMode
+                        backgroundColor: (storageWidget.selectedSort == '$sort+' || storageWidget.selectedSort == '$sort-')
+                          ? Colors.green
+                          : AppSettings.isDarkMode
                             ? Color.fromARGB(255, 220, 216, 216)
                             : Color.fromARGB(255, 48, 46, 46),
                       ),
