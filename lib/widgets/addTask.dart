@@ -72,61 +72,63 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                                 setState(() {});
                               },
                               child: ActionChip(
-                                backgroundColor: AppSettings.isDarkMode
-                                    ? Colors.white
-                                    : const Color.fromARGB(255, 220, 216, 216),
-                                label: Container(
-                                  child: Text(
-                                    (due != null)
-                                        ? dueString
-                                        : "select due date",
+                                  backgroundColor: AppSettings.isDarkMode
+                                      ? Colors.white
+                                      : const Color.fromARGB(
+                                          255, 220, 216, 216),
+                                  label: Container(
+                                    child: Text(
+                                      (due != null)
+                                          ? dueString
+                                          : "select due date",
+                                    ),
                                   ),
-                                ),
-                                onPressed: () async {
-                                  var initialDate =
-                                      due?.toLocal() ?? DateTime.now();
-                                  var date = await showDatePicker(
-                                    context: context,
-                                    initialDate: initialDate,
-                                    firstDate: DateTime(
-                                        1990), // >= 1980-01-01T00:00:00.000Z
-                                    lastDate: DateTime(2037, 12,
-                                        31), // < 2038-01-19T03:14:08.000Z
-                                  );
-                                  if (date != null) {
-                                    var time = await showTimePicker(
+                                  onPressed: () async {
+                                    var initialDate =
+                                        due?.toLocal() ?? DateTime.now();
+                                    var date = await showDatePicker(
                                       context: context,
-                                      initialTime:
-                                          TimeOfDay.fromDateTime(initialDate),
+                                      initialDate: initialDate,
+                                      firstDate: DateTime(
+                                          1990), // >= 1980-01-01T00:00:00.000Z
+                                      lastDate: DateTime(2037, 12,
+                                          31), // < 2038-01-19T03:14:08.000Z
                                     );
-                                    if (time != null) {
-                                      var dateTime = date.add(
-                                        Duration(
-                                          hours: time.hour,
-                                          minutes: time.minute,
-                                        ),
+                                    if (date != null) {
+                                      var time = await showTimePicker(
+                                        context: context,
+                                        initialTime:
+                                            TimeOfDay.fromDateTime(initialDate),
                                       );
-                                      dateTime = dateTime.add(
-                                        Duration(
-                                          hours: time.hour - dateTime.hour,
-                                        ),
-                                      );
-                                      due = dateTime.toUtc();
-                                      NotificationService notificationService =
-                                          NotificationService();
-                                      notificationService
-                                          .initiliazeNotification();
+                                      if (time != null) {
+                                        var dateTime = date.add(
+                                          Duration(
+                                            hours: time.hour,
+                                            minutes: time.minute,
+                                          ),
+                                        );
+                                        dateTime = dateTime.add(
+                                          Duration(
+                                            hours: time.hour - dateTime.hour,
+                                          ),
+                                        );
+                                        due = dateTime.toUtc();
+                                        NotificationService
+                                            notificationService =
+                                            NotificationService();
+                                        notificationService
+                                            .initiliazeNotification();
 
-                                      notificationService.sendNotification(
-                                          dateTime, namecontroller.text);
+                                        notificationService.sendNotification(
+                                            dateTime, namecontroller.text);
 
-                                      dueString = DateFormat("dd-MM-yyyy HH:mm")
-                                          .format(dateTime);
+                                        dueString =
+                                            DateFormat("dd-MM-yyyy HH:mm")
+                                                .format(dateTime);
+                                      }
                                     }
-                                  }
-                                  setState(() {});
-                                },
-                              ),
+                                    setState(() {});
+                                  }),
                             ),
                           ],
                         ),
@@ -202,11 +204,16 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
       );
 
   Widget buildAddButton(BuildContext context) {
+    int errCode = 0;
     return TextButton(
       child: const Text("Add"),
       onPressed: () {
         try {
           if (formKey.currentState!.validate()) {
+            if (due == null) {
+              errCode = 1;
+              throw const FormatException('Due date cannot be empty');
+            }
             var task = taskParser(namecontroller.text)
                 .rebuild((b) => b..due = due)
                 .rebuild((p) => p..priority = priority);
@@ -219,19 +226,30 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
             setState(() {});
             Navigator.of(context).pop();
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: const Text('Task Added Successfully'),
+                content:
+                    const Text('Task Added Successfully, Double tap to Edit'),
                 backgroundColor: AppSettings.isDarkMode
                     ? const Color.fromARGB(255, 61, 61, 61)
                     : const Color.fromARGB(255, 39, 39, 39),
                 duration: const Duration(seconds: 2)));
           }
         } on FormatException catch (e) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: const Text('Task Addition Failed'),
-              backgroundColor: AppSettings.isDarkMode
-                  ? const Color.fromARGB(255, 61, 61, 61)
-                  : const Color.fromARGB(255, 39, 39, 39),
-              duration: const Duration(seconds: 2)));
+          Navigator.of(context).pop();
+          if (errCode == 1) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: const Text('Due date cannot be empty'),
+                backgroundColor: AppSettings.isDarkMode
+                    ? const Color.fromARGB(255, 61, 61, 61)
+                    : const Color.fromARGB(255, 39, 39, 39),
+                duration: const Duration(seconds: 2)));
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: const Text('Task Addition Failed'),
+                backgroundColor: AppSettings.isDarkMode
+                    ? const Color.fromARGB(255, 61, 61, 61)
+                    : const Color.fromARGB(255, 39, 39, 39),
+                duration: const Duration(seconds: 2)));
+          }
           log(e.toString());
         }
       },
