@@ -34,6 +34,7 @@ class StatusWidget extends StatelessWidget {
           ),
         ),
         onTap: () {
+          print(value);
           switch (value) {
             case 'pending':
               return callback('completed');
@@ -46,4 +47,11 @@ class StatusWidget extends StatelessWidget {
       ),
     );
   }
+}
+
+class StatusWidgetData {
+  //for accessing the value of the status widget from another class or another dart file
+  static dynamic _value;
+  static dynamic get value => _value;
+  static set value(dynamic newValue) => _value = newValue;
 }
