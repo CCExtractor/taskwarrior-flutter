@@ -49,7 +49,7 @@ class _TaskListItemState extends State<TaskListItem> {
 
   @override
   Widget build(BuildContext context) {
-    var colours = Colors.white;
+    MaterialColor colours = Colors.grey;
     var colour = widget.darkmode ? Colors.white : Colors.black;
     var dimColor = widget.darkmode
         ? const Color.fromARGB(137, 248, 248, 248)
@@ -59,7 +59,7 @@ class _TaskListItemState extends State<TaskListItem> {
       colours = Colors.red;
     } else if (widget.task.priority == 'M') {
       colours = Colors.yellow;
-    } else {
+    } else if (widget.task.priority == 'L') {
       colours = Colors.green;
     }
 
