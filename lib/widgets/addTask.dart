@@ -212,7 +212,8 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
           if (formKey.currentState!.validate()) {
             if (due == null) {
               errCode = 1;
-              throw const FormatException('Due date cannot be empty');
+              throw const FormatException(
+                  'Due date cannot be empty'); // added an exception case for not leaving due date empty
             }
             var task = taskParser(namecontroller.text)
                 .rebuild((b) => b..due = due)
@@ -226,8 +227,8 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
             setState(() {});
             Navigator.of(context).pop();
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content:
-                    const Text('Task Added Successfully, Double tap to Edit'),
+                content: const Text(
+                    'Task Added Successfully, Double tap to Edit'), // Intimating the user about the double tap to edit feature
                 backgroundColor: AppSettings.isDarkMode
                     ? const Color.fromARGB(255, 61, 61, 61)
                     : const Color.fromARGB(255, 39, 39, 39),
@@ -237,7 +238,8 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
           Navigator.of(context).pop();
           if (errCode == 1) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: const Text('Due date cannot be empty'),
+                content: const Text(
+                    'Due date cannot be empty'), // Intimating the user not to leave the due date empty
                 backgroundColor: AppSettings.isDarkMode
                     ? const Color.fromARGB(255, 61, 61, 61)
                     : const Color.fromARGB(255, 39, 39, 39),

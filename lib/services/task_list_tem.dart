@@ -55,20 +55,21 @@ class _TaskListItemState extends State<TaskListItem> {
         ? const Color.fromARGB(137, 248, 248, 248)
         : const Color.fromARGB(136, 17, 17, 17);
 
-    if (widget.task.priority == 'H') {
+    /*if (widget.task.priority == 'H') {
       colours = Colors.red;
     } else if (widget.task.priority == 'M') {
       colours = Colors.yellow;
     } else {
       colours = Colors.green;
-    }
+    }*/
 
     if ((widget.task.status[0].toUpperCase()) == 'P') {
+      // to differentiate between pending and completed tasks
+      // pending tasks will be having the check boxes, on the other hand completed one's doesn't
       return CheckboxListTile(
+        // homepage for pending tasks (when the home page is set to pending)
         side: const BorderSide(
-          // ======> CHANGE THE BORDER COLOR HERE <======
           color: Colors.grey,
-          // Give your checkbox border a custom width
           width: 1.5,
         ),
         shape: RoundedRectangleBorder(
@@ -153,6 +154,7 @@ class _TaskListItemState extends State<TaskListItem> {
         // isThreeLine: true,
       );
     } else {
+      // homepage for completed tasks (when the filter is set to completed)
       return ListTile(
         /*leading: Icon(
           Icons.circle,

@@ -190,7 +190,8 @@ class _TasksBuilderState extends State<TasksBuilder> {
                       onDoubleTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => DetailRoute(task.uuid),
+                          builder: (context) => DetailRoute(task
+                              .uuid), // added functionality for double tap to open task-details
                         ),
                       ),
                       child: TaskListItem(
@@ -211,7 +212,8 @@ class _TasksBuilderState extends State<TasksBuilder> {
                     onDoubleTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => DetailRoute(task.uuid),
+                        builder: (context) => DetailRoute(task
+                            .uuid), // added functionality for double tap to open task-details
                       ),
                     ),
                     child: TaskListItem(
