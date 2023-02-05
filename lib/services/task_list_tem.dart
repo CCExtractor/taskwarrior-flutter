@@ -55,13 +55,13 @@ class _TaskListItemState extends State<TaskListItem> {
         ? const Color.fromARGB(137, 248, 248, 248)
         : const Color.fromARGB(136, 17, 17, 17);
 
-    /*if (widget.task.priority == 'H') {
+    if (widget.task.priority == 'H') {
       colours = Colors.red;
     } else if (widget.task.priority == 'M') {
       colours = Colors.yellow;
     } else {
       colours = Colors.green;
-    }*/
+    }
 
     if ((widget.task.status[0].toUpperCase()) == 'P') {
       // to differentiate between pending and completed tasks
