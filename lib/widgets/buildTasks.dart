@@ -79,8 +79,17 @@ class _TasksBuilderState extends State<TasksBuilder> {
                                     onPressed: () {
                                       setStatus('completed', task.uuid);
                                       DateTime? dtb = task.due;
-                                      dtb =
-                                          dtb!.add(const Duration(minutes: 1));
+                                      if (dtb == null) {
+                                        final FlutterLocalNotificationsPlugin
+                                            flutterLocalNotificationsPlugin =
+                                            FlutterLocalNotificationsPlugin();
+                                        flutterLocalNotificationsPlugin
+                                            .cancel(0);
+                                        Navigator.of(context).pop();
+                                        return;
+                                      }
+
+                                      dtb = dtb.add(const Duration(minutes: 1));
                                       final FlutterLocalNotificationsPlugin
                                           flutterLocalNotificationsPlugin0 =
                                           FlutterLocalNotificationsPlugin();
@@ -139,15 +148,20 @@ class _TasksBuilderState extends State<TasksBuilder> {
                                       DateTime? dtb = task.due;
 
                                       if (dtb == null) {
-                                        final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-                                        _flutterLocalNotificationsPlugin.cancel(0);
+                                        final FlutterLocalNotificationsPlugin
+                                            flutterLocalNotificationsPlugin =
+                                            FlutterLocalNotificationsPlugin();
+                                        flutterLocalNotificationsPlugin
+                                            .cancel(0);
                                         Navigator.of(context).pop();
                                         return;
                                       }
 
                                       dtb = dtb.add(const Duration(minutes: 1));
-                                      final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-                                      _flutterLocalNotificationsPlugin.cancel(
+                                      final FlutterLocalNotificationsPlugin
+                                          flutterLocalNotificationsPlugin =
+                                          FlutterLocalNotificationsPlugin();
+                                      flutterLocalNotificationsPlugin.cancel(
                                           dtb.day * 100 +
                                               dtb.hour * 10 +
                                               dtb.minute);
