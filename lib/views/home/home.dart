@@ -105,53 +105,41 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       drawer: NavDrawer(notifyParent: refresh),
-      body: RefreshIndicator(
-        onRefresh: () {
-          return Future.delayed(
-            Duration(seconds: 1),
-              ((){
-                setState(() {
-                  storageWidget.synchronize(context);
-                });
-            })
-          );
-        },
-        child: Container(
-          color: AppSettings.isDarkMode ? Palette.kToDark.shade200 : Colors.white,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-            child: Column(
-              children: <Widget>[
-                if (storageWidget.searchVisible)
-                  Card(
-                    margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    child: TextField(
-                      autofocus: true,
-                      onChanged: (value) {
-                        storageWidget.search(value);
-                      },
-                      controller: storageWidget.searchController,
-                      decoration: InputDecoration(
-                          hintText: 'Search',
-                          prefixIcon: Icon(Icons.search_rounded),
-                          fillColor: Colors.grey[300],
-                          filled: true,
-                          border: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.circular(12))),
-                    ),
-                  ),
-                Expanded(
-                  child: Scrollbar(
-                    child: TasksBuilder(
-                      // darkmode: AppSettings.isDarkMode,
-                      taskData: taskData,
-                      pendingFilter: pendingFilter,
-                    ),
+      body: Container(
+        color: AppSettings.isDarkMode ? Palette.kToDark.shade200 : Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+          child: Column(
+            children: <Widget>[
+              if (storageWidget.searchVisible)
+                Card(
+                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: TextField(
+                    autofocus: true,
+                    onChanged: (value) {
+                      storageWidget.search(value);
+                    },
+                    controller: storageWidget.searchController,
+                    decoration: InputDecoration(
+                        hintText: 'Search',
+                        prefixIcon: Icon(Icons.search_rounded),
+                        fillColor: Colors.grey[300],
+                        filled: true,
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(12))),
                   ),
                 ),
-              ],
-            ),
+              Expanded(
+                child: Scrollbar(
+                  child: TasksBuilder(
+                    // darkmode: AppSettings.isDarkMode,
+                    taskData: taskData,
+                    pendingFilter: pendingFilter,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
