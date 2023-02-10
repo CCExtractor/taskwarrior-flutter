@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:taskwarrior/config/app_settings.dart';
 
 class StatusWidget extends StatelessWidget {

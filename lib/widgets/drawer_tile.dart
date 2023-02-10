@@ -6,8 +6,7 @@ class DrawerTile extends StatelessWidget {
   Widget? title;
   void Function()? onTap;
 
-  DrawerTile(
-      {required this.title, required this.onTap});
+  DrawerTile({required this.title, required this.onTap});
 
   @override
   Widget build(BuildContext context) {

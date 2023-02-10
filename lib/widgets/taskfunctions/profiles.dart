@@ -3,8 +3,9 @@
 import 'dart:collection';
 import 'dart:io';
 
-import 'package:taskwarrior/model/storage.dart';
 import 'package:uuid/uuid.dart';
+
+import 'package:taskwarrior/model/storage.dart';
 
 class Profiles {
   Profiles(this.base);

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'package:google_fonts/google_fonts.dart';
+
 import 'package:taskwarrior/config/app_settings.dart';
 
 class SelectProfile extends StatelessWidget {
@@ -34,12 +36,10 @@ class SelectProfile extends StatelessWidget {
             'Profile:',
             overflow: TextOverflow.fade,
           ),
-          Text(
-            currentProfile,
-            style: TextStyle(  
-              color: AppSettings.isDarkMode ? Colors.grey : Colors.grey[600],
-            )
-            )
+          Text(currentProfile,
+              style: TextStyle(
+                color: AppSettings.isDarkMode ? Colors.grey : Colors.grey[600],
+              ))
         ],
       ),
       children: [

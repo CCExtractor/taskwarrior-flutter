@@ -1,9 +1,8 @@
 // ignore_for_file: depend_on_referenced_packages
 
-import 'package:intl/intl.dart';
-
 import 'package:built_value/iso_8601_date_time_serializer.dart';
 import 'package:built_value/serializer.dart';
+import 'package:intl/intl.dart';
 
 /// > Dates are rendered in ISO 8601 combined date and time in UTC format using
 /// > the template: `YYYYMMDDTHHMMSSZ`. An example: `20120110T231200Z`. No other

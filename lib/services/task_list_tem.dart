@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:taskwarrior/widgets/taskw.dart';
-import 'package:taskwarrior/model/json.dart';
 
+import 'package:taskwarrior/model/json.dart';
+import 'package:taskwarrior/widgets/taskw.dart';
 import '../model/storage/storage_widget.dart';
 import '/widgets/taskdetails/status_widget.dart';
 

@@ -4,11 +4,10 @@ import 'package:flutter/material.dart';
 
 import 'package:built_collection/built_collection.dart';
 import 'package:loggy/loggy.dart';
+
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
-
 import 'package:taskwarrior/widgets/taskw.dart';
-
 import '../pallete.dart';
 
 class TagsWidget extends StatelessWidget {

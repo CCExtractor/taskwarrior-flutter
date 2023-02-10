@@ -1,6 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages
 
 import 'package:collection/collection.dart';
+
 import 'package:taskwarrior/model/json.dart';
 import 'package:taskwarrior/widgets/taskw.dart';
 

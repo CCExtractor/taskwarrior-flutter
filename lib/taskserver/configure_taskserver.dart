@@ -6,14 +6,14 @@ import 'package:flutter/services.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loggy/loggy.dart';
+
 import 'package:taskwarrior/config/app_settings.dart';
+import 'package:taskwarrior/model/storage.dart';
 import 'package:taskwarrior/model/storage/client.dart';
 import 'package:taskwarrior/model/storage/set_config.dart';
-import 'package:taskwarrior/widgets/fingerprint.dart';
-
-import 'package:taskwarrior/widgets/home_paths.dart' as rc;
-import 'package:taskwarrior/model/storage.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
+import 'package:taskwarrior/widgets/fingerprint.dart';
+import 'package:taskwarrior/widgets/home_paths.dart' as rc;
 import 'package:taskwarrior/widgets/pallete.dart';
 import 'package:taskwarrior/widgets/taskdetails.dart';
 import 'package:taskwarrior/widgets/taskserver.dart';

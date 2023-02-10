@@ -34,6 +34,7 @@ dependencies:
   pem: ^2.0.1
   flutter_slidable: ^2.0.0
   flutter_native_timezone: ^2.0.0
+  import_sorter: ^4.6.0
 
 dev_dependencies:
   flutter_test:
