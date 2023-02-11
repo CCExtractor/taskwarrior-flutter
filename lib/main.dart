@@ -6,12 +6,10 @@ import 'package:flutter/material.dart';
 
 import 'package:loggy/loggy.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:taskwarrior/routes/pageroute.dart';
-
-import 'package:permission_handler/permission_handler.dart';
-
 import 'package:taskwarrior/services/notification_services.dart';
 import 'package:taskwarrior/views/home/home.dart';
 import 'package:taskwarrior/views/profile/profile.dart';
