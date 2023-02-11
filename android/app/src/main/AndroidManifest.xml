@@ -2,6 +2,7 @@
     package="com.example.taskwarrior">
 	<uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
    <application
         android:label="taskwarrior"
         android:name="${applicationName}"

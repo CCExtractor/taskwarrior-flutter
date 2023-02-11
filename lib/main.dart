@@ -1,6 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages
 
 import 'dart:io';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:taskwarrior/services/notification_services.dart';
 import 'package:taskwarrior/views/profile/profile.dart';
 import 'package:taskwarrior/widgets/pallete.dart';
@@ -16,6 +17,12 @@ import 'package:taskwarrior/routes/pageroute.dart';
 
 Future main([List<String> args = const []]) async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Permission.notification.isDenied.then((value) {
+    if (value) {
+      Permission.notification.request();
+    }
+
+  });
 
   Directory? testingDirectory;
   if (args.contains('flutter_driver_test')) {
@@ -58,7 +65,9 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+
     notificationService.initiliazeNotification();
+
   }
 
   @override
