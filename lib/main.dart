@@ -9,6 +9,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:taskwarrior/routes/pageroute.dart';
+
+import 'package:permission_handler/permission_handler.dart';
+
 import 'package:taskwarrior/services/notification_services.dart';
 import 'package:taskwarrior/views/home/home.dart';
 import 'package:taskwarrior/views/profile/profile.dart';
@@ -20,6 +23,11 @@ import 'package:taskwarrior/widgets/taskdetails/profiles_widget.dart';
 
 Future main([List<String> args = const []]) async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Permission.notification.isDenied.then((value) {
+    if (value) {
+      Permission.notification.request();
+    }
+  });
 
   Directory? testingDirectory;
   if (args.contains('flutter_driver_test')) {
@@ -62,6 +70,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+
     notificationService.initiliazeNotification();
   }
 
