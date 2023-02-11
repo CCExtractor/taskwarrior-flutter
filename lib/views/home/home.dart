@@ -1,5 +1,6 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, deprecated_member_use, avoid_unnecessary_containers, unused_element, prefer_const_literals_to_create_immutables, library_private_types_in_public_api
 
+import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter/material.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
@@ -106,41 +107,45 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       drawer: NavDrawer(storageWidget: storageWidget, notifyParent: refresh),
-      body: Container(
-        color: AppSettings.isDarkMode ? Palette.kToDark.shade200 : Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-          child: Column(
-            children: <Widget>[
-              if (storageWidget.searchVisible)
-                Card(
-                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: TextField(
-                    autofocus: true,
-                    onChanged: (value) {
-                      storageWidget.search(value);
-                    },
-                    controller: storageWidget.searchController,
-                    decoration: InputDecoration(
-                        hintText: 'Search',
-                        prefixIcon: Icon(Icons.search_rounded),
-                        fillColor: Colors.grey[300],
-                        filled: true,
-                        border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                            borderRadius: BorderRadius.circular(12))),
+      body: DoubleBackToCloseApp(
+        snackBar: const SnackBar(content: Text('Tap back again to exit')),
+
+        child: Container(
+          color: AppSettings.isDarkMode ? Palette.kToDark.shade200 : Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+            child: Column(
+              children: <Widget>[
+                if (storageWidget.searchVisible)
+                  Card(
+                    margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    child: TextField(
+                      autofocus: true,
+                      onChanged: (value) {
+                        storageWidget.search(value);
+                      },
+                      controller: storageWidget.searchController,
+                      decoration: InputDecoration(
+                          hintText: 'Search',
+                          prefixIcon: Icon(Icons.search_rounded),
+                          fillColor: Colors.grey[300],
+                          filled: true,
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                              borderRadius: BorderRadius.circular(12))),
+                    ),
+                  ),
+                Expanded(
+                  child: Scrollbar(
+                    child: TasksBuilder(
+                      // darkmode: AppSettings.isDarkMode,
+                      taskData: taskData,
+                      pendingFilter: pendingFilter,
+                    ),
                   ),
                 ),
-              Expanded(
-                child: Scrollbar(
-                  child: TasksBuilder(
-                    // darkmode: AppSettings.isDarkMode,
-                    taskData: taskData,
-                    pendingFilter: pendingFilter,
-                  ),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
