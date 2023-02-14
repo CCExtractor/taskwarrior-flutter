@@ -86,6 +86,7 @@ class _TasksBuilderState extends State<TasksBuilder> {
         duration: const Duration(milliseconds: 100), //show/hide animation
         opacity: showbtn ? 1.0 : 0.0, //set obacity to 1 on visible, or hide
         child: FloatingActionButton(
+          heroTag: "btn2",
           onPressed: () {
             scrollController.animateTo(
                 //go to top of scroll
