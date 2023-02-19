@@ -13,9 +13,18 @@ class NotificationService {
       requestCriticalPermission: true,
       requestSoundPermission: true);
 
+  DarwinInitializationSettings macosSettings =
+      const DarwinInitializationSettings(
+          requestAlertPermission: true,
+          requestBadgePermission: true,
+          requestCriticalPermission: true,
+          requestSoundPermission: true);
+
   void initiliazeNotification() async {
     InitializationSettings initializationSettings = InitializationSettings(
-        android: _androidInitializationSettings, iOS: iosSettings);
+        android: _androidInitializationSettings,
+        iOS: iosSettings,
+        macOS: macosSettings);
 
     await _flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }

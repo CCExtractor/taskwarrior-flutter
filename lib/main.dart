@@ -17,12 +17,15 @@ import 'package:taskwarrior/routes/pageroute.dart';
 
 Future main([List<String> args = const []]) async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Permission.notification.isDenied.then((value) {
-    if (value) {
-      Permission.notification.request();
-    }
 
-  });
+  if(!Platform.isMacOS){
+    await Permission.notification.isDenied.then((value) {
+      if (value) {
+        Permission.notification.request();
+      }
+
+    });
+  }
 
   Directory? testingDirectory;
   if (args.contains('flutter_driver_test')) {
