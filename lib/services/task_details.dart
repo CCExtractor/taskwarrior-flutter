@@ -105,6 +105,7 @@ class _DetailRouteState extends State<DetailRoute> {
         floatingActionButton: (modify.changes.isEmpty)
             ? null
             : FloatingActionButton(
+          heroTag: 'btn2',
                 onPressed: () {
                   showDialog(
                     context: context,
@@ -147,7 +148,7 @@ class _DetailRouteState extends State<DetailRoute> {
       ),
       onWillPop: () async {
         if (modify.changes.isNotEmpty) {
-          return (await showDialog(
+          return await showDialog(
             context: context,
             builder: (context) {
               return AlertDialog(
@@ -179,7 +180,7 @@ class _DetailRouteState extends State<DetailRoute> {
                 ],
               );
             },
-          )) ?? false;
+          );
         } else {
           return await Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(builder: (context) => HomePage()),
