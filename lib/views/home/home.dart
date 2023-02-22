@@ -108,9 +108,9 @@ class _HomePageState extends State<HomePage> {
       drawer: NavDrawer(storageWidget: storageWidget, notifyParent: refresh),
       body: DoubleBackToCloseApp(
         snackBar: const SnackBar(content: Text('Tap back again to exit')),
-
         child: Container(
-          color: AppSettings.isDarkMode ? Palette.kToDark.shade200 : Colors.white,
+          color:
+              AppSettings.isDarkMode ? Palette.kToDark.shade200 : Colors.white,
           child: Padding(
             padding: const EdgeInsets.only(left: 8.0, right: 8.0),
             child: Column(
@@ -150,6 +150,7 @@ class _HomePageState extends State<HomePage> {
       ),
       endDrawer: FilterDrawer(filters),
       floatingActionButton: FloatingActionButton(
+        heroTag: 'btn3',
         backgroundColor:
             AppSettings.isDarkMode ? Colors.white : Palette.kToDark.shade200,
         child: Icon(

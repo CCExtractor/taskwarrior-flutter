@@ -177,6 +177,7 @@ class TagsRouteState extends State<TagsRoute> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: 'btn4',
         onPressed: () {
           var controller = TextEditingController();
           showDialog(
