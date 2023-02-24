@@ -272,7 +272,7 @@ class _StorageWidgetState extends State<StorageWidget> {
   void search(String term) {
     searchedTasks = queriedTasks
         .where(
-          (task) => task.description.contains(term),
+          (task) => task.description.toLowerCase().contains(term.toLowerCase()),
         )
         .toList();
     setState(() {});
