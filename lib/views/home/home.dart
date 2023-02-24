@@ -36,6 +36,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+   void reload() {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     var storageWidget = StorageWidget.of(context);
@@ -105,7 +110,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      drawer: NavDrawer(storageWidget: storageWidget, notifyParent: refresh),
+      drawer: NavDrawer(storageWidget: storageWidget, notifyParent: refresh, reload: reload,),
       body: DoubleBackToCloseApp(
         snackBar: const SnackBar(content: Text('Tap back again to exit')),
 

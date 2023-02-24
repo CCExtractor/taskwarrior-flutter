@@ -6,8 +6,9 @@ import 'package:taskwarrior/routes/pageroute.dart';
 class NavDrawer extends StatefulWidget {
   InheritedStorage storageWidget;
   final Function() notifyParent;
+  final Function() reload;
 
-  NavDrawer({Key? key, required this.storageWidget, required this.notifyParent})
+  NavDrawer({Key? key, required this.storageWidget, required this.notifyParent, required this.reload})
       : super(key: key);
 
   @override
@@ -62,6 +63,7 @@ class _NavDrawerState extends State<NavDrawer> {
               ),
               onTap: () {
                 storageWidget.synchronize(context);
+                widget.reload();
                 Navigator.pop(context);
               },
               title: const Text("Refresh"),
