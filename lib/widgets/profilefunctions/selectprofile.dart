@@ -81,7 +81,12 @@ class SelectProfileListTile extends StatelessWidget {
       leading: Radio<String>(
         value: uuid,
         groupValue: selectedUuid,
-        onChanged: (_) => select(),
+        onChanged: (_) {
+          select();
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text('Switched to Profile ${alias ?? uuid}'),
+          ));
+        },
         activeColor: AppSettings.isDarkMode
             ? Colors.white
             : const Color.fromARGB(255, 48, 46, 46),
