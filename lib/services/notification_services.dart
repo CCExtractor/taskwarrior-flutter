@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
@@ -13,14 +15,28 @@ class NotificationService {
       requestCriticalPermission: true,
       requestSoundPermission: true);
 
+  Future<void> requestMacOsPermissions() async {
+    if (Platform.isMacOS) {
+      await _flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<
+              MacOSFlutterLocalNotificationsPlugin>()
+          ?.requestPermissions(
+            alert: true,
+            badge: true,
+            sound: true,
+          );
+    }
+  }
+
   DarwinInitializationSettings macosSettings =
       const DarwinInitializationSettings(
-          requestAlertPermission: true,
-          requestBadgePermission: true,
-          requestCriticalPermission: true,
-          requestSoundPermission: true);
+    requestAlertPermission: true,
+    requestBadgePermission: true,
+    requestSoundPermission: true,
+    requestCriticalPermission: true,
+  );
 
-  void initiliazeNotification() async {
+  Future<void> initiliazeNotification() async {
     InitializationSettings initializationSettings = InitializationSettings(
         android: _androidInitializationSettings,
         iOS: iosSettings,
@@ -30,6 +46,8 @@ class NotificationService {
   }
 
   void sendNotification(DateTime dtb, String task) async {
+    print("sent notif");
+
     DateTime dateTime = DateTime.now();
     tz.initializeTimeZones();
     print("date and time are:-$dateTime");
@@ -52,15 +70,20 @@ class NotificationService {
     NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
 
-    _flutterLocalNotificationsPlugin.zonedSchedule(
-        scheduledAt.day * 100 + scheduledAt.hour * 10 + scheduledAt.minute,
-        'Task Warrior Reminder',
-        'Hey! Your task of $task is still pending',
-        scheduledAt,
-        notificationDetails,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime,
-        androidAllowWhileIdle: true);
+    _flutterLocalNotificationsPlugin
+        .zonedSchedule(
+            scheduledAt.day * 100 + scheduledAt.hour * 10 + scheduledAt.minute,
+            'Task Warrior Reminder',
+            'Hey! Your task of $task is still pending',
+            scheduledAt,
+            notificationDetails,
+            payload: 'payload',
+            uiLocalNotificationDateInterpretation:
+                UILocalNotificationDateInterpretation.absoluteTime,
+            androidAllowWhileIdle: true)
+        .then((value) {
+      print("notif ok");
+    });
     print(scheduledAt.day * 100 + scheduledAt.hour * 10 + scheduledAt.minute);
   }
 }

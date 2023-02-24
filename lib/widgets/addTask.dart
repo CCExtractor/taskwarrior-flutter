@@ -114,7 +114,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                                       due = dateTime.toUtc();
                                       NotificationService notificationService =
                                           NotificationService();
-                                      notificationService
+                                      await notificationService
                                           .initiliazeNotification();
 
                                       notificationService.sendNotification(

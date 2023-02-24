@@ -23,8 +23,9 @@ Future main([List<String> args = const []]) async {
       if (value) {
         Permission.notification.request();
       }
-
     });
+  } else {
+    await NotificationService().requestMacOsPermissions();
   }
 
   Directory? testingDirectory;
