@@ -7,11 +7,16 @@ import 'package:taskwarrior/views/home/home.dart';
 import 'package:taskwarrior/widgets/project_filter.dart';
 import 'package:taskwarrior/widgets/tag_filter.dart';
 
-class FilterDrawer extends StatelessWidget {
+class FilterDrawer extends StatefulWidget {
   const FilterDrawer(this.filters, {Key? key}) : super(key: key);
 
   final Filters filters;
 
+  @override
+  State<FilterDrawer> createState() => _FilterDrawerState();
+}
+
+class _FilterDrawerState extends State<FilterDrawer> {
   @override
   Widget build(BuildContext context) {
     var storageWidget = StorageWidget.of(context);
@@ -29,9 +34,9 @@ class FilterDrawer extends StatelessWidget {
               Card(
                 child: ListTile(
                   title: Text(
-                    'filter:${filters.pendingFilter ? 'status : pending' : 'status : archived'}',
+                    'filter:${widget.filters.pendingFilter ? 'status : pending' : 'status : archived'}',
                   ),
-                  onTap: filters.togglePendingFilter,
+                  onTap: widget.filters.togglePendingFilter,
                   tileColor: AppSettings.isDarkMode
                       ? Color.fromARGB(255, 48, 46, 46)
                       : Color.fromARGB(255, 220, 216, 216),
@@ -40,16 +45,38 @@ class FilterDrawer extends StatelessWidget {
                       : Color.fromARGB(255, 48, 46, 46),
                 ),
               ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: DropdownButton( 
+                  underline: SizedBox(),
+                  isExpanded: true,
+                  hint: Text('Filter: Status', style: TextStyle(color: Colors.white),),
+                  dropdownColor: Color.fromARGB(255, 48, 46, 46),
+                  items: const [
+                    DropdownMenuItem(
+                      value: 'pending',
+                      child: Text('Filter:Status: Pending',style: TextStyle(color: Colors.white),),
+                    ),
+                    DropdownMenuItem(  
+                      value: 'archived ',
+                      child: Text('Filter:Status: Completed', style: TextStyle(color: Colors.white)),
+                    )
+                  ],
+                  focusColor: Colors.white,
+                  onChanged: (value){
+                  },
+                ),
+              ),
               const Divider(),
               ProjectsColumn(
-                filters.projects,
-                filters.projectFilter,
-                filters.toggleProjectFilter,
+                widget.filters.projects,
+                widget.filters.projectFilter,
+                widget.filters.toggleProjectFilter,
               ),
               const Divider(),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: TagFiltersWrap(filters.tagFilters),
+                child: TagFiltersWrap(widget.filters.tagFilters),
               ),
               const Divider(),
               Padding(
@@ -57,8 +84,9 @@ class FilterDrawer extends StatelessWidget {
                 child: Text(
                   'Sort By : ',
                   style: TextStyle(
-                      color:
-                          (AppSettings.isDarkMode ? Colors.white : Colors.black),
+                      color: (AppSettings.isDarkMode
+                          ? Colors.white
+                          : Colors.black),
                       fontStyle: FontStyle.normal,
                       fontSize: 20),
                   textAlign: TextAlign.left,

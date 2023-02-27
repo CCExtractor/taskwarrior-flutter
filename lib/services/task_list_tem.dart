@@ -78,7 +78,6 @@ class TaskListItem extends StatelessWidget {
           ),
         ],
       ),
-      // isThreeLine: true,
     );
   }
 }

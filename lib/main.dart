@@ -9,9 +9,7 @@ import 'package:uuid/uuid.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:taskwarrior/widgets/taskdetails/profiles_widget.dart';
 import 'package:flutter/material.dart';
-// import 'package:taskwarrior/model/task.dart';
 import 'package:taskwarrior/views/home/home.dart';
-//import 'package:flutter_dotenv/flutter_dotenv.dart'
 import 'package:loggy/loggy.dart';
 import 'package:taskwarrior/routes/pageroute.dart';
 
