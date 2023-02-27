@@ -31,24 +31,11 @@ class _FilterDrawerState extends State<FilterDrawer> {
             primary: false,
             key: const PageStorageKey('tags-filter'),
             children: [
-              Card(
-                child: ListTile(
-                  title: Text(
-                    'filter:${widget.filters.pendingFilter ? 'status : pending' : 'status : archived'}',
-                  ),
-                  onTap: widget.filters.togglePendingFilter,
-                  tileColor: AppSettings.isDarkMode
-                      ? Color.fromARGB(255, 48, 46, 46)
-                      : Color.fromARGB(255, 220, 216, 216),
-                  textColor: AppSettings.isDarkMode
-                      ? Colors.white
-                      : Color.fromARGB(255, 48, 46, 46),
-                ),
-              ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: DropdownButton( 
                   underline: SizedBox(),
+                  icon: Icon(Icons.arrow_drop_down, color: Colors.white),
                   isExpanded: true,
                   hint: Text('Filter: Status', style: TextStyle(color: Colors.white),),
                   dropdownColor: Color.fromARGB(255, 48, 46, 46),
