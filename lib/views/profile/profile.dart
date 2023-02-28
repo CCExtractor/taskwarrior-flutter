@@ -1,13 +1,16 @@
 // ignore_for_file: file_names, unused_import, library_private_types_in_public_api
+
 import 'dart:io';
+
 import 'package:flutter/material.dart';
+
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/model/storage/savefile.dart';
+import 'package:taskwarrior/routes/pageroute.dart';
 import 'package:taskwarrior/taskserver/configure_taskserver.dart';
 import 'package:taskwarrior/widgets/pallete.dart';
 import 'package:taskwarrior/widgets/profilefunctions.dart';
 import 'package:taskwarrior/widgets/taskdetails.dart';
-import 'package:taskwarrior/routes/pageroute.dart';
 import 'package:taskwarrior/widgets/taskfunctions/taskparser.dart';
 
 class ProfilePage extends StatefulWidget {

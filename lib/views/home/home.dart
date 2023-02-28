@@ -1,7 +1,9 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, deprecated_member_use, avoid_unnecessary_containers, unused_element, prefer_const_literals_to_create_immutables, library_private_types_in_public_api
 
-import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter/material.dart';
+
+import 'package:double_back_to_close_app/double_back_to_close_app.dart';
+
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/drawer/filter_drawer.dart';
 import 'package:taskwarrior/drawer/nav_drawer.dart';
@@ -108,9 +110,9 @@ class _HomePageState extends State<HomePage> {
       drawer: NavDrawer(storageWidget: storageWidget, notifyParent: refresh),
       body: DoubleBackToCloseApp(
         snackBar: const SnackBar(content: Text('Tap back again to exit')),
-
         child: Container(
-          color: AppSettings.isDarkMode ? Palette.kToDark.shade200 : Colors.white,
+          color:
+              AppSettings.isDarkMode ? Palette.kToDark.shade200 : Colors.white,
           child: Padding(
             padding: const EdgeInsets.only(left: 8.0, right: 8.0),
             child: Column(

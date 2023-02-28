@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'package:loggy/loggy.dart';
+
 import 'package:taskwarrior/config/app_settings.dart';
 
 class DescriptionWidget extends StatelessWidget {

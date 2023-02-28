@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
 import 'package:taskwarrior/views/home/home.dart';
@@ -57,8 +58,9 @@ class FilterDrawer extends StatelessWidget {
                 child: Text(
                   'Sort By : ',
                   style: TextStyle(
-                      color:
-                          (AppSettings.isDarkMode ? Colors.white : Colors.black),
+                      color: (AppSettings.isDarkMode
+                          ? Colors.white
+                          : Colors.black),
                       fontStyle: FontStyle.normal,
                       fontSize: 20),
                   textAlign: TextAlign.left,
