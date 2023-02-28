@@ -83,8 +83,8 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             icon: (storageWidget.searchVisible)
-                ? const Icon(Icons.cancel, color: Colors.white)
-                : const Icon(Icons.search, color: Colors.white),
+                ? Tooltip(message: 'Cancel', child: const Icon(Icons.cancel, color: Colors.white))
+                : Tooltip(message: 'Search', child: const Icon(Icons.search, color: Colors.white)),
             onPressed: storageWidget.toggleSearch,
           ),
           // Builder(
@@ -95,14 +95,14 @@ class _HomePageState extends State<HomePage> {
           // ),
           Builder(
             builder: (context) => IconButton(
-              icon: const Icon(Icons.filter_list, color: Colors.white),
+              icon: Tooltip(message: 'Filters',child: const Icon(Icons.filter_list, color: Colors.white),),
               onPressed: () => Scaffold.of(context).openEndDrawer(),
             ),
           ),
         ],
         leading: Builder(
           builder: (context) => IconButton(
-            icon: const Icon(Icons.menu, color: Colors.white),
+            icon: Tooltip(message:'Menu', child: const Icon(Icons.menu, color: Colors.white)),
             onPressed: () => Scaffold.of(context).openDrawer(),
           ),
         ),
@@ -154,10 +154,13 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor:
             AppSettings.isDarkMode ? Colors.white : Palette.kToDark.shade200,
-        child: Icon(
-          Icons.add,
-          color:
-              AppSettings.isDarkMode ? Palette.kToDark.shade200 : Colors.white,
+        child: Tooltip(
+          message: 'Add Task',
+          child: Icon(
+            Icons.add,
+            color:
+                AppSettings.isDarkMode ? Palette.kToDark.shade200 : Colors.white,
+          ),
         ),
         onPressed: () => showDialog(
           context: context,
