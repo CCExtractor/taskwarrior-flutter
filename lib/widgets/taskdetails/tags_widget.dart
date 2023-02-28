@@ -4,11 +4,10 @@ import 'package:flutter/material.dart';
 
 import 'package:built_collection/built_collection.dart';
 import 'package:loggy/loggy.dart';
+
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
-
 import 'package:taskwarrior/widgets/taskw.dart';
-
 import '../pallete.dart';
 
 class TagsWidget extends StatelessWidget {
@@ -177,7 +176,9 @@ class TagsRouteState extends State<TagsRoute> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: "btn4",
         onPressed: () {
+          final _formKey = GlobalKey<FormState>();
           var controller = TextEditingController();
           showDialog(
             context: context,
@@ -187,9 +188,20 @@ class TagsRouteState extends State<TagsRoute> {
                   : Colors.white,
               scrollable: true,
               title: const Text('Add tag'),
-              content: TextField(
-                autofocus: true,
-                controller: controller,
+              content: Form(
+                key: _formKey,
+                child: TextFormField(
+                  validator: (value){
+                    if(value != null){
+                      if(value.isNotEmpty && value.contains(" ")){
+                        return "Tags cannot contain spaces";
+                      }
+                    }
+                    return null;
+                  },
+                  autofocus: true,
+                  controller: controller,
+                ),
               ),
               actions: [
                 TextButton(
@@ -200,12 +212,14 @@ class TagsRouteState extends State<TagsRoute> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    try {
-                      validateTaskTags(controller.text);
-                      _addTag(controller.text);
-                      Navigator.of(context).pop();
-                    } on FormatException catch (e, trace) {
-                      logError(e, trace);
+                    if(_formKey.currentState!.validate()){
+                      try {
+                        validateTaskTags(controller.text);
+                        _addTag(controller.text);
+                        Navigator.of(context).pop();
+                      } on FormatException catch (e, trace) {
+                        logError(e, trace);
+                      }
                     }
                   },
                   child: const Text('Submit'),
