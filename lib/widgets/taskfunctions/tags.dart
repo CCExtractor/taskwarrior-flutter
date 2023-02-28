@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:taskwarrior/model/json.dart';
 
 Set<String> tagSet(Iterable<Task> tasks) {

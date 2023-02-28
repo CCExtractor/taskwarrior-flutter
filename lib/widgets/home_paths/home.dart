@@ -1,7 +1,8 @@
 import 'dart:io';
+
 import 'package:taskwarrior/model/storage/bad_certificate_exception.dart';
-import 'package:taskwarrior/widgets/taskserver.dart' as rc;
 import 'package:taskwarrior/widgets/home_paths.dart';
+import 'package:taskwarrior/widgets/taskserver.dart' as rc;
 
 class Home {
   const Home({

@@ -7,7 +7,6 @@ import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 
 import 'package:taskwarrior/model/json.dart';
-
 import 'package:taskwarrior/widgets/taskw.dart';
 
 part 'task.g.dart';
