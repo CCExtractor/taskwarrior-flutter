@@ -82,30 +82,28 @@ class _TasksBuilderState extends State<TasksBuilder> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButtonLocation:
-            FloatingActionButtonLocation.miniStartFloat,
-        floatingActionButton: AnimatedOpacity(
-          duration: const Duration(milliseconds: 100), //show/hide animation
-          opacity: showbtn ? 1.0 : 0.0, //set obacity to 1 on visible, or hide
-          child: FloatingActionButton(
-            onPressed: () {
-              scrollController.animateTo(
-                  //go to top of scroll
-                  0, //scroll offset to go
-                  duration:
-                      const Duration(milliseconds: 500), //duration of scroll
-                  curve: Curves.fastLinearToSlowEaseIn //scroll type
-                  );
-            },
-            backgroundColor: AppSettings.isDarkMode
-                ? Colors.white
-                : Palette.kToDark.shade200,
-            child: Icon(
-              Icons.arrow_upward,
-              color: AppSettings.isDarkMode
-                  ? Palette.kToDark.shade200
-                  : Colors.white,
-            ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniStartFloat,
+      floatingActionButton: AnimatedOpacity(
+        duration: const Duration(milliseconds: 100), //show/hide animation
+        opacity: showbtn ? 1.0 : 0.0, //set obacity to 1 on visible, or hide
+        child: FloatingActionButton(
+          heroTag: "btn2",
+          onPressed: () {
+            scrollController.animateTo(
+                //go to top of scroll
+                0, //scroll offset to go
+                duration:
+                    const Duration(milliseconds: 500), //duration of scroll
+                curve: Curves.fastLinearToSlowEaseIn //scroll type
+                );
+          },
+          backgroundColor:
+              AppSettings.isDarkMode ? Colors.white : Palette.kToDark.shade200,
+          child: Icon(
+            Icons.arrow_upward,
+            color: AppSettings.isDarkMode
+                ? Palette.kToDark.shade200
+                : Colors.white,
           ),
         ),
         backgroundColor: Colors.transparent,

@@ -107,6 +107,7 @@ class _DetailRouteState extends State<DetailRoute> {
         floatingActionButton: (modify.changes.isEmpty)
             ? null
             : FloatingActionButton(
+                heroTag: "btn1",
                 onPressed: () {
                   showDialog(
                     context: context,

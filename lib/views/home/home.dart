@@ -152,6 +152,7 @@ class _HomePageState extends State<HomePage> {
       ),
       endDrawer: FilterDrawer(filters),
       floatingActionButton: FloatingActionButton(
+        heroTag: "btn3",
         backgroundColor:
             AppSettings.isDarkMode ? Colors.white : Palette.kToDark.shade200,
         child: Tooltip(
