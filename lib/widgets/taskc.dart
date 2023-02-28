@@ -1,6 +1,5 @@
 library taskc;
 
-import 'dart:io';
 
 export 'taskc/message.dart';
 export 'taskc/payload.dart';
