@@ -1,8 +1,9 @@
 // ignore_for_file: depend_on_referenced_packages
 
 import 'package:petitparser/petitparser.dart';
-import 'package:taskwarrior/model/json.dart';
 import 'package:uuid/uuid.dart';
+
+import 'package:taskwarrior/model/json.dart';
 
 class Tag {
   const Tag(this.tag);

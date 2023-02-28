@@ -2,7 +2,9 @@ import 'dart:collection';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+
 import 'package:loggy/loggy.dart';
+
 import 'package:taskwarrior/model/json.dart';
 import 'package:taskwarrior/model/storage.dart';
 import 'package:taskwarrior/model/storage/client.dart';
@@ -272,7 +274,7 @@ class _StorageWidgetState extends State<StorageWidget> {
   void search(String term) {
     searchedTasks = queriedTasks
         .where(
-          (task) => task.description.contains(term),
+          (task) => task.description.toLowerCase().contains(term.toLowerCase()),
         )
         .toList();
     setState(() {});

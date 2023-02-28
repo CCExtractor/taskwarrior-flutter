@@ -1,15 +1,16 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/model/json.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
 import 'package:taskwarrior/services/task_details.dart';
 import 'package:taskwarrior/services/task_list_tem.dart';
 import 'package:taskwarrior/widgets/taskfunctions/modify.dart';
-
 import 'pallete.dart';
 
 class TasksBuilder extends StatefulWidget {
@@ -86,6 +87,7 @@ class _TasksBuilderState extends State<TasksBuilder> {
         duration: const Duration(milliseconds: 100), //show/hide animation
         opacity: showbtn ? 1.0 : 0.0, //set obacity to 1 on visible, or hide
         child: FloatingActionButton(
+          heroTag: "btn2",
           onPressed: () {
             scrollController.animateTo(
                 //go to top of scroll
@@ -145,96 +147,121 @@ class _TasksBuilderState extends State<TasksBuilder> {
                                                 dtb.hour * 10 +
                                                 dtb.minute);
 
-                                        print("Task due is $dtb");
-                                        print(dtb.day * 100 +
-                                            dtb.hour * 10 +
-                                            dtb.minute);
+                                          print("Task due is $dtb");
+                                          print(widget
+                                              .taskData); // status is in first index
+                                          print(dtb.day * 100 +
+                                              dtb.hour * 10 +
+                                              dtb.minute);
 
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: const Text('Yes'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: const Text('No'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: const Text('Cancel'),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          },
-                          icon: Icons.done,
-                          label: "COMPLETE",
-                          backgroundColor: Colors.green,
-                        ),
-                      ],
-                    ),
-                    endActionPane: ActionPane(
-                      motion: const DrawerMotion(),
-                      children: [
-                        SlidableAction(
-                          onPressed: (context) {
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  title: const Text(
-                                      'Do you want to save changes?'),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        setStatus('deleted', task.uuid);
-                                        DateTime? dtb = task.due;
-                                        dtb = dtb!
-                                            .add(const Duration(minutes: 1));
-                                        final FlutterLocalNotificationsPlugin
-                                            flutterLocalNotificationsPlugin =
-                                            FlutterLocalNotificationsPlugin();
-                                        flutterLocalNotificationsPlugin.cancel(
-                                            dtb.day * 100 +
-                                                dtb.hour * 10 +
-                                                dtb.minute);
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text('Yes'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text('No'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text('Cancel'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                            icon: Icons.done,
+                            label: "COMPLETE",
+                            backgroundColor: Colors.green,
+                          ),
+                        ],
+                      ),
+                      endActionPane: ActionPane(
+                        motion: const DrawerMotion(),
+                        children: [
+                          SlidableAction(
+                            onPressed: (context) {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: const Text(
+                                        'Do you want to save changes?'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          setStatus('deleted', task.uuid);
+                                          DateTime? dtb = task.due;
+                                          dtb = dtb!
+                                              .add(const Duration(minutes: 1));
+                                          final FlutterLocalNotificationsPlugin
+                                              flutterLocalNotificationsPlugin =
+                                              FlutterLocalNotificationsPlugin();
+                                          flutterLocalNotificationsPlugin
+                                              .cancel(dtb.day * 100 +
+                                                  dtb.hour * 10 +
+                                                  dtb.minute);
 
-                                        print("Task due is$dtb");
-                                        print(dtb.day * 100 +
-                                            dtb.hour * 10 +
-                                            dtb.minute);
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: const Text('Yes'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: const Text('No'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: const Text('Cancel'),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          },
-                          icon: Icons.delete,
-                          label: "DELETE",
-                          backgroundColor: Colors.red,
+                                          print("Task due is$dtb");
+                                          print(dtb.day * 100 +
+                                              dtb.hour * 10 +
+                                              dtb.minute);
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text('Yes'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text('No'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text('Cancel'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                            icon: Icons.delete,
+                            label: "DELETE",
+                            backgroundColor: Colors.red,
+                          ),
+                        ],
+                      ),
+                      child: Card(
+                        color: AppSettings.isDarkMode
+                            ? Palette.kToDark
+                            : Colors.white,
+                        child: InkWell(
+                          splashColor: AppSettings.isDarkMode
+                              ? Colors.black
+                              : Colors.grey.shade200,
+                          onDoubleTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DetailRoute(task
+                                  .uuid), // added functionality for double tap to open task-details
+                            ),
+                          ),
+                          child: TaskListItem(
+                            task,
+                            pendingFilter: widget.pendingFilter,
+                            darkmode: AppSettings.isDarkMode,
+                          ),
                         ),
-                      ],
-                    ),
-                    child: Card(
+                      ),
+                    )
+                  : Card(
                       color: AppSettings.isDarkMode
                           ? Palette.kToDark
                           : Colors.white,
@@ -242,10 +269,11 @@ class _TasksBuilderState extends State<TasksBuilder> {
                         splashColor: AppSettings.isDarkMode
                             ? Colors.black
                             : Colors.grey.shade200,
-                        onTap: () => Navigator.push(
+                        onDoubleTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => DetailRoute(task.uuid),
+                            builder: (context) => DetailRoute(task
+                                .uuid), // added functionality for double tap to open task-details
                           ),
                         ),
                         child: TaskListItem(
@@ -255,29 +283,7 @@ class _TasksBuilderState extends State<TasksBuilder> {
                         ),
                       ),
                     ),
-                  )
-                : Card(
-                    color:
-                        AppSettings.isDarkMode ? Palette.kToDark : Colors.white,
-                    child: InkWell(
-                      splashColor: AppSettings.isDarkMode
-                          ? Colors.black
-                          : Colors.grey.shade200,
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DetailRoute(task.uuid),
-                        ),
-                      ),
-                      child: TaskListItem(
-                        task,
-                        pendingFilter: widget.pendingFilter,
-                        darkmode: AppSettings.isDarkMode,
-                      ),
-                    ),
-                  ),
-        ],
-      ),
-    );
+          ],
+        ));
   }
 }

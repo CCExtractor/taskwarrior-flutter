@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:taskwarrior/model/json.dart';
-
 import 'package:taskwarrior/widgets/taskw.dart';
 
 // ignore: prefer_expression_function_bodies

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
-import 'package:taskwarrior/config/app_settings.dart';
 
+import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/widgets/taskw.dart';
 
 class InheritedProjects extends InheritedWidget {
