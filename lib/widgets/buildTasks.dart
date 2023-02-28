@@ -106,40 +106,46 @@ class _TasksBuilderState extends State<TasksBuilder> {
                 : Colors.white,
           ),
         ),
-        backgroundColor: Colors.transparent,
-        body: ListView(
-          controller: scrollController,
-          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
-          children: [
-            for (var task in widget.taskData)
-              widget.pendingFilter
-                  ? Slidable(
-                      key: ValueKey(task.uuid),
-                      startActionPane: ActionPane(
-                        motion: const BehindMotion(),
-                        children: [
-                          SlidableAction(
-                            onPressed: (context) {
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    title: const Text(
-                                        'Do you want to save changes?'),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          setStatus('completed', task.uuid);
-                                          DateTime? dtb = task.due;
-                                          dtb = dtb!
-                                              .add(const Duration(minutes: 1));
-                                          final FlutterLocalNotificationsPlugin
-                                              flutterLocalNotificationsPlugin =
-                                              FlutterLocalNotificationsPlugin();
-                                          flutterLocalNotificationsPlugin
-                                              .cancel(dtb.day * 100 +
-                                                  dtb.hour * 10 +
-                                                  dtb.minute);
+      ),
+      backgroundColor: Colors.transparent,
+      body: widget.taskData.isEmpty ? const Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Center(
+          child: Text('Click on the bottom right button to start adding tasks', textAlign: TextAlign.center,),
+        ),
+      ) : ListView(
+        controller: scrollController,
+        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
+        children: [
+          for (var task in widget.taskData)
+            widget.pendingFilter
+                ? Slidable(
+                    key: ValueKey(task.uuid),
+                    startActionPane: ActionPane(
+                      motion: const BehindMotion(),
+                      children: [
+                        SlidableAction(
+                          onPressed: (context) {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: const Text(
+                                      'Do you want to save changes?'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        setStatus('completed', task.uuid);
+                                        DateTime? dtb = task.due;
+                                        dtb = dtb!
+                                            .add(const Duration(minutes: 1));
+                                        final FlutterLocalNotificationsPlugin
+                                            flutterLocalNotificationsPlugin =
+                                            FlutterLocalNotificationsPlugin();
+                                        flutterLocalNotificationsPlugin.cancel(
+                                            dtb.day * 100 +
+                                                dtb.hour * 10 +
+                                                dtb.minute);
 
                                           print("Task due is $dtb");
                                           print(widget
