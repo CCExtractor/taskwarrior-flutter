@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:taskwarrior/config/app_settings.dart';
+
 import 'package:tuple/tuple.dart';
+
+import 'package:taskwarrior/config/app_settings.dart';
 
 class ManageProfile extends StatelessWidget {
   const ManageProfile(

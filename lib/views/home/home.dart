@@ -1,7 +1,9 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, deprecated_member_use, avoid_unnecessary_containers, unused_element, prefer_const_literals_to_create_immutables, library_private_types_in_public_api
 
-import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter/material.dart';
+
+import 'package:double_back_to_close_app/double_back_to_close_app.dart';
+
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/drawer/filter_drawer.dart';
 import 'package:taskwarrior/drawer/nav_drawer.dart';
@@ -81,8 +83,8 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             icon: (storageWidget.searchVisible)
-                ? const Icon(Icons.cancel, color: Colors.white)
-                : const Icon(Icons.search, color: Colors.white),
+                ? Tooltip(message: 'Cancel', child: const Icon(Icons.cancel, color: Colors.white))
+                : Tooltip(message: 'Search', child: const Icon(Icons.search, color: Colors.white)),
             onPressed: storageWidget.toggleSearch,
           ),
           // Builder(
@@ -93,14 +95,14 @@ class _HomePageState extends State<HomePage> {
           // ),
           Builder(
             builder: (context) => IconButton(
-              icon: const Icon(Icons.filter_list, color: Colors.white),
+              icon: Tooltip(message: 'Filters',child: const Icon(Icons.filter_list, color: Colors.white),),
               onPressed: () => Scaffold.of(context).openEndDrawer(),
             ),
           ),
         ],
         leading: Builder(
           builder: (context) => IconButton(
-            icon: const Icon(Icons.menu, color: Colors.white),
+            icon: Tooltip(message:'Menu', child: const Icon(Icons.menu, color: Colors.white)),
             onPressed: () => Scaffold.of(context).openDrawer(),
           ),
         ),
@@ -108,9 +110,9 @@ class _HomePageState extends State<HomePage> {
       drawer: NavDrawer(storageWidget: storageWidget, notifyParent: refresh),
       body: DoubleBackToCloseApp(
         snackBar: const SnackBar(content: Text('Tap back again to exit')),
-
         child: Container(
-          color: AppSettings.isDarkMode ? Palette.kToDark.shade200 : Colors.white,
+          color:
+              AppSettings.isDarkMode ? Palette.kToDark.shade200 : Colors.white,
           child: Padding(
             padding: const EdgeInsets.only(left: 8.0, right: 8.0),
             child: Column(
@@ -153,10 +155,13 @@ class _HomePageState extends State<HomePage> {
         heroTag: "btn3",
         backgroundColor:
             AppSettings.isDarkMode ? Colors.white : Palette.kToDark.shade200,
-        child: Icon(
-          Icons.add,
-          color:
-              AppSettings.isDarkMode ? Palette.kToDark.shade200 : Colors.white,
+        child: Tooltip(
+          message: 'Add Task',
+          child: Icon(
+            Icons.add,
+            color:
+                AppSettings.isDarkMode ? Palette.kToDark.shade200 : Colors.white,
+          ),
         ),
         onPressed: () => showDialog(
           context: context,
