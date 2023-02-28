@@ -191,9 +191,9 @@ class TagsRouteState extends State<TagsRoute> {
               content: Form(
                 key: _formKey,
                 child: TextFormField(
-                  validator: (value){
-                    if(value != null){
-                      if(value.isNotEmpty && value.contains(" ")){
+                  validator: (value) {
+                    if (value != null) {
+                      if (value.isNotEmpty && value.contains(" ")) {
                         return "Tags cannot contain spaces";
                       }
                     }
@@ -212,7 +212,7 @@ class TagsRouteState extends State<TagsRoute> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    if(_formKey.currentState!.validate()){
+                    if (_formKey.currentState!.validate()) {
                       try {
                         validateTaskTags(controller.text);
                         _addTag(controller.text);
