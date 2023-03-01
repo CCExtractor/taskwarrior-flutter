@@ -235,7 +235,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
             Navigator.of(context).pop();
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: const Text(
-                    'Task Added Successfully, Double tap to Edit'), // Intimating the user about the double tap to edit feature
+                    'Task Added Successfully, Tap to Edit'), // Intimating the user about the double tap to edit feature
                 backgroundColor: AppSettings.isDarkMode
                     ? const Color.fromARGB(255, 61, 61, 61)
                     : const Color.fromARGB(255, 39, 39, 39),

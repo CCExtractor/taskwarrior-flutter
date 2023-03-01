@@ -246,17 +246,19 @@ class _TasksBuilderState extends State<TasksBuilder> {
                           splashColor: AppSettings.isDarkMode
                               ? Colors.black
                               : Colors.grey.shade200,
-                          onDoubleTap: () => Navigator.push(
+                          onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => DetailRoute(task
                                   .uuid), // added functionality for double tap to open task-details
                             ),
                           ),
-                          child: TaskListItem(
-                            task,
-                            pendingFilter: widget.pendingFilter,
-                            darkmode: AppSettings.isDarkMode,
+                          child: IgnorePointer(
+                            child: TaskListItem(
+                              task,
+                              pendingFilter: widget.pendingFilter,
+                              darkmode: AppSettings.isDarkMode,
+                            ),
                           ),
                         ),
                       ),
@@ -276,10 +278,12 @@ class _TasksBuilderState extends State<TasksBuilder> {
                                 .uuid), // added functionality for double tap to open task-details
                           ),
                         ),
-                        child: TaskListItem(
-                          task,
-                          pendingFilter: widget.pendingFilter,
-                          darkmode: AppSettings.isDarkMode,
+                        child: IgnorePointer(
+                          child: TaskListItem(
+                            task,
+                            pendingFilter: widget.pendingFilter,
+                            darkmode: AppSettings.isDarkMode,
+                          ),
                         ),
                       ),
                     ),
