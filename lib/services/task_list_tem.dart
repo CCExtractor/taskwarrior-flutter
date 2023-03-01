@@ -64,97 +64,97 @@ class _TaskListItemState extends State<TaskListItem> {
       colours = Colors.green;
     }
 
-    if ((widget.task.status[0].toUpperCase()) == 'P') {
+    //if ((widget.task.status[0].toUpperCase()) == 'P') {
       // to differentiate between pending and completed tasks
       // pending tasks will be having the check boxes, on the other hand completed one's doesn't
-      return CheckboxListTile(
-        // homepage for pending tasks (when the home page is set to pending)
-        side: const BorderSide(
-          color: Colors.grey,
-          width: 1.5,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          side: const BorderSide(color: Colors.black, width: 1.0),
-        ),
-        onChanged: (value) {
-          setState(() {
-            isChecked = value!;
-          });
-          print(isChecked);
-          StatusWidgetData.value = isChecked ? 'completed' : 'pending';
-          setStatus(StatusWidgetData.value, widget.task.uuid);
-          DateTime? dtb = widget.task.due;
-          dtb = dtb!.add(const Duration(minutes: 1));
-          final FlutterLocalNotificationsPlugin
-              flutterLocalNotificationsPlugin =
-              FlutterLocalNotificationsPlugin();
-          flutterLocalNotificationsPlugin
-              .cancel(dtb.day * 100 + dtb.hour * 10 + dtb.minute);
+      // return CheckboxListTile(
+      //   // homepage for pending tasks (when the home page is set to pending)
+      //   side: const BorderSide(
+      //     color: Colors.grey,
+      //     width: 1.5,
+      //   ),
+      //   shape: RoundedRectangleBorder(
+      //     borderRadius: BorderRadius.circular(10.0),
+      //     side: const BorderSide(color: Colors.black, width: 1.0),
+      //   ),
+      //   onChanged: (value) {
+      //     setState(() {
+      //       isChecked = value!;
+      //     });
+      //     print(isChecked);
+      //     StatusWidgetData.value = isChecked ? 'completed' : 'pending';
+      //     setStatus(StatusWidgetData.value, widget.task.uuid);
+      //     DateTime? dtb = widget.task.due;
+      //     dtb = dtb!.add(const Duration(minutes: 1));
+      //     final FlutterLocalNotificationsPlugin
+      //         flutterLocalNotificationsPlugin =
+      //         FlutterLocalNotificationsPlugin();
+      //     flutterLocalNotificationsPlugin
+      //         .cancel(dtb.day * 100 + dtb.hour * 10 + dtb.minute);
 
-          print("Task due is $dtb");
-          print(dtb.day * 100 + dtb.hour * 10 + dtb.minute);
-          print(widget.task.status[0].toUpperCase());
-          print(StatusWidgetData.value);
-        },
-        value: isChecked,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                CircleAvatar(
-                  backgroundColor: colours,
-                  radius: 8,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  '${(widget.task.id == 0) ? '#' : widget.task.id}. ${widget.task.description}',
-                  style: TextStyle(
-                      color: colour,
-                      fontFamily: GoogleFonts.firaMono().fontFamily),
-                ),
-              ],
-            ),
-            Text(
-              (widget.task.annotations != null)
-                  ? ' [${widget.task.annotations!.length}]'
-                  : '',
-              style: TextStyle(
-                  color: colour, fontFamily: GoogleFonts.firaMono().fontFamily),
-            ),
-          ],
-        ),
-        subtitle: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Flexible(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Text(
-                  '${widget.pendingFilter ? '' : '${widget.task.status[0].toUpperCase()}\n'}'
-                          'Last Modified: ${(widget.task.modified != null) ? age(widget.task.modified!) : ((widget.task.start != null) ? age(widget.task.start!) : '-')} | '
-                          'Due: ${(widget.task.due != null) ? when(widget.task.due!) : '-'}'
-                      .replaceFirst(RegExp(r' \[\]$'), '')
-                      .replaceAll(RegExp(r' +'), ' '),
-                  style: TextStyle(
-                      color: dimColor,
-                      fontFamily: GoogleFonts.firaMono().fontFamily,
-                      fontSize: 12,
-                      overflow: TextOverflow.ellipsis),
-                ),
-              ),
-            ),
-            Text(
-              formatUrgency(urgency(widget.task)),
-              style: TextStyle(
-                  color: colour, fontFamily: GoogleFonts.firaMono().fontFamily),
-            ),
-          ],
-        ),
-        // isThreeLine: true,
-      );
-    } else {
+      //     print("Task due is $dtb");
+      //     print(dtb.day * 100 + dtb.hour * 10 + dtb.minute);
+      //     print(widget.task.status[0].toUpperCase());
+      //     print(StatusWidgetData.value);
+      //   },
+      //   value: isChecked,
+      //   title: Row(
+      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //     children: [
+      //       Row(
+      //         children: [
+      //           CircleAvatar(
+      //             backgroundColor: colours,
+      //             radius: 8,
+      //           ),
+      //           const SizedBox(width: 8),
+      //           Text(
+      //             '${(widget.task.id == 0) ? '#' : widget.task.id}. ${widget.task.description}',
+      //             style: TextStyle(
+      //                 color: colour,
+      //                 fontFamily: GoogleFonts.firaMono().fontFamily),
+      //           ),
+      //         ],
+      //       ),
+      //       Text(
+      //         (widget.task.annotations != null)
+      //             ? ' [${widget.task.annotations!.length}]'
+      //             : '',
+      //         style: TextStyle(
+      //             color: colour, fontFamily: GoogleFonts.firaMono().fontFamily),
+      //       ),
+      //     ],
+      //   ),
+      //   subtitle: Row(
+      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //     children: [
+      //       Flexible(
+      //         child: SingleChildScrollView(
+      //           scrollDirection: Axis.horizontal,
+      //           child: Text(
+      //             '${widget.pendingFilter ? '' : '${widget.task.status[0].toUpperCase()}\n'}'
+      //                     'Last Modified: ${(widget.task.modified != null) ? age(widget.task.modified!) : ((widget.task.start != null) ? age(widget.task.start!) : '-')} | '
+      //                     'Due: ${(widget.task.due != null) ? when(widget.task.due!) : '-'}'
+      //                 .replaceFirst(RegExp(r' \[\]$'), '')
+      //                 .replaceAll(RegExp(r' +'), ' '),
+      //             style: TextStyle(
+      //                 color: dimColor,
+      //                 fontFamily: GoogleFonts.firaMono().fontFamily,
+      //                 fontSize: 12,
+      //                 overflow: TextOverflow.ellipsis),
+      //           ),
+      //         ),
+      //       ),
+      //       Text(
+      //         formatUrgency(urgency(widget.task)),
+      //         style: TextStyle(
+      //             color: colour, fontFamily: GoogleFonts.firaMono().fontFamily),
+      //       ),
+      //     ],
+      //   ),
+      //   // isThreeLine: true,
+      // );
+    //} else {
       // homepage for completed tasks (when the filter is set to completed)
       return ListTile(
         /*leading: Icon(
@@ -218,4 +218,4 @@ class _TaskListItemState extends State<TaskListItem> {
       );
     }
   }
-}
+//}
