@@ -36,7 +36,7 @@ class SelectProfile extends StatelessWidget {
             'Profile:',
             overflow: TextOverflow.fade,
           ),
-          Text(currentProfile,
+          Text( currentProfile,
               style: TextStyle(
                 color: AppSettings.isDarkMode ? Colors.grey : Colors.grey[600],
               ))
@@ -98,7 +98,7 @@ class SelectProfileListTile extends StatelessWidget {
         key: PageStorageKey<String>('scroll-title-$uuid'),
         scrollDirection: Axis.horizontal,
         child: Text(
-          alias ?? '',
+          alias ?? 'New Profile',
           style: GoogleFonts.firaMono(),
         ),
       ),
