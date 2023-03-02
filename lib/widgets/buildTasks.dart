@@ -109,7 +109,7 @@ class _TasksBuilderState extends State<TasksBuilder> {
       ),
       backgroundColor: Colors.transparent,
       body: widget.taskData.isEmpty ? Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Center(
           child: Text('Click on the bottom right button to start adding tasks', textAlign: TextAlign.center,  style: TextStyle(color: AppSettings.isDarkMode ? Colors.white : Palette.kToDark.shade200  ),),
         ),
