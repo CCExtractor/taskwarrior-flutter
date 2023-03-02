@@ -78,12 +78,10 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                                       ? Colors.white
                                       : const Color.fromARGB(
                                           255, 220, 216, 216),
-                                  label: Container(
-                                    child: Text(
-                                      (due != null)
-                                          ? dueString
-                                          : "select due date",
-                                    ),
+                                  label: Text(
+                                    (due != null)
+                                        ? dueString
+                                        : "select due date",
                                   ),
                                   onPressed: () async {
                                     var initialDate =
