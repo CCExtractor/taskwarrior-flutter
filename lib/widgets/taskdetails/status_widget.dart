@@ -35,7 +35,7 @@ class StatusWidget extends StatelessWidget {
           ),
         ),
         onTap: () {
-          print(value);
+          debugPrint(value);
           switch (value) {
             case 'pending':
               return callback('completed');

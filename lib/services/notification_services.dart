@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
@@ -23,16 +24,16 @@ class NotificationService {
   void sendNotification(DateTime dtb, String task) async {
     DateTime dateTime = DateTime.now();
     tz.initializeTimeZones();
-    print("date and time are:-$dateTime");
-    print("date and time are:-$dtb");
+    debugPrint("date and time are:-$dateTime");
+    debugPrint("date and time are:-$dtb");
 
     final tz.TZDateTime scheduledAt =
         tz.TZDateTime.from(dtb.add(const Duration(minutes: 1)), tz.local);
     final tz.TZDateTime scheduledAt1 = tz.TZDateTime.local(dateTime.year,
         dateTime.month, dateTime.day, dateTime.hour, dateTime.minute);
-    // print("date and time are:-" + dateTime.toString());
-    print("dtb is :-$scheduledAt");
-    print("date and time are scheduled2:-$scheduledAt1");
+    // debugPrint("date and time are:-" + dateTime.toString());
+    debugPrint("dtb is :-$scheduledAt");
+    debugPrint("date and time are scheduled2:-$scheduledAt1");
 
     AndroidNotificationDetails androidNotificationDetails =
         const AndroidNotificationDetails('channelId', 'TaskReminder',
@@ -52,6 +53,6 @@ class NotificationService {
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
         androidAllowWhileIdle: true);
-    print(scheduledAt.day * 100 + scheduledAt.hour * 10 + scheduledAt.minute);
+    debugPrint((scheduledAt.day * 100 + scheduledAt.hour * 10 + scheduledAt.minute).toString());
   }
 }

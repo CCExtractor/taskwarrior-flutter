@@ -147,12 +147,12 @@ class _TasksBuilderState extends State<TasksBuilder> {
                                                 dtb.hour * 10 +
                                                 dtb.minute);
 
-                                          print("Task due is $dtb");
-                                          print(widget
-                                              .taskData); // status is in first index
-                                          print(dtb.day * 100 +
+                                          debugPrint("Task due is $dtb");
+                                          debugPrint((widget
+                                              .taskData).toString()); // status is in first index
+                                          debugPrint((dtb.day * 100 +
                                               dtb.hour * 10 +
-                                              dtb.minute);
+                                              dtb.minute).toString());
 
                                           Navigator.of(context).pop();
                                         },
@@ -207,10 +207,10 @@ class _TasksBuilderState extends State<TasksBuilder> {
                                                   dtb.hour * 10 +
                                                   dtb.minute);
 
-                                          print("Task due is$dtb");
-                                          print(dtb.day * 100 +
+                                          debugPrint("Task due is$dtb");
+                                          debugPrint((dtb.day * 100 +
                                               dtb.hour * 10 +
-                                              dtb.minute);
+                                              dtb.minute).toString());
                                           Navigator.of(context).pop();
                                         },
                                         child: const Text('Yes'),
