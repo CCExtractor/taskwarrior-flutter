@@ -65,9 +65,8 @@ Parser descriptionWordPrimitive() => wordPrimitive();
 
 final add = (epsilon() & endOfInput()) |
     (tagPrimitive() | attributePrimitive() | descriptionWordPrimitive())
-        .separatedBy(
+        .plusSeparated(
       char(' '),
-      includeSeparators: false,
     );
 
 Task taskParser(String task) {
