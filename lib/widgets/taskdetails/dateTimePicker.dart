@@ -49,23 +49,25 @@ class DateTimeWidget extends StatelessWidget {
             lastDate: DateTime(2037, 12, 31), // < 2038-01-19T03:14:08.000Z
           );
           if (date != null) {
-            var time = await showTimePicker(
-              context: context,
-              initialTime: TimeOfDay.fromDateTime(initialDate),
-            );
-            if (time != null) {
-              var dateTime = date.add(
-                Duration(
-                  hours: time.hour,
-                  minutes: time.minute,
-                ),
+            if (context.mounted) {
+              var time = await showTimePicker(
+                context: context,
+                initialTime: TimeOfDay.fromDateTime(initialDate),
               );
-              dateTime = dateTime.add(
-                Duration(
-                  hours: time.hour - dateTime.hour,
-                ),
-              );
-              return callback(dateTime.toUtc());
+              if (time != null) {
+                var dateTime = date.add(
+                  Duration(
+                    hours: time.hour,
+                    minutes: time.minute,
+                  ),
+                );
+                dateTime = dateTime.add(
+                  Duration(
+                    hours: time.hour - dateTime.hour,
+                  ),
+                );
+                return callback(dateTime.toUtc());
+              }
             }
           }
         },

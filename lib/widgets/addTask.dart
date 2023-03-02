@@ -95,41 +95,44 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                                           31), // < 2038-01-19T03:14:08.000Z
                                     );
                                     if (date != null) {
-                                      var time = await showTimePicker(
-                                        context: context,
-                                        initialTime:
-                                            TimeOfDay.fromDateTime(initialDate),
-                                      );
-                                      if (time != null) {
-                                        var dateTime = date.add(
-                                          Duration(
-                                            hours: time.hour,
-                                            minutes: time.minute,
-                                          ),
+                                      if (context.mounted) {
+                                        var time = await showTimePicker(
+                                          context: context,
+                                          initialTime: TimeOfDay.fromDateTime(
+                                              initialDate),
                                         );
-                                        dateTime = dateTime.add(
-                                          Duration(
-                                            hours: time.hour - dateTime.hour,
-                                          ),
-                                        );
-                                        due = dateTime.toUtc();
-                                        NotificationService
-                                            notificationService =
-                                            NotificationService();
-                                        notificationService
-                                            .initiliazeNotification();
+                                        if (time != null) {
+                                          var dateTime = date.add(
+                                            Duration(
+                                              hours: time.hour,
+                                              minutes: time.minute,
+                                            ),
+                                          );
+                                          dateTime = dateTime.add(
+                                            Duration(
+                                              hours: time.hour - dateTime.hour,
+                                            ),
+                                          );
+                                          due = dateTime.toUtc();
+                                          NotificationService
+                                              notificationService =
+                                              NotificationService();
+                                          notificationService
+                                              .initiliazeNotification();
 
-                                        if ((dateTime.millisecondsSinceEpoch -
-                                                DateTime.now()
-                                                    .millisecondsSinceEpoch) >
-                                            0) {
-                                          notificationService.sendNotification(
-                                              dateTime, namecontroller.text);
+                                          if ((dateTime.millisecondsSinceEpoch -
+                                                  DateTime.now()
+                                                      .millisecondsSinceEpoch) >
+                                              0) {
+                                            notificationService
+                                                .sendNotification(dateTime,
+                                                    namecontroller.text);
+                                          }
+
+                                          dueString =
+                                              DateFormat("dd-MM-yyyy HH:mm")
+                                                  .format(dateTime);
                                         }
-
-                                        dueString =
-                                            DateFormat("dd-MM-yyyy HH:mm")
-                                                .format(dateTime);
                                       }
                                     }
                                     setState(() {});

@@ -248,9 +248,11 @@ class _StorageWidgetState extends State<StorageWidget> {
       pendingTags = _pendingTags();
       projects = _projects();
       setState(() {});
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('${header['code']}: ${header['status']}'),
-      ));
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('${header['code']}: ${header['status']}'),
+        ));
+      }
       // ignore: avoid_catches_without_on_clauses
     } catch (e, trace) {
       logError(e, trace);
