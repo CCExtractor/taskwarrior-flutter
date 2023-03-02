@@ -9,7 +9,7 @@ Future<void> setConfig({required Storage storage, required String key}) async {
   String? contents;
   String? name;
   if (Platform.isLinux || Platform.isMacOS || Platform.isWindows) {
-    var typeGroup = XTypeGroup(label: key, extensions: []);
+    var typeGroup = XTypeGroup(label: key, extensions: const []);
     var file = await openFile(acceptedTypeGroups: [typeGroup]);
     if (file != null) {
       contents = await file.readAsString();
