@@ -207,8 +207,8 @@ class AttributeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DateTime format =
-        (value is DateTime) ? (value).toLocal() : DateTime.now().toUtc();
+    // DateTime format =
+    //     (value is DateTime) ? (value).toLocal() : DateTime.now().toUtc();
     var localValue = (value is DateTime)
         ? // now = (value as DateTime).toLocal(),
         // '${format.day}-${format.month}-${format.year} ${format.hour}:${format.minute}'
