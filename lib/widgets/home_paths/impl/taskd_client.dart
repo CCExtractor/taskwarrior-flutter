@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:io';
+// ignore: unnecessary_import
+import 'dart:typed_data';
 
 import 'package:taskwarrior/model/storage/taskserver_configuration_exception.dart';
 import 'package:taskwarrior/widgets/taskc/impl/codec.dart';
