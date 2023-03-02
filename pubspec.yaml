@@ -37,6 +37,7 @@ dependencies:
   import_sorter: ^4.6.0
   double_back_to_close_app: ^2.1.0
   permission_handler: ^10.2.0
+  timezone: ^0.9.1
 
 dev_dependencies:
   flutter_test:
