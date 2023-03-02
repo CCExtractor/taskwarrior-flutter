@@ -121,13 +121,13 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                                         notificationService
                                             .initiliazeNotification();
 
-                                      if ((dateTime.millisecondsSinceEpoch -
-                                              DateTime.now()
-                                                  .millisecondsSinceEpoch) >
-                                          0) {
-                                        notificationService.sendNotification(
-                                            dateTime, namecontroller.text);
-                                      }
+                                        if ((dateTime.millisecondsSinceEpoch -
+                                                DateTime.now()
+                                                    .millisecondsSinceEpoch) >
+                                            0) {
+                                          notificationService.sendNotification(
+                                              dateTime, namecontroller.text);
+                                        }
 
                                         dueString =
                                             DateFormat("dd-MM-yyyy HH:mm")

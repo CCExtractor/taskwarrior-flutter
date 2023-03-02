@@ -83,8 +83,12 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             icon: (storageWidget.searchVisible)
-                ? Tooltip(message: 'Cancel', child: const Icon(Icons.cancel, color: Colors.white))
-                : Tooltip(message: 'Search', child: const Icon(Icons.search, color: Colors.white)),
+                ? Tooltip(
+                    message: 'Cancel',
+                    child: const Icon(Icons.cancel, color: Colors.white))
+                : Tooltip(
+                    message: 'Search',
+                    child: const Icon(Icons.search, color: Colors.white)),
             onPressed: storageWidget.toggleSearch,
           ),
           // Builder(
@@ -95,14 +99,19 @@ class _HomePageState extends State<HomePage> {
           // ),
           Builder(
             builder: (context) => IconButton(
-              icon: Tooltip(message: 'Filters',child: const Icon(Icons.filter_list, color: Colors.white),),
+              icon: Tooltip(
+                message: 'Filters',
+                child: const Icon(Icons.filter_list, color: Colors.white),
+              ),
               onPressed: () => Scaffold.of(context).openEndDrawer(),
             ),
           ),
         ],
         leading: Builder(
           builder: (context) => IconButton(
-            icon: Tooltip(message:'Menu', child: const Icon(Icons.menu, color: Colors.white)),
+            icon: Tooltip(
+                message: 'Menu',
+                child: const Icon(Icons.menu, color: Colors.white)),
             onPressed: () => Scaffold.of(context).openDrawer(),
           ),
         ),
@@ -159,8 +168,9 @@ class _HomePageState extends State<HomePage> {
           message: 'Add Task',
           child: Icon(
             Icons.add,
-            color:
-                AppSettings.isDarkMode ? Palette.kToDark.shade200 : Colors.white,
+            color: AppSettings.isDarkMode
+                ? Palette.kToDark.shade200
+                : Colors.white,
           ),
         ),
         onPressed: () => showDialog(
