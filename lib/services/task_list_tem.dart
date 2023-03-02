@@ -81,7 +81,7 @@ class _TaskListItemState extends State<TaskListItem> {
           setState(() {
             isChecked = value!;
           });
-          print(isChecked);
+          debugPrint(isChecked as String?);
           StatusWidgetData.value = isChecked ? 'completed' : 'pending';
           setStatus(StatusWidgetData.value, widget.task.uuid);
           DateTime? dtb = widget.task.due;
@@ -92,10 +92,10 @@ class _TaskListItemState extends State<TaskListItem> {
           flutterLocalNotificationsPlugin
               .cancel(dtb.day * 100 + dtb.hour * 10 + dtb.minute);
 
-          print("Task due is $dtb");
-          print(dtb.day * 100 + dtb.hour * 10 + dtb.minute);
-          print(widget.task.status[0].toUpperCase());
-          print(StatusWidgetData.value);
+          debugPrint("Task due is $dtb");
+          debugPrint((dtb.day * 100 + dtb.hour * 10 + dtb.minute) as String?);
+          debugPrint(widget.task.status[0].toUpperCase());
+          debugPrint(StatusWidgetData.value);
         },
         value: isChecked,
         title: Row(
