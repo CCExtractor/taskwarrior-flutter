@@ -5,13 +5,15 @@ import 'package:taskwarrior/model/storage/storage_widget.dart';
 import 'package:taskwarrior/routes/pageroute.dart';
 
 class NavDrawer extends StatefulWidget {
-  InheritedStorage storageWidget;
+  final InheritedStorage storageWidget;
   final Function() notifyParent;
 
-  NavDrawer({Key? key, required this.storageWidget, required this.notifyParent})
+  const NavDrawer(
+      {Key? key, required this.storageWidget, required this.notifyParent})
       : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _NavDrawerState createState() => _NavDrawerState();
 }
 
@@ -85,7 +87,7 @@ class _NavDrawerState extends State<NavDrawer> {
               onTap: () async {
                 AppSettings.isDarkMode = !AppSettings.isDarkMode;
                 setState(() {});
-                await selectedTheme.saveMode(AppSettings.isDarkMode);
+                await SelectedTheme.saveMode(AppSettings.isDarkMode);
                 widget.notifyParent();
               },
             )
