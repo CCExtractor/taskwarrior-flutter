@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/model/json.dart';
@@ -111,12 +112,19 @@ class _TasksBuilderState extends State<TasksBuilder> {
         ),
         backgroundColor: Colors.transparent,
         body: widget.taskData.isEmpty
-            ? const Padding(
-                padding: EdgeInsets.all(16.0),
+            ? Padding(
+                padding: const EdgeInsets.all(16.0),
                 child: Center(
                   child: Text(
                     'Click on the bottom right button to start adding tasks',
                     textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: GoogleFonts.firaMono().fontFamily,
+                      fontSize: 20,
+                      color: AppSettings.isDarkMode
+                          ? Colors.white
+                          : Palette.kToDark.shade200,
+                    ),
                   ),
                 ),
               )
