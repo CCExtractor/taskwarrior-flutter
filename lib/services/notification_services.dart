@@ -53,8 +53,8 @@ class NotificationService {
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
         androidAllowWhileIdle: true);
-    debugPrint((scheduledAt.day * 100 +
-        scheduledAt.hour * 10 +
-        scheduledAt.minute) as String?);
+    var time =
+        scheduledAt.day * 100 + scheduledAt.hour * 10 + scheduledAt.minute;
+    debugPrint(time.toString());
   }
 }
