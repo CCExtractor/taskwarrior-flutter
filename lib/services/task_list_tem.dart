@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:taskwarrior/model/json.dart';
 import 'package:taskwarrior/widgets/taskw.dart';
+
 import '../model/storage/storage_widget.dart';
-import '/widgets/taskdetails/status_widget.dart';
 
 class TaskListItem extends StatefulWidget {
   const TaskListItem(this.task,
@@ -67,37 +66,8 @@ class _TaskListItemState extends State<TaskListItem> {
     if ((widget.task.status[0].toUpperCase()) == 'P') {
       // to differentiate between pending and completed tasks
       // pending tasks will be having the check boxes, on the other hand completed one's doesn't
-      return CheckboxListTile(
+      return ListTile(
         // homepage for pending tasks (when the home page is set to pending)
-        side: const BorderSide(
-          color: Colors.grey,
-          width: 1.5,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          side: const BorderSide(color: Colors.black, width: 1.0),
-        ),
-        onChanged: (value) {
-          setState(() {
-            isChecked = value!;
-          });
-          debugPrint(isChecked as String?);
-          StatusWidgetData.value = isChecked ? 'completed' : 'pending';
-          setStatus(StatusWidgetData.value, widget.task.uuid);
-          DateTime? dtb = widget.task.due;
-          dtb = dtb!.add(const Duration(minutes: 1));
-          final FlutterLocalNotificationsPlugin
-              flutterLocalNotificationsPlugin =
-              FlutterLocalNotificationsPlugin();
-          flutterLocalNotificationsPlugin
-              .cancel(dtb.day * 100 + dtb.hour * 10 + dtb.minute);
-
-          debugPrint("Task due is $dtb");
-          debugPrint((dtb.day * 100 + dtb.hour * 10 + dtb.minute) as String?);
-          debugPrint(widget.task.status[0].toUpperCase());
-          debugPrint(StatusWidgetData.value);
-        },
-        value: isChecked,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
