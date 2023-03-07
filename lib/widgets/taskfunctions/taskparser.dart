@@ -65,6 +65,7 @@ Parser descriptionWordPrimitive() => wordPrimitive();
 
 final add = (epsilon() & endOfInput()) |
     (tagPrimitive() | attributePrimitive() | descriptionWordPrimitive())
+        // ignore: deprecated_member_use
         .separatedBy(
       char(' '),
     );
