@@ -65,7 +65,7 @@ Parser descriptionWordPrimitive() => wordPrimitive();
 
 final add = (epsilon() & endOfInput()) |
     (tagPrimitive() | attributePrimitive() | descriptionWordPrimitive())
-        .plusSeparated(
+        .separatedBy(
       char(' '),
     );
 
