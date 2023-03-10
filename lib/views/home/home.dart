@@ -175,7 +175,7 @@ class _HomePageState extends State<HomePage> {
         ),
         onPressed: () => showDialog(
           context: context,
-          builder: (context) => const AddTaskBottomSheet(),
+          builder: (context) => const AddTaskDialog(),
         ),
       ),
       resizeToAvoidBottomInset: false,
