@@ -26,7 +26,7 @@ dependencies:
   intl: ^0.17.0
   date_format: ^2.0.6
   uuid: ^3.0.6
-  google_fonts: ^3.0.1
+  google_fonts: ^4.0.3
   file_picker_writable: ^2.0.3
   file_selector: ^0.9.0
   tuple: ^2.0.0
@@ -63,9 +63,9 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/.taskrc
+    - assets/.task/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

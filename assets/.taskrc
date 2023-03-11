@@ -1,0 +1,6 @@
+taskd.certificate=/path/to/first_last.certificate.pem
+taskd.key=/path/to/first_last.key.pem
+taskd.ca=/path/to/ca.cert.pem
+taskd.server=host.domain:53589
+taskd.credentials=Public/First Last/7c706c65-7e08-4159-8a5c-3c949564f6f0
+taskd.trust=strict

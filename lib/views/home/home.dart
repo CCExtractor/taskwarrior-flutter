@@ -91,12 +91,12 @@ class _HomePageState extends State<HomePage> {
                     child: const Icon(Icons.search, color: Colors.white)),
             onPressed: storageWidget.toggleSearch,
           ),
-          // Builder(
-          //   builder: (context) => IconButton(
-          //     icon: const Icon(Icons.refresh, color: Colors.white),
-          //     onPressed: () => storageWidget.synchronize(context),
-          //   ),
-          // ),
+          Builder(
+            builder: (context) => IconButton(
+              icon: const Icon(Icons.refresh, color: Colors.white),
+              onPressed: () => storageWidget.synchronize(context),
+            ),
+          ),
           Builder(
             builder: (context) => IconButton(
               icon: Tooltip(
