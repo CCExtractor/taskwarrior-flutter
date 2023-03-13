@@ -1,8 +1,8 @@
-name: Demo App Android Release
+name: Release apk
 
 on:
   push:
-    branches: [ master ]
+    branches: [ taskd ]
 
 jobs:
   version:
