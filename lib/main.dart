@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import 'package:loggy/loggy.dart';
 import 'package:path_provider/path_provider.dart';
@@ -38,16 +39,14 @@ Future main([List<String> args = const []]) async {
     ).createSync(recursive: true);
   }
 
+  Directory directory = await getApplicationDocumentsDirectory();
+  FlutterNativeSplash.remove();
+
   runApp(
-    FutureBuilder<Directory>(
-      future: getApplicationDocumentsDirectory(),
-      builder: (context, snapshot) => (snapshot.hasData)
-          ? ProfilesWidget(
-              baseDirectory: testingDirectory ?? snapshot.data!,
-              child: const MyApp(),
-            )
-          : const Placeholder(),
-    ),
+      ProfilesWidget(
+        baseDirectory: testingDirectory ?? directory,
+        child: const MyApp(),
+      )
   );
 }
 
