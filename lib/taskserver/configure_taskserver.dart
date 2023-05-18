@@ -1,12 +1,9 @@
 import 'dart:math';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loggy/loggy.dart';
-
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/model/storage.dart';
 import 'package:taskwarrior/model/storage/client.dart';
@@ -113,12 +110,26 @@ class _ConfigureTaskserverRouteState extends State<ConfigureTaskserverRoute> {
       server = Taskrc.fromString(contents).server;
       credentials = Taskrc.fromString(contents).credentials;
     }
-
+    var color =
+        AppSettings.isDarkMode ? Colors.white : Palette.kToDark.shade200;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Palette.kToDark.shade200,
-        title:
-            Text(alias ?? profile, style: const TextStyle(color: Colors.white)),
+        titleSpacing:
+            0, // Reduce the spacing between the title and leading/back button
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "Configure TaskServer",
+              style: TextStyle(color: Colors.white, fontSize: 18),
+            ),
+            Text(
+              alias ?? profile,
+              style: const TextStyle(color: Colors.white, fontSize: 12),
+            ),
+          ],
+        ),
         actions: [
           if (kDebugMode)
             IconButton(
@@ -128,14 +139,12 @@ class _ConfigureTaskserverRouteState extends State<ConfigureTaskserverRoute> {
               ),
               onPressed: _setConfigurationFromFixtureForDebugging,
             ),
-          Builder(
-            builder: (context) => IconButton(
-              icon: const Icon(
-                Icons.show_chart,
-                color: Colors.white,
-              ),
-              onPressed: () => _showStatistics(context),
+          IconButton(
+            icon: const Icon(
+              Icons.show_chart,
+              color: Colors.white,
             ),
+            onPressed: () => _showStatistics(context),
           ),
         ],
         leading: const BackButton(
@@ -157,6 +166,27 @@ class _ConfigureTaskserverRouteState extends State<ConfigureTaskserverRoute> {
                 storage: storage,
                 pem: pem,
               ),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.info_outline, color: color),
+                const SizedBox(width: 8),
+                InkWell(
+                  onTap: () {
+                    ///Link the TaskServer or the Inther.am documentation
+                  },
+                  child: Text(
+                    "I dont know how to configure the TaskServer",
+                    style: GoogleFonts.firaMono(
+                      color: color,
+                      decoration: TextDecoration.underline,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                )
+              ],
+            )
           ],
         ),
       ),
@@ -186,10 +216,31 @@ class _PemWidgetState extends State<PemWidget> {
       textColor: color,
       title: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
-        child: Text(
-          '${widget.pem.padRight(17)}${(widget.pem == 'server.cert') ? '' : ' = $name'}',
-          style: GoogleFonts.firaMono(),
+
+        child: RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: widget.pem.padRight(17),
+                style: GoogleFonts.firaMono(
+                  color: color,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              TextSpan(
+                text: (widget.pem == 'server.cert') ? '' : ' = $name',
+                style: GoogleFonts.firaMono(
+                  color: color,
+                  fontWeight: FontWeight.w400,
+                ),
+              )
+            ],
+          ),
         ),
+        // child: Text(
+        //   '${widget.pem.padRight(17)}${(widget.pem == 'server.cert') ? '' : ' = $name'}',
+        //   style: GoogleFonts.firaMono(),
+        // ),
       ),
       subtitle: (key) {
         if (key == 'taskd.key') {
@@ -200,7 +251,10 @@ class _PemWidgetState extends State<PemWidget> {
             scrollDirection: Axis.horizontal,
             child: Text(
               'SHA1: null',
-              style: GoogleFonts.firaMono(),
+              style: GoogleFonts.firaMono(
+                color: color,
+                fontWeight: FontWeight.w800,
+              ),
             ),
           );
         }
@@ -208,9 +262,25 @@ class _PemWidgetState extends State<PemWidget> {
           var identifier = fingerprint(contents).toUpperCase();
           return SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            child: Text(
-              'SHA1: $identifier',
-              style: GoogleFonts.firaMono(),
+            child: RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: 'SHA1 = ',
+                    style: GoogleFonts.firaMono(
+                      color: color,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  TextSpan(
+                    text: identifier,
+                    style: GoogleFonts.firaMono(
+                      color: color,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  )
+                ],
+              ),
             ),
           );
           // ignore: avoid_catches_without_on_clauses
@@ -254,7 +324,11 @@ class TaskrcWidget extends StatefulWidget {
 }
 
 class _TaskrcWidgetState extends State<TaskrcWidget> {
+  final TextEditingController _taskrcContentController =
+      TextEditingController();
   bool hideKey = true;
+
+  Storage get storage => widget.storage;
 
   @override
   Widget build(BuildContext context) {
@@ -263,6 +337,23 @@ class _TaskrcWidgetState extends State<TaskrcWidget> {
 
     Server? server;
     Credentials? credentials;
+
+    void setContent() async {
+      final clipboardData = await Clipboard.getData(Clipboard.kTextPlain);
+      _taskrcContentController.text = clipboardData?.text ?? '';
+      if (_taskrcContentController.text.isNotEmpty) {
+        storage.taskrc.addTaskrc(_taskrcContentController.text);
+      }
+
+      var contents = rc.Taskrc(widget.storage.home.home).readTaskrc();
+      if (contents != null) {
+        setState(() {
+          server = Taskrc.fromString(contents).server;
+          credentials = Taskrc.fromString(contents).credentials;
+        });
+      }
+    }
+
     var contents = rc.Taskrc(widget.storage.home.home).readTaskrc();
     if (contents != null) {
       server = Taskrc.fromString(contents).server;
@@ -272,37 +363,123 @@ class _TaskrcWidgetState extends State<TaskrcWidget> {
     if (credentials != null) {
       String key;
       if (hideKey) {
-        key = credentials.key.replaceAll(RegExp(r'[0-9a-f]'), '*');
+        key = credentials!.key.replaceAll(RegExp(r'[0-9a-f]'), '*');
       } else {
-        key = credentials.key;
+        key = credentials!.key;
       }
 
-      credentialsString = '${credentials.org}/${credentials.user}/$key';
-    }
+      credentialsString = '${credentials!.org}/${credentials!.user}/$key';
 
+      if (credentialsString.isNotEmpty && server.toString().isNotEmpty) {
+        print(credentialsString);
+        _taskrcContentController.text =
+            "taskd.server=$server\ntaskd.credentials=${credentials!.org}/${credentials!.user}/$key";
+      }
+    }
+    var height = MediaQuery.of(context).size.height;
     return Column(
       children: [
-        ListTile(
-          textColor: color,
-          title: Text(
-            'Select TASKRC',
-            style: GoogleFonts.firaMono(),
+        Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: SizedBox(
+            height: height * 0.15,
+            child: TextField(
+              controller: _taskrcContentController,
+              maxLines: 8,
+              style: const TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                suffixIconConstraints: const BoxConstraints(
+                  maxHeight: 24,
+                  maxWidth: 24,
+                ),
+                isDense: true,
+                suffix: IconButton(
+                    onPressed: () async {
+                      setContent();
+                    },
+                    icon: const Icon(Icons.content_paste)),
+                border: const OutlineInputBorder(),
+                labelStyle: GoogleFonts.firaMono(color: color),
+                labelText: 'Paste your taskrc contents here',
+              ),
+            ),
           ),
-          onTap: () async {
+        ),
+
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              "Or",
+              style: GoogleFonts.firaMono(color: color),
+            )
+          ],
+        ),
+        FilledButton.tonal(
+          onPressed: () async {
             await setConfig(
               storage: widget.storage,
               key: 'TASKRC',
             );
             setState(() {});
           },
+          child: const Text('Select TASKRC'),
+        ),
+        // ListTile(
+        //   textColor: color,
+        //   title: Row(
+        //     mainAxisAlignment: MainAxisAlignment.center,
+        //     children: [
+        //       Text(
+        //         'Select TASKRC',
+        //         style: GoogleFonts.firaMono(),
+        //       ),
+        //     ],
+        //   ),
+        //   onTap: () async {
+        //     await setConfig(
+        //       storage: widget.storage,
+        //       key: 'TASKRC',
+        //     );
+        //     setState(() {});
+        //   },
+        // ),
+        Divider(
+          height: height * 0.05,
+        ),
+        ListTile(
+          textColor: color,
+          title: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              'Selected TaskServer Configuration',
+              style: GoogleFonts.firaMono(fontWeight: FontWeight.w800),
+            ),
+          ),
         ),
         ListTile(
             textColor: color,
             title: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              child: Text(
-                'taskd.server      = $server',
-                style: GoogleFonts.firaMono(),
+              child: RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'taskd.server      = ',
+                      style: GoogleFonts.firaMono(
+                        color: color,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    TextSpan(
+                      text: '$server',
+                      style: GoogleFonts.firaMono(
+                        color: color,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
             onTap: (server == null)
@@ -310,9 +487,9 @@ class _TaskrcWidgetState extends State<TaskrcWidget> {
                 : () async {
                     late String mainDomain;
                     if (server!.address == 'localhost') {
-                      mainDomain = server.address;
+                      mainDomain = server!.address;
                     } else {
-                      var parts = server.address.split('.');
+                      var parts = server!.address.split('.');
                       var length = parts.length;
                       mainDomain = parts.sublist(length - 2, length).join('.');
                     }
@@ -326,9 +503,25 @@ class _TaskrcWidgetState extends State<TaskrcWidget> {
           textColor: color,
           title: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            child: Text(
-              'taskd.credentials = $credentialsString',
-              style: GoogleFonts.firaMono(),
+            child: RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: 'taskd.credentials = ',
+                    style: GoogleFonts.firaMono(
+                      color: color,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  TextSpan(
+                    text: '$credentialsString',
+                    style: GoogleFonts.firaMono(
+                      color: color,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
           trailing: (credentials == null)
