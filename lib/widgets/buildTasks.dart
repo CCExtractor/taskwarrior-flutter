@@ -262,7 +262,7 @@ class _TasksBuilderState extends State<TasksBuilder> {
                                 splashColor: AppSettings.isDarkMode
                                     ? Colors.black
                                     : Colors.grey.shade200,
-                                onDoubleTap: () => Navigator.push(
+                                onTap: () => Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => DetailRoute(task
@@ -285,7 +285,7 @@ class _TasksBuilderState extends State<TasksBuilder> {
                               splashColor: AppSettings.isDarkMode
                                   ? Colors.black
                                   : Colors.grey.shade200,
-                              onDoubleTap: () => Navigator.push(
+                              onTap: () => Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => DetailRoute(task
