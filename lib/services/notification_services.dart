@@ -26,13 +26,15 @@ class NotificationService {
     print("date and time are:-$dateTime");
     print("date and time are:-$dtb");
 
-    final tz.TZDateTime scheduledAt =
+    // represent the time when the task is actually scheduled to go off
+    final tz.TZDateTime scheduledFor =
         tz.TZDateTime.from(dtb.add(const Duration(minutes: 1)), tz.local);
-    final tz.TZDateTime scheduledAt1 = tz.TZDateTime.local(dateTime.year,
+    // represent the time when the user created or scheduled the task
+    final tz.TZDateTime scheduledAt = tz.TZDateTime.local(dateTime.year,
         dateTime.month, dateTime.day, dateTime.hour, dateTime.minute);
     // print("date and time are:-" + dateTime.toString());
-    print("dtb is :-$scheduledAt");
-    print("date and time are scheduled2:-$scheduledAt1");
+    print("dtb is :-$scheduledFor");
+    print("date and time are scheduled2:-$scheduledAt");
 
     AndroidNotificationDetails androidNotificationDetails =
         const AndroidNotificationDetails('channelId', 'TaskReminder',
@@ -44,14 +46,15 @@ class NotificationService {
         NotificationDetails(android: androidNotificationDetails);
 
     _flutterLocalNotificationsPlugin.zonedSchedule(
-        scheduledAt.day * 100 + scheduledAt.hour * 10 + scheduledAt.minute,
+        scheduledFor.day * 100 + scheduledFor.hour * 10 + scheduledFor.minute,
         'Task Warrior Reminder',
-        'Hey! Your task of $task is still pending',
-        scheduledAt,
+        'Hi there! Just a friendly reminder that your task "$task" is still pending. Would you like to complete it now?',
+        scheduledFor,
         notificationDetails,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
         androidAllowWhileIdle: true);
-    print(scheduledAt.day * 100 + scheduledAt.hour * 10 + scheduledAt.minute);
+    print(
+        scheduledFor.day * 100 + scheduledFor.hour * 10 + scheduledFor.minute);
   }
 }
