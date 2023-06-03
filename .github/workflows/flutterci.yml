@@ -2,13 +2,9 @@ name: Flutter CI
 
 on:
   push:
-    branches:
-      - main
-      - test-ci
+    branches: [master, develop]
   pull_request:
-    branches:
-      - main
-      - test-ci
+    branches: [master, develop]
 
 jobs:
   build:
@@ -31,16 +27,19 @@ jobs:
       # Step 4: Get dependencies
       - run: flutter pub get
 
-      # Step 5: Format code using dart format
-      - run: dart format -n --set-exit-if-changed .
+      # Step 5: Analyze code
+      - run: flutter analyze
 
-      # Step 6: Run tests
-      #- run: flutter test
+      # Step 6: Format code
+      - run: flutter format -n --set-exit-if-changed .
 
-      # Step 7: Build APK
+      # Step 7: Run tests
+      - run: flutter test
+
+      # Step 8: Build APK
       - run: flutter build apk
 
-      # Step 8: Upload artifact
+      # Step 9: Upload artifact
       - uses: actions/upload-artifact@v1
         with:
           name: release-apk
