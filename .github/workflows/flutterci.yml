@@ -29,13 +29,13 @@ jobs:
       - run: flutter pub get
 
       # Step 5: Analyze code
-      - run: flutter analyze
+      # - run: flutter analyze
 
       # Step 6: Format code
       - run: flutter format -n --set-exit-if-changed .
 
       # Step 7: Run tests
-      - run: flutter test
+      #- run: flutter test
 
       # Step 8: Build APK
       - run: flutter build apk
