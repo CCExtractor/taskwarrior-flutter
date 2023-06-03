@@ -2,10 +2,11 @@ name: Flutter CI
 
 on:
   push:
-    branches: [master, develop]
+    branches: 
+      - main
   pull_request:
-    branches: [master, develop]
-
+    branches: 
+      - main
 jobs:
   build:
     runs-on: ubuntu-latest
