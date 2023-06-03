@@ -2,44 +2,23 @@ name: Flutter CI
 
 on:
   push:
-    branches: 
+    branches:
       - main
-  pull_request:
-    branches: 
-      - main
+
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      # Step 1: Checkout the repository
-      - uses: actions/checkout@v2
-
-      # Step 2: Set up Java
+      - uses: actions/checkout@v1
       - uses: actions/setup-java@v1
         with:
           java-version: '12.x'
-
-      # Step 3: Set up Flutter
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '3.7.11'
-
-      # Step 4: Get dependencies
+          channel: 'stable'
       - run: flutter pub get
-
-      # Step 5: Analyze code
-      # - run: flutter analyze
-
-
-      # Step 6: Run tests
-      #- run: flutter test
-
-      # Step 7: Build APK
       - run: flutter build apk
-
-      # Step 8: Upload artifact
-      - uses: actions/upload-artifact@v1
+      - uses: actions/upload-artifact@v3
         with:
           name: release-apk
           path: build/app/outputs/apk/release/app-release.apk
