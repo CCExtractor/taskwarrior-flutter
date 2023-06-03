@@ -31,8 +31,8 @@ jobs:
       # Step 4: Get dependencies
       - run: flutter pub get
 
-      # Step 5: Format code
-      - run: flutter format -n --set-exit-if-changed .
+      # Step 5: Format code using dart format
+      - run: dart format -n --set-exit-if-changed .
 
       # Step 6: Run tests
       #- run: flutter test
