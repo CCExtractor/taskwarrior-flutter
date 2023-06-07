@@ -248,6 +248,7 @@ class _StorageWidgetState extends State<StorageWidget> {
       pendingTags = _pendingTags();
       projects = _projects();
       setState(() {});
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('${header['code']}: ${header['status']}'),
       ));

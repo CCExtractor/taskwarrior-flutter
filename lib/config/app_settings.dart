@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-class selectedTheme {
+class SelectedTheme {
   static SharedPreferences? _preferences;
 
   static Future init() async =>
@@ -13,5 +13,5 @@ class selectedTheme {
 }
 
 class AppSettings {
-  static bool isDarkMode = selectedTheme.getMode() ?? true;
+  static bool isDarkMode = SelectedTheme.getMode() ?? true;
 }
