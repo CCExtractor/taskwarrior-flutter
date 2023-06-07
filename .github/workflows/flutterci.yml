@@ -1,45 +1,82 @@
-name: Flutter Android debug build
+Skip to content
+
+Search or jump to...
+Pull requests
+Issues
+Codespaces
+Marketplace
+Explore
+ 
+@Pavel401 
+CCExtractor
+/
+taskwarrior-flutter
+Public
+Fork your own copy of CCExtractor/taskwarrior-flutter
+Code
+Issues
+19
+Pull requests
+14
+Discussions
+Actions
+Projects
+Wiki
+Security
+Insights
+Settings
+Back to pull request #155
+Update Github Actions for TaskWarrior #73
+Jobs
+Run details
+Workflow file for this run
+.github/workflows/flutterci.yml at b500b7e
+name: Flutter CI
 
 on:
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-    inputs:
-      versionName:
-        description: 'User-facing release version name'
-        required: true
-        default: "1.0.0"
-      versionCode:
-        description: 'versionCode or build number'
-        required: true
-        default: '1'
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  debug-build:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-
-      - uses: actions/setup-java@v3
-        with:
-          distribution: 'zulu'
-          java-version: 11
-          cache: 'gradle'
-
-      - name: Setup Flutter environment
-        uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-          cache: true
-
-      - name: Get Flutter dependencies
-        run: flutter pub get
-
-      - name: Create the build
-        run: flutter build apk --debug --build-number=${{ github.event.inputs.versionCode }} --build-name=${{ github.event.inputs.versionName }}
+      # Step 1: Checkout the repository
+      - uses: actions/checkout@v2
       
-      - name: Upload generated build to artifacts
-        uses: actions/upload-artifact@v3
+      # Step 2: Setup Java with version 12.x
+      - uses: actions/setup-java@v1
         with:
-          name: debug-apk
-          path: build/app/outputs/flutter-apk/debug/app-debug.apk
+          java-version: '12.x'
+      
+      # Step 3: Setup Flutter with version 3.7.11
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '3.7.11'
+      
+      # Step 4: Get dependencies using pub get
+      - run: flutter pub get
+      
+      # Step 5: Analyze the code using flutter analyze
+      - run: flutter analyze
+      
+      # Step 6: Format the code using flutter format
+      - run: flutter format -n --set-exit-if-changed .
+      
+      # Step 7: Run tests using flutter test
+      - run: flutter test
+      
+      # Step 8: Build APK using flutter build apk
+      - run: flutter build apk
+      
+      # Step 9: Upload the built APK as an artifact
+      - uses: actions/upload-artifact@v1
+        with:
+          name: release-apk
+          path: build/app/outputs/apk/release/app-release.apk
+Update Github Actions for TaskWarrior · CCExtractor/taskwarrior-flutter@b500b7e 

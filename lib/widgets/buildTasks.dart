@@ -20,10 +20,12 @@ class TasksBuilder extends StatefulWidget {
     Key? key,
     required this.taskData,
     required this.pendingFilter,
+    required this.searchVisible
   }) : super(key: key);
 
   final List<Task> taskData;
   final bool pendingFilter;
+  final bool searchVisible;
 
   @override
   State<TasksBuilder> createState() => _TasksBuilderState();
@@ -116,7 +118,9 @@ class _TasksBuilderState extends State<TasksBuilder> {
                 padding: const EdgeInsets.all(16.0),
                 child: Center(
                   child: Text(
-                    'Click on the bottom right button to start adding tasks',
+                    (widget.searchVisible)?
+                        'Search Not Found :('
+                    :'Click on the bottom right button to start adding tasks',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: GoogleFonts.firaMono().fontFamily,
@@ -265,7 +269,7 @@ class _TasksBuilderState extends State<TasksBuilder> {
                                 splashColor: AppSettings.isDarkMode
                                     ? Colors.black
                                     : Colors.grey.shade200,
-                                onDoubleTap: () => Navigator.push(
+                                onTap: () => Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => DetailRoute(task
@@ -288,7 +292,7 @@ class _TasksBuilderState extends State<TasksBuilder> {
                               splashColor: AppSettings.isDarkMode
                                   ? Colors.black
                                   : Colors.grey.shade200,
-                              onDoubleTap: () => Navigator.push(
+                              onTap: () => Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => DetailRoute(task

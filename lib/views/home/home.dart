@@ -151,6 +151,7 @@ class _HomePageState extends State<HomePage> {
                       // darkmode: AppSettings.isDarkMode,
                       taskData: taskData,
                       pendingFilter: pendingFilter,
+                      searchVisible: storageWidget.searchVisible
                     ),
                   ),
                 ),
