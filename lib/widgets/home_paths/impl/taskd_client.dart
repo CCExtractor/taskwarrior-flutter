@@ -3,7 +3,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:taskwarrior/model/storage/taskserver_configuration_exception.dart';
+import 'package:taskwarrior/model/storage/exceptions/taskserver_configuration_exception.dart';
 import 'package:taskwarrior/widgets/taskc/impl/codec.dart';
 import 'package:taskwarrior/widgets/taskc/impl/message.dart';
 import 'package:taskwarrior/widgets/taskc/message.dart';
