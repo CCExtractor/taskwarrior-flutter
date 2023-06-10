@@ -338,19 +338,45 @@ class _TaskrcWidgetState extends State<TaskrcWidget> {
     Server? server;
     Credentials? credentials;
 
+    /// The [setConfig] function is used to set the configuration of the TaskServer from the clipboard
     void setContent() async {
       final clipboardData = await Clipboard.getData(Clipboard.kTextPlain);
       _taskrcContentController.text = clipboardData?.text ?? '';
-      if (_taskrcContentController.text.isNotEmpty) {
-        storage.taskrc.addTaskrc(_taskrcContentController.text);
-      }
 
-      var contents = rc.Taskrc(widget.storage.home.home).readTaskrc();
-      if (contents != null) {
-        setState(() {
-          server = Taskrc.fromString(contents).server;
-          credentials = Taskrc.fromString(contents).credentials;
-        });
+      // Check if the clipboard data is not empty
+      if (_taskrcContentController.text.isNotEmpty) {
+        // Add the clipboard data to the taskrc file
+        storage.taskrc.addTaskrc(_taskrcContentController.text);
+
+        // Read the contents of the taskrc file
+        var contents = rc.Taskrc(widget.storage.home.home).readTaskrc();
+
+        // Check if the contents were successfully read
+        if (contents != null) {
+          // Parse the contents into a Taskrc object
+          var taskrc = Taskrc.fromString(contents);
+
+          // Check if the server and credentials are present in the Taskrc object
+          if (taskrc.server != null && taskrc.credentials != null) {
+            // Update the server and credentials variables
+            setState(() {
+              server = taskrc.server;
+              credentials = taskrc.credentials;
+            });
+          } else {
+            // Handle the case when server or credentials are missing in the Taskrc object
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                  content: Text(
+                      'Error: Server or credentials missing in taskrc file')),
+            );
+          }
+        } else {
+          // Handle the case when there is an error reading the taskrc file
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Error: Failed to read taskrc file')),
+          );
+        }
       }
     }
 
