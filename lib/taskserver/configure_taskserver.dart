@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -55,11 +57,40 @@ class _ConfigureTaskserverRouteState extends State<ConfigureTaskserverRoute> {
     setState(() {});
   }
 
+  ///fetch statistics from the taskserver
   Future<void> _showStatistics(BuildContext context) async {
+    ///show loading dialog
+    ///while the statistics are being fetched
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Fetching statistics...'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: const [
+              CircularProgressIndicator(),
+              SizedBox(height: 16),
+              Text('Please wait...'),
+            ],
+          ),
+        );
+      },
+    );
+
     try {
+      // Fetch statistics header from storage
       var header = await storage.home.statistics(await client());
+
+      // Determine the maximum key length for formatting purposes
       var maxKeyLength =
           header.keys.map<int>((key) => (key as String).length).reduce(max);
+
+      // Dismiss the loading dialog
+      Navigator.of(context).pop();
+
+      // Show statistics in a dialog
       await showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -72,6 +103,7 @@ class _ConfigureTaskserverRouteState extends State<ConfigureTaskserverRoute> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // Display each key-value pair in the statistics header
                     for (var key in header.keys.toList())
                       Text(
                         '${'$key:'.padRight(maxKeyLength + 1)} ${header[key]}',
@@ -93,7 +125,13 @@ class _ConfigureTaskserverRouteState extends State<ConfigureTaskserverRoute> {
         ),
       );
     } on Exception catch (e, trace) {
+      // Dismiss the loading dialog
+      Navigator.of(context).pop();
+
+      // Log the error and trace
       logError(e, trace);
+
+      // Refresh the state of ProfilesWidget
       ProfilesWidget.of(context).setState(() {});
     }
   }
@@ -176,12 +214,17 @@ class _ConfigureTaskserverRouteState extends State<ConfigureTaskserverRoute> {
                   onTap: () {
                     ///Link the TaskServer or the Inther.am documentation
                   },
-                  child: Text(
-                    "I dont know how to configure the TaskServer",
-                    style: GoogleFonts.firaMono(
-                      color: color,
-                      decoration: TextDecoration.underline,
-                      fontWeight: FontWeight.w500,
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    child: Text(
+                      "I dont know how to configure the TaskServer",
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      style: GoogleFonts.firaMono(
+                        color: color,
+                        decoration: TextDecoration.underline,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
                 )
