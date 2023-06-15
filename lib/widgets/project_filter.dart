@@ -49,7 +49,9 @@ class ProjectsColumn extends StatelessWidget {
         title: Text(
           'project:$projectFilter',
           style: GoogleFonts.firaMono(
-              color: AppSettings.isDarkMode ? Colors.white : Colors.black),
+            color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+            fontSize: 18,
+          ),
         ),
         backgroundColor: AppSettings.isDarkMode
             ? const Color.fromARGB(255, 48, 46, 46)
