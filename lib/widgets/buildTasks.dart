@@ -1,5 +1,6 @@
 // ignore_for_file: file_names
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -36,7 +37,6 @@ class _TasksBuilderState extends State<TasksBuilder> {
   bool showbtn = false;
   @override
   void initState() {
-    // TODO: implement initState
     scrollController.addListener(() {
       //scroll listener
       double showoffset =
@@ -167,12 +167,14 @@ class _TasksBuilderState extends State<TasksBuilder> {
                                                         dtb.hour * 10 +
                                                         dtb.minute);
 
-                                                print("Task due is $dtb");
-                                                print(widget
-                                                    .taskData); // status is in first index
-                                                print(dtb.day * 100 +
-                                                    dtb.hour * 10 +
-                                                    dtb.minute);
+                                                if (kDebugMode) {
+                                                  print("Task due is $dtb");
+                                                  print(widget
+                                                      .taskData); // status is in first index
+                                                  print(dtb.day * 100 +
+                                                      dtb.hour * 10 +
+                                                      dtb.minute);
+                                                }
 
                                                 Navigator.of(context).pop();
                                               },
@@ -226,11 +228,12 @@ class _TasksBuilderState extends State<TasksBuilder> {
                                                     .cancel(dtb.day * 100 +
                                                         dtb.hour * 10 +
                                                         dtb.minute);
-
-                                                print("Task due is$dtb");
-                                                print(dtb.day * 100 +
-                                                    dtb.hour * 10 +
-                                                    dtb.minute);
+                                                if (kDebugMode) {
+                                                  print("Task due is$dtb");
+                                                  print(dtb.day * 100 +
+                                                      dtb.hour * 10 +
+                                                      dtb.minute);
+                                                }
                                                 Navigator.of(context).pop();
                                               },
                                               child: const Text('Yes'),

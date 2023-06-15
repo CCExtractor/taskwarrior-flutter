@@ -1,3 +1,6 @@
+// ignore_for_file: unnecessary_getters_setters
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
@@ -35,7 +38,9 @@ class StatusWidget extends StatelessWidget {
           ),
         ),
         onTap: () {
-          print(value);
+          if (kDebugMode) {
+            print(value);
+          }
           switch (value) {
             case 'pending':
               return callback('completed');

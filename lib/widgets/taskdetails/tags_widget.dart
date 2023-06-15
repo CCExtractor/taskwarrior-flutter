@@ -178,7 +178,7 @@ class TagsRouteState extends State<TagsRoute> {
       floatingActionButton: FloatingActionButton(
         heroTag: "btn4",
         onPressed: () {
-          final _formKey = GlobalKey<FormState>();
+          final formKey = GlobalKey<FormState>();
           var controller = TextEditingController();
           showDialog(
             context: context,
@@ -189,7 +189,7 @@ class TagsRouteState extends State<TagsRoute> {
               scrollable: true,
               title: const Text('Add tag'),
               content: Form(
-                key: _formKey,
+                key: formKey,
                 child: TextFormField(
                   validator: (value) {
                     if (value != null) {
@@ -212,7 +212,7 @@ class TagsRouteState extends State<TagsRoute> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    if (_formKey.currentState!.validate()) {
+                    if (formKey.currentState!.validate()) {
                       try {
                         validateTaskTags(controller.text);
                         _addTag(controller.text);
