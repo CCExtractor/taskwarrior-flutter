@@ -440,7 +440,7 @@ class _TaskrcWidgetState extends State<TaskrcWidget> {
       credentialsString = '${credentials!.org}/${credentials!.user}/$key';
 
       if (credentialsString.isNotEmpty && server.toString().isNotEmpty) {
-        print(credentialsString);
+        //print(credentialsString);
         _taskrcContentController.text =
             "taskd.server=$server\ntaskd.credentials=${credentials!.org}/${credentials!.user}/$key";
       }
