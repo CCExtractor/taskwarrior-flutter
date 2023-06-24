@@ -13,7 +13,6 @@ class FilterDrawer extends StatelessWidget {
   const FilterDrawer(this.filters, {Key? key}) : super(key: key);
 
   final Filters filters;
-
   @override
   Widget build(BuildContext context) {
     var storageWidget = StorageWidget.of(context);
@@ -179,6 +178,9 @@ class FilterDrawer extends StatelessWidget {
                               onSelected: (_) {
                                 if (storageWidget.selectedSort == '$sort+') {
                                   storageWidget.selectSort('$sort-');
+                                } else if (storageWidget.selectedSort ==
+                                    '$sort-') {
+                                  storageWidget.selectSort(sort);
                                 } else {
                                   storageWidget.selectSort('$sort+');
                                 }
@@ -193,6 +195,35 @@ class FilterDrawer extends StatelessWidget {
                             ),
                         ],
                       ),
+                    ),
+                    const Divider(
+                      color: Color.fromARGB(0, 48, 46, 46),
+                    ),
+                    Container(
+                      width: 200,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: AppSettings.isDarkMode
+                            ? Color.fromARGB(255, 220, 216, 216)
+                            : Color.fromARGB(255, 48, 46, 46),
+                      ),
+                      child: TextButton(
+                          onPressed: () {
+                            if (storageWidget.selectedSort.endsWith('+') ||
+                                storageWidget.selectedSort.endsWith('-')) {
+                              storageWidget.selectSort(
+                                  storageWidget.selectedSort.substring(0,
+                                      storageWidget.selectedSort.length - 1));
+                            }
+                          },
+                          child: Text(
+                            'Reset Sort',
+                            style: TextStyle(
+                                fontSize: 15,
+                                color: AppSettings.isDarkMode
+                                    ? Color.fromARGB(255, 48, 46, 46)
+                                    : Colors.white),
+                          )),
                     ),
                     const Divider(
                       color: Color.fromARGB(0, 48, 46, 46),
