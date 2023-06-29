@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
 import 'package:taskwarrior/routes/pageroute.dart';
+import 'package:taskwarrior/views/reports/reports_home.dart';
 
 class NavDrawer extends StatefulWidget {
   final InheritedStorage storageWidget;
@@ -68,6 +69,19 @@ class _NavDrawerState extends State<NavDrawer> {
                 Navigator.pop(context);
               },
               title: const Text("Refresh"),
+            ),
+            ListTile(
+              tileColor: AppSettings.isDarkMode ? Colors.black : Colors.white,
+              textColor: AppSettings.isDarkMode ? Colors.white : Colors.black,
+              leading: Icon(
+                Icons.summarize,
+                color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+              ),
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const ReportsHome()));
+              },
+              title: const Text("Reports"),
             ),
             ListTile(
               tileColor: AppSettings.isDarkMode ? Colors.black : Colors.white,
