@@ -26,7 +26,7 @@ jobs:
       # Step 3: Setup Flutter with version 3.7.11
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '3.7.11'
+          flutter-version: '3.10.5'
       
       # Step 4: Get dependencies using pub get
       - run: flutter pub get
