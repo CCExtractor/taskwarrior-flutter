@@ -91,12 +91,12 @@ class _HomePageState extends State<HomePage> {
                     child: const Icon(Icons.search, color: Colors.white)),
             onPressed: storageWidget.toggleSearch,
           ),
-          // Builder(
-          //   builder: (context) => IconButton(
-          //     icon: const Icon(Icons.refresh, color: Colors.white),
-          //     onPressed: () => storageWidget.synchronize(context),
-          //   ),
-          // ),
+          Builder(
+            builder: (context) => IconButton(
+              icon: const Icon(Icons.refresh, color: Colors.white),
+              onPressed: () => storageWidget.synchronize(context),
+            ),
+          ),
           Builder(
             builder: (context) => IconButton(
               icon: Tooltip(
@@ -148,11 +148,10 @@ class _HomePageState extends State<HomePage> {
                 Expanded(
                   child: Scrollbar(
                     child: TasksBuilder(
-                      // darkmode: AppSettings.isDarkMode,
-                      taskData: taskData,
-                      pendingFilter: pendingFilter,
-                      searchVisible: storageWidget.searchVisible
-                    ),
+                        // darkmode: AppSettings.isDarkMode,
+                        taskData: taskData,
+                        pendingFilter: pendingFilter,
+                        searchVisible: storageWidget.searchVisible),
                   ),
                 ),
               ],
