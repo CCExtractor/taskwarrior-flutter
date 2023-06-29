@@ -65,11 +65,11 @@ class _ConfigureTaskserverRouteState extends State<ConfigureTaskserverRoute> {
       context: context,
       barrierDismissible: false,
       builder: (context) {
-        return AlertDialog(
-          title: const Text('Fetching statistics...'),
+        return const AlertDialog(
+          title: Text('Fetching statistics...'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
-            children: const [
+            children: [
               CircularProgressIndicator(),
               SizedBox(height: 16),
               Text('Please wait...'),
