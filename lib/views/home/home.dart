@@ -1,8 +1,9 @@
-// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, deprecated_member_use, avoid_unnecessary_containers, unused_element, prefer_const_literals_to_create_immutables, library_private_types_in_public_api
+// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, deprecated_member_use, avoid_unnecessary_containers, unused_element, prefer_const_literals_to_create_immutables, library_private_types_in_public_api, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/drawer/filter_drawer.dart';
@@ -38,6 +39,39 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late InheritedStorage storageWidget;
+
+  ///to check if the data is synced or not
+
+  bool isSyncNeeded = false;
+
+  ///call the synchronize function from storage_widget.dart
+  ///to sync the data from the server
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    ///didChangeDependencies loads after the initState
+    ///it provides the context from the tree
+    if (!isSyncNeeded) {
+      ///check if the data is synced or not
+      ///if not then sync the data
+      isNeededtoSync();
+      isSyncNeeded = true;
+    }
+  }
+
+  isNeededtoSync() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool? value;
+    value = prefs.getBool('sync') ?? false;
+
+    if (value) {
+      storageWidget = StorageWidget.of(context);
+      storageWidget.synchronize(context);
+    } else {}
+  }
+
   @override
   Widget build(BuildContext context) {
     var storageWidget = StorageWidget.of(context);
