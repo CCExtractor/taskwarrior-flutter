@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loggy/loggy.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/model/storage.dart';
 import 'package:taskwarrior/model/storage/client.dart';
@@ -29,6 +30,20 @@ class _ConfigureTaskserverRouteState extends State<ConfigureTaskserverRoute> {
   late Storage storage;
   Server? server;
   Credentials? credentials;
+  bool _value = false;
+  @override
+  void initState() {
+    super.initState();
+    checkAutoSync();
+  }
+
+  checkAutoSync() async {
+    ///check if auto sync is on or off
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _value = prefs.getBool('sync') ?? false;
+    });
+  }
 
   @override
   void didChangeDependencies() {
@@ -229,7 +244,99 @@ class _ConfigureTaskserverRouteState extends State<ConfigureTaskserverRoute> {
                   ),
                 )
               ],
-            )
+            ),
+            Divider(
+              height: MediaQuery.of(context).size.height * 0.05,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: Row(
+                children: [
+                  Text(
+                    'TaskServer Sync Configuration',
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    style: GoogleFonts.firaMono(
+                      color: color,
+                      decoration: TextDecoration.underline,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.02,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: Row(
+                children: [
+                  Text(
+                    "Auto Sync",
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    style: GoogleFonts.firaMono(
+                      color: color,
+                      decoration: TextDecoration.underline,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  Switch(
+                      splashRadius: 24,
+                      // inactiveTrackColor: Colors.pink,
+                      // activeTrackColor: Colors.green,
+                      thumbIcon: MaterialStateProperty.resolveWith(
+                        (Set<MaterialState> states) {
+                          if (states.contains(MaterialState.selected)) {
+                            return const Icon(Icons.check, color: Colors.green);
+                          }
+                          return null;
+                        },
+                      ),
+                      // activeColor: Colors.lime,
+                      // inactiveThumbColor: Colors.orange,
+                      value: _value,
+                      onChanged: (bool value) async {
+                        setState(() {
+                          _value = !_value;
+                        });
+
+                        final SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+                        await prefs.setBool('sync', _value);
+                      }),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.02,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 20,
+              ),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    child: Text(
+                      "Sync tasks from taskserver automatically on initialization",
+                      textAlign: TextAlign.start,
+                      maxLines: 2,
+                      style: GoogleFonts.poppins(
+                        color: color,
+                        decoration: TextDecoration.underline,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
