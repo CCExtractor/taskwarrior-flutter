@@ -4,11 +4,11 @@ on:
   push:
     branches:
       - main
-      - fix-lint-errors
+      - reports
   pull_request:
     branches:
       - main
-      - fix-lint-errors
+      - reports
 
 jobs:
   build:
