@@ -51,99 +51,104 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
           title: const Center(child: Text(title)),
           content: Form(
             key: formKey,
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  const SizedBox(height: 8),
-                  buildName(),
-                  const SizedBox(height: 12),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Wrap(
-                          children: [
-                            const Text(
-                              "Due : ",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, height: 3.3),
-                            ),
-                            GestureDetector(
-                              onLongPress: () {
-                                due = null;
-                                setState(() {});
-                              },
-                              child: ActionChip(
-                                  backgroundColor: AppSettings.isDarkMode
-                                      ? Colors.white
-                                      : const Color.fromARGB(
-                                          255, 220, 216, 216),
-                                  label: Text(
-                                    (due != null)
-                                        ? dueString
-                                        : "select due date",
-                                  ),
-                                  onPressed: () async {
-                                    var initialDate =
-                                        due?.toLocal() ?? DateTime.now();
-                                    var date = await showDatePicker(
-                                      context: context,
-                                      initialDate: initialDate,
-                                      firstDate: DateTime(
-                                          1990), // >= 1980-01-01T00:00:00.000Z
-                                      lastDate: DateTime(2037, 12,
-                                          31), // < 2038-01-19T03:14:08.000Z
-                                    );
-                                    if (date != null) {
-                                      var time = await showTimePicker(
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width * 0.8,
+              // height: MediaQuery.of(context).size.height * 0.5,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    const SizedBox(height: 8),
+                    buildName(),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Wrap(
+                            children: [
+                              const Text(
+                                "Due : ",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, height: 3.3),
+                              ),
+                              GestureDetector(
+                                onLongPress: () {
+                                  due = null;
+                                  setState(() {});
+                                },
+                                child: ActionChip(
+                                    backgroundColor: AppSettings.isDarkMode
+                                        ? Colors.white
+                                        : const Color.fromARGB(
+                                            255, 220, 216, 216),
+                                    label: Text(
+                                      (due != null)
+                                          ? dueString
+                                          : "select due date",
+                                    ),
+                                    onPressed: () async {
+                                      var initialDate =
+                                          due?.toLocal() ?? DateTime.now();
+                                      var date = await showDatePicker(
                                         context: context,
-                                        initialTime:
-                                            TimeOfDay.fromDateTime(initialDate),
+                                        initialDate: initialDate,
+                                        firstDate: DateTime(
+                                            1990), // >= 1980-01-01T00:00:00.000Z
+                                        lastDate: DateTime(2037, 12,
+                                            31), // < 2038-01-19T03:14:08.000Z
                                       );
-                                      if (time != null) {
-                                        var dateTime = date.add(
-                                          Duration(
-                                            hours: time.hour,
-                                            minutes: time.minute,
-                                          ),
+                                      if (date != null) {
+                                        var time = await showTimePicker(
+                                          context: context,
+                                          initialTime: TimeOfDay.fromDateTime(
+                                              initialDate),
                                         );
-                                        dateTime = dateTime.add(
-                                          Duration(
-                                            hours: time.hour - dateTime.hour,
-                                          ),
-                                        );
-                                        due = dateTime.toUtc();
-                                        NotificationService
-                                            notificationService =
-                                            NotificationService();
-                                        notificationService
-                                            .initiliazeNotification();
+                                        if (time != null) {
+                                          var dateTime = date.add(
+                                            Duration(
+                                              hours: time.hour,
+                                              minutes: time.minute,
+                                            ),
+                                          );
+                                          dateTime = dateTime.add(
+                                            Duration(
+                                              hours: time.hour - dateTime.hour,
+                                            ),
+                                          );
+                                          due = dateTime.toUtc();
+                                          NotificationService
+                                              notificationService =
+                                              NotificationService();
+                                          notificationService
+                                              .initiliazeNotification();
 
-                                        if ((dateTime.millisecondsSinceEpoch -
-                                                DateTime.now()
-                                                    .millisecondsSinceEpoch) >
-                                            0) {
-                                          notificationService.sendNotification(
-                                              dateTime, namecontroller.text);
+                                          if ((dateTime.millisecondsSinceEpoch -
+                                                  DateTime.now()
+                                                      .millisecondsSinceEpoch) >
+                                              0) {
+                                            notificationService
+                                                .sendNotification(dateTime,
+                                                    namecontroller.text);
+                                          }
+
+                                          dueString =
+                                              DateFormat("dd-MM-yyyy HH:mm")
+                                                  .format(dateTime);
                                         }
-
-                                        dueString =
-                                            DateFormat("dd-MM-yyyy HH:mm")
-                                                .format(dateTime);
                                       }
-                                    }
-                                    setState(() {});
-                                  }),
-                            ),
-                          ],
+                                      setState(() {});
+                                    }),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  // const SizedBox(height: 8),
-                  const SizedBox(height: 0),
-                  buildPriority(),
-                ],
+                      ],
+                    ),
+                    // const SizedBox(height: 8),
+                    const SizedBox(height: 0),
+                    buildPriority(),
+                  ],
+                ),
               ),
             ),
           ),
@@ -159,7 +164,8 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   Widget buildName() => TextFormField(
         controller: namecontroller,
         decoration: const InputDecoration(
-          border: OutlineInputBorder(),
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10))),
           hintText: 'Enter Task',
         ),
         validator: (name) => name != null && name.isEmpty
