@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/model/storage/savefile.dart';
@@ -32,13 +33,19 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Palette.kToDark,
+        title: const Text(
+          'Profiles',
+          style: TextStyle(color: Colors.white),
+        ),
         leading: IconButton(
           onPressed: () {
             Navigator.pushReplacementNamed(context, PageRoutes.home);
           },
-          icon: const Tooltip(
-              message: 'Home',
-              child: Icon(Icons.home_filled, color: Colors.white)),
+          icon: const Icon(
+            Icons.chevron_left,
+            color: Colors.white,
+            size: 30,
+          ),
         ),
       ),
       //primary: false,
