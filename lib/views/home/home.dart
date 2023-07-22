@@ -110,6 +110,7 @@ class _HomePageState extends State<HomePage> {
       toggleProjectFilter: storageWidget.toggleProjectFilter,
       tagFilters: tagFilters,
     );
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Palette.kToDark.shade200,
@@ -161,22 +162,31 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               children: <Widget>[
                 if (storageWidget.searchVisible)
-                  Card(
-                    margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    child: TextField(
-                      autofocus: true,
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    child: SearchBar(
+                      controller: storageWidget.searchController,
+                      // shape:,
                       onChanged: (value) {
                         storageWidget.search(value);
                       },
-                      controller: storageWidget.searchController,
-                      decoration: InputDecoration(
-                          hintText: 'Search',
-                          prefixIcon: Icon(Icons.search_rounded),
-                          fillColor: Colors.grey[300],
-                          filled: true,
-                          border: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.circular(12))),
+                      shape: MaterialStateProperty.resolveWith<OutlinedBorder?>(
+                        (Set<MaterialState> states) {
+                          if (states.contains(MaterialState.focused)) {
+                            return RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12.0),
+                              side: BorderSide(color: Colors.black, width: 2.0),
+                            );
+                          } else {
+                            return RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12.0),
+                              side: BorderSide(color: Colors.black, width: 1.5),
+                            );
+                          }
+                        },
+                      ),
+                      leading: Icon(Icons.search_rounded),
+                      hintText: 'Search',
                     ),
                   ),
                 Expanded(
