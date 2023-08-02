@@ -97,26 +97,28 @@ class FilterDrawer extends StatelessWidget {
                       ? Color.fromARGB(255, 48, 46, 46)
                       : Color.fromARGB(255, 220, 216, 216),
                 ),
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                      child: Text(
-                        '  Filter Tag By: ',
-                        style: TextStyle(
-                            color: (AppSettings.isDarkMode
-                                ? Colors.white
-                                : Color.fromARGB(255, 48, 46, 46)),
-                            fontFamily: GoogleFonts.firaMono().fontFamily,
-                            fontSize: 18),
-                        //textAlign: TextAlign.right,
+                child: SingleChildScrollView(scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                        child: Text(
+                          '  Filter Tag By: ',
+                          style: TextStyle(
+                              color: (AppSettings.isDarkMode
+                                  ? Colors.white
+                                  : Color.fromARGB(255, 48, 46, 46)),
+                              fontFamily: GoogleFonts.firaMono().fontFamily,
+                              fontSize: 18),
+                          //textAlign: TextAlign.right,
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: TagFiltersWrap(filters.tagFilters),
-                    )
-                  ],
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: TagFiltersWrap(filters.tagFilters),
+                      )
+                    ],
+                  ),
                 ),
               ),
               const Divider(
