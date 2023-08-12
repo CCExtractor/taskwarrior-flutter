@@ -3,10 +3,12 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'package:intl/intl.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
+import 'package:taskwarrior/controller/WidgetController.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
 import 'package:taskwarrior/services/notification_services.dart';
 import 'package:taskwarrior/widgets/taskfunctions/taskparser.dart';
@@ -209,6 +211,8 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
       );
 
   Widget buildAddButton(BuildContext context) {
+    WidgetController widgetController = Get.put(WidgetController(context));
+
     int errCode = 0;
     return TextButton(
       child: const Text("Add"),
@@ -231,6 +235,8 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
             priority = 'M';
             setState(() {});
             Navigator.of(context).pop();
+            widgetController.fetchAllData();
+
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: const Text(
                     'Task Added Successfully, Tap to Edit'), // Intimating the user about the double tap to edit feature
