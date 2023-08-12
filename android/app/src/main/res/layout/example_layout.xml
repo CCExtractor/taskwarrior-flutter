@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- XML implementation of Card Layout -->
+<!-- listile_item.xml -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="10dp"
+    android:id="@+id/cardItem"
+    android:paddingRight="10dp"
+    android:paddingBottom="10dp"
+    android:background="@drawable/app_widget_item_layout_bg"
+    >
+
+    <TextView
+        android:id="@+id/idTvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Title"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/idTvDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Subtitle"
+        android:textSize="14sp"
+        android:textColor="#666666"
+        android:layout_below="@id/idTvTitle"
+        android:layout_alignParentStart="true" />
+
+    <!-- Second List Tile -->
+    <TextView
+        android:id="@+id/idTvTitle2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Title"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:layout_below="@id/idTvDate"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:id="@+id/idTvDate2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Subtitle"
+        android:textSize="14sp"
+        android:textColor="#666666"
+        android:layout_below="@id/idTvTitle2"
+        android:layout_alignParentStart="true" />
+
+    <!-- Third List Tile -->
+    <TextView
+        android:id="@+id/idTvTitle3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Title"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:layout_below="@id/idTvDate2"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:id="@+id/idTvDate3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Subtitle"
+        android:textSize="14sp"
+        android:textColor="#666666"
+        android:layout_below="@id/idTvTitle3"
+        android:layout_alignParentStart="true" />
+
+</RelativeLayout>

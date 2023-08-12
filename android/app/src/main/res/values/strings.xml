@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TaskWarrior</string>
+    <string name="item_cta_key">nurture.farm.android.appwidget.CTA</string>
+    <string name="action_click">nurture.farm.android.appwidget.ACTION_CLICK</string>
+    <string name="text_data_key">textData</string>
+    <string name="image_data_key">imageData</string>
+    <string name="app_widget_launch_action">es.antonborri.home_widget.action.LAUNCH</string>
+    <string name="app_widget_card_clicked_uri">TravelScheduleAppWidget://cardClicked</string>
+    <string name="places_data">placesData</string>
+    <string name="dates_data">datesData</string>
+</resources>
