@@ -15,11 +15,11 @@ import com.example.taskwarrior.MainActivity
 import com.example.taskwarrior.R
 
 
-class HomeWidgetExampleProvider : HomeWidgetProvider() {
+class TaskWarriorWidgetProvider : HomeWidgetProvider() {
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray, widgetData: SharedPreferences) {
         appWidgetIds.forEach { widgetId ->
-            val views = RemoteViews(context.packageName, R.layout.example_layout).apply {
+            val views = RemoteViews(context.packageName, R.layout.taskwarrior_layout).apply {
                 // Open App on Widget Click
                 val pendingIntent = HomeWidgetLaunchIntent.getActivity(
                         context,

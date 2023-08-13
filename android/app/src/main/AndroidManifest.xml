@@ -28,13 +28,13 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-		<receiver android:name="HomeWidgetExampleProvider"
+		<receiver android:name="TaskWarriorWidgetProvider"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
             <meta-data android:name="android.appwidget.provider"
-                android:resource="@xml/home_widget_example" />
+                android:resource="@xml/taskwarriorconfig" />
         </receiver>
 
         <!-- Used for Background Work -->

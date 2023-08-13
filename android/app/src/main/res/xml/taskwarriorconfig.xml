@@ -4,7 +4,7 @@ android:minWidth="300dip"
 android:minHeight="150dip"
 
     android:updatePeriodMillis="86400000"
-    android:initialLayout="@layout/example_layout"
+    android:initialLayout="@layout/taskwarrior_layout"
     android:resizeMode="horizontal|vertical"
 	android:previewImage="@drawable/preview"
     android:description="@string/my_widget_description">

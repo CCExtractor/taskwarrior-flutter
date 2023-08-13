@@ -101,7 +101,7 @@ class WidgetController extends GetxController {
   Future _updateWidget() async {
     try {
       return HomeWidget.updateWidget(
-          name: 'HomeWidgetExampleProvider', iOSName: 'HomeWidgetExample');
+          name: 'TaskWarriorWidgetProvider', iOSName: 'HomeWidgetExample');
     } on PlatformException catch (exception) {
       debugPrint('Error Updating Widget. $exception');
     }

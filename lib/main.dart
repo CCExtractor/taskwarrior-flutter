@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:home_widget/home_widget.dart';
 
 import 'package:loggy/loggy.dart';
 import 'package:path_provider/path_provider.dart';
@@ -95,23 +94,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _checkForWidgetLaunch();
-    HomeWidget.widgetClicked.listen(_launchedFromWidget);
-  }
-
-  void _checkForWidgetLaunch() {
-    HomeWidget.initiallyLaunchedFromHomeWidget().then(_launchedFromWidget);
-  }
-
-  void _launchedFromWidget(Uri? uri) {
-    if (uri != null) {
-      showDialog(
-          context: context,
-          builder: (BuildContext buildContext) => AlertDialog(
-                title: const Text('App started from HomeScreenWidget'),
-                content: Text('Here is the URI: $uri'),
-              ));
-    }
   }
 
   @override
