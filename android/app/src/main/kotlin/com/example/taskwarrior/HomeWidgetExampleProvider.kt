@@ -28,17 +28,17 @@ class HomeWidgetExampleProvider : HomeWidgetProvider() {
 
                 // Swap Title Text by calling Dart Code in the Background
                 setTextViewText(R.id.idTvTitle, widgetData.getString("title1", null)
-                        ?: "No Data")
+                        ?: "No Pending Task")
 				setTextViewText(R.id.idTvDate, widgetData.getString("subtitle1", null)
-                        ?: "No Data")
+                        ?: "")
 						setTextViewText(R.id.idTvTitle2, widgetData.getString("title2", null)
-                        ?: "No Data")
+                        ?: "No Pending Task")
 				setTextViewText(R.id.idTvDate2, widgetData.getString("subtitle2", null)
-                        ?: "No Data")
+                        ?: "")
 						setTextViewText(R.id.idTvTitle3, widgetData.getString("title3", null)
-                        ?: "No Data")
+                        ?: "No Pending Task")
 				setTextViewText(R.id.idTvDate3, widgetData.getString("subtitle3", null)
-                        ?: "No Data")
+                        ?: "")
                 val backgroundIntent = HomeWidgetBackgroundIntent.getBroadcast(
                         context,
                         Uri.parse("homeWidgetExample://titleClicked")

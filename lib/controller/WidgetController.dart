@@ -66,7 +66,7 @@ class WidgetController extends GetxController {
   Future<void> _sendData() async {
     try {
       for (int i = 0; i < allData.length && i < 3; i++) {
-        String subtitle = 'No Task';
+        String subtitle = 'No Pending Task';
 
         if (allData[i].modified != null) {
           subtitle = 'Last Modified: ${age(allData[i].modified!)}';

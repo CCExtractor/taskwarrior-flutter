@@ -1,78 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- XML implementation of Card Layout -->
-<!-- listile_item.xml -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cardItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="10dp"
-    android:id="@+id/cardItem"
-    android:paddingRight="10dp"
-    android:paddingBottom="10dp"
     android:background="@drawable/app_widget_item_layout_bg"
-    >
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+	android:paddingTop="10dp"
+    android:paddingBottom="10dp">
+	
+	<TextView
+	android:id="@+id/taskWarriorText"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:text="TaskWarrior"
+	android:textSize="20sp"
+	android:textStyle="bold"
+	android:layout_alignParentTop="true"
+	android:layout_centerHorizontal="true"
+	android:layout_marginTop="12dp"/>
 
-    <TextView
-        android:id="@+id/idTvTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Title"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+<!-- Pending Task TextView -->
+<TextView
+	android:id="@+id/pendingTaskText"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:text="Pending Tasks"
+	android:textSize="18sp"
+	android:textStyle="bold"
+	android:layout_below="@id/taskWarriorText"
+	android:layout_centerHorizontal="true"
+	android:layout_marginTop="8dp"/>
+    <LinearLayout
+	android:id="@+id/firstLayout"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_below="@id/pendingTaskText"
+	android:layout_marginTop="8dp"
+	android:background="@drawable/border_style"
+	android:layout_marginLeft="8dp" 
+	android:layout_marginRight="8dp"
+	android:orientation="vertical"
+	android:padding="8dp">
 
-    <TextView
-        android:id="@+id/idTvDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Subtitle"
-        android:textSize="14sp"
-        android:textColor="#666666"
-        android:layout_below="@id/idTvTitle"
-        android:layout_alignParentStart="true" />
+        <TextView
+            android:id="@+id/idTvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Title"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-    <!-- Second List Tile -->
-    <TextView
-        android:id="@+id/idTvTitle2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Title"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:layout_below="@id/idTvDate"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="10dp" />
+        <TextView
+            android:id="@+id/idTvDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Subtitle"
+            android:textColor="#666666"
+            android:textSize="14sp" />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/idTvDate2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Subtitle"
-        android:textSize="14sp"
-        android:textColor="#666666"
-        android:layout_below="@id/idTvTitle2"
-        android:layout_alignParentStart="true" />
+    <LinearLayout
+	android:id="@+id/secondLayout"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_below="@id/firstLayout"
+	android:layout_marginTop="8dp"
+	android:background="@drawable/border_style"
+	android:orientation="vertical"
+	android:layout_marginLeft="8dp" 
+	android:layout_marginRight="8dp"
+	android:padding="8dp">
 
-    <!-- Third List Tile -->
-    <TextView
-        android:id="@+id/idTvTitle3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Title"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:layout_below="@id/idTvDate2"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="10dp" />
+        <TextView
+            android:id="@+id/idTvTitle2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Title"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/idTvDate3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Subtitle"
-        android:textSize="14sp"
-        android:textColor="#666666"
-        android:layout_below="@id/idTvTitle3"
-        android:layout_alignParentStart="true" />
+        <TextView
+            android:id="@+id/idTvDate2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Subtitle"
+            android:textColor="#666666"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <LinearLayout
+	android:id="@+id/thirdLayout"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_below="@id/secondLayout"
+	android:layout_marginTop="8dp"
+	android:layout_marginBottom="8dp"
+	android:background="@drawable/border_style"
+	android:layout_marginLeft="8dp" 
+	android:layout_marginRight="8dp"
+	android:orientation="vertical"
+	android:padding="8dp">
+
+        <TextView
+            android:id="@+id/idTvTitle3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Title"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/idTvDate3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Subtitle"
+            android:textColor="#666666"
+            android:textSize="14sp" />
+    </LinearLayout>
 
 </RelativeLayout>

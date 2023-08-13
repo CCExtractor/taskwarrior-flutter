@@ -7,6 +7,6 @@
     <string name="image_data_key">imageData</string>
     <string name="app_widget_launch_action">es.antonborri.home_widget.action.LAUNCH</string>
     <string name="app_widget_card_clicked_uri">TravelScheduleAppWidget://cardClicked</string>
-    <string name="places_data">placesData</string>
-    <string name="dates_data">datesData</string>
+    <string name="my_widget_description">This widget shows pending tasks from TaskWarrior app</string>
+
 </resources>
