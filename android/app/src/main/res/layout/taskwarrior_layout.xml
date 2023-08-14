@@ -4,6 +4,8 @@
     android:id="@+id/cardItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    style="@style/Widget.Android.AppWidget.Container"
+	android:theme="@style/Theme.Android.AppWidgetContainer"
     android:background="@drawable/app_widget_item_layout_bg"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
