@@ -24,9 +24,11 @@ dependencies:
   flutter_native_splash: ^2.1.2+1
   flutter_native_timezone: ^2.0.0
   flutter_slidable: ^2.0.0
+  get: ^4.6.5
   google_fonts: ^5.1.0
   hive: ^2.2.1
   hive_flutter: ^1.1.0
+  home_widget: ^0.3.0
   http: ^1.1.0
   import_sorter: ^4.6.0
   intl: ^0.18.0
@@ -42,7 +44,6 @@ dependencies:
   uuid: ^3.0.6
 
 dev_dependencies:
-  # hive database generators
   build_runner: ^2.1.11
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
