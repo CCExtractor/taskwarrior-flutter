@@ -6,6 +6,7 @@ import 'package:file_selector/file_selector.dart';
 
 Future<void> saveServerCert(String contents) async {
   if (Platform.isLinux || Platform.isMacOS || Platform.isWindows) {
+    // ignore: deprecated_member_use
     var path = await getSavePath(
       suggestedName: 'server.cert.pem',
     );
@@ -27,6 +28,7 @@ Future<void> exportTasks({
   required String suggestedName,
 }) async {
   if (Platform.isLinux || Platform.isMacOS || Platform.isWindows) {
+    // ignore: deprecated_member_use
     var path = await getSavePath(
       suggestedName: suggestedName,
     );
