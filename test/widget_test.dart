@@ -1,31 +1,33 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility that Flutter provides. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
-
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:taskwarrior/main.dart';
+import 'package:taskwarrior/model/json/task.dart';
+import 'package:taskwarrior/services/task_list_tem.dart';
+
+import 'package:uuid/uuid.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
-
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+  // This test checks if there are tasks in the app.
+  testWidgets("check if there are tasks in the app",
+      (WidgetTester tester) async {
+    // Pump the widget tree and await its rendering.
+    await tester.pumpWidget(
+      MaterialApp(
+        // Create a Material app with the specified home widget.
+        home: Material(
+          child: TaskListItem(
+            // Create a TaskListItem widget with a sample Task.
+            Task(
+              (b) => b
+                ..status = 'pending'
+                ..uuid = const Uuid().v1()
+                ..entry = DateTime.now()
+                ..description = 'foo',
+            ),
+            darkmode: true, // Specify dark mode.
+          ),
+        ),
+      ),
+    );
   });
 }
