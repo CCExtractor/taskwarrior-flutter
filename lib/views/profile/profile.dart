@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/model/storage/savefile.dart';
 import 'package:taskwarrior/routes/pageroute.dart';
-import 'package:taskwarrior/taskserver/configure_taskserver.dart';
+import 'package:taskwarrior/taskserver/ntaskserver.dart';
 import 'package:taskwarrior/widgets/pallete.dart';
 import 'package:taskwarrior/widgets/profilefunctions.dart';
 import 'package:taskwarrior/widgets/taskdetails.dart';
@@ -67,7 +67,8 @@ class _ProfilePageState extends State<ProfilePage> {
               () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => const ConfigureTaskserverRoute(),
+                  // builder: (_) => const ConfigureTaskserverRoute(),
+                  builder: (_) => const ManageTaskServer(),
                 ),
               ),
               () {
