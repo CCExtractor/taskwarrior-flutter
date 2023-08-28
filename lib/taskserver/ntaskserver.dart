@@ -846,7 +846,9 @@ class _PemWidgetState extends State<PemWidget> {
                           ),
                           Text(
                             widget.pem == 'taskd.key'
-                                ? "private.key.pem"
+                                ? name != null
+                                    ? "private.key.pem"
+                                    : ""
                                 : identifier,
                             style: GoogleFonts.firaMono(
                                 fontWeight: FontWeight.w400, color: color),
