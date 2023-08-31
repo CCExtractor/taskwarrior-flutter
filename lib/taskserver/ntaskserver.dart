@@ -803,6 +803,9 @@ class _PemWidgetState extends State<PemWidget> {
             style:
                 GoogleFonts.firaMono(fontWeight: FontWeight.w500, color: color),
           ),
+          const SizedBox(
+            height: 10,
+          ),
           GestureDetector(
             onTap: (widget.pem == 'server.cert')
                 ? () {
