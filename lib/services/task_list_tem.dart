@@ -78,11 +78,16 @@ class _TaskListItemState extends State<TaskListItem> {
                   radius: 8,
                 ),
                 const SizedBox(width: 8),
-                Text(
-                  '${(widget.task.id == 0) ? '#' : widget.task.id}. ${widget.task.description}',
-                  style: TextStyle(
-                      color: colour,
-                      fontFamily: GoogleFonts.firaMono().fontFamily),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.70,
+                  child: Text(
+                    '${(widget.task.id == 0) ? '#' : widget.task.id}. ${widget.task.description}',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                        color: colour,
+                        fontFamily: GoogleFonts.firaMono().fontFamily),
+                  ),
                 ),
               ],
             ),
@@ -147,11 +152,16 @@ class _TaskListItemState extends State<TaskListItem> {
                   radius: 8,
                 ),
                 const SizedBox(width: 8),
-                Text(
-                  '${(widget.task.id == 0) ? '#' : widget.task.id}. ${widget.task.description}',
-                  style: TextStyle(
-                      color: colour,
-                      fontFamily: GoogleFonts.firaMono().fontFamily),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.65,
+                  child: Text(
+                    '${(widget.task.id == 0) ? '#' : widget.task.id}. ${widget.task.description}',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                        color: colour,
+                        fontFamily: GoogleFonts.firaMono().fontFamily),
+                  ),
                 ),
               ],
             ),
