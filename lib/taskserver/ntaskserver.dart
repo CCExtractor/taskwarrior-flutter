@@ -471,8 +471,11 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                                       Icons.check,
                                       color: Colors.green,
                                     )
-                                  : const Icon(
+                                  : Icon(
                                       Icons.chevron_right_rounded,
+                                      color: AppSettings.isDarkMode
+                                          ? Colors.black
+                                          : Colors.white,
                                     ),
                             ),
                           ),
@@ -547,8 +550,12 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                                               Icons.check,
                                               color: Colors.green,
                                             )
-                                          : const Icon(
-                                              Icons.chevron_right_rounded),
+                                          : Icon(
+                                              Icons.chevron_right_rounded,
+                                              color: AppSettings.isDarkMode
+                                                  ? Colors.black
+                                                  : Colors.white,
+                                            ),
                                     ),
                                   ),
                                 ],
@@ -627,8 +634,12 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                                         shape: BoxShape.circle,
                                       ),
                                       child: credentials == null
-                                          ? const Icon(
-                                              Icons.chevron_right_rounded)
+                                          ? Icon(
+                                              Icons.chevron_right_rounded,
+                                              color: AppSettings.isDarkMode
+                                                  ? Colors.black
+                                                  : Colors.white,
+                                            )
                                           : Icon(
                                               hideKey
                                                   ? Icons.visibility_off
@@ -868,7 +879,12 @@ class _PemWidgetState extends State<PemWidget> {
                     ),
                     child: Center(
                       child: name == null
-                          ? const Icon(Icons.chevron_right_rounded)
+                          ? Icon(
+                              Icons.chevron_right_rounded,
+                              color: AppSettings.isDarkMode
+                                  ? Colors.black
+                                  : Colors.white,
+                            )
                           : const Icon(
                               Icons.check,
                               color: Colors.green,
