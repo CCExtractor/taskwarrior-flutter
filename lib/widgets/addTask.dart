@@ -213,7 +213,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
       ]);
   Widget buildCancelButton(BuildContext context) => TextButton(
         child: const Text('Cancel'),
-        onPressed: () => Navigator.of(context).pop(),
+        onPressed: () => Navigator.of(context).pop("cancel"),
       );
 
   Widget buildAddButton(BuildContext context) {

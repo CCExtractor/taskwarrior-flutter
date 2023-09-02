@@ -220,7 +220,20 @@ class _HomePageState extends State<HomePage> {
         onPressed: () => showDialog(
           context: context,
           builder: (context) => const AddTaskBottomSheet(),
-        ),
+        ).then((value) {
+          // print(value);
+
+          //if auto sync is turned on
+          if (isSyncNeeded) {
+            //if user have not created any event then
+            //we won't call sync method
+            if (value == "cancel") {
+            } else {
+              //else we can sync new tasks
+              isNeededtoSync();
+            }
+          }
+        }),
       ),
       resizeToAvoidBottomInset: false,
     );
