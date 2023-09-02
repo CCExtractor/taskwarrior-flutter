@@ -58,7 +58,7 @@ class FilterDrawer extends StatelessWidget {
                 ),
                 child: ListTile(
                   title: Text(
-                    'filter:${filters.pendingFilter ? 'status : pending' : 'status : archived'}',
+                    'filter:${filters.pendingFilter ? 'status : pending' : 'status : completed'}',
                     style: TextStyle(
                       fontFamily: GoogleFonts.firaMono().fontFamily,
                       fontSize: 18,
