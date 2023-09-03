@@ -28,9 +28,9 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Palette.kToDark,
-        title: const Text(
-          'Profiles',
-          style: TextStyle(color: Colors.white),
+        title: Text(
+          profilesMap.length == 1 ? 'Profile' : 'Profiles',
+          style: const TextStyle(color: Colors.white),
         ),
         leading: IconButton(
           onPressed: () {
