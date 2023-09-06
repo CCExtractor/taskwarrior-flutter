@@ -41,6 +41,11 @@
 			<string>UIInterfaceOrientationLandscapeLeft</string>
 			<string>UIInterfaceOrientationLandscapeRight</string>
 		</array>
+		<key>LSApplicationQueriesSchemes</key>
+		<array>
+  			<string>https://ccextractor.org/</string>
+ 			<string>https://github.com/CCExtractor/taskwarrior-flutter</string>
+		</array>
 		<key>UIViewControllerBasedStatusBarAppearance</key>
 		<false/>
 		<key>UIStatusBarHidden</key>

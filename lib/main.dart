@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:loggy/loggy.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:sizer/sizer.dart';
 import 'package:taskwarrior/controller/WidgetController.dart';
 import 'package:uuid/uuid.dart';
 
@@ -101,19 +102,21 @@ class _MyAppState extends State<MyApp> {
     WidgetController widgetController = Get.put(WidgetController(context));
     widgetController.fetchAllData();
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Taskwarrior',
-      theme: ThemeData(
-        useMaterial3: true,
-        primarySwatch: Palette.kToDark,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      initialRoute: PageRoutes.home,
-      routes: {
-        PageRoutes.home: (context) => HomePage(),
-        PageRoutes.profile: (context) => const ProfilePage(),
-      },
-    );
+    return Sizer(builder: ((context, orientation, deviceType) {
+      return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Taskwarrior',
+        theme: ThemeData(
+          useMaterial3: true,
+          primarySwatch: Palette.kToDark,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        initialRoute: PageRoutes.home,
+        routes: {
+          PageRoutes.home: (context) => HomePage(),
+          PageRoutes.profile: (context) => const ProfilePage(),
+        },
+      );
+    }));
   }
 }

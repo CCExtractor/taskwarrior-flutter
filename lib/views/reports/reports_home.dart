@@ -121,7 +121,8 @@ class _ReportsHomeState extends State<ReportsHome>
             ),
           ),
         ),
-        backgroundColor: AppSettings.isDarkMode ? Colors.black : Colors.white,
+        backgroundColor:
+            AppSettings.isDarkMode ? Palette.kToDark.shade200 : Colors.white,
         body: allData.isEmpty
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.center,

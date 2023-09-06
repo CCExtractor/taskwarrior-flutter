@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
 import 'package:taskwarrior/routes/pageroute.dart';
+import 'package:taskwarrior/views/about/about.dart';
 import 'package:taskwarrior/views/reports/reports_home.dart';
 
 class NavDrawer extends StatefulWidget {
@@ -104,7 +105,20 @@ class _NavDrawerState extends State<NavDrawer> {
                 await SelectedTheme.saveMode(AppSettings.isDarkMode);
                 widget.notifyParent();
               },
-            )
+            ),
+            ListTile(
+              tileColor: AppSettings.isDarkMode ? Colors.black : Colors.white,
+              textColor: AppSettings.isDarkMode ? Colors.white : Colors.black,
+              leading: Icon(
+                Icons.info,
+                color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+              ),
+              onTap: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => const AboutPage()));
+              },
+              title: const Text("About"),
+            ),
           ],
         ));
   }
