@@ -115,7 +115,7 @@ class _NavDrawerState extends State<NavDrawer> {
               ),
               onTap: () {
                 Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const About()));
+                    MaterialPageRoute(builder: (context) => const AboutPage()));
               },
               title: const Text("About"),
             ),
