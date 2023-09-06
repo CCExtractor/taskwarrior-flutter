@@ -1,14 +1,3 @@
-// import 'package:animate_do/animate_do.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_svg/svg.dart';
-// import 'package:get/get.dart';
-// import 'package:promts/controllers/fetchGithubApi.dart';
-// import 'package:promts/models/model_theme.dart';
-// import 'package:provider/provider.dart';
-// import 'package:sizer/sizer.dart';
-// import 'package:flutter_social_button/flutter_social_button.dart';
-// import 'package:url_launcher/url_launcher.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -17,25 +6,21 @@ import 'package:sizer/sizer.dart';
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/config/taskwarriorcolors.dart';
 import 'package:taskwarrior/widgets/pallete.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class About extends StatefulWidget {
-  const About({Key? key}) : super(key: key);
+class AboutPage extends StatefulWidget {
+  const AboutPage({Key? key}) : super(key: key);
   @override
   // ignore: library_private_types_in_public_api
-  _AboutState createState() => _AboutState();
+  _AboutPageState createState() => _AboutPageState();
 }
 
-class _AboutState extends State<About> {
+class _AboutPageState extends State<AboutPage> {
   String introduction =
-      "Hi there! MABUD here. I am a CS student with a passion for building beautiful and functional applications. I have used OPEN API and Flutter to build this app. I am open to any suggestions and feedbacks.Contributions are always welcomed :)";
-
-//   var controller = Get.put(ContributorController());
+      "This project aims to build an app for Taskwarrior. It is your task management app across all platforms. It helps you manage your tasks and filter them as per your needs.";
 
   @override
   Widget build(BuildContext context) {
-    // var controller = Get.put(ContributorController());
-    var color =
-        AppSettings.isDarkMode ? Colors.white : Palette.kToDark.shade200;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -74,8 +59,8 @@ class _AboutState extends State<About> {
               Text(
                 "Taskwarrior",
                 style: GoogleFonts.firaMono(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
                   color: AppSettings.isDarkMode ? Colors.white : Colors.black,
                 ),
               ),
@@ -94,28 +79,58 @@ class _AboutState extends State<About> {
                       } else if (snapshot.hasError) {
                         return Text('Error: ${snapshot.error}');
                       } else {
-                        // Split the app info into lines
                         final appInfoLines = snapshot.data!.split(' ');
+
                         return Column(
                           children: [
-                            Text(
-                              'Version: ${appInfoLines[1]}', // Display app version (second part)
-                              style: GoogleFonts.firaMono(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 12,
-                                color: AppSettings.isDarkMode
-                                    ? Colors.white
-                                    : Colors.black,
+                            RichText(
+                              text: TextSpan(
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text: 'Version: ',
+                                    style: GoogleFonts.firaMono(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                      color: AppSettings.isDarkMode
+                                          ? Colors.white
+                                          : Colors.black,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: appInfoLines[1],
+                                    style: GoogleFonts.firaMono(
+                                      fontSize: 15,
+                                      color: AppSettings.isDarkMode
+                                          ? Colors.white
+                                          : Colors.black,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            Text(
-                              'Package: ${appInfoLines[0]}', // Display package name (first part)
-                              style: GoogleFonts.firaMono(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 12,
-                                color: AppSettings.isDarkMode
-                                    ? Colors.white
-                                    : Colors.black,
+                            RichText(
+                              text: TextSpan(
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text: 'Package: ',
+                                    style: GoogleFonts.firaMono(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                      color: AppSettings.isDarkMode
+                                          ? Colors.white
+                                          : Colors.black,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: appInfoLines[0],
+                                    style: GoogleFonts.firaMono(
+                                      fontSize: 15,
+                                      color: AppSettings.isDarkMode
+                                          ? Colors.white
+                                          : Colors.black,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
@@ -126,10 +141,11 @@ class _AboutState extends State<About> {
                 ],
               ),
               SizedBox(
-                height: 2.h,
+                height: 5.h,
               ),
               Text(
                 introduction,
+                textAlign: TextAlign.center,
                 style: GoogleFonts.firaMono(
                   fontWeight: FontWeight.w500,
                   fontSize: 12,
@@ -137,42 +153,36 @@ class _AboutState extends State<About> {
                 ),
               ),
               SizedBox(
-                height: 2.h,
-              ),
-              Text(
-                "For any further queries contact me through:",
-                style: GoogleFonts.firaMono(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 12,
-                  color: AppSettings.isDarkMode ? Colors.white : Colors.black,
-                ),
-              ),
-              SizedBox(
-                height: 2.h,
+                height: 6.h,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   SizedBox(
-                    width: 40.w, // <-- Button Width
-                    height: 5.h, // <-- Button height
+                    width: 40.w,
+                    height: 5.h,
                     child: ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
-                        // primary: HexColor("#202020"),
+                        backgroundColor: AppSettings.isDarkMode
+                            ? const Color.fromARGB(255, 220, 216, 216)
+                            : const Color.fromARGB(255, 48, 46, 46),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10), // <-- Radius
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                       onPressed: () async {
-                        //   String url = "https://github.com/Pavel401";
-                        //   if (!await launchUrl(Uri.parse(url))) {
-                        //     throw Exception('Could not launch $url');
-                        //   }
+                        // Launch GitHub URL.
+
+                        String url =
+                            "https://github.com/CCExtractor/taskwarrior-flutter";
+                        if (!await launchUrl(Uri.parse(url))) {
+                          throw Exception('Could not launch $url');
+                        }
                       },
                       icon: SvgPicture.asset(
                         "assets/svg/github.svg",
-                        width: 24.sp,
-                        height: 24.sp,
+                        width: 15.sp,
+                        height: 15.sp,
                       ),
                       label: Text(
                         "GitHub",
@@ -180,42 +190,43 @@ class _AboutState extends State<About> {
                           fontWeight: FontWeight.w500,
                           fontSize: 12,
                           color: AppSettings.isDarkMode
-                              ? Colors.white
-                              : Colors.black,
+                              ? Colors.black
+                              : Colors.white,
                         ),
                       ),
                     ),
                   ),
                   SizedBox(
-                    width: 40.w, // <-- Button Width
-                    height: 5.h, // <-- Button height
+                    width: 40.w,
+                    height: 5.h,
                     child: ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
+                        backgroundColor: AppSettings.isDarkMode
+                            ? const Color.fromARGB(255, 220, 216, 216)
+                            : const Color.fromARGB(255, 48, 46, 46),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10), // <-- Radius
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                       onPressed: () async {
-                        //   String url =
-                        //       "https://www.linkedin.com/in/sk-mabud-alam-444a87133/";
-                        //   if (!await launchUrl(Uri.parse(url))) {
-                        //     throw Exception('Could not launch $url');
-                        //   }
+                        String url = "https://ccextractor.org/";
+                        if (!await launchUrl(Uri.parse(url))) {
+                          throw Exception('Could not launch $url');
+                        }
                       },
                       icon: SvgPicture.asset(
-                        "assets/svg/github.svg",
-                        width: 24.sp,
-                        height: 24.sp,
+                        "assets/svg/link.svg",
+                        width: 15.sp,
+                        height: 15.sp,
                       ),
                       label: Text(
-                        "LinkedIN",
+                        "CCExtractor",
                         style: GoogleFonts.firaMono(
                           fontWeight: FontWeight.w500,
                           fontSize: 12,
                           color: AppSettings.isDarkMode
-                              ? Colors.white
-                              : Colors.black,
+                              ? Colors.black
+                              : Colors.white,
                         ),
                       ),
                     ),
@@ -226,17 +237,10 @@ class _AboutState extends State<About> {
                 height: 2.h,
               ),
               Text(
-                "All the contributors are listed below:",
+                "Eager to enhance this project? Visit our GitHub repository.",
+                textAlign: TextAlign.center,
                 style: GoogleFonts.firaMono(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 12,
-                  color: AppSettings.isDarkMode ? Colors.white : Colors.black,
-                ),
-              ),
-              Text(
-                "Contribute on github to get your name here",
-                style: GoogleFonts.firaMono(
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w600,
                   fontSize: 12,
                   color: AppSettings.isDarkMode ? Colors.white : Colors.black,
                 ),
