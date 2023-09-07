@@ -290,12 +290,22 @@ class AttributeWidget extends StatelessWidget {
               child: Row(
                 children: [
                   Text(
-                    '${'$name:'.padRight(13)}$localValue',
-                    style: TextStyle(
+                    '$name:'.padRight(13),
+                    style: GoogleFonts.firaMono(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
                       color:
                           AppSettings.isDarkMode ? Colors.white : Colors.black,
                     ),
                   ),
+                  Text(
+                    localValue?.toString() ?? "not selected",
+                    style: GoogleFonts.firaMono(
+                      fontSize: 15,
+                      color:
+                          AppSettings.isDarkMode ? Colors.white : Colors.black,
+                    ),
+                  )
                 ],
               ),
             ),
@@ -330,10 +340,36 @@ class TagsWidget extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
-              Text(
-                '${'$name:  '}${(value as ListBuilder?)?.build()}',
-                style: GoogleFonts.firaMono(),
+              RichText(
+                text: TextSpan(
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: '$name:'.padRight(13),
+                      style: GoogleFonts.firaMono(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                        color: AppSettings.isDarkMode
+                            ? Colors.white
+                            : Colors.black,
+                      ),
+                    ),
+                    TextSpan(
+                      text:
+                          '${(value as ListBuilder?)?.build() ?? 'not selected'}',
+                      style: GoogleFonts.firaMono(
+                        fontSize: 15,
+                        color: AppSettings.isDarkMode
+                            ? Colors.white
+                            : Colors.black,
+                      ),
+                    )
+                  ],
+                ),
               ),
+              // Text(
+              //   '${'$name:  '}${(value as ListBuilder?)?.build()}',
+              //   style: GoogleFonts.firaMono(),
+              // ),
             ],
           ),
         ),
