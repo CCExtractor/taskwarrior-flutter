@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
 
@@ -28,8 +29,30 @@ class PriorityWidget extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
-              Text(
-                '${'$name:'.padRight(13)}$value',
+              RichText(
+                text: TextSpan(
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: '$name:'.padRight(13),
+                      style: GoogleFonts.firaMono(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                        color: AppSettings.isDarkMode
+                            ? Colors.white
+                            : Colors.black,
+                      ),
+                    ),
+                    TextSpan(
+                      text: value ?? "not selected",
+                      style: GoogleFonts.firaMono(
+                        fontSize: 15,
+                        color: AppSettings.isDarkMode
+                            ? Colors.white
+                            : Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
