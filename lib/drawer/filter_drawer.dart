@@ -10,7 +10,10 @@ import 'package:taskwarrior/widgets/project_filter.dart';
 import 'package:taskwarrior/widgets/tag_filter.dart';
 
 class FilterDrawer extends StatelessWidget {
-  const FilterDrawer(this.filters, {Key? key}) : super(key: key);
+  FilterDrawer(this.filters, {Key? key}) : super(key: key);
+  var tileColor = AppSettings.isDarkMode
+      ? const Color.fromARGB(255, 48, 46, 46)
+      : const Color.fromARGB(255, 220, 216, 216);
 
   final Filters filters;
   @override
@@ -36,13 +39,13 @@ class FilterDrawer extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 0.0),
                   child: Text(
-                    'Filter',
+                    'Apply Filters',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: (AppSettings.isDarkMode
                             ? Colors.white
                             : Color.fromARGB(255, 48, 46, 46)),
-                        fontSize: 35),
+                        fontSize: 25),
                   ),
                 ),
               ),
@@ -50,15 +53,18 @@ class FilterDrawer extends StatelessWidget {
                 color: Color.fromARGB(0, 48, 46, 46),
               ),
               Container(
+                width: MediaQuery.of(context).size.width * 1,
+                padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: AppSettings.isDarkMode
-                      ? Color.fromARGB(255, 48, 46, 46)
-                      : Color.fromARGB(255, 220, 216, 216),
+                  color: tileColor,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.grey.shade300),
                 ),
                 child: ListTile(
                   title: Text(
-                    'filter:${filters.pendingFilter ? 'status : pending' : 'status : completed'}',
+                    filters.pendingFilter
+                        ? 'status : pending'
+                        : 'status : completed',
                     style: TextStyle(
                       fontFamily: GoogleFonts.firaMono().fontFamily,
                       fontSize: 18,
@@ -74,11 +80,12 @@ class FilterDrawer extends StatelessWidget {
                 color: Color.fromARGB(0, 48, 46, 46),
               ),
               Container(
+                width: MediaQuery.of(context).size.width * 1,
+                padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: AppSettings.isDarkMode
-                      ? Color.fromARGB(255, 48, 46, 46)
-                      : Color.fromARGB(255, 220, 216, 216),
+                  color: tileColor,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.grey.shade300),
                 ),
                 child: ProjectsColumn(
                   filters.projects,
@@ -90,19 +97,23 @@ class FilterDrawer extends StatelessWidget {
                 color: Color.fromARGB(0, 48, 46, 46),
               ),
               Container(
-                height: 55,
+                width: MediaQuery.of(context).size.width * 1,
+                padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: AppSettings.isDarkMode
-                      ? Color.fromARGB(255, 48, 46, 46)
-                      : Color.fromARGB(255, 220, 216, 216),
+                  color: tileColor,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.grey.shade300),
                 ),
-                child: Row(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    const Divider(
+                      color: Color.fromARGB(0, 48, 46, 46),
+                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 0.0),
                       child: Text(
-                        '  Filter Tag By: ',
+                        'Filter Tag By:',
                         style: TextStyle(
                             color: (AppSettings.isDarkMode
                                 ? Colors.white
@@ -112,10 +123,16 @@ class FilterDrawer extends StatelessWidget {
                         //textAlign: TextAlign.right,
                       ),
                     ),
+                    const Divider(
+                      color: Color.fromARGB(0, 48, 46, 46),
+                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: TagFiltersWrap(filters.tagFilters),
-                    )
+                    ),
+                    const Divider(
+                      color: Color.fromARGB(0, 48, 46, 46),
+                    ),
                   ],
                 ),
               ),
@@ -123,11 +140,12 @@ class FilterDrawer extends StatelessWidget {
                 color: Color.fromARGB(0, 48, 46, 46),
               ),
               Container(
+                width: MediaQuery.of(context).size.width * 1,
+                padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: AppSettings.isDarkMode
-                      ? Color.fromARGB(255, 48, 46, 46)
-                      : Color.fromARGB(255, 220, 216, 216),
+                  color: tileColor,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.grey.shade300),
                 ),
                 //height: 30,
                 child: Column(
