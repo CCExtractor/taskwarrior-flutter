@@ -179,11 +179,14 @@ class _AboutPageState extends State<AboutPage> {
                           throw Exception('Could not launch $url');
                         }
                       },
-                      icon: SvgPicture.asset(
-                        "assets/svg/github.svg",
-                        width: 15.sp,
-                        height: 15.sp,
-                      ),
+                      icon: SvgPicture.asset("assets/svg/github.svg",
+                          width: 15.sp,
+                          height: 15.sp,
+                          colorFilter: ColorFilter.mode(
+                              AppSettings.isDarkMode
+                                  ? Colors.black
+                                  : Colors.white,
+                              BlendMode.srcIn)),
                       label: Text(
                         "GitHub",
                         style: GoogleFonts.firaMono(
@@ -214,11 +217,14 @@ class _AboutPageState extends State<AboutPage> {
                           throw Exception('Could not launch $url');
                         }
                       },
-                      icon: SvgPicture.asset(
-                        "assets/svg/link.svg",
-                        width: 15.sp,
-                        height: 15.sp,
-                      ),
+                      icon: SvgPicture.asset("assets/svg/link.svg",
+                          width: 15.sp,
+                          height: 15.sp,
+                          colorFilter: ColorFilter.mode(
+                              AppSettings.isDarkMode
+                                  ? Colors.black
+                                  : Colors.white,
+                              BlendMode.srcIn)),
                       label: Text(
                         "CCExtractor",
                         style: GoogleFonts.firaMono(
