@@ -18,6 +18,7 @@ import 'package:taskwarrior/widgets/home_paths.dart' as rc;
 import 'package:taskwarrior/widgets/pallete.dart';
 import 'package:taskwarrior/widgets/taskdetails.dart';
 import 'package:taskwarrior/widgets/taskserver.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ManageTaskServer extends StatefulWidget {
   const ManageTaskServer({Key? key}) : super(key: key);
@@ -283,7 +284,13 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
               Icons.info,
               color: Colors.white,
             ),
-            onPressed: () {},
+            onPressed: () async {
+              String url =
+                  "https://github.com/Pavel401/taskwarrior-flutter/blob/main/README.md#taskserver-setup";
+              if (!await launchUrl(Uri.parse(url))) {
+                throw Exception('Could not launch $url');
+              }
+            },
           ),
           if (kDebugMode)
             IconButton(
