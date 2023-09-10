@@ -52,7 +52,7 @@ This project aims to build an app for Taskwarrior. It is your task management ap
 
 ## Getting started & Contribution guide
 
-[CONTRIBUTING.md](https://github.com/CCExtractor/Flood_Mobile/blob/master/CONTRIBUTING.md)
+[CONTRIBUTING.md](https://github.com/CCExtractor/taskwarrior-flutter/blob/main/CONTRIBUTING.md)
 
 <!-- USAGE EXAMPLES -->
 
