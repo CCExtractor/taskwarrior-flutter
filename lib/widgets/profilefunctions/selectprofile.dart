@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sizer/sizer.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
 
@@ -32,9 +33,17 @@ class SelectProfile extends StatelessWidget {
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Profile:',
+          Text(
+            'Current Profile:',
             overflow: TextOverflow.fade,
+            style: GoogleFonts.firaMono(
+              fontWeight: FontWeight.bold,
+              fontSize: 15,
+              color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+            ),
+          ),
+          SizedBox(
+            height: 1.h,
           ),
           Text(currentProfile,
               style: TextStyle(
@@ -43,6 +52,28 @@ class SelectProfile extends StatelessWidget {
         ],
       ),
       children: [
+        SizedBox(
+          height: 1.h,
+        ),
+        Padding(
+          padding: EdgeInsets.only(left: 4.w),
+          child: Row(
+            children: [
+              Text(
+                'All Profiles:',
+                overflow: TextOverflow.fade,
+                style: GoogleFonts.firaMono(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                  color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(
+          height: 1.h,
+        ),
         for (var entry in profilesMap.entries)
           SelectProfileListTile(
             currentProfile,
@@ -71,45 +102,58 @@ class SelectProfileListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      textColor: AppSettings.isDarkMode
-          ? Colors.white
-          : const Color.fromARGB(255, 48, 46, 46),
-      iconColor: AppSettings.isDarkMode
-          ? Colors.white
-          : const Color.fromARGB(255, 48, 46, 46),
-      leading: Radio<String>(
-        value: uuid,
-        groupValue: selectedUuid,
-        onChanged: (_) {
-          select();
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text('Switched to Profile ${alias ?? uuid}'),
-          ));
-        },
-        activeColor: AppSettings.isDarkMode
-            ? Colors.white
-            : const Color.fromARGB(255, 48, 46, 46),
-        focusColor: AppSettings.isDarkMode
-            ? Colors.white
-            : const Color.fromARGB(255, 48, 46, 46),
-      ),
-      title: SingleChildScrollView(
-        key: PageStorageKey<String>('scroll-title-$uuid'),
-        scrollDirection: Axis.horizontal,
-        child: Text(
-          alias ?? '',
-          style: GoogleFonts.firaMono(),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Radio<String>(
+          value: uuid,
+          groupValue: selectedUuid,
+          onChanged: (_) {
+            select();
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text('Switched to Profile ${alias ?? uuid}'),
+            ));
+          },
+          activeColor: AppSettings.isDarkMode
+              ? Colors.white
+              : const Color.fromARGB(255, 48, 46, 46),
+          focusColor: AppSettings.isDarkMode
+              ? Colors.white
+              : const Color.fromARGB(255, 48, 46, 46),
         ),
-      ),
-      subtitle: SingleChildScrollView(
-        key: PageStorageKey<String>('scroll-subtitle-$uuid'),
-        scrollDirection: Axis.horizontal,
-        child: Text(
-          uuid,
-          style: GoogleFonts.firaMono(),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            if (alias != null && alias!.isNotEmpty)
+              SingleChildScrollView(
+                key: PageStorageKey<String>('scroll-title-$uuid'),
+                scrollDirection: Axis.horizontal,
+                child: Text(
+                  alias!,
+                  style: GoogleFonts.firaMono(
+                    color: AppSettings.isDarkMode
+                        ? Colors.white
+                        : const Color.fromARGB(255, 48, 46, 46),
+                  ),
+                ),
+              ),
+            SingleChildScrollView(
+              key: PageStorageKey<String>('scroll-subtitle-$uuid'),
+              scrollDirection: Axis.horizontal,
+              child: Text(
+                uuid,
+                style: GoogleFonts.firaMono(
+                  color: AppSettings.isDarkMode
+                      ? Colors.white
+                      : const Color.fromARGB(255, 48, 46, 46),
+                ),
+              ),
+            ),
+          ],
         ),
-      ),
+      ],
     );
   }
 }

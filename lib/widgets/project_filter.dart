@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sizer/sizer.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/widgets/taskw.dart';
@@ -46,11 +47,26 @@ class ProjectsColumn extends StatelessWidget {
       projects: projects,
       child: ExpansionTile(
         key: const PageStorageKey('project-filter'),
-        title: Text(
-          'project:$projectFilter',
-          style: GoogleFonts.firaMono(
-            color: AppSettings.isDarkMode ? Colors.white : Colors.black,
-            fontSize: 18,
+        title: RichText(
+          maxLines: 2,
+          text: TextSpan(
+            children: <TextSpan>[
+              TextSpan(
+                text: 'Project : ',
+                style: GoogleFonts.firaMono(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                  color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                ),
+              ),
+              TextSpan(
+                text: projectFilter,
+                style: GoogleFonts.firaMono(
+                  fontSize: 15,
+                  color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                ),
+              ),
+            ],
           ),
         ),
         backgroundColor: AppSettings.isDarkMode
@@ -59,11 +75,26 @@ class ProjectsColumn extends StatelessWidget {
         iconColor: AppSettings.isDarkMode ? Colors.white : Colors.black,
         collapsedIconColor:
             AppSettings.isDarkMode ? Colors.white : Colors.black,
-        children: (Map.of(projects)
-              ..removeWhere((_, nodeData) => nodeData.parent != null))
-            .keys
-            .map(ProjectTile.new)
-            .toList(),
+        children: projects.isNotEmpty
+            ? (Map.of(projects)
+                  ..removeWhere((_, nodeData) => nodeData.parent != null))
+                .keys
+                .map(ProjectTile.new)
+                .toList()
+            : [
+                Text(
+                  "No Projecs Found",
+                  style: TextStyle(
+                      color: (AppSettings.isDarkMode
+                          ? Colors.white
+                          : const Color.fromARGB(255, 48, 46, 46)),
+                      fontFamily: GoogleFonts.firaMono().fontFamily,
+                      fontSize: 14),
+                ),
+                SizedBox(
+                  height: 2.h,
+                )
+              ],
       ),
     );
   }

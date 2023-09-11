@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:tuple/tuple.dart';
 
@@ -41,7 +42,14 @@ class ManageProfile extends StatelessWidget {
           : const Color.fromARGB(255, 48, 46, 46),
       textColor: AppSettings.isDarkMode ? Colors.white : Colors.black,
       key: const PageStorageKey<String>('manage-profile'),
-      title: const Text('Manage selected profile'),
+      title: Text(
+        'Manage selected profile',
+        style: GoogleFonts.firaMono(
+          fontWeight: FontWeight.bold,
+          fontSize: 15,
+          color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+        ),
+      ),
       children: [
         for (var triple in triples)
           ListTile(
