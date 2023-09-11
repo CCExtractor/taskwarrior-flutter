@@ -62,13 +62,30 @@ class FilterDrawer extends StatelessWidget {
                   border: Border.all(color: Colors.grey.shade300),
                 ),
                 child: ListTile(
-                  title: Text(
-                    filters.pendingFilter
-                        ? 'status : pending'
-                        : 'status : completed',
-                    style: TextStyle(
-                      fontFamily: GoogleFonts.firaMono().fontFamily,
-                      fontSize: 18,
+                  title: RichText(
+                    maxLines: 2,
+                    text: TextSpan(
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: 'Status : ',
+                          style: GoogleFonts.firaMono(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                            color: AppSettings.isDarkMode
+                                ? Colors.white
+                                : Colors.black,
+                          ),
+                        ),
+                        TextSpan(
+                          text: filters.pendingFilter ? 'pending' : 'completed',
+                          style: GoogleFonts.firaMono(
+                            fontSize: 15,
+                            color: AppSettings.isDarkMode
+                                ? Colors.white
+                                : Colors.black,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   onTap: filters.togglePendingFilter,
