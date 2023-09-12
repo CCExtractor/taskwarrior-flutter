@@ -68,7 +68,7 @@ class _HomePageState extends State<HomePage> {
 
     if (value) {
       storageWidget = StorageWidget.of(context);
-      storageWidget.synchronize(context);
+      storageWidget.synchronize(context, false);
     } else {}
   }
 
@@ -129,7 +129,7 @@ class _HomePageState extends State<HomePage> {
           Builder(
             builder: (context) => IconButton(
               icon: const Icon(Icons.refresh, color: Colors.white),
-              onPressed: () => storageWidget.synchronize(context),
+              onPressed: () => storageWidget.synchronize(context, true),
             ),
           ),
           Builder(
