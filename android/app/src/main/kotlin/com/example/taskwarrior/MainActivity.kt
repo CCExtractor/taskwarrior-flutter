@@ -1,4 +1,4 @@
-package com.example.taskwarrior
+package com.ccextractor.taskwarrior
 
 import io.flutter.embedding.android.FlutterActivity
 

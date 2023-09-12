@@ -1,4 +1,4 @@
-package com.example.taskwarrior
+package com.ccextractor.taskwarrior
 
 import android.appwidget.AppWidgetManager
 import android.content.Context
@@ -11,8 +11,8 @@ import es.antonborri.home_widget.HomeWidgetBackgroundIntent
 import es.antonborri.home_widget.HomeWidgetLaunchIntent
 import es.antonborri.home_widget.HomeWidgetProvider
 
-import com.example.taskwarrior.MainActivity
-import com.example.taskwarrior.R
+import com.ccextractor.taskwarrior.MainActivity
+import com.ccextractor.taskwarrior.R
 
 
 class TaskWarriorWidgetProvider : HomeWidgetProvider() {
