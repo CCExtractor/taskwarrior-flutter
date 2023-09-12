@@ -1,4 +1,4 @@
-// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, deprecated_member_use, avoid_unnecessary_containers, unused_element, prefer_const_literals_to_create_immutables, library_private_types_in_public_api, use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
 
@@ -13,6 +13,11 @@ import 'package:taskwarrior/widgets/addTask.dart';
 import 'package:taskwarrior/widgets/buildTasks.dart';
 import 'package:taskwarrior/widgets/pallete.dart';
 import 'package:taskwarrior/widgets/tag_filter.dart';
+
+import 'package:taskwarrior/model/storage.dart';
+
+import 'package:taskwarrior/widgets/home_paths.dart' as rc;
+import 'package:taskwarrior/widgets/taskserver.dart';
 
 class Filters {
   const Filters({
@@ -34,12 +39,19 @@ class Filters {
 
 class HomePage extends StatefulWidget {
   static const String routeName = '/home';
+
+  const HomePage({Key? key}) : super(key: key);
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   late InheritedStorage storageWidget;
+  late Storage storage;
+  Server? server;
+  Credentials? credentials;
+
+  bool isTaskDServerActive = true;
 
   ///to check if the data is synced or not
 
@@ -50,6 +62,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    storage = StorageWidget.of(context).storage;
 
     ///didChangeDependencies loads after the initState
     ///it provides the context from the tree
@@ -72,8 +85,24 @@ class _HomePageState extends State<HomePage> {
     } else {}
   }
 
+  bool hideKey = true;
+
   @override
   Widget build(BuildContext context) {
+    Server? server;
+    Credentials? credentials;
+
+    var contents = rc.Taskrc(storage.home.home).readTaskrc();
+    if (contents != null) {
+      server = Taskrc.fromString(contents).server;
+      credentials = Taskrc.fromString(contents).credentials;
+    }
+
+    if (contents != null) {
+      server = Taskrc.fromString(contents).server;
+      credentials = Taskrc.fromString(contents).credentials;
+    }
+
     var storageWidget = StorageWidget.of(context);
     var taskData = storageWidget.tasks;
 
@@ -114,29 +143,38 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Palette.kToDark.shade200,
-        title: Text('Home Page', style: TextStyle(color: Colors.white)),
+        title: const Text('Home Page', style: TextStyle(color: Colors.white)),
         actions: [
           IconButton(
             icon: (storageWidget.searchVisible)
-                ? Tooltip(
+                ? const Tooltip(
                     message: 'Cancel',
-                    child: const Icon(Icons.cancel, color: Colors.white))
-                : Tooltip(
+                    child: Icon(Icons.cancel, color: Colors.white))
+                : const Tooltip(
                     message: 'Search',
-                    child: const Icon(Icons.search, color: Colors.white)),
+                    child: Icon(Icons.search, color: Colors.white)),
             onPressed: storageWidget.toggleSearch,
           ),
           Builder(
             builder: (context) => IconButton(
               icon: const Icon(Icons.refresh, color: Colors.white),
-              onPressed: () => storageWidget.synchronize(context, true),
+              onPressed: () {
+                if (server != null || credentials != null) {
+                  storageWidget.synchronize(context, true);
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        content: Text('TaskServer is not configured')),
+                  );
+                }
+              },
             ),
           ),
           Builder(
             builder: (context) => IconButton(
-              icon: Tooltip(
+              icon: const Tooltip(
                 message: 'Filters',
-                child: const Icon(Icons.filter_list, color: Colors.white),
+                child: Icon(Icons.filter_list, color: Colors.white),
               ),
               onPressed: () => Scaffold.of(context).openEndDrawer(),
             ),
@@ -144,9 +182,8 @@ class _HomePageState extends State<HomePage> {
         ],
         leading: Builder(
           builder: (context) => IconButton(
-            icon: Tooltip(
-                message: 'Menu',
-                child: const Icon(Icons.menu, color: Colors.white)),
+            icon: const Tooltip(
+                message: 'Menu', child: Icon(Icons.menu, color: Colors.white)),
             onPressed: () => Scaffold.of(context).openDrawer(),
           ),
         ),
@@ -163,7 +200,8 @@ class _HomePageState extends State<HomePage> {
               children: <Widget>[
                 if (storageWidget.searchVisible)
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 10),
                     child: SearchBar(
                       controller: storageWidget.searchController,
                       // shape:,
@@ -175,17 +213,19 @@ class _HomePageState extends State<HomePage> {
                           if (states.contains(MaterialState.focused)) {
                             return RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12.0),
-                              side: BorderSide(color: Colors.black, width: 2.0),
+                              side: const BorderSide(
+                                  color: Colors.black, width: 2.0),
                             );
                           } else {
                             return RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12.0),
-                              side: BorderSide(color: Colors.black, width: 1.5),
+                              side: const BorderSide(
+                                  color: Colors.black, width: 1.5),
                             );
                           }
                         },
                       ),
-                      leading: Icon(Icons.search_rounded),
+                      leading: const Icon(Icons.search_rounded),
                       hintText: 'Search',
                     ),
                   ),

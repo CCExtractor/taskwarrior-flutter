@@ -133,7 +133,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         onPressed: () {
           onboardingController.markOnboardingAsCompleted();
           Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => HomePage()),
+              MaterialPageRoute(builder: (context) => const HomePage()),
               (Route<dynamic> route) => false);
         },
         style: ElevatedButton.styleFrom(

@@ -112,7 +112,7 @@ class _MyAppState extends State<MyApp> {
         ),
         // initialRoute: PageRoutes.home,
         routes: {
-          PageRoutes.home: (context) => HomePage(),
+          PageRoutes.home: (context) => const HomePage(),
           PageRoutes.profile: (context) => const ProfilePage(),
         },
 
@@ -133,7 +133,7 @@ class CheckOnboardingStatus extends StatelessWidget {
     return Obx(
       () {
         if (onboardingController.hasCompletedOnboarding.value) {
-          return HomePage();
+          return const HomePage();
         } else {
           return const OnboardingScreen();
         }

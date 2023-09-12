@@ -58,19 +58,20 @@ class _NavDrawerState extends State<NavDrawer> {
                 // Navigator.pop(context);
               },
             ),
-            ListTile(
-              tileColor: AppSettings.isDarkMode ? Colors.black : Colors.white,
-              textColor: AppSettings.isDarkMode ? Colors.white : Colors.black,
-              leading: Icon(
-                Icons.refresh,
-                color: AppSettings.isDarkMode ? Colors.white : Colors.black,
-              ),
-              onTap: () {
-                Navigator.pop(context);
-                storageWidget.synchronize(context, true);
-              },
-              title: const Text("Refresh"),
-            ),
+            //We dont need 2 sync buttons
+            // ListTile(
+            //   tileColor: AppSettings.isDarkMode ? Colors.black : Colors.white,
+            //   textColor: AppSettings.isDarkMode ? Colors.white : Colors.black,
+            //   leading: Icon(
+            //     Icons.refresh,
+            //     color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+            //   ),
+            //   onTap: () {
+            //     Navigator.pop(context);
+            //     storageWidget.synchronize(context, true);
+            //   },
+            //   title: const Text("Refresh"),
+            // ),
             ListTile(
               tileColor: AppSettings.isDarkMode ? Colors.black : Colors.white,
               textColor: AppSettings.isDarkMode ? Colors.white : Colors.black,

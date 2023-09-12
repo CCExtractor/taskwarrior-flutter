@@ -185,7 +185,7 @@ class _DetailRouteState extends State<DetailRoute> {
           );
         } else {
           return await Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => HomePage()),
+              MaterialPageRoute(builder: (context) => const HomePage()),
               (Route<dynamic> route) => false);
         }
       },
