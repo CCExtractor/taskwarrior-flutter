@@ -12,6 +12,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  connectivity_plus: ^4.0.2
   cupertino_icons: ^1.0.5
   date_format: ^2.0.6
   double_back_to_close_app: ^2.1.0

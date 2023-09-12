@@ -66,8 +66,8 @@ class _NavDrawerState extends State<NavDrawer> {
                 color: AppSettings.isDarkMode ? Colors.white : Colors.black,
               ),
               onTap: () {
-                storageWidget.synchronize(context);
                 Navigator.pop(context);
+                storageWidget.synchronize(context, true);
               },
               title: const Text("Refresh"),
             ),
