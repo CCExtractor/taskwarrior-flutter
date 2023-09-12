@@ -54,8 +54,8 @@ class FilterDrawer extends StatelessWidget {
                 color: Color.fromARGB(0, 48, 46, 46),
               ),
               Container(
-                width: MediaQuery.of(context).size.width * 1,
-                padding: const EdgeInsets.all(12),
+                // width: MediaQuery.of(context).size.width * 1,
+                // padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: tileColor,
                   borderRadius: BorderRadius.circular(8),
@@ -99,7 +99,7 @@ class FilterDrawer extends StatelessWidget {
               ),
               Container(
                 width: MediaQuery.of(context).size.width * 1,
-                padding: const EdgeInsets.all(12),
+                // padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: tileColor,
                   borderRadius: BorderRadius.circular(8),

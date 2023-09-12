@@ -42,61 +42,94 @@ class ProjectsColumn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InheritedProjects(
-      projectFilter: projectFilter,
-      callback: callback,
-      projects: projects,
-      child: ExpansionTile(
-        key: const PageStorageKey('project-filter'),
-        title: RichText(
-          maxLines: 2,
-          text: TextSpan(
-            children: <TextSpan>[
-              TextSpan(
-                text: 'Project : ',
-                style: GoogleFonts.firaMono(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15,
-                  color: AppSettings.isDarkMode ? Colors.white : Colors.black,
-                ),
+        projectFilter: projectFilter,
+        callback: callback,
+        projects: projects,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "Project : ",
+                    style: GoogleFonts.firaMono(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                      color:
+                          AppSettings.isDarkMode ? Colors.white : Colors.black,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 40.w,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            projectFilter == ""
+                                ? "Not selected"
+                                : projectFilter,
+                            style: GoogleFonts.firaMono(
+                              fontSize: 12,
+                              color: AppSettings.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              TextSpan(
-                text: projectFilter,
-                style: GoogleFonts.firaMono(
-                  fontSize: 15,
-                  color: AppSettings.isDarkMode ? Colors.white : Colors.black,
-                ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "All Projecs",
+                    style: GoogleFonts.firaMono(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12,
+                      color:
+                          AppSettings.isDarkMode ? Colors.white : Colors.black,
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
-        backgroundColor: AppSettings.isDarkMode
-            ? const Color.fromARGB(255, 48, 46, 46)
-            : const Color.fromARGB(255, 220, 216, 216),
-        iconColor: AppSettings.isDarkMode ? Colors.white : Colors.black,
-        collapsedIconColor:
-            AppSettings.isDarkMode ? Colors.white : Colors.black,
-        children: projects.isNotEmpty
-            ? (Map.of(projects)
-                  ..removeWhere((_, nodeData) => nodeData.parent != null))
-                .keys
-                .map(ProjectTile.new)
-                .toList()
-            : [
-                Text(
-                  "No Projecs Found",
-                  style: TextStyle(
-                      color: (AppSettings.isDarkMode
+            ),
+            if (projects.isNotEmpty)
+              ...projects.entries
+                  .where((entry) => entry.value.parent == null)
+                  .map((entry) => ProjectTile(entry.key))
+                  .toList()
+            else
+              Column(
+                children: [
+                  Text(
+                    "No Projects Found",
+                    style: TextStyle(
+                      color: AppSettings.isDarkMode
                           ? Colors.white
-                          : const Color.fromARGB(255, 48, 46, 46)),
+                          : const Color.fromARGB(255, 48, 46, 46),
                       fontFamily: GoogleFonts.firaMono().fontFamily,
-                      fontSize: 14),
-                ),
-                SizedBox(
-                  height: 2.h,
-                )
-              ],
-      ),
-    );
+                      fontSize: 14,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 2.h,
+                  ),
+                ],
+              ),
+          ],
+        ));
   }
 }
 
@@ -145,19 +178,45 @@ class ProjectTile extends StatelessWidget {
     );
 
     return (node.children.isEmpty)
-        ? ListTile(
-            leading: radio,
-            title: title,
+        ? GestureDetector(
             onTap: () => callback(project),
-            tileColor: AppSettings.isDarkMode
-                ? const Color.fromARGB(255, 48, 46, 46)
-                : const Color.fromARGB(255, 220, 216, 216),
-            textColor: AppSettings.isDarkMode
-                ? Colors.white
-                : const Color.fromARGB(255, 48, 46, 46),
+            child: Row(
+              children: [
+                radio,
+                SizedBox(
+                  width: 45.w,
+                  child: Text(project,
+                      maxLines: 3,
+                      style: GoogleFonts.firaMono(
+                          color: AppSettings.isDarkMode
+                              ? Colors.white
+                              : Colors.black)),
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: (AppSettings.isDarkMode
+                        ? Colors.white
+                        : const Color.fromARGB(255, 48, 46, 46)),
+                  ),
+                  child: Text(
+                    (node.children.isEmpty)
+                        ? '${node.subtasks}'
+                        : '(${node.tasks}) ${node.subtasks}',
+                    maxLines: 1,
+                    style: GoogleFonts.firaMono(
+                        color: AppSettings.isDarkMode
+                            ? Colors.black
+                            : Colors.white),
+                  ),
+                ),
+              ],
+            ),
           )
         : ExpansionTile(
-            // textColor: Theme.of(context).textTheme.subtitle1!.color,
             controlAffinity: ListTileControlAffinity.leading,
             leading: radio,
             title: title,
