@@ -41,7 +41,7 @@ class TagFiltersWrap extends StatelessWidget {
         FilterChip(
           onSelected: (_) => filters.toggleTagUnion(),
           label: Text(filters.tagUnion ? 'OR' : 'AND',
-              style: GoogleFonts.firaMono(
+              style: GoogleFonts.poppins(
                   color: AppSettings.isDarkMode ? Colors.black : Colors.white)),
           backgroundColor: AppSettings.isDarkMode
               ? const Color.fromARGB(255, 220, 216, 216)
@@ -52,7 +52,7 @@ class TagFiltersWrap extends StatelessWidget {
             onSelected: (_) => filters.toggleTagFilter(entry.key),
             label: Text(
               entry.value.display,
-              style: GoogleFonts.firaMono(
+              style: GoogleFonts.poppins(
                   fontWeight: entry.value.selected ? FontWeight.w700 : null,
                   color: AppSettings.isDarkMode ? Colors.black : Colors.white),
             ),

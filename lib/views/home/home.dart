@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
@@ -69,15 +70,15 @@ class _HomePageState extends State<HomePage> {
     if (!isSyncNeeded) {
       ///check if the data is synced or not
       ///if not then sync the data
-      isNeededtoSync();
+      isNeededtoSyncOnStart();
       isSyncNeeded = true;
     }
   }
 
-  isNeededtoSync() async {
+  isNeededtoSyncOnStart() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     bool? value;
-    value = prefs.getBool('sync') ?? false;
+    value = prefs.getBool('sync-onStart') ?? false;
 
     if (value) {
       storageWidget = StorageWidget.of(context);
@@ -143,7 +144,8 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Palette.kToDark.shade200,
-        title: const Text('Home Page', style: TextStyle(color: Colors.white)),
+        title:
+            Text('Home Page', style: GoogleFonts.poppins(color: Colors.white)),
         actions: [
           IconButton(
             icon: (storageWidget.searchVisible)
@@ -270,7 +272,7 @@ class _HomePageState extends State<HomePage> {
             if (value == "cancel") {
             } else {
               //else we can sync new tasks
-              isNeededtoSync();
+              isNeededtoSyncOnStart();
             }
           }
         }),

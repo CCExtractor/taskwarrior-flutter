@@ -70,9 +70,9 @@ class _ReportsHomeState extends State<ReportsHome>
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Palette.kToDark.shade200,
-          title: const Text(
+          title: Text(
             'Reports',
-            style: TextStyle(color: Colors.white),
+            style: GoogleFonts.poppins(color: Colors.white),
           ),
           leading: GestureDetector(
             onTap: () {
@@ -89,11 +89,11 @@ class _ReportsHomeState extends State<ReportsHome>
             child: TabBar(
               controller: _tabController,
               labelColor: Appcolors.white,
-              labelStyle: GoogleFonts.firaMono(
+              labelStyle: GoogleFonts.poppins(
                 fontWeight: FontWeight.w500,
                 fontSize: 12,
               ),
-              unselectedLabelStyle: GoogleFonts.firaMono(
+              unselectedLabelStyle: GoogleFonts.poppins(
                 fontWeight: FontWeight.w300,
               ),
               onTap: (value) {
@@ -137,7 +137,7 @@ class _ReportsHomeState extends State<ReportsHome>
                     children: [
                       Text(
                         'No Task found',
-                        style: GoogleFonts.firaMono(
+                        style: GoogleFonts.poppins(
                           fontWeight: FontWeight.w500,
                           fontSize: 12,
                           color: AppSettings.isDarkMode
@@ -152,7 +152,7 @@ class _ReportsHomeState extends State<ReportsHome>
                     children: [
                       Text(
                         'Add a task to see reports',
-                        style: GoogleFonts.firaMono(
+                        style: GoogleFonts.poppins(
                           fontWeight: FontWeight.w500,
                           fontSize: 12,
                           color: AppSettings.isDarkMode

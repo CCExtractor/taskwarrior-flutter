@@ -18,7 +18,7 @@
 	android:layout_height="wrap_content"
 	android:text="TaskWarrior"
 	android:textSize="20sp"
-	android:textStyle="bold"
+	android:GoogleFonts.poppins="bold"
 	android:layout_alignParentTop="true"
 	android:layout_centerHorizontal="true"
 	android:layout_marginTop="12dp"/>
@@ -30,7 +30,7 @@
 	android:layout_height="wrap_content"
 	android:text="Pending Tasks"
 	android:textSize="18sp"
-	android:textStyle="bold"
+	android:GoogleFonts.poppins="bold"
 	android:layout_below="@id/taskWarriorText"
 	android:layout_centerHorizontal="true"
 	android:layout_marginTop="8dp"/>
@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:text="Title"
             android:textSize="16sp"
-            android:textStyle="bold" />
+            android:GoogleFonts.poppins="bold" />
 
         <TextView
             android:id="@+id/idTvDate"
@@ -82,7 +82,7 @@
             android:layout_height="wrap_content"
             android:text="Title"
             android:textSize="16sp"
-            android:textStyle="bold" />
+            android:GoogleFonts.poppins="bold" />
 
         <TextView
             android:id="@+id/idTvDate2"
@@ -113,7 +113,7 @@
             android:layout_height="wrap_content"
             android:text="Title"
             android:textSize="16sp"
-            android:textStyle="bold" />
+            android:GoogleFonts.poppins="bold" />
 
         <TextView
             android:id="@+id/idTvDate3"

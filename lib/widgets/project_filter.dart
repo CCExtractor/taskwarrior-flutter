@@ -55,7 +55,7 @@ class ProjectsColumn extends StatelessWidget {
                 children: [
                   Text(
                     "Project : ",
-                    style: GoogleFonts.firaMono(
+                    style: GoogleFonts.poppins(
                       fontWeight: FontWeight.bold,
                       fontSize: 15,
                       color:
@@ -74,7 +74,7 @@ class ProjectsColumn extends StatelessWidget {
                             projectFilter == ""
                                 ? "Not selected"
                                 : projectFilter,
-                            style: GoogleFonts.firaMono(
+                            style: GoogleFonts.poppins(
                               fontSize: 12,
                               color: AppSettings.isDarkMode
                                   ? Colors.white
@@ -95,7 +95,7 @@ class ProjectsColumn extends StatelessWidget {
                 children: [
                   Text(
                     "All Projecs",
-                    style: GoogleFonts.firaMono(
+                    style: GoogleFonts.poppins(
                       fontWeight: FontWeight.w600,
                       fontSize: 12,
                       color:
@@ -115,11 +115,10 @@ class ProjectsColumn extends StatelessWidget {
                 children: [
                   Text(
                     "No Projects Found",
-                    style: TextStyle(
+                    style: GoogleFonts.poppins(
                       color: AppSettings.isDarkMode
                           ? Colors.white
                           : const Color.fromARGB(255, 48, 46, 46),
-                      fontFamily: GoogleFonts.firaMono().fontFamily,
                       fontSize: 14,
                     ),
                   ),
@@ -151,14 +150,14 @@ class ProjectTile extends StatelessWidget {
       children: [
         Flexible(
             child: Text(project,
-                style: GoogleFonts.firaMono(
+                style: GoogleFonts.poppins(
                     color:
                         AppSettings.isDarkMode ? Colors.white : Colors.black))),
         Text(
           (node.children.isEmpty)
               ? '${node.subtasks}'
               : '(${node.tasks}) ${node.subtasks}',
-          style: GoogleFonts.firaMono(
+          style: GoogleFonts.poppins(
               color: AppSettings.isDarkMode ? Colors.white : Colors.black),
         )
       ],
@@ -187,7 +186,7 @@ class ProjectTile extends StatelessWidget {
                   width: 45.w,
                   child: Text(project,
                       maxLines: 3,
-                      style: GoogleFonts.firaMono(
+                      style: GoogleFonts.poppins(
                           color: AppSettings.isDarkMode
                               ? Colors.white
                               : Colors.black)),
@@ -207,7 +206,7 @@ class ProjectTile extends StatelessWidget {
                         ? '${node.subtasks}'
                         : '(${node.tasks}) ${node.subtasks}',
                     maxLines: 1,
-                    style: GoogleFonts.firaMono(
+                    style: GoogleFonts.poppins(
                         color: AppSettings.isDarkMode
                             ? Colors.black
                             : Colors.white),
