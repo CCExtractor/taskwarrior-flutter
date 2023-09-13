@@ -19,7 +19,7 @@ class CommonChartIndicator extends StatelessWidget {
           children: [
             Text(
               title,
-              style: GoogleFonts.firaMono(
+              style: GoogleFonts.poppins(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
                 color: AppSettings.isDarkMode ? Colors.white : Colors.black,
@@ -42,7 +42,7 @@ class CommonChartIndicator extends StatelessWidget {
                 ),
                 Text(
                   "Completed",
-                  style: GoogleFonts.firaMono(
+                  style: GoogleFonts.poppins(
                     fontWeight: FontWeight.w400,
                     fontSize: 16,
                     color: AppSettings.isDarkMode ? Colors.white : Colors.black,
@@ -59,7 +59,7 @@ class CommonChartIndicator extends StatelessWidget {
                 ),
                 Text(
                   "Pending",
-                  style: GoogleFonts.firaMono(
+                  style: GoogleFonts.poppins(
                     fontWeight: FontWeight.w400,
                     fontSize: 16,
                     color: AppSettings.isDarkMode ? Colors.white : Colors.black,

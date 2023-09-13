@@ -7,7 +7,6 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/model/storage.dart';
 import 'package:taskwarrior/model/storage/client.dart';
@@ -31,21 +30,11 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
   late Storage storage;
   Server? server;
   Credentials? credentials;
-  bool _value = false;
 
   bool isTaskDServerActive = true;
   @override
   void initState() {
     super.initState();
-    checkAutoSync();
-  }
-
-  checkAutoSync() async {
-    ///check if auto sync is on or off
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _value = prefs.getBool('sync') ?? false;
-    });
   }
 
   bool hideKey = true;
@@ -268,13 +257,13 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               "Configure TaskServer",
-              style: TextStyle(color: Colors.white, fontSize: 18),
+              style: GoogleFonts.poppins(color: Colors.white, fontSize: 18),
             ),
             Text(
               alias ?? profile,
-              style: const TextStyle(color: Colors.white, fontSize: 12),
+              style: GoogleFonts.poppins(color: Colors.white, fontSize: 12),
             ),
           ],
         ),
@@ -331,7 +320,7 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                 children: [
                   Text(
                     "Configure TASKRC",
-                    style: GoogleFonts.firaMono(
+                    style: GoogleFonts.poppins(
                         fontWeight: FontWeight.w500, color: color),
                   ),
                   const SizedBox(height: 10),
@@ -368,14 +357,14 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                                         children: [
                                           Text(
                                             'Configure TaskRc',
-                                            style: GoogleFonts.firaMono(
+                                            style: GoogleFonts.poppins(
                                               fontWeight: FontWeight.bold,
                                               color: color,
                                             ),
                                           ),
                                           Text(
                                             'Paste the taskrc content or select taskrc file',
-                                            style: GoogleFonts.firaMono(
+                                            style: GoogleFonts.poppins(
                                               fontWeight: FontWeight.w400,
                                               color: color,
                                               fontSize: 10,
@@ -390,7 +379,7 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                                                 controller:
                                                     taskrcContentController,
                                                 maxLines: 8,
-                                                style: const TextStyle(
+                                                style: GoogleFonts.poppins(
                                                     color: Colors.white),
                                                 decoration: InputDecoration(
                                                   suffixIconConstraints:
@@ -409,7 +398,7 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                                                   border:
                                                       const OutlineInputBorder(),
                                                   labelStyle:
-                                                      GoogleFonts.firaMono(
+                                                      GoogleFonts.poppins(
                                                           color: color),
                                                   labelText:
                                                       'Paste your taskrc contents here',
@@ -419,7 +408,7 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                                           ),
                                           Text(
                                             "Or",
-                                            style: GoogleFonts.firaMono(
+                                            style: GoogleFonts.poppins(
                                                 color: color),
                                           ),
                                           FilledButton.tonal(
@@ -460,7 +449,7 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                             taskrcContentController.text.isEmpty
                                 ? "Set TaskRc"
                                 : "Taskrc file is verified",
-                            style: GoogleFonts.firaMono(
+                            style: GoogleFonts.poppins(
                                 fontWeight: FontWeight.w400, color: color),
                           ),
                           Container(
@@ -508,7 +497,7 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                         children: [
                           Text(
                             "TaskD Server Info",
-                            style: GoogleFonts.firaMono(
+                            style: GoogleFonts.poppins(
                                 fontWeight: FontWeight.w500, color: color),
                           ),
                           const SizedBox(height: 10),
@@ -530,13 +519,13 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                                   server == null
                                       ? Text(
                                           'Not Configured',
-                                          style: GoogleFonts.firaMono(
+                                          style: GoogleFonts.poppins(
                                               fontWeight: FontWeight.w400,
                                               color: color),
                                         )
                                       : Text(
                                           '$server',
-                                          style: GoogleFonts.firaMono(
+                                          style: GoogleFonts.poppins(
                                               fontWeight: FontWeight.w400,
                                               color: color),
                                         ),
@@ -583,7 +572,7 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                         children: [
                           Text(
                             "TaskD Server Credentials",
-                            style: GoogleFonts.firaMono(
+                            style: GoogleFonts.poppins(
                                 fontWeight: FontWeight.w500, color: color),
                           ),
                           const SizedBox(height: 10),
@@ -605,7 +594,7 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                                   credentialsString == null
                                       ? Text(
                                           'Not Configured',
-                                          style: GoogleFonts.firaMono(
+                                          style: GoogleFonts.poppins(
                                               fontWeight: FontWeight.w400,
                                               color: color),
                                         )
@@ -618,7 +607,7 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                                             scrollDirection: Axis.horizontal,
                                             child: Text(
                                               credentialsString,
-                                              style: GoogleFonts.firaMono(
+                                              style: GoogleFonts.poppins(
                                                   fontWeight: FontWeight.w400,
                                                   color: color),
                                             ),
@@ -690,70 +679,6 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                             ? "Select Certificate"
                             : "Select Certificate",
               ),
-            Padding(
-              padding: const EdgeInsets.only(
-                top: 10,
-                bottom: 10,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Configure AutoSync",
-                    style: GoogleFonts.firaMono(
-                        fontWeight: FontWeight.w500, color: color),
-                  ),
-                  const SizedBox(height: 10),
-                  GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * 1,
-                      //   height: MediaQuery.of(context).size.height * 0.05,
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: tileColor,
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Colors.grey.shade300),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Enable Sync",
-                            style: GoogleFonts.firaMono(
-                                fontWeight: FontWeight.w400, color: color),
-                          ),
-                          Switch(
-                              splashRadius: 24,
-                              thumbIcon: MaterialStateProperty.resolveWith(
-                                (Set<MaterialState> states) {
-                                  if (states.contains(MaterialState.selected)) {
-                                    return const Icon(
-                                      Icons.check,
-                                      color: Colors.green,
-                                    );
-                                  }
-                                  return null;
-                                },
-                              ),
-                              value: _value,
-                              onChanged: (bool value) async {
-                                setState(() {
-                                  _value = !_value;
-                                });
-
-                                final SharedPreferences prefs =
-                                    await SharedPreferences.getInstance();
-                                await prefs.setBool('sync', _value);
-                              }),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
           ],
         ),
       ),
@@ -808,7 +733,7 @@ class _PemWidgetState extends State<PemWidget> {
           Text(
             widget.optionString,
             style:
-                GoogleFonts.firaMono(fontWeight: FontWeight.w500, color: color),
+                GoogleFonts.poppins(fontWeight: FontWeight.w500, color: color),
           ),
           const SizedBox(
             height: 10,
@@ -862,7 +787,7 @@ class _PemWidgetState extends State<PemWidget> {
                                 : (widget.pem == 'server.cert')
                                     ? ''
                                     : "$name = ",
-                            style: GoogleFonts.firaMono(
+                            style: GoogleFonts.poppins(
                                 fontWeight: FontWeight.w400, color: color),
                           ),
                           Text(
@@ -871,7 +796,7 @@ class _PemWidgetState extends State<PemWidget> {
                                     ? "private.key.pem"
                                     : ""
                                 : identifier,
-                            style: GoogleFonts.firaMono(
+                            style: GoogleFonts.poppins(
                                 fontWeight: FontWeight.w400, color: color),
                           ),
                         ],

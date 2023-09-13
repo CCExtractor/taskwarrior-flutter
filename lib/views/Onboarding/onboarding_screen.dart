@@ -87,7 +87,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           Text(
             content.title,
             textAlign: TextAlign.center,
-            style: GoogleFonts.mulish(
+            style: GoogleFonts.poppins(
               fontWeight: FontWeight.w600,
               fontSize: (width <= 550) ? 30 : 35,
             ),
@@ -95,7 +95,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           const SizedBox(height: 15),
           Text(
             content.desc,
-            style: GoogleFonts.mulish(
+            style: GoogleFonts.poppins(
               fontWeight: FontWeight.w300,
               fontSize: (width <= 550) ? 17 : 17,
             ),
@@ -144,11 +144,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           padding: (width <= 550)
               ? const EdgeInsets.symmetric(horizontal: 100, vertical: 20)
               : EdgeInsets.symmetric(horizontal: width * 0.2, vertical: 25),
-          textStyle: TextStyle(fontSize: (width <= 550) ? 13 : 17),
+          textStyle: GoogleFonts.poppins(fontSize: (width <= 550) ? 13 : 17),
         ),
         child: Text(
           "Start",
-          style: GoogleFonts.mulish(
+          style: GoogleFonts.poppins(
             fontWeight: FontWeight.w300,
             color: Colors.white,
             fontSize: (width <= 550) ? 17 : 17,
@@ -177,7 +177,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ),
             child: Text(
               "Skip",
-              style: GoogleFonts.mulish(
+              style: GoogleFonts.poppins(
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
                 fontSize: (width <= 550) ? 12 : 12,
@@ -204,7 +204,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ),
             child: Text(
               "Next",
-              style: GoogleFonts.mulish(
+              style: GoogleFonts.poppins(
                 fontWeight: FontWeight.w300,
                 color: Colors.white,
                 fontSize: (width <= 550) ? 12 : 12,

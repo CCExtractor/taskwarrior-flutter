@@ -133,7 +133,7 @@
 //                     for (var key in header.keys.toList())
 //                       Text(
 //                         '${'$key:'.padRight(maxKeyLength + 1)} ${header[key]}',
-//                         style: GoogleFonts.firaMono(),
+//                         style: GoogleFonts.poppins(),
 //                       ),
 //                   ],
 //                 ),
@@ -186,11 +186,11 @@
 //           children: [
 //             const Text(
 //               "Configure TaskServer",
-//               style: TextStyle(color: Colors.white, fontSize: 18),
+//               style: GoogleFonts.poppins(color: Colors.white, fontSize: 18),
 //             ),
 //             Text(
 //               alias ?? profile,
-//               style: const TextStyle(color: Colors.white, fontSize: 12),
+//               style: const GoogleFonts.poppins(color: Colors.white, fontSize: 12),
 //             ),
 //           ],
 //         ),
@@ -246,7 +246,7 @@
 //                       "I dont know how to configure the TaskServer",
 //                       textAlign: TextAlign.center,
 //                       maxLines: 2,
-//                       style: GoogleFonts.firaMono(
+//                       style: GoogleFonts.poppins(
 //                         color: color,
 //                         decoration: TextDecoration.underline,
 //                         fontWeight: FontWeight.w500,
@@ -267,7 +267,7 @@
 //                     'TaskServer Sync Configuration',
 //                     textAlign: TextAlign.center,
 //                     maxLines: 2,
-//                     style: GoogleFonts.firaMono(
+//                     style: GoogleFonts.poppins(
 //                       color: color,
 //                       decoration: TextDecoration.underline,
 //                       fontWeight: FontWeight.w800,
@@ -287,7 +287,7 @@
 //                     "Auto Sync",
 //                     textAlign: TextAlign.center,
 //                     maxLines: 2,
-//                     style: GoogleFonts.firaMono(
+//                     style: GoogleFonts.poppins(
 //                       color: color,
 //                       decoration: TextDecoration.underline,
 //                       fontWeight: FontWeight.w500,
@@ -383,7 +383,7 @@
 //             children: [
 //               TextSpan(
 //                 text: widget.pem.padRight(17),
-//                 style: GoogleFonts.firaMono(
+//                 style: GoogleFonts.poppins(
 //                   color: color,
 //                   fontWeight: FontWeight.w800,
 //                 ),
@@ -391,14 +391,14 @@
 //               name == null
 //                   ? TextSpan(
 //                       text: "   = Not Configured",
-//                       style: GoogleFonts.firaMono(
+//                       style: GoogleFonts.poppins(
 //                         color: color,
 //                         fontWeight: FontWeight.w400,
 //                       ),
 //                     )
 //                   : TextSpan(
 //                       text: (widget.pem == 'server.cert') ? '' : ' = $name',
-//                       style: GoogleFonts.firaMono(
+//                       style: GoogleFonts.poppins(
 //                         color: color,
 //                         fontWeight: FontWeight.w400,
 //                       ),
@@ -408,7 +408,7 @@
 //         ),
 //         // child: Text(
 //         //   '${widget.pem.padRight(17)}${(widget.pem == 'server.cert') ? '' : ' = $name'}',
-//         //   style: GoogleFonts.firaMono(),
+//         //   style: GoogleFonts.poppins(),
 //         // ),
 //       ),
 //       subtitle: (key) {
@@ -420,7 +420,7 @@
 //             scrollDirection: Axis.horizontal,
 //             child: Text(
 //               'SHA1: null',
-//               style: GoogleFonts.firaMono(
+//               style: GoogleFonts.poppins(
 //                 color: color,
 //                 fontWeight: FontWeight.w800,
 //               ),
@@ -436,14 +436,14 @@
 //                 children: [
 //                   TextSpan(
 //                     text: 'SHA1 = ',
-//                     style: GoogleFonts.firaMono(
+//                     style: GoogleFonts.poppins(
 //                       color: color,
 //                       fontWeight: FontWeight.w800,
 //                     ),
 //                   ),
 //                   TextSpan(
 //                     text: identifier,
-//                     style: GoogleFonts.firaMono(
+//                     style: GoogleFonts.poppins(
 //                       color: color,
 //                       fontWeight: FontWeight.w400,
 //                     ),
@@ -458,7 +458,7 @@
 //             scrollDirection: Axis.horizontal,
 //             child: Text(
 //               '${e.runtimeType}',
-//               style: GoogleFonts.firaMono(),
+//               style: GoogleFonts.poppins(),
 //             ),
 //           );
 //         }
@@ -581,7 +581,7 @@
 //             child: TextField(
 //               controller: _taskrcContentController,
 //               maxLines: 8,
-//               style: const TextStyle(color: Colors.white),
+//               style: const GoogleFonts.poppins(color: Colors.white),
 //               decoration: InputDecoration(
 //                 suffixIconConstraints: const BoxConstraints(
 //                   maxHeight: 24,
@@ -594,7 +594,7 @@
 //                     },
 //                     icon: const Icon(Icons.content_paste)),
 //                 border: const OutlineInputBorder(),
-//                 labelStyle: GoogleFonts.firaMono(color: color),
+//                 labelStyle: GoogleFonts.poppins(color: color),
 //                 labelText: 'Paste your taskrc contents here',
 //               ),
 //             ),
@@ -605,7 +605,7 @@
 //           children: [
 //             Text(
 //               "Or",
-//               style: GoogleFonts.firaMono(color: color),
+//               style: GoogleFonts.poppins(color: color),
 //             )
 //           ],
 //         ),
@@ -628,7 +628,7 @@
 //             scrollDirection: Axis.horizontal,
 //             child: Text(
 //               'Selected TaskServer Configuration',
-//               style: GoogleFonts.firaMono(fontWeight: FontWeight.w800),
+//               style: GoogleFonts.poppins(fontWeight: FontWeight.w800),
 //             ),
 //           ),
 //         ),
@@ -641,7 +641,7 @@
 //                   children: [
 //                     TextSpan(
 //                       text: 'taskd.server      = ',
-//                       style: GoogleFonts.firaMono(
+//                       style: GoogleFonts.poppins(
 //                         color: color,
 //                         fontWeight: FontWeight.w800,
 //                       ),
@@ -649,14 +649,14 @@
 //                     server == null
 //                         ? TextSpan(
 //                             text: 'Not Configured',
-//                             style: GoogleFonts.firaMono(
+//                             style: GoogleFonts.poppins(
 //                               color: color,
 //                               fontWeight: FontWeight.w400,
 //                             ),
 //                           )
 //                         : TextSpan(
 //                             text: '$server',
-//                             style: GoogleFonts.firaMono(
+//                             style: GoogleFonts.poppins(
 //                               color: color,
 //                               fontWeight: FontWeight.w400,
 //                             ),
@@ -691,7 +691,7 @@
 //                 children: [
 //                   TextSpan(
 //                     text: 'taskd.credentials = ',
-//                     style: GoogleFonts.firaMono(
+//                     style: GoogleFonts.poppins(
 //                       color: color,
 //                       fontWeight: FontWeight.w800,
 //                     ),
@@ -699,14 +699,14 @@
 //                   credentialsString == null
 //                       ? TextSpan(
 //                           text: 'Not Configured',
-//                           style: GoogleFonts.firaMono(
+//                           style: GoogleFonts.poppins(
 //                             color: color,
 //                             fontWeight: FontWeight.w400,
 //                           ),
 //                         )
 //                       : TextSpan(
 //                           text: credentialsString,
-//                           style: GoogleFonts.firaMono(
+//                           style: GoogleFonts.poppins(
 //                             color: color,
 //                             fontWeight: FontWeight.w400,
 //                           ),

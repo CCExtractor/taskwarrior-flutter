@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/model/storage/savefile.dart';
@@ -30,7 +31,7 @@ class _ProfilePageState extends State<ProfilePage> {
         backgroundColor: Palette.kToDark.shade200,
         title: Text(
           profilesMap.length == 1 ? 'Profile' : 'Profiles',
-          style: const TextStyle(color: Colors.white),
+          style: GoogleFonts.poppins(color: Colors.white),
         ),
         leading: IconButton(
           onPressed: () {

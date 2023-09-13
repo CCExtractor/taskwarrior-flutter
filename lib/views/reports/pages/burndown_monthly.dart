@@ -144,7 +144,7 @@ class _BurnDownMonthltState extends State<BurnDownMonthlt>
               primaryXAxis: CategoryAxis(
                 title: AxisTitle(
                   text: 'Month - Year',
-                  textStyle: GoogleFonts.firaMono(
+                  textStyle: GoogleFonts.poppins(
                     fontWeight: FontWeight.bold,
                     fontSize: 12,
                     color: AppSettings.isDarkMode ? Colors.white : Colors.black,
@@ -154,7 +154,7 @@ class _BurnDownMonthltState extends State<BurnDownMonthlt>
               primaryYAxis: NumericAxis(
                 title: AxisTitle(
                   text: 'Tasks',
-                  textStyle: GoogleFonts.firaMono(
+                  textStyle: GoogleFonts.poppins(
                     fontWeight: FontWeight.bold,
                     fontSize: 12,
                     color: AppSettings.isDarkMode ? Colors.white : Colors.black,

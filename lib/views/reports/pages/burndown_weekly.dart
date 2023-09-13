@@ -160,7 +160,7 @@ class _BurnDownWeeklyState extends State<BurnDownWeekly>
               primaryXAxis: CategoryAxis(
                 title: AxisTitle(
                   text: 'Weeks - Year',
-                  textStyle: GoogleFonts.firaMono(
+                  textStyle: GoogleFonts.poppins(
                     fontWeight: FontWeight.bold,
                     fontSize: 12,
                     color: AppSettings.isDarkMode ? Colors.white : Colors.black,
@@ -170,7 +170,7 @@ class _BurnDownWeeklyState extends State<BurnDownWeekly>
               primaryYAxis: NumericAxis(
                 title: AxisTitle(
                   text: 'Tasks',
-                  textStyle: GoogleFonts.firaMono(
+                  textStyle: GoogleFonts.poppins(
                     fontWeight: FontWeight.bold,
                     color: AppSettings.isDarkMode ? Colors.white : Colors.black,
                     fontSize: 12,

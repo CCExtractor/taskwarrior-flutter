@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:built_collection/built_collection.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:loggy/loggy.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
@@ -113,9 +114,9 @@ class TagsRouteState extends State<TagsRoute> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Palette.kToDark.shade200,
-        title: const Text(
+        title: Text(
           'Tags',
-          style: TextStyle(color: Colors.white),
+          style: GoogleFonts.poppins(color: Colors.white),
         ),
         leading: const BackButton(
           color: Colors.white,
@@ -148,7 +149,7 @@ class TagsRouteState extends State<TagsRoute> {
                     padding: const EdgeInsets.fromLTRB(15, 18, 0, 10),
                     child: Text(
                       'Added tags will appear here',
-                      style: TextStyle(
+                      style: GoogleFonts.poppins(
                           fontStyle: FontStyle.italic,
                           color: AppSettings.isDarkMode
                               ? Colors.white

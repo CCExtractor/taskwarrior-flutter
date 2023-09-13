@@ -4,8 +4,10 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/controller/WidgetController.dart';
@@ -68,9 +70,9 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                         Expanded(
                           child: Wrap(
                             children: [
-                              const Text(
+                              Text(
                                 "Due : ",
-                                style: TextStyle(
+                                style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.bold, height: 3.3),
                               ),
                               GestureDetector(
@@ -179,9 +181,9 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Text(
+            Text(
               'Priority :  ',
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
               textAlign: TextAlign.left,
             ),
             DropdownButton<String>(
@@ -190,7 +192,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                   : Colors.white,
               value: priority,
               elevation: 16,
-              style: const TextStyle(color: Colors.black),
+              style: GoogleFonts.poppins(color: Colors.black),
               underline: Container(
                 height: 1.5,
                 color: Colors.black,
@@ -222,7 +224,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
     int errCode = 0;
     return TextButton(
       child: const Text("Add"),
-      onPressed: () {
+      onPressed: () async {
         try {
           if (formKey.currentState!.validate()) {
             if (due == null) {
@@ -250,6 +252,16 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                     ? const Color.fromARGB(255, 61, 61, 61)
                     : const Color.fromARGB(255, 39, 39, 39),
                 duration: const Duration(seconds: 2)));
+
+            final SharedPreferences prefs =
+                await SharedPreferences.getInstance();
+            bool? value;
+            value = prefs.getBool('sync-OnTaskCreate') ?? false;
+            late InheritedStorage storageWidget;
+            storageWidget = StorageWidget.of(context);
+            if (value) {
+              storageWidget.synchronize(context, true);
+            }
           }
         } on FormatException catch (e) {
           Navigator.of(context).pop();

@@ -44,7 +44,7 @@ class ManageProfile extends StatelessWidget {
       key: const PageStorageKey<String>('manage-profile'),
       title: Text(
         'Manage selected profile',
-        style: GoogleFonts.firaMono(
+        style: GoogleFonts.poppins(
           fontWeight: FontWeight.bold,
           fontSize: 15,
           color: AppSettings.isDarkMode ? Colors.white : Colors.black,

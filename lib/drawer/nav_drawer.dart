@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
 import 'package:taskwarrior/routes/pageroute.dart';
 import 'package:taskwarrior/views/about/about.dart';
 import 'package:taskwarrior/views/reports/reports_home.dart';
+import 'package:taskwarrior/views/settings/settings.dart';
 
 class NavDrawer extends StatefulWidget {
   final InheritedStorage storageWidget;
@@ -33,9 +35,9 @@ class _NavDrawerState extends State<NavDrawer> {
               tileColor: AppSettings.isDarkMode ? Colors.black : Colors.white,
               textColor: AppSettings.isDarkMode ? Colors.white : Colors.black,
               contentPadding: const EdgeInsets.only(top: 40, left: 10),
-              title: const Text(
+              title: Text(
                 'Menu',
-                style: TextStyle(
+                style: GoogleFonts.poppins(
                   fontSize: 25,
                   fontWeight: FontWeight.bold,
                 ),
@@ -119,6 +121,19 @@ class _NavDrawerState extends State<NavDrawer> {
                     MaterialPageRoute(builder: (context) => const AboutPage()));
               },
               title: const Text("About"),
+            ),
+            ListTile(
+              tileColor: AppSettings.isDarkMode ? Colors.black : Colors.white,
+              textColor: AppSettings.isDarkMode ? Colors.white : Colors.black,
+              leading: Icon(
+                Icons.settings,
+                color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+              ),
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const SettingsPage()));
+              },
+              title: const Text("Settings"),
             ),
           ],
         ));

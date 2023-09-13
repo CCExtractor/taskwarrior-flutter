@@ -5,6 +5,8 @@ import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:loggy/loggy.dart';
 
@@ -267,20 +269,26 @@ class _StorageWidgetState extends State<StorageWidget> {
                 ),
                 child: Container(
                   padding: const EdgeInsets.all(16.0),
-                  child: const Column(
+                  child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      CircularProgressIndicator(),
-                      SizedBox(height: 16.0),
+                      const CircularProgressIndicator(),
+                      const SizedBox(height: 16.0),
                       Text(
                         "Syncing",
-                        style: TextStyle(
+                        style: GoogleFonts.poppins(
                           fontSize: 18.0,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 8.0),
-                      Text("Please wait..."),
+                      const SizedBox(height: 8.0),
+                      Text(
+                        "Please wait...",
+                        style: GoogleFonts.poppins(
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -296,7 +304,7 @@ class _StorageWidgetState extends State<StorageWidget> {
         setState(() {});
 
         if (isDialogNeeded) {
-          Navigator.pop(context);
+          Get.back();
         }
 
         ScaffoldMessenger.of(context).showSnackBar(
@@ -306,6 +314,9 @@ class _StorageWidgetState extends State<StorageWidget> {
         );
       }
     } catch (e, trace) {
+      if (isDialogNeeded) {
+        Get.back();
+      }
       logError(e, trace);
     }
   }

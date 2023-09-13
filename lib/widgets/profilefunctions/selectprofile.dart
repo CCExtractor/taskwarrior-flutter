@@ -36,7 +36,7 @@ class SelectProfile extends StatelessWidget {
           Text(
             'Current Profile:',
             overflow: TextOverflow.fade,
-            style: GoogleFonts.firaMono(
+            style: GoogleFonts.poppins(
               fontWeight: FontWeight.bold,
               fontSize: 15,
               color: AppSettings.isDarkMode ? Colors.white : Colors.black,
@@ -46,7 +46,8 @@ class SelectProfile extends StatelessWidget {
             height: 1.h,
           ),
           Text(currentProfile,
-              style: TextStyle(
+              style: GoogleFonts.poppins(
+                fontSize: 14,
                 color: AppSettings.isDarkMode ? Colors.grey : Colors.grey[600],
               ))
         ],
@@ -62,7 +63,7 @@ class SelectProfile extends StatelessWidget {
               Text(
                 'All Profiles:',
                 overflow: TextOverflow.fade,
-                style: GoogleFonts.firaMono(
+                style: GoogleFonts.poppins(
                   fontWeight: FontWeight.bold,
                   fontSize: 15,
                   color: AppSettings.isDarkMode ? Colors.white : Colors.black,
@@ -132,7 +133,7 @@ class SelectProfileListTile extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 child: Text(
                   alias!,
-                  style: GoogleFonts.firaMono(
+                  style: GoogleFonts.poppins(
                     color: AppSettings.isDarkMode
                         ? Colors.white
                         : const Color.fromARGB(255, 48, 46, 46),
@@ -144,7 +145,7 @@ class SelectProfileListTile extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               child: Text(
                 uuid,
-                style: GoogleFonts.firaMono(
+                style: GoogleFonts.poppins(
                   color: AppSettings.isDarkMode
                       ? Colors.white
                       : const Color.fromARGB(255, 48, 46, 46),

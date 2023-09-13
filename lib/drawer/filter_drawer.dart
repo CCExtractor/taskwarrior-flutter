@@ -41,7 +41,7 @@ class FilterDrawer extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 0.0),
                   child: Text(
                     'Apply Filters',
-                    style: TextStyle(
+                    style: GoogleFonts.poppins(
                         fontWeight: FontWeight.bold,
                         color: (AppSettings.isDarkMode
                             ? Colors.white
@@ -68,7 +68,7 @@ class FilterDrawer extends StatelessWidget {
                       children: <TextSpan>[
                         TextSpan(
                           text: 'Status : ',
-                          style: GoogleFonts.firaMono(
+                          style: GoogleFonts.poppins(
                             fontWeight: FontWeight.bold,
                             fontSize: 15,
                             color: AppSettings.isDarkMode
@@ -78,7 +78,7 @@ class FilterDrawer extends StatelessWidget {
                         ),
                         TextSpan(
                           text: filters.pendingFilter ? 'pending' : 'completed',
-                          style: GoogleFonts.firaMono(
+                          style: GoogleFonts.poppins(
                             fontSize: 15,
                             color: AppSettings.isDarkMode
                                 ? Colors.white
@@ -132,11 +132,11 @@ class FilterDrawer extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 0.0),
                       child: Text(
                         'Filter Tag By:',
-                        style: TextStyle(
+                        style: GoogleFonts.poppins(
                             color: (AppSettings.isDarkMode
                                 ? Colors.white
                                 : Color.fromARGB(255, 48, 46, 46)),
-                            fontFamily: GoogleFonts.firaMono().fontFamily,
+                            //
                             fontSize: 18),
                         //textAlign: TextAlign.right,
                       ),
@@ -175,11 +175,10 @@ class FilterDrawer extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 0.0),
                       child: Text(
                         'Sort By',
-                        style: TextStyle(
+                        style: GoogleFonts.poppins(
                             color: (AppSettings.isDarkMode
                                 ? Colors.white
                                 : Color.fromARGB(255, 48, 46, 46)),
-                            fontFamily: GoogleFonts.firaMono().fontFamily,
                             fontSize: 18),
                         //textAlign: TextAlign.right,
                       ),
@@ -221,7 +220,7 @@ class FilterDrawer extends StatelessWidget {
                                   storageWidget.selectSort('$sort+');
                                 }
                               },
-                              labelStyle: TextStyle(
+                              labelStyle: GoogleFonts.poppins(
                                   color: AppSettings.isDarkMode
                                       ? Colors.black
                                       : Colors.white),
@@ -254,7 +253,7 @@ class FilterDrawer extends StatelessWidget {
                           },
                           child: Text(
                             'Reset Sort',
-                            style: TextStyle(
+                            style: GoogleFonts.poppins(
                                 fontSize: 15,
                                 color: AppSettings.isDarkMode
                                     ? Color.fromARGB(255, 48, 46, 46)
@@ -312,13 +311,13 @@ class FilterDrawer extends StatelessWidget {
 //         FilterChip(
 //             onSelected: (_) => filters.toggleTagUnion(),
 //             label: Text(filters.tagUnion ? 'OR' : 'AND',
-//                 style: GoogleFonts.firaMono())),
+//                 style: GoogleFonts.poppins())),
 //         for (var entry in filters.tags.entries)
 //           FilterChip(
 //             onSelected: (_) => filters.toggleTagFilter(entry.key),
 //             label: Text(
 //               entry.value.display,
-//               style: GoogleFonts.firaMono(
+//               style: GoogleFonts.poppins(
 //                 fontWeight: entry.value.selected ? FontWeight.w700 : null,
 //               ),
 //             ),
