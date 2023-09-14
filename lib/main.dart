@@ -14,6 +14,7 @@ import 'package:taskwarrior/controller/onboarding_controller.dart';
 import 'package:taskwarrior/routes/pageroute.dart';
 import 'package:taskwarrior/views/Onboarding/onboarding_screen.dart';
 import 'package:taskwarrior/views/profile/profile.dart';
+import 'package:taskwarrior/widgets/app_placeholder.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:taskwarrior/services/notification_services.dart';
@@ -54,7 +55,7 @@ Future main([List<String> args = const []]) async {
               baseDirectory: testingDirectory ?? snapshot.data!,
               child: const MyApp(),
             )
-          : const Placeholder(),
+          : const AppSetupPlaceholder(),
     ),
   );
 }
