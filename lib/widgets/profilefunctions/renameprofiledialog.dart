@@ -22,7 +22,7 @@ class RenameProfileDialog extends StatelessWidget {
       child: Center(
         child: AlertDialog(
           scrollable: true,
-          title: const Text('Rename Profile'),
+          title: const Text('Rename Alias'),
           content: TextField(controller: controller),
           actions: [
             TextButton(
