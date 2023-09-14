@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, file_names
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 Widget createDrawerHeader() {
   return ListTile(
@@ -10,7 +11,7 @@ Widget createDrawerHeader() {
     ),
     title: Text(
       'Taskwarrior',
-      style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.w500),
+      style: GoogleFonts.poppins(fontSize: 30.0, fontWeight: FontWeight.w500),
     ),
   );
 }

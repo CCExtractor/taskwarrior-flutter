@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
@@ -58,6 +59,19 @@ class _NavDrawerState extends State<NavDrawer> {
               AppSettings.isDarkMode ? Icons.dark_mode : Icons.light_mode,
               color: AppSettings.isDarkMode ? Colors.white : Colors.black,
               size: 15,
+          children: [
+            ListTile(
+              tileColor: AppSettings.isDarkMode ? Colors.black : Colors.white,
+              textColor: AppSettings.isDarkMode ? Colors.white : Colors.black,
+              contentPadding: const EdgeInsets.only(top: 40, left: 10),
+              title: Text(
+                'Menu',
+                style: GoogleFonts.poppins(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              onTap: () => Navigator.pop(context),
             ),
           ),
         ),
@@ -86,19 +100,20 @@ class _NavDrawerState extends State<NavDrawer> {
                 // Navigator.pop(context);
               },
             ),
-            ListTile(
-              tileColor: AppSettings.isDarkMode ? Colors.black : Colors.white,
-              textColor: AppSettings.isDarkMode ? Colors.white : Colors.black,
-              leading: Icon(
-                Icons.refresh,
-                color: AppSettings.isDarkMode ? Colors.white : Colors.black,
-              ),
-              onTap: () {
-                storageWidget.synchronize(context);
-                Navigator.pop(context);
-              },
-              title: const Text("Refresh"),
-            ),
+            //We dont need 2 sync buttons
+            // ListTile(
+            //   tileColor: AppSettings.isDarkMode ? Colors.black : Colors.white,
+            //   textColor: AppSettings.isDarkMode ? Colors.white : Colors.black,
+            //   leading: Icon(
+            //     Icons.refresh,
+            //     color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+            //   ),
+            //   onTap: () {
+            //     Navigator.pop(context);
+            //     storageWidget.synchronize(context, true);
+            //   },
+            //   title: const Text("Refresh"),
+            // ),
             ListTile(
               tileColor: AppSettings.isDarkMode ? Colors.black : Colors.white,
               textColor: AppSettings.isDarkMode ? Colors.white : Colors.black,
@@ -124,6 +139,19 @@ class _NavDrawerState extends State<NavDrawer> {
                     MaterialPageRoute(builder: (context) => const AboutPage()));
               },
               title: const Text("About"),
+            ),
+            ListTile(
+              tileColor: AppSettings.isDarkMode ? Colors.black : Colors.white,
+              textColor: AppSettings.isDarkMode ? Colors.white : Colors.black,
+              leading: Icon(
+                Icons.settings,
+                color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+              ),
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const SettingsPage()));
+              },
+              title: const Text("Settings"),
             ),
           ],
         ));

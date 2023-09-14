@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/model/storage/savefile.dart';
@@ -28,9 +29,9 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Palette.kToDark.shade200,
-        title: const Text(
-          'Profiles',
-          style: TextStyle(color: Colors.white),
+        title: Text(
+          profilesMap.length == 1 ? 'Profile' : 'Profiles',
+          style: GoogleFonts.poppins(color: Colors.white),
         ),
         leading: IconButton(
           onPressed: () {
@@ -78,9 +79,37 @@ class _ProfilePageState extends State<ProfilePage> {
                     .toIso8601String()
                     .replaceAll(RegExp(r'[-:]'), '')
                     .replaceAll(RegExp(r'\..*'), '');
-                exportTasks(
-                  contents: tasks,
-                  suggestedName: 'tasks-$now.txt',
+
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text("Export Format"),
+                      content: const Text("Choose the export format:"),
+                      actions: <Widget>[
+                        TextButton(
+                          child: const Text("JSON"),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            exportTasks(
+                              contents: tasks,
+                              suggestedName: 'tasks-$now.json',
+                            );
+                          },
+                        ),
+                        TextButton(
+                          child: const Text("TXT"),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            exportTasks(
+                              contents: tasks,
+                              suggestedName: 'tasks-$now.txt',
+                            );
+                          },
+                        ),
+                      ],
+                    );
+                  },
                 );
               },
               () {

@@ -38,7 +38,7 @@ class DateTimeWidget extends StatelessWidget {
                   children: <TextSpan>[
                     TextSpan(
                       text: '$name:'.padRight(13),
-                      style: GoogleFonts.firaMono(
+                      style: GoogleFonts.poppins(
                         fontWeight: FontWeight.bold,
                         fontSize: 15,
                         color: AppSettings.isDarkMode
@@ -48,7 +48,7 @@ class DateTimeWidget extends StatelessWidget {
                     ),
                     TextSpan(
                       text: value ?? "not selected",
-                      style: GoogleFonts.firaMono(
+                      style: GoogleFonts.poppins(
                         fontSize: 15,
                         color: AppSettings.isDarkMode
                             ? Colors.white
@@ -129,7 +129,7 @@ class StartWidget extends StatelessWidget {
                   children: <TextSpan>[
                     TextSpan(
                       text: '$name:'.padRight(13),
-                      style: GoogleFonts.firaMono(
+                      style: GoogleFonts.poppins(
                         fontWeight: FontWeight.bold,
                         fontSize: 15,
                         color: AppSettings.isDarkMode
@@ -139,7 +139,7 @@ class StartWidget extends StatelessWidget {
                     ),
                     TextSpan(
                       text: value ?? "not selected",
-                      style: GoogleFonts.firaMono(
+                      style: GoogleFonts.poppins(
                         fontSize: 15,
                         color: AppSettings.isDarkMode
                             ? Colors.white

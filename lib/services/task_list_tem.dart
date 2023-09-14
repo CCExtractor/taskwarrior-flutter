@@ -84,9 +84,9 @@ class _TaskListItemState extends State<TaskListItem> {
                     '${(widget.task.id == 0) ? '#' : widget.task.id}. ${widget.task.description}',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                        color: colour,
-                        fontFamily: GoogleFonts.firaMono().fontFamily),
+                    style: GoogleFonts.poppins(
+                      color: colour,
+                    ),
                   ),
                 ),
               ],
@@ -95,8 +95,9 @@ class _TaskListItemState extends State<TaskListItem> {
               (widget.task.annotations != null)
                   ? ' [${widget.task.annotations!.length}]'
                   : '',
-              style: TextStyle(
-                  color: colour, fontFamily: GoogleFonts.firaMono().fontFamily),
+              style: GoogleFonts.poppins(
+                color: colour,
+              ),
             ),
           ],
         ),
@@ -112,18 +113,19 @@ class _TaskListItemState extends State<TaskListItem> {
                           'Due: ${(widget.task.due != null) ? when(widget.task.due!) : '-'}'
                       .replaceFirst(RegExp(r' \[\]$'), '')
                       .replaceAll(RegExp(r' +'), ' '),
-                  style: TextStyle(
-                      color: dimColor,
-                      fontFamily: GoogleFonts.firaMono().fontFamily,
-                      fontSize: 12,
-                      overflow: TextOverflow.ellipsis),
+                  overflow: TextOverflow.ellipsis,
+                  style: GoogleFonts.poppins(
+                    color: dimColor,
+                    fontSize: 12,
+                  ),
                 ),
               ),
             ),
             Text(
               formatUrgency(urgency(widget.task)),
-              style: TextStyle(
-                  color: colour, fontFamily: GoogleFonts.firaMono().fontFamily),
+              style: GoogleFonts.poppins(
+                color: colour,
+              ),
             ),
           ],
         ),
@@ -158,9 +160,9 @@ class _TaskListItemState extends State<TaskListItem> {
                     '${(widget.task.id == 0) ? '#' : widget.task.id}. ${widget.task.description}',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                        color: colour,
-                        fontFamily: GoogleFonts.firaMono().fontFamily),
+                    style: GoogleFonts.poppins(
+                      color: colour,
+                    ),
                   ),
                 ),
               ],
@@ -179,18 +181,19 @@ class _TaskListItemState extends State<TaskListItem> {
                           'Due: ${(widget.task.due != null) ? when(widget.task.due!) : '-'}'
                       .replaceFirst(RegExp(r' \[\]$'), '')
                       .replaceAll(RegExp(r' +'), ' '),
-                  style: TextStyle(
-                      color: dimColor,
-                      fontFamily: GoogleFonts.firaMono().fontFamily,
-                      fontSize: 12,
-                      overflow: TextOverflow.ellipsis),
+                  overflow: TextOverflow.ellipsis,
+                  style: GoogleFonts.poppins(
+                    color: dimColor,
+                    fontSize: 12,
+                  ),
                 ),
               ),
             ),
             Text(
               formatUrgency(urgency(widget.task)),
-              style: TextStyle(
-                  color: colour, fontFamily: GoogleFonts.firaMono().fontFamily),
+              style: GoogleFonts.poppins(
+                color: colour,
+              ),
             ),
           ],
         ),

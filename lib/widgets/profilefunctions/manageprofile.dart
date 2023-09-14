@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:tuple/tuple.dart';
 
@@ -23,7 +24,7 @@ class ManageProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var triples = [
-      Tuple3(Icons.edit, 'Rename Profile', rename),
+      Tuple3(Icons.edit, 'Rename Alias', rename),
       Tuple3(Icons.link, 'Configure Taskserver', configure),
       Tuple3(Icons.file_download, 'Export tasks', export),
       Tuple3(Icons.copy, 'Copy config to new profile', copy),
@@ -41,7 +42,14 @@ class ManageProfile extends StatelessWidget {
           : const Color.fromARGB(255, 48, 46, 46),
       textColor: AppSettings.isDarkMode ? Colors.white : Colors.black,
       key: const PageStorageKey<String>('manage-profile'),
-      title: const Text('Manage selected profile'),
+      title: Text(
+        'Manage selected profile',
+        style: GoogleFonts.poppins(
+          fontWeight: FontWeight.bold,
+          fontSize: 15,
+          color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+        ),
+      ),
       children: [
         for (var triple in triples)
           ListTile(

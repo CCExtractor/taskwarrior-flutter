@@ -62,7 +62,7 @@ class _BurnDownDailyState extends State<BurnDownDaily>
             children: [
               Text(
                 'Date: $date',
-                style: const TextStyle(
+                style: GoogleFonts.poppins(
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -160,7 +160,7 @@ class _BurnDownDailyState extends State<BurnDownDaily>
               primaryXAxis: CategoryAxis(
                 title: AxisTitle(
                   text: 'Day - Month',
-                  textStyle: GoogleFonts.firaMono(
+                  textStyle: GoogleFonts.poppins(
                     fontWeight: FontWeight.bold,
                     color: AppSettings.isDarkMode ? Colors.white : Colors.black,
                     fontSize: 12,
@@ -170,7 +170,7 @@ class _BurnDownDailyState extends State<BurnDownDaily>
               primaryYAxis: NumericAxis(
                 title: AxisTitle(
                   text: 'Tasks',
-                  textStyle: GoogleFonts.firaMono(
+                  textStyle: GoogleFonts.poppins(
                     fontWeight: FontWeight.bold,
                     fontSize: 12,
                     color: AppSettings.isDarkMode ? Colors.white : Colors.black,

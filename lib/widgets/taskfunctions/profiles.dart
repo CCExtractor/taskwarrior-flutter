@@ -19,7 +19,8 @@ class Profiles {
     File('${base.path}/profiles/$uuid/created')
         .writeAsStringSync('${DateTime.now().toUtc()}');
     File('${base.path}/profiles/$uuid/alias').createSync();
-
+    const alias = 'New Alias';
+    setAlias(profile: uuid, alias: alias);
     return uuid;
   }
 

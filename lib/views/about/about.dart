@@ -25,9 +25,9 @@ class _AboutPageState extends State<AboutPage> {
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Palette.kToDark.shade200,
-        title: const Text(
+        title: Text(
           'About',
-          style: TextStyle(color: Colors.white),
+          style: GoogleFonts.poppins(color: Colors.white),
         ),
         leading: GestureDetector(
           onTap: () {
@@ -58,7 +58,7 @@ class _AboutPageState extends State<AboutPage> {
               ),
               Text(
                 "Taskwarrior",
-                style: GoogleFonts.firaMono(
+                style: GoogleFonts.poppins(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                   color: AppSettings.isDarkMode ? Colors.white : Colors.black,
@@ -88,7 +88,7 @@ class _AboutPageState extends State<AboutPage> {
                                 children: <TextSpan>[
                                   TextSpan(
                                     text: 'Version: ',
-                                    style: GoogleFonts.firaMono(
+                                    style: GoogleFonts.poppins(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 15,
                                       color: AppSettings.isDarkMode
@@ -98,7 +98,7 @@ class _AboutPageState extends State<AboutPage> {
                                   ),
                                   TextSpan(
                                     text: appInfoLines[1],
-                                    style: GoogleFonts.firaMono(
+                                    style: GoogleFonts.poppins(
                                       fontSize: 15,
                                       color: AppSettings.isDarkMode
                                           ? Colors.white
@@ -113,7 +113,7 @@ class _AboutPageState extends State<AboutPage> {
                                 children: <TextSpan>[
                                   TextSpan(
                                     text: 'Package: ',
-                                    style: GoogleFonts.firaMono(
+                                    style: GoogleFonts.poppins(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 15,
                                       color: AppSettings.isDarkMode
@@ -123,7 +123,7 @@ class _AboutPageState extends State<AboutPage> {
                                   ),
                                   TextSpan(
                                     text: appInfoLines[0],
-                                    style: GoogleFonts.firaMono(
+                                    style: GoogleFonts.poppins(
                                       fontSize: 15,
                                       color: AppSettings.isDarkMode
                                           ? Colors.white
@@ -146,7 +146,7 @@ class _AboutPageState extends State<AboutPage> {
               Text(
                 introduction,
                 textAlign: TextAlign.center,
-                style: GoogleFonts.firaMono(
+                style: GoogleFonts.poppins(
                   fontWeight: FontWeight.w500,
                   fontSize: 12,
                   color: AppSettings.isDarkMode ? Colors.white : Colors.black,
@@ -179,14 +179,17 @@ class _AboutPageState extends State<AboutPage> {
                           throw Exception('Could not launch $url');
                         }
                       },
-                      icon: SvgPicture.asset(
-                        "assets/svg/github.svg",
-                        width: 15.sp,
-                        height: 15.sp,
-                      ),
+                      icon: SvgPicture.asset("assets/svg/github.svg",
+                          width: 15.sp,
+                          height: 15.sp,
+                          colorFilter: ColorFilter.mode(
+                              AppSettings.isDarkMode
+                                  ? Colors.black
+                                  : Colors.white,
+                              BlendMode.srcIn)),
                       label: Text(
                         "GitHub",
-                        style: GoogleFonts.firaMono(
+                        style: GoogleFonts.poppins(
                           fontWeight: FontWeight.w500,
                           fontSize: 12,
                           color: AppSettings.isDarkMode
@@ -214,14 +217,17 @@ class _AboutPageState extends State<AboutPage> {
                           throw Exception('Could not launch $url');
                         }
                       },
-                      icon: SvgPicture.asset(
-                        "assets/svg/link.svg",
-                        width: 15.sp,
-                        height: 15.sp,
-                      ),
+                      icon: SvgPicture.asset("assets/svg/link.svg",
+                          width: 15.sp,
+                          height: 15.sp,
+                          colorFilter: ColorFilter.mode(
+                              AppSettings.isDarkMode
+                                  ? Colors.black
+                                  : Colors.white,
+                              BlendMode.srcIn)),
                       label: Text(
                         "CCExtractor",
-                        style: GoogleFonts.firaMono(
+                        style: GoogleFonts.poppins(
                           fontWeight: FontWeight.w500,
                           fontSize: 12,
                           color: AppSettings.isDarkMode
@@ -239,7 +245,7 @@ class _AboutPageState extends State<AboutPage> {
               Text(
                 "Eager to enhance this project? Visit our GitHub repository.",
                 textAlign: TextAlign.center,
-                style: GoogleFonts.firaMono(
+                style: GoogleFonts.poppins(
                   fontWeight: FontWeight.w600,
                   fontSize: 12,
                   color: AppSettings.isDarkMode ? Colors.white : Colors.black,

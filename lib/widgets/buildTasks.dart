@@ -16,12 +16,12 @@ import 'package:taskwarrior/widgets/taskfunctions/modify.dart';
 import 'pallete.dart';
 
 class TasksBuilder extends StatefulWidget {
-  const TasksBuilder({
-    Key? key,
-    required this.taskData,
-    required this.pendingFilter,
-    required this.searchVisible
-  }) : super(key: key);
+  const TasksBuilder(
+      {Key? key,
+      required this.taskData,
+      required this.pendingFilter,
+      required this.searchVisible})
+      : super(key: key);
 
   final List<Task> taskData;
   final bool pendingFilter;
@@ -118,12 +118,11 @@ class _TasksBuilderState extends State<TasksBuilder> {
                 padding: const EdgeInsets.all(16.0),
                 child: Center(
                   child: Text(
-                    (widget.searchVisible)?
-                        'Search Not Found :('
-                    :'Click on the bottom right button to start adding tasks',
+                    (widget.searchVisible)
+                        ? 'Search Not Found :('
+                        : 'Click on the bottom right button to start adding tasks',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontFamily: GoogleFonts.firaMono().fontFamily,
+                    style: GoogleFonts.poppins(
                       fontSize: 20,
                       color: AppSettings.isDarkMode
                           ? Colors.white

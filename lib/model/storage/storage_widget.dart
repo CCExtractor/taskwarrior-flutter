@@ -1,7 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:collection';
 import 'dart:io';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:loggy/loggy.dart';
 
@@ -241,19 +246,77 @@ class _StorageWidgetState extends State<StorageWidget> {
     setState(() {});
   }
 
-  Future<void> synchronize(BuildContext context) async {
+  Future<void> synchronize(BuildContext context, bool isDialogNeeded) async {
     try {
-      var header = await storage.home.synchronize(await client());
-      _refreshTasks();
-      pendingTags = _pendingTags();
-      projects = _projects();
-      setState(() {});
-      // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('${header['code']}: ${header['status']}'),
-      ));
-      // ignore: avoid_catches_without_on_clauses
+      final connectivityResult = await Connectivity().checkConnectivity();
+      if (connectivityResult == ConnectivityResult.none) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+                'You are not connected to the internet. Please check your network connection.'),
+          ),
+        );
+      } else {
+        if (isDialogNeeded) {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return Dialog(
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: Container(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const CircularProgressIndicator(),
+                      const SizedBox(height: 16.0),
+                      Text(
+                        "Syncing",
+                        style: GoogleFonts.poppins(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8.0),
+                      Text(
+                        "Please wait...",
+                        style: GoogleFonts.poppins(
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
+        }
+
+        var header = await storage.home.synchronize(await client());
+        _refreshTasks();
+        pendingTags = _pendingTags();
+        projects = _projects();
+        setState(() {});
+
+        if (isDialogNeeded) {
+          Get.back();
+        }
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('${header['code']}: ${header['status']}'),
+          ),
+        );
+      }
     } catch (e, trace) {
+      if (isDialogNeeded) {
+        Get.back();
+      }
       logError(e, trace);
     }
   }
@@ -412,7 +475,7 @@ class InheritedStorage extends InheritedModel<String> {
   final Set<String> selectedTags;
   final Task Function(String) getTask;
   final void Function(Task) mergeTask;
-  final void Function(BuildContext) synchronize;
+  final void Function(BuildContext, bool) synchronize;
   final void Function() togglePendingFilter;
   final void Function(String) toggleProjectFilter;
   final void Function() toggleTagUnion;

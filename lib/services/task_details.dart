@@ -70,7 +70,7 @@ class _DetailRouteState extends State<DetailRoute> {
           backgroundColor: Palette.kToDark,
           title: Text(
             'id: ${(modify.id == 0) ? '-' : modify.id}',
-            style: GoogleFonts.firaMono(color: Colors.white),
+            style: GoogleFonts.poppins(color: Colors.white),
           ),
         ),
         body: Padding(
@@ -124,7 +124,7 @@ class _DetailRouteState extends State<DetailRoute> {
                                     '  new: ${entry.value['new']}')
                                 .toList()
                                 .join('\n'),
-                            style: GoogleFonts.firaMono(),
+                            style: GoogleFonts.poppins(),
                           ),
                         ),
                         actions: [
@@ -185,7 +185,7 @@ class _DetailRouteState extends State<DetailRoute> {
           );
         } else {
           return await Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => HomePage()),
+              MaterialPageRoute(builder: (context) => const HomePage()),
               (Route<dynamic> route) => false);
         }
       },
@@ -291,7 +291,7 @@ class AttributeWidget extends StatelessWidget {
                 children: [
                   Text(
                     '$name:'.padRight(13),
-                    style: GoogleFonts.firaMono(
+                    style: GoogleFonts.poppins(
                       fontWeight: FontWeight.bold,
                       fontSize: 15,
                       color:
@@ -300,7 +300,7 @@ class AttributeWidget extends StatelessWidget {
                   ),
                   Text(
                     localValue?.toString() ?? "not selected",
-                    style: GoogleFonts.firaMono(
+                    style: GoogleFonts.poppins(
                       fontSize: 15,
                       color:
                           AppSettings.isDarkMode ? Colors.white : Colors.black,
@@ -345,7 +345,7 @@ class TagsWidget extends StatelessWidget {
                   children: <TextSpan>[
                     TextSpan(
                       text: '$name:'.padRight(13),
-                      style: GoogleFonts.firaMono(
+                      style: GoogleFonts.poppins(
                         fontWeight: FontWeight.bold,
                         fontSize: 15,
                         color: AppSettings.isDarkMode
@@ -356,7 +356,7 @@ class TagsWidget extends StatelessWidget {
                     TextSpan(
                       text:
                           '${(value as ListBuilder?)?.build() ?? 'not selected'}',
-                      style: GoogleFonts.firaMono(
+                      style: GoogleFonts.poppins(
                         fontSize: 15,
                         color: AppSettings.isDarkMode
                             ? Colors.white
@@ -368,7 +368,7 @@ class TagsWidget extends StatelessWidget {
               ),
               // Text(
               //   '${'$name:  '}${(value as ListBuilder?)?.build()}',
-              //   style: GoogleFonts.firaMono(),
+              //   style: GoogleFonts.poppins(),
               // ),
             ],
           ),
@@ -410,7 +410,7 @@ class TagsWidget extends StatelessWidget {
 //                 (value == null)
 //                     ? '${'$name:'.padRight(13)}null'
 //                     : '${'$name:'.padRight(13)}${(value as ListBuilder).length} annotation(s)',
-//                 style: GoogleFonts.firaMono(),
+//                 style: GoogleFonts.poppins(),
 //               ),
 //             ],
 //           ),
