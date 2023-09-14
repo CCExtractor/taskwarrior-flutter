@@ -30,22 +30,22 @@ class _NavDrawerState extends State<NavDrawer> {
         child: ListView(
           padding: EdgeInsets.zero,
    children: [
-  ListTile(
-    tileColor: AppSettings.isDarkMode ? Colors.black : Colors.white,
-    textColor: AppSettings.isDarkMode ? Colors.white : Colors.black,
-    contentPadding: const EdgeInsets.only(top: 40, left: 10),
-    title: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
+      ListTile(
+         tileColor: AppSettings.isDarkMode ? Colors.black : Colors.white,
+         textColor: AppSettings.isDarkMode ? Colors.white : Colors.black,
+         contentPadding: const EdgeInsets.only(top: 40, left: 10),
+         title: Row(
+             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+             children: [
         Text(
           'Menu',
           style: TextStyle(
-            fontSize: 25,
-            fontWeight: FontWeight.bold,
+          fontSize: 25,
+          fontWeight: FontWeight.bold,
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(right: 10), // Adjust the right padding as needed
+          padding: EdgeInsets.only(right: 10), 
           child: ThemeSwitcherClipper(
             isDarkMode: AppSettings.isDarkMode,
             onTap: (bool newMode) async {
@@ -63,13 +63,13 @@ class _NavDrawerState extends State<NavDrawer> {
         ),
       ],
     ),
-    onTap: () async {
-      AppSettings.isDarkMode = !AppSettings.isDarkMode;
-      setState(() {});
-      await SelectedTheme.saveMode(AppSettings.isDarkMode);
-      widget.notifyParent();
-    },
-  ),
+       onTap: () async {
+         AppSettings.isDarkMode = !AppSettings.isDarkMode;
+         setState(() {});
+         await SelectedTheme.saveMode(AppSettings.isDarkMode);
+         widget.notifyParent();
+           },
+         ),
              ListTile(
                tileColor: AppSettings.isDarkMode ? Colors.black : Colors.white,
                textColor: AppSettings.isDarkMode ? Colors.white : Colors.black,
