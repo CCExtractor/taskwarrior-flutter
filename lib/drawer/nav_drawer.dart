@@ -5,6 +5,7 @@ import 'package:taskwarrior/model/storage/storage_widget.dart';
 import 'package:taskwarrior/routes/pageroute.dart';
 import 'package:taskwarrior/views/about/about.dart';
 import 'package:taskwarrior/views/reports/reports_home.dart';
+import 'package:taskwarrior/config/theme_switcher_clipper.dart';
 
 class NavDrawer extends StatefulWidget {
   final InheritedStorage storageWidget;
@@ -28,29 +29,56 @@ class _NavDrawerState extends State<NavDrawer> {
         backgroundColor: AppSettings.isDarkMode ? Colors.black : Colors.white,
         child: ListView(
           padding: EdgeInsets.zero,
-          children: [
-            ListTile(
-              tileColor: AppSettings.isDarkMode ? Colors.black : Colors.white,
-              textColor: AppSettings.isDarkMode ? Colors.white : Colors.black,
-              contentPadding: const EdgeInsets.only(top: 40, left: 10),
-              title: const Text(
-                'Menu',
-                style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              onTap: () => Navigator.pop(context),
+   children: [
+  ListTile(
+    tileColor: AppSettings.isDarkMode ? Colors.black : Colors.white,
+    textColor: AppSettings.isDarkMode ? Colors.white : Colors.black,
+    contentPadding: const EdgeInsets.only(top: 40, left: 10),
+    title: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          'Menu',
+          style: TextStyle(
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(right: 10), // Adjust the right padding as needed
+          child: ThemeSwitcherClipper(
+            isDarkMode: AppSettings.isDarkMode,
+            onTap: (bool newMode) async {
+              AppSettings.isDarkMode = newMode;
+              setState(() {});
+              await SelectedTheme.saveMode(AppSettings.isDarkMode);
+              widget.notifyParent();
+            },
+            child: Icon(
+              AppSettings.isDarkMode ? Icons.dark_mode : Icons.light_mode,
+              color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+              size: 15,
             ),
-            ListTile(
-              tileColor: AppSettings.isDarkMode ? Colors.black : Colors.white,
-              textColor: AppSettings.isDarkMode ? Colors.white : Colors.black,
-              leading: Icon(
-                Icons.person_rounded,
-                color: AppSettings.isDarkMode ? Colors.white : Colors.black,
-              ),
-              title: const Text('Profile'),
-              onTap: () {
+          ),
+        ),
+      ],
+    ),
+    onTap: () async {
+      AppSettings.isDarkMode = !AppSettings.isDarkMode;
+      setState(() {});
+      await SelectedTheme.saveMode(AppSettings.isDarkMode);
+      widget.notifyParent();
+    },
+  ),
+             ListTile(
+               tileColor: AppSettings.isDarkMode ? Colors.black : Colors.white,
+               textColor: AppSettings.isDarkMode ? Colors.white : Colors.black,
+               leading: Icon(
+                 Icons.person_rounded,
+                 color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                ),
+               title: const Text('Profile'),
+               onTap: () {
                 // Update the state of the app
                 // ...
                 Navigator.pushNamed(context, PageRoutes.profile);
@@ -83,28 +111,6 @@ class _NavDrawerState extends State<NavDrawer> {
                     builder: (context) => const ReportsHome()));
               },
               title: const Text("Reports"),
-            ),
-            ListTile(
-              tileColor: AppSettings.isDarkMode ? Colors.black : Colors.white,
-              textColor: AppSettings.isDarkMode ? Colors.white : Colors.black,
-              leading: AppSettings.isDarkMode
-                  ? const Icon(
-                      Icons.light_mode,
-                      color: Color.fromARGB(255, 216, 196, 15),
-                      size: 25,
-                    )
-                  : const Icon(
-                      Icons.dark_mode,
-                      color: Colors.black,
-                      size: 25,
-                    ),
-              title: const Text("Switch Theme"),
-              onTap: () async {
-                AppSettings.isDarkMode = !AppSettings.isDarkMode;
-                setState(() {});
-                await SelectedTheme.saveMode(AppSettings.isDarkMode);
-                widget.notifyParent();
-              },
             ),
             ListTile(
               tileColor: AppSettings.isDarkMode ? Colors.black : Colors.white,
