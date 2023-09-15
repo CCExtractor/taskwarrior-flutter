@@ -4,7 +4,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
    <application
-        android:label="taskwarrior"
+        android:label="TaskWarrior"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity

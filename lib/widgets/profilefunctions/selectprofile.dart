@@ -47,7 +47,7 @@ class SelectProfile extends StatelessWidget {
           ),
           Text(currentProfile,
               style: GoogleFonts.poppins(
-                fontSize: 14,
+                fontSize: 12,
                 color: AppSettings.isDarkMode ? Colors.grey : Colors.grey[600],
               ))
         ],
