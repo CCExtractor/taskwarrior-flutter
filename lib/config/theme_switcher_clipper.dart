@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 
 class ThemeSwitcherClipper extends StatefulWidget {
@@ -7,7 +9,8 @@ class ThemeSwitcherClipper extends StatefulWidget {
   const ThemeSwitcherClipper({
     Key? key,
     required this.isDarkMode,
-    required this.onTap, required Icon child,
+    required this.onTap,
+    required Icon child,
   }) : super(key: key);
 
   @override
@@ -23,13 +26,13 @@ class _ThemeSwitcherClipperState extends State<ThemeSwitcherClipper> {
       },
       child: ClipOval(
         child: Hero(
-          tag: 'theme_switcher', 
-          child: Container(
-            width: 60, 
-            height: 60, 
+          tag: 'theme_switcher',
+          child: SizedBox(
+            width: 60,
+            height: 60,
             child: Center(
               child: AnimatedSwitcher(
-                duration: Duration(seconds: 2),
+                duration: const Duration(seconds: 2),
                 child: Icon(
                   widget.isDarkMode ? Icons.dark_mode : Icons.light_mode,
                   key: ValueKey<bool>(widget.isDarkMode),
@@ -44,5 +47,3 @@ class _ThemeSwitcherClipperState extends State<ThemeSwitcherClipper> {
     );
   }
 }
-
-
