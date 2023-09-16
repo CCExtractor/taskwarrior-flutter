@@ -10,6 +10,7 @@ import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/drawer/filter_drawer.dart';
 import 'package:taskwarrior/drawer/nav_drawer.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
+import 'package:taskwarrior/taskserver/ntaskserver.dart';
 import 'package:taskwarrior/widgets/add_Task.dart';
 import 'package:taskwarrior/widgets/buildTasks.dart';
 import 'package:taskwarrior/widgets/pallete.dart';
@@ -165,8 +166,20 @@ class _HomePageState extends State<HomePage> {
                   storageWidget.synchronize(context, true);
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                        content: Text('TaskServer is not configured')),
+                    SnackBar(
+                      content: const Text('TaskServer is not configured'),
+                      action: SnackBarAction(
+                        label: 'Set Up',
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const ManageTaskServer(),
+                              ));
+                        },
+                        textColor: Colors.purple,
+                      ),
+                    ),
                   );
                 }
               },
