@@ -31,16 +31,15 @@ class _ThemeSwitcherClipperState extends State<ThemeSwitcherClipper> {
             width: 60,
             height: 60,
             child: Center(
-              child: AnimatedSwitcher(
-                duration: const Duration(seconds: 2),
-                child: Icon(
-                  widget.isDarkMode ? Icons.dark_mode : Icons.light_mode,
-                  key: ValueKey<bool>(widget.isDarkMode),
-                  color: widget.isDarkMode ? Colors.white : Colors.black,
-                  size: 40,
-                ),
+                child: AnimatedSwitcher(
+              duration: const Duration(seconds: 2),
+              child: Icon(
+                widget.isDarkMode ? Icons.dark_mode : Icons.light_mode,
+                key: UniqueKey(),
+                color: widget.isDarkMode ? Colors.white : Colors.black,
+                size: 40,
               ),
-            ),
+            )),
           ),
         ),
       ),

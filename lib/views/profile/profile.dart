@@ -3,7 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/model/storage/savefile.dart';
-import 'package:taskwarrior/routes/pageroute.dart';
 import 'package:taskwarrior/taskserver/ntaskserver.dart';
 import 'package:taskwarrior/widgets/pallete.dart';
 import 'package:taskwarrior/widgets/profilefunctions.dart';
@@ -35,7 +34,8 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         leading: IconButton(
           onPressed: () {
-            Navigator.pushReplacementNamed(context, PageRoutes.home);
+            // Navigator.pushReplacementNamed(context, PageRoutes.home);
+            Navigator.of(context).pop();
           },
           icon: const Icon(
             Icons.chevron_left,
