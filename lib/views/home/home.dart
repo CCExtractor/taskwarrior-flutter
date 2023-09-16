@@ -175,7 +175,9 @@ class _HomePageState extends State<HomePage> {
                               context,
                               MaterialPageRoute(
                                 builder: (_) => const ManageTaskServer(),
-                              ));
+                              )).then((value) {
+                            setState(() {});
+                          });
                         },
                         textColor: Colors.purple,
                       ),

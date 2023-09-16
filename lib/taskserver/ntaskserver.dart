@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:loggy/loggy.dart';
 import 'package:taskwarrior/widgets/taskdetails/profiles_widget.dart';
 // ignore_for_file: use_build_context_synchronously
@@ -418,6 +419,7 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                                                 key: 'TASKRC',
                                               );
                                               setState(() {});
+                                              Get.back();
                                             },
                                             child: const Text(
                                                 'Select TASKRC file'),
