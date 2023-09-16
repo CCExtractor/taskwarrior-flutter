@@ -1,4 +1,4 @@
-// ignore_for_file: library_private_types_in_public_api
+// ignore_for_file: library_private_types_in_public_api, must_be_immutable
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,33 +8,41 @@ import 'package:taskwarrior/config/taskwarriorcolors.dart';
 import 'package:taskwarrior/widgets/pallete.dart';
 
 class SettingsPage extends StatefulWidget {
-  const SettingsPage({Key? key}) : super(key: key);
+  SettingsPage(
+      {Key? key,
+      required this.isSyncOnStartActivel,
+      required this.isSyncOnTaskCreateActivel})
+      : super(key: key);
+  bool isSyncOnStartActivel;
+  bool isSyncOnTaskCreateActivel;
 
   @override
   _SettingsPageState createState() => _SettingsPageState();
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  bool syncOnStart = false;
-  bool syncOnTaskCreate = false;
+  // bool syncOnStart = false;
+  // bool syncOnTaskCreate = false;
 
-  checkAutoSync() async {
-    ///check if auto sync is on or off
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      syncOnStart = prefs.getBool('sync-onStart') ?? false;
-      syncOnTaskCreate = prefs.getBool('sync-OnTaskCreate') ?? false;
-    });
-  }
+  // checkAutoSync() async {
+  //   ///check if auto sync is on or off
+  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   setState(() {
+  //     syncOnStart = prefs.getBool('sync-onStart') ?? false;
+  //     syncOnTaskCreate = prefs.getBool('sync-OnTaskCreate') ?? false;
+  //   });
+  // }
 
-  @override
-  void initState() {
-    super.initState();
-    checkAutoSync();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   checkAutoSync();
+  // }
 
   @override
   Widget build(BuildContext context) {
+    // syncOnStart = widget.isSyncOnStartActivel;
+    // syncOnTaskCreate = widget.isSyncOnTaskCreateActivel;
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
@@ -90,18 +98,18 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
             trailing: Switch(
-                value: syncOnStart,
+                value: widget.isSyncOnStartActivel,
                 onChanged: (bool value) async {
                   setState(() {
-                    syncOnStart = !syncOnStart;
+                    widget.isSyncOnStartActivel = value;
                   });
 
                   final SharedPreferences prefs =
                       await SharedPreferences.getInstance();
-                  await prefs.setBool('sync-onStart', syncOnStart);
+                  await prefs.setBool('sync-onStart', value);
                 }),
           ),
-          const Divider(), // Add a divider between settings
+          const Divider(),
           ListTile(
             title: Text(
               'Sync on Task Create',
@@ -119,18 +127,17 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
             trailing: Switch(
-                value: syncOnTaskCreate,
+                value: widget.isSyncOnTaskCreateActivel,
                 onChanged: (bool value) async {
                   setState(() {
-                    syncOnTaskCreate = !syncOnTaskCreate;
+                    widget.isSyncOnTaskCreateActivel = value;
                   });
 
                   final SharedPreferences prefs =
                       await SharedPreferences.getInstance();
-                  await prefs.setBool('sync-OnTaskCreate', syncOnTaskCreate);
+                  await prefs.setBool('sync-OnTaskCreate', value);
                 }),
           ),
-          // Add more settings here
         ],
       ),
     );
