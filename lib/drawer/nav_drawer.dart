@@ -1,6 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sizer/sizer.dart';
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
@@ -122,6 +123,13 @@ class _NavDrawerState extends State<NavDrawer> {
                 );
               },
             ),
+            buildMenuItem(
+              icon: Icons.exit_to_app,
+              text: 'Exit',
+              onTap: () {
+                _showExitConfirmationDialog(context);
+              },
+            ),
           ],
         ),
       ),
@@ -136,7 +144,7 @@ class _NavDrawerState extends State<NavDrawer> {
       onTap: onTap,
       child: Container(
         color: AppSettings.isDarkMode ? Colors.black : Colors.white,
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+        padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 10),
         child: Row(
           children: [
             Icon(
@@ -156,4 +164,32 @@ class _NavDrawerState extends State<NavDrawer> {
       ),
     );
   }
+}
+
+Future<void> _showExitConfirmationDialog(BuildContext context) async {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false, // Prevents closing the dialog by tapping outside
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Exit App'),
+        content: const Text('Are you sure you want to exit the app?'),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Cancel'),
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+            },
+          ),
+          TextButton(
+            child: const Text('Exit'),
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+              SystemNavigator.pop(); // Exit the app
+            },
+          ),
+        ],
+      );
+    },
+  );
 }
