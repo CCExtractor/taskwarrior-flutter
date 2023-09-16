@@ -65,14 +65,15 @@ This project aims to build an app for Taskwarrior. It is your task management ap
 <img src='https://github.com/CCExtractor/taskwarrior-flutter/assets/47685150/041c3c41-6a50-433a-b628-661fb26156be' width=200></img> 
 <img src='https://github.com/Pavel401/taskwarrior-flutter/assets/47685150/7cd0d242-491a-43b0-90ad-ae24ebcfb032' width=200></img> 
 <img src='https://github.com/Pavel401/taskwarrior-flutter/assets/47685150/269ce68b-0e5c-4dec-8fe9-d53d81533270' width=200></img> 
-<img src='https://github.com/Pavel401/taskwarrior-flutter/assets/47685150/113b8aa0-2100-470e-9462-52d55bbbd69e' width=200></img> 
+<img src='https://github.com/CCExtractor/taskwarrior-flutter/assets/47685150/01377cac-56d1-4c1d-b0f4-372a3dc72f8d' width=200></img> 
 <img src='https://github.com/Pavel401/taskwarrior-flutter/assets/47685150/8d802beb-dc3c-493d-8929-affbc10a7e67' width=200></img> 
 <img src='https://github.com/Pavel401/taskwarrior-flutter/assets/47685150/51e64747-5ba2-4f9b-baed-f287a0ad58c4' width=200></img> 
 <img src='https://github.com/Pavel401/taskwarrior-flutter/assets/47685150/d8f75a98-e3a0-4de9-892e-a1489f808201' width=200></img> 
 <img src='https://github.com/Pavel401/taskwarrior-flutter/assets/47685150/8d1d83e9-e32d-447a-8c1d-33c4e76e0b0d' width=200></img> 
 <img src='https://github.com/Pavel401/taskwarrior-flutter/assets/47685150/c1a134e9-b1f1-4b53-b7ac-7b87490d32be' width=200></img> 
 <img src='https://github.com/Pavel401/taskwarrior-flutter/assets/47685150/e6f76f60-ae7e-42f7-a669-4e3f12201e13' width=200></img> 
-<img src='https://github.com/Pavel401/taskwarrior-flutter/assets/47685150/d38eb8de-25d2-4acf-af4c-87fe32bc5c4f' width=200></img> 
+<img src='https://github.com/CCExtractor/taskwarrior-flutter/assets/47685150/b289bdf4-e28e-489e-9ef5-56981add5eac' width=200></img> 
+
 
 
 
