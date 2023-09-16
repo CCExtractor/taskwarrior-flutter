@@ -1,7 +1,8 @@
-// ignore_for_file: library_private_types_in_public_api
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
@@ -115,10 +116,26 @@ class _NavDrawerState extends State<NavDrawer> {
             buildMenuItem(
               icon: Icons.settings,
               text: 'Settings',
-              onTap: () {
+              onTap: () async {
+                bool syncOnStart = false;
+                bool syncOnTaskCreate = false;
+
+                ///check if auto sync is on or off
+                final SharedPreferences prefs =
+                    await SharedPreferences.getInstance();
+                setState(() {
+                  syncOnStart = prefs.getBool('sync-onStart') ?? false;
+                  syncOnTaskCreate =
+                      prefs.getBool('sync-OnTaskCreate') ?? false;
+                });
+                // print(syncOnStart);
+                // print(syncOnTaskCreate);
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => const SettingsPage(),
+                    builder: (context) => SettingsPage(
+                      isSyncOnStartActivel: syncOnStart,
+                      isSyncOnTaskCreateActivel: syncOnTaskCreate,
+                    ),
                   ),
                 );
               },
