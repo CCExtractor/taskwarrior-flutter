@@ -74,7 +74,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Widget _buildOnboardingPage(
       OnboardingModel content, double width, double height) {
     return Padding(
-      padding: const EdgeInsets.all(40.0),
+      padding: const EdgeInsets.all(35.0),
       child: Column(
         children: [
           SvgPicture.asset(
@@ -92,7 +92,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               fontSize: (width <= 550) ? 30 : 35,
             ),
           ),
-          const SizedBox(height: 15),
+          const SizedBox(height: 5),
           Text(
             content.desc,
             style: GoogleFonts.poppins(
