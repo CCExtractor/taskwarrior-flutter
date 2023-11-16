@@ -1,7 +1,4 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_launcher_icons/xml_templates.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -17,7 +14,6 @@ import 'package:taskwarrior/widgets/taskw.dart';
 
 class AddTaskBottomSheet extends StatefulWidget {
   const AddTaskBottomSheet({Key? key}) : super(key: key);
-
   @override
   _AddTaskBottomSheetState createState() => _AddTaskBottomSheetState();
 }
@@ -47,7 +43,12 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
     return Center(
       child: SingleChildScrollView(
         child: AlertDialog(
-          backgroundColor: AppSettings.isDarkMode ? Colors.black : Colors.white,
+          surfaceTintColor: AppSettings.isDarkMode
+              ? const Color.fromARGB(255, 25, 25, 25)
+              : Colors.white,
+          backgroundColor: AppSettings.isDarkMode
+              ? const Color.fromARGB(255, 25, 25, 25)
+              : Colors.white,
           title: Center(
             child: Text(
               title,
@@ -84,6 +85,9 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
 
   Widget buildName() => TextFormField(
         controller: namecontroller,
+        style: TextStyle(
+          color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+        ),
         decoration: InputDecoration(
           hintText: 'Enter Task',
           hintStyle: TextStyle(
@@ -189,8 +193,9 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                 textAlign: TextAlign.left,
               ),
               DropdownButton<String>(
-                dropdownColor:
-                    AppSettings.isDarkMode ? Colors.black : Colors.white,
+                dropdownColor: AppSettings.isDarkMode
+                    ? const Color.fromARGB(255, 25, 25, 25)
+                    : Colors.white,
                 value: priority,
                 elevation: 16,
                 style: GoogleFonts.poppins(
@@ -198,7 +203,9 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                 ),
                 underline: Container(
                   height: 1.5,
-                  color: Colors.black,
+                  color: AppSettings.isDarkMode
+                      ? const Color.fromARGB(255, 25, 25, 25)
+                      : Colors.white,
                 ),
                 onChanged: (String? newValue) {
                   setState(() {
@@ -219,7 +226,12 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
       );
 
   Widget buildCancelButton(BuildContext context) => TextButton(
-        child: const Text('Cancel'),
+        child: Text(
+          'Cancel',
+          style: TextStyle(
+            color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+          ),
+        ),
         onPressed: () => Navigator.of(context).pop("cancel"),
       );
 
@@ -227,7 +239,12 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
     WidgetController widgetController = Get.put(WidgetController(context));
 
     return TextButton(
-      child: const Text("Add"),
+      child: Text(
+        "Add",
+        style: TextStyle(
+          color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+        ),
+      ),
       onPressed: () async {
         if (formKey.currentState!.validate()) {
           if (due == null) {
