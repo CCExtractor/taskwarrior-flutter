@@ -1,8 +1,7 @@
-// ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api, file_names
-
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_launcher_icons/xml_templates.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -48,10 +47,15 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
     return Center(
       child: SingleChildScrollView(
         child: AlertDialog(
-          backgroundColor: AppSettings.isDarkMode
-              ? const Color.fromARGB(255, 220, 216, 216)
-              : Colors.white,
-          title: const Center(child: Text(title)),
+          backgroundColor: AppSettings.isDarkMode ? Colors.black : Colors.white,
+          title: Center(
+            child: Text(
+              title,
+              style: TextStyle(
+                color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+              ),
+            ),
+          ),
           content: Form(
             key: formKey,
             child: SizedBox(
@@ -80,8 +84,11 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
 
   Widget buildName() => TextFormField(
         controller: namecontroller,
-        decoration: const InputDecoration(
+        decoration: InputDecoration(
           hintText: 'Enter Task',
+          hintStyle: TextStyle(
+            color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+          ),
         ),
         validator: (name) => name != null && name.isEmpty
             ? 'You cannot leave this field empty!'
@@ -93,6 +100,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
           Text(
             "Due : ",
             style: GoogleFonts.poppins(
+              color: AppSettings.isDarkMode ? Colors.white : Colors.black,
               fontWeight: FontWeight.bold,
               height: 3.3,
             ),
@@ -100,25 +108,19 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
           Expanded(
             child: GestureDetector(
               child: TextFormField(
+                style: TextStyle(
+                  color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                ),
                 readOnly: true,
                 controller: TextEditingController(
-                  text: (due != null) ? dueString : "Select due date",
+                  text: (due != null) ? dueString : "  Select due date",
                 ),
                 decoration: InputDecoration(
                   hintText: 'Select due date',
+                  hintStyle: TextStyle(
+                    color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                  ),
                   errorText: (due == null) ? 'Due date is required' : null,
-                  enabledBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.black,
-                      width: 1.0,
-                    ),
-                  ),
-                  focusedBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.black,
-                      width: 1.0,
-                    ),
-                  ),
                 ),
                 validator: (name) => name != null && name.isEmpty
                     ? 'due date is required'
@@ -180,16 +182,20 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
             children: [
               Text(
                 'Priority :  ',
-                style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+                style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.bold,
+                  color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                ),
                 textAlign: TextAlign.left,
               ),
               DropdownButton<String>(
-                dropdownColor: AppSettings.isDarkMode
-                    ? const Color.fromARGB(255, 220, 216, 216)
-                    : Colors.white,
+                dropdownColor:
+                    AppSettings.isDarkMode ? Colors.black : Colors.white,
                 value: priority,
                 elevation: 16,
-                style: GoogleFonts.poppins(color: Colors.black),
+                style: GoogleFonts.poppins(
+                  color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                ),
                 underline: Container(
                   height: 1.5,
                   color: Colors.black,
@@ -228,9 +234,8 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: const Text(
                   'Due date cannot be empty. Please select a due date.'),
-              backgroundColor: AppSettings.isDarkMode
-                  ? const Color.fromARGB(255, 61, 61, 61)
-                  : const Color.fromARGB(255, 39, 39, 39),
+              backgroundColor:
+                  AppSettings.isDarkMode ? Colors.black : Colors.white,
               duration: const Duration(seconds: 2),
             ));
             return;
@@ -250,9 +255,8 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
 
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: const Text('Task Added Successfully, Tap to Edit'),
-              backgroundColor: AppSettings.isDarkMode
-                  ? const Color.fromARGB(255, 61, 61, 61)
-                  : const Color.fromARGB(255, 39, 39, 39),
+              backgroundColor:
+                  AppSettings.isDarkMode ? Colors.black : Colors.white,
               duration: const Duration(seconds: 2),
             ));
 
