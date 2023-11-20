@@ -9,6 +9,7 @@ import 'package:loggy/loggy.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sizer/sizer.dart';
+import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/controller/WidgetController.dart';
 import 'package:taskwarrior/controller/onboarding_controller.dart';
 import 'package:taskwarrior/routes/pageroute.dart';
@@ -110,6 +111,37 @@ class _MyAppState extends State<MyApp> {
           useMaterial3: true,
           primarySwatch: Palette.kToDark,
           visualDensity: VisualDensity.adaptivePlatformDensity,
+          colorScheme: ColorScheme(
+              brightness: AppSettings.isDarkMode
+                  ? Brightness.dark
+                  : Brightness.light,
+              primary: AppSettings.isDarkMode
+                  ? Colors.white
+                  : const Color(0xFF191919),
+              onPrimary: AppSettings.isDarkMode
+                  ? const Color(0xFF191919)
+                  : Colors.white,
+              secondary: AppSettings.isDarkMode
+                  ? Colors.white
+                  : const Color(0xFF191919),
+              onSecondary: AppSettings.isDarkMode
+                  ? Colors.white
+                  : const Color(0xFF191919),
+              error: Colors.red,
+              onError: Colors.red,
+              background: AppSettings.isDarkMode
+                  ? const Color(0xFF191919)
+                  : Colors.white,
+              onBackground: AppSettings.isDarkMode
+                  ? const Color(0xFF191919)
+                  : Colors.white,
+              surface: AppSettings.isDarkMode
+                  ? const Color(0xFF191919)
+                  : Colors.white,
+              onSurface: AppSettings.isDarkMode
+                  ? Colors.white
+                  : const Color(0xFF191919),
+            ),
         ),
         // initialRoute: PageRoutes.home,
         routes: {
