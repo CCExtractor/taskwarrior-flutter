@@ -9,7 +9,6 @@ import 'package:loggy/loggy.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sizer/sizer.dart';
-import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/controller/WidgetController.dart';
 import 'package:taskwarrior/controller/onboarding_controller.dart';
 import 'package:taskwarrior/routes/pageroute.dart';
