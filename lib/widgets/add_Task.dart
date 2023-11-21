@@ -135,6 +135,39 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                     : null,
                 onTap: () async {
                   var date = await showDatePicker(
+                    builder: (BuildContext context, Widget? child) {
+                      return Theme(
+                        data: Theme.of(context).copyWith(
+                            colorScheme: AppSettings.isDarkMode
+                                ? const ColorScheme(
+                                    brightness: Brightness.dark,
+                                    primary: Colors.white,
+                                    onPrimary: Colors.black,
+                                    secondary: Colors.black,
+                                    onSecondary: Colors.white,
+                                    error: Colors.red,
+                                    onError: Colors.black,
+                                    background: Colors.black,
+                                    onBackground: Colors.white,
+                                    surface: Colors.black,
+                                    onSurface: Colors.white,
+                                  )
+                                : const ColorScheme(
+                                    brightness: Brightness.light,
+                                    primary: Colors.black,
+                                    onPrimary: Colors.white,
+                                    secondary: Colors.white,
+                                    onSecondary: Colors.black,
+                                    error: Colors.red,
+                                    onError: Colors.white,
+                                    background: Colors.white,
+                                    onBackground: Colors.black,
+                                    surface: Colors.white,
+                                    onSurface: Colors.black,
+                                  )),
+                        child: child!,
+                      );
+                    },
                     fieldHintText: "Month/Date/Year",
                     context: context,
                     initialDate: due ?? DateTime.now(),
@@ -143,6 +176,40 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                   );
                   if (date != null) {
                     var time = await showTimePicker(
+                      builder: (BuildContext context, Widget? child) {
+                        return Theme(
+                          data: Theme.of(context).copyWith(
+                              textTheme: const TextTheme(),
+                              colorScheme: AppSettings.isDarkMode
+                                  ? const ColorScheme(
+                                      brightness: Brightness.dark,
+                                      primary: Colors.white,
+                                      onPrimary: Colors.black,
+                                      secondary: Colors.black,
+                                      onSecondary: Colors.white,
+                                      error: Colors.red,
+                                      onError: Colors.black,
+                                      background: Colors.black,
+                                      onBackground: Colors.white,
+                                      surface: Colors.black,
+                                      onSurface: Colors.white,
+                                    )
+                                  : const ColorScheme(
+                                      brightness: Brightness.light,
+                                      primary: Colors.black,
+                                      onPrimary: Colors.white,
+                                      secondary: Colors.white,
+                                      onSecondary: Colors.black,
+                                      error: Colors.red,
+                                      onError: Colors.white,
+                                      background: Colors.white,
+                                      onBackground: Colors.black,
+                                      surface: Colors.white,
+                                      onSurface: Colors.black,
+                                    )),
+                          child: child!,
+                        );
+                      },
                       context: context,
                       initialTime:
                           TimeOfDay.fromDateTime(due ?? DateTime.now()),

@@ -118,37 +118,6 @@ class _MyAppState extends State<MyApp> {
           useMaterial3: true,
           primarySwatch: Palette.kToDark,
           visualDensity: VisualDensity.adaptivePlatformDensity,
-          colorScheme: ColorScheme(
-              brightness: AppSettings.isDarkMode
-                  ? Brightness.dark
-                  : Brightness.light,
-              primary: AppSettings.isDarkMode
-                  ? Colors.white
-                  : const Color(0xFF191919),
-              onPrimary: AppSettings.isDarkMode
-                  ? const Color(0xFF191919)
-                  : Colors.white,
-              secondary: AppSettings.isDarkMode
-                  ? Colors.white
-                  : const Color(0xFF191919),
-              onSecondary: AppSettings.isDarkMode
-                  ? Colors.white
-                  : const Color(0xFF191919),
-              error: Colors.red,
-              onError: Colors.red,
-              background: AppSettings.isDarkMode
-                  ? const Color(0xFF191919)
-                  : Colors.white,
-              onBackground: AppSettings.isDarkMode
-                  ? const Color(0xFF191919)
-                  : Colors.white,
-              surface: AppSettings.isDarkMode
-                  ? const Color(0xFF191919)
-                  : Colors.white,
-              onSurface: AppSettings.isDarkMode
-                  ? Colors.white
-                  : const Color(0xFF191919),
-            ),
         ),
         // initialRoute: PageRoutes.home,
         routes: {
