@@ -104,6 +104,13 @@ class _MyAppState extends State<MyApp> {
 
     return Sizer(builder: ((context, orientation, deviceType) {
       return GetMaterialApp(
+        builder: (context, child) {
+          return Builder(
+            builder: (BuildContext context) {
+              return child!;
+            },
+          );
+        },
         debugShowCheckedModeBanner: false,
         title: 'Taskwarrior',
         theme: ThemeData(
