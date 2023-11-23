@@ -171,7 +171,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                     fieldHintText: "Month/Date/Year",
                     context: context,
                     initialDate: due ?? DateTime.now(),
-                    firstDate: DateTime(1990),
+                    firstDate: DateTime.now(),
                     lastDate: DateTime(2037, 12, 31),
                   );
                   if (date != null) {
