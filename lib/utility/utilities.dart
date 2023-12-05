@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:taskwarrior/config/app_settings.dart';
 
 class Utils {
   static String getWeekNumber(DateTime? date) {
@@ -16,6 +18,17 @@ class Utils {
   static String formatDate(DateTime date, String pattern) {
     final formatter = DateFormat(pattern);
     return formatter.format(date);
+  }
+
+  static void showSnakbar(String message, BuildContext context) {
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(
+          content: Text(message),
+          backgroundColor: AppSettings.isDarkMode
+              ? const Color.fromARGB(255, 61, 61, 61)
+              : const Color.fromARGB(255, 39, 39, 39),
+          duration: const Duration(seconds: 2)));
   }
 
   static String getMonthName(int month) {

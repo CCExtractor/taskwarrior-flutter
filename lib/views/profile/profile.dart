@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/model/storage/savefile.dart';
 import 'package:taskwarrior/taskserver/ntaskserver.dart';
+import 'package:taskwarrior/utility/utilities.dart';
 import 'package:taskwarrior/widgets/pallete.dart';
 import 'package:taskwarrior/widgets/profilefunctions.dart';
 import 'package:taskwarrior/widgets/taskdetails.dart';
@@ -115,19 +116,9 @@ class _ProfilePageState extends State<ProfilePage> {
               () {
                 try {
                   profilesWidget.copyConfigToNewProfile(currentProfile);
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: const Text('Profile Config Copied'),
-                      backgroundColor: AppSettings.isDarkMode
-                          ? const Color.fromARGB(255, 61, 61, 61)
-                          : const Color.fromARGB(255, 39, 39, 39),
-                      duration: const Duration(seconds: 2)));
+                  Utils.showSnakbar('Profile Config Copied', context);
                 } catch (e) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: const Text('Profile Config Copy Failed'),
-                      backgroundColor: AppSettings.isDarkMode
-                          ? const Color.fromARGB(255, 61, 61, 61)
-                          : const Color.fromARGB(255, 39, 39, 39),
-                      duration: const Duration(seconds: 2)));
+                  Utils.showSnakbar('Profile Config Copied Failed', context);
                 }
               },
               () => showDialog(
@@ -188,19 +179,9 @@ class ProfilesColumn extends StatelessWidget {
             onPressed: () {
               try {
                 addProfile();
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: const Text('Profile Added Successfully'),
-                    backgroundColor: AppSettings.isDarkMode
-                        ? const Color.fromARGB(255, 61, 61, 61)
-                        : const Color.fromARGB(255, 39, 39, 39),
-                    duration: const Duration(seconds: 2)));
+                Utils.showSnakbar('Profile Added Scuccessfully', context);
               } catch (e) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: const Text('Profile Additon Failed'),
-                    backgroundColor: AppSettings.isDarkMode
-                        ? const Color.fromARGB(255, 61, 61, 61)
-                        : const Color.fromARGB(255, 39, 39, 39),
-                    duration: const Duration(seconds: 2)));
+                Utils.showSnakbar('Profile Addition Failed', context);
               }
             },
             style: ButtonStyle(

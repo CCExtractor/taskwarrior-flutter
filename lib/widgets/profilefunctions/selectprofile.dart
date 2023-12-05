@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:sizer/sizer.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
+import 'package:taskwarrior/utility/utilities.dart';
 
 class SelectProfile extends StatelessWidget {
   const SelectProfile(
@@ -112,9 +113,7 @@ class SelectProfileListTile extends StatelessWidget {
           groupValue: selectedUuid,
           onChanged: (_) {
             select();
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text('Switched to Profile ${alias ?? uuid}'),
-            ));
+            Utils.showSnakbar('Switched to Profile ${alias ?? uuid}', context);
           },
           activeColor: AppSettings.isDarkMode
               ? Colors.white
