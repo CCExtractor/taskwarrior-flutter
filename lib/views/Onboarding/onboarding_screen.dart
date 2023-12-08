@@ -92,7 +92,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               fontSize: (width <= 550) ? 30 : 35,
             ),
           ),
-          const SizedBox(height: 5),
+          Flexible(flex: 1, child: Container()),
           Text(
             content.desc,
             style: GoogleFonts.poppins(
@@ -101,6 +101,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ),
             textAlign: TextAlign.center,
           ),
+          Flexible(flex: 1, child: Container()),
         ],
       ),
     );
