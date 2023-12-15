@@ -60,7 +60,49 @@ class _DetailRouteState extends State<DetailRoute> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (bool didPop) async {
+        if (didPop) {
+          await Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => const HomePage()),
+              (Route<dynamic> route) => false);
+        }
+        // ignore: use_build_context_synchronously
+        return await showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('Do you want to save changes?'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    saveChanges();
+                    Navigator.of(context).pop();
+                    setState(() {});
+                  },
+                  child: const Text('Yes'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                      HomePage.routeName,
+                      (route) => false,
+                    );
+                  },
+                  child: const Text('No'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Cancel'),
+                ),
+              ],
+            );
+          },
+        );
+      },
       child: Scaffold(
         backgroundColor: AppSettings.isDarkMode
             ? const Color.fromARGB(255, 29, 29, 29)
@@ -148,47 +190,6 @@ class _DetailRouteState extends State<DetailRoute> {
                 child: const Icon(Icons.save),
               ),
       ),
-      onWillPop: () async {
-        if (modify.changes.isNotEmpty) {
-          return await showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: const Text('Do you want to save changes?'),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      saveChanges();
-                      Navigator.of(context).pop();
-                      setState(() {});
-                    },
-                    child: const Text('Yes'),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pushNamedAndRemoveUntil(
-                        HomePage.routeName,
-                        (route) => false,
-                      );
-                    },
-                    child: const Text('No'),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text('Cancel'),
-                  ),
-                ],
-              );
-            },
-          );
-        } else {
-          return await Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => const HomePage()),
-              (Route<dynamic> route) => false);
-        }
-      },
     );
   }
 }
