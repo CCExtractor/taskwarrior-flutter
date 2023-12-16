@@ -19,8 +19,8 @@ import 'package:path_provider/path_provider.dart';
 
 class ReportsHome extends StatefulWidget {
   const ReportsHome({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<ReportsHome> createState() => _ReportsHomeState();

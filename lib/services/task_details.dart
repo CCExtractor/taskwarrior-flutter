@@ -14,7 +14,7 @@ import 'package:taskwarrior/widgets/taskdetails.dart';
 import 'package:taskwarrior/widgets/taskw.dart';
 
 class DetailRoute extends StatefulWidget {
-  const DetailRoute(this.uuid, {Key? key}) : super(key: key);
+  const DetailRoute(this.uuid, {super.key});
 
   final String uuid;
 
@@ -60,7 +60,49 @@ class _DetailRouteState extends State<DetailRoute> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (bool didPop) async {
+        if (didPop) {
+          await Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => const HomePage()),
+              (Route<dynamic> route) => false);
+        }
+        // ignore: use_build_context_synchronously
+        return showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('Do you want to save changes?'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    saveChanges();
+                    Navigator.of(context).pop();
+                    setState(() {});
+                  },
+                  child: const Text('Yes'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                      HomePage.routeName,
+                      (route) => false,
+                    );
+                  },
+                  child: const Text('No'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Cancel'),
+                ),
+              ],
+            );
+          },
+        );
+      },
       child: Scaffold(
         backgroundColor: AppSettings.isDarkMode
             ? const Color.fromARGB(255, 29, 29, 29)
@@ -148,47 +190,6 @@ class _DetailRouteState extends State<DetailRoute> {
                 child: const Icon(Icons.save),
               ),
       ),
-      onWillPop: () async {
-        if (modify.changes.isNotEmpty) {
-          return await showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: const Text('Do you want to save changes?'),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      saveChanges();
-                      Navigator.of(context).pop();
-                      setState(() {});
-                    },
-                    child: const Text('Yes'),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pushNamedAndRemoveUntil(
-                        HomePage.routeName,
-                        (route) => false,
-                      );
-                    },
-                    child: const Text('No'),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text('Cancel'),
-                  ),
-                ],
-              );
-            },
-          );
-        } else {
-          return await Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => const HomePage()),
-              (Route<dynamic> route) => false);
-        }
-      },
     );
   }
 }
@@ -198,8 +199,8 @@ class AttributeWidget extends StatelessWidget {
     required this.name,
     required this.value,
     required this.callback,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final String name;
   final dynamic value;
@@ -319,8 +320,8 @@ class TagsWidget extends StatelessWidget {
     required this.name,
     required this.value,
     required this.callback,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final String name;
   final dynamic value;

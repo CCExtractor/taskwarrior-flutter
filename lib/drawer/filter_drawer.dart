@@ -11,7 +11,7 @@ import 'package:taskwarrior/widgets/tag_filter.dart';
 
 // ignore: must_be_immutable
 class FilterDrawer extends StatelessWidget {
-  FilterDrawer(this.filters, {Key? key}) : super(key: key);
+  FilterDrawer(this.filters, {super.key});
   var tileColor = AppSettings.isDarkMode
       ? const Color.fromARGB(255, 48, 46, 46)
       : const Color.fromARGB(255, 220, 216, 216);

@@ -29,7 +29,7 @@ class TagFilters {
 }
 
 class TagFiltersWrap extends StatelessWidget {
-  const TagFiltersWrap(this.filters, {Key? key}) : super(key: key);
+  const TagFiltersWrap(this.filters, {super.key});
 
   final TagFilters filters;
 

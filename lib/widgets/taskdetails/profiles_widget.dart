@@ -1,3 +1,5 @@
+// ignore_for_file: use_super_parameters
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -113,7 +115,7 @@ class _ProfilesWidgetState extends State<ProfilesWidget> {
 
 class InheritedProfiles extends InheritedModel<String> {
   const InheritedProfiles({
-    Key? key,
+    super.key,
     required this.addProfile,
     required this.copyConfigToNewProfile,
     required this.deleteProfile,
@@ -124,7 +126,7 @@ class InheritedProfiles extends InheritedModel<String> {
     required this.getStorage,
     required this.setState,
     required child,
-  }) : super(key: key, child: child);
+  }) : super(child: child);
 
   final Function() addProfile;
   final Function(String) copyConfigToNewProfile;

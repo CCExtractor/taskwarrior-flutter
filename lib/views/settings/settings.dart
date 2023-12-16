@@ -9,10 +9,9 @@ import 'package:taskwarrior/widgets/pallete.dart';
 
 class SettingsPage extends StatefulWidget {
   SettingsPage(
-      {Key? key,
+      {super.key,
       required this.isSyncOnStartActivel,
-      required this.isSyncOnTaskCreateActivel})
-      : super(key: key);
+      required this.isSyncOnTaskCreateActivel});
   bool isSyncOnStartActivel;
   bool isSyncOnTaskCreateActivel;
 

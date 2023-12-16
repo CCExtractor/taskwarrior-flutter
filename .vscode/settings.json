@@ -13,6 +13,6 @@
 	"editor.detectIndentation": false,
 	"editor.tabSize": 4,
 	"editor.codeActionsOnSave": {
-		"source.fixAll": true
+		"source.fixAll": "explicit"
 	}
 }

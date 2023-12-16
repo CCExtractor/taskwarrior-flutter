@@ -57,6 +57,7 @@ class NotificationService {
         notificationDetails,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
+        // ignore: deprecated_member_use
         androidAllowWhileIdle: true);
     if (kDebugMode) {
       print(scheduledAt.day * 100 + scheduledAt.hour * 10 + scheduledAt.minute);

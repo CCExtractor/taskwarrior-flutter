@@ -7,8 +7,8 @@ class DeleteProfileDialog extends StatelessWidget {
   const DeleteProfileDialog({
     required this.profile,
     required this.context,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final String profile;
   final BuildContext context;

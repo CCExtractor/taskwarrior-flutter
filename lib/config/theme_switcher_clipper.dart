@@ -7,11 +7,11 @@ class ThemeSwitcherClipper extends StatefulWidget {
   final Function(bool) onTap;
 
   const ThemeSwitcherClipper({
-    Key? key,
+    super.key,
     required this.isDarkMode,
     required this.onTap,
     required Icon child,
-  }) : super(key: key);
+  });
 
   @override
   _ThemeSwitcherClipperState createState() => _ThemeSwitcherClipperState();

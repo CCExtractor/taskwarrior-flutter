@@ -18,7 +18,7 @@ import 'package:taskwarrior/widgets/taskdetails/profiles_widget.dart';
 import 'package:path_provider/path_provider.dart';
 
 class BurnDownDaily extends StatefulWidget {
-  const BurnDownDaily({Key? key}) : super(key: key);
+  const BurnDownDaily({super.key});
 
   @override
   State<BurnDownDaily> createState() => _BurnDownDailyState();

@@ -7,7 +7,7 @@ import 'package:taskwarrior/views/Onboarding/Components/size_config.dart';
 import 'package:taskwarrior/views/home/home.dart';
 
 class OnboardingScreen extends StatefulWidget {
-  const OnboardingScreen({Key? key}) : super(key: key);
+  const OnboardingScreen({super.key});
 
   @override
   State<OnboardingScreen> createState() => _OnboardingScreenState();

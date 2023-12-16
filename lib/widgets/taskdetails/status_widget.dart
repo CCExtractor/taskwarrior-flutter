@@ -11,8 +11,7 @@ class StatusWidget extends StatelessWidget {
       {required this.name,
       required this.value,
       required this.callback,
-      Key? key})
-      : super(key: key);
+      super.key});
 
   final String name;
   final dynamic value;

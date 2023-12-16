@@ -7,8 +7,8 @@ class RenameProfileDialog extends StatelessWidget {
     required this.profile,
     required this.alias,
     required this.context,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final String profile;
   final String? alias;

@@ -16,8 +16,8 @@ class TagsWidget extends StatelessWidget {
     required this.name,
     required this.value,
     required this.callback,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final String name;
   final dynamic value;
@@ -57,8 +57,7 @@ class TagsWidget extends StatelessWidget {
 }
 
 class TagsRoute extends StatefulWidget {
-  const TagsRoute({required this.value, required this.callback, Key? key})
-      : super(key: key);
+  const TagsRoute({required this.value, required this.callback, super.key});
 
   final ListBuilder<String>? value;
   final void Function(ListBuilder<String>?) callback;
