@@ -109,7 +109,6 @@ class ProjectsColumn extends StatelessWidget {
               ...projects.entries
                   .where((entry) => entry.value.parent == null)
                   .map((entry) => ProjectTile(entry.key))
-                  .toList()
             else
               Column(
                 children: [
