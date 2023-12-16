@@ -9,11 +9,11 @@ import 'package:taskwarrior/config/app_settings.dart';
 
 class DateTimeWidget extends StatelessWidget {
   const DateTimeWidget({
-    Key? key,
+    super.key,
     required this.name,
     required this.value,
     required this.callback,
-  }) : super(key: key);
+  });
 
   final String name;
   final dynamic value;
@@ -103,8 +103,8 @@ class StartWidget extends StatelessWidget {
     required this.name,
     required this.value,
     required this.callback,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final String name;
   final dynamic value;

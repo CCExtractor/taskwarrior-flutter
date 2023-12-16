@@ -12,8 +12,8 @@ class ManageProfile extends StatelessWidget {
     this.export,
     this.copy,
     this.delete, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final void Function() rename;
   final void Function() configure;

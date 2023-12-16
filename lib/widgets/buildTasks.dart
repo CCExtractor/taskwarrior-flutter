@@ -17,11 +17,10 @@ import 'pallete.dart';
 
 class TasksBuilder extends StatefulWidget {
   const TasksBuilder(
-      {Key? key,
+      {super.key,
       required this.taskData,
       required this.pendingFilter,
-      required this.searchVisible})
-      : super(key: key);
+      required this.searchVisible});
 
   final List<Task> taskData;
   final bool pendingFilter;

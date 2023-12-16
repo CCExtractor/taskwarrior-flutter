@@ -21,7 +21,7 @@ import 'package:taskwarrior/widgets/taskserver.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ManageTaskServer extends StatefulWidget {
-  const ManageTaskServer({Key? key}) : super(key: key);
+  const ManageTaskServer({super.key});
 
   @override
   State<ManageTaskServer> createState() => _ManageTaskServerState();
@@ -692,10 +692,9 @@ class PemWidget extends StatefulWidget {
   const PemWidget(
       {required this.storage,
       required this.pem,
-      Key? key,
+      super.key,
       required this.optionString,
-      required this.listTileTitle})
-      : super(key: key);
+      required this.listTileTitle});
 
   final Storage storage;
   final String pem;

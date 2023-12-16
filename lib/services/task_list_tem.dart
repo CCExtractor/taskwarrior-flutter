@@ -9,8 +9,7 @@ import '../model/storage/storage_widget.dart';
 
 class TaskListItem extends StatefulWidget {
   const TaskListItem(this.task,
-      {this.pendingFilter = false, Key? key, required this.darkmode})
-      : super(key: key);
+      {this.pendingFilter = false, super.key, required this.darkmode});
 
   final Task task;
   final bool pendingFilter;

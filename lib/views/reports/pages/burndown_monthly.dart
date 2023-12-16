@@ -16,7 +16,7 @@ import 'package:taskwarrior/views/reports/widgets/commonChartIndicator.dart';
 import 'package:taskwarrior/widgets/taskdetails/profiles_widget.dart';
 
 class BurnDownMonthlt extends StatefulWidget {
-  const BurnDownMonthlt({Key? key}) : super(key: key);
+  const BurnDownMonthlt({super.key});
 
   @override
   State<BurnDownMonthlt> createState() => _BurnDownMonthltState();

@@ -5,7 +5,7 @@ import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/widgets/pallete.dart';
 
 class AppSetupPlaceholder extends StatelessWidget {
-  const AppSetupPlaceholder({Key? key}) : super(key: key);
+  const AppSetupPlaceholder({super.key});
 
   @override
   Widget build(BuildContext context) {

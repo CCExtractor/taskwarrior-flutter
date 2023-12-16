@@ -14,7 +14,7 @@ import 'package:taskwarrior/widgets/taskdetails.dart';
 import 'package:taskwarrior/widgets/taskw.dart';
 
 class DetailRoute extends StatefulWidget {
-  const DetailRoute(this.uuid, {Key? key}) : super(key: key);
+  const DetailRoute(this.uuid, {super.key});
 
   final String uuid;
 
@@ -199,8 +199,8 @@ class AttributeWidget extends StatelessWidget {
     required this.name,
     required this.value,
     required this.callback,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final String name;
   final dynamic value;
@@ -320,8 +320,8 @@ class TagsWidget extends StatelessWidget {
     required this.name,
     required this.value,
     required this.callback,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final String name;
   final dynamic value;

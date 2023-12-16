@@ -9,7 +9,7 @@ import 'package:taskwarrior/widgets/pallete.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AboutPage extends StatefulWidget {
-  const AboutPage({Key? key}) : super(key: key);
+  const AboutPage({super.key});
   @override
   // ignore: library_private_types_in_public_api
   _AboutPageState createState() => _AboutPageState();

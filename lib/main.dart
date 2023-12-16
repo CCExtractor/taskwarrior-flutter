@@ -65,7 +65,7 @@ Future init() async {
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
   @override
   // ignore: library_private_types_in_public_api
   _MyAppState createState() => _MyAppState();
@@ -134,7 +134,7 @@ class CheckOnboardingStatus extends StatelessWidget {
   final OnboardingController onboardingController =
       Get.put(OnboardingController());
 
-  CheckOnboardingStatus({Key? key}) : super(key: key);
+  CheckOnboardingStatus({super.key});
 
   @override
   Widget build(BuildContext context) {

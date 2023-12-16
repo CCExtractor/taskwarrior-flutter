@@ -11,7 +11,7 @@ import 'package:taskwarrior/widgets/taskdetails.dart';
 class ProfilePage extends StatefulWidget {
   static const String routeName = '/profile';
 
-  const ProfilePage({Key? key}) : super(key: key);
+  const ProfilePage({super.key});
   @override
   // ignore: library_private_types_in_public_api
   _ProfilePageState createState() => _ProfilePageState();
@@ -156,8 +156,8 @@ class ProfilesColumn extends StatelessWidget {
     this.export,
     this.copy,
     this.delete, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final Map profilesMap;
   final String currentProfile;

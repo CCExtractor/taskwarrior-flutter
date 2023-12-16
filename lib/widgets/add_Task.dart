@@ -17,7 +17,7 @@ import 'package:taskwarrior/widgets/taskfunctions/taskparser.dart';
 import 'package:taskwarrior/widgets/taskw.dart';
 
 class AddTaskBottomSheet extends StatefulWidget {
-  const AddTaskBottomSheet({Key? key}) : super(key: key);
+  const AddTaskBottomSheet({super.key});
   @override
   _AddTaskBottomSheetState createState() => _AddTaskBottomSheetState();
 }

@@ -10,8 +10,8 @@ class SelectProfile extends StatelessWidget {
     this.currentProfile,
     this.profilesMap,
     this.selectProfile, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final String currentProfile;
   final Map profilesMap;

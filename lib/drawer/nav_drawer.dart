@@ -17,10 +17,10 @@ class NavDrawer extends StatefulWidget {
   final Function() notifyParent;
 
   const NavDrawer({
-    Key? key,
+    super.key,
     required this.storageWidget,
     required this.notifyParent,
-  }) : super(key: key);
+  });
 
   @override
   _NavDrawerState createState() => _NavDrawerState();

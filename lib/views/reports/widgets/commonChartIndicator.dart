@@ -8,7 +8,7 @@ import 'package:taskwarrior/config/taskwarriorcolors.dart';
 ///Common widget for Report chart indicator
 class CommonChartIndicator extends StatelessWidget {
   final String title;
-  const CommonChartIndicator({Key? key, required this.title}) : super(key: key);
+  const CommonChartIndicator({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
