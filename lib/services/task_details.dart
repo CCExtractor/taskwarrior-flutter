@@ -69,7 +69,7 @@ class _DetailRouteState extends State<DetailRoute> {
               (Route<dynamic> route) => false);
         }
         // ignore: use_build_context_synchronously
-        return await showDialog(
+        return showDialog(
           context: context,
           builder: (context) {
             return AlertDialog(
