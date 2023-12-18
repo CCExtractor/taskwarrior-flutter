@@ -88,6 +88,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   }
 
   Widget buildName() => TextFormField(
+        autofocus: true,
         controller: namecontroller,
         style: TextStyle(
           color: AppSettings.isDarkMode ? Colors.white : Colors.black,
