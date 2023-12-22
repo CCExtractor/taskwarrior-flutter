@@ -112,6 +112,7 @@ class SelectProfileListTile extends StatelessWidget {
           groupValue: selectedUuid,
           onChanged: (_) {
             select();
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text('Switched to Profile ${alias ?? uuid}'),
             ));
