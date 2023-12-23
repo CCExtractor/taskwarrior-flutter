@@ -184,12 +184,6 @@ class _TasksBuilderState extends State<TasksBuilder> {
                                               },
                                               child: const Text('No'),
                                             ),
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: const Text('Cancel'),
-                                            ),
                                           ],
                                         );
                                       },
@@ -241,12 +235,6 @@ class _TasksBuilderState extends State<TasksBuilder> {
                                                 Navigator.of(context).pop();
                                               },
                                               child: const Text('No'),
-                                            ),
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: const Text('Cancel'),
                                             ),
                                           ],
                                         );
