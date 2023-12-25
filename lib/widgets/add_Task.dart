@@ -88,6 +88,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   }
 
   Widget buildName() => TextFormField(
+        autofocus: true,
         controller: namecontroller,
         style: TextStyle(
           color: AppSettings.isDarkMode ? Colors.white : Colors.black,
@@ -121,14 +122,14 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                 ),
                 readOnly: true,
                 controller: TextEditingController(
-                  text: (due != null) ? dueString : "  Select due date",
+                  text: (due != null) ? dueString : null,
                 ),
                 decoration: InputDecoration(
                   hintText: 'Select due date',
                   hintStyle: TextStyle(
                     color: AppSettings.isDarkMode ? Colors.white : Colors.black,
                   ),
-                  errorText: (due == null) ? 'Due date is required' : null,
+                  // errorText: (due == null) ? 'Due date is required' : null,
                 ),
                 validator: (name) => name != null && name.isEmpty
                     ? 'due date is required'
@@ -321,8 +322,12 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
         if (formKey.currentState!.validate()) {
           if (due == null) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: const Text(
-                  'Due date cannot be empty. Please select a due date.'),
+              content: Text(
+                'Due date cannot be empty. Please select a due date.',
+                style: TextStyle(
+                  color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                ),
+              ),
               backgroundColor:
                   AppSettings.isDarkMode ? Colors.black : Colors.white,
               duration: const Duration(seconds: 2),
@@ -343,7 +348,12 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
             widgetController.fetchAllData();
 
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: const Text('Task Added Successfully, Tap to Edit'),
+              content: Text(
+                'Task Added Successfully, Tap to Edit',
+                style: TextStyle(
+                  color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                ),
+              ),
               backgroundColor:
                   AppSettings.isDarkMode ? Colors.black : Colors.white,
               duration: const Duration(seconds: 2),
@@ -360,7 +370,12 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
             }
           } on FormatException catch (e) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(e.message),
+              content: Text(
+                e.message,
+                style: TextStyle(
+                  color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                ),
+              ),
               backgroundColor: AppSettings.isDarkMode
                   ? const Color.fromARGB(255, 61, 61, 61)
                   : const Color.fromARGB(255, 39, 39, 39),
