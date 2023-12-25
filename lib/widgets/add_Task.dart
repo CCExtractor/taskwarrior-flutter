@@ -129,7 +129,6 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                   hintStyle: TextStyle(
                     color: AppSettings.isDarkMode ? Colors.white : Colors.black,
                   ),
-                  // errorText: (due == null) ? 'Due date is required' : null,
                 ),
                 validator: (name) => name != null && name.isEmpty
                     ? 'due date is required'
