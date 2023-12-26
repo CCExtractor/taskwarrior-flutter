@@ -122,14 +122,13 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                 ),
                 readOnly: true,
                 controller: TextEditingController(
-                  text: (due != null) ? dueString : "  Select due date",
+                  text: (due != null) ? dueString : null,
                 ),
                 decoration: InputDecoration(
                   hintText: 'Select due date',
                   hintStyle: TextStyle(
                     color: AppSettings.isDarkMode ? Colors.white : Colors.black,
                   ),
-                  errorText: (due == null) ? 'Due date is required' : null,
                 ),
                 validator: (name) => name != null && name.isEmpty
                     ? 'due date is required'
