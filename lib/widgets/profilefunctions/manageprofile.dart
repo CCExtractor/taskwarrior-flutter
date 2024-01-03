@@ -26,7 +26,7 @@ class ManageProfile extends StatelessWidget {
     var triples = [
       Tuple3(Icons.edit, 'Rename Alias', rename),
       Tuple3(Icons.link, 'Configure Taskserver', configure),
-      Tuple3(Icons.file_download, 'Export tasks', export),
+      Tuple3(Icons.upload, 'Export tasks', export),
       Tuple3(Icons.copy, 'Copy config to new profile', copy),
       Tuple3(Icons.delete, 'Delete profile', delete),
     ];
