@@ -11,7 +11,7 @@ class FormSubmitButton extends StatelessWidget {
   Widget build(BuildContext context) => ElevatedButton(
         style: ElevatedButton.styleFrom(
           shape: const StadiumBorder(),
-          onPrimary: Colors.white,
+          // onPrimary: Colors.white,
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
         ),
         onPressed: onPressed,

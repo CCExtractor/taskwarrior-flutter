@@ -180,7 +180,7 @@ class FilterDrawer extends StatelessWidget {
                                 ? Colors.white
                                 : Color.fromARGB(255, 48, 46, 46)),
                             fontSize: 18),
-                        //textAlign: TextAlign.right,
+                        // textAlign: TextAlign.right,
                       ),
                     ),
                     const Divider(

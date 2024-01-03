@@ -81,7 +81,7 @@ class SelectProfile extends StatelessWidget {
             entry.key,
             () => selectProfile(entry.key),
             entry.value,
-          ),
+          )
       ],
     );
   }
@@ -129,15 +129,20 @@ class SelectProfileListTile extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             if (alias != null && alias!.isNotEmpty)
-              SingleChildScrollView(
-                key: PageStorageKey<String>('scroll-title-$uuid'),
-                scrollDirection: Axis.horizontal,
-                child: Text(
-                  alias!,
-                  style: GoogleFonts.poppins(
-                    color: AppSettings.isDarkMode
-                        ? Colors.white
-                        : const Color.fromARGB(255, 48, 46, 46),
+              SizedBox(
+                // height: 100,
+                width: double.maxFinite,
+                child: SingleChildScrollView(
+                  key: PageStorageKey<String>('scroll-title-$uuid'),
+                  scrollDirection: Axis.horizontal,
+                  child: Text(
+                    alias!,
+                    overflow: TextOverflow.fade,
+                    style: GoogleFonts.poppins(
+                      color: AppSettings.isDarkMode
+                          ? Colors.white
+                          : const Color.fromARGB(255, 48, 46, 46),
+                    ),
                   ),
                 ),
               ),
