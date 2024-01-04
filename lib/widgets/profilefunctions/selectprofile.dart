@@ -131,7 +131,7 @@ class SelectProfileListTile extends StatelessWidget {
             if (alias != null && alias!.isNotEmpty)
               SizedBox(
                 // height: 100,
-                width: double.maxFinite,
+                width: 300,
                 child: SingleChildScrollView(
                   key: PageStorageKey<String>('scroll-title-$uuid'),
                   scrollDirection: Axis.horizontal,
