@@ -182,37 +182,7 @@ Consider setting up the TaskServer in the cloud, such as Azure or any other clou
 **Docker Container:**
 For easy installation, you can opt for the unofficial Docker container. Check out the latest Docker container here: [Docker Container](https://github.com/ogarcia/docker-taskd).
 
-
-## [Inthe.am](https://github.com/coddingtonbear/inthe.am) 
-It is an open-source project that enables users to create their own TaskServer for free. The process is simple:
-
-1. **Sign Up:** Start by registering on the [Inthe.am](https://inthe.am/) website.
-
-<img width="1710" alt="Screenshot 2023-09-10 at 6 10 17 PM" src="https://github.com/Pavel401/taskwarrior-flutter/assets/47685150/a85b7f6d-ff0a-45d3-abca-9a65207a899e">
-
-
-2. **Configuration Files:** After registration, navigate to the Configuration section. In this section, you will find all the necessary configuration files required to set up your TaskServer.
-
-	Download the following three files:
-
-   - Your Certificate: `private.certificate.pem`
-   - Your Key: `private.key.pem`
-   - Server Certificate: `ca.cert.pem`
-
-3. **TaskWarrior Setup:** With the configuration files in hand, open the TaskWarrior mobile app and configure it to connect to your newly created TaskServer. Follow the app's prompts to input the necessary details.
-
-
-<img width="1710" alt="Screenshot 2023-09-10 at 6 10 17 PM" src="https://github.com/Pavel401/taskwarrior-flutter/assets/47685150/c0d0f20a-c153-4002-b6a8-1fc64e39748c">
-
-<img width="1710" alt="Screenshot 2023-09-10 at 6 10 17 PM" src="https://github.com/Pavel401/taskwarrior-flutter/assets/47685150/f5de70bf-a913-40dd-921d-7f2d43d3c4dd">
-
-
-
 ---
-
-
-
-
 
 ## Contact
 
