@@ -192,14 +192,44 @@ For easy installation, you can opt for the unofficial Docker container. Check ou
 
 ![image](https://github.com/Rancho-rachit/taskwarrior-flutter/assets/111473259/436435d5-c33a-4ffe-a839-c907563eecf2)
 
-### 3. Extract Files to a folder 
-- It is suggested to name the folder without spacing
+### 3. Once extracted, you'll find the following files and folders:
 
-![image](https://github.com/Rancho-rachit/taskwarrior-flutter/assets/111473259/fc6a87e9-0a91-4774-a94e-7912deec2553)
+- `install.sh`
+- `README`
+- `taskrc`
+- `wingtask_certs`
 
-- the extracted folder will have these 3 files and a folder
+![Files and Folders](https://github.com/CCExtractor/taskwarrior-flutter/assets/47685150/34fc908a-682d-426c-a5a9-54043a3c7583)
 
-![image](https://github.com/Rancho-rachit/taskwarrior-flutter/assets/111473259/368abf59-f246-43aa-bab6-6a484a61a4e2)
+
+5. Copy the three files from the `wingtask_certs` folder and save them.
+
+6. Open the `taskrc` file and copy the content of the following two lines:
+   - `taskd.server`
+   - `taskd.credentials`
+
+![taskrc Content](https://github.com/CCExtractor/taskwarrior-flutter/assets/47685150/45b3c5b4-f459-4ebb-ba8f-582af8622d30)
+
+7. Move the three copied files and the configuration from step 6 to your mobile device.
+
+8. Paste the content of `taskd.server` and `taskd.credentials` into the respective fields under "Set taskrc" in the app.
+
+![Paste Configurations](https://github.com/CCExtractor/taskwarrior-flutter/assets/47685150/77f71e5a-7325-4313-8fb1-18a7e6594810)
+
+9. Configure the certificates in the app:
+   - Select `example@gmail.com.cert.pem` for "Configure Server Certificate."
+   - Select `example@gmail.com.key.pem` for "Configure TaskServer Key."
+   - Select `letsencrypt_root_cert.pem` for "Configure Your Certificate."
+
+![Configure Certificates](https://github.com/CCExtractor/taskwarrior-flutter/assets/47685150/8b73f087-152a-4207-9d93-87d0b87404d8)
+
+10. Click on the "Stats" button in the app bar and check the response. If the response code is 200, you are good to go.
+
+![Check Response](https://github.com/CCExtractor/taskwarrior-flutter/assets/47685150/21c82242-63fe-46d1-9f30-c681ca9a699f)
+
+11. Sync your tasks and enjoy!
+
+Feel free to reach out if you encounter any issues. 
 
 ---
 
