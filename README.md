@@ -182,6 +182,25 @@ Consider setting up the TaskServer in the cloud, such as Azure or any other clou
 **Docker Container:**
 For easy installation, you can opt for the unofficial Docker container. Check out the latest Docker container here: [Docker Container](https://github.com/ogarcia/docker-taskd).
 
+## [#WingTask](https://app.wingtask.com/)
+
+### 1. [Sign Up](https://app.wingtask.com/signup) at WingTask
+
+![image](https://github.com/Rancho-rachit/taskwarrior-flutter/assets/111473259/90efd152-87ed-4d39-8a9b-acdffe4879a5)
+
+### 2. Download Configuration Files
+
+![image](https://github.com/Rancho-rachit/taskwarrior-flutter/assets/111473259/436435d5-c33a-4ffe-a839-c907563eecf2)
+
+### 3. Extract Files to a folder 
+- It is suggested to name the folder without spacing
+
+![image](https://github.com/Rancho-rachit/taskwarrior-flutter/assets/111473259/fc6a87e9-0a91-4774-a94e-7912deec2553)
+
+- the extracted folder will have these 3 files and a folder
+
+![image](https://github.com/Rancho-rachit/taskwarrior-flutter/assets/111473259/368abf59-f246-43aa-bab6-6a484a61a4e2)
+
 ---
 
 ## Contact
