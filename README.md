@@ -202,32 +202,46 @@ For easy installation, you can opt for the unofficial Docker container. Check ou
 ![Files and Folders](https://github.com/CCExtractor/taskwarrior-flutter/assets/47685150/34fc908a-682d-426c-a5a9-54043a3c7583)
 
 
-5. Copy the three files from the `wingtask_certs` folder and save them.
+### 4. Run install script
 
-6. Open the `taskrc` file and copy the content of the following two lines:
-   - `taskd.server`
-   - `taskd.credentials`
+#### 4.1 Change the directory to the respective folder having configuration files
 
-![taskrc Content](https://github.com/CCExtractor/taskwarrior-flutter/assets/47685150/45b3c5b4-f459-4ebb-ba8f-582af8622d30)
+`cd /mnt/c/...../folder_name/wingtask_configuration`
 
-7. Move the three copied files and the configuration from step 6 to your mobile device.
+![image](https://github.com/Rancho-rachit/taskwarrior-flutter/assets/111473259/732b58d0-3826-4de0-b253-3d88cae7edcd)
 
-8. Paste the content of `taskd.server` and `taskd.credentials` into the respective fields under "Set taskrc" in the app.
+#### 4.2 Run the install script
 
-![Paste Configurations](https://github.com/CCExtractor/taskwarrior-flutter/assets/47685150/77f71e5a-7325-4313-8fb1-18a7e6594810)
+- run 2 commands
 
-9. Configure the certificates in the app:
+`chmod +x install.sh`
+
+`./install.sh`
+
+![image](https://github.com/Rancho-rachit/taskwarrior-flutter/assets/111473259/a088befa-9a33-494e-8383-ba75a0df1f31)
+
+- if the above commands run successfully, you'll get an interface like this
+
+![image](https://github.com/Rancho-rachit/taskwarrior-flutter/assets/111473259/2096249c-165e-41d9-941c-4ce1f3dc81f6)
+
+### 5. Syncing for the first time
+
+- run `task sync init`
+
+![image](https://github.com/Rancho-rachit/taskwarrior-flutter/assets/111473259/b562e125-1ca1-480b-8b96-6d7c709eb4b9)
+
+### 6. Configure the certificates in the app:
    - Select `example@gmail.com.cert.pem` for "Configure Server Certificate."
    - Select `example@gmail.com.key.pem` for "Configure TaskServer Key."
    - Select `letsencrypt_root_cert.pem` for "Configure Your Certificate."
 
 ![Configure Certificates](https://github.com/CCExtractor/taskwarrior-flutter/assets/47685150/8b73f087-152a-4207-9d93-87d0b87404d8)
 
-10. Click on the "Stats" button in the app bar and check the response. If the response code is 200, you are good to go.
+### 7. Click on the "Stats" button in the app bar and check the response. If the response code is 200, you are good to go.
 
 ![Check Response](https://github.com/CCExtractor/taskwarrior-flutter/assets/47685150/21c82242-63fe-46d1-9f30-c681ca9a699f)
 
-11. Sync your tasks and enjoy!
+### 8. Sync your tasks and enjoy!
 
 Feel free to reach out if you encounter any issues. 
 
