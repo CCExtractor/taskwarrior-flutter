@@ -154,24 +154,23 @@ class _TasksBuilderState extends State<TasksBuilder> {
                                               onPressed: () {
                                                 setStatus(
                                                     'completed', task.uuid);
-                                                DateTime? dtb = task.due;
-                                                dtb = dtb!.add(
-                                                    const Duration(minutes: 1));
-                                                final FlutterLocalNotificationsPlugin
-                                                    flutterLocalNotificationsPlugin =
-                                                    FlutterLocalNotificationsPlugin();
-                                                flutterLocalNotificationsPlugin
-                                                    .cancel(dtb.day * 100 +
+                                                if (task.due != null) {
+                                                  DateTime? dtb = task.due;
+                                                  dtb = dtb!.add(const Duration(
+                                                      minutes: 1));
+                                                  final FlutterLocalNotificationsPlugin
+                                                      flutterLocalNotificationsPlugin =
+                                                      FlutterLocalNotificationsPlugin();
+                                                  flutterLocalNotificationsPlugin
+                                                      .cancel(dtb.day * 100 +
+                                                          dtb.hour * 10 +
+                                                          dtb.minute);
+                                                  if (kDebugMode) {
+                                                    print("Task due is $dtb");
+                                                    print(dtb.day * 100 +
                                                         dtb.hour * 10 +
                                                         dtb.minute);
-
-                                                if (kDebugMode) {
-                                                  print("Task due is $dtb");
-                                                  print(widget
-                                                      .taskData); // status is in first index
-                                                  print(dtb.day * 100 +
-                                                      dtb.hour * 10 +
-                                                      dtb.minute);
+                                                  }
                                                 }
 
                                                 Navigator.of(context).pop();
@@ -210,22 +209,25 @@ class _TasksBuilderState extends State<TasksBuilder> {
                                             TextButton(
                                               onPressed: () {
                                                 setStatus('deleted', task.uuid);
-                                                DateTime? dtb = task.due;
-                                                dtb = dtb!.add(
-                                                    const Duration(minutes: 1));
-                                                final FlutterLocalNotificationsPlugin
-                                                    flutterLocalNotificationsPlugin =
-                                                    FlutterLocalNotificationsPlugin();
-                                                flutterLocalNotificationsPlugin
-                                                    .cancel(dtb.day * 100 +
+                                                if (task.due != null) {
+                                                  DateTime? dtb = task.due;
+                                                  dtb = dtb!.add(const Duration(
+                                                      minutes: 1));
+                                                  final FlutterLocalNotificationsPlugin
+                                                      flutterLocalNotificationsPlugin =
+                                                      FlutterLocalNotificationsPlugin();
+                                                  flutterLocalNotificationsPlugin
+                                                      .cancel(dtb.day * 100 +
+                                                          dtb.hour * 10 +
+                                                          dtb.minute);
+                                                  if (kDebugMode) {
+                                                    print("Task due is $dtb");
+                                                    print(dtb.day * 100 +
                                                         dtb.hour * 10 +
                                                         dtb.minute);
-                                                if (kDebugMode) {
-                                                  print("Task due is$dtb");
-                                                  print(dtb.day * 100 +
-                                                      dtb.hour * 10 +
-                                                      dtb.minute);
+                                                  }
                                                 }
+
                                                 Navigator.of(context).pop();
                                               },
                                               child: const Text('Yes'),
