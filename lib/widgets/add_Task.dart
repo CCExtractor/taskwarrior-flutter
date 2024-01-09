@@ -281,7 +281,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                     priority = newValue!;
                   });
                 },
-                items: <String>['H', 'M', 'L']
+                items: <String>['H', 'M', 'L', 'None']
                     .map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
