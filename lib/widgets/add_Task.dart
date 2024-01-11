@@ -130,9 +130,6 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                     color: AppSettings.isDarkMode ? Colors.white : Colors.black,
                   ),
                 ),
-                validator: (name) => name != null && name.isEmpty
-                    ? 'due date is required'
-                    : null,
                 onTap: () async {
                   var date = await showDatePicker(
                     builder: (BuildContext context, Widget? child) {
@@ -284,7 +281,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                     priority = newValue!;
                   });
                 },
-                items: <String>['H', 'M', 'L']
+                items: <String>['H', 'M', 'L', 'None']
                     .map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
@@ -319,20 +316,6 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
       ),
       onPressed: () async {
         if (formKey.currentState!.validate()) {
-          if (due == null) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(
-                'Due date cannot be empty. Please select a due date.',
-                style: TextStyle(
-                  color: AppSettings.isDarkMode ? Colors.white : Colors.black,
-                ),
-              ),
-              backgroundColor:
-                  AppSettings.isDarkMode ? Colors.black : Colors.white,
-              duration: const Duration(seconds: 2),
-            ));
-            return;
-          }
           try {
             var task = taskParser(namecontroller.text)
                 .rebuild((b) => b..due = due)

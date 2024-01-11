@@ -547,7 +547,11 @@ class TaskBuilder implements Builder<Task, TaskBuilder> {
 
   String? _priority;
   String? get priority => _$this._priority;
-  set priority(String? priority) => _$this._priority = priority;
+  set priority(String? priority) {
+    if (priority != 'None') {
+      _$this._priority = priority;
+    }
+  }
 
   ListBuilder<String>? _depends;
   ListBuilder<String> get depends =>
