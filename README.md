@@ -72,7 +72,7 @@ This project aims to build an app for Taskwarrior. It is your task management ap
 <img src='https://github.com/Pavel401/taskwarrior-flutter/assets/47685150/8d1d83e9-e32d-447a-8c1d-33c4e76e0b0d' width=200></img> 
 <img src='https://github.com/Pavel401/taskwarrior-flutter/assets/47685150/c1a134e9-b1f1-4b53-b7ac-7b87490d32be' width=200></img> 
 <img src='https://github.com/Pavel401/taskwarrior-flutter/assets/47685150/e6f76f60-ae7e-42f7-a669-4e3f12201e13' width=200></img> 
-<img src='https://github.com/CCExtractor/taskwarrior-flutter/assets/47685150/b289bdf4-e28e-489e-9ef5-56981add5eac' width=200></img> 
+<img src='https://github.com/prince02765/taskwarrior-flutter/assets/69643676/1011e85d-abd0-4821-8e88-a689b4487305' width=200></img> 
 
 
 
