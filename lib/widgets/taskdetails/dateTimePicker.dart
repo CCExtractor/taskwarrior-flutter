@@ -68,7 +68,7 @@ class DateTimeWidget extends StatelessWidget {
           var date = await showDatePicker(
             context: context,
             initialDate: initialDate,
-            firstDate: DateTime(1990), // >= 1980-01-01T00:00:00.000Z
+            firstDate: DateTime.now(), // sets the earliest selectable date to the current date. This prevents the user from selecting a date in the past.
             lastDate: DateTime(2037, 12, 31), // < 2038-01-19T03:14:08.000Z
           );
           if (date != null) {
