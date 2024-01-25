@@ -30,7 +30,7 @@ def keystoreProperties = new Properties()
        keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
    }
 android {
-    compileSdkVersion 33
+    compileSdkVersion 34
 
     // compileSdkVersion flutter.compileSdkVersion
 

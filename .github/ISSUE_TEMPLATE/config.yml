@@ -1,0 +1,9 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Questions
+    url: https://rhccgsoc15.slack.com/join/shared_invite/zt-2a4ankwic-~HR0g1yTtetDWzGNAW3tDA#/shared-invite/email
+    about: You can join the discussions on Slack .
+  - name: GSoC
+    url: https://ccextractor.org/docs/ideas_page_for_summer_of_code_2024/
+    about: You can find more information about the project on the CCextractor website.
+  
