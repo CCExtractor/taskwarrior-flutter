@@ -212,7 +212,8 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                       },
                       context: context,
                       initialTime:
-                          TimeOfDay.now(),
+                          TimeOfDay.fromDateTime(due ?? DateTime.now()),
+                          // TimeOfDay.now(),
                     );
                     if (time != null) {
                       var dateTime = date.add(
@@ -226,16 +227,17 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                           hours: time.hour - dateTime.hour,
                         ),
                       );
-                      // Check if the selected time is in the past
-                      if (dateTime.isBefore(DateTime.now())) {
-                        // Show a message that past times can't be set
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Can't set times in the past")),
-                        );
-                      } else {
-                        // If the time is not in the past, proceed as usual
-                        due=dateTime.toUtc();
-                      }
+                      // // Check if the selected time is in the past
+                      // if (dateTime.isBefore(DateTime.now())) {
+                      //   // Show a message that past times can't be set
+                      //   ScaffoldMessenger.of(context).showSnackBar(
+                      //     const SnackBar(content: Text("Can't set times in the past")),
+                      //   );
+                      // } else {
+                      //   // If the time is not in the past, proceed as usual
+                      //   due=dateTime.toUtc();
+                      // }
+                      due=dateTime.toUtc();
                       NotificationService notificationService =
                           NotificationService();
                       notificationService.initiliazeNotification();
