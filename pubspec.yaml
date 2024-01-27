@@ -44,6 +44,7 @@ dependencies:
   syncfusion_flutter_charts: ^23.2.7
   timezone: ^0.9.2
   tuple: ^2.0.0
+  tutorial_coach_mark: ^1.2.11
   url_launcher: ^6.1.14
   uuid: ^4.2.2
 

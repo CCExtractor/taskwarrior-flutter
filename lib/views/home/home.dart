@@ -7,10 +7,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
+import 'package:taskwarrior/controller/home_tour_controller.dart';
 import 'package:taskwarrior/drawer/filter_drawer.dart';
 import 'package:taskwarrior/drawer/nav_drawer.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
 import 'package:taskwarrior/taskserver/ntaskserver.dart';
+import 'package:taskwarrior/views/home/home_tour.dart';
 import 'package:taskwarrior/widgets/add_Task.dart';
 import 'package:taskwarrior/widgets/buildTasks.dart';
 import 'package:taskwarrior/widgets/pallete.dart';
@@ -20,6 +22,7 @@ import 'package:taskwarrior/model/storage.dart';
 
 import 'package:taskwarrior/widgets/home_paths.dart' as rc;
 import 'package:taskwarrior/widgets/taskserver.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class Filters {
   const Filters({
@@ -48,6 +51,60 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final addKey = GlobalKey();
+  final searchKey = GlobalKey();
+  final filterKey = GlobalKey();
+  final menuKey = GlobalKey();
+  final refreshKey = GlobalKey();
+
+  bool isSaved = false;
+  late TutorialCoachMark tutorialCoachMark;
+
+  void _initInAppTour() {
+    tutorialCoachMark = TutorialCoachMark(
+        targets: addTargetsPage(
+          addKey: addKey,
+          searchKey: searchKey,
+          filterKey: filterKey,
+          menuKey: menuKey,
+          refreshKey: refreshKey,
+        ),
+        colorShadow: Colors.black,
+        paddingFocus: 10,
+        opacityShadow: 0.8,
+        hideSkip: true,
+        onFinish: () {
+          SaveInAppTour().saveTourStatus();
+        });
+  }
+
+  void _showInAppTour() {
+    Future.delayed(
+      const Duration(seconds: 2),
+      () {
+        SaveInAppTour().getTourStatus().then((value) => {
+              if (value == false)
+                {
+                  tutorialCoachMark.show(context: context),
+                }
+              else
+                {
+                  // ignore: avoid_print
+                  print('User has seen this page'),
+                  // User has seen this page
+                }
+            });
+      },
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initInAppTour();
+    _showInAppTour();
+  }
+
   late InheritedStorage storageWidget;
   late Storage storage;
   Server? server;
@@ -149,6 +206,7 @@ class _HomePageState extends State<HomePage> {
             Text('Home Page', style: GoogleFonts.poppins(color: Colors.white)),
         actions: [
           IconButton(
+            key: searchKey,
             icon: (storageWidget.searchVisible)
                 ? const Tooltip(
                     message: 'Cancel',
@@ -160,6 +218,7 @@ class _HomePageState extends State<HomePage> {
           ),
           Builder(
             builder: (context) => IconButton(
+              key: refreshKey,
               icon: const Icon(Icons.refresh, color: Colors.white),
               onPressed: () {
                 if (server != null || credentials != null) {
@@ -189,6 +248,7 @@ class _HomePageState extends State<HomePage> {
           ),
           Builder(
             builder: (context) => IconButton(
+              key: filterKey,
               icon: const Tooltip(
                 message: 'Filters',
                 child: Icon(Icons.filter_list, color: Colors.white),
@@ -199,6 +259,7 @@ class _HomePageState extends State<HomePage> {
         ],
         leading: Builder(
           builder: (context) => IconButton(
+            key: menuKey,
             icon: const Tooltip(
                 message: 'Menu', child: Icon(Icons.menu, color: Colors.white)),
             onPressed: () => Scaffold.of(context).openDrawer(),
@@ -217,6 +278,7 @@ class _HomePageState extends State<HomePage> {
               children: <Widget>[
                 if (storageWidget.searchVisible)
                   Container(
+                    key: searchKey,
                     margin: const EdgeInsets.symmetric(
                         horizontal: 10, vertical: 10),
                     child: SearchBar(
@@ -262,6 +324,7 @@ class _HomePageState extends State<HomePage> {
       ),
       endDrawer: FilterDrawer(filters),
       floatingActionButton: FloatingActionButton(
+        key: addKey,
         heroTag: "btn3",
         backgroundColor:
             AppSettings.isDarkMode ? Colors.white : Palette.kToDark.shade200,
