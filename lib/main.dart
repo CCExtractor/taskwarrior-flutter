@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:loggy/loggy.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:showcaseview/showcaseview.dart';
 import 'package:sizer/sizer.dart';
 import 'package:taskwarrior/controller/WidgetController.dart';
 import 'package:taskwarrior/controller/onboarding_controller.dart';
@@ -141,7 +142,11 @@ class CheckOnboardingStatus extends StatelessWidget {
     return Obx(
       () {
         if (onboardingController.hasCompletedOnboarding.value) {
-          return const HomePage();
+          return ShowCaseWidget(
+            builder: Builder(
+              builder: (context) => const HomePage(),
+            ),
+          );
         } else {
           return const OnboardingScreen();
         }

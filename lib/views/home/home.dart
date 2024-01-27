@@ -20,6 +20,7 @@ import 'package:taskwarrior/model/storage.dart';
 
 import 'package:taskwarrior/widgets/home_paths.dart' as rc;
 import 'package:taskwarrior/widgets/taskserver.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 class Filters {
   const Filters({
@@ -88,6 +89,19 @@ class _HomePageState extends State<HomePage> {
   }
 
   bool hideKey = true;
+  final GlobalKey add = GlobalKey();
+  final GlobalKey search = GlobalKey();
+  final GlobalKey filter = GlobalKey();
+  final GlobalKey refreshTasks = GlobalKey();
+  final GlobalKey menu = GlobalKey();
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      ShowCaseWidget.of(context)
+          .startShowCase([add, filter, refreshTasks, search, menu]);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -144,67 +158,88 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Palette.kToDark.shade200,
-        title:
-            Text('Home Page', style: GoogleFonts.poppins(color: Colors.white)),
-        actions: [
-          IconButton(
-            icon: (storageWidget.searchVisible)
-                ? const Tooltip(
-                    message: 'Cancel',
-                    child: Icon(Icons.cancel, color: Colors.white))
-                : const Tooltip(
-                    message: 'Search',
-                    child: Icon(Icons.search, color: Colors.white)),
-            onPressed: storageWidget.toggleSearch,
-          ),
-          Builder(
-            builder: (context) => IconButton(
-              icon: const Icon(Icons.refresh, color: Colors.white),
-              onPressed: () {
-                if (server != null || credentials != null) {
-                  storageWidget.synchronize(context, true);
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: const Text('TaskServer is not configured'),
-                      action: SnackBarAction(
-                        label: 'Set Up',
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => const ManageTaskServer(),
-                              )).then((value) {
-                            setState(() {});
-                          });
-                        },
-                        textColor: Colors.purple,
-                      ),
-                    ),
-                  );
-                }
-              },
-            ),
-          ),
-          Builder(
-            builder: (context) => IconButton(
-              icon: const Tooltip(
-                message: 'Filters',
-                child: Icon(Icons.filter_list, color: Colors.white),
+          backgroundColor: Palette.kToDark.shade200,
+          title: Text('Home Page',
+              style: GoogleFonts.poppins(color: Colors.white)),
+          actions: [
+            Showcase(
+              key: search,
+              description: 'Find tasks using the search bar',
+              child: IconButton(
+                icon: (storageWidget.searchVisible)
+                    ? const Tooltip(
+                        message: 'Cancel',
+                        child: Icon(Icons.cancel, color: Colors.white))
+                    : const Tooltip(
+                        message: 'Search',
+                        child: Icon(Icons.search, color: Colors.white)),
+                onPressed: storageWidget.toggleSearch,
               ),
-              onPressed: () => Scaffold.of(context).openEndDrawer(),
             ),
-          ),
-        ],
-        leading: Builder(
-          builder: (context) => IconButton(
-            icon: const Tooltip(
-                message: 'Menu', child: Icon(Icons.menu, color: Colors.white)),
-            onPressed: () => Scaffold.of(context).openDrawer(),
-          ),
-        ),
-      ),
+            Showcase(
+              key: refreshTasks,
+              description: 'Refresh or sync tasks for the latest info',
+              child: Builder(
+                builder: (context) => IconButton(
+                  icon: const Icon(Icons.refresh, color: Colors.white),
+                  onPressed: () {
+                    if (server != null || credentials != null) {
+                      storageWidget.synchronize(context, true);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: const Text('TaskServer is not configured'),
+                          action: SnackBarAction(
+                            label: 'Set Up',
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => const ManageTaskServer(),
+                                  )).then((value) {
+                                setState(() {});
+                              });
+                            },
+                            textColor: Colors.purple,
+                          ),
+                        ),
+                      );
+                    }
+                  },
+                ),
+              ),
+            ),
+            Showcase(
+              key: filter,
+              description:
+                  'Apply filters for pending tasks, tags, and projects',
+              child: Builder(
+                builder: (context) => IconButton(
+                  icon: const Tooltip(
+                    message: 'Filters',
+                    child: Icon(Icons.filter_list, color: Colors.white),
+                  ),
+                  onPressed: () => Scaffold.of(context).openEndDrawer(),
+                ),
+              ),
+            )
+          ],
+          leading: Showcase(
+            key: menu,
+            description: 'Access app settings and other features ',
+            child: Builder(
+              builder: (context) => IconButton(
+                icon: const Tooltip(
+                  message: 'Menu',
+                  child: Icon(
+                    Icons.menu,
+                    color: Colors.white,
+                  ),
+                ),
+                onPressed: () => Scaffold.of(context).openDrawer(),
+              ),
+            ),
+          )),
       drawer: NavDrawer(storageWidget: storageWidget, notifyParent: refresh),
       body: DoubleBackToCloseApp(
         snackBar: const SnackBar(content: Text('Tap back again to exit')),
@@ -261,36 +296,42 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       endDrawer: FilterDrawer(filters),
-      floatingActionButton: FloatingActionButton(
-        heroTag: "btn3",
-        backgroundColor:
-            AppSettings.isDarkMode ? Colors.white : Palette.kToDark.shade200,
-        child: Tooltip(
-          message: 'Add Task',
-          child: Icon(
-            Icons.add,
-            color: AppSettings.isDarkMode
-                ? Palette.kToDark.shade200
-                : Colors.white,
+      floatingActionButton: Showcase(
+        key: add,
+        description: 'Add new tasks',
+        child: FloatingActionButton(
+          heroTag: "btn3",
+          backgroundColor:
+              AppSettings.isDarkMode ? Colors.white : Palette.kToDark.shade200,
+          child: Tooltip(
+            message: 'Add Task',
+            child: Icon(
+              Icons.add,
+              color: AppSettings.isDarkMode
+                  ? Palette.kToDark.shade200
+                  : Colors.white,
+            ),
+          ),
+          onPressed: () => showDialog(
+            context: context,
+            builder: (context) => const AddTaskBottomSheet(),
+          ).then(
+            (value) {
+              // print(value);
+
+              //if auto sync is turned on
+              if (isSyncNeeded) {
+                //if user have not created any event then
+                //we won't call sync method
+                if (value == "cancel") {
+                } else {
+                  //else we can sync new tasks
+                  isNeededtoSyncOnStart();
+                }
+              }
+            },
           ),
         ),
-        onPressed: () => showDialog(
-          context: context,
-          builder: (context) => const AddTaskBottomSheet(),
-        ).then((value) {
-          // print(value);
-
-          //if auto sync is turned on
-          if (isSyncNeeded) {
-            //if user have not created any event then
-            //we won't call sync method
-            if (value == "cancel") {
-            } else {
-              //else we can sync new tasks
-              isNeededtoSyncOnStart();
-            }
-          }
-        }),
       ),
       resizeToAvoidBottomInset: false,
     );
