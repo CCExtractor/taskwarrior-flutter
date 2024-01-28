@@ -78,7 +78,10 @@ class _DetailRouteState extends State<DetailRoute> {
                 TextButton(
                   onPressed: () {
                     saveChanges();
-                    Navigator.of(context).pop();
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                      HomePage.routeName,
+                      (route) => false,
+                    );
                     setState(() {});
                   },
                   child: const Text('Yes'),
@@ -208,10 +211,10 @@ class AttributeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  var localValue = (value is DateTime)
-    ? DateFormat.yMEd().add_jms().format(value.toLocal())
-    : ((value is BuiltList) ? (value).toBuilder() : value);
-    
+    var localValue = (value is DateTime)
+        ? DateFormat.yMEd().add_jms().format(value.toLocal())
+        : ((value is BuiltList) ? (value).toBuilder() : value);
+
     switch (name) {
       case 'description':
         return DescriptionWidget(
