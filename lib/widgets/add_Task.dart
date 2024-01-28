@@ -185,7 +185,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                                       brightness: Brightness.dark,
                                       primary: Colors.white,
                                       onPrimary: Colors.black,
-                                      secondary: Colors.black,
+                                      secondary: Color.fromARGB(255, 79, 78, 78),
                                       onSecondary: Colors.white,
                                       error: Colors.red,
                                       onError: Colors.black,
