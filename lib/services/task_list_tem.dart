@@ -34,6 +34,12 @@ class _TaskListItemState extends State<TaskListItem> {
     saveChanges();
   }
 
+  bool isDueWithinOneDay(DateTime dueDate) {
+    DateTime now = DateTime.now();
+    Duration difference = dueDate.difference(now);
+    return difference.inDays <= 1 && difference.inDays >= 0;
+  }
+
   void saveChanges() async {
     var now = DateTime.now().toUtc();
     modify.save(
@@ -44,6 +50,7 @@ class _TaskListItemState extends State<TaskListItem> {
       duration: Duration(seconds: 2),
     ));
   }
+
   //dynamic status_value = StatusWidgetData.value;
 
   @override
@@ -65,84 +72,93 @@ class _TaskListItemState extends State<TaskListItem> {
     if ((widget.task.status[0].toUpperCase()) == 'P') {
       // to differentiate between pending and completed tasks
       // pending tasks will be having the check boxes, on the other hand completed one's doesn't
-      return ListTile(
-        // homepage for pending tasks (when the home page is set to pending)
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                CircleAvatar(
-                  backgroundColor: colours,
-                  radius: 8,
+      return Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: (widget.task.due != null &&
+                isDueWithinOneDay(widget.task.due!))
+                ? Colors.red // Set border color to red if due within 1 day
+                : dimColor, // Set default border color
+          ),
+          borderRadius: BorderRadius.circular(
+              8.0), // You can adjust the border radius as needed
+        ),
+        child: ListTile(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  CircleAvatar(
+                    backgroundColor: colours,
+                    radius: 8,
+                  ),
+                  const SizedBox(width: 8),
+                  SizedBox(
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width * 0.70,
+                    child: Text(
+                      '${(widget.task.id == 0) ? '#' : widget.task.id}. ${widget
+                          .task.description}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.poppins(
+                        color: colour,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Text(
+                (widget.task.annotations != null)
+                    ? ' [${widget.task.annotations!.length}]'
+                    : '',
+                style: GoogleFonts.poppins(
+                  color: colour,
                 ),
-                const SizedBox(width: 8),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.70,
+              ),
+            ],
+          ),
+          subtitle: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flexible(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
                   child: Text(
-                    '${(widget.task.id == 0) ? '#' : widget.task.id}. ${widget.task.description}',
-                    maxLines: 1,
+                    '${widget.pendingFilter ? '' : '${widget.task.status[0]
+                        .toUpperCase()}\n'}'
+                        'Last Modified: ${(widget.task.modified != null) ? age(
+                        widget.task.modified!) : ((widget.task.start != null)
+                        ? age(widget.task.start!)
+                        : '-')} | '
+                        'Due: ${(widget.task.due != null) ? when(
+                        widget.task.due!) : '-'}'
+                        .replaceFirst(RegExp(r' \[\]$'), '')
+                        .replaceAll(RegExp(r' +'), ' '),
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.poppins(
-                      color: colour,
+                      color: dimColor,
+                      fontSize: 12,
                     ),
                   ),
                 ),
-              ],
-            ),
-            Text(
-              (widget.task.annotations != null)
-                  ? ' [${widget.task.annotations!.length}]'
-                  : '',
-              style: GoogleFonts.poppins(
-                color: colour,
               ),
-            ),
-          ],
-        ),
-        subtitle: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Flexible(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Text(
-                  '${widget.pendingFilter ? '' : '${widget.task.status[0].toUpperCase()}\n'}'
-                          'Last Modified: ${(widget.task.modified != null) ? age(widget.task.modified!) : ((widget.task.start != null) ? age(widget.task.start!) : '-')} | '
-                          'Due: ${(widget.task.due != null) ? when(widget.task.due!) : '-'}'
-                      .replaceFirst(RegExp(r' \[\]$'), '')
-                      .replaceAll(RegExp(r' +'), ' '),
-                  overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.poppins(
-                    color: dimColor,
-                    fontSize: 12,
-                  ),
+              Text(
+                formatUrgency(urgency(widget.task)),
+                style: GoogleFonts.poppins(
+                  color: colour,
                 ),
               ),
-            ),
-            Text(
-              formatUrgency(urgency(widget.task)),
-              style: GoogleFonts.poppins(
-                color: colour,
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
-        // isThreeLine: true,
       );
     } else {
-      // homepage for completed tasks (when the filter is set to completed)
+      // Completed tasks
       return ListTile(
-        /*leading: Icon(
-          Icons.circle,
-          color: widget.task.priority == 'H'
-              ? Colors.red
-              : widget.task.priority == 'M'
-                  ? Colors.yellow[600]
-                  : Colors.green,
-          size: 20,
-          semanticLabel: 'Priority',
-        ),*/
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -154,9 +170,13 @@ class _TaskListItemState extends State<TaskListItem> {
                 ),
                 const SizedBox(width: 8),
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.65,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width * 0.65,
                   child: Text(
-                    '${(widget.task.id == 0) ? '#' : widget.task.id}. ${widget.task.description}',
+                    '${(widget.task.id == 0) ? '#' : widget.task.id}. ${widget
+                        .task.description}',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.poppins(
@@ -175,9 +195,13 @@ class _TaskListItemState extends State<TaskListItem> {
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Text(
-                  //'${widget.pendingFilter ? '' : '${widget.task.status[0].toUpperCase()}\n'}'
-                  'Last Modified: ${(widget.task.modified != null) ? age(widget.task.modified!) : ((widget.task.start != null) ? age(widget.task.start!) : '-')} | '
-                          'Due: ${(widget.task.due != null) ? when(widget.task.due!) : '-'}'
+                  'Last Modified: ${(widget.task.modified != null) ? age(
+                      widget.task.modified!) : ((widget.task.start != null)
+                      ? age(widget.task.start!)
+                      : '-')} | '
+                      'Due: ${(widget.task.due != null)
+                      ? when(widget.task.due!)
+                      : '-'}'
                       .replaceFirst(RegExp(r' \[\]$'), '')
                       .replaceAll(RegExp(r' +'), ' '),
                   overflow: TextOverflow.ellipsis,
@@ -196,8 +220,8 @@ class _TaskListItemState extends State<TaskListItem> {
             ),
           ],
         ),
-        // isThreeLine: true,
       );
+
     }
   }
 }
