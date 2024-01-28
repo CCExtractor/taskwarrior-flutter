@@ -24,6 +24,7 @@ class DetailRoute extends StatefulWidget {
 
 class _DetailRouteState extends State<DetailRoute> {
   late Modify modify;
+  bool isModified = false;
 
   @override
   void didChangeDependencies() {
@@ -37,6 +38,7 @@ class _DetailRouteState extends State<DetailRoute> {
   }
 
   void Function(dynamic) callback(String name) {
+    isModified = true;
     return (newValue) {
       modify.set(name, newValue);
       setState(() {});
@@ -61,7 +63,7 @@ class _DetailRouteState extends State<DetailRoute> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: false,
+      canPop: !isModified,
       onPopInvoked: (bool didPop) async {
         if (didPop) {
           await Navigator.of(context).pushAndRemoveUntil(
