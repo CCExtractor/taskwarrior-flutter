@@ -216,6 +216,7 @@ class ProjectTile extends StatelessWidget {
           )
         : ExpansionTile(
             controlAffinity: ListTileControlAffinity.leading,
+            key: PageStorageKey(project),
             leading: radio,
             title: title,
             backgroundColor: AppSettings.isDarkMode
