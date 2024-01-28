@@ -15,7 +15,7 @@ import 'package:taskwarrior/widgets/taskfunctions/taskparser.dart';
 import 'package:taskwarrior/widgets/taskw.dart';
 
 class AddTaskBottomSheet extends StatefulWidget {
-  const AddTaskBottomSheet({Key? key}) : super(key: key);
+  const AddTaskBottomSheet({super.key});
 
   @override
   _AddTaskBottomSheetState createState() => _AddTaskBottomSheetState();
@@ -373,7 +373,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
             if (tagcontroller.text != "") {
               tags.add(tagcontroller.text.trim());
             }
-            if (tags.length > 0) {
+            if (tags.isNotEmpty) {
               task = task.rebuild((t) => t..tags.replace(tags));
             }
 
