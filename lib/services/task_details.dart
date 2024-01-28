@@ -24,7 +24,7 @@ class DetailRoute extends StatefulWidget {
 
 class _DetailRouteState extends State<DetailRoute> {
   late Modify modify;
-
+  bool onedit = false;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -39,6 +39,7 @@ class _DetailRouteState extends State<DetailRoute> {
   void Function(dynamic) callback(String name) {
     return (newValue) {
       modify.set(name, newValue);
+      onedit = true;
       setState(() {});
     };
   }
@@ -48,6 +49,7 @@ class _DetailRouteState extends State<DetailRoute> {
     modify.save(
       modified: () => now,
     );
+    onedit = true;
     setState(() {});
     Navigator.of(context).pop();
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -63,7 +65,9 @@ class _DetailRouteState extends State<DetailRoute> {
     return PopScope(
       canPop: false,
       onPopInvoked: (bool didPop) async {
-        if (didPop) {
+        if (didPop || !onedit) {
+          // print(onedit);
+
           await Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(builder: (context) => const HomePage()),
               (Route<dynamic> route) => false);
