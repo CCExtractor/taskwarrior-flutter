@@ -28,6 +28,8 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   DateTime? due;
   String dueString = '';
   String priority = 'M';
+  final tagcontroller = TextEditingController();
+  List<String> tags = [];
 
   @override
   void initState() {
@@ -36,6 +38,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
 
   @override
   void dispose() {
+    tagcontroller.dispose();
     namecontroller.dispose();
     super.dispose();
   }
@@ -74,6 +77,8 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                   buildDueDate(context),
                   const SizedBox(height: 8),
                   buildPriority(),
+                  buildTags(),
+
                 ],
               ),
             ),
@@ -86,6 +91,22 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
       ),
     );
   }
+
+  Widget buildTags() =>
+      TextFormField(
+        controller: tagcontroller,
+        style: TextStyle(
+          color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+        ),
+        decoration: InputDecoration(
+          hintText: 'Add g',
+          hintStyle: TextStyle(
+            color: AppSettings.isDarkMode ? Colors.white : Colors.red,
+          ),
+        ),
+
+      );
+
 
   Widget buildName() => TextFormField(
         autofocus: true,
@@ -331,11 +352,17 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
             var task = taskParser(namecontroller.text)
                 .rebuild((b) => b..due = due)
                 .rebuild((p) => p..priority = priority);
+            if (tagcontroller.text != "") {
+              tags.add(tagcontroller.text);
+              task = task.rebuild((t) => t..tags.replace(tags));
+            }
 
             StorageWidget.of(context).mergeTask(task);
             namecontroller.text = '';
             due = null;
             priority = 'M';
+            tagcontroller.text = '';
+            tags = [];
             setState(() {});
             Navigator.of(context).pop();
             widgetController.fetchAllData();
