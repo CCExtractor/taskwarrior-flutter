@@ -84,7 +84,10 @@ class _DetailRouteState extends State<DetailRoute> {
                     saveChanges();
                     Navigator.of(context).pushNamedAndRemoveUntil(
                       HomePage.routeName,
+
                           (route) => false,
+                      (route) => false,
+
                     );
                     setState(() {});
                   },

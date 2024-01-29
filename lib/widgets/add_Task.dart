@@ -15,7 +15,7 @@ import 'package:taskwarrior/widgets/taskfunctions/taskparser.dart';
 import 'package:taskwarrior/widgets/taskw.dart';
 
 class AddTaskBottomSheet extends StatefulWidget {
-  const AddTaskBottomSheet({Key? key}) : super(key: key);
+  const AddTaskBottomSheet({super.key});
 
   @override
   _AddTaskBottomSheetState createState() => _AddTaskBottomSheetState();
@@ -123,7 +123,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
               onPressed: () {
                 addTag(tagcontroller.text.trim());
               },
-              icon: Icon(Icons.add), // Plus icon
+              icon: const Icon(Icons.add), // Plus icon
             ),
           ],
         ),
@@ -143,216 +143,223 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   }
 
   Widget buildName() => TextFormField(
-    autofocus: true,
-    controller: namecontroller,
-    style: TextStyle(
-      color: AppSettings.isDarkMode ? Colors.white : Colors.black,
-    ),
-    decoration: InputDecoration(
-      hintText: 'Enter Task',
-      hintStyle: TextStyle(
-        color: AppSettings.isDarkMode ? Colors.white : Colors.black,
-      ),
-    ),
-    validator: (name) =>
-    name != null && name.isEmpty ? 'You cannot leave this field empty!' : null,
-  );
+        autofocus: true,
+        controller: namecontroller,
+        style: TextStyle(
+          color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+        ),
+        decoration: InputDecoration(
+          hintText: 'Enter Task',
+          hintStyle: TextStyle(
+            color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+          ),
+        ),
+        validator: (name) => name != null && name.isEmpty
+            ? 'You cannot leave this field empty!'
+            : null,
+      );
 
   Widget buildDueDate(BuildContext context) => Row(
-    children: [
-      Text(
-        "Due : ",
-        style: GoogleFonts.poppins(
-          color: AppSettings.isDarkMode ? Colors.white : Colors.black,
-          fontWeight: FontWeight.bold,
-          height: 3.3,
-        ),
-      ),
-      Expanded(
-        child: GestureDetector(
-          child: TextFormField(
-            style: TextStyle(
-              color: AppSettings.isDarkMode ? Colors.white : Colors.black,
-            ),
-            readOnly: true,
-            controller: TextEditingController(
-              text: (due != null) ? dueString : null,
-            ),
-            decoration: InputDecoration(
-              hintText: 'Select due date',
-              hintStyle: TextStyle(
-                color: AppSettings.isDarkMode ? Colors.white : Colors.black,
-              ),
-            ),
-            onTap: () async {
-              var date = await showDatePicker(
-                builder: (BuildContext context, Widget? child) {
-                  return Theme(
-                    data: Theme.of(context).copyWith(
-                      colorScheme: AppSettings.isDarkMode
-                          ? const ColorScheme(
-                        brightness: Brightness.dark,
-                        primary: Colors.white,
-                        onPrimary: Colors.black,
-                        secondary: Colors.black,
-                        onSecondary: Colors.white,
-                        error: Colors.red,
-                        onError: Colors.black,
-                        background: Colors.black,
-                        onBackground: Colors.white,
-                        surface: Colors.black,
-                        onSurface: Colors.white,
-                      )
-                          : const ColorScheme(
-                        brightness: Brightness.light,
-                        primary: Colors.black,
-                        onPrimary: Colors.white,
-                        secondary: Colors.white,
-                        onSecondary: Colors.black,
-                        error: Colors.red,
-                        onError: Colors.white,
-                        background: Colors.white,
-                        onBackground: Colors.black,
-                        surface: Colors.white,
-                        onSurface: Colors.black,
-                      ),
-                    ),
-                    child: child!,
-                  );
-                },
-                fieldHintText: "Month/Date/Year",
-                context: context,
-                initialDate: due ?? DateTime.now(),
-                firstDate: DateTime.now(),
-                lastDate: DateTime(2037, 12, 31),
-              );
-              if (date != null) {
-                var time = await showTimePicker(
-                  builder: (BuildContext context, Widget? child) {
-                    return Theme(
-                      data: Theme.of(context).copyWith(
-                        textTheme: const TextTheme(),
-                        colorScheme: AppSettings.isDarkMode
-                            ? const ColorScheme(
-                          brightness: Brightness.dark,
-                          primary: Colors.white,
-                          onPrimary: Colors.black,
-                          secondary: Colors.black,
-                          onSecondary: Colors.white,
-                          error: Colors.red,
-                          onError: Colors.black,
-                          background: Colors.black,
-                          onBackground: Colors.white,
-                          surface: Colors.black,
-                          onSurface: Colors.white,
-                        )
-                            : const ColorScheme(
-                          brightness: Brightness.light,
-                          primary: Colors.black,
-                          onPrimary: Colors.white,
-                          secondary: Colors.white,
-                          onSecondary: Colors.black,
-                          error: Colors.red,
-                          onError: Colors.white,
-                          background: Colors.white,
-                          onBackground: Colors.black,
-                          surface: Colors.white,
-                          onSurface: Colors.black,
-                        ),
-                      ),
-                      child: child!,
-                    );
-                  },
-                  context: context,
-                  initialTime: TimeOfDay.fromDateTime(due ?? DateTime.now()),
-                );
-                if (time != null) {
-                  var dateTime = date.add(
-                    Duration(
-                      hours: time.hour,
-                      minutes: time.minute,
-                    ),
-                  );
-                  dateTime = dateTime.add(
-                    Duration(
-                      hours: time.hour - dateTime.hour,
-                    ),
-                  );
-                  due = dateTime.toUtc();
-                  NotificationService notificationService = NotificationService();
-                  notificationService.initiliazeNotification();
-
-                  if ((dateTime.millisecondsSinceEpoch - DateTime.now().millisecondsSinceEpoch) > 0) {
-                    notificationService.sendNotification(dateTime, namecontroller.text);
-                  }
-
-                  dueString = DateFormat("dd-MM-yyyy HH:mm").format(dateTime);
-                }
-                setState(() {});
-              }
-            },
-          ),
-        ),
-      ),
-    ],
-  );
-
-  Widget buildPriority() => Column(
-    children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            'Priority :  ',
+            "Due : ",
             style: GoogleFonts.poppins(
+              color: AppSettings.isDarkMode ? Colors.white : Colors.black,
               fontWeight: FontWeight.bold,
-              color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+              height: 3.3,
             ),
-            textAlign: TextAlign.left,
           ),
-          DropdownButton<String>(
-            dropdownColor: AppSettings.isDarkMode
-                ? const Color.fromARGB(255, 25, 25, 25)
-                : Colors.white,
-            value: priority,
-            elevation: 16,
-            style: GoogleFonts.poppins(
-              color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+          Expanded(
+            child: GestureDetector(
+              child: TextFormField(
+                style: TextStyle(
+                  color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                ),
+                readOnly: true,
+                controller: TextEditingController(
+                  text: (due != null) ? dueString : null,
+                ),
+                decoration: InputDecoration(
+                  hintText: 'Select due date',
+                  hintStyle: TextStyle(
+                    color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                  ),
+                ),
+                onTap: () async {
+                  var date = await showDatePicker(
+                    builder: (BuildContext context, Widget? child) {
+                      return Theme(
+                        data: Theme.of(context).copyWith(
+                          colorScheme: AppSettings.isDarkMode
+                              ? const ColorScheme(
+                                  brightness: Brightness.dark,
+                                  primary: Colors.white,
+                                  onPrimary: Colors.black,
+                                  secondary: Colors.black,
+                                  onSecondary: Colors.white,
+                                  error: Colors.red,
+                                  onError: Colors.black,
+                                  background: Colors.black,
+                                  onBackground: Colors.white,
+                                  surface: Colors.black,
+                                  onSurface: Colors.white,
+                                )
+                              : const ColorScheme(
+                                  brightness: Brightness.light,
+                                  primary: Colors.black,
+                                  onPrimary: Colors.white,
+                                  secondary: Colors.white,
+                                  onSecondary: Colors.black,
+                                  error: Colors.red,
+                                  onError: Colors.white,
+                                  background: Colors.white,
+                                  onBackground: Colors.black,
+                                  surface: Colors.white,
+                                  onSurface: Colors.black,
+                                ),
+                        ),
+                        child: child!,
+                      );
+                    },
+                    fieldHintText: "Month/Date/Year",
+                    context: context,
+                    initialDate: due ?? DateTime.now(),
+                    firstDate: DateTime.now(),
+                    lastDate: DateTime(2037, 12, 31),
+                  );
+                  if (date != null) {
+                    var time = await showTimePicker(
+                      builder: (BuildContext context, Widget? child) {
+                        return Theme(
+                          data: Theme.of(context).copyWith(
+                            textTheme: const TextTheme(),
+                            colorScheme: AppSettings.isDarkMode
+                                ? const ColorScheme(
+                                    brightness: Brightness.dark,
+                                    primary: Colors.white,
+                                    onPrimary: Colors.black,
+                                    secondary: Color.fromARGB(255, 70, 68, 68),
+                                    onSecondary: Colors.white,
+                                    error: Colors.red,
+                                    onError: Colors.black,
+                                    background: Colors.black,
+                                    onBackground: Colors.white,
+                                    surface: Colors.black,
+                                    onSurface: Colors.white,
+                                  )
+                                : const ColorScheme(
+                                    brightness: Brightness.light,
+                                    primary: Colors.black,
+                                    onPrimary: Colors.white,
+                                    secondary: Colors.white,
+                                    onSecondary: Colors.black,
+                                    error: Colors.red,
+                                    onError: Colors.white,
+                                    background: Colors.white,
+                                    onBackground: Colors.black,
+                                    surface: Colors.white,
+                                    onSurface: Colors.black,
+                                  ),
+                          ),
+                          child: child!,
+                        );
+                      },
+                      context: context,
+                      initialTime:
+                          TimeOfDay.fromDateTime(due ?? DateTime.now()),
+                    );
+                    if (time != null) {
+                      var dateTime = date.add(
+                        Duration(
+                          hours: time.hour,
+                          minutes: time.minute,
+                        ),
+                      );
+                      dateTime = dateTime.add(
+                        Duration(
+                          hours: time.hour - dateTime.hour,
+                        ),
+                      );
+                      due = dateTime.toUtc();
+                      NotificationService notificationService =
+                          NotificationService();
+                      notificationService.initiliazeNotification();
+
+                      if ((dateTime.millisecondsSinceEpoch -
+                              DateTime.now().millisecondsSinceEpoch) >
+                          0) {
+                        notificationService.sendNotification(
+                            dateTime, namecontroller.text);
+                      }
+
+                      dueString =
+                          DateFormat("dd-MM-yyyy HH:mm").format(dateTime);
+                    }
+                    setState(() {});
+                  }
+                },
+              ),
             ),
-            underline: Container(
-              height: 1.5,
-              color: AppSettings.isDarkMode
-                  ? const Color.fromARGB(255, 25, 25, 25)
-                  : Colors.white,
-            ),
-            onChanged: (String? newValue) {
-              setState(() {
-                priority = newValue!;
-              });
-            },
-            items: <String>['H', 'M', 'L', 'None']
-                .map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text('  $value'),
-              );
-            }).toList(),
-          )
+          ),
         ],
-      ),
-    ],
-  );
+      );
+
+  Widget buildPriority() => Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                'Priority :  ',
+                style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.bold,
+                  color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                ),
+                textAlign: TextAlign.left,
+              ),
+              DropdownButton<String>(
+                dropdownColor: AppSettings.isDarkMode
+                    ? const Color.fromARGB(255, 25, 25, 25)
+                    : Colors.white,
+                value: priority,
+                elevation: 16,
+                style: GoogleFonts.poppins(
+                  color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                ),
+                underline: Container(
+                  height: 1.5,
+                  color: AppSettings.isDarkMode
+                      ? const Color.fromARGB(255, 25, 25, 25)
+                      : Colors.white,
+                ),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    priority = newValue!;
+                  });
+                },
+                items: <String>['H', 'M', 'L', 'None']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text('  $value'),
+                  );
+                }).toList(),
+              )
+            ],
+          ),
+        ],
+      );
 
   Widget buildCancelButton(BuildContext context) => TextButton(
-    child: Text(
-      'Cancel',
-      style: TextStyle(
-        color: AppSettings.isDarkMode ? Colors.white : Colors.black,
-      ),
-    ),
-    onPressed: () => Navigator.of(context).pop("cancel"),
-  );
+        child: Text(
+          'Cancel',
+          style: TextStyle(
+            color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+          ),
+        ),
+        onPressed: () => Navigator.of(context).pop("cancel"),
+      );
 
   Widget buildAddButton(BuildContext context) {
     WidgetController widgetController = Get.put(WidgetController(context));
@@ -373,7 +380,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
             if (tagcontroller.text != "") {
               tags.add(tagcontroller.text.trim());
             }
-            if (tags.length > 0) {
+            if (tags.isNotEmpty) {
               task = task.rebuild((t) => t..tags.replace(tags));
             }
 
@@ -394,11 +401,13 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                   color: AppSettings.isDarkMode ? Colors.white : Colors.black,
                 ),
               ),
-              backgroundColor: AppSettings.isDarkMode ? Colors.black : Colors.white,
+              backgroundColor:
+                  AppSettings.isDarkMode ? Colors.black : Colors.white,
               duration: const Duration(seconds: 2),
             ));
 
-            final SharedPreferences prefs = await SharedPreferences.getInstance();
+            final SharedPreferences prefs =
+                await SharedPreferences.getInstance();
             bool? value;
             value = prefs.getBool('sync-OnTaskCreate') ?? false;
             late InheritedStorage storageWidget;
