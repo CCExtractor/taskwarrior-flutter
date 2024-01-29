@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taskwarrior/model/json.dart';
-import 'package:taskwarrior/views/settings/settings.dart';
 import 'package:taskwarrior/widgets/taskw.dart';
-import '../model/storage/storage_widget.dart';
 
 class TaskListItem extends StatefulWidget {
   const TaskListItem(this.task,

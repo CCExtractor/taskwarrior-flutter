@@ -86,7 +86,6 @@ class _DetailRouteState extends State<DetailRoute> {
                       HomePage.routeName,
 
                           (route) => false,
-                      (route) => false,
 
                     );
                     setState(() {});
