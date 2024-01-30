@@ -70,7 +70,7 @@ class _DetailRouteState extends State<DetailRoute> {
 
           await Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(builder: (context) => const HomePage()),
-              (Route<dynamic> route) => false);
+                  (Route<dynamic> route) => false);
         }
         // ignore: use_build_context_synchronously
         return showDialog(
@@ -84,7 +84,9 @@ class _DetailRouteState extends State<DetailRoute> {
                     saveChanges();
                     Navigator.of(context).pushNamedAndRemoveUntil(
                       HomePage.routeName,
-                      (route) => false,
+
+                          (route) => false,
+
                     );
                     setState(() {});
                   },
@@ -94,7 +96,7 @@ class _DetailRouteState extends State<DetailRoute> {
                   onPressed: () {
                     Navigator.of(context).pushNamedAndRemoveUntil(
                       HomePage.routeName,
-                      (route) => false,
+                          (route) => false,
                     );
                   },
                   child: const Text('No'),
@@ -156,46 +158,46 @@ class _DetailRouteState extends State<DetailRoute> {
         floatingActionButton: (modify.changes.isEmpty)
             ? null
             : FloatingActionButton(
-                heroTag: "btn1",
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        scrollable: true,
-                        title: const Text('Review changes:'),
-                        content: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Text(
-                            modify.changes.entries
-                                .map((entry) => '${entry.key}:\n'
-                                    '  old: ${entry.value['old']}\n'
-                                    '  new: ${entry.value['new']}')
-                                .toList()
-                                .join('\n'),
-                            style: GoogleFonts.poppins(),
-                          ),
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: const Text('Cancel'),
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              saveChanges();
-                            },
-                            child: const Text('Submit'),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-                child: const Icon(Icons.save),
-              ),
+          heroTag: "btn1",
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  scrollable: true,
+                  title: const Text('Review changes:'),
+                  content: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Text(
+                      modify.changes.entries
+                          .map((entry) => '${entry.key}:\n'
+                          '  old: ${entry.value['old']}\n'
+                          '  new: ${entry.value['new']}')
+                          .toList()
+                          .join('\n'),
+                      style: GoogleFonts.poppins(),
+                    ),
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('Cancel'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        saveChanges();
+                      },
+                      child: const Text('Submit'),
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+          child: const Icon(Icons.save),
+        ),
       ),
     );
   }
@@ -274,12 +276,12 @@ class AttributeWidget extends StatelessWidget {
           value: localValue,
           callback: callback,
         );
-      //   case 'annotations':
-      //     return AnnotationsWidget(
-      //       name: name,
-      //       value: localValue,
-      //       callback: callback,
-      //     );
+    //   case 'annotations':
+    //     return AnnotationsWidget(
+    //       name: name,
+    //       value: localValue,
+    //       callback: callback,
+    //     );
       default:
         return Card(
           color: AppSettings.isDarkMode
@@ -299,7 +301,7 @@ class AttributeWidget extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                       fontSize: 15,
                       color:
-                          AppSettings.isDarkMode ? Colors.white : Colors.black,
+                      AppSettings.isDarkMode ? Colors.white : Colors.black,
                     ),
                   ),
                   Text(
@@ -307,7 +309,7 @@ class AttributeWidget extends StatelessWidget {
                     style: GoogleFonts.poppins(
                       fontSize: 15,
                       color:
-                          AppSettings.isDarkMode ? Colors.white : Colors.black,
+                      AppSettings.isDarkMode ? Colors.white : Colors.black,
                     ),
                   )
                 ],
@@ -359,7 +361,7 @@ class TagsWidget extends StatelessWidget {
                     ),
                     TextSpan(
                       text:
-                          '${(value as ListBuilder?)?.build() ?? 'not selected'}',
+                      '${(value as ListBuilder?)?.build() ?? 'not selected'}',
                       style: GoogleFonts.poppins(
                         fontSize: 15,
                         color: AppSettings.isDarkMode

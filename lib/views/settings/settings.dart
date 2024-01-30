@@ -8,40 +8,23 @@ import 'package:taskwarrior/config/taskwarriorcolors.dart';
 import 'package:taskwarrior/widgets/pallete.dart';
 
 class SettingsPage extends StatefulWidget {
-  SettingsPage(
-      {super.key,
-      required this.isSyncOnStartActivel,
-      required this.isSyncOnTaskCreateActivel});
+  SettingsPage({
+    super.key,
+    required this.isSyncOnStartActivel,
+    required this.isSyncOnTaskCreateActivel,
+    required this.delaytask,
+  });
   bool isSyncOnStartActivel;
   bool isSyncOnTaskCreateActivel;
+  bool delaytask;
 
   @override
   _SettingsPageState createState() => _SettingsPageState();
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  // bool syncOnStart = false;
-  // bool syncOnTaskCreate = false;
-
-  // checkAutoSync() async {
-  //   ///check if auto sync is on or off
-  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   setState(() {
-  //     syncOnStart = prefs.getBool('sync-onStart') ?? false;
-  //     syncOnTaskCreate = prefs.getBool('sync-OnTaskCreate') ?? false;
-  //   });
-  // }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   checkAutoSync();
-  // }
-
   @override
   Widget build(BuildContext context) {
-    // syncOnStart = widget.isSyncOnStartActivel;
-    // syncOnTaskCreate = widget.isSyncOnTaskCreateActivel;
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
@@ -77,7 +60,7 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
       backgroundColor:
-          AppSettings.isDarkMode ? Palette.kToDark.shade200 : Colors.white,
+      AppSettings.isDarkMode ? Palette.kToDark.shade200 : Colors.white,
       body: ListView(
         children: [
           ListTile(
@@ -97,16 +80,17 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
             trailing: Switch(
-                value: widget.isSyncOnStartActivel,
-                onChanged: (bool value) async {
-                  setState(() {
-                    widget.isSyncOnStartActivel = value;
-                  });
+              value: widget.isSyncOnStartActivel,
+              onChanged: (bool value) async {
+                setState(() {
+                  widget.isSyncOnStartActivel = value;
+                });
 
-                  final SharedPreferences prefs =
-                      await SharedPreferences.getInstance();
-                  await prefs.setBool('sync-onStart', value);
-                }),
+                final SharedPreferences prefs =
+                await SharedPreferences.getInstance();
+                await prefs.setBool('sync-onStart', value);
+              },
+            ),
           ),
           const Divider(),
           ListTile(
@@ -126,16 +110,47 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
             trailing: Switch(
-                value: widget.isSyncOnTaskCreateActivel,
-                onChanged: (bool value) async {
-                  setState(() {
-                    widget.isSyncOnTaskCreateActivel = value;
-                  });
+              value: widget.isSyncOnTaskCreateActivel,
+              onChanged: (bool value) async {
+                setState(() {
+                  widget.isSyncOnTaskCreateActivel = value;
+                });
 
-                  final SharedPreferences prefs =
-                      await SharedPreferences.getInstance();
-                  await prefs.setBool('sync-OnTaskCreate', value);
-                }),
+                final SharedPreferences prefs =
+                await SharedPreferences.getInstance();
+                await prefs.setBool('sync-OnTaskCreate', value);
+              },
+            ),
+          ),
+          const Divider(),
+          ListTile(
+            title: Text(
+              'Highlight the task',
+              style: GoogleFonts.poppins(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+              ),
+            ),
+            subtitle: Text(
+              'Make the border of task if only one day left',
+              style: GoogleFonts.poppins(
+                color: Colors.grey,
+                fontSize: 14,
+              ),
+            ),
+            trailing: Switch(
+              value: widget.delaytask,
+              onChanged: (bool value) async {
+                setState(() {
+                  widget.delaytask = value;
+                });
+
+                final SharedPreferences prefs =
+                await SharedPreferences.getInstance();
+                await prefs.setBool('delaytask', value);
+              },
+            ),
           ),
         ],
       ),

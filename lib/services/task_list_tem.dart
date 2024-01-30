@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taskwarrior/model/json.dart';
 import 'package:taskwarrior/widgets/taskw.dart';
-
-import '../model/storage/storage_widget.dart';
 
 class TaskListItem extends StatefulWidget {
   const TaskListItem(this.task,
@@ -22,16 +19,19 @@ class TaskListItem extends StatefulWidget {
 class _TaskListItemState extends State<TaskListItem> {
   late Modify modify;
   bool isChecked = false;
+  bool useDelayTask = false; // Default value
 
-  void setStatus(String newValue, String id) {
-    var storageWidget = StorageWidget.of(context);
-    modify = Modify(
-      getTask: storageWidget.getTask,
-      mergeTask: storageWidget.mergeTask,
-      uuid: id,
-    );
-    modify.set('status', newValue);
-    saveChanges();
+  @override
+  void initState() {
+    super.initState();
+    loadDelayTask();
+  }
+
+  Future<void> loadDelayTask() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      useDelayTask = prefs.getBool('delaytask') ?? false;
+    });
   }
 
   bool isDueWithinOneDay(DateTime dueDate) {
@@ -51,8 +51,6 @@ class _TaskListItemState extends State<TaskListItem> {
     ));
   }
 
-  //dynamic status_value = StatusWidgetData.value;
-
   @override
   Widget build(BuildContext context) {
     MaterialColor colours = Colors.grey;
@@ -70,18 +68,16 @@ class _TaskListItemState extends State<TaskListItem> {
     }
 
     if ((widget.task.status[0].toUpperCase()) == 'P') {
-      // to differentiate between pending and completed tasks
-      // pending tasks will be having the check boxes, on the other hand completed one's doesn't
+      // Pending tasks
       return Container(
         decoration: BoxDecoration(
           border: Border.all(
             color: (widget.task.due != null &&
-                isDueWithinOneDay(widget.task.due!))
-                ? Colors.red // Set border color to red if due within 1 day
+                isDueWithinOneDay(widget.task.due!) && useDelayTask)
+                ? Colors.red // Set border color to red if due within 1 day and useDelayTask is true
                 : dimColor, // Set default border color
           ),
-          borderRadius: BorderRadius.circular(
-              8.0), // You can adjust the border radius as needed
+          borderRadius: BorderRadius.circular(8.0),
         ),
         child: ListTile(
           title: Row(
@@ -221,7 +217,6 @@ class _TaskListItemState extends State<TaskListItem> {
           ],
         ),
       );
-
     }
   }
 }

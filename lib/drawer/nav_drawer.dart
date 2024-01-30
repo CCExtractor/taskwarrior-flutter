@@ -119,6 +119,8 @@ class _NavDrawerState extends State<NavDrawer> {
               onTap: () async {
                 bool syncOnStart = false;
                 bool syncOnTaskCreate = false;
+                bool delaytask= false;
+
 
                 ///check if auto sync is on or off
                 final SharedPreferences prefs =
@@ -127,6 +129,8 @@ class _NavDrawerState extends State<NavDrawer> {
                   syncOnStart = prefs.getBool('sync-onStart') ?? false;
                   syncOnTaskCreate =
                       prefs.getBool('sync-OnTaskCreate') ?? false;
+                  delaytask =
+                      prefs.getBool('delaytask') ?? false;
                 });
                 // print(syncOnStart);
                 // print(syncOnTaskCreate);
@@ -135,6 +139,7 @@ class _NavDrawerState extends State<NavDrawer> {
                     builder: (context) => SettingsPage(
                       isSyncOnStartActivel: syncOnStart,
                       isSyncOnTaskCreateActivel: syncOnTaskCreate,
+                      delaytask: delaytask,
                     ),
                   ),
                 );
