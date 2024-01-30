@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/config/taskwarriorcolors.dart';
+import 'package:taskwarrior/controller/reports_tour_controller.dart';
 import 'package:taskwarrior/model/json/task.dart';
 import 'package:taskwarrior/model/storage.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
@@ -13,9 +14,11 @@ import 'package:taskwarrior/views/home/home.dart';
 import 'package:taskwarrior/views/reports/pages/burndown_daily.dart';
 import 'package:taskwarrior/views/reports/pages/burndown_monthly.dart';
 import 'package:taskwarrior/views/reports/pages/burndown_weekly.dart';
+import 'package:taskwarrior/views/reports/reports_tour.dart';
 import 'package:taskwarrior/widgets/pallete.dart';
 import 'package:taskwarrior/widgets/taskdetails/profiles_widget.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class ReportsHome extends StatefulWidget {
   const ReportsHome({
@@ -29,6 +32,12 @@ class ReportsHome extends StatefulWidget {
 class _ReportsHomeState extends State<ReportsHome>
     with TickerProviderStateMixin {
   late TabController _tabController;
+  final GlobalKey daily = GlobalKey();
+  final GlobalKey weekly = GlobalKey();
+  final GlobalKey monthly = GlobalKey();
+
+  bool isSaved = false;
+  late TutorialCoachMark tutorialCoachMark;
 
   int _selectedIndex = 0;
   var storageWidget;
@@ -37,9 +46,48 @@ class _ReportsHomeState extends State<ReportsHome>
 
   Directory? baseDirectory;
   List<Task> allData = [];
+
+  void _initReportsTour() {
+    tutorialCoachMark = TutorialCoachMark(
+      targets: reportsDrawer(
+        daily: daily,
+        weekly: weekly,
+        monthly: monthly,
+      ),
+      colorShadow: Colors.black,
+      paddingFocus: 10,
+      opacityShadow: 0.8,
+      hideSkip: true,
+      onFinish: () {
+        SaveReportsTour().saveReportsTourStatus();
+      },
+    );
+  }
+
+  void _showReportsTour() {
+    Future.delayed(
+      const Duration(seconds: 2),
+      () {
+        SaveReportsTour().getReportsTourStatus().then((value) => {
+              if (value == false)
+                {
+                  tutorialCoachMark.show(context: context),
+                }
+              else
+                {
+                  // ignore: avoid_print
+                  print('User has seen this page'),
+                }
+            });
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
+    _initReportsTour();
+    _showReportsTour();
 
     _tabController = TabController(length: 3, vsync: this);
 
@@ -101,21 +149,24 @@ class _ReportsHomeState extends State<ReportsHome>
                 _selectedIndex = value;
               });
             },
-            tabs: const <Widget>[
+            tabs: <Widget>[
               Tab(
-                icon: Icon(Icons.schedule),
+                key: daily,
+                icon: const Icon(Icons.schedule),
                 text: 'Daily',
-                iconMargin: EdgeInsets.only(bottom: 0.0),
+                iconMargin: const EdgeInsets.only(bottom: 0.0),
               ),
               Tab(
-                icon: Icon(Icons.today),
+                key: weekly,
+                icon: const Icon(Icons.today),
                 text: 'Weekly',
-                iconMargin: EdgeInsets.only(bottom: 0.0),
+                iconMargin: const EdgeInsets.only(bottom: 0.0),
               ),
               Tab(
-                icon: Icon(Icons.date_range),
+                key: monthly,
+                icon: const Icon(Icons.date_range),
                 text: 'Monthly',
-                iconMargin: EdgeInsets.only(bottom: 0.0),
+                iconMargin: const EdgeInsets.only(bottom: 0.0),
               ),
             ],
           ),
