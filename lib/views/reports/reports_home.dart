@@ -68,109 +68,110 @@ class _ReportsHomeState extends State<ReportsHome>
     // double width = MediaQuery.of(context).size.width; // Screen width
 
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Palette.kToDark.shade200,
-          title: Text(
-            'Reports',
-            style: GoogleFonts.poppins(color: Colors.white),
-          ),
-          leading: GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Icon(
-              Icons.chevron_left,
-              color: Appcolors.white,
-            ),
-          ),
-          bottom: PreferredSize(
-            preferredSize: Size.fromHeight(
-                height * 0.1), // Adjust the preferred height as needed
-            child: TabBar(
-              controller: _tabController,
-              labelColor: Appcolors.white,
-              labelStyle: GoogleFonts.poppins(
-                fontWeight: FontWeight.w500,
-                fontSize: 12,
-              ),
-              unselectedLabelStyle: GoogleFonts.poppins(
-                fontWeight: FontWeight.w300,
-              ),
-              onTap: (value) {
-                setState(() {
-                  _selectedIndex = value;
-                });
-              },
-              tabs: const <Widget>[
-                Tab(
-                  icon: Icon(Icons.schedule),
-                  text: 'Daily',
-                  iconMargin: EdgeInsets.only(bottom: 0.0),
-                ),
-                Tab(
-                  icon: Icon(Icons.today),
-                  text: 'Weekly',
-                  iconMargin: EdgeInsets.only(bottom: 0.0),
-                ),
-                Tab(
-                  icon: Icon(Icons.date_range),
-                  text: 'Monthly',
-                  iconMargin: EdgeInsets.only(bottom: 0.0),
-                ),
-              ],
-            ),
+      appBar: AppBar(
+        backgroundColor: Palette.kToDark.shade200,
+        title: Text(
+          'Reports',
+          style: GoogleFonts.poppins(color: Colors.white),
+        ),
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Icon(
+            Icons.chevron_left,
+            color: Appcolors.white,
           ),
         ),
-        backgroundColor:
-            AppSettings.isDarkMode ? Palette.kToDark.shade200 : Colors.white,
-        body: allData.isEmpty
-            ? Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.heart_broken,
-                    color: AppSettings.isDarkMode ? Colors.white : Colors.black,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'No Task found',
-                        style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 12,
-                          color: AppSettings.isDarkMode
-                              ? Colors.white
-                              : Colors.black,
-                        ),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(
+              height * 0.1), // Adjust the preferred height as needed
+          child: TabBar(
+            controller: _tabController,
+            labelColor: Appcolors.white,
+            labelStyle: GoogleFonts.poppins(
+              fontWeight: FontWeight.w500,
+              fontSize: 12,
+            ),
+            unselectedLabelStyle: GoogleFonts.poppins(
+              fontWeight: FontWeight.w300,
+            ),
+            onTap: (value) {
+              setState(() {
+                _selectedIndex = value;
+              });
+            },
+            tabs: const <Widget>[
+              Tab(
+                icon: Icon(Icons.schedule),
+                text: 'Daily',
+                iconMargin: EdgeInsets.only(bottom: 0.0),
+              ),
+              Tab(
+                icon: Icon(Icons.today),
+                text: 'Weekly',
+                iconMargin: EdgeInsets.only(bottom: 0.0),
+              ),
+              Tab(
+                icon: Icon(Icons.date_range),
+                text: 'Monthly',
+                iconMargin: EdgeInsets.only(bottom: 0.0),
+              ),
+            ],
+          ),
+        ),
+      ),
+      backgroundColor:
+          AppSettings.isDarkMode ? Palette.kToDark.shade200 : Colors.white,
+      body: allData.isEmpty
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.heart_broken,
+                  color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'No Task found',
+                      style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 12,
+                        color: AppSettings.isDarkMode
+                            ? Colors.white
+                            : Colors.black,
                       ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Add a task to see reports',
-                        style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 12,
-                          color: AppSettings.isDarkMode
-                              ? Colors.white
-                              : Colors.black,
-                        ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Add a task to see reports',
+                      style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 12,
+                        color: AppSettings.isDarkMode
+                            ? Colors.white
+                            : Colors.black,
                       ),
-                    ],
-                  ),
-                ],
-              )
-            : IndexedStack(
-                index: _selectedIndex,
-                children: const [
-                  BurnDownDaily(),
-                  BurnDownWeekly(),
-                  BurnDownMonthlt(),
-                ],
-              ));
+                    ),
+                  ],
+                ),
+              ],
+            )
+          : IndexedStack(
+              index: _selectedIndex,
+              children: const [
+                BurnDownDaily(),
+                BurnDownWeekly(),
+                BurnDownMonthlt(),
+              ],
+            ),
+    );
   }
 }

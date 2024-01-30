@@ -4,19 +4,80 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
+import 'package:taskwarrior/controller/filter_drawer_tour_controller.dart';
+import 'package:taskwarrior/drawer/filter_drawer_tour.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
 import 'package:taskwarrior/views/home/home.dart';
 import 'package:taskwarrior/widgets/project_filter.dart';
 import 'package:taskwarrior/widgets/tag_filter.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
-// ignore: must_be_immutable
-class FilterDrawer extends StatelessWidget {
-  FilterDrawer(this.filters, {super.key});
+class FilterDrawer extends StatefulWidget {
+  final Filters filters;
+
+  const FilterDrawer(this.filters, {super.key});
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _FilterDrawerState createState() => _FilterDrawerState();
+}
+
+class _FilterDrawerState extends State<FilterDrawer> {
+  final GlobalKey statusKey = GlobalKey();
+  final GlobalKey projectsKey = GlobalKey();
+  final GlobalKey filterTagKey = GlobalKey();
+  final GlobalKey sortByKey = GlobalKey();
+
+  bool isSaved = false;
   var tileColor = AppSettings.isDarkMode
       ? const Color.fromARGB(255, 48, 46, 46)
       : const Color.fromARGB(255, 220, 216, 216);
+  late TutorialCoachMark tutorialCoachMark;
 
-  final Filters filters;
+  void _initFilterDrawerTour() {
+    tutorialCoachMark = TutorialCoachMark(
+      targets: filterDrawer(
+        statusKey: statusKey,
+        projectsKey: projectsKey,
+        filterTagKey: filterTagKey,
+        sortByKey: sortByKey,
+      ),
+      colorShadow: Colors.black,
+      paddingFocus: 10,
+      opacityShadow: 1.00,
+      hideSkip: true,
+      onFinish: () {
+        SaveFilterTour().saveFilterTourStatus();
+      },
+    );
+  }
+
+  void _showFilterDrawerTour() {
+    Future.delayed(
+      const Duration(seconds: 2),
+      () {
+        SaveFilterTour().getFilterTourStatus().then((value) => {
+              if (value == false)
+                {
+                  tutorialCoachMark.show(context: context),
+                }
+              else
+                {
+                  // ignore: avoid_print
+                  print('User has seen this page'),
+                }
+            });
+      },
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initFilterDrawerTour();
+    _showFilterDrawerTour();
+  }
+
   @override
   Widget build(BuildContext context) {
     var storageWidget = StorageWidget.of(context);
@@ -63,6 +124,7 @@ class FilterDrawer extends StatelessWidget {
                 ),
                 child: ListTile(
                   title: RichText(
+                    key: statusKey,
                     maxLines: 2,
                     text: TextSpan(
                       children: <TextSpan>[
@@ -77,7 +139,9 @@ class FilterDrawer extends StatelessWidget {
                           ),
                         ),
                         TextSpan(
-                          text: filters.pendingFilter ? 'pending' : 'completed',
+                          text: widget.filters.pendingFilter
+                              ? 'pending'
+                              : 'completed',
                           style: GoogleFonts.poppins(
                             fontSize: 15,
                             color: AppSettings.isDarkMode
@@ -88,7 +152,7 @@ class FilterDrawer extends StatelessWidget {
                       ],
                     ),
                   ),
-                  onTap: filters.togglePendingFilter,
+                  onTap: widget.filters.togglePendingFilter,
                   textColor: AppSettings.isDarkMode
                       ? Colors.white
                       : Color.fromARGB(255, 48, 46, 46),
@@ -98,6 +162,7 @@ class FilterDrawer extends StatelessWidget {
                 color: Color.fromARGB(0, 48, 46, 46),
               ),
               Container(
+                key: projectsKey,
                 width: MediaQuery.of(context).size.width * 1,
                 // padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
@@ -106,15 +171,16 @@ class FilterDrawer extends StatelessWidget {
                   border: Border.all(color: Colors.grey.shade300),
                 ),
                 child: ProjectsColumn(
-                  filters.projects,
-                  filters.projectFilter,
-                  filters.toggleProjectFilter,
+                  widget.filters.projects,
+                  widget.filters.projectFilter,
+                  widget.filters.toggleProjectFilter,
                 ),
               ),
               const Divider(
                 color: Color.fromARGB(0, 48, 46, 46),
               ),
               Container(
+                key: filterTagKey,
                 width: MediaQuery.of(context).size.width * 1,
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
@@ -146,7 +212,7 @@ class FilterDrawer extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: TagFiltersWrap(filters.tagFilters),
+                      child: TagFiltersWrap(widget.filters.tagFilters),
                     ),
                     const Divider(
                       color: Color.fromARGB(0, 48, 46, 46),
@@ -158,6 +224,7 @@ class FilterDrawer extends StatelessWidget {
                 color: Color.fromARGB(0, 48, 46, 46),
               ),
               Container(
+                key: sortByKey,
                 width: MediaQuery.of(context).size.width * 1,
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
