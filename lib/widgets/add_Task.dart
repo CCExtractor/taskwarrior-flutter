@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously, file_names
+
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -13,7 +15,7 @@ import 'package:taskwarrior/widgets/taskfunctions/taskparser.dart';
 import 'package:taskwarrior/widgets/taskw.dart';
 
 class AddTaskBottomSheet extends StatefulWidget {
-  const AddTaskBottomSheet({Key? key}) : super(key: key);
+  const AddTaskBottomSheet({super.key});
 
   @override
   _AddTaskBottomSheetState createState() => _AddTaskBottomSheetState();
@@ -21,11 +23,11 @@ class AddTaskBottomSheet extends StatefulWidget {
 
 class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   final formKey = GlobalKey<FormState>();
-  final nameController = TextEditingController();
+  final namecontroller = TextEditingController();
   DateTime? due;
   String dueString = '';
   String priority = 'M';
-  final tagController = TextEditingController();
+  final tagcontroller = TextEditingController();
   List<String> tags = [];
 
   @override
@@ -35,8 +37,8 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
 
   @override
   void dispose() {
-    tagController.dispose();
-    nameController.dispose();
+    tagcontroller.dispose();
+    namecontroller.dispose();
     super.dispose();
   }
 
@@ -101,7 +103,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
           children: [
             Expanded(
               child: TextFormField(
-                controller: tagController,
+                controller: tagcontroller,
                 style: TextStyle(
                   color: AppSettings.isDarkMode ? Colors.white : Colors.black,
                 ),
@@ -116,11 +118,12 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                 },
               ),
             ),
+            // Replace ElevatedButton with IconButton
             IconButton(
               onPressed: () {
-                addTag(tagController.text.trim());
+                addTag(tagcontroller.text.trim());
               },
-              icon: const Icon(Icons.add),
+              icon: const Icon(Icons.add), // Plus icon
             ),
           ],
         ),
@@ -141,7 +144,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
 
   Widget buildName() => TextFormField(
     autofocus: true,
-    controller: nameController,
+    controller: namecontroller,
     style: TextStyle(
       color: AppSettings.isDarkMode ? Colors.white : Colors.black,
     ),
@@ -224,7 +227,6 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                 firstDate: DateTime.now(),
                 lastDate: DateTime(2037, 12, 31),
               );
-
               if (date != null) {
                 var time = await showTimePicker(
                   builder: (BuildContext context, Widget? child) {
@@ -263,9 +265,9 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                     );
                   },
                   context: context,
-                  initialTime: TimeOfDay.fromDateTime(due ?? DateTime.now()),
+                  initialTime:
+                  TimeOfDay.fromDateTime(due ?? DateTime.now()),
                 );
-
                 if (time != null) {
                   var dateTime = date.add(
                     Duration(
@@ -273,35 +275,27 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                       minutes: time.minute,
                     ),
                   );
+                  dateTime = dateTime.add(
+                    Duration(
+                      hours: time.hour - dateTime.hour,
+                    ),
+                  );
+                  due = dateTime.toUtc();
+                  NotificationService notificationService =
+                  NotificationService();
+                  notificationService.initiliazeNotification();
 
-                  if (dateTime.isAfter(DateTime.now())) {
-                    due = dateTime.toUtc();
-                    NotificationService notificationService =
-                    NotificationService();
-                    notificationService.initiliazeNotification();
-
+                  if ((dateTime.millisecondsSinceEpoch -
+                      DateTime.now().millisecondsSinceEpoch) >
+                      0) {
                     notificationService.sendNotification(
-                        dateTime, nameController.text);
-
-                    dueString = DateFormat("dd-MM-yyyy HH:mm").format(dateTime);
-                    setState(() {});
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(
-                        'Please select a due date and time in the future.',
-                        style: TextStyle(
-                          color: AppSettings.isDarkMode
-                              ? Colors.white
-                              : Colors.black,
-                        ),
-                      ),
-                      backgroundColor: AppSettings.isDarkMode
-                          ? Colors.black
-                          : Colors.white,
-                      duration: const Duration(seconds: 2),
-                    ));
+                        dateTime, namecontroller.text);
                   }
+
+                  dueString =
+                      DateFormat("dd-MM-yyyy HH:mm").format(dateTime);
                 }
+                setState(() {});
               }
             },
           ),
@@ -380,21 +374,21 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
       onPressed: () async {
         if (formKey.currentState!.validate()) {
           try {
-            var task = taskParser(nameController.text)
+            var task = taskParser(namecontroller.text)
                 .rebuild((b) => b..due = due)
                 .rebuild((p) => p..priority = priority);
-            if (tagController.text != "") {
-              tags.add(tagController.text.trim());
+            if (tagcontroller.text != "") {
+              tags.add(tagcontroller.text.trim());
             }
             if (tags.isNotEmpty) {
               task = task.rebuild((t) => t..tags.replace(tags));
             }
 
             StorageWidget.of(context).mergeTask(task);
-            nameController.text = '';
+            namecontroller.text = '';
             due = null;
             priority = 'M';
-            tagController.text = '';
+            tagcontroller.text = '';
             tags = [];
             setState(() {});
             Navigator.of(context).pop();
@@ -446,7 +440,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
       setState(() {
         String trimmedString = tag.trim();
         tags.add(trimmedString);
-        tagController.text = '';
+        tagcontroller.text = '';
       });
     }
   }
