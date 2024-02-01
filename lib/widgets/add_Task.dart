@@ -13,7 +13,7 @@ import 'package:taskwarrior/widgets/taskfunctions/taskparser.dart';
 import 'package:taskwarrior/widgets/taskw.dart';
 
 class AddTaskBottomSheet extends StatefulWidget {
-  const AddTaskBottomSheet({super.key});
+  const AddTaskBottomSheet({Key? key}) : super(key: key);
 
   @override
   _AddTaskBottomSheetState createState() => _AddTaskBottomSheetState();
@@ -21,11 +21,11 @@ class AddTaskBottomSheet extends StatefulWidget {
 
 class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   final formKey = GlobalKey<FormState>();
-  final namecontroller = TextEditingController();
+  final nameController = TextEditingController();
   DateTime? due;
   String dueString = '';
   String priority = 'M';
-  final tagcontroller = TextEditingController();
+  final tagController = TextEditingController();
   List<String> tags = [];
 
   @override
@@ -35,8 +35,8 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
 
   @override
   void dispose() {
-    tagcontroller.dispose();
-    namecontroller.dispose();
+    tagController.dispose();
+    nameController.dispose();
     super.dispose();
   }
 
@@ -101,7 +101,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
           children: [
             Expanded(
               child: TextFormField(
-                controller: tagcontroller,
+                controller: tagController,
                 style: TextStyle(
                   color: AppSettings.isDarkMode ? Colors.white : Colors.black,
                 ),
@@ -118,7 +118,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
             ),
             IconButton(
               onPressed: () {
-                addTag(tagcontroller.text.trim());
+                addTag(tagController.text.trim());
               },
               icon: const Icon(Icons.add),
             ),
@@ -141,7 +141,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
 
   Widget buildName() => TextFormField(
     autofocus: true,
-    controller: namecontroller,
+    controller: nameController,
     style: TextStyle(
       color: AppSettings.isDarkMode ? Colors.white : Colors.black,
     ),
@@ -220,8 +220,8 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                 },
                 fieldHintText: "Month/Date/Year",
                 context: context,
-                firstDate: DateTime.now(),
                 initialDate: due ?? DateTime.now(),
+                firstDate: DateTime.now(),
                 lastDate: DateTime(2037, 12, 31),
               );
 
@@ -263,8 +263,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                     );
                   },
                   context: context,
-                  initialTime:
-                  TimeOfDay.fromDateTime(due ?? DateTime.now()),
+                  initialTime: TimeOfDay.fromDateTime(due ?? DateTime.now()),
                 );
 
                 if (time != null) {
@@ -282,10 +281,9 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                     notificationService.initiliazeNotification();
 
                     notificationService.sendNotification(
-                        dateTime, namecontroller.text);
+                        dateTime, nameController.text);
 
-                    dueString =
-                        DateFormat("dd-MM-yyyy HH:mm").format(dateTime);
+                    dueString = DateFormat("dd-MM-yyyy HH:mm").format(dateTime);
                     setState(() {});
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -382,21 +380,21 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
       onPressed: () async {
         if (formKey.currentState!.validate()) {
           try {
-            var task = taskParser(namecontroller.text)
+            var task = taskParser(nameController.text)
                 .rebuild((b) => b..due = due)
                 .rebuild((p) => p..priority = priority);
-            if (tagcontroller.text != "") {
-              tags.add(tagcontroller.text.trim());
+            if (tagController.text != "") {
+              tags.add(tagController.text.trim());
             }
             if (tags.isNotEmpty) {
               task = task.rebuild((t) => t..tags.replace(tags));
             }
 
             StorageWidget.of(context).mergeTask(task);
-            namecontroller.text = '';
+            nameController.text = '';
             due = null;
             priority = 'M';
-            tagcontroller.text = '';
+            tagController.text = '';
             tags = [];
             setState(() {});
             Navigator.of(context).pop();
@@ -448,7 +446,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
       setState(() {
         String trimmedString = tag.trim();
         tags.add(trimmedString);
-        tagcontroller.text = '';
+        tagController.text = '';
       });
     }
   }
