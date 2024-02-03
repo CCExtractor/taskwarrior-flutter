@@ -275,27 +275,35 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                           minutes: time.minute,
                         ),
                       );
-                      dateTime = dateTime.add(
-                        Duration(
-                          hours: time.hour - dateTime.hour,
-                        ),
-                      );
-                      due = dateTime.toUtc();
-                      NotificationService notificationService =
-                          NotificationService();
-                      notificationService.initiliazeNotification();
+                      if (dateTime.isAfter(DateTime.now())) {
+                        due = dateTime.toUtc();
+                        NotificationService notificationService =
+                            NotificationService();
+                        notificationService.initiliazeNotification();
 
-                      if ((dateTime.millisecondsSinceEpoch -
-                              DateTime.now().millisecondsSinceEpoch) >
-                          0) {
                         notificationService.sendNotification(
                             dateTime, namecontroller.text);
-                      }
 
-                      dueString =
-                          DateFormat("dd-MM-yyyy HH:mm").format(dateTime);
+                        dueString =
+                            DateFormat("dd-MM-yyyy HH:mm").format(dateTime);
+                        setState(() {});
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(
+                            'Please select a due date and time in the future.',
+                            style: TextStyle(
+                              color: AppSettings.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
+                          ),
+                          backgroundColor: AppSettings.isDarkMode
+                              ? Colors.black
+                              : Colors.white,
+                          duration: const Duration(seconds: 2),
+                        ));
+                      }
                     }
-                    setState(() {});
                   }
                 },
               ),
