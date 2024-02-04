@@ -57,11 +57,8 @@ class TagsWidget extends StatelessWidget {
 }
 
 class TagsRoute extends StatefulWidget {
-  const TagsRoute({
-    required this.value,
-    required this.callback,
-    Key? key,
-  }) : super(key: key);
+  const TagsRoute({required this.value, required this.callback, super.key});
+
 
   final ListBuilder<String>? value;
   final void Function(ListBuilder<String>?) callback;
