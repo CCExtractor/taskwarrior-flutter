@@ -13,6 +13,7 @@ import 'package:taskwarrior/widgets/pallete.dart';
 import 'package:taskwarrior/widgets/taskdetails.dart';
 import 'package:taskwarrior/widgets/taskw.dart';
 
+
 class DetailRoute extends StatefulWidget {
   const DetailRoute(this.uuid, {super.key});
 
@@ -43,6 +44,7 @@ class _DetailRouteState extends State<DetailRoute> {
       setState(() {});
     };
   }
+
 
   void saveChanges() async {
     var now = DateTime.now().toUtc();
