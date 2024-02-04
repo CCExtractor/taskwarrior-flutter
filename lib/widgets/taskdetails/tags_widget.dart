@@ -11,12 +11,12 @@ import 'package:taskwarrior/widgets/taskw.dart';
 import '../pallete.dart';
 
 class TagsWidget extends StatelessWidget {
-  const TagsWidget({
-    required this.name,
-    required this.value,
-    required this.callback,
-    Key? key,
-  }): super(key: key);
+   const TagsWidget({
+  required this.name,
+  required this.value,
+  required this.callback,
+  super.key,
+  });
 
   final String name;
   final dynamic value;
