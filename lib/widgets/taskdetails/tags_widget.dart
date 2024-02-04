@@ -16,7 +16,7 @@ class TagsWidget extends StatelessWidget {
     required this.value,
     required this.callback,
     Key? key,
-  }) : super(key: key);
+  }): super(key: key);
 
   final String name;
   final dynamic value;
