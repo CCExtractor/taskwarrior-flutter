@@ -241,6 +241,7 @@ class _StorageWidgetState extends State<StorageWidget> {
 
   void mergeTask(Task task) {
     storage.data.mergeTask(task);
+
     _refreshTasks();
     setState(() {});
   }

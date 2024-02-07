@@ -10,7 +10,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/controller/WidgetController.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
-import 'package:taskwarrior/services/notification_services.dart';
 import 'package:taskwarrior/widgets/taskfunctions/taskparser.dart';
 import 'package:taskwarrior/widgets/taskw.dart';
 
@@ -277,12 +276,6 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                       );
                       if (dateTime.isAfter(DateTime.now())) {
                         due = dateTime.toUtc();
-                        NotificationService notificationService =
-                            NotificationService();
-                        notificationService.initiliazeNotification();
-
-                        notificationService.sendNotification(
-                            dateTime, namecontroller.text);
 
                         dueString =
                             DateFormat("dd-MM-yyyy HH:mm").format(dateTime);

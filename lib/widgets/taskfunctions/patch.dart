@@ -1,7 +1,6 @@
 // ignore_for_file: depend_on_referenced_packages
 
 import 'package:built_collection/built_collection.dart';
-
 import 'package:taskwarrior/model/json.dart';
 
 Task patch(Task task, Map<String, dynamic> updates) {
