@@ -52,7 +52,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final addKey = GlobalKey();
-  final searchKey = GlobalKey();
+  final searchKey1 = GlobalKey();
+  final searchKey2 = GlobalKey();
   final filterKey = GlobalKey();
   final menuKey = GlobalKey();
   final refreshKey = GlobalKey();
@@ -64,7 +65,7 @@ class _HomePageState extends State<HomePage> {
     tutorialCoachMark = TutorialCoachMark(
         targets: addTargetsPage(
           addKey: addKey,
-          searchKey: searchKey,
+          searchKey: searchKey1,
           filterKey: filterKey,
           menuKey: menuKey,
           refreshKey: refreshKey,
@@ -206,7 +207,7 @@ class _HomePageState extends State<HomePage> {
             Text('Home Page', style: GoogleFonts.poppins(color: Colors.white)),
         actions: [
           IconButton(
-            key: searchKey,
+            key: searchKey1,
             icon: (storageWidget.searchVisible)
                 ? const Tooltip(
                     message: 'Cancel',
@@ -278,7 +279,7 @@ class _HomePageState extends State<HomePage> {
               children: <Widget>[
                 if (storageWidget.searchVisible)
                   Container(
-                    key: searchKey,
+                    key: searchKey2,
                     margin: const EdgeInsets.symmetric(
                         horizontal: 10, vertical: 10),
                     child: SearchBar(
