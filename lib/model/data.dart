@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:taskwarrior/model/json/task.dart';
+import 'package:taskwarrior/services/notification_services.dart';
 import 'package:taskwarrior/widgets/taskc/payload.dart';
 import 'package:taskwarrior/widgets/taskw.dart';
 
@@ -148,6 +149,21 @@ class Data {
   }
 
   void mergeTask(Task task) {
+    NotificationService notificationService = NotificationService();
+    notificationService.initiliazeNotification();
+
+    if (task.status == 'pending' && task.due != null) {
+      int notificationid = notificationService.calculateNotificationId(
+          task.due!, task.description, task.id);
+      notificationService.cancelNotification(notificationid);
+      notificationService.sendNotification(
+          task.due!, task.description, task.id);
+    } else if (task.due != null) {
+      int notificationid = notificationService.calculateNotificationId(
+          task.due!, task.description, task.id);
+
+      notificationService.cancelNotification(notificationid);
+    }
     _mergeTasks([task]);
     File('${home.path}/.task/backlog.data').writeAsStringSync(
       '${json.encode(task.rebuild((b) => b..id = null).toJson())}\n',
