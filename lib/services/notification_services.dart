@@ -19,9 +19,17 @@ class NotificationService {
       requestCriticalPermission: true,
       requestSoundPermission: true);
 
+  DarwinInitializationSettings macSettings = const DarwinInitializationSettings(
+      requestAlertPermission: true,
+      requestBadgePermission: true,
+      requestCriticalPermission: true,
+      requestSoundPermission: true);
   void initiliazeNotification() async {
     InitializationSettings initializationSettings = InitializationSettings(
-        android: _androidInitializationSettings, iOS: iosSettings);
+      android: _androidInitializationSettings,
+      iOS: iosSettings,
+      macOS: macSettings,
+    );
 
     await _flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
@@ -60,8 +68,26 @@ class NotificationService {
             importance: Importance.max,
             priority: Priority.max);
 
-    NotificationDetails notificationDetails =
-        NotificationDetails(android: androidNotificationDetails);
+    // iOS and macOS Notification Details
+    DarwinNotificationDetails iOSNotificationDetails =
+        const DarwinNotificationDetails(
+      presentAlert: true,
+      presentBadge: true,
+      presentSound: true,
+    );
+
+    DarwinNotificationDetails macOsNotificationDetails =
+        const DarwinNotificationDetails(
+      presentAlert: true,
+      presentBadge: true,
+      presentSound: true,
+    );
+
+    NotificationDetails notificationDetails = NotificationDetails(
+      android: androidNotificationDetails,
+      iOS: iOSNotificationDetails,
+      macOS: macOsNotificationDetails,
+    );
 
     // Generate a unique notification ID based on the scheduled time and task name
     int notificationId = calculateNotificationId(dtb, taskname, taskid);
