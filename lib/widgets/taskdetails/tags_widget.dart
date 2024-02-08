@@ -1,7 +1,6 @@
 // ignore_for_file: depend_on_referenced_packages
 
 import 'package:flutter/material.dart';
-
 import 'package:built_collection/built_collection.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loggy/loggy.dart';
@@ -12,16 +11,17 @@ import 'package:taskwarrior/widgets/taskw.dart';
 import '../pallete.dart';
 
 class TagsWidget extends StatelessWidget {
-  const TagsWidget({
-    required this.name,
-    required this.value,
-    required this.callback,
-    super.key,
+   const TagsWidget({
+  required this.name,
+  required this.value,
+  required this.callback,
+  super.key,
   });
 
   final String name;
   final dynamic value;
   final void Function(dynamic) callback;
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -59,6 +59,7 @@ class TagsWidget extends StatelessWidget {
 class TagsRoute extends StatefulWidget {
   const TagsRoute({required this.value, required this.callback, super.key});
 
+
   final ListBuilder<String>? value;
   final void Function(ListBuilder<String>?) callback;
 
@@ -71,13 +72,15 @@ class TagsRouteState extends State<TagsRoute> {
   ListBuilder<String>? draftTags;
 
   void _addTag(String tag) {
-    if (draftTags == null) {
-      draftTags = ListBuilder([tag]);
-    } else {
-      draftTags!.add(tag);
+    if (tag.isNotEmpty) {  // Add this condition to ensure the tag is not empty
+      if (draftTags == null) {
+        draftTags = ListBuilder([tag]);
+      } else {
+        draftTags!.add(tag);
+      }
+      widget.callback(draftTags);
+      setState(() {});
     }
-    widget.callback(draftTags);
-    setState(() {});
   }
 
   void _removeTag(String tag) {
@@ -129,7 +132,7 @@ class TagsRouteState extends State<TagsRoute> {
           padding: const EdgeInsets.all(4),
           child: SingleChildScrollView(
             padding:
-                const EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 0),
+            const EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 0),
             child: Wrap(
               spacing: 8,
               runSpacing: 4,
@@ -161,8 +164,8 @@ class TagsRouteState extends State<TagsRoute> {
                       : Palette.kToDark.shade200,
                 ),
                 if (_pendingTags != null)
-                  for (var tag in _pendingTags!.entries.where((tag) =>
-                      !(draftTags?.build().contains(tag.key) ?? false)))
+                  for (var tag in _pendingTags!.entries
+                      .where((tag) => !(draftTags?.build().contains(tag.key) ?? false)))
                     FilterChip(
                       backgroundColor: Colors.grey.shade200,
                       onSelected: (_) => _addTag(tag.key),
