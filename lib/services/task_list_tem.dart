@@ -73,8 +73,10 @@ class _TaskListItemState extends State<TaskListItem> {
         decoration: BoxDecoration(
           border: Border.all(
             color: (widget.task.due != null &&
-                isDueWithinOneDay(widget.task.due!) && useDelayTask)
-                ? Colors.red // Set border color to red if due within 1 day and useDelayTask is true
+                    isDueWithinOneDay(widget.task.due!) &&
+                    useDelayTask)
+                ? Colors
+                    .red // Set border color to red if due within 1 day and useDelayTask is true
                 : dimColor, // Set default border color
           ),
           borderRadius: BorderRadius.circular(8.0),
@@ -91,13 +93,9 @@ class _TaskListItemState extends State<TaskListItem> {
                   ),
                   const SizedBox(width: 8),
                   SizedBox(
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width * 0.70,
+                    width: MediaQuery.of(context).size.width * 0.70,
                     child: Text(
-                      '${(widget.task.id == 0) ? '#' : widget.task.id}. ${widget
-                          .task.description}',
+                      '${(widget.task.id == 0) ? '#' : widget.task.id}. ${widget.task.description}',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: GoogleFonts.poppins(
@@ -124,14 +122,9 @@ class _TaskListItemState extends State<TaskListItem> {
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Text(
-                    '${widget.pendingFilter ? '' : '${widget.task.status[0]
-                        .toUpperCase()}\n'}'
-                        'Last Modified: ${(widget.task.modified != null) ? age(
-                        widget.task.modified!) : ((widget.task.start != null)
-                        ? age(widget.task.start!)
-                        : '-')} | '
-                        'Due: ${(widget.task.due != null) ? when(
-                        widget.task.due!) : '-'}'
+                    '${widget.pendingFilter ? '' : '${widget.task.status[0].toUpperCase()}\n'}'
+                            'Last Modified: ${(widget.task.modified != null) ? age(widget.task.modified!) : ((widget.task.start != null) ? age(widget.task.start!) : '-')} | '
+                            'Due: ${(widget.task.due != null) ? when(widget.task.due!) : '-'}'
                         .replaceFirst(RegExp(r' \[\]$'), '')
                         .replaceAll(RegExp(r' +'), ' '),
                     overflow: TextOverflow.ellipsis,
@@ -166,13 +159,9 @@ class _TaskListItemState extends State<TaskListItem> {
                 ),
                 const SizedBox(width: 8),
                 SizedBox(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width * 0.65,
+                  width: MediaQuery.of(context).size.width * 0.65,
                   child: Text(
-                    '${(widget.task.id == 0) ? '#' : widget.task.id}. ${widget
-                        .task.description}',
+                    '${(widget.task.id == 0) ? '#' : widget.task.id}. ${widget.task.description}',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.poppins(
@@ -191,13 +180,8 @@ class _TaskListItemState extends State<TaskListItem> {
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Text(
-                  'Last Modified: ${(widget.task.modified != null) ? age(
-                      widget.task.modified!) : ((widget.task.start != null)
-                      ? age(widget.task.start!)
-                      : '-')} | '
-                      'Due: ${(widget.task.due != null)
-                      ? when(widget.task.due!)
-                      : '-'}'
+                  'Last Modified: ${(widget.task.modified != null) ? age(widget.task.modified!) : ((widget.task.start != null) ? age(widget.task.start!) : '-')} | '
+                          'Due: ${(widget.task.due != null) ? when(widget.task.due!) : '-'}'
                       .replaceFirst(RegExp(r' \[\]$'), '')
                       .replaceAll(RegExp(r' +'), ' '),
                   overflow: TextOverflow.ellipsis,

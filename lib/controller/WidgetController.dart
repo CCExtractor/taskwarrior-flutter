@@ -31,39 +31,41 @@ class WidgetController extends GetxController {
   bool stopTraver = false;
 
   void fetchAllData() async {
-    storageWidget = StorageWidget.of(context!); // Use Get.context from GetX
-    var currentProfile = ProfilesWidget.of(context!).currentProfile;
+    if (Platform.isAndroid || Platform.isIOS) {
+      storageWidget = StorageWidget.of(context!); // Use Get.context from GetX
+      var currentProfile = ProfilesWidget.of(context!).currentProfile;
 
-    baseDirectory = await getApplicationDocumentsDirectory();
-    storage =
-        Storage(Directory('${baseDirectory!.path}/profiles/$currentProfile'));
+      baseDirectory = await getApplicationDocumentsDirectory();
+      storage =
+          Storage(Directory('${baseDirectory!.path}/profiles/$currentProfile'));
 
-    allData.assignAll(storage.data.allData());
+      allData.assignAll(storage.data.allData());
 
-    if (allData.isNotEmpty) {
-      List<Task> temp = [];
-      for (int i = 0; i < allData.length; i++) {
-        if (allData[i].status == "pending") {
-          if (temp.length < 3) {
-            temp.add(allData[i]);
-          } else {
-            break;
+      if (allData.isNotEmpty) {
+        List<Task> temp = [];
+        for (int i = 0; i < allData.length; i++) {
+          if (allData[i].status == "pending") {
+            if (temp.length < 3) {
+              temp.add(allData[i]);
+            } else {
+              break;
+            }
           }
         }
-      }
 
-      allData.assignAll(temp);
-      //   allData = allData.reversed.toList().obs;
-      _sendAndUpdate();
+        allData.assignAll(temp);
+        //   allData = allData.reversed.toList().obs;
+        sendAndUpdate();
+      }
     }
   }
 
-  Future<void> _sendAndUpdate() async {
-    await _sendData();
-    await _updateWidget();
+  Future<void> sendAndUpdate() async {
+    await sendData();
+    await updateWidget();
   }
 
-  Future<void> _sendData() async {
+  Future<void> sendData() async {
     try {
       for (int i = 0; i < allData.length && i < 3; i++) {
         String subtitle = 'No Pending Task';
@@ -98,7 +100,7 @@ class WidgetController extends GetxController {
     }
   }
 
-  Future _updateWidget() async {
+  Future updateWidget() async {
     try {
       return HomeWidget.updateWidget(
           name: 'TaskWarriorWidgetProvider', iOSName: 'HomeWidgetExample');

@@ -123,6 +123,9 @@ class _FilterDrawerState extends State<FilterDrawer> {
                   border: Border.all(color: Colors.grey.shade300),
                 ),
                 child: ListTile(
+                  contentPadding: EdgeInsets.only(
+                    left: 8,
+                  ),
                   title: RichText(
                     key: statusKey,
                     maxLines: 2,

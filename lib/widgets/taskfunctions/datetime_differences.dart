@@ -21,5 +21,5 @@ String difference(Duration difference) {
   } else {
     result = '${difference.abs().inSeconds}s';
   }
-  return '${(difference.isNegative) ? '-' : ''}$result';
+  return '$result ${(difference.isNegative) ? 'ago ' : ''}';
 }

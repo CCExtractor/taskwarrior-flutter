@@ -50,7 +50,7 @@ class ProjectsColumn extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
@@ -63,7 +63,6 @@ class ProjectsColumn extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    width: 40.w,
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
@@ -145,7 +144,7 @@ class ProjectTile extends StatelessWidget {
     var callback = inheritedProjects.callback;
 
     var title = Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Flexible(
             child: Text(project,
@@ -179,22 +178,19 @@ class ProjectTile extends StatelessWidget {
         ? GestureDetector(
             onTap: () => callback(project),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 radio,
-                SizedBox(
-                  width: 45.w,
-                  child: Text(project,
-                      maxLines: 3,
-                      style: GoogleFonts.poppins(
-                          color: AppSettings.isDarkMode
-                              ? Colors.white
-                              : Colors.black)),
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
+                Text(project,
+                    maxLines: 3,
+                    style: GoogleFonts.poppins(
+                        color: AppSettings.isDarkMode
+                            ? Colors.white
+                            : Colors.black)),
+                const Spacer(),
                 Container(
-                  padding: const EdgeInsets.all(4),
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  margin: const EdgeInsets.only(right: 10),
                   decoration: BoxDecoration(
                     color: (AppSettings.isDarkMode
                         ? Colors.white
