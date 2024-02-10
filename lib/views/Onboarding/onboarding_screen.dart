@@ -61,9 +61,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 },
               ),
             ),
+            SizedBox(height: height*5/100,),
             Expanded(
               flex: 1,
-              child: _buildBottomSection(width),
+              child: SingleChildScrollView(child: _buildBottomSection(width)),
             ),
           ],
         ),
@@ -73,36 +74,40 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   Widget _buildOnboardingPage(
       OnboardingModel content, double width, double height) {
-    return Padding(
-      padding: const EdgeInsets.all(35.0),
-      child: Column(
-        children: [
-          SvgPicture.asset(
-            content.image,
-            height: SizeConfig.blockV! * 30,
-          ),
-          SizedBox(
-            height: (height >= 840) ? 60 : 30,
-          ),
-          Text(
-            content.title,
-            textAlign: TextAlign.center,
-            style: GoogleFonts.poppins(
-              fontWeight: FontWeight.w600,
-              fontSize: (width <= 550) ? 30 : 35,
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(35.0),
+        child: Column(
+          children: [
+            SvgPicture.asset(
+              content.image,
+              height: SizeConfig.blockV! * 30,
             ),
-          ),
-          Flexible(flex: 1, child: Container()),
-          Text(
-            content.desc,
-            style: GoogleFonts.poppins(
-              fontWeight: FontWeight.w300,
-              fontSize: (width <= 550) ? 17 : 17,
+            SizedBox(
+              height: (height >= 840) ? 60 : 30,
             ),
-            textAlign: TextAlign.center,
-          ),
-          Flexible(flex: 1, child: Container()),
-        ],
+            Text(
+              content.title,
+              textAlign: TextAlign.center,
+              style: GoogleFonts.poppins(
+                fontWeight: FontWeight.w600,
+                fontSize: (width <= 550) ? 30 : 35,
+              ),
+            ),
+            SizedBox(height: height*2/100,),
+            // Flexible(flex: 1, child: Container()),
+            Text(
+              content.desc,
+              style: GoogleFonts.poppins(
+                fontWeight: FontWeight.w300,
+                fontSize: (width <= 550) ? 17 : 17,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: height*2/100,)
+            // Flexible(flex: 1, child: Container()),
+          ],
+        ),
       ),
     );
   }
