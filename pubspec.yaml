@@ -1,6 +1,7 @@
 name: taskwarrior
 description: A new Flutter project.
 version: 1.0.0+1
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 environment:
   sdk: ">=3.0.5 <4.0.0"
