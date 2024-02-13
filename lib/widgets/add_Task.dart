@@ -26,6 +26,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   DateTime? due;
   String dueString = '';
   String priority = 'M';
+  bool use24hourFormate = false;
   final tagcontroller = TextEditingController();
   List<String> tags = [];
 
@@ -75,6 +76,10 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                   buildDueDate(context),
                   const SizedBox(height: 8),
                   buildPriority(),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  buildformate(),
                   buildTags(),
                 ],
               ),
@@ -217,7 +222,12 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                                   onSurface: Colors.black,
                                 ),
                         ),
-                        child: child!,
+                        child: MediaQuery(
+                          data: MediaQuery.of(context).copyWith(
+                            alwaysUse24HourFormat: use24hourFormate,
+                          ),
+                          child: child!),
+                        );
                       );
                     },
                     fieldHintText: "Month/Date/Year",
@@ -351,6 +361,40 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
           ),
         ],
       );
+  Widget buildformate() {
+    return Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+      Text(
+        'Click to Choose:',
+        style: GoogleFonts.poppins(
+          fontWeight: FontWeight.bold,
+          color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+        ),
+      ),
+      const SizedBox(
+        width: 5.0,
+      ),
+      Wrap(
+        spacing: 5.0,
+        children: List<Widget>.generate(
+          1,
+          (int index) {
+            return ChoiceChip(
+                label: const Text(
+                  '24hour',
+                ),
+                selected: use24hourFormate,
+                onSelected: (bool? selected) {
+                  if (selected != use24hourFormate) {
+                    setState(() {
+                      use24hourFormate = selected!;
+                    });
+                  }
+                });
+          },
+        ),
+      )
+    ]);
+  }
 
   Widget buildCancelButton(BuildContext context) => TextButton(
         child: Text(
