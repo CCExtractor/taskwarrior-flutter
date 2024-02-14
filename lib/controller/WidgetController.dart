@@ -53,17 +53,13 @@ class WidgetController extends GetxController {
   Future<void> sendData() async {
     int i=1;
     List<Map<String, String>> l = [];
-    allData.forEach((task) {
-      
+    for (var task in allData) {
       l.add({
         "description": "$i.${task.description}",
         "urgency": 'urgencyLevel : ${urgency(task)}',
       });
       i++;
-    });
-
-    print(jsonEncode(l));
-    // print(jsonEncode(allData.map((task) => task.toJson()).toList()));
+    }
     await HomeWidget.saveWidgetData(
         'tasks', jsonEncode(l));
   }
