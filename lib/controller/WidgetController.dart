@@ -51,17 +51,21 @@ class WidgetController extends GetxController {
   }
 
   Future<void> sendData() async {
-    int i=1;
+    int i = 1;
     List<Map<String, String>> l = [];
     for (var task in allData) {
-      l.add({
-        "description": "$i.${task.description}",
-        "urgency": 'urgencyLevel : ${urgency(task)}',
-      });
-      i++;
+      if (task.status == "pending") {
+        l.add({
+          "description": "$i.${task.description}",
+          "urgency": 'urgencyLevel : ${urgency(task)}',
+        });
+        i++;
+      }
     }
-    await HomeWidget.saveWidgetData(
-        'tasks', jsonEncode(l));
+    if (l.isEmpty) {
+      l.add({"description": "No tasks added yet.", "urgency": "urgencyLevel : 0"});
+    }
+    await HomeWidget.saveWidgetData('tasks', jsonEncode(l));
   }
 
   Future updateWidget() async {
