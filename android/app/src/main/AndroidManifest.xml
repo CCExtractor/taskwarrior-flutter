@@ -49,7 +49,9 @@
         </receiver>
         <service android:name="es.antonborri.home_widget.HomeWidgetBackgroundService"
             android:permission="android.permission.BIND_JOB_SERVICE" android:exported="true"/>
-
+			<service
+            android:name=".ListViewRemoteViewsService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data

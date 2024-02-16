@@ -1,0 +1,31 @@
+<!-- list_item_layout.xml -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/list_item_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+	android:background="@drawable/border_style"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Title TextView -->
+    <TextView
+        android:id="@+id/title_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Task Title"
+		android:textColor="#666666"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
+
+    <!-- Urgency Level TextView -->
+    <TextView
+        android:id="@+id/urgency_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+		
+        android:text="Urgency Level"
+        android:textSize="14sp"
+        android:textColor="#666666"/>
+
+</LinearLayout>
