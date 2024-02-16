@@ -34,6 +34,10 @@ class _TasksBuilderState extends State<TasksBuilder> {
   late Modify modify;
   ScrollController scrollController = ScrollController();
   bool showbtn = false;
+  Task? lastDeletedTask;
+  Task? lastCompletedTask;
+  bool isUndoInProgress = false; // track undo action
+
   @override
   void initState() {
     scrollController.addListener(() {
@@ -72,12 +76,41 @@ class _TasksBuilderState extends State<TasksBuilder> {
     modify.save(
       modified: () => now,
     );
+
+    // Show a snackbar with an undo action
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: const Text('Task Updated'),
-        backgroundColor: AppSettings.isDarkMode
-            ? const Color.fromARGB(255, 61, 61, 61)
-            : const Color.fromARGB(255, 39, 39, 39),
-        duration: const Duration(seconds: 2)));
+      content: const Text('Task Updated'),
+      backgroundColor: AppSettings.isDarkMode
+          ? const Color.fromARGB(255, 61, 61, 61)
+          : const Color.fromARGB(255, 39, 39, 39),
+      duration: const Duration(seconds: 2),
+      action: SnackBarAction(
+        label: 'Undo',
+        onPressed: () {
+          // Undo the task status change
+          undoChanges();
+        },
+      ),
+    ));
+  }
+
+  void undoChanges() {
+    if (isUndoInProgress) {
+      return; // If undo is already in progress, do nothing
+    }
+    isUndoInProgress = true;
+    ScaffoldMessenger.of(context).removeCurrentSnackBar();
+
+    if (lastDeletedTask != null) {
+      setStatus('pending', lastDeletedTask!.uuid);
+      lastDeletedTask = null;
+    }
+
+    if (lastCompletedTask != null) {
+      setStatus('pending', lastCompletedTask!.uuid);
+      lastCompletedTask = null;
+    }
+    isUndoInProgress = false;
   }
 
   // final bool darkmode;
@@ -143,50 +176,27 @@ class _TasksBuilderState extends State<TasksBuilder> {
                               children: [
                                 SlidableAction(
                                   onPressed: (context) {
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return AlertDialog(
-                                          title: const Text(
-                                              'Do you want to save changes?'),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () {
-                                                setStatus(
-                                                    'completed', task.uuid);
-                                                if (task.due != null) {
-                                                  DateTime? dtb = task.due;
-                                                  dtb = dtb!.add(const Duration(
-                                                      minutes: 1));
-                                                  final FlutterLocalNotificationsPlugin
-                                                      flutterLocalNotificationsPlugin =
-                                                      FlutterLocalNotificationsPlugin();
-                                                  flutterLocalNotificationsPlugin
-                                                      .cancel(dtb.day * 100 +
-                                                          dtb.hour * 10 +
-                                                          dtb.minute);
-                                                  if (kDebugMode) {
-                                                    print("Task due is $dtb");
-                                                    print(dtb.day * 100 +
-                                                        dtb.hour * 10 +
-                                                        dtb.minute);
-                                                  }
-                                                }
-
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: const Text('Yes'),
-                                            ),
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: const Text('No'),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
+                                    // Complete task without confirmation
+                                    setStatus('completed', task.uuid);
+                                    if (task.due != null) {
+                                      DateTime? dtb = task.due;
+                                      dtb =
+                                          dtb!.add(const Duration(minutes: 1));
+                                      final FlutterLocalNotificationsPlugin
+                                          flutterLocalNotificationsPlugin =
+                                          FlutterLocalNotificationsPlugin();
+                                      flutterLocalNotificationsPlugin.cancel(
+                                          dtb.day * 100 +
+                                              dtb.hour * 10 +
+                                              dtb.minute);
+                                      if (kDebugMode) {
+                                        print("Task due is $dtb");
+                                        print(dtb.day * 100 +
+                                            dtb.hour * 10 +
+                                            dtb.minute);
+                                      }
+                                    }
+                                    lastCompletedTask = task;
                                   },
                                   icon: Icons.done,
                                   label: "COMPLETE",
@@ -199,49 +209,27 @@ class _TasksBuilderState extends State<TasksBuilder> {
                               children: [
                                 SlidableAction(
                                   onPressed: (context) {
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return AlertDialog(
-                                          title: const Text(
-                                              'Do you want to save changes?'),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () {
-                                                setStatus('deleted', task.uuid);
-                                                if (task.due != null) {
-                                                  DateTime? dtb = task.due;
-                                                  dtb = dtb!.add(const Duration(
-                                                      minutes: 1));
-                                                  final FlutterLocalNotificationsPlugin
-                                                      flutterLocalNotificationsPlugin =
-                                                      FlutterLocalNotificationsPlugin();
-                                                  flutterLocalNotificationsPlugin
-                                                      .cancel(dtb.day * 100 +
-                                                          dtb.hour * 10 +
-                                                          dtb.minute);
-                                                  if (kDebugMode) {
-                                                    print("Task due is $dtb");
-                                                    print(dtb.day * 100 +
-                                                        dtb.hour * 10 +
-                                                        dtb.minute);
-                                                  }
-                                                }
-
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: const Text('Yes'),
-                                            ),
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: const Text('No'),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
+                                    // Delete task without confirmation
+                                    setStatus('deleted', task.uuid);
+                                    if (task.due != null) {
+                                      DateTime? dtb = task.due;
+                                      dtb =
+                                          dtb!.add(const Duration(minutes: 1));
+                                      final FlutterLocalNotificationsPlugin
+                                          flutterLocalNotificationsPlugin =
+                                          FlutterLocalNotificationsPlugin();
+                                      flutterLocalNotificationsPlugin.cancel(
+                                          dtb.day * 100 +
+                                              dtb.hour * 10 +
+                                              dtb.minute);
+                                      if (kDebugMode) {
+                                        print("Task due is $dtb");
+                                        print(dtb.day * 100 +
+                                            dtb.hour * 10 +
+                                            dtb.minute);
+                                      }
+                                    }
+                                    lastDeletedTask = task;
                                   },
                                   icon: Icons.delete,
                                   label: "DELETE",
