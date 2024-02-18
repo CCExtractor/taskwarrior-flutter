@@ -74,18 +74,6 @@ Future<List<Directory>> getDirectories() async {
   return [defaultDirectory, baseDirectory];
 }
 
-Future builder(BuildContext context, AsyncSnapshot<Directory> snapshot) async {
-  if (snapshot.hasData) {
-    return ProfilesWidget(
-      defaultDirectory: snapshot.data!,
-      baseDirectory: snapshot.data!,
-      child: const MyApp(),
-    );
-  } else {
-    return const AppSetupPlaceholder();
-  }
-}
-
 Future init() async {
   Loggy.initLoggy(logPrinter: const PrettyPrinter());
 }
