@@ -231,7 +231,8 @@ class _SettingsPageState extends State<SettingsPage> {
                                 AppSettings.isDarkMode
                                     ? TaskWarriorColors
                                         .ksecondaryBackgroundColor
-                                    : TaskWarriorColors.white,
+                                    : TaskWarriorColors
+                                        .kLightSecondaryBackgroundColor,
                               ),
                             ),
                             onPressed: () {
@@ -341,7 +342,8 @@ class _SettingsPageState extends State<SettingsPage> {
                                 AppSettings.isDarkMode
                                     ? TaskWarriorColors
                                         .ksecondaryBackgroundColor
-                                    : TaskWarriorColors.white,
+                                    : TaskWarriorColors
+                                        .kLightSecondaryBackgroundColor,
                               ),
                             ),
                             onPressed: () {
