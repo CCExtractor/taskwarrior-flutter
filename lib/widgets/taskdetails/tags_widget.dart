@@ -9,7 +9,6 @@ import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/config/taskwarriorcolors.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
 import 'package:taskwarrior/widgets/taskw.dart';
-import '../pallete.dart';
 
 class TagsWidget extends StatelessWidget {
   const TagsWidget({

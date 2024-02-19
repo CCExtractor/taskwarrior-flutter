@@ -127,8 +127,18 @@ class SelectProfileListTile extends StatelessWidget {
             select();
             ScaffoldMessenger.of(context).hideCurrentSnackBar();
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text('Switched to Profile ${alias ?? uuid}'),
-            ));
+                content: Text(
+                  'Switched to Profile ${alias ?? uuid}',
+                  style: TextStyle(
+                    color: AppSettings.isDarkMode
+                        ? TaskWarriorColors.kprimaryTextColor
+                        : TaskWarriorColors.kLightPrimaryTextColor,
+                  ),
+                ),
+                backgroundColor: AppSettings.isDarkMode
+                    ? TaskWarriorColors.ksecondaryBackgroundColor
+                    : TaskWarriorColors.kLightSecondaryBackgroundColor,
+                duration: const Duration(seconds: 2)));
           },
           activeColor: AppSettings.isDarkMode
               ? TaskWarriorColors.white

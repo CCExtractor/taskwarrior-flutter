@@ -3,7 +3,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/config/taskwarriorcolors.dart';
-import 'package:taskwarrior/widgets/pallete.dart';
 
 class AppSetupPlaceholder extends StatelessWidget {
   const AppSetupPlaceholder({super.key});

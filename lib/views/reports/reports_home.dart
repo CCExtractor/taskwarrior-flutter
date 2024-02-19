@@ -15,7 +15,6 @@ import 'package:taskwarrior/views/reports/pages/burndown_daily.dart';
 import 'package:taskwarrior/views/reports/pages/burndown_monthly.dart';
 import 'package:taskwarrior/views/reports/pages/burndown_weekly.dart';
 import 'package:taskwarrior/views/reports/reports_tour.dart';
-import 'package:taskwarrior/widgets/pallete.dart';
 import 'package:taskwarrior/widgets/taskdetails/profiles_widget.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';

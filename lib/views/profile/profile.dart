@@ -118,14 +118,28 @@ class _ProfilePageState extends State<ProfilePage> {
                 try {
                   profilesWidget.copyConfigToNewProfile(currentProfile);
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: const Text('Profile Config Copied'),
+                      content: Text(
+                        'Profile Config Copied',
+                        style: TextStyle(
+                          color: AppSettings.isDarkMode
+                              ? TaskWarriorColors.kprimaryTextColor
+                              : TaskWarriorColors.kLightPrimaryTextColor,
+                        ),
+                      ),
                       backgroundColor: AppSettings.isDarkMode
                           ? TaskWarriorColors.ksecondaryBackgroundColor
                           : TaskWarriorColors.kLightSecondaryBackgroundColor,
                       duration: const Duration(seconds: 2)));
                 } catch (e) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: const Text('Profile Config Copy Failed'),
+                      content: Text(
+                        'Profile Config Copy Failed',
+                        style: TextStyle(
+                          color: AppSettings.isDarkMode
+                              ? TaskWarriorColors.kprimaryTextColor
+                              : TaskWarriorColors.kLightPrimaryTextColor,
+                        ),
+                      ),
                       backgroundColor: AppSettings.isDarkMode
                           ? TaskWarriorColors.ksecondaryBackgroundColor
                           : TaskWarriorColors.kLightSecondaryBackgroundColor,
@@ -191,14 +205,28 @@ class ProfilesColumn extends StatelessWidget {
               try {
                 addProfile();
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: const Text('Profile Added Successfully'),
+                    content: Text(
+                      'Profile Added Successfully',
+                      style: TextStyle(
+                        color: AppSettings.isDarkMode
+                            ? TaskWarriorColors.kprimaryTextColor
+                            : TaskWarriorColors.kLightPrimaryTextColor,
+                      ),
+                    ),
                     backgroundColor: AppSettings.isDarkMode
                         ? TaskWarriorColors.ksecondaryBackgroundColor
                         : TaskWarriorColors.kLightSecondaryBackgroundColor,
                     duration: const Duration(seconds: 2)));
               } catch (e) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: const Text('Profile Additon Failed'),
+                    content: Text(
+                      'Profile Additon Failed',
+                      style: TextStyle(
+                        color: AppSettings.isDarkMode
+                            ? TaskWarriorColors.kprimaryTextColor
+                            : TaskWarriorColors.kLightPrimaryTextColor,
+                      ),
+                    ),
                     backgroundColor: AppSettings.isDarkMode
                         ? TaskWarriorColors.ksecondaryBackgroundColor
                         : TaskWarriorColors.kLightSecondaryBackgroundColor,
