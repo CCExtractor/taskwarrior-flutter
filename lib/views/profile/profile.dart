@@ -47,8 +47,8 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
       //primary: false,
       backgroundColor: AppSettings.isDarkMode
-          ? TaskWarriorColors.kLightPrimaryBackgroundColor
-          : TaskWarriorColors.white,
+          ? TaskWarriorColors.kprimaryBackgroundColor
+          : TaskWarriorColors.kLightPrimaryBackgroundColor,
       body: SingleChildScrollView(
         child: Column(
           children: [
