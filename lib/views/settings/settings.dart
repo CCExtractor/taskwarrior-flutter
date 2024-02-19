@@ -229,7 +229,8 @@ class _SettingsPageState extends State<SettingsPage> {
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all<Color>(
                                 AppSettings.isDarkMode
-                                    ? TaskWarriorColors.black
+                                    ? TaskWarriorColors
+                                        .ksecondaryBackgroundColor
                                     : TaskWarriorColors.white,
                               ),
                             ),
