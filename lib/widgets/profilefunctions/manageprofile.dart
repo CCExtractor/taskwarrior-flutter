@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:taskwarrior/config/taskwarriorcolors.dart';
 
 import 'package:tuple/tuple.dart';
 
@@ -33,32 +34,40 @@ class ManageProfile extends StatelessWidget {
 
     return ExpansionTile(
       backgroundColor: AppSettings.isDarkMode
-          ? const Color.fromARGB(255, 48, 46, 46)
-          : const Color.fromARGB(255, 220, 216, 216),
-      iconColor: AppSettings.isDarkMode ? Colors.white : Colors.black,
-      collapsedIconColor: AppSettings.isDarkMode ? Colors.white : Colors.black,
+          ? TaskWarriorColors.ksecondaryBackgroundColor
+          : TaskWarriorColors.kLightSecondaryBackgroundColor,
+      iconColor: AppSettings.isDarkMode
+          ? TaskWarriorColors.white
+          : TaskWarriorColors.black,
+      collapsedIconColor: AppSettings.isDarkMode
+          ? TaskWarriorColors.white
+          : TaskWarriorColors.black,
       collapsedTextColor: AppSettings.isDarkMode
-          ? Colors.white
-          : const Color.fromARGB(255, 48, 46, 46),
-      textColor: AppSettings.isDarkMode ? Colors.white : Colors.black,
+          ? TaskWarriorColors.white
+          : TaskWarriorColors.ksecondaryBackgroundColor,
+      textColor: AppSettings.isDarkMode
+          ? TaskWarriorColors.white
+          : TaskWarriorColors.black,
       key: const PageStorageKey<String>('manage-profile'),
       title: Text(
         'Manage selected profile',
         style: GoogleFonts.poppins(
           fontWeight: FontWeight.bold,
           fontSize: 15,
-          color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+          color: AppSettings.isDarkMode
+              ? TaskWarriorColors.white
+              : TaskWarriorColors.black,
         ),
       ),
       children: [
         for (var triple in triples)
           ListTile(
             textColor: AppSettings.isDarkMode
-                ? Colors.white
-                : const Color.fromARGB(255, 48, 46, 46),
+                ? TaskWarriorColors.ksecondaryTextColor
+                : TaskWarriorColors.kLightSecondaryTextColor,
             iconColor: AppSettings.isDarkMode
-                ? Colors.white
-                : const Color.fromARGB(255, 48, 46, 46),
+                ? TaskWarriorColors.white
+                : TaskWarriorColors.kLightSecondaryTextColor,
             leading: Padding(
               padding: const EdgeInsets.all(12),
               child: Icon(triple.item1),

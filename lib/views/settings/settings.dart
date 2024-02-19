@@ -5,7 +5,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/config/taskwarriorcolors.dart';
-import 'package:taskwarrior/widgets/pallete.dart';
 
 class SettingsPage extends StatefulWidget {
   SettingsPage({
@@ -28,7 +27,7 @@ class _SettingsPageState extends State<SettingsPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
-        backgroundColor: Palette.kToDark.shade200,
+        backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
         title: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,14 +35,14 @@ class _SettingsPageState extends State<SettingsPage> {
             Text(
               'Settings',
               style: GoogleFonts.poppins(
-                color: Colors.white,
+                color: TaskWarriorColors.white,
                 fontSize: 20,
               ),
             ),
             Text(
               'Configure your preferences',
               style: GoogleFonts.poppins(
-                color: Colors.white70,
+                color: TaskWarriorColors.white,
                 fontSize: 14,
               ),
             ),
@@ -55,12 +54,13 @@ class _SettingsPageState extends State<SettingsPage> {
           },
           child: Icon(
             Icons.chevron_left,
-            color: Appcolors.white,
+            color: TaskWarriorColors.white,
           ),
         ),
       ),
-      backgroundColor:
-      AppSettings.isDarkMode ? Palette.kToDark.shade200 : Colors.white,
+      backgroundColor: AppSettings.isDarkMode
+          ? TaskWarriorColors.kprimaryBackgroundColor
+          : TaskWarriorColors.white,
       body: ListView(
         children: [
           ListTile(
@@ -69,13 +69,15 @@ class _SettingsPageState extends State<SettingsPage> {
               style: GoogleFonts.poppins(
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
-                color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                color: AppSettings.isDarkMode
+                    ? TaskWarriorColors.white
+                    : TaskWarriorColors.black,
               ),
             ),
             subtitle: Text(
               'Automatically sync data on app startup',
               style: GoogleFonts.poppins(
-                color: Colors.grey,
+                color: TaskWarriorColors.grey,
                 fontSize: 14,
               ),
             ),
@@ -87,7 +89,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 });
 
                 final SharedPreferences prefs =
-                await SharedPreferences.getInstance();
+                    await SharedPreferences.getInstance();
                 await prefs.setBool('sync-onStart', value);
               },
             ),
@@ -99,13 +101,15 @@ class _SettingsPageState extends State<SettingsPage> {
               style: GoogleFonts.poppins(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
-                color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                color: AppSettings.isDarkMode
+                    ? TaskWarriorColors.white
+                    : TaskWarriorColors.black,
               ),
             ),
             subtitle: Text(
               'Enable automatic syncing when creating a new task',
               style: GoogleFonts.poppins(
-                color: Colors.grey,
+                color: TaskWarriorColors.grey,
                 fontSize: 14,
               ),
             ),
@@ -117,7 +121,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 });
 
                 final SharedPreferences prefs =
-                await SharedPreferences.getInstance();
+                    await SharedPreferences.getInstance();
                 await prefs.setBool('sync-OnTaskCreate', value);
               },
             ),
@@ -129,13 +133,15 @@ class _SettingsPageState extends State<SettingsPage> {
               style: GoogleFonts.poppins(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
-                color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                color: AppSettings.isDarkMode
+                    ? TaskWarriorColors.white
+                    : TaskWarriorColors.black,
               ),
             ),
             subtitle: Text(
               'Make the border of task if only one day left',
               style: GoogleFonts.poppins(
-                color: Colors.grey,
+                color: TaskWarriorColors.grey,
                 fontSize: 14,
               ),
             ),
@@ -147,7 +153,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 });
 
                 final SharedPreferences prefs =
-                await SharedPreferences.getInstance();
+                    await SharedPreferences.getInstance();
                 await prefs.setBool('delaytask', value);
               },
             ),

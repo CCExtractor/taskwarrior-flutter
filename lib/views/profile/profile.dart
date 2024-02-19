@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
+import 'package:taskwarrior/config/taskwarriorcolors.dart';
 import 'package:taskwarrior/model/storage/savefile.dart';
 import 'package:taskwarrior/taskserver/ntaskserver.dart';
 import 'package:taskwarrior/widgets/pallete.dart';
@@ -30,23 +31,24 @@ class _ProfilePageState extends State<ProfilePage> {
         backgroundColor: Palette.kToDark.shade200,
         title: Text(
           profilesMap.length == 1 ? 'Profile' : 'Profiles',
-          style: GoogleFonts.poppins(color: Colors.white),
+          style: GoogleFonts.poppins(color: TaskWarriorColors.white),
         ),
         leading: IconButton(
           onPressed: () {
             // Navigator.pushReplacementNamed(context, PageRoutes.home);
             Navigator.of(context).pop();
           },
-          icon: const Icon(
+          icon: Icon(
             Icons.chevron_left,
-            color: Colors.white,
+            color: TaskWarriorColors.white,
             size: 30,
           ),
         ),
       ),
       //primary: false,
-      backgroundColor:
-          AppSettings.isDarkMode ? Palette.kToDark.shade200 : Colors.white,
+      backgroundColor: AppSettings.isDarkMode
+          ? TaskWarriorColors.kLightPrimaryBackgroundColor
+          : TaskWarriorColors.white,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -118,15 +120,15 @@ class _ProfilePageState extends State<ProfilePage> {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: const Text('Profile Config Copied'),
                       backgroundColor: AppSettings.isDarkMode
-                          ? const Color.fromARGB(255, 61, 61, 61)
-                          : const Color.fromARGB(255, 39, 39, 39),
+                          ? TaskWarriorColors.ksecondaryBackgroundColor
+                          : TaskWarriorColors.kLightSecondaryBackgroundColor,
                       duration: const Duration(seconds: 2)));
                 } catch (e) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: const Text('Profile Config Copy Failed'),
                       backgroundColor: AppSettings.isDarkMode
-                          ? const Color.fromARGB(255, 61, 61, 61)
-                          : const Color.fromARGB(255, 39, 39, 39),
+                          ? TaskWarriorColors.ksecondaryBackgroundColor
+                          : TaskWarriorColors.kLightSecondaryBackgroundColor,
                       duration: const Duration(seconds: 2)));
                 }
               },
@@ -191,34 +193,35 @@ class ProfilesColumn extends StatelessWidget {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: const Text('Profile Added Successfully'),
                     backgroundColor: AppSettings.isDarkMode
-                        ? const Color.fromARGB(255, 61, 61, 61)
-                        : const Color.fromARGB(255, 39, 39, 39),
+                        ? TaskWarriorColors.ksecondaryBackgroundColor
+                        : TaskWarriorColors.kLightSecondaryBackgroundColor,
                     duration: const Duration(seconds: 2)));
               } catch (e) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: const Text('Profile Additon Failed'),
                     backgroundColor: AppSettings.isDarkMode
-                        ? const Color.fromARGB(255, 61, 61, 61)
-                        : const Color.fromARGB(255, 39, 39, 39),
+                        ? TaskWarriorColors.ksecondaryBackgroundColor
+                        : TaskWarriorColors.kLightSecondaryBackgroundColor,
                     duration: const Duration(seconds: 2)));
               }
             },
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all<Color>(
                 AppSettings.isDarkMode
-                    ? const Color.fromARGB(255, 61, 61, 61)
-                    : Colors.white,
+                    ? TaskWarriorColors.ksecondaryBackgroundColor
+                    : TaskWarriorColors.kLightSecondaryBackgroundColor,
               ),
             ),
             icon: Icon(Icons.add,
                 color: AppSettings.isDarkMode
-                    ? Colors.deepPurpleAccent
-                    : Colors.deepPurple),
+                    ? TaskWarriorColors.deepPurpleAccent
+                    : TaskWarriorColors.deepPurple),
             label: Text(
               'Add new Profile',
               style: TextStyle(
-                color:
-                    AppSettings.isDarkMode ? Colors.white : Colors.deepPurple,
+                color: AppSettings.isDarkMode
+                    ? TaskWarriorColors.white
+                    : TaskWarriorColors.deepPurple,
               ),
             ),
           )

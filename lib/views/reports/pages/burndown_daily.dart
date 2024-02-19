@@ -183,7 +183,7 @@ class _BurnDownDailyState extends State<BurnDownDaily>
                 StackedColumnSeries<ChartData, String>(
                   groupName: 'Group A',
                   enableTooltip: true,
-                  color: Appcolors.green,
+                  color: TaskWarriorColors.green,
                   dataSource: dailyInfo.entries
                       .map((entry) => ChartData(
                             entry.key,
@@ -199,7 +199,7 @@ class _BurnDownDailyState extends State<BurnDownDaily>
                 /// This is the pending tasks
                 StackedColumnSeries<ChartData, String>(
                   groupName: 'Group A',
-                  color: Appcolors.yellow,
+                  color: TaskWarriorColors.yellow,
                   enableTooltip: true,
                   dataSource: dailyInfo.entries
                       .map((entry) => ChartData(

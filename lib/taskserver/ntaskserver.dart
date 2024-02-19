@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loggy/loggy.dart';
+import 'package:taskwarrior/config/taskwarriorcolors.dart';
 import 'package:taskwarrior/widgets/taskdetails/profiles_widget.dart';
 // ignore_for_file: use_build_context_synchronously
 
@@ -15,7 +16,6 @@ import 'package:taskwarrior/model/storage/set_config.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
 import 'package:taskwarrior/widgets/fingerprint.dart';
 import 'package:taskwarrior/widgets/home_paths.dart' as rc;
-import 'package:taskwarrior/widgets/pallete.dart';
 import 'package:taskwarrior/widgets/taskdetails.dart';
 import 'package:taskwarrior/widgets/taskserver.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -164,11 +164,12 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
       server = Taskrc.fromString(contents).server;
       credentials = Taskrc.fromString(contents).credentials;
     }
-    var color =
-        AppSettings.isDarkMode ? Colors.white : Palette.kToDark.shade200;
+    var color = AppSettings.isDarkMode
+        ? TaskWarriorColors.white
+        : TaskWarriorColors.kprimaryBackgroundColor;
     var tileColor = AppSettings.isDarkMode
-        ? const Color.fromARGB(255, 48, 46, 46)
-        : const Color.fromARGB(255, 220, 216, 216);
+        ? TaskWarriorColors.ksecondaryBackgroundColor
+        : TaskWarriorColors.kLightSecondaryBackgroundColor;
     if (contents != null) {
       server = Taskrc.fromString(contents).server;
       credentials = Taskrc.fromString(contents).credentials;
@@ -252,7 +253,7 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
     var height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Palette.kToDark.shade200,
+        backgroundColor: TaskWarriorColors.kLightPrimaryBackgroundColor,
         titleSpacing:
             0, // Reduce the spacing between the title and leading/back button
         title: Column(
@@ -260,19 +261,21 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
           children: [
             Text(
               "Configure TaskServer",
-              style: GoogleFonts.poppins(color: Colors.white, fontSize: 18),
+              style: GoogleFonts.poppins(
+                  color: TaskWarriorColors.white, fontSize: 18),
             ),
             Text(
               alias ?? profile,
-              style: GoogleFonts.poppins(color: Colors.white, fontSize: 12),
+              style: GoogleFonts.poppins(
+                  color: TaskWarriorColors.white, fontSize: 12),
             ),
           ],
         ),
         actions: [
           IconButton(
-            icon: const Icon(
+            icon: Icon(
               Icons.info,
-              color: Colors.white,
+              color: TaskWarriorColors.white,
             ),
             onPressed: () async {
               String url =
@@ -284,26 +287,27 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
           ),
           if (kDebugMode)
             IconButton(
-              icon: const Icon(
+              icon: Icon(
                 Icons.bug_report,
-                color: Colors.white,
+                color: TaskWarriorColors.white,
               ),
               onPressed: _setConfigurationFromFixtureForDebugging,
             ),
           IconButton(
-            icon: const Icon(
+            icon: Icon(
               Icons.show_chart,
-              color: Colors.white,
+              color: TaskWarriorColors.white,
             ),
             onPressed: () => _showStatistics(context),
           ),
         ],
-        leading: const BackButton(
-          color: Colors.white,
+        leading: BackButton(
+          color: TaskWarriorColors.white,
         ),
       ),
-      backgroundColor:
-          AppSettings.isDarkMode ? Palette.kToDark.shade200 : Colors.white,
+      backgroundColor: AppSettings.isDarkMode
+          ? TaskWarriorColors.kprimaryBackgroundColor
+          : TaskWarriorColors.kLightPrimaryBackgroundColor,
       body: Padding(
         padding: const EdgeInsets.only(left: 20, right: 20),
         child: ListView(
@@ -381,7 +385,8 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                                                     taskrcContentController,
                                                 maxLines: 8,
                                                 style: GoogleFonts.poppins(
-                                                    color: Colors.white),
+                                                    color: TaskWarriorColors
+                                                        .white),
                                                 decoration: InputDecoration(
                                                   suffixIconConstraints:
                                                       const BoxConstraints(
@@ -442,7 +447,8 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                       decoration: BoxDecoration(
                         color: tileColor,
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Colors.grey.shade300),
+                        border:
+                            Border.all(color: TaskWarriorColors.borderColor),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -459,21 +465,22 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                             width: 30,
                             decoration: BoxDecoration(
                               color: AppSettings.isDarkMode
-                                  ? const Color.fromARGB(255, 220, 216, 216)
-                                  : const Color.fromARGB(255, 48, 46, 46),
+                                  ? TaskWarriorColors
+                                      .kLightSecondaryBackgroundColor
+                                  : TaskWarriorColors.ksecondaryBackgroundColor,
                               shape: BoxShape.circle,
                             ),
                             child: Center(
                               child: taskrcContentController.text.isNotEmpty
-                                  ? const Icon(
+                                  ? Icon(
                                       Icons.check,
-                                      color: Colors.green,
+                                      color: TaskWarriorColors.green,
                                     )
                                   : Icon(
                                       Icons.chevron_right_rounded,
                                       color: AppSettings.isDarkMode
-                                          ? Colors.black
-                                          : Colors.white,
+                                          ? TaskWarriorColors.black
+                                          : TaskWarriorColors.white,
                                     ),
                             ),
                           ),
@@ -512,7 +519,9 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                               decoration: BoxDecoration(
                                 color: tileColor,
                                 borderRadius: BorderRadius.circular(8),
-                                border: Border.all(color: Colors.grey.shade300),
+                                border: Border.all(
+                                  color: TaskWarriorColors.borderColor,
+                                ),
                               ),
                               child: Row(
                                 mainAxisAlignment:
@@ -536,23 +545,23 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                                     width: 30,
                                     decoration: BoxDecoration(
                                       color: AppSettings.isDarkMode
-                                          ? const Color.fromARGB(
-                                              255, 220, 216, 216)
-                                          : const Color.fromARGB(
-                                              255, 48, 46, 46),
+                                          ? TaskWarriorColors
+                                              .kLightSecondaryBackgroundColor
+                                          : TaskWarriorColors
+                                              .ksecondaryBackgroundColor,
                                       shape: BoxShape.circle,
                                     ),
                                     child: Center(
                                       child: server != null
-                                          ? const Icon(
+                                          ? Icon(
                                               Icons.check,
-                                              color: Colors.green,
+                                              color: TaskWarriorColors.green,
                                             )
                                           : Icon(
                                               Icons.chevron_right_rounded,
                                               color: AppSettings.isDarkMode
-                                                  ? Colors.black
-                                                  : Colors.white,
+                                                  ? TaskWarriorColors.black
+                                                  : TaskWarriorColors.white,
                                             ),
                                     ),
                                   ),
@@ -587,7 +596,8 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                               decoration: BoxDecoration(
                                 color: tileColor,
                                 borderRadius: BorderRadius.circular(8),
-                                border: Border.all(color: Colors.grey.shade300),
+                                border: Border.all(
+                                    color: TaskWarriorColors.borderColor),
                               ),
                               child: Row(
                                 mainAxisAlignment:
@@ -625,26 +635,26 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                                       width: 30,
                                       decoration: BoxDecoration(
                                         color: AppSettings.isDarkMode
-                                            ? const Color.fromARGB(
-                                                255, 220, 216, 216)
-                                            : const Color.fromARGB(
-                                                255, 48, 46, 46),
+                                            ? TaskWarriorColors
+                                                .kLightPrimaryBackgroundColor
+                                            : TaskWarriorColors
+                                                .kprimaryBackgroundColor,
                                         shape: BoxShape.circle,
                                       ),
                                       child: credentials == null
                                           ? Icon(
                                               Icons.chevron_right_rounded,
                                               color: AppSettings.isDarkMode
-                                                  ? Colors.black
-                                                  : Colors.white,
+                                                  ? TaskWarriorColors.black
+                                                  : TaskWarriorColors.white,
                                             )
                                           : Icon(
                                               hideKey
                                                   ? Icons.visibility_off
                                                   : Icons.visibility,
                                               color: AppSettings.isDarkMode
-                                                  ? Colors.green
-                                                  : Colors.green,
+                                                  ? TaskWarriorColors.green
+                                                  : TaskWarriorColors.green,
                                             ),
                                     ),
                                   ),
@@ -707,8 +717,9 @@ class PemWidget extends StatefulWidget {
 class _PemWidgetState extends State<PemWidget> {
   @override
   Widget build(BuildContext context) {
-    var color =
-        AppSettings.isDarkMode ? Colors.white : Palette.kToDark.shade200;
+    var color = AppSettings.isDarkMode
+        ? TaskWarriorColors.white
+        : TaskWarriorColors.kprimaryBackgroundColor;
     var contents = widget.storage.guiPemFiles.pemContents(widget.pem);
     var name = widget.storage.guiPemFiles.pemFilename(widget.pem);
     String identifier = "";
@@ -719,8 +730,8 @@ class _PemWidgetState extends State<PemWidget> {
     }
 
     var tileColor = AppSettings.isDarkMode
-        ? const Color.fromARGB(255, 48, 46, 46)
-        : const Color.fromARGB(255, 220, 216, 216);
+        ? TaskWarriorColors.ksecondaryBackgroundColor
+        : TaskWarriorColors.kLightSecondaryBackgroundColor;
 
     return Padding(
       padding: const EdgeInsets.only(
@@ -771,7 +782,7 @@ class _PemWidgetState extends State<PemWidget> {
               decoration: BoxDecoration(
                 color: tileColor,
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.grey.shade300),
+                border: Border.all(color: TaskWarriorColors.borderColor),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -809,8 +820,8 @@ class _PemWidgetState extends State<PemWidget> {
                     width: 30,
                     decoration: BoxDecoration(
                       color: AppSettings.isDarkMode
-                          ? const Color.fromARGB(255, 220, 216, 216)
-                          : const Color.fromARGB(255, 48, 46, 46),
+                          ? TaskWarriorColors.kLightSecondaryBackgroundColor
+                          : TaskWarriorColors.ksecondaryBackgroundColor,
                       shape: BoxShape.circle,
                     ),
                     child: Center(
@@ -818,12 +829,12 @@ class _PemWidgetState extends State<PemWidget> {
                           ? Icon(
                               Icons.chevron_right_rounded,
                               color: AppSettings.isDarkMode
-                                  ? Colors.black
-                                  : Colors.white,
+                                  ? TaskWarriorColors.black
+                                  : TaskWarriorColors.white,
                             )
-                          : const Icon(
+                          : Icon(
                               Icons.check,
-                              color: Colors.green,
+                              color: TaskWarriorColors.green,
                             ),
                     ),
                   ),

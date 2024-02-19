@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:taskwarrior/config/app_settings.dart';
+import 'package:taskwarrior/config/taskwarriorcolors.dart';
 import 'package:taskwarrior/widgets/pallete.dart';
 
 class AppSetupPlaceholder extends StatelessWidget {
@@ -11,8 +12,9 @@ class AppSetupPlaceholder extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        backgroundColor:
-            AppSettings.isDarkMode ? Palette.kToDark.shade200 : Colors.white,
+        backgroundColor: AppSettings.isDarkMode
+            ? TaskWarriorColors.kprimaryBackgroundColor
+            : TaskWarriorColors.kLightPrimaryBackgroundColor,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -31,7 +33,9 @@ class AppSetupPlaceholder extends StatelessWidget {
                 style: GoogleFonts.poppins(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
-                  color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.white
+                      : TaskWarriorColors.black,
                 ),
               ),
             ],

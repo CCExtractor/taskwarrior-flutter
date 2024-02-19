@@ -8,6 +8,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
+import 'package:taskwarrior/config/taskwarriorcolors.dart';
 import 'package:taskwarrior/model/json.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
 import 'package:taskwarrior/services/task_details.dart';
@@ -81,8 +82,8 @@ class _TasksBuilderState extends State<TasksBuilder> {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: const Text('Task Updated'),
       backgroundColor: AppSettings.isDarkMode
-          ? const Color.fromARGB(255, 61, 61, 61)
-          : const Color.fromARGB(255, 39, 39, 39),
+          ? TaskWarriorColors.ksecondaryBackgroundColor
+          : TaskWarriorColors.kLightSecondaryBackgroundColor,
       duration: const Duration(seconds: 2),
       action: SnackBarAction(
         label: 'Undo',
@@ -134,13 +135,13 @@ class _TasksBuilderState extends State<TasksBuilder> {
                   );
             },
             backgroundColor: AppSettings.isDarkMode
-                ? Colors.white
-                : Palette.kToDark.shade200,
+                ? TaskWarriorColors.kLightPrimaryBackgroundColor
+                : TaskWarriorColors.kprimaryBackgroundColor,
             child: Icon(
               Icons.arrow_upward,
               color: AppSettings.isDarkMode
-                  ? Palette.kToDark.shade200
-                  : Colors.white,
+                  ? TaskWarriorColors.kprimaryBackgroundColor
+                  : TaskWarriorColors.kLightPrimaryBackgroundColor,
             ),
           ),
         ),
@@ -157,8 +158,8 @@ class _TasksBuilderState extends State<TasksBuilder> {
                     style: GoogleFonts.poppins(
                       fontSize: 20,
                       color: AppSettings.isDarkMode
-                          ? Colors.white
-                          : Palette.kToDark.shade200,
+                          ? TaskWarriorColors.kLightPrimaryBackgroundColor
+                          : TaskWarriorColors.kprimaryBackgroundColor,
                     ),
                   ),
                 ),
@@ -200,7 +201,7 @@ class _TasksBuilderState extends State<TasksBuilder> {
                                   },
                                   icon: Icons.done,
                                   label: "COMPLETE",
-                                  backgroundColor: Colors.green,
+                                  backgroundColor: TaskWarriorColors.green,
                                 ),
                               ],
                             ),
@@ -233,18 +234,18 @@ class _TasksBuilderState extends State<TasksBuilder> {
                                   },
                                   icon: Icons.delete,
                                   label: "DELETE",
-                                  backgroundColor: Colors.red,
+                                  backgroundColor: TaskWarriorColors.red,
                                 ),
                               ],
                             ),
                             child: Card(
                               color: AppSettings.isDarkMode
                                   ? Palette.kToDark
-                                  : Colors.white,
+                                  : TaskWarriorColors.white,
                               child: InkWell(
                                 splashColor: AppSettings.isDarkMode
-                                    ? Colors.black
-                                    : Colors.grey.shade200,
+                                    ? TaskWarriorColors.black
+                                    : TaskWarriorColors.borderColor,
                                 onTap: () => Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -263,11 +264,11 @@ class _TasksBuilderState extends State<TasksBuilder> {
                         : Card(
                             color: AppSettings.isDarkMode
                                 ? Palette.kToDark
-                                : Colors.white,
+                                : TaskWarriorColors.white,
                             child: InkWell(
                               splashColor: AppSettings.isDarkMode
-                                  ? Colors.black
-                                  : Colors.grey.shade200,
+                                  ? TaskWarriorColors.black
+                                  : TaskWarriorColors.borderColor,
                               onTap: () => Navigator.push(
                                 context,
                                 MaterialPageRoute(

@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taskwarrior/config/app_settings.dart';
+import 'package:taskwarrior/config/taskwarriorcolors.dart';
 import 'package:taskwarrior/controller/WidgetController.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
 import 'package:taskwarrior/widgets/taskfunctions/taskparser.dart';
@@ -49,16 +50,18 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
       child: SingleChildScrollView(
         child: AlertDialog(
           surfaceTintColor: AppSettings.isDarkMode
-              ? const Color.fromARGB(255, 25, 25, 25)
-              : Colors.white,
+              ? TaskWarriorColors.kdialogBackGroundColor
+              : TaskWarriorColors.kLightDialogBackGroundColor,
           backgroundColor: AppSettings.isDarkMode
-              ? const Color.fromARGB(255, 25, 25, 25)
-              : Colors.white,
+              ? TaskWarriorColors.kdialogBackGroundColor
+              : TaskWarriorColors.kLightDialogBackGroundColor,
           title: Center(
             child: Text(
               title,
               style: TextStyle(
-                color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                color: AppSettings.isDarkMode
+                    ? TaskWarriorColors.white
+                    : TaskWarriorColors.black,
               ),
             ),
           ),
@@ -104,12 +107,16 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
               child: TextFormField(
                 controller: tagcontroller,
                 style: TextStyle(
-                  color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.white
+                      : TaskWarriorColors.black,
                 ),
                 decoration: InputDecoration(
                   hintText: 'Add tags',
                   hintStyle: TextStyle(
-                    color: AppSettings.isDarkMode ? Colors.white : Colors.red,
+                    color: AppSettings.isDarkMode
+                        ? TaskWarriorColors.white
+                        : TaskWarriorColors.red,
                   ),
                 ),
                 onFieldSubmitted: (tag) {
@@ -145,12 +152,16 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
         autofocus: true,
         controller: namecontroller,
         style: TextStyle(
-          color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+          color: AppSettings.isDarkMode
+              ? TaskWarriorColors.white
+              : TaskWarriorColors.black,
         ),
         decoration: InputDecoration(
           hintText: 'Enter Task',
           hintStyle: TextStyle(
-            color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+            color: AppSettings.isDarkMode
+                ? TaskWarriorColors.white
+                : TaskWarriorColors.black,
           ),
         ),
         validator: (name) => name != null && name.isEmpty
@@ -163,7 +174,9 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
           Text(
             "Due : ",
             style: GoogleFonts.poppins(
-              color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+              color: AppSettings.isDarkMode
+                  ? TaskWarriorColors.white
+                  : TaskWarriorColors.black,
               fontWeight: FontWeight.bold,
               height: 3.3,
             ),
@@ -172,7 +185,9 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
             child: GestureDetector(
               child: TextFormField(
                 style: TextStyle(
-                  color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.white
+                      : TaskWarriorColors.black,
                 ),
                 readOnly: true,
                 controller: TextEditingController(
@@ -181,7 +196,9 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                 decoration: InputDecoration(
                   hintText: 'Select due date',
                   hintStyle: TextStyle(
-                    color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                    color: AppSettings.isDarkMode
+                        ? TaskWarriorColors.white
+                        : TaskWarriorColors.black,
                   ),
                 ),
                 onTap: () async {
@@ -190,31 +207,31 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                       return Theme(
                         data: Theme.of(context).copyWith(
                           colorScheme: AppSettings.isDarkMode
-                              ? const ColorScheme(
+                              ? ColorScheme(
                                   brightness: Brightness.dark,
-                                  primary: Colors.white,
-                                  onPrimary: Colors.black,
-                                  secondary: Colors.black,
-                                  onSecondary: Colors.white,
-                                  error: Colors.red,
-                                  onError: Colors.black,
-                                  background: Colors.black,
-                                  onBackground: Colors.white,
-                                  surface: Colors.black,
-                                  onSurface: Colors.white,
+                                  primary: TaskWarriorColors.white,
+                                  onPrimary: TaskWarriorColors.black,
+                                  secondary: TaskWarriorColors.black,
+                                  onSecondary: TaskWarriorColors.white,
+                                  error: TaskWarriorColors.red,
+                                  onError: TaskWarriorColors.black,
+                                  background: TaskWarriorColors.black,
+                                  onBackground: TaskWarriorColors.white,
+                                  surface: TaskWarriorColors.black,
+                                  onSurface: TaskWarriorColors.white,
                                 )
-                              : const ColorScheme(
+                              : ColorScheme(
                                   brightness: Brightness.light,
-                                  primary: Colors.black,
-                                  onPrimary: Colors.white,
-                                  secondary: Colors.white,
-                                  onSecondary: Colors.black,
-                                  error: Colors.red,
-                                  onError: Colors.white,
-                                  background: Colors.white,
-                                  onBackground: Colors.black,
-                                  surface: Colors.white,
-                                  onSurface: Colors.black,
+                                  primary: TaskWarriorColors.black,
+                                  onPrimary: TaskWarriorColors.white,
+                                  secondary: TaskWarriorColors.white,
+                                  onSecondary: TaskWarriorColors.black,
+                                  error: TaskWarriorColors.red,
+                                  onError: TaskWarriorColors.white,
+                                  background: TaskWarriorColors.white,
+                                  onBackground: TaskWarriorColors.black,
+                                  surface: TaskWarriorColors.white,
+                                  onSurface: TaskWarriorColors.black,
                                 ),
                         ),
                         child: child!,
@@ -233,31 +250,31 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                           data: Theme.of(context).copyWith(
                             textTheme: const TextTheme(),
                             colorScheme: AppSettings.isDarkMode
-                                ? const ColorScheme(
+                                ? ColorScheme(
                                     brightness: Brightness.dark,
-                                    primary: Colors.white,
-                                    onPrimary: Colors.black,
-                                    secondary: Color.fromARGB(255, 70, 68, 68),
-                                    onSecondary: Colors.white,
-                                    error: Colors.red,
-                                    onError: Colors.black,
-                                    background: Colors.black,
-                                    onBackground: Colors.white,
-                                    surface: Colors.black,
-                                    onSurface: Colors.white,
+                                    primary: TaskWarriorColors.white,
+                                    onPrimary: TaskWarriorColors.black,
+                                    secondary: TaskWarriorColors.black,
+                                    onSecondary: TaskWarriorColors.white,
+                                    error: TaskWarriorColors.red,
+                                    onError: TaskWarriorColors.black,
+                                    background: TaskWarriorColors.black,
+                                    onBackground: TaskWarriorColors.white,
+                                    surface: TaskWarriorColors.black,
+                                    onSurface: TaskWarriorColors.white,
                                   )
-                                : const ColorScheme(
+                                : ColorScheme(
                                     brightness: Brightness.light,
-                                    primary: Colors.black,
-                                    onPrimary: Colors.white,
-                                    secondary: Colors.white,
-                                    onSecondary: Colors.black,
-                                    error: Colors.red,
-                                    onError: Colors.white,
-                                    background: Colors.white,
-                                    onBackground: Colors.black,
-                                    surface: Colors.white,
-                                    onSurface: Colors.black,
+                                    primary: TaskWarriorColors.black,
+                                    onPrimary: TaskWarriorColors.white,
+                                    secondary: TaskWarriorColors.white,
+                                    onSecondary: TaskWarriorColors.black,
+                                    error: TaskWarriorColors.red,
+                                    onError: TaskWarriorColors.white,
+                                    background: TaskWarriorColors.white,
+                                    onBackground: TaskWarriorColors.black,
+                                    surface: TaskWarriorColors.white,
+                                    onSurface: TaskWarriorColors.black,
                                   ),
                           ),
                           child: child!,
@@ -286,13 +303,13 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                             'Please select a due date and time in the future.',
                             style: TextStyle(
                               color: AppSettings.isDarkMode
-                                  ? Colors.white
-                                  : Colors.black,
+                                  ? TaskWarriorColors.white
+                                  : TaskWarriorColors.black,
                             ),
                           ),
                           backgroundColor: AppSettings.isDarkMode
-                              ? Colors.black
-                              : Colors.white,
+                              ? TaskWarriorColors.black
+                              : TaskWarriorColors.white,
                           duration: const Duration(seconds: 2),
                         ));
                       }
@@ -315,24 +332,28 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                 'Priority :  ',
                 style: GoogleFonts.poppins(
                   fontWeight: FontWeight.bold,
-                  color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.white
+                      : TaskWarriorColors.black,
                 ),
                 textAlign: TextAlign.left,
               ),
               DropdownButton<String>(
                 dropdownColor: AppSettings.isDarkMode
-                    ? const Color.fromARGB(255, 25, 25, 25)
-                    : Colors.white,
+                    ? TaskWarriorColors.kdialogBackGroundColor
+                    : TaskWarriorColors.kLightDialogBackGroundColor,
                 value: priority,
                 elevation: 16,
                 style: GoogleFonts.poppins(
-                  color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.white
+                      : TaskWarriorColors.black,
                 ),
                 underline: Container(
                   height: 1.5,
                   color: AppSettings.isDarkMode
-                      ? const Color.fromARGB(255, 25, 25, 25)
-                      : Colors.white,
+                      ? TaskWarriorColors.kdialogBackGroundColor
+                      : TaskWarriorColors.kLightDialogBackGroundColor,
                 ),
                 onChanged: (String? newValue) {
                   setState(() {
@@ -356,7 +377,9 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
         child: Text(
           'Cancel',
           style: TextStyle(
-            color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+            color: AppSettings.isDarkMode
+                ? TaskWarriorColors.white
+                : TaskWarriorColors.black,
           ),
         ),
         onPressed: () => Navigator.of(context).pop("cancel"),
@@ -369,7 +392,9 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
       child: Text(
         "Add",
         style: TextStyle(
-          color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+          color: AppSettings.isDarkMode
+              ? TaskWarriorColors.white
+              : TaskWarriorColors.black,
         ),
       ),
       onPressed: () async {
@@ -399,11 +424,14 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
               content: Text(
                 'Task Added Successfully, Tap to Edit',
                 style: TextStyle(
-                  color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.white
+                      : TaskWarriorColors.black,
                 ),
               ),
-              backgroundColor:
-                  AppSettings.isDarkMode ? Colors.black : Colors.white,
+              backgroundColor: AppSettings.isDarkMode
+                  ? TaskWarriorColors.black
+                  : TaskWarriorColors.white,
               duration: const Duration(seconds: 2),
             ));
 
@@ -421,12 +449,14 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
               content: Text(
                 e.message,
                 style: TextStyle(
-                  color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.white
+                      : TaskWarriorColors.black,
                 ),
               ),
               backgroundColor: AppSettings.isDarkMode
-                  ? const Color.fromARGB(255, 61, 61, 61)
-                  : const Color.fromARGB(255, 39, 39, 39),
+                  ? TaskWarriorColors.ksecondaryBackgroundColor
+                  : TaskWarriorColors.kLightSecondaryBackgroundColor,
               duration: const Duration(seconds: 2),
             ));
             log(e.toString());

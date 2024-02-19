@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
+import 'package:taskwarrior/config/taskwarriorcolors.dart';
 import 'package:taskwarrior/controller/filter_drawer_tour_controller.dart';
 import 'package:taskwarrior/drawer/filter_drawer_tour.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
@@ -30,8 +31,8 @@ class _FilterDrawerState extends State<FilterDrawer> {
 
   bool isSaved = false;
   var tileColor = AppSettings.isDarkMode
-      ? const Color.fromARGB(255, 48, 46, 46)
-      : const Color.fromARGB(255, 220, 216, 216);
+      ? TaskWarriorColors.ksecondaryBackgroundColor
+      : TaskWarriorColors.kLightPrimaryBackgroundColor;
   late TutorialCoachMark tutorialCoachMark;
 
   void _initFilterDrawerTour() {
@@ -42,7 +43,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
         filterTagKey: filterTagKey,
         sortByKey: sortByKey,
       ),
-      colorShadow: Colors.black,
+      colorShadow: TaskWarriorColors.black,
       paddingFocus: 10,
       opacityShadow: 1.00,
       hideSkip: true,
@@ -83,8 +84,8 @@ class _FilterDrawerState extends State<FilterDrawer> {
     var storageWidget = StorageWidget.of(context);
     return Drawer(
       backgroundColor: AppSettings.isDarkMode
-          ? Color.fromARGB(255, 29, 29, 29)
-          : Colors.white,
+          ? TaskWarriorColors.kprimaryBackgroundColor
+          : TaskWarriorColors.kLightPrimaryBackgroundColor,
       child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8),
@@ -105,8 +106,8 @@ class _FilterDrawerState extends State<FilterDrawer> {
                     style: GoogleFonts.poppins(
                         fontWeight: FontWeight.bold,
                         color: (AppSettings.isDarkMode
-                            ? Colors.white
-                            : Color.fromARGB(255, 48, 46, 46)),
+                            ? TaskWarriorColors.white
+                            : TaskWarriorColors.kLightSecondaryBackgroundColor),
                         fontSize: 25),
                   ),
                 ),
@@ -120,7 +121,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                 decoration: BoxDecoration(
                   color: tileColor,
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.grey.shade300),
+                  border: Border.all(color: TaskWarriorColors.borderColor),
                 ),
                 child: ListTile(
                   contentPadding: EdgeInsets.only(
@@ -137,8 +138,8 @@ class _FilterDrawerState extends State<FilterDrawer> {
                             fontWeight: FontWeight.bold,
                             fontSize: 15,
                             color: AppSettings.isDarkMode
-                                ? Colors.white
-                                : Colors.black,
+                                ? TaskWarriorColors.white
+                                : TaskWarriorColors.black,
                           ),
                         ),
                         TextSpan(
@@ -148,8 +149,8 @@ class _FilterDrawerState extends State<FilterDrawer> {
                           style: GoogleFonts.poppins(
                             fontSize: 15,
                             color: AppSettings.isDarkMode
-                                ? Colors.white
-                                : Colors.black,
+                                ? TaskWarriorColors.white
+                                : TaskWarriorColors.black,
                           ),
                         ),
                       ],
@@ -157,8 +158,8 @@ class _FilterDrawerState extends State<FilterDrawer> {
                   ),
                   onTap: widget.filters.togglePendingFilter,
                   textColor: AppSettings.isDarkMode
-                      ? Colors.white
-                      : Color.fromARGB(255, 48, 46, 46),
+                      ? TaskWarriorColors.kprimaryTextColor
+                      : TaskWarriorColors.kLightSecondaryTextColor,
                 ),
               ),
               const Divider(
@@ -171,7 +172,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                 decoration: BoxDecoration(
                   color: tileColor,
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.grey.shade300),
+                  border: Border.all(color: TaskWarriorColors.borderColor),
                 ),
                 child: ProjectsColumn(
                   widget.filters.projects,
@@ -189,7 +190,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                 decoration: BoxDecoration(
                   color: tileColor,
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.grey.shade300),
+                  border: Border.all(color: TaskWarriorColors.borderColor),
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -203,8 +204,8 @@ class _FilterDrawerState extends State<FilterDrawer> {
                         'Filter Tag By:',
                         style: GoogleFonts.poppins(
                             color: (AppSettings.isDarkMode
-                                ? Colors.white
-                                : Color.fromARGB(255, 48, 46, 46)),
+                                ? TaskWarriorColors.kprimaryTextColor
+                                : TaskWarriorColors.kLightSecondaryTextColor),
                             //
                             fontSize: 18),
                         //textAlign: TextAlign.right,
@@ -233,7 +234,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                 decoration: BoxDecoration(
                   color: tileColor,
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.grey.shade300),
+                  border: Border.all(color: TaskWarriorColors.borderColor),
                 ),
                 //height: 30,
                 child: Column(
@@ -247,8 +248,8 @@ class _FilterDrawerState extends State<FilterDrawer> {
                         'Sort By',
                         style: GoogleFonts.poppins(
                             color: (AppSettings.isDarkMode
-                                ? Colors.white
-                                : Color.fromARGB(255, 48, 46, 46)),
+                                ? TaskWarriorColors.kprimaryTextColor
+                                : TaskWarriorColors.ksecondaryTextColor),
                             fontSize: 18),
                         // textAlign: TextAlign.right,
                       ),
@@ -292,11 +293,12 @@ class _FilterDrawerState extends State<FilterDrawer> {
                               },
                               labelStyle: GoogleFonts.poppins(
                                   color: AppSettings.isDarkMode
-                                      ? Colors.black
-                                      : Colors.white),
+                                      ? TaskWarriorColors.black
+                                      : TaskWarriorColors.white),
                               backgroundColor: AppSettings.isDarkMode
-                                  ? Color.fromARGB(255, 220, 216, 216)
-                                  : Color.fromARGB(255, 48, 46, 46),
+                                  ? TaskWarriorColors
+                                      .kLightSecondaryBackgroundColor
+                                  : TaskWarriorColors.ksecondaryBackgroundColor,
                             ),
                         ],
                       ),
@@ -307,11 +309,10 @@ class _FilterDrawerState extends State<FilterDrawer> {
                     Container(
                       width: 200,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: AppSettings.isDarkMode
-                            ? Color.fromARGB(255, 220, 216, 216)
-                            : Color.fromARGB(255, 48, 46, 46),
-                      ),
+                          borderRadius: BorderRadius.circular(10),
+                          color: AppSettings.isDarkMode
+                              ? TaskWarriorColors.kLightSecondaryBackgroundColor
+                              : TaskWarriorColors.ksecondaryBackgroundColor),
                       child: TextButton(
                           onPressed: () {
                             if (storageWidget.selectedSort.endsWith('+') ||
@@ -326,8 +327,8 @@ class _FilterDrawerState extends State<FilterDrawer> {
                             style: GoogleFonts.poppins(
                                 fontSize: 15,
                                 color: AppSettings.isDarkMode
-                                    ? Color.fromARGB(255, 48, 46, 46)
-                                    : Colors.white),
+                                    ? TaskWarriorColors.kLightSecondaryTextColor
+                                    : TaskWarriorColors.ksecondaryTextColor),
                           )),
                     ),
                     const Divider(

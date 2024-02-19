@@ -6,16 +6,17 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:loggy/loggy.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
+import 'package:taskwarrior/config/taskwarriorcolors.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
 import 'package:taskwarrior/widgets/taskw.dart';
 import '../pallete.dart';
 
 class TagsWidget extends StatelessWidget {
-   const TagsWidget({
-  required this.name,
-  required this.value,
-  required this.callback,
-  super.key,
+  const TagsWidget({
+    required this.name,
+    required this.value,
+    required this.callback,
+    super.key,
   });
 
   final String name;
@@ -28,9 +29,9 @@ class TagsWidget extends StatelessWidget {
       child: ListTile(
         tileColor: AppSettings.isDarkMode
             ? const Color.fromARGB(255, 55, 54, 54)
-            : Colors.white,
+            : TaskWarriorColors.white,
         textColor: AppSettings.isDarkMode
-            ? Colors.white
+            ? TaskWarriorColors.white
             : const Color.fromARGB(255, 48, 46, 46),
         title: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
@@ -59,7 +60,6 @@ class TagsWidget extends StatelessWidget {
 class TagsRoute extends StatefulWidget {
   const TagsRoute({required this.value, required this.callback, super.key});
 
-
   final ListBuilder<String>? value;
   final void Function(ListBuilder<String>?) callback;
 
@@ -72,7 +72,8 @@ class TagsRouteState extends State<TagsRoute> {
   ListBuilder<String>? draftTags;
 
   void _addTag(String tag) {
-    if (tag.isNotEmpty) {  // Add this condition to ensure the tag is not empty
+    if (tag.isNotEmpty) {
+      // Add this condition to ensure the tag is not empty
       if (draftTags == null) {
         draftTags = ListBuilder([tag]);
       } else {
@@ -115,24 +116,24 @@ class TagsRouteState extends State<TagsRoute> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Palette.kToDark.shade200,
+        backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
         title: Text(
           'Tags',
-          style: GoogleFonts.poppins(color: Colors.white),
+          style: GoogleFonts.poppins(color: TaskWarriorColors.white),
         ),
-        leading: const BackButton(
-          color: Colors.white,
+        leading: BackButton(
+          color: TaskWarriorColors.white,
         ),
       ),
       backgroundColor: AppSettings.isDarkMode
-          ? const Color.fromARGB(255, 31, 31, 31)
-          : Colors.white,
+          ? TaskWarriorColors.kprimaryBackgroundColor
+          : TaskWarriorColors.kLightPrimaryBackgroundColor,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(4),
           child: SingleChildScrollView(
             padding:
-            const EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 0),
+                const EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 0),
             child: Wrap(
               spacing: 8,
               runSpacing: 4,
@@ -140,7 +141,7 @@ class TagsRouteState extends State<TagsRoute> {
                 if (draftTags != null)
                   for (var tag in draftTags!.build())
                     FilterChip(
-                      backgroundColor: Colors.grey.shade200,
+                      backgroundColor: TaskWarriorColors.grey,
                       onSelected: (_) => _removeTag(tag),
                       label: Text(
                         '+$tag ${_pendingTags?[tag]?.frequency ?? 0}',
@@ -154,20 +155,20 @@ class TagsRouteState extends State<TagsRoute> {
                       style: GoogleFonts.poppins(
                           fontStyle: FontStyle.italic,
                           color: AppSettings.isDarkMode
-                              ? Colors.white
-                              : Colors.black),
+                              ? TaskWarriorColors.kprimaryTextColor
+                              : TaskWarriorColors.kLightPrimaryTextColor),
                     ),
                   ),
                 Divider(
                   color: AppSettings.isDarkMode
                       ? const Color.fromARGB(255, 192, 192, 192)
-                      : Palette.kToDark.shade200,
+                      : TaskWarriorColors.kprimaryBackgroundColor,
                 ),
                 if (_pendingTags != null)
-                  for (var tag in _pendingTags!.entries
-                      .where((tag) => !(draftTags?.build().contains(tag.key) ?? false)))
+                  for (var tag in _pendingTags!.entries.where((tag) =>
+                      !(draftTags?.build().contains(tag.key) ?? false)))
                     FilterChip(
-                      backgroundColor: Colors.grey.shade200,
+                      backgroundColor: TaskWarriorColors.grey,
                       onSelected: (_) => _addTag(tag.key),
                       label: Text(
                         '${tag.key} ${tag.value.frequency}',
@@ -187,8 +188,8 @@ class TagsRouteState extends State<TagsRoute> {
             context: context,
             builder: (context) => AlertDialog(
               backgroundColor: AppSettings.isDarkMode
-                  ? const Color.fromARGB(255, 220, 216, 216)
-                  : Colors.white,
+                  ? TaskWarriorColors.kLightSecondaryBackgroundColor
+                  : TaskWarriorColors.white,
               scrollable: true,
               title: const Text('Add tag'),
               content: Form(

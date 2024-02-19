@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:sizer/sizer.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
+import 'package:taskwarrior/config/taskwarriorcolors.dart';
 
 class SelectProfile extends StatelessWidget {
   const SelectProfile(
@@ -22,14 +23,20 @@ class SelectProfile extends StatelessWidget {
     return ExpansionTile(
       key: const PageStorageKey<String>('task-list'),
       backgroundColor: AppSettings.isDarkMode
-          ? const Color.fromARGB(255, 48, 46, 46)
-          : const Color.fromARGB(255, 220, 216, 216),
-      iconColor: AppSettings.isDarkMode ? Colors.white : Colors.black,
-      collapsedIconColor: AppSettings.isDarkMode ? Colors.white : Colors.black,
+          ? TaskWarriorColors.ksecondaryBackgroundColor
+          : TaskWarriorColors.kLightSecondaryBackgroundColor,
+      iconColor: AppSettings.isDarkMode
+          ? TaskWarriorColors.white
+          : TaskWarriorColors.black,
+      collapsedIconColor: AppSettings.isDarkMode
+          ? TaskWarriorColors.white
+          : TaskWarriorColors.black,
       collapsedTextColor: AppSettings.isDarkMode
-          ? Colors.white
-          : const Color.fromARGB(255, 48, 46, 46),
-      textColor: AppSettings.isDarkMode ? Colors.white : Colors.black,
+          ? TaskWarriorColors.ksecondaryTextColor
+          : TaskWarriorColors.kLightSecondaryTextColor,
+      textColor: AppSettings.isDarkMode
+          ? TaskWarriorColors.white
+          : TaskWarriorColors.black,
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -39,7 +46,9 @@ class SelectProfile extends StatelessWidget {
             style: GoogleFonts.poppins(
               fontWeight: FontWeight.bold,
               fontSize: 15,
-              color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+              color: AppSettings.isDarkMode
+                  ? TaskWarriorColors.white
+                  : TaskWarriorColors.black,
             ),
           ),
           SizedBox(
@@ -48,7 +57,9 @@ class SelectProfile extends StatelessWidget {
           Text(currentProfile,
               style: GoogleFonts.poppins(
                 fontSize: 12,
-                color: AppSettings.isDarkMode ? Colors.grey : Colors.grey[600],
+                color: AppSettings.isDarkMode
+                    ? TaskWarriorColors.grey
+                    : TaskWarriorColors.lightGrey,
               ))
         ],
       ),
@@ -66,7 +77,9 @@ class SelectProfile extends StatelessWidget {
                 style: GoogleFonts.poppins(
                   fontWeight: FontWeight.bold,
                   fontSize: 15,
-                  color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.white
+                      : TaskWarriorColors.black,
                 ),
               ),
             ],
@@ -118,11 +131,11 @@ class SelectProfileListTile extends StatelessWidget {
             ));
           },
           activeColor: AppSettings.isDarkMode
-              ? Colors.white
-              : const Color.fromARGB(255, 48, 46, 46),
+              ? TaskWarriorColors.white
+              : TaskWarriorColors.ksecondaryBackgroundColor,
           focusColor: AppSettings.isDarkMode
-              ? Colors.white
-              : const Color.fromARGB(255, 48, 46, 46),
+              ? TaskWarriorColors.white
+              : TaskWarriorColors.ksecondaryBackgroundColor,
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,8 +153,8 @@ class SelectProfileListTile extends StatelessWidget {
                     overflow: TextOverflow.fade,
                     style: GoogleFonts.poppins(
                       color: AppSettings.isDarkMode
-                          ? Colors.white
-                          : const Color.fromARGB(255, 48, 46, 46),
+                          ? TaskWarriorColors.ksecondaryTextColor
+                          : TaskWarriorColors.kLightSecondaryTextColor,
                     ),
                   ),
                 ),
@@ -153,8 +166,8 @@ class SelectProfileListTile extends StatelessWidget {
                 uuid,
                 style: GoogleFonts.poppins(
                   color: AppSettings.isDarkMode
-                      ? Colors.white
-                      : const Color.fromARGB(255, 48, 46, 46),
+                      ? TaskWarriorColors.ksecondaryTextColor
+                      : TaskWarriorColors.kLightSecondaryTextColor,
                 ),
               ),
             ),

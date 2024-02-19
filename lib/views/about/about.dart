@@ -5,7 +5,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sizer/sizer.dart';
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/config/taskwarriorcolors.dart';
-import 'package:taskwarrior/widgets/pallete.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AboutPage extends StatefulWidget {
@@ -24,10 +23,10 @@ class _AboutPageState extends State<AboutPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Palette.kToDark.shade200,
+        backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
         title: Text(
           'About',
-          style: GoogleFonts.poppins(color: Colors.white),
+          style: GoogleFonts.poppins(color: TaskWarriorColors.white),
         ),
         leading: GestureDetector(
           onTap: () {
@@ -35,12 +34,13 @@ class _AboutPageState extends State<AboutPage> {
           },
           child: Icon(
             Icons.chevron_left,
-            color: Appcolors.white,
+            color: TaskWarriorColors.white,
           ),
         ),
       ),
-      backgroundColor:
-          AppSettings.isDarkMode ? Palette.kToDark.shade200 : Colors.white,
+      backgroundColor: AppSettings.isDarkMode
+          ? TaskWarriorColors.kprimaryBackgroundColor
+          : TaskWarriorColors.white,
       body: Padding(
         padding: EdgeInsets.only(top: 1.h, left: 2.w, right: 2.w),
         child: SingleChildScrollView(
@@ -61,7 +61,9 @@ class _AboutPageState extends State<AboutPage> {
                 style: GoogleFonts.poppins(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
-                  color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.white
+                      : TaskWarriorColors.black,
                 ),
               ),
               SizedBox(
@@ -92,8 +94,8 @@ class _AboutPageState extends State<AboutPage> {
                                       fontWeight: FontWeight.bold,
                                       fontSize: 15,
                                       color: AppSettings.isDarkMode
-                                          ? Colors.white
-                                          : Colors.black,
+                                          ? TaskWarriorColors.white
+                                          : TaskWarriorColors.black,
                                     ),
                                   ),
                                   TextSpan(
@@ -101,8 +103,8 @@ class _AboutPageState extends State<AboutPage> {
                                     style: GoogleFonts.poppins(
                                       fontSize: 15,
                                       color: AppSettings.isDarkMode
-                                          ? Colors.white
-                                          : Colors.black,
+                                          ? TaskWarriorColors.white
+                                          : TaskWarriorColors.black,
                                     ),
                                   ),
                                 ],
@@ -117,8 +119,8 @@ class _AboutPageState extends State<AboutPage> {
                                       fontWeight: FontWeight.bold,
                                       fontSize: 15,
                                       color: AppSettings.isDarkMode
-                                          ? Colors.white
-                                          : Colors.black,
+                                          ? TaskWarriorColors.white
+                                          : TaskWarriorColors.black,
                                     ),
                                   ),
                                   TextSpan(
@@ -126,8 +128,8 @@ class _AboutPageState extends State<AboutPage> {
                                     style: GoogleFonts.poppins(
                                       fontSize: 15,
                                       color: AppSettings.isDarkMode
-                                          ? Colors.white
-                                          : Colors.black,
+                                          ? TaskWarriorColors.white
+                                          : TaskWarriorColors.black,
                                     ),
                                   ),
                                 ],
@@ -149,7 +151,9 @@ class _AboutPageState extends State<AboutPage> {
                 style: GoogleFonts.poppins(
                   fontWeight: FontWeight.w500,
                   fontSize: 12,
-                  color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.white
+                      : TaskWarriorColors.black,
                 ),
               ),
               SizedBox(
@@ -164,8 +168,8 @@ class _AboutPageState extends State<AboutPage> {
                     child: ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppSettings.isDarkMode
-                            ? const Color.fromARGB(255, 220, 216, 216)
-                            : const Color.fromARGB(255, 48, 46, 46),
+                            ? TaskWarriorColors.kLightSecondaryBackgroundColor
+                            : TaskWarriorColors.ksecondaryBackgroundColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -184,8 +188,8 @@ class _AboutPageState extends State<AboutPage> {
                           height: 15.sp,
                           colorFilter: ColorFilter.mode(
                               AppSettings.isDarkMode
-                                  ? Colors.black
-                                  : Colors.white,
+                                  ? TaskWarriorColors.black
+                                  : TaskWarriorColors.white,
                               BlendMode.srcIn)),
                       label: Text(
                         "GitHub",
@@ -193,8 +197,8 @@ class _AboutPageState extends State<AboutPage> {
                           fontWeight: FontWeight.w500,
                           fontSize: 12,
                           color: AppSettings.isDarkMode
-                              ? Colors.black
-                              : Colors.white,
+                              ? TaskWarriorColors.black
+                              : TaskWarriorColors.white,
                         ),
                       ),
                     ),
@@ -205,8 +209,8 @@ class _AboutPageState extends State<AboutPage> {
                     child: ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppSettings.isDarkMode
-                            ? const Color.fromARGB(255, 220, 216, 216)
-                            : const Color.fromARGB(255, 48, 46, 46),
+                            ? TaskWarriorColors.kLightSecondaryBackgroundColor
+                            : TaskWarriorColors.ksecondaryBackgroundColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -222,8 +226,8 @@ class _AboutPageState extends State<AboutPage> {
                           height: 15.sp,
                           colorFilter: ColorFilter.mode(
                               AppSettings.isDarkMode
-                                  ? Colors.black
-                                  : Colors.white,
+                                  ? TaskWarriorColors.black
+                                  : TaskWarriorColors.white,
                               BlendMode.srcIn)),
                       label: Text(
                         "CCExtractor",
@@ -231,8 +235,8 @@ class _AboutPageState extends State<AboutPage> {
                           fontWeight: FontWeight.w500,
                           fontSize: 12,
                           color: AppSettings.isDarkMode
-                              ? Colors.black
-                              : Colors.white,
+                              ? TaskWarriorColors.black
+                              : TaskWarriorColors.white,
                         ),
                       ),
                     ),
@@ -248,7 +252,9 @@ class _AboutPageState extends State<AboutPage> {
                 style: GoogleFonts.poppins(
                   fontWeight: FontWeight.w600,
                   fontSize: 12,
-                  color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.white
+                      : TaskWarriorColors.black,
                 ),
               ),
               SizedBox(

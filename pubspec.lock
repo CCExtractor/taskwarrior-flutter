@@ -422,14 +422,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.0"
-  flutter_platform_widgets:
-    dependency: "direct main"
-    description:
-      name: flutter_platform_widgets
-      sha256: "4970c211af1dad0a161e6379d04de2cace80283da0439f2f87d31a541f9b2b84"
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.0.2"
   flutter_slidable:
     dependency: "direct main"
     description:
