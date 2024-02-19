@@ -253,7 +253,7 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
     var height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: TaskWarriorColors.kLightPrimaryBackgroundColor,
+        backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
         titleSpacing:
             0, // Reduce the spacing between the title and leading/back button
         title: Column(
@@ -381,34 +381,48 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                                             child: SizedBox(
                                               height: height * 0.15,
                                               child: TextField(
+                                                style: TextStyle(
+                                                    color:
+                                                        AppSettings.isDarkMode
+                                                            ? TaskWarriorColors
+                                                                .white
+                                                            : TaskWarriorColors
+                                                                .black),
                                                 controller:
                                                     taskrcContentController,
                                                 maxLines: 8,
-                                                style: GoogleFonts.poppins(
-                                                    color: TaskWarriorColors
-                                                        .white),
                                                 decoration: InputDecoration(
-                                                  suffixIconConstraints:
-                                                      const BoxConstraints(
-                                                    maxHeight: 24,
-                                                    maxWidth: 24,
-                                                  ),
-                                                  isDense: true,
-                                                  suffix: IconButton(
-                                                    onPressed: () async {
-                                                      setContent();
-                                                    },
-                                                    icon: const Icon(
-                                                        Icons.content_paste),
-                                                  ),
-                                                  border:
-                                                      const OutlineInputBorder(),
-                                                  labelStyle:
-                                                      GoogleFonts.poppins(
-                                                          color: color),
-                                                  labelText:
-                                                      'Paste your taskrc contents here',
-                                                ),
+                                                    counterStyle: TextStyle(
+                                                        color: AppSettings.isDarkMode
+                                                            ? TaskWarriorColors
+                                                                .white
+                                                            : TaskWarriorColors
+                                                                .black),
+                                                    suffixIconConstraints:
+                                                        const BoxConstraints(
+                                                      maxHeight: 24,
+                                                      maxWidth: 24,
+                                                    ),
+                                                    isDense: true,
+                                                    suffix: IconButton(
+                                                      onPressed: () async {
+                                                        setContent();
+                                                      },
+                                                      icon: const Icon(
+                                                          Icons.content_paste),
+                                                    ),
+                                                    border:
+                                                        const OutlineInputBorder(),
+                                                    labelStyle: GoogleFonts
+                                                        .poppins(
+                                                            color: AppSettings
+                                                                    .isDarkMode
+                                                                ? TaskWarriorColors
+                                                                    .white
+                                                                : TaskWarriorColors
+                                                                    .black),
+                                                    labelText:
+                                                        'Paste your taskrc contents here'),
                                               ),
                                             ),
                                           ),
@@ -718,8 +732,8 @@ class _PemWidgetState extends State<PemWidget> {
   @override
   Widget build(BuildContext context) {
     var color = AppSettings.isDarkMode
-        ? TaskWarriorColors.white
-        : TaskWarriorColors.kprimaryBackgroundColor;
+        ? TaskWarriorColors.kprimaryTextColor
+        : TaskWarriorColors.kLightPrimaryTextColor;
     var contents = widget.storage.guiPemFiles.pemContents(widget.pem);
     var name = widget.storage.guiPemFiles.pemFilename(widget.pem);
     String identifier = "";

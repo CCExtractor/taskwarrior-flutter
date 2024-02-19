@@ -228,7 +228,17 @@ class _HomePageState extends State<HomePage> {
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: const Text('TaskServer is not configured'),
+                      content: Text(
+                        'TaskServer is not configured',
+                        style: TextStyle(
+                          color: AppSettings.isDarkMode
+                              ? TaskWarriorColors.white
+                              : TaskWarriorColors.black,
+                        ),
+                      ),
+                      backgroundColor: AppSettings.isDarkMode
+                          ? TaskWarriorColors.black
+                          : TaskWarriorColors.white,
                       action: SnackBarAction(
                         label: 'Set Up',
                         onPressed: () {

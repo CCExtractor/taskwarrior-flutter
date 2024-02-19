@@ -422,7 +422,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
 
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(
-                'Task Added Successfully, Tap to Edit',
+                'Task Added Successfully. Tap to Edit',
                 style: TextStyle(
                   color: AppSettings.isDarkMode
                       ? TaskWarriorColors.white
