@@ -106,8 +106,8 @@ class _FilterDrawerState extends State<FilterDrawer> {
                     style: GoogleFonts.poppins(
                         fontWeight: FontWeight.bold,
                         color: (AppSettings.isDarkMode
-                            ? TaskWarriorColors.white
-                            : TaskWarriorColors.kLightSecondaryBackgroundColor),
+                            ? TaskWarriorColors.kprimaryTextColor
+                            : TaskWarriorColors.kLightPrimaryTextColor),
                         fontSize: 25),
                   ),
                 ),
