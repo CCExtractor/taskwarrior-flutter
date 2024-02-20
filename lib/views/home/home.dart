@@ -296,6 +296,10 @@ class _HomePageState extends State<HomePage> {
                     margin: const EdgeInsets.symmetric(
                         horizontal: 10, vertical: 10),
                     child: SearchBar(
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                          (TaskWarriorColors.kLightPrimaryBackgroundColor)),
+                      surfaceTintColor: MaterialStateProperty.all<Color>(
+                          (TaskWarriorColors.kLightPrimaryBackgroundColor)),
                       controller: storageWidget.searchController,
                       // shape:,
                       onChanged: (value) {
