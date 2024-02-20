@@ -186,14 +186,32 @@ class TagsRouteState extends State<TagsRoute> {
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
+              surfaceTintColor: AppSettings.isDarkMode
+                  ? TaskWarriorColors.kdialogBackGroundColor
+                  : TaskWarriorColors.kLightDialogBackGroundColor,
+              shadowColor: AppSettings.isDarkMode
+                  ? TaskWarriorColors.kdialogBackGroundColor
+                  : TaskWarriorColors.kLightDialogBackGroundColor,
               backgroundColor: AppSettings.isDarkMode
-                  ? TaskWarriorColors.kLightSecondaryBackgroundColor
-                  : TaskWarriorColors.white,
+                  ? TaskWarriorColors.kdialogBackGroundColor
+                  : TaskWarriorColors.kLightDialogBackGroundColor,
               scrollable: true,
-              title: const Text('Add tag'),
+              title: Text(
+                'Add tag',
+                style: TextStyle(
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.white
+                      : TaskWarriorColors.black,
+                ),
+              ),
               content: Form(
                 key: formKey,
                 child: TextFormField(
+                  style: TextStyle(
+                    color: AppSettings.isDarkMode
+                        ? TaskWarriorColors.white
+                        : TaskWarriorColors.black,
+                  ),
                   validator: (value) {
                     if (value != null) {
                       if (value.isNotEmpty && value.contains(" ")) {
@@ -211,7 +229,14 @@ class TagsRouteState extends State<TagsRoute> {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Text('Cancel'),
+                  child: Text(
+                    'Cancel',
+                    style: TextStyle(
+                      color: AppSettings.isDarkMode
+                          ? TaskWarriorColors.white
+                          : TaskWarriorColors.black,
+                    ),
+                  ),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -225,7 +250,14 @@ class TagsRouteState extends State<TagsRoute> {
                       }
                     }
                   },
-                  child: const Text('Submit'),
+                  child: Text(
+                    'Submit',
+                    style: TextStyle(
+                      color: AppSettings.isDarkMode
+                          ? TaskWarriorColors.black
+                          : TaskWarriorColors.black,
+                    ),
+                  ),
                 ),
               ],
             ),

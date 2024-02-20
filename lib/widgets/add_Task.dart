@@ -52,6 +52,9 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
           surfaceTintColor: AppSettings.isDarkMode
               ? TaskWarriorColors.kdialogBackGroundColor
               : TaskWarriorColors.kLightDialogBackGroundColor,
+          shadowColor: AppSettings.isDarkMode
+              ? TaskWarriorColors.kdialogBackGroundColor
+              : TaskWarriorColors.kLightDialogBackGroundColor,
           backgroundColor: AppSettings.isDarkMode
               ? TaskWarriorColors.kdialogBackGroundColor
               : TaskWarriorColors.kLightDialogBackGroundColor,

@@ -86,7 +86,23 @@ class _DetailRouteState extends State<DetailRoute> {
           context: context,
           builder: (context) {
             return AlertDialog(
-              title: const Text('Do you want to save changes?'),
+              surfaceTintColor: AppSettings.isDarkMode
+                  ? TaskWarriorColors.kdialogBackGroundColor
+                  : TaskWarriorColors.kLightDialogBackGroundColor,
+              shadowColor: AppSettings.isDarkMode
+                  ? TaskWarriorColors.kdialogBackGroundColor
+                  : TaskWarriorColors.kLightDialogBackGroundColor,
+              backgroundColor: AppSettings.isDarkMode
+                  ? TaskWarriorColors.kdialogBackGroundColor
+                  : TaskWarriorColors.kLightDialogBackGroundColor,
+              title: Text(
+                'Do you want to save changes?',
+                style: TextStyle(
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.white
+                      : TaskWarriorColors.black,
+                ),
+              ),
               actions: [
                 TextButton(
                   onPressed: () {
@@ -97,7 +113,14 @@ class _DetailRouteState extends State<DetailRoute> {
                     );
                     setState(() {});
                   },
-                  child: const Text('Yes'),
+                  child: Text(
+                    'Yes',
+                    style: TextStyle(
+                      color: AppSettings.isDarkMode
+                          ? TaskWarriorColors.white
+                          : TaskWarriorColors.black,
+                    ),
+                  ),
                 ),
                 TextButton(
                   onPressed: () {
@@ -106,13 +129,27 @@ class _DetailRouteState extends State<DetailRoute> {
                       (route) => false,
                     );
                   },
-                  child: const Text('No'),
+                  child: Text(
+                    'No',
+                    style: TextStyle(
+                      color: AppSettings.isDarkMode
+                          ? TaskWarriorColors.white
+                          : TaskWarriorColors.black,
+                    ),
+                  ),
                 ),
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Text('Cancel'),
+                  child: Text(
+                    'Cancel',
+                    style: TextStyle(
+                      color: AppSettings.isDarkMode
+                          ? TaskWarriorColors.white
+                          : TaskWarriorColors.black,
+                    ),
+                  ),
                 ),
               ],
             );
@@ -128,7 +165,9 @@ class _DetailRouteState extends State<DetailRoute> {
           backgroundColor: Palette.kToDark,
           title: Text(
             'id: ${(modify.id == 0) ? '-' : modify.id}',
-            style: GoogleFonts.poppins(color: TaskWarriorColors.white),
+            style: TextStyle(
+              color: TaskWarriorColors.white,
+            ),
           ),
         ),
         body: Padding(
@@ -165,14 +204,39 @@ class _DetailRouteState extends State<DetailRoute> {
         floatingActionButton: (modify.changes.isEmpty)
             ? null
             : FloatingActionButton(
+                backgroundColor: AppSettings.isDarkMode
+                    ? TaskWarriorColors.black
+                    : TaskWarriorColors.white,
+                foregroundColor: AppSettings.isDarkMode
+                    ? TaskWarriorColors.white
+                    : TaskWarriorColors.black,
+                splashColor: AppSettings.isDarkMode
+                    ? TaskWarriorColors.black
+                    : TaskWarriorColors.white,
                 heroTag: "btn1",
                 onPressed: () {
                   showDialog(
                     context: context,
                     builder: (context) {
                       return AlertDialog(
+                        surfaceTintColor: AppSettings.isDarkMode
+                            ? TaskWarriorColors.kdialogBackGroundColor
+                            : TaskWarriorColors.kLightDialogBackGroundColor,
+                        shadowColor: AppSettings.isDarkMode
+                            ? TaskWarriorColors.kdialogBackGroundColor
+                            : TaskWarriorColors.kLightDialogBackGroundColor,
+                        backgroundColor: AppSettings.isDarkMode
+                            ? TaskWarriorColors.kdialogBackGroundColor
+                            : TaskWarriorColors.kLightDialogBackGroundColor,
                         scrollable: true,
-                        title: const Text('Review changes:'),
+                        title: Text(
+                          'Review changes:',
+                          style: TextStyle(
+                            color: AppSettings.isDarkMode
+                                ? TaskWarriorColors.white
+                                : TaskWarriorColors.black,
+                          ),
+                        ),
                         content: SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Text(
@@ -182,7 +246,11 @@ class _DetailRouteState extends State<DetailRoute> {
                                     '  new: ${entry.value['new']}')
                                 .toList()
                                 .join('\n'),
-                            style: GoogleFonts.poppins(),
+                            style: TextStyle(
+                              color: AppSettings.isDarkMode
+                                  ? TaskWarriorColors.white
+                                  : TaskWarriorColors.black,
+                            ),
                           ),
                         ),
                         actions: [
@@ -190,13 +258,27 @@ class _DetailRouteState extends State<DetailRoute> {
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
-                            child: const Text('Cancel'),
+                            child: Text(
+                              'Cancel',
+                              style: TextStyle(
+                                color: AppSettings.isDarkMode
+                                    ? TaskWarriorColors.white
+                                    : TaskWarriorColors.black,
+                              ),
+                            ),
                           ),
                           ElevatedButton(
                             onPressed: () {
                               saveChanges();
                             },
-                            child: const Text('Submit'),
+                            child: Text(
+                              'Submit',
+                              style: TextStyle(
+                                color: AppSettings.isDarkMode
+                                    ? TaskWarriorColors.black
+                                    : TaskWarriorColors.black,
+                              ),
+                            ),
                           ),
                         ],
                       );
@@ -304,9 +386,7 @@ class AttributeWidget extends StatelessWidget {
                 children: [
                   Text(
                     '$name:'.padRight(13),
-                    style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
+                    style: TextStyle(
                       color: AppSettings.isDarkMode
                           ? TaskWarriorColors.white
                           : TaskWarriorColors.black,
@@ -314,13 +394,12 @@ class AttributeWidget extends StatelessWidget {
                   ),
                   Text(
                     localValue?.toString() ?? "not selected",
-                    style: GoogleFonts.poppins(
-                      fontSize: 15,
+                    style: TextStyle(
                       color: AppSettings.isDarkMode
                           ? TaskWarriorColors.white
                           : TaskWarriorColors.black,
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -371,13 +450,12 @@ class TagsWidget extends StatelessWidget {
                     TextSpan(
                       text:
                           '${(value as ListBuilder?)?.build() ?? 'not selected'}',
-                      style: GoogleFonts.poppins(
-                        fontSize: 15,
+                      style: TextStyle(
                         color: AppSettings.isDarkMode
                             ? TaskWarriorColors.white
                             : TaskWarriorColors.black,
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),

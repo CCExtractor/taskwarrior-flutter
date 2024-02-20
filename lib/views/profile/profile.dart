@@ -86,11 +86,41 @@ class _ProfilePageState extends State<ProfilePage> {
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: const Text("Export Format"),
-                      content: const Text("Choose the export format:"),
+                      surfaceTintColor: AppSettings.isDarkMode
+                          ? TaskWarriorColors.kdialogBackGroundColor
+                          : TaskWarriorColors.kLightDialogBackGroundColor,
+                      shadowColor: AppSettings.isDarkMode
+                          ? TaskWarriorColors.kdialogBackGroundColor
+                          : TaskWarriorColors.kLightDialogBackGroundColor,
+                      backgroundColor: AppSettings.isDarkMode
+                          ? TaskWarriorColors.kdialogBackGroundColor
+                          : TaskWarriorColors.kLightDialogBackGroundColor,
+                      title: Text(
+                        "Export Format",
+                        style: TextStyle(
+                          color: AppSettings.isDarkMode
+                              ? TaskWarriorColors.white
+                              : TaskWarriorColors.black,
+                        ),
+                      ),
+                      content: Text(
+                        "Choose the export format:",
+                        style: TextStyle(
+                          color: AppSettings.isDarkMode
+                              ? TaskWarriorColors.white
+                              : TaskWarriorColors.black,
+                        ),
+                      ),
                       actions: <Widget>[
                         TextButton(
-                          child: const Text("JSON"),
+                          child: Text(
+                            "JSON",
+                            style: TextStyle(
+                              color: AppSettings.isDarkMode
+                                  ? TaskWarriorColors.white
+                                  : TaskWarriorColors.black,
+                            ),
+                          ),
                           onPressed: () {
                             Navigator.of(context).pop();
                             exportTasks(
@@ -100,7 +130,14 @@ class _ProfilePageState extends State<ProfilePage> {
                           },
                         ),
                         TextButton(
-                          child: const Text("TXT"),
+                          child: Text(
+                            "TXT",
+                            style: TextStyle(
+                              color: AppSettings.isDarkMode
+                                  ? TaskWarriorColors.white
+                                  : TaskWarriorColors.black,
+                            ),
+                          ),
                           onPressed: () {
                             Navigator.of(context).pop();
                             exportTasks(
@@ -122,8 +159,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         'Profile Config Copied',
                         style: TextStyle(
                           color: AppSettings.isDarkMode
-                              ? TaskWarriorColors.kprimaryTextColor
-                              : TaskWarriorColors.kLightPrimaryTextColor,
+                              ? TaskWarriorColors.white
+                              : TaskWarriorColors.black,
                         ),
                       ),
                       backgroundColor: AppSettings.isDarkMode
@@ -136,8 +173,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         'Profile Config Copy Failed',
                         style: TextStyle(
                           color: AppSettings.isDarkMode
-                              ? TaskWarriorColors.kprimaryTextColor
-                              : TaskWarriorColors.kLightPrimaryTextColor,
+                              ? TaskWarriorColors.white
+                              : TaskWarriorColors.black,
                         ),
                       ),
                       backgroundColor: AppSettings.isDarkMode
@@ -249,7 +286,7 @@ class ProfilesColumn extends StatelessWidget {
               style: TextStyle(
                 color: AppSettings.isDarkMode
                     ? TaskWarriorColors.white
-                    : TaskWarriorColors.deepPurple,
+                    : TaskWarriorColors.black,
               ),
             ),
           )

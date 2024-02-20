@@ -260,12 +260,21 @@ class _SettingsPageState extends State<SettingsPage> {
                                   context: context,
                                   builder: (BuildContext context) {
                                     return AlertDialog(
+                                      surfaceTintColor: AppSettings.isDarkMode
+                                          ? TaskWarriorColors
+                                              .kdialogBackGroundColor
+                                          : TaskWarriorColors
+                                              .kLightDialogBackGroundColor,
+                                      shadowColor: AppSettings.isDarkMode
+                                          ? TaskWarriorColors
+                                              .kdialogBackGroundColor
+                                          : TaskWarriorColors
+                                              .kLightDialogBackGroundColor,
                                       backgroundColor: AppSettings.isDarkMode
                                           ? TaskWarriorColors
-                                              .kprimaryBackgroundColor
+                                              .kdialogBackGroundColor
                                           : TaskWarriorColors
-                                              .kLightPrimaryBackgroundColor,
-                                      surfaceTintColor: Colors.transparent,
+                                              .kLightDialogBackGroundColor,
                                       title: Text(
                                         'Reset to default',
                                         style: GoogleFonts.poppins(
@@ -403,10 +412,15 @@ class _SettingsPageState extends State<SettingsPage> {
               context: context,
               builder: (BuildContext context) {
                 return AlertDialog(
+                  surfaceTintColor: AppSettings.isDarkMode
+                      ? TaskWarriorColors.kdialogBackGroundColor
+                      : TaskWarriorColors.kLightDialogBackGroundColor,
+                  shadowColor: AppSettings.isDarkMode
+                      ? TaskWarriorColors.kdialogBackGroundColor
+                      : TaskWarriorColors.kLightDialogBackGroundColor,
                   backgroundColor: AppSettings.isDarkMode
-                      ? TaskWarriorColors.ksecondaryBackgroundColor
-                      : TaskWarriorColors.white,
-                  surfaceTintColor: Colors.transparent,
+                      ? TaskWarriorColors.kdialogBackGroundColor
+                      : TaskWarriorColors.kLightDialogBackGroundColor,
                   title: Text(
                     'Error',
                     style: GoogleFonts.poppins(

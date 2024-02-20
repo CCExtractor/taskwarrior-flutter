@@ -369,7 +369,7 @@ class _HomePageState extends State<HomePage> {
         key: addKey,
         heroTag: "btn3",
         backgroundColor: AppSettings.isDarkMode
-            ? TaskWarriorColors.white
+            ? TaskWarriorColors.kLightPrimaryBackgroundColor
             : TaskWarriorColors.kprimaryBackgroundColor,
         child: Tooltip(
           message: 'Add Task',

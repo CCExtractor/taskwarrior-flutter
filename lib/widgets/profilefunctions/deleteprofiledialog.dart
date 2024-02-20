@@ -20,15 +20,38 @@ class DeleteProfileDialog extends StatelessWidget {
       child: SingleChildScrollView(
         child: Center(
           child: AlertDialog(
+            surfaceTintColor: AppSettings.isDarkMode
+                ? TaskWarriorColors.kdialogBackGroundColor
+                : TaskWarriorColors.kLightDialogBackGroundColor,
+            shadowColor: AppSettings.isDarkMode
+                ? TaskWarriorColors.kdialogBackGroundColor
+                : TaskWarriorColors.kLightDialogBackGroundColor,
+            backgroundColor: AppSettings.isDarkMode
+                ? TaskWarriorColors.kdialogBackGroundColor
+                : TaskWarriorColors.kLightDialogBackGroundColor,
             scrollable: true,
-            title: const Text('Delete Profile?'),
+            title: Text(
+              'Delete Profile?',
+              style: TextStyle(
+                color: AppSettings.isDarkMode
+                    ? TaskWarriorColors.white
+                    : TaskWarriorColors.black,
+              ),
+            ),
             // content: TextField(controller: controller),
             actions: [
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: const Text('Cancel'),
+                child: Text(
+                  'Cancel',
+                  style: TextStyle(
+                    color: AppSettings.isDarkMode
+                        ? TaskWarriorColors.white
+                        : TaskWarriorColors.black,
+                  ),
+                ),
               ),
               ElevatedButton(
                 onPressed: () {
@@ -64,7 +87,14 @@ class DeleteProfileDialog extends StatelessWidget {
                         duration: const Duration(seconds: 2)));
                   }
                 },
-                child: const Text('Confirm'),
+                child: Text(
+                  'Confirm',
+                  style: TextStyle(
+                    color: AppSettings.isDarkMode
+                        ? TaskWarriorColors.black
+                        : TaskWarriorColors.black,
+                  ),
+                ),
               ),
             ],
           ),

@@ -211,17 +211,54 @@ Future<void> _showExitConfirmationDialog(BuildContext context) async {
     barrierDismissible: false, // Prevents closing the dialog by tapping outside
     builder: (BuildContext context) {
       return AlertDialog(
-        title: const Text('Exit App'),
-        content: const Text('Are you sure you want to exit the app?'),
+        surfaceTintColor: AppSettings.isDarkMode
+            ? TaskWarriorColors.kdialogBackGroundColor
+            : TaskWarriorColors.kLightDialogBackGroundColor,
+        shadowColor: AppSettings.isDarkMode
+            ? TaskWarriorColors.kdialogBackGroundColor
+            : TaskWarriorColors.kLightDialogBackGroundColor,
+        backgroundColor: AppSettings.isDarkMode
+            ? TaskWarriorColors.kdialogBackGroundColor
+            : TaskWarriorColors.kLightDialogBackGroundColor,
+        title: Text(
+          'Exit App',
+          style: TextStyle(
+            color: AppSettings.isDarkMode
+                ? TaskWarriorColors.white
+                : TaskWarriorColors.black,
+          ),
+        ),
+        content: Text(
+          'Are you sure you want to exit the app?',
+          style: TextStyle(
+            color: AppSettings.isDarkMode
+                ? TaskWarriorColors.white
+                : TaskWarriorColors.black,
+          ),
+        ),
         actions: <Widget>[
           TextButton(
-            child: const Text('Cancel'),
+            child: Text(
+              'Cancel',
+              style: TextStyle(
+                color: AppSettings.isDarkMode
+                    ? TaskWarriorColors.white
+                    : TaskWarriorColors.black,
+              ),
+            ),
             onPressed: () {
               Navigator.of(context).pop(); // Close the dialog
             },
           ),
           TextButton(
-            child: const Text('Exit'),
+            child: Text(
+              'Exit',
+              style: TextStyle(
+                color: AppSettings.isDarkMode
+                    ? TaskWarriorColors.white
+                    : TaskWarriorColors.black,
+              ),
+            ),
             onPressed: () {
               Navigator.of(context).pop(); // Close the dialog
               SystemNavigator.pop(); // Exit the app
