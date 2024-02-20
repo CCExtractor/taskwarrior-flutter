@@ -179,6 +179,15 @@ class TagsRouteState extends State<TagsRoute> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: AppSettings.isDarkMode
+            ? TaskWarriorColors.black
+            : TaskWarriorColors.white,
+        foregroundColor: AppSettings.isDarkMode
+            ? TaskWarriorColors.white
+            : TaskWarriorColors.black,
+        splashColor: AppSettings.isDarkMode
+            ? TaskWarriorColors.black
+            : TaskWarriorColors.white,
         heroTag: "btn4",
         onPressed: () {
           final formKey = GlobalKey<FormState>();
