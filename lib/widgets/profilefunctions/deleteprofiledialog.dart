@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
+import 'package:taskwarrior/config/taskwarriorcolors.dart';
 import 'package:taskwarrior/widgets/taskdetails/profiles_widget.dart';
 
 class DeleteProfileDialog extends StatelessWidget {
@@ -36,18 +37,30 @@ class DeleteProfileDialog extends StatelessWidget {
                     Navigator.of(context).pop();
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
-                            'Profile: ${profile.characters} Deleted Successfully'),
+                          'Profile: ${profile.characters} Deleted Successfully',
+                          style: TextStyle(
+                            color: AppSettings.isDarkMode
+                                ? TaskWarriorColors.kprimaryTextColor
+                                : TaskWarriorColors.kLightPrimaryTextColor,
+                          ),
+                        ),
                         backgroundColor: AppSettings.isDarkMode
-                            ? const Color.fromARGB(255, 61, 61, 61)
-                            : const Color.fromARGB(255, 39, 39, 39),
+                            ? TaskWarriorColors.ksecondaryBackgroundColor
+                            : TaskWarriorColors.kLightSecondaryBackgroundColor,
                         duration: const Duration(seconds: 2)));
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
-                            'Profile: ${profile.characters} Deletion Failed'),
+                          'Profile: ${profile.characters} Deletion Failed',
+                          style: TextStyle(
+                            color: AppSettings.isDarkMode
+                                ? TaskWarriorColors.kprimaryTextColor
+                                : TaskWarriorColors.kLightPrimaryTextColor,
+                          ),
+                        ),
                         backgroundColor: AppSettings.isDarkMode
-                            ? const Color.fromARGB(255, 61, 61, 61)
-                            : const Color.fromARGB(255, 39, 39, 39),
+                            ? TaskWarriorColors.ksecondaryBackgroundColor
+                            : TaskWarriorColors.kLightSecondaryBackgroundColor,
                         duration: const Duration(seconds: 2)));
                   }
                 },

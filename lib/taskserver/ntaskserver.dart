@@ -225,27 +225,53 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
             // Handle the case when server or credentials are missing in the Taskrc object
             Navigator.pop(context);
 
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                  content: Text(
-                      'Success: Server or credentials are verified in taskrc file')),
-            );
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(
+                  'Success: Server or credentials are verified in taskrc file',
+                  style: TextStyle(
+                    color: AppSettings.isDarkMode
+                        ? TaskWarriorColors.kprimaryTextColor
+                        : TaskWarriorColors.kLightPrimaryTextColor,
+                  ),
+                ),
+                backgroundColor: AppSettings.isDarkMode
+                    ? TaskWarriorColors.ksecondaryBackgroundColor
+                    : TaskWarriorColors.kLightSecondaryBackgroundColor,
+                duration: const Duration(seconds: 2)));
           } else {
             Navigator.pop(context);
             // Handle the case when server or credentials are missing in the Taskrc object
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                  content: Text(
-                      'Error: Server or credentials are missing in taskrc file')),
-            );
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(
+                  'Error: Server or credentials are missing in taskrc file',
+                  style: TextStyle(
+                    color: AppSettings.isDarkMode
+                        ? TaskWarriorColors.kprimaryTextColor
+                        : TaskWarriorColors.kLightPrimaryTextColor,
+                  ),
+                ),
+                backgroundColor: AppSettings.isDarkMode
+                    ? TaskWarriorColors.ksecondaryBackgroundColor
+                    : TaskWarriorColors.kLightSecondaryBackgroundColor,
+                duration: const Duration(seconds: 2)));
           }
         } else {
           Navigator.pop(context);
 
           // Handle the case when there is an error reading the taskrc file
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Error: Failed to read taskrc file')),
-          );
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(
+                'Error: Failed to read taskrc file',
+                style: TextStyle(
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.kprimaryTextColor
+                      : TaskWarriorColors.kLightPrimaryTextColor,
+                ),
+              ),
+              backgroundColor: AppSettings.isDarkMode
+                  ? TaskWarriorColors.ksecondaryBackgroundColor
+                  : TaskWarriorColors.kLightSecondaryBackgroundColor,
+              duration: const Duration(seconds: 2)));
         }
       }
     }

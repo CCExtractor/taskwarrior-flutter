@@ -116,7 +116,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                   hintStyle: TextStyle(
                     color: AppSettings.isDarkMode
                         ? TaskWarriorColors.white
-                        : TaskWarriorColors.red,
+                        : TaskWarriorColors.black,
                   ),
                 ),
                 onFieldSubmitted: (tag) {
@@ -299,19 +299,19 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                         setState(() {});
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(
-                            'Please select a due date and time in the future.',
-                            style: TextStyle(
-                              color: AppSettings.isDarkMode
-                                  ? TaskWarriorColors.white
-                                  : TaskWarriorColors.black,
+                            content: Text(
+                              'Please select a due date and time in the future.',
+                              style: TextStyle(
+                                color: AppSettings.isDarkMode
+                                    ? TaskWarriorColors.kprimaryTextColor
+                                    : TaskWarriorColors.kLightPrimaryTextColor,
+                              ),
                             ),
-                          ),
-                          backgroundColor: AppSettings.isDarkMode
-                              ? TaskWarriorColors.black
-                              : TaskWarriorColors.white,
-                          duration: const Duration(seconds: 2),
-                        ));
+                            backgroundColor: AppSettings.isDarkMode
+                                ? TaskWarriorColors.ksecondaryBackgroundColor
+                                : TaskWarriorColors
+                                    .kLightSecondaryBackgroundColor,
+                            duration: const Duration(seconds: 2)));
                       }
                     }
                   }
@@ -421,19 +421,18 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
             widgetController.fetchAllData();
 
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(
-                'Task Added Successfully. Tap to Edit',
-                style: TextStyle(
-                  color: AppSettings.isDarkMode
-                      ? TaskWarriorColors.white
-                      : TaskWarriorColors.black,
+                content: Text(
+                  'Task Added Successfully. Tap to Edit',
+                  style: TextStyle(
+                    color: AppSettings.isDarkMode
+                        ? TaskWarriorColors.kprimaryTextColor
+                        : TaskWarriorColors.kLightPrimaryTextColor,
+                  ),
                 ),
-              ),
-              backgroundColor: AppSettings.isDarkMode
-                  ? TaskWarriorColors.black
-                  : TaskWarriorColors.white,
-              duration: const Duration(seconds: 2),
-            ));
+                backgroundColor: AppSettings.isDarkMode
+                    ? TaskWarriorColors.ksecondaryBackgroundColor
+                    : TaskWarriorColors.kLightSecondaryBackgroundColor,
+                duration: const Duration(seconds: 2)));
 
             final SharedPreferences prefs =
                 await SharedPreferences.getInstance();
@@ -446,19 +445,18 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
             }
           } on FormatException catch (e) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(
-                e.message,
-                style: TextStyle(
-                  color: AppSettings.isDarkMode
-                      ? TaskWarriorColors.white
-                      : TaskWarriorColors.black,
+                content: Text(
+                  e.message,
+                  style: TextStyle(
+                    color: AppSettings.isDarkMode
+                        ? TaskWarriorColors.kprimaryTextColor
+                        : TaskWarriorColors.kLightPrimaryTextColor,
+                  ),
                 ),
-              ),
-              backgroundColor: AppSettings.isDarkMode
-                  ? TaskWarriorColors.ksecondaryBackgroundColor
-                  : TaskWarriorColors.kLightSecondaryBackgroundColor,
-              duration: const Duration(seconds: 2),
-            ));
+                backgroundColor: AppSettings.isDarkMode
+                    ? TaskWarriorColors.ksecondaryBackgroundColor
+                    : TaskWarriorColors.kLightSecondaryBackgroundColor,
+                duration: const Duration(seconds: 2)));
             log(e.toString());
           }
         }

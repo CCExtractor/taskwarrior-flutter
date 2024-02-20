@@ -80,19 +80,18 @@ class _TasksBuilderState extends State<TasksBuilder> {
 
     // Show a snackbar with an undo action
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: const Text('Task Updated'),
-      backgroundColor: AppSettings.isDarkMode
-          ? TaskWarriorColors.ksecondaryBackgroundColor
-          : TaskWarriorColors.kLightSecondaryBackgroundColor,
-      duration: const Duration(seconds: 2),
-      action: SnackBarAction(
-        label: 'Undo',
-        onPressed: () {
-          // Undo the task status change
-          undoChanges();
-        },
-      ),
-    ));
+        content: Text(
+          'Task Updated',
+          style: TextStyle(
+            color: AppSettings.isDarkMode
+                ? TaskWarriorColors.kprimaryTextColor
+                : TaskWarriorColors.kLightPrimaryTextColor,
+          ),
+        ),
+        backgroundColor: AppSettings.isDarkMode
+            ? TaskWarriorColors.ksecondaryBackgroundColor
+            : TaskWarriorColors.kLightSecondaryBackgroundColor,
+        duration: const Duration(seconds: 2)));
   }
 
   void undoChanges() {

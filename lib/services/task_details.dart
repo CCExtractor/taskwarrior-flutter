@@ -55,7 +55,14 @@ class _DetailRouteState extends State<DetailRoute> {
     setState(() {});
     Navigator.of(context).pop();
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: const Text('Task Updated'),
+        content: Text(
+          'Task Updated',
+          style: TextStyle(
+            color: AppSettings.isDarkMode
+                ? TaskWarriorColors.kprimaryTextColor
+                : TaskWarriorColors.kLightPrimaryTextColor,
+          ),
+        ),
         backgroundColor: AppSettings.isDarkMode
             ? TaskWarriorColors.ksecondaryBackgroundColor
             : TaskWarriorColors.kLightSecondaryBackgroundColor,

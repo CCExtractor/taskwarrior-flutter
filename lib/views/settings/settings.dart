@@ -238,10 +238,23 @@ class _SettingsPageState extends State<SettingsPage> {
                             onPressed: () {
                               if (getBaseDirectory() == "Default") {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Already default'),
-                                  ),
-                                );
+                                    SnackBar(
+                                        content: Text(
+                                          'Already default',
+                                          style: TextStyle(
+                                            color: AppSettings.isDarkMode
+                                                ? TaskWarriorColors
+                                                    .kprimaryTextColor
+                                                : TaskWarriorColors
+                                                    .kLightPrimaryTextColor,
+                                          ),
+                                        ),
+                                        backgroundColor: AppSettings.isDarkMode
+                                            ? TaskWarriorColors
+                                                .ksecondaryBackgroundColor
+                                            : TaskWarriorColors
+                                                .kLightSecondaryBackgroundColor,
+                                        duration: const Duration(seconds: 2)));
                               } else {
                                 showDialog(
                                   context: context,
