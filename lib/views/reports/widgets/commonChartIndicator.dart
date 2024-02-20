@@ -22,7 +22,9 @@ class CommonChartIndicator extends StatelessWidget {
               style: GoogleFonts.poppins(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
-                color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                color: AppSettings.isDarkMode
+                    ? TaskWarriorColors.white
+                    : TaskWarriorColors.black,
               ),
             )
           ],
@@ -38,14 +40,16 @@ class CommonChartIndicator extends StatelessWidget {
                 Container(
                   height: 20,
                   width: 80,
-                  decoration: BoxDecoration(color: Appcolors.green),
+                  decoration: BoxDecoration(color: TaskWarriorColors.green),
                 ),
                 Text(
                   "Completed",
                   style: GoogleFonts.poppins(
                     fontWeight: FontWeight.w400,
                     fontSize: 16,
-                    color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                    color: AppSettings.isDarkMode
+                        ? TaskWarriorColors.white
+                        : TaskWarriorColors.black,
                   ),
                 ),
               ],
@@ -55,14 +59,16 @@ class CommonChartIndicator extends StatelessWidget {
                 Container(
                   height: 20,
                   width: 80,
-                  decoration: BoxDecoration(color: Appcolors.yellow),
+                  decoration: BoxDecoration(color: TaskWarriorColors.yellow),
                 ),
                 Text(
                   "Pending",
                   style: GoogleFonts.poppins(
                     fontWeight: FontWeight.w400,
                     fontSize: 16,
-                    color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                    color: AppSettings.isDarkMode
+                        ? TaskWarriorColors.white
+                        : TaskWarriorColors.black,
                   ),
                 ),
               ],

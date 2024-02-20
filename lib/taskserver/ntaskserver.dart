@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loggy/loggy.dart';
+import 'package:taskwarrior/config/taskwarriorcolors.dart';
 import 'package:taskwarrior/widgets/taskdetails/profiles_widget.dart';
 // ignore_for_file: use_build_context_synchronously
 
@@ -15,7 +16,6 @@ import 'package:taskwarrior/model/storage/set_config.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
 import 'package:taskwarrior/widgets/fingerprint.dart';
 import 'package:taskwarrior/widgets/home_paths.dart' as rc;
-import 'package:taskwarrior/widgets/pallete.dart';
 import 'package:taskwarrior/widgets/taskdetails.dart';
 import 'package:taskwarrior/widgets/taskserver.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -76,9 +76,18 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
       context: context,
       barrierDismissible: false,
       builder: (context) {
-        return const AlertDialog(
-          title: Text('Fetching statistics...'),
-          content: Column(
+        return AlertDialog(
+          surfaceTintColor: AppSettings.isDarkMode
+              ? TaskWarriorColors.kdialogBackGroundColor
+              : TaskWarriorColors.kLightDialogBackGroundColor,
+          shadowColor: AppSettings.isDarkMode
+              ? TaskWarriorColors.kdialogBackGroundColor
+              : TaskWarriorColors.kLightDialogBackGroundColor,
+          backgroundColor: AppSettings.isDarkMode
+              ? TaskWarriorColors.kdialogBackGroundColor
+              : TaskWarriorColors.kLightDialogBackGroundColor,
+          title: const Text('Fetching statistics...'),
+          content: const Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               CircularProgressIndicator(),
@@ -105,8 +114,24 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
       await showDialog(
         context: context,
         builder: (context) => AlertDialog(
+          surfaceTintColor: AppSettings.isDarkMode
+              ? TaskWarriorColors.kdialogBackGroundColor
+              : TaskWarriorColors.kLightDialogBackGroundColor,
+          shadowColor: AppSettings.isDarkMode
+              ? TaskWarriorColors.kdialogBackGroundColor
+              : TaskWarriorColors.kLightDialogBackGroundColor,
+          backgroundColor: AppSettings.isDarkMode
+              ? TaskWarriorColors.kdialogBackGroundColor
+              : TaskWarriorColors.kLightDialogBackGroundColor,
           scrollable: true,
-          title: const Text('Statistics:'),
+          title: Text(
+            'Statistics:',
+            style: TextStyle(
+              color: AppSettings.isDarkMode
+                  ? TaskWarriorColors.white
+                  : TaskWarriorColors.black,
+            ),
+          ),
           content: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -118,7 +143,11 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                     for (var key in header.keys.toList())
                       Text(
                         '${'$key:'.padRight(maxKeyLength + 1)} ${header[key]}',
-                        style: GoogleFonts.firaMono(),
+                        style: TextStyle(
+                          color: AppSettings.isDarkMode
+                              ? TaskWarriorColors.white
+                              : TaskWarriorColors.black,
+                        ),
                       ),
                   ],
                 ),
@@ -130,7 +159,14 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Ok'),
+              child: Text(
+                'Ok',
+                style: TextStyle(
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.white
+                      : TaskWarriorColors.black,
+                ),
+              ),
             ),
           ],
         ),
@@ -164,11 +200,9 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
       server = Taskrc.fromString(contents).server;
       credentials = Taskrc.fromString(contents).credentials;
     }
-    var color =
-        AppSettings.isDarkMode ? Colors.white : Palette.kToDark.shade200;
     var tileColor = AppSettings.isDarkMode
-        ? const Color.fromARGB(255, 48, 46, 46)
-        : const Color.fromARGB(255, 220, 216, 216);
+        ? TaskWarriorColors.ksecondaryBackgroundColor
+        : TaskWarriorColors.kLightSecondaryBackgroundColor;
     if (contents != null) {
       server = Taskrc.fromString(contents).server;
       credentials = Taskrc.fromString(contents).credentials;
@@ -224,27 +258,53 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
             // Handle the case when server or credentials are missing in the Taskrc object
             Navigator.pop(context);
 
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                  content: Text(
-                      'Success: Server or credentials are verified in taskrc file')),
-            );
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(
+                  'Success: Server or credentials are verified in taskrc file',
+                  style: TextStyle(
+                    color: AppSettings.isDarkMode
+                        ? TaskWarriorColors.white
+                        : TaskWarriorColors.black,
+                  ),
+                ),
+                backgroundColor: AppSettings.isDarkMode
+                    ? TaskWarriorColors.ksecondaryBackgroundColor
+                    : TaskWarriorColors.kLightSecondaryBackgroundColor,
+                duration: const Duration(seconds: 2)));
           } else {
             Navigator.pop(context);
             // Handle the case when server or credentials are missing in the Taskrc object
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                  content: Text(
-                      'Error: Server or credentials are missing in taskrc file')),
-            );
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(
+                  'Error: Server or credentials are missing in taskrc file',
+                  style: TextStyle(
+                    color: AppSettings.isDarkMode
+                        ? TaskWarriorColors.white
+                        : TaskWarriorColors.black,
+                  ),
+                ),
+                backgroundColor: AppSettings.isDarkMode
+                    ? TaskWarriorColors.ksecondaryBackgroundColor
+                    : TaskWarriorColors.kLightSecondaryBackgroundColor,
+                duration: const Duration(seconds: 2)));
           }
         } else {
           Navigator.pop(context);
 
           // Handle the case when there is an error reading the taskrc file
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Error: Failed to read taskrc file')),
-          );
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(
+                'Error: Failed to read taskrc file',
+                style: TextStyle(
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.white
+                      : TaskWarriorColors.black,
+                ),
+              ),
+              backgroundColor: AppSettings.isDarkMode
+                  ? TaskWarriorColors.ksecondaryBackgroundColor
+                  : TaskWarriorColors.kLightSecondaryBackgroundColor,
+              duration: const Duration(seconds: 2)));
         }
       }
     }
@@ -252,7 +312,7 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
     var height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Palette.kToDark.shade200,
+        backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
         titleSpacing:
             0, // Reduce the spacing between the title and leading/back button
         title: Column(
@@ -260,19 +320,21 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
           children: [
             Text(
               "Configure TaskServer",
-              style: GoogleFonts.poppins(color: Colors.white, fontSize: 18),
+              style: GoogleFonts.poppins(
+                  color: TaskWarriorColors.white, fontSize: 18),
             ),
             Text(
               alias ?? profile,
-              style: GoogleFonts.poppins(color: Colors.white, fontSize: 12),
+              style: GoogleFonts.poppins(
+                  color: TaskWarriorColors.white, fontSize: 12),
             ),
           ],
         ),
         actions: [
           IconButton(
-            icon: const Icon(
+            icon: Icon(
               Icons.info,
-              color: Colors.white,
+              color: TaskWarriorColors.white,
             ),
             onPressed: () async {
               String url =
@@ -284,26 +346,27 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
           ),
           if (kDebugMode)
             IconButton(
-              icon: const Icon(
+              icon: Icon(
                 Icons.bug_report,
-                color: Colors.white,
+                color: TaskWarriorColors.white,
               ),
               onPressed: _setConfigurationFromFixtureForDebugging,
             ),
           IconButton(
-            icon: const Icon(
+            icon: Icon(
               Icons.show_chart,
-              color: Colors.white,
+              color: TaskWarriorColors.white,
             ),
             onPressed: () => _showStatistics(context),
           ),
         ],
-        leading: const BackButton(
-          color: Colors.white,
+        leading: BackButton(
+          color: TaskWarriorColors.white,
         ),
       ),
-      backgroundColor:
-          AppSettings.isDarkMode ? Palette.kToDark.shade200 : Colors.white,
+      backgroundColor: AppSettings.isDarkMode
+          ? TaskWarriorColors.kprimaryBackgroundColor
+          : TaskWarriorColors.kLightPrimaryBackgroundColor,
       body: Padding(
         padding: const EdgeInsets.only(left: 20, right: 20),
         child: ListView(
@@ -321,8 +384,11 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                 children: [
                   Text(
                     "Configure TASKRC",
-                    style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.w500, color: color),
+                    style: TextStyle(
+                      color: AppSettings.isDarkMode
+                          ? TaskWarriorColors.white
+                          : TaskWarriorColors.black,
+                    ),
                   ),
                   const SizedBox(height: 10),
                   GestureDetector(
@@ -358,17 +424,19 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                                         children: [
                                           Text(
                                             'Configure TaskRc',
-                                            style: GoogleFonts.poppins(
+                                            style: TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              color: color,
+                                              color: AppSettings.isDarkMode
+                                                  ? TaskWarriorColors.white
+                                                  : TaskWarriorColors.black,
                                             ),
                                           ),
                                           Text(
                                             'Paste the taskrc content or select taskrc file',
-                                            style: GoogleFonts.poppins(
-                                              fontWeight: FontWeight.w400,
-                                              color: color,
-                                              fontSize: 10,
+                                            style: TextStyle(
+                                              color: AppSettings.isDarkMode
+                                                  ? TaskWarriorColors.white
+                                                  : TaskWarriorColors.black,
                                             ),
                                           ),
                                           const SizedBox(height: 16.0),
@@ -377,42 +445,70 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                                             child: SizedBox(
                                               height: height * 0.15,
                                               child: TextField(
+                                                style: TextStyle(
+                                                    color:
+                                                        AppSettings.isDarkMode
+                                                            ? TaskWarriorColors
+                                                                .white
+                                                            : TaskWarriorColors
+                                                                .black),
                                                 controller:
                                                     taskrcContentController,
                                                 maxLines: 8,
-                                                style: GoogleFonts.poppins(
-                                                    color: Colors.white),
                                                 decoration: InputDecoration(
-                                                  suffixIconConstraints:
-                                                      const BoxConstraints(
-                                                    maxHeight: 24,
-                                                    maxWidth: 24,
-                                                  ),
-                                                  isDense: true,
-                                                  suffix: IconButton(
-                                                    onPressed: () async {
-                                                      setContent();
-                                                    },
-                                                    icon: const Icon(
-                                                        Icons.content_paste),
-                                                  ),
-                                                  border:
-                                                      const OutlineInputBorder(),
-                                                  labelStyle:
-                                                      GoogleFonts.poppins(
-                                                          color: color),
-                                                  labelText:
-                                                      'Paste your taskrc contents here',
-                                                ),
+                                                    counterStyle: TextStyle(
+                                                        color: AppSettings.isDarkMode
+                                                            ? TaskWarriorColors
+                                                                .white
+                                                            : TaskWarriorColors
+                                                                .black),
+                                                    suffixIconConstraints:
+                                                        const BoxConstraints(
+                                                      maxHeight: 24,
+                                                      maxWidth: 24,
+                                                    ),
+                                                    isDense: true,
+                                                    suffix: IconButton(
+                                                      onPressed: () async {
+                                                        setContent();
+                                                      },
+                                                      icon: const Icon(
+                                                          Icons.content_paste),
+                                                    ),
+                                                    border:
+                                                        const OutlineInputBorder(),
+                                                    labelStyle: GoogleFonts
+                                                        .poppins(
+                                                            color: AppSettings
+                                                                    .isDarkMode
+                                                                ? TaskWarriorColors
+                                                                    .white
+                                                                : TaskWarriorColors
+                                                                    .black),
+                                                    labelText:
+                                                        'Paste your taskrc contents here'),
                                               ),
                                             ),
                                           ),
                                           Text(
                                             "Or",
-                                            style: GoogleFonts.poppins(
-                                                color: color),
+                                            style: TextStyle(
+                                              color: AppSettings.isDarkMode
+                                                  ? TaskWarriorColors.white
+                                                  : TaskWarriorColors.black,
+                                            ),
                                           ),
                                           FilledButton.tonal(
+                                            style: ButtonStyle(
+                                                backgroundColor: AppSettings
+                                                        .isDarkMode
+                                                    ? MaterialStateProperty.all<
+                                                            Color>(
+                                                        TaskWarriorColors.black)
+                                                    : MaterialStateProperty.all<
+                                                            Color>(
+                                                        TaskWarriorColors
+                                                            .white)),
                                             onPressed: () async {
                                               await setConfig(
                                                 storage: storage,
@@ -421,8 +517,14 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                                               setState(() {});
                                               Get.back();
                                             },
-                                            child: const Text(
-                                                'Select TASKRC file'),
+                                            child: Text(
+                                              'Select TASKRC file',
+                                              style: TextStyle(
+                                                color: AppSettings.isDarkMode
+                                                    ? TaskWarriorColors.white
+                                                    : TaskWarriorColors.black,
+                                              ),
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -442,7 +544,8 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                       decoration: BoxDecoration(
                         color: tileColor,
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Colors.grey.shade300),
+                        border:
+                            Border.all(color: TaskWarriorColors.borderColor),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -451,29 +554,33 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                             taskrcContentController.text.isEmpty
                                 ? "Set TaskRc"
                                 : "Taskrc file is verified",
-                            style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.w400, color: color),
+                            style: TextStyle(
+                              color: AppSettings.isDarkMode
+                                  ? TaskWarriorColors.white
+                                  : TaskWarriorColors.black,
+                            ),
                           ),
                           Container(
                             height: 30,
                             width: 30,
                             decoration: BoxDecoration(
                               color: AppSettings.isDarkMode
-                                  ? const Color.fromARGB(255, 220, 216, 216)
-                                  : const Color.fromARGB(255, 48, 46, 46),
+                                  ? TaskWarriorColors
+                                      .kLightSecondaryBackgroundColor
+                                  : TaskWarriorColors.ksecondaryBackgroundColor,
                               shape: BoxShape.circle,
                             ),
                             child: Center(
                               child: taskrcContentController.text.isNotEmpty
-                                  ? const Icon(
+                                  ? Icon(
                                       Icons.check,
-                                      color: Colors.green,
+                                      color: TaskWarriorColors.green,
                                     )
                                   : Icon(
                                       Icons.chevron_right_rounded,
                                       color: AppSettings.isDarkMode
-                                          ? Colors.black
-                                          : Colors.white,
+                                          ? TaskWarriorColors.black
+                                          : TaskWarriorColors.white,
                                     ),
                             ),
                           ),
@@ -499,8 +606,11 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                         children: [
                           Text(
                             "TaskD Server Info",
-                            style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.w500, color: color),
+                            style: TextStyle(
+                              color: AppSettings.isDarkMode
+                                  ? TaskWarriorColors.white
+                                  : TaskWarriorColors.black,
+                            ),
                           ),
                           const SizedBox(height: 10),
                           GestureDetector(
@@ -512,7 +622,9 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                               decoration: BoxDecoration(
                                 color: tileColor,
                                 borderRadius: BorderRadius.circular(8),
-                                border: Border.all(color: Colors.grey.shade300),
+                                border: Border.all(
+                                  color: TaskWarriorColors.borderColor,
+                                ),
                               ),
                               child: Row(
                                 mainAxisAlignment:
@@ -521,38 +633,42 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                                   server == null
                                       ? Text(
                                           'Not Configured',
-                                          style: GoogleFonts.poppins(
-                                              fontWeight: FontWeight.w400,
-                                              color: color),
+                                          style: TextStyle(
+                                            color: AppSettings.isDarkMode
+                                                ? TaskWarriorColors.white
+                                                : TaskWarriorColors.black,
+                                          ),
                                         )
                                       : Text(
                                           '$server',
-                                          style: GoogleFonts.poppins(
-                                              fontWeight: FontWeight.w400,
-                                              color: color),
+                                          style: TextStyle(
+                                            color: AppSettings.isDarkMode
+                                                ? TaskWarriorColors.white
+                                                : TaskWarriorColors.black,
+                                          ),
                                         ),
                                   Container(
                                     height: 30,
                                     width: 30,
                                     decoration: BoxDecoration(
                                       color: AppSettings.isDarkMode
-                                          ? const Color.fromARGB(
-                                              255, 220, 216, 216)
-                                          : const Color.fromARGB(
-                                              255, 48, 46, 46),
+                                          ? TaskWarriorColors
+                                              .kLightSecondaryBackgroundColor
+                                          : TaskWarriorColors
+                                              .ksecondaryBackgroundColor,
                                       shape: BoxShape.circle,
                                     ),
                                     child: Center(
                                       child: server != null
-                                          ? const Icon(
+                                          ? Icon(
                                               Icons.check,
-                                              color: Colors.green,
+                                              color: TaskWarriorColors.green,
                                             )
                                           : Icon(
                                               Icons.chevron_right_rounded,
                                               color: AppSettings.isDarkMode
-                                                  ? Colors.black
-                                                  : Colors.white,
+                                                  ? TaskWarriorColors.black
+                                                  : TaskWarriorColors.white,
                                             ),
                                     ),
                                   ),
@@ -574,8 +690,11 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                         children: [
                           Text(
                             "TaskD Server Credentials",
-                            style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.w500, color: color),
+                            style: TextStyle(
+                              color: AppSettings.isDarkMode
+                                  ? TaskWarriorColors.white
+                                  : TaskWarriorColors.black,
+                            ),
                           ),
                           const SizedBox(height: 10),
                           GestureDetector(
@@ -587,7 +706,8 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                               decoration: BoxDecoration(
                                 color: tileColor,
                                 borderRadius: BorderRadius.circular(8),
-                                border: Border.all(color: Colors.grey.shade300),
+                                border: Border.all(
+                                    color: TaskWarriorColors.borderColor),
                               ),
                               child: Row(
                                 mainAxisAlignment:
@@ -596,9 +716,11 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                                   credentialsString == null
                                       ? Text(
                                           'Not Configured',
-                                          style: GoogleFonts.poppins(
-                                              fontWeight: FontWeight.w400,
-                                              color: color),
+                                          style: TextStyle(
+                                            color: AppSettings.isDarkMode
+                                                ? TaskWarriorColors.white
+                                                : TaskWarriorColors.black,
+                                          ),
                                         )
                                       : SizedBox(
                                           width: MediaQuery.of(context)
@@ -609,9 +731,11 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                                             scrollDirection: Axis.horizontal,
                                             child: Text(
                                               credentialsString,
-                                              style: GoogleFonts.poppins(
-                                                  fontWeight: FontWeight.w400,
-                                                  color: color),
+                                              style: TextStyle(
+                                                color: AppSettings.isDarkMode
+                                                    ? TaskWarriorColors.white
+                                                    : TaskWarriorColors.black,
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -625,26 +749,26 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                                       width: 30,
                                       decoration: BoxDecoration(
                                         color: AppSettings.isDarkMode
-                                            ? const Color.fromARGB(
-                                                255, 220, 216, 216)
-                                            : const Color.fromARGB(
-                                                255, 48, 46, 46),
+                                            ? TaskWarriorColors
+                                                .kLightPrimaryBackgroundColor
+                                            : TaskWarriorColors
+                                                .kprimaryBackgroundColor,
                                         shape: BoxShape.circle,
                                       ),
                                       child: credentials == null
                                           ? Icon(
                                               Icons.chevron_right_rounded,
                                               color: AppSettings.isDarkMode
-                                                  ? Colors.black
-                                                  : Colors.white,
+                                                  ? TaskWarriorColors.black
+                                                  : TaskWarriorColors.white,
                                             )
                                           : Icon(
                                               hideKey
                                                   ? Icons.visibility_off
                                                   : Icons.visibility,
                                               color: AppSettings.isDarkMode
-                                                  ? Colors.green
-                                                  : Colors.green,
+                                                  ? TaskWarriorColors.green
+                                                  : TaskWarriorColors.green,
                                             ),
                                     ),
                                   ),
@@ -707,8 +831,6 @@ class PemWidget extends StatefulWidget {
 class _PemWidgetState extends State<PemWidget> {
   @override
   Widget build(BuildContext context) {
-    var color =
-        AppSettings.isDarkMode ? Colors.white : Palette.kToDark.shade200;
     var contents = widget.storage.guiPemFiles.pemContents(widget.pem);
     var name = widget.storage.guiPemFiles.pemFilename(widget.pem);
     String identifier = "";
@@ -719,8 +841,8 @@ class _PemWidgetState extends State<PemWidget> {
     }
 
     var tileColor = AppSettings.isDarkMode
-        ? const Color.fromARGB(255, 48, 46, 46)
-        : const Color.fromARGB(255, 220, 216, 216);
+        ? TaskWarriorColors.ksecondaryBackgroundColor
+        : TaskWarriorColors.kLightSecondaryBackgroundColor;
 
     return Padding(
       padding: const EdgeInsets.only(
@@ -733,8 +855,11 @@ class _PemWidgetState extends State<PemWidget> {
         children: [
           Text(
             widget.optionString,
-            style:
-                GoogleFonts.poppins(fontWeight: FontWeight.w500, color: color),
+            style: TextStyle(
+              color: AppSettings.isDarkMode
+                  ? TaskWarriorColors.white
+                  : TaskWarriorColors.black,
+            ),
           ),
           const SizedBox(
             height: 10,
@@ -771,7 +896,7 @@ class _PemWidgetState extends State<PemWidget> {
               decoration: BoxDecoration(
                 color: tileColor,
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.grey.shade300),
+                border: Border.all(color: TaskWarriorColors.borderColor),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -788,8 +913,11 @@ class _PemWidgetState extends State<PemWidget> {
                                 : (widget.pem == 'server.cert')
                                     ? ''
                                     : "$name = ",
-                            style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.w400, color: color),
+                            style: TextStyle(
+                              color: AppSettings.isDarkMode
+                                  ? TaskWarriorColors.white
+                                  : TaskWarriorColors.black,
+                            ),
                           ),
                           Text(
                             widget.pem == 'taskd.key'
@@ -797,8 +925,11 @@ class _PemWidgetState extends State<PemWidget> {
                                     ? "private.key.pem"
                                     : ""
                                 : identifier,
-                            style: GoogleFonts.poppins(
-                                fontWeight: FontWeight.w400, color: color),
+                            style: TextStyle(
+                              color: AppSettings.isDarkMode
+                                  ? TaskWarriorColors.white
+                                  : TaskWarriorColors.black,
+                            ),
                           ),
                         ],
                       ),
@@ -809,8 +940,8 @@ class _PemWidgetState extends State<PemWidget> {
                     width: 30,
                     decoration: BoxDecoration(
                       color: AppSettings.isDarkMode
-                          ? const Color.fromARGB(255, 220, 216, 216)
-                          : const Color.fromARGB(255, 48, 46, 46),
+                          ? TaskWarriorColors.kLightSecondaryBackgroundColor
+                          : TaskWarriorColors.ksecondaryBackgroundColor,
                       shape: BoxShape.circle,
                     ),
                     child: Center(
@@ -818,12 +949,12 @@ class _PemWidgetState extends State<PemWidget> {
                           ? Icon(
                               Icons.chevron_right_rounded,
                               color: AppSettings.isDarkMode
-                                  ? Colors.black
-                                  : Colors.white,
+                                  ? TaskWarriorColors.black
+                                  : TaskWarriorColors.white,
                             )
-                          : const Icon(
+                          : Icon(
                               Icons.check,
-                              color: Colors.green,
+                              color: TaskWarriorColors.green,
                             ),
                     ),
                   ),

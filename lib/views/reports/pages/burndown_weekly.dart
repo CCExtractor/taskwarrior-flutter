@@ -180,7 +180,7 @@ class _BurnDownWeeklyState extends State<BurnDownWeekly>
                 StackedColumnSeries<ChartData, String>(
                   groupName: 'Group A',
                   enableTooltip: true,
-                  color: Appcolors.green,
+                  color: TaskWarriorColors.green,
                   dataSource: allData
                       .map((task) => ChartData(
                             'Week ${Utils.getWeekNumbertoInt(task.entry)}, ${task.entry.year}',
@@ -200,7 +200,7 @@ class _BurnDownWeeklyState extends State<BurnDownWeekly>
                 ///this is the pending tasks
                 StackedColumnSeries<ChartData, String>(
                   groupName: 'Group A',
-                  color: Appcolors.yellow,
+                  color: TaskWarriorColors.yellow,
                   enableTooltip: true,
                   dataSource: allData
                       .map((task) => ChartData(

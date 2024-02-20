@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:loggy/loggy.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
+import 'package:taskwarrior/config/taskwarriorcolors.dart';
 
 class DescriptionWidget extends StatelessWidget {
   const DescriptionWidget(
@@ -65,9 +66,30 @@ class DescriptionWidget extends StatelessWidget {
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
+              surfaceTintColor: AppSettings.isDarkMode
+                  ? TaskWarriorColors.kdialogBackGroundColor
+                  : TaskWarriorColors.kLightDialogBackGroundColor,
+              shadowColor: AppSettings.isDarkMode
+                  ? TaskWarriorColors.kdialogBackGroundColor
+                  : TaskWarriorColors.kLightDialogBackGroundColor,
+              backgroundColor: AppSettings.isDarkMode
+                  ? TaskWarriorColors.kdialogBackGroundColor
+                  : TaskWarriorColors.kLightDialogBackGroundColor,
               scrollable: true,
-              title: const Text('Edit description'),
+              title: Text(
+                'Edit description',
+                style: TextStyle(
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.white
+                      : TaskWarriorColors.black,
+                ),
+              ),
               content: TextField(
+                style: TextStyle(
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.white
+                      : TaskWarriorColors.black,
+                ),
                 autofocus: true,
                 maxLines: null,
                 controller: controller,
@@ -77,7 +99,14 @@ class DescriptionWidget extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Text('Cancel'),
+                  child: Text(
+                    'Cancel',
+                    style: TextStyle(
+                      color: AppSettings.isDarkMode
+                          ? TaskWarriorColors.white
+                          : TaskWarriorColors.black,
+                    ),
+                  ),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -88,7 +117,14 @@ class DescriptionWidget extends StatelessWidget {
                       logError(e, trace);
                     }
                   },
-                  child: const Text('Submit'),
+                  child: Text(
+                    'Submit',
+                    style: TextStyle(
+                      color: AppSettings.isDarkMode
+                          ? TaskWarriorColors.black
+                          : TaskWarriorColors.black,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -159,9 +195,30 @@ class ProjectWidget extends StatelessWidget {
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
+              surfaceTintColor: AppSettings.isDarkMode
+                  ? TaskWarriorColors.kdialogBackGroundColor
+                  : TaskWarriorColors.kLightDialogBackGroundColor,
+              shadowColor: AppSettings.isDarkMode
+                  ? TaskWarriorColors.kdialogBackGroundColor
+                  : TaskWarriorColors.kLightDialogBackGroundColor,
+              backgroundColor: AppSettings.isDarkMode
+                  ? TaskWarriorColors.kdialogBackGroundColor
+                  : TaskWarriorColors.kLightDialogBackGroundColor,
               scrollable: true,
-              title: const Text('Edit project'),
+              title: Text(
+                'Edit project',
+                style: TextStyle(
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.white
+                      : TaskWarriorColors.black,
+                ),
+              ),
               content: TextField(
+                style: TextStyle(
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.white
+                      : TaskWarriorColors.black,
+                ),
                 autofocus: true,
                 maxLines: null,
                 controller: controller,
@@ -171,7 +228,14 @@ class ProjectWidget extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Text('Cancel'),
+                  child: Text(
+                    'Cancel',
+                    style: TextStyle(
+                      color: AppSettings.isDarkMode
+                          ? TaskWarriorColors.white
+                          : TaskWarriorColors.black,
+                    ),
+                  ),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -183,7 +247,14 @@ class ProjectWidget extends StatelessWidget {
                       logError(e, trace);
                     }
                   },
-                  child: const Text('Submit'),
+                  child: Text(
+                    'Submit',
+                    style: TextStyle(
+                      color: AppSettings.isDarkMode
+                          ? TaskWarriorColors.black
+                          : TaskWarriorColors.black,
+                    ),
+                  ),
                 ),
               ],
             ),

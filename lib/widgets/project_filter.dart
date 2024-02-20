@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:sizer/sizer.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
+import 'package:taskwarrior/config/taskwarriorcolors.dart';
 import 'package:taskwarrior/widgets/taskw.dart';
 
 class InheritedProjects extends InheritedWidget {
@@ -58,8 +59,9 @@ class ProjectsColumn extends StatelessWidget {
                     style: GoogleFonts.poppins(
                       fontWeight: FontWeight.bold,
                       fontSize: 15,
-                      color:
-                          AppSettings.isDarkMode ? Colors.white : Colors.black,
+                      color: AppSettings.isDarkMode
+                          ? TaskWarriorColors.white
+                          : TaskWarriorColors.black,
                     ),
                   ),
                   SizedBox(
@@ -76,8 +78,8 @@ class ProjectsColumn extends StatelessWidget {
                             style: GoogleFonts.poppins(
                               fontSize: 12,
                               color: AppSettings.isDarkMode
-                                  ? Colors.white
-                                  : Colors.black,
+                                  ? TaskWarriorColors.white
+                                  : TaskWarriorColors.black,
                             ),
                           ),
                         ],
@@ -97,8 +99,9 @@ class ProjectsColumn extends StatelessWidget {
                     style: GoogleFonts.poppins(
                       fontWeight: FontWeight.w600,
                       fontSize: 12,
-                      color:
-                          AppSettings.isDarkMode ? Colors.white : Colors.black,
+                      color: AppSettings.isDarkMode
+                          ? TaskWarriorColors.white
+                          : TaskWarriorColors.black,
                     ),
                   ),
                 ],
@@ -115,8 +118,8 @@ class ProjectsColumn extends StatelessWidget {
                     "No Projects Found",
                     style: GoogleFonts.poppins(
                       color: AppSettings.isDarkMode
-                          ? Colors.white
-                          : const Color.fromARGB(255, 48, 46, 46),
+                          ? TaskWarriorColors.white
+                          : TaskWarriorColors.black,
                       fontSize: 14,
                     ),
                   ),
@@ -149,25 +152,28 @@ class ProjectTile extends StatelessWidget {
         Flexible(
             child: Text(project,
                 style: GoogleFonts.poppins(
-                    color:
-                        AppSettings.isDarkMode ? Colors.white : Colors.black))),
+                    color: AppSettings.isDarkMode
+                        ? TaskWarriorColors.white
+                        : TaskWarriorColors.black))),
         Text(
           (node.children.isEmpty)
               ? '${node.subtasks}'
               : '(${node.tasks}) ${node.subtasks}',
           style: GoogleFonts.poppins(
-              color: AppSettings.isDarkMode ? Colors.white : Colors.black),
+              color: AppSettings.isDarkMode
+                  ? TaskWarriorColors.white
+                  : TaskWarriorColors.black),
         )
       ],
     );
 
     var radio = Radio(
       activeColor: AppSettings.isDarkMode
-          ? Colors.white
-          : const Color.fromARGB(255, 48, 46, 46),
+          ? TaskWarriorColors.white
+          : TaskWarriorColors.ksecondaryBackgroundColor,
       focusColor: AppSettings.isDarkMode
-          ? Colors.white
-          : const Color.fromARGB(255, 48, 46, 46),
+          ? TaskWarriorColors.white
+          : TaskWarriorColors.ksecondaryBackgroundColor,
       toggleable: true,
       value: project,
       groupValue: projectFilter,
@@ -185,16 +191,16 @@ class ProjectTile extends StatelessWidget {
                     maxLines: 3,
                     style: GoogleFonts.poppins(
                         color: AppSettings.isDarkMode
-                            ? Colors.white
-                            : Colors.black)),
+                            ? TaskWarriorColors.white
+                            : TaskWarriorColors.black)),
                 const Spacer(),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 4),
                   margin: const EdgeInsets.only(right: 10),
                   decoration: BoxDecoration(
                     color: (AppSettings.isDarkMode
-                        ? Colors.white
-                        : const Color.fromARGB(255, 48, 46, 46)),
+                        ? TaskWarriorColors.white
+                        : TaskWarriorColors.ksecondaryBackgroundColor),
                   ),
                   child: Text(
                     (node.children.isEmpty)
@@ -203,8 +209,8 @@ class ProjectTile extends StatelessWidget {
                     maxLines: 1,
                     style: GoogleFonts.poppins(
                         color: AppSettings.isDarkMode
-                            ? Colors.black
-                            : Colors.white),
+                            ? TaskWarriorColors.black
+                            : TaskWarriorColors.white),
                   ),
                 ),
               ],
@@ -216,11 +222,11 @@ class ProjectTile extends StatelessWidget {
             leading: radio,
             title: title,
             backgroundColor: AppSettings.isDarkMode
-                ? const Color.fromARGB(255, 48, 46, 46)
-                : const Color.fromARGB(255, 220, 216, 216),
+                ? TaskWarriorColors.ksecondaryBackgroundColor
+                : TaskWarriorColors.ksecondaryBackgroundColor,
             textColor: AppSettings.isDarkMode
-                ? Colors.white
-                : const Color.fromARGB(255, 48, 46, 46),
+                ? TaskWarriorColors.white
+                : TaskWarriorColors.ksecondaryBackgroundColor,
             children: node.children.map(ProjectTile.new).toList(),
           );
   }

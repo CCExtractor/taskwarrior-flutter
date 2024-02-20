@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:taskwarrior/config/app_settings.dart';
+import 'package:taskwarrior/config/taskwarriorcolors.dart';
 import 'package:taskwarrior/model/json.dart';
 import 'package:taskwarrior/widgets/taskw.dart';
 
@@ -45,10 +47,19 @@ class _TaskListItemState extends State<TaskListItem> {
     modify.save(
       modified: () => now,
     );
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text('Task Updated'),
-      duration: Duration(seconds: 2),
-    ));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          'Task Updated',
+          style: TextStyle(
+            color: AppSettings.isDarkMode
+                ? TaskWarriorColors.kprimaryTextColor
+                : TaskWarriorColors.kLightPrimaryTextColor,
+          ),
+        ),
+        backgroundColor: AppSettings.isDarkMode
+            ? TaskWarriorColors.ksecondaryBackgroundColor
+            : TaskWarriorColors.kLightSecondaryBackgroundColor,
+        duration: const Duration(seconds: 2)));
   }
 
   @override

@@ -15,7 +15,6 @@ import 'package:taskwarrior/views/reports/pages/burndown_daily.dart';
 import 'package:taskwarrior/views/reports/pages/burndown_monthly.dart';
 import 'package:taskwarrior/views/reports/pages/burndown_weekly.dart';
 import 'package:taskwarrior/views/reports/reports_tour.dart';
-import 'package:taskwarrior/widgets/pallete.dart';
 import 'package:taskwarrior/widgets/taskdetails/profiles_widget.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
@@ -53,7 +52,7 @@ class _ReportsHomeState extends State<ReportsHome>
         weekly: weekly,
         monthly: monthly,
       ),
-      colorShadow: Colors.black,
+      colorShadow: TaskWarriorColors.black,
       paddingFocus: 10,
       opacityShadow: 0.8,
       hideSkip: true,
@@ -114,10 +113,10 @@ class _ReportsHomeState extends State<ReportsHome>
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Palette.kToDark.shade200,
+        backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
         title: Text(
           'Reports',
-          style: GoogleFonts.poppins(color: Colors.white),
+          style: GoogleFonts.poppins(color: TaskWarriorColors.white),
         ),
         leading: GestureDetector(
           onTap: () {
@@ -125,7 +124,7 @@ class _ReportsHomeState extends State<ReportsHome>
           },
           child: Icon(
             Icons.chevron_left,
-            color: Appcolors.white,
+            color: TaskWarriorColors.white,
           ),
         ),
         bottom: PreferredSize(
@@ -133,7 +132,7 @@ class _ReportsHomeState extends State<ReportsHome>
               height * 0.1), // Adjust the preferred height as needed
           child: TabBar(
             controller: _tabController,
-            labelColor: Appcolors.white,
+            labelColor: TaskWarriorColors.white,
             labelStyle: GoogleFonts.poppins(
               fontWeight: FontWeight.w500,
               fontSize: 12,
@@ -169,8 +168,9 @@ class _ReportsHomeState extends State<ReportsHome>
           ),
         ),
       ),
-      backgroundColor:
-          AppSettings.isDarkMode ? Palette.kToDark.shade200 : Colors.white,
+      backgroundColor: AppSettings.isDarkMode
+          ? TaskWarriorColors.kprimaryBackgroundColor
+          : TaskWarriorColors.white,
       body: allData.isEmpty
           ? Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -178,7 +178,9 @@ class _ReportsHomeState extends State<ReportsHome>
               children: [
                 Icon(
                   Icons.heart_broken,
-                  color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.white
+                      : TaskWarriorColors.black,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -189,8 +191,8 @@ class _ReportsHomeState extends State<ReportsHome>
                         fontWeight: FontWeight.w500,
                         fontSize: 12,
                         color: AppSettings.isDarkMode
-                            ? Colors.white
-                            : Colors.black,
+                            ? TaskWarriorColors.white
+                            : TaskWarriorColors.black,
                       ),
                     ),
                   ],
@@ -204,8 +206,8 @@ class _ReportsHomeState extends State<ReportsHome>
                         fontWeight: FontWeight.w500,
                         fontSize: 12,
                         color: AppSettings.isDarkMode
-                            ? Colors.white
-                            : Colors.black,
+                            ? TaskWarriorColors.white
+                            : TaskWarriorColors.black,
                       ),
                     ),
                   ],
