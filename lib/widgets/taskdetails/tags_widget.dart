@@ -140,7 +140,7 @@ class TagsRouteState extends State<TagsRoute> {
                 if (draftTags != null)
                   for (var tag in draftTags!.build())
                     FilterChip(
-                      backgroundColor: TaskWarriorColors.grey,
+                      backgroundColor: TaskWarriorColors.lightGrey,
                       onSelected: (_) => _removeTag(tag),
                       label: Text(
                         '+$tag ${_pendingTags?[tag]?.frequency ?? 0}',
