@@ -200,9 +200,6 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
       server = Taskrc.fromString(contents).server;
       credentials = Taskrc.fromString(contents).credentials;
     }
-    var color = AppSettings.isDarkMode
-        ? TaskWarriorColors.white
-        : TaskWarriorColors.kprimaryBackgroundColor;
     var tileColor = AppSettings.isDarkMode
         ? TaskWarriorColors.ksecondaryBackgroundColor
         : TaskWarriorColors.kLightSecondaryBackgroundColor;
@@ -834,9 +831,6 @@ class PemWidget extends StatefulWidget {
 class _PemWidgetState extends State<PemWidget> {
   @override
   Widget build(BuildContext context) {
-    var color = AppSettings.isDarkMode
-        ? TaskWarriorColors.kprimaryTextColor
-        : TaskWarriorColors.kLightPrimaryTextColor;
     var contents = widget.storage.guiPemFiles.pemContents(widget.pem);
     var name = widget.storage.guiPemFiles.pemFilename(widget.pem);
     String identifier = "";
