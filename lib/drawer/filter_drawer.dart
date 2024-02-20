@@ -86,6 +86,9 @@ class _FilterDrawerState extends State<FilterDrawer> {
       backgroundColor: AppSettings.isDarkMode
           ? TaskWarriorColors.kprimaryBackgroundColor
           : TaskWarriorColors.kLightPrimaryBackgroundColor,
+      surfaceTintColor: AppSettings.isDarkMode
+          ? TaskWarriorColors.kprimaryBackgroundColor
+          : TaskWarriorColors.kLightPrimaryBackgroundColor,
       child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8),
@@ -249,7 +252,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                         style: GoogleFonts.poppins(
                             color: (AppSettings.isDarkMode
                                 ? TaskWarriorColors.kprimaryTextColor
-                                : TaskWarriorColors.ksecondaryTextColor),
+                                : TaskWarriorColors.kLightPrimaryTextColor),
                             fontSize: 18),
                         // textAlign: TextAlign.right,
                       ),

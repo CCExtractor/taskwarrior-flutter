@@ -32,19 +32,22 @@ class _NavDrawerState extends State<NavDrawer> {
   Widget build(BuildContext context) {
     return Drawer(
       backgroundColor: AppSettings.isDarkMode
-          ? TaskWarriorColors.black
-          : TaskWarriorColors.white,
+          ? TaskWarriorColors.kprimaryBackgroundColor
+          : TaskWarriorColors.kLightPrimaryBackgroundColor,
+      surfaceTintColor: AppSettings.isDarkMode
+          ? TaskWarriorColors.kprimaryBackgroundColor
+          : TaskWarriorColors.kLightPrimaryBackgroundColor,
       child: Container(
         color: AppSettings.isDarkMode
-            ? TaskWarriorColors.black
-            : TaskWarriorColors.white,
+            ? TaskWarriorColors.kprimaryBackgroundColor
+            : TaskWarriorColors.kLightPrimaryBackgroundColor,
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
             Container(
               color: AppSettings.isDarkMode
-                  ? TaskWarriorColors.black
-                  : TaskWarriorColors.white,
+                  ? TaskWarriorColors.kprimaryBackgroundColor
+                  : TaskWarriorColors.kLightPrimaryBackgroundColor,
               padding: const EdgeInsets.only(top: 50, left: 15, right: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -85,8 +88,8 @@ class _NavDrawerState extends State<NavDrawer> {
             ),
             Container(
               color: AppSettings.isDarkMode
-                  ? TaskWarriorColors.black
-                  : TaskWarriorColors.white,
+                  ? TaskWarriorColors.kprimaryBackgroundColor
+                  : TaskWarriorColors.kLightPrimaryBackgroundColor,
               height: 3.h,
             ),
             buildMenuItem(
@@ -174,8 +177,8 @@ class _NavDrawerState extends State<NavDrawer> {
       onTap: onTap,
       child: Container(
         color: AppSettings.isDarkMode
-            ? TaskWarriorColors.black
-            : TaskWarriorColors.white,
+            ? TaskWarriorColors.kprimaryBackgroundColor
+            : TaskWarriorColors.kLightPrimaryBackgroundColor,
         padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 10),
         child: Row(
           children: [
