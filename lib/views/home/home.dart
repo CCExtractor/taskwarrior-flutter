@@ -204,6 +204,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
+        surfaceTintColor: TaskWarriorColors.kprimaryBackgroundColor,
         title: Text('Home Page',
             style: GoogleFonts.poppins(color: TaskWarriorColors.white)),
         actions: [
