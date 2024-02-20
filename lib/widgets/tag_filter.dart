@@ -48,7 +48,7 @@ class TagFiltersWrap extends StatelessWidget {
                       : TaskWarriorColors.white)),
           backgroundColor: AppSettings.isDarkMode
               ? TaskWarriorColors.kLightSecondaryBackgroundColor
-              : TaskWarriorColors.kprimaryBackgroundColor,
+              : TaskWarriorColors.ksecondaryBackgroundColor,
         ),
         for (var entry in filters.tags.entries)
           FilterChip(
