@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/config/taskwarriorcolors.dart';
+import 'package:taskwarrior/config/taskwarriorfonts.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
 import 'package:taskwarrior/views/about/about.dart';
 import 'package:taskwarrior/views/profile/profile.dart';
@@ -56,7 +57,7 @@ class _NavDrawerState extends State<NavDrawer> {
                     'Menu',
                     style: TextStyle(
                       fontSize: 25,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: TaskWarriorFonts.bold,
                       color: AppSettings.isDarkMode
                           ? TaskWarriorColors.white
                           : TaskWarriorColors.black,

@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/config/taskwarriorcolors.dart';
+import 'package:taskwarrior/config/taskwarriorfonts.dart';
 import 'package:taskwarrior/widgets/pallete.dart';
 import 'package:taskwarrior/widgets/taskdetails/profiles_widget.dart';
 
@@ -92,7 +93,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 Text(
                   'Moving data to new directory',
                   style: GoogleFonts.poppins(
-                    fontWeight: FontWeight.bold,
+                    fontWeight: TaskWarriorFonts.bold,
                     fontSize: 16,
                     color: AppSettings.isDarkMode
                         ? TaskWarriorColors.white
@@ -107,7 +108,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   title: Text(
                     'Sync on Start',
                     style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.bold,
+                      fontWeight: TaskWarriorFonts.bold,
                       fontSize: 18,
                       color: AppSettings.isDarkMode
                           ? TaskWarriorColors.white
@@ -139,7 +140,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   title: Text(
                     'Sync on Task Create',
                     style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.bold,
+                      fontWeight: TaskWarriorFonts.bold,
                       fontSize: 16,
                       color: AppSettings.isDarkMode
                           ? TaskWarriorColors.white
@@ -171,7 +172,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   title: Text(
                     'Highlight the task',
                     style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.bold,
+                      fontWeight: TaskWarriorFonts.bold,
                       fontSize: 16,
                       color: AppSettings.isDarkMode
                           ? TaskWarriorColors.white
@@ -203,7 +204,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   title: Text(
                     'Select directory',
                     style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.bold,
+                      fontWeight: TaskWarriorFonts.bold,
                       fontSize: 16,
                       color: AppSettings.isDarkMode
                           ? TaskWarriorColors.white
@@ -278,7 +279,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                       title: Text(
                                         'Reset to default',
                                         style: GoogleFonts.poppins(
-                                          fontWeight: FontWeight.bold,
+                                          fontWeight: TaskWarriorFonts.bold,
                                           fontSize: 16,
                                           color: AppSettings.isDarkMode
                                               ? TaskWarriorColors.white
@@ -424,7 +425,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   title: Text(
                     'Error',
                     style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.bold,
+                      fontWeight: TaskWarriorFonts.bold,
                       fontSize: 16,
                       color: AppSettings.isDarkMode
                           ? TaskWarriorColors.white

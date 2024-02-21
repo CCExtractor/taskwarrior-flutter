@@ -5,6 +5,7 @@ import 'package:loggy/loggy.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/config/taskwarriorcolors.dart';
+import 'package:taskwarrior/config/taskwarriorfonts.dart';
 
 class DescriptionWidget extends StatelessWidget {
   const DescriptionWidget(
@@ -37,7 +38,7 @@ class DescriptionWidget extends StatelessWidget {
                     TextSpan(
                       text: '$name:'.padRight(13),
                       style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.bold,
+                        fontWeight: TaskWarriorFonts.bold,
                         fontSize: 15,
                         color: AppSettings.isDarkMode
                             ? Colors.white
@@ -166,7 +167,7 @@ class ProjectWidget extends StatelessWidget {
                     TextSpan(
                       text: '$name:'.padRight(13),
                       style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.bold,
+                        fontWeight: TaskWarriorFonts.bold,
                         fontSize: 15,
                         color: AppSettings.isDarkMode
                             ? Colors.white

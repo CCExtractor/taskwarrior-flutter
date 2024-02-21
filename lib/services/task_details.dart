@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/config/taskwarriorcolors.dart';
+import 'package:taskwarrior/config/taskwarriorfonts.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
 import 'package:taskwarrior/views/home/home.dart';
 import 'package:taskwarrior/widgets/pallete.dart';
@@ -440,7 +441,7 @@ class TagsWidget extends StatelessWidget {
                     TextSpan(
                       text: '$name:'.padRight(13),
                       style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.bold,
+                        fontWeight: TaskWarriorFonts.bold,
                         fontSize: 15,
                         color: AppSettings.isDarkMode
                             ? TaskWarriorColors.white

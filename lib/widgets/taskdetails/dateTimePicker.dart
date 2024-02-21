@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/config/taskwarriorcolors.dart';
+import 'package:taskwarrior/config/taskwarriorfonts.dart';
 
 class DateTimeWidget extends StatelessWidget {
   const DateTimeWidget({
@@ -40,7 +41,7 @@ class DateTimeWidget extends StatelessWidget {
                     TextSpan(
                       text: '$name:'.padRight(13),
                       style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.bold,
+                        fontWeight: TaskWarriorFonts.bold,
                         fontSize: 15,
                         color: AppSettings.isDarkMode
                             ? Colors.white
@@ -152,7 +153,7 @@ class StartWidget extends StatelessWidget {
                     TextSpan(
                       text: '$name:'.padRight(13),
                       style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.bold,
+                        fontWeight: TaskWarriorFonts.bold,
                         fontSize: 15,
                         color: AppSettings.isDarkMode
                             ? Colors.white

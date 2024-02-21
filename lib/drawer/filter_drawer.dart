@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/config/taskwarriorcolors.dart';
+import 'package:taskwarrior/config/taskwarriorfonts.dart';
 import 'package:taskwarrior/controller/filter_drawer_tour_controller.dart';
 import 'package:taskwarrior/drawer/filter_drawer_tour.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
@@ -107,7 +108,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                   child: Text(
                     'Apply Filters',
                     style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.bold,
+                        fontWeight: TaskWarriorFonts.bold,
                         color: (AppSettings.isDarkMode
                             ? TaskWarriorColors.kprimaryTextColor
                             : TaskWarriorColors.kLightPrimaryTextColor),
@@ -138,7 +139,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                         TextSpan(
                           text: 'Status : ',
                           style: GoogleFonts.poppins(
-                            fontWeight: FontWeight.bold,
+                            fontWeight: TaskWarriorFonts.bold,
                             fontSize: 15,
                             color: AppSettings.isDarkMode
                                 ? TaskWarriorColors.white

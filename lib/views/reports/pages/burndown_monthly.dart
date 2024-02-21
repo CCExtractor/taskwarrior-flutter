@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:taskwarrior/config/app_settings.dart';
+import 'package:taskwarrior/config/taskwarriorfonts.dart';
 import 'package:taskwarrior/model/chart.dart';
 import 'dart:io';
 
@@ -60,7 +61,7 @@ class _BurnDownMonthltState extends State<BurnDownMonthlt>
               Text(
                 'Month-Year: $monthYear',
                 style: const TextStyle(
-                  fontWeight: FontWeight.bold,
+                  fontWeight: TaskWarriorFonts.bold,
                 ),
               ),
               Text(
@@ -142,7 +143,7 @@ class _BurnDownMonthltState extends State<BurnDownMonthlt>
                 title: AxisTitle(
                   text: 'Month - Year',
                   textStyle: GoogleFonts.poppins(
-                    fontWeight: FontWeight.bold,
+                    fontWeight: TaskWarriorFonts.bold,
                     fontSize: 12,
                     color: AppSettings.isDarkMode ? Colors.white : Colors.black,
                   ),
@@ -152,7 +153,7 @@ class _BurnDownMonthltState extends State<BurnDownMonthlt>
                 title: AxisTitle(
                   text: 'Tasks',
                   textStyle: GoogleFonts.poppins(
-                    fontWeight: FontWeight.bold,
+                    fontWeight: TaskWarriorFonts.bold,
                     fontSize: 12,
                     color: AppSettings.isDarkMode ? Colors.white : Colors.black,
                   ),

@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/config/taskwarriorcolors.dart';
+import 'package:taskwarrior/config/taskwarriorfonts.dart';
 
 class TagFilterMetadata {
   const TagFilterMetadata({
@@ -56,7 +57,8 @@ class TagFiltersWrap extends StatelessWidget {
             label: Text(
               entry.value.display,
               style: GoogleFonts.poppins(
-                  fontWeight: entry.value.selected ? FontWeight.w700 : null,
+                  fontWeight:
+                      entry.value.selected ? TaskWarriorFonts.bold : null,
                   color: AppSettings.isDarkMode
                       ? TaskWarriorColors.black
                       : TaskWarriorColors.white),

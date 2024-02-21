@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:taskwarrior/config/taskwarriorcolors.dart';
+import 'package:taskwarrior/config/taskwarriorfonts.dart';
 import 'package:taskwarrior/controller/onboarding_controller.dart';
 import 'package:taskwarrior/views/Onboarding/Model/onboarding_contents.dart';
 import 'package:taskwarrior/views/Onboarding/Components/size_config.dart';
@@ -93,7 +94,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               content.title,
               textAlign: TextAlign.center,
               style: GoogleFonts.poppins(
-                fontWeight: FontWeight.w600,
+                fontWeight: TaskWarriorFonts.semiBold,
                 fontSize: (width <= 550) ? 30 : 35,
               ),
             ),
@@ -104,7 +105,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             Text(
               content.desc,
               style: GoogleFonts.poppins(
-                fontWeight: FontWeight.w300,
+                fontWeight: TaskWarriorFonts.light,
                 fontSize: (width <= 550) ? 17 : 17,
               ),
               textAlign: TextAlign.center,
@@ -162,7 +163,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         child: Text(
           "Start",
           style: GoogleFonts.poppins(
-            fontWeight: FontWeight.w300,
+            fontWeight: TaskWarriorFonts.light,
             color: TaskWarriorColors.white,
             fontSize: (width <= 550) ? 17 : 17,
           ),
@@ -184,14 +185,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             style: TextButton.styleFrom(
               elevation: 0,
               textStyle: TextStyle(
-                fontWeight: FontWeight.w600,
+                fontWeight: TaskWarriorFonts.semiBold,
                 fontSize: (width <= 550) ? 13 : 17,
               ),
             ),
             child: Text(
               "Skip",
               style: GoogleFonts.poppins(
-                fontWeight: FontWeight.bold,
+                fontWeight: TaskWarriorFonts.bold,
                 color: TaskWarriorColors.black,
                 fontSize: (width <= 550) ? 12 : 12,
               ),
@@ -218,7 +219,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             child: Text(
               "Next",
               style: GoogleFonts.poppins(
-                fontWeight: FontWeight.w300,
+                fontWeight: TaskWarriorFonts.light,
                 color: TaskWarriorColors.white,
                 fontSize: (width <= 550) ? 12 : 12,
               ),

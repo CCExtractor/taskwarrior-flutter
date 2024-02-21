@@ -5,6 +5,7 @@ import 'package:sizer/sizer.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/config/taskwarriorcolors.dart';
+import 'package:taskwarrior/config/taskwarriorfonts.dart';
 import 'package:taskwarrior/widgets/taskw.dart';
 
 class InheritedProjects extends InheritedWidget {
@@ -57,7 +58,7 @@ class ProjectsColumn extends StatelessWidget {
                   Text(
                     "Project : ",
                     style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.bold,
+                      fontWeight: TaskWarriorFonts.bold,
                       fontSize: 15,
                       color: AppSettings.isDarkMode
                           ? TaskWarriorColors.white
@@ -97,7 +98,7 @@ class ProjectsColumn extends StatelessWidget {
                   Text(
                     "All Projects",
                     style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.w600,
+                      fontWeight: TaskWarriorFonts.semiBold,
                       fontSize: 12,
                       color: AppSettings.isDarkMode
                           ? TaskWarriorColors.white

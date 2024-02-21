@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:taskwarrior/config/taskwarriorcolors.dart';
+import 'package:taskwarrior/config/taskwarriorfonts.dart';
 
 import 'package:tuple/tuple.dart';
 
@@ -52,7 +53,7 @@ class ManageProfile extends StatelessWidget {
       title: Text(
         'Manage selected profile',
         style: GoogleFonts.poppins(
-          fontWeight: FontWeight.bold,
+          fontWeight: TaskWarriorFonts.bold,
           fontSize: 15,
           color: AppSettings.isDarkMode
               ? TaskWarriorColors.white

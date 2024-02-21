@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
+import 'package:taskwarrior/config/taskwarriorfonts.dart';
 
 class StatusWidget extends StatelessWidget {
   const StatusWidget(
@@ -37,7 +38,7 @@ class StatusWidget extends StatelessWidget {
                     TextSpan(
                       text: '$name:'.padRight(13),
                       style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.bold,
+                        fontWeight: TaskWarriorFonts.bold,
                         fontSize: 15,
                         color: AppSettings.isDarkMode
                             ? Colors.white

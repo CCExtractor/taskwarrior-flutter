@@ -7,6 +7,7 @@ import 'package:taskwarrior/config/taskwarriorcolors.dart';
 import 'dart:io';
 
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:taskwarrior/config/taskwarriorfonts.dart';
 import 'package:taskwarrior/model/chart.dart';
 import 'package:taskwarrior/model/json/task.dart';
 import 'package:taskwarrior/model/storage.dart';
@@ -62,7 +63,7 @@ class _BurnDownDailyState extends State<BurnDownDaily>
               Text(
                 'Date: $date',
                 style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.bold,
+                  fontWeight: TaskWarriorFonts.bold,
                 ),
               ),
               Text(
@@ -158,7 +159,7 @@ class _BurnDownDailyState extends State<BurnDownDaily>
                 title: AxisTitle(
                   text: 'Day - Month',
                   textStyle: GoogleFonts.poppins(
-                    fontWeight: FontWeight.bold,
+                    fontWeight: TaskWarriorFonts.bold,
                     color: AppSettings.isDarkMode ? Colors.white : Colors.black,
                     fontSize: 12,
                   ),
@@ -168,7 +169,7 @@ class _BurnDownDailyState extends State<BurnDownDaily>
                 title: AxisTitle(
                   text: 'Tasks',
                   textStyle: GoogleFonts.poppins(
-                    fontWeight: FontWeight.bold,
+                    fontWeight: TaskWarriorFonts.bold,
                     fontSize: 12,
                     color: AppSettings.isDarkMode ? Colors.white : Colors.black,
                   ),
