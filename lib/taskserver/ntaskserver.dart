@@ -840,7 +840,9 @@ class _PemWidgetState extends State<PemWidget> {
     var name = widget.storage.guiPemFiles.pemFilename(widget.pem);
     String identifier = "";
     try {
-      identifier = fingerprint(contents!).toUpperCase();
+      if (contents != null) {
+        identifier = fingerprint(contents).toUpperCase(); // Null check removed
+      }
     } catch (e) {
       debugPrint(e.toString());
     }
