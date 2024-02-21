@@ -91,7 +91,7 @@ class _HomePageState extends State<HomePage> {
               else
                 {
                   // ignore: avoid_print
-                  print('User has seen this page'),
+                  debugPrint('User has seen this page'),
                   // User has seen this page
                 }
             });
