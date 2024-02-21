@@ -160,7 +160,7 @@ class _BurnDownWeeklyState extends State<BurnDownWeekly>
                   text: 'Weeks - Year',
                   textStyle: GoogleFonts.poppins(
                     fontWeight: TaskWarriorFonts.bold,
-                    fontSize: 12,
+                    fontSize: TaskWarriorFonts.fontSizeSmall,
                     color: AppSettings.isDarkMode ? Colors.white : Colors.black,
                   ),
                 ),
@@ -171,7 +171,7 @@ class _BurnDownWeeklyState extends State<BurnDownWeekly>
                   textStyle: GoogleFonts.poppins(
                     fontWeight: TaskWarriorFonts.bold,
                     color: AppSettings.isDarkMode ? Colors.white : Colors.black,
-                    fontSize: 12,
+                    fontSize: TaskWarriorFonts.fontSizeSmall,
                   ),
                 ),
               ),

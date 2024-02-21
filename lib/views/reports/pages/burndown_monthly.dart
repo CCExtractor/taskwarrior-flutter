@@ -144,7 +144,7 @@ class _BurnDownMonthltState extends State<BurnDownMonthlt>
                   text: 'Month - Year',
                   textStyle: GoogleFonts.poppins(
                     fontWeight: TaskWarriorFonts.bold,
-                    fontSize: 12,
+                    fontSize: TaskWarriorFonts.fontSizeSmall,
                     color: AppSettings.isDarkMode ? Colors.white : Colors.black,
                   ),
                 ),
@@ -154,7 +154,7 @@ class _BurnDownMonthltState extends State<BurnDownMonthlt>
                   text: 'Tasks',
                   textStyle: GoogleFonts.poppins(
                     fontWeight: TaskWarriorFonts.bold,
-                    fontSize: 12,
+                    fontSize: TaskWarriorFonts.fontSizeSmall,
                     color: AppSettings.isDarkMode ? Colors.white : Colors.black,
                   ),
                 ),

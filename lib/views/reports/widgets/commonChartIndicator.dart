@@ -22,7 +22,7 @@ class CommonChartIndicator extends StatelessWidget {
               title,
               style: GoogleFonts.poppins(
                 fontWeight: TaskWarriorFonts.bold,
-                fontSize: 16,
+                fontSize: TaskWarriorFonts.fontSizeMedium,
                 color: AppSettings.isDarkMode
                     ? TaskWarriorColors.white
                     : TaskWarriorColors.black,
@@ -47,7 +47,7 @@ class CommonChartIndicator extends StatelessWidget {
                   "Completed",
                   style: GoogleFonts.poppins(
                     fontWeight: TaskWarriorFonts.regular,
-                    fontSize: 16,
+                    fontSize: TaskWarriorFonts.fontSizeMedium,
                     color: AppSettings.isDarkMode
                         ? TaskWarriorColors.white
                         : TaskWarriorColors.black,
@@ -66,7 +66,7 @@ class CommonChartIndicator extends StatelessWidget {
                   "Pending",
                   style: GoogleFonts.poppins(
                     fontWeight: TaskWarriorFonts.regular,
-                    fontSize: 16,
+                    fontSize: TaskWarriorFonts.fontSizeMedium,
                     color: AppSettings.isDarkMode
                         ? TaskWarriorColors.white
                         : TaskWarriorColors.black,

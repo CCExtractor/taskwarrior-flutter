@@ -161,7 +161,7 @@ class _BurnDownDailyState extends State<BurnDownDaily>
                   textStyle: GoogleFonts.poppins(
                     fontWeight: TaskWarriorFonts.bold,
                     color: AppSettings.isDarkMode ? Colors.white : Colors.black,
-                    fontSize: 12,
+                    fontSize: TaskWarriorFonts.fontSizeSmall,
                   ),
                 ),
               ),
@@ -170,7 +170,7 @@ class _BurnDownDailyState extends State<BurnDownDaily>
                   text: 'Tasks',
                   textStyle: GoogleFonts.poppins(
                     fontWeight: TaskWarriorFonts.bold,
-                    fontSize: 12,
+                    fontSize: TaskWarriorFonts.fontSizeSmall,
                     color: AppSettings.isDarkMode ? Colors.white : Colors.black,
                   ),
                 ),

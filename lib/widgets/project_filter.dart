@@ -59,7 +59,7 @@ class ProjectsColumn extends StatelessWidget {
                     "Project : ",
                     style: GoogleFonts.poppins(
                       fontWeight: TaskWarriorFonts.bold,
-                      fontSize: 15,
+                      fontSize: TaskWarriorFonts.fontSizeMedium,
                       color: AppSettings.isDarkMode
                           ? TaskWarriorColors.white
                           : TaskWarriorColors.black,
@@ -77,7 +77,7 @@ class ProjectsColumn extends StatelessWidget {
                                 ? "Not selected"
                                 : projectFilter,
                             style: GoogleFonts.poppins(
-                              fontSize: 12,
+                              fontSize: TaskWarriorFonts.fontSizeSmall,
                               color: AppSettings.isDarkMode
                                   ? TaskWarriorColors.white
                                   : TaskWarriorColors.black,
@@ -99,7 +99,7 @@ class ProjectsColumn extends StatelessWidget {
                     "All Projects",
                     style: GoogleFonts.poppins(
                       fontWeight: TaskWarriorFonts.semiBold,
-                      fontSize: 12,
+                      fontSize: TaskWarriorFonts.fontSizeSmall,
                       color: AppSettings.isDarkMode
                           ? TaskWarriorColors.white
                           : TaskWarriorColors.black,
@@ -121,7 +121,7 @@ class ProjectsColumn extends StatelessWidget {
                       color: AppSettings.isDarkMode
                           ? TaskWarriorColors.white
                           : TaskWarriorColors.black,
-                      fontSize: 14,
+                      fontSize: TaskWarriorFonts.fontSizeSmall,
                     ),
                   ),
                   SizedBox(

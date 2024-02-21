@@ -32,7 +32,7 @@ class AppSetupPlaceholder extends StatelessWidget {
                 "Setting up the app...",
                 style: GoogleFonts.poppins(
                   fontWeight: TaskWarriorFonts.bold,
-                  fontSize: 18,
+                  fontSize: TaskWarriorFonts.fontSizeLarge,
                   color: AppSettings.isDarkMode
                       ? TaskWarriorColors.white
                       : TaskWarriorColors.black,

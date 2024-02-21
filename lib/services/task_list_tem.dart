@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/config/taskwarriorcolors.dart';
+import 'package:taskwarrior/config/taskwarriorfonts.dart';
 import 'package:taskwarrior/model/json.dart';
 import 'package:taskwarrior/widgets/taskw.dart';
 
@@ -141,7 +142,7 @@ class _TaskListItemState extends State<TaskListItem> {
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.poppins(
                       color: dimColor,
-                      fontSize: 12,
+                      fontSize: TaskWarriorFonts.fontSizeSmall,
                     ),
                   ),
                 ),
@@ -198,7 +199,7 @@ class _TaskListItemState extends State<TaskListItem> {
                   overflow: TextOverflow.ellipsis,
                   style: GoogleFonts.poppins(
                     color: dimColor,
-                    fontSize: 12,
+                    fontSize: TaskWarriorFonts.fontSizeSmall,
                   ),
                 ),
               ),

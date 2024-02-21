@@ -56,7 +56,7 @@ class _NavDrawerState extends State<NavDrawer> {
                   Text(
                     'Menu',
                     style: TextStyle(
-                      fontSize: 25,
+                      fontSize: TaskWarriorFonts.fontSizeExtraLarge,
                       fontWeight: TaskWarriorFonts.bold,
                       color: AppSettings.isDarkMode
                           ? TaskWarriorColors.white
@@ -196,7 +196,7 @@ class _NavDrawerState extends State<NavDrawer> {
                 color: AppSettings.isDarkMode
                     ? TaskWarriorColors.white
                     : TaskWarriorColors.black,
-                fontSize: 18,
+                fontSize: TaskWarriorFonts.fontSizeMedium,
               ),
             ),
           ],

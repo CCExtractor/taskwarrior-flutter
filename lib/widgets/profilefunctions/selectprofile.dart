@@ -46,7 +46,7 @@ class SelectProfile extends StatelessWidget {
             overflow: TextOverflow.fade,
             style: GoogleFonts.poppins(
               fontWeight: TaskWarriorFonts.bold,
-              fontSize: 15,
+              fontSize: TaskWarriorFonts.fontSizeMedium,
               color: AppSettings.isDarkMode
                   ? TaskWarriorColors.white
                   : TaskWarriorColors.black,
@@ -57,7 +57,7 @@ class SelectProfile extends StatelessWidget {
           ),
           Text(currentProfile,
               style: GoogleFonts.poppins(
-                fontSize: 12,
+                fontSize: TaskWarriorFonts.fontSizeSmall,
                 color: AppSettings.isDarkMode
                     ? TaskWarriorColors.grey
                     : TaskWarriorColors.lightGrey,
@@ -77,7 +77,7 @@ class SelectProfile extends StatelessWidget {
                 overflow: TextOverflow.fade,
                 style: GoogleFonts.poppins(
                   fontWeight: TaskWarriorFonts.bold,
-                  fontSize: 15,
+                  fontSize: TaskWarriorFonts.fontSizeMedium,
                   color: AppSettings.isDarkMode
                       ? TaskWarriorColors.white
                       : TaskWarriorColors.black,

@@ -136,7 +136,7 @@ class _ReportsHomeState extends State<ReportsHome>
             labelColor: TaskWarriorColors.white,
             labelStyle: GoogleFonts.poppins(
               fontWeight: TaskWarriorFonts.medium,
-              fontSize: 12,
+              fontSize: TaskWarriorFonts.fontSizeSmall,
             ),
             unselectedLabelStyle: GoogleFonts.poppins(
               fontWeight: TaskWarriorFonts.light,
@@ -190,7 +190,7 @@ class _ReportsHomeState extends State<ReportsHome>
                       'No Task found',
                       style: GoogleFonts.poppins(
                         fontWeight: TaskWarriorFonts.medium,
-                        fontSize: 12,
+                        fontSize: TaskWarriorFonts.fontSizeSmall,
                         color: AppSettings.isDarkMode
                             ? TaskWarriorColors.white
                             : TaskWarriorColors.black,
@@ -205,7 +205,7 @@ class _ReportsHomeState extends State<ReportsHome>
                       'Add a task to see reports',
                       style: GoogleFonts.poppins(
                         fontWeight: TaskWarriorFonts.light,
-                        fontSize: 12,
+                        fontSize: TaskWarriorFonts.fontSizeSmall,
                         color: AppSettings.isDarkMode
                             ? TaskWarriorColors.white
                             : TaskWarriorColors.black,

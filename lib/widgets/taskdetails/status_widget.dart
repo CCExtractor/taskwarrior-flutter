@@ -39,7 +39,7 @@ class StatusWidget extends StatelessWidget {
                       text: '$name:'.padRight(13),
                       style: GoogleFonts.poppins(
                         fontWeight: TaskWarriorFonts.bold,
-                        fontSize: 15,
+                        fontSize: TaskWarriorFonts.fontSizeMedium,
                         color: AppSettings.isDarkMode
                             ? Colors.white
                             : Colors.black,
@@ -48,7 +48,7 @@ class StatusWidget extends StatelessWidget {
                     TextSpan(
                       text: value ?? "not selected",
                       style: GoogleFonts.poppins(
-                        fontSize: 15,
+                        fontSize: TaskWarriorFonts.fontSizeMedium,
                         color: AppSettings.isDarkMode
                             ? Colors.white
                             : Colors.black,

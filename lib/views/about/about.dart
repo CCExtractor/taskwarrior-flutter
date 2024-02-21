@@ -61,7 +61,7 @@ class _AboutPageState extends State<AboutPage> {
                 "Taskwarrior",
                 style: GoogleFonts.poppins(
                   fontWeight: TaskWarriorFonts.bold,
-                  fontSize: 18,
+                  fontSize: TaskWarriorFonts.fontSizeLarge,
                   color: AppSettings.isDarkMode
                       ? TaskWarriorColors.white
                       : TaskWarriorColors.black,
@@ -93,7 +93,7 @@ class _AboutPageState extends State<AboutPage> {
                                     text: 'Version: ',
                                     style: GoogleFonts.poppins(
                                       fontWeight: TaskWarriorFonts.bold,
-                                      fontSize: 15,
+                                      fontSize: TaskWarriorFonts.fontSizeMedium,
                                       color: AppSettings.isDarkMode
                                           ? TaskWarriorColors.white
                                           : TaskWarriorColors.black,
@@ -102,7 +102,7 @@ class _AboutPageState extends State<AboutPage> {
                                   TextSpan(
                                     text: appInfoLines[1],
                                     style: GoogleFonts.poppins(
-                                      fontSize: 15,
+                                      fontSize: TaskWarriorFonts.fontSizeMedium,
                                       color: AppSettings.isDarkMode
                                           ? TaskWarriorColors.white
                                           : TaskWarriorColors.black,
@@ -118,7 +118,7 @@ class _AboutPageState extends State<AboutPage> {
                                     text: 'Package: ',
                                     style: GoogleFonts.poppins(
                                       fontWeight: TaskWarriorFonts.bold,
-                                      fontSize: 15,
+                                      fontSize: TaskWarriorFonts.fontSizeMedium,
                                       color: AppSettings.isDarkMode
                                           ? TaskWarriorColors.white
                                           : TaskWarriorColors.black,
@@ -127,7 +127,7 @@ class _AboutPageState extends State<AboutPage> {
                                   TextSpan(
                                     text: appInfoLines[0],
                                     style: GoogleFonts.poppins(
-                                      fontSize: 15,
+                                      fontSize: TaskWarriorFonts.fontSizeMedium,
                                       color: AppSettings.isDarkMode
                                           ? TaskWarriorColors.white
                                           : TaskWarriorColors.black,
@@ -151,7 +151,7 @@ class _AboutPageState extends State<AboutPage> {
                 textAlign: TextAlign.center,
                 style: GoogleFonts.poppins(
                   fontWeight: TaskWarriorFonts.medium,
-                  fontSize: 12,
+                  fontSize: TaskWarriorFonts.fontSizeSmall,
                   color: AppSettings.isDarkMode
                       ? TaskWarriorColors.white
                       : TaskWarriorColors.black,
@@ -196,7 +196,7 @@ class _AboutPageState extends State<AboutPage> {
                         "GitHub",
                         style: GoogleFonts.poppins(
                           fontWeight: TaskWarriorFonts.medium,
-                          fontSize: 12,
+                          fontSize: TaskWarriorFonts.fontSizeSmall,
                           color: AppSettings.isDarkMode
                               ? TaskWarriorColors.black
                               : TaskWarriorColors.white,
@@ -234,7 +234,7 @@ class _AboutPageState extends State<AboutPage> {
                         "CCExtractor",
                         style: GoogleFonts.poppins(
                           fontWeight: TaskWarriorFonts.medium,
-                          fontSize: 12,
+                          fontSize: TaskWarriorFonts.fontSizeSmall,
                           color: AppSettings.isDarkMode
                               ? TaskWarriorColors.black
                               : TaskWarriorColors.white,
@@ -252,7 +252,7 @@ class _AboutPageState extends State<AboutPage> {
                 textAlign: TextAlign.center,
                 style: GoogleFonts.poppins(
                   fontWeight: TaskWarriorFonts.semiBold,
-                  fontSize: 12,
+                  fontSize: TaskWarriorFonts.fontSizeSmall,
                   color: AppSettings.isDarkMode
                       ? TaskWarriorColors.white
                       : TaskWarriorColors.black,

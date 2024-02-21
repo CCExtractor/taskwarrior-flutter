@@ -56,14 +56,14 @@ class _SettingsPageState extends State<SettingsPage> {
               'Settings',
               style: GoogleFonts.poppins(
                 color: TaskWarriorColors.white,
-                fontSize: 20,
+                fontSize: TaskWarriorFonts.fontSizeLarge,
               ),
             ),
             Text(
               'Configure your preferences',
               style: GoogleFonts.poppins(
                 color: TaskWarriorColors.white,
-                fontSize: 14,
+                fontSize: TaskWarriorFonts.fontSizeSmall,
               ),
             ),
           ],
@@ -93,8 +93,8 @@ class _SettingsPageState extends State<SettingsPage> {
                 Text(
                   'Moving data to new directory',
                   style: GoogleFonts.poppins(
-                    fontWeight: TaskWarriorFonts.bold,
-                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    fontSize: TaskWarriorFonts.fontSizeMedium,
                     color: AppSettings.isDarkMode
                         ? TaskWarriorColors.white
                         : TaskWarriorColors.black,
@@ -108,8 +108,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   title: Text(
                     'Sync on Start',
                     style: GoogleFonts.poppins(
-                      fontWeight: TaskWarriorFonts.bold,
-                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      fontSize: TaskWarriorFonts.fontSizeMedium,
                       color: AppSettings.isDarkMode
                           ? TaskWarriorColors.white
                           : TaskWarriorColors.black,
@@ -119,7 +119,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     'Automatically sync data on app startup',
                     style: GoogleFonts.poppins(
                       color: TaskWarriorColors.grey,
-                      fontSize: 14,
+                      fontSize: TaskWarriorFonts.fontSizeSmall,
                     ),
                   ),
                   trailing: Switch(
@@ -140,8 +140,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   title: Text(
                     'Sync on Task Create',
                     style: GoogleFonts.poppins(
-                      fontWeight: TaskWarriorFonts.bold,
-                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      fontSize: TaskWarriorFonts.fontSizeMedium,
                       color: AppSettings.isDarkMode
                           ? TaskWarriorColors.white
                           : TaskWarriorColors.black,
@@ -151,7 +151,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     'Enable automatic syncing when creating a new task',
                     style: GoogleFonts.poppins(
                       color: TaskWarriorColors.grey,
-                      fontSize: 14,
+                      fontSize: TaskWarriorFonts.fontSizeSmall,
                     ),
                   ),
                   trailing: Switch(
@@ -172,8 +172,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   title: Text(
                     'Highlight the task',
                     style: GoogleFonts.poppins(
-                      fontWeight: TaskWarriorFonts.bold,
-                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      fontSize: TaskWarriorFonts.fontSizeMedium,
                       color: AppSettings.isDarkMode
                           ? TaskWarriorColors.white
                           : TaskWarriorColors.black,
@@ -183,7 +183,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     'Make the border of task if only one day left',
                     style: GoogleFonts.poppins(
                       color: TaskWarriorColors.grey,
-                      fontSize: 14,
+                      fontSize: TaskWarriorFonts.fontSizeSmall,
                     ),
                   ),
                   trailing: Switch(
@@ -204,8 +204,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   title: Text(
                     'Select directory',
                     style: GoogleFonts.poppins(
-                      fontWeight: TaskWarriorFonts.bold,
-                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      fontSize: TaskWarriorFonts.fontSizeMedium,
                       color: AppSettings.isDarkMode
                           ? TaskWarriorColors.white
                           : TaskWarriorColors.black,
@@ -214,10 +214,10 @@ class _SettingsPageState extends State<SettingsPage> {
                   subtitle: Column(
                     children: [
                       Text(
-                        'Select the directory where the TaskWarrior data is stored\nCurrent: ${getBaseDirectory()}',
+                        'Select the directory where the TaskWarrior data is stored\nCurrent directory: ${getBaseDirectory()}',
                         style: GoogleFonts.poppins(
                           color: TaskWarriorColors.grey,
-                          fontSize: 14,
+                          fontSize: TaskWarriorFonts.fontSizeSmall,
                         ),
                       ),
                       const SizedBox(
@@ -279,8 +279,9 @@ class _SettingsPageState extends State<SettingsPage> {
                                       title: Text(
                                         'Reset to default',
                                         style: GoogleFonts.poppins(
-                                          fontWeight: TaskWarriorFonts.bold,
-                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize:
+                                              TaskWarriorFonts.fontSizeMedium,
                                           color: AppSettings.isDarkMode
                                               ? TaskWarriorColors.white
                                               : TaskWarriorColors.black,
@@ -290,7 +291,8 @@ class _SettingsPageState extends State<SettingsPage> {
                                         "Are you sure you want to reset the directory to the default?",
                                         style: GoogleFonts.poppins(
                                           color: TaskWarriorColors.grey,
-                                          fontSize: 14,
+                                          fontSize:
+                                              TaskWarriorFonts.fontSizeMedium,
                                         ),
                                       ),
                                       actions: [
@@ -425,8 +427,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   title: Text(
                     'Error',
                     style: GoogleFonts.poppins(
-                      fontWeight: TaskWarriorFonts.bold,
-                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      fontSize: TaskWarriorFonts.fontSizeMedium,
                       color: AppSettings.isDarkMode
                           ? TaskWarriorColors.white
                           : TaskWarriorColors.black,
@@ -440,7 +442,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             : "An error occurred",
                     style: GoogleFonts.poppins(
                       color: TaskWarriorColors.grey,
-                      fontSize: 14,
+                      fontSize: TaskWarriorFonts.fontSizeSmall,
                     ),
                   ),
                   actions: [

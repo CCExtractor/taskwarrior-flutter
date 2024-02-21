@@ -322,12 +322,16 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
             Text(
               "Configure TaskServer",
               style: GoogleFonts.poppins(
-                  color: TaskWarriorColors.white, fontSize: 18),
+                color: TaskWarriorColors.white,
+                fontSize: TaskWarriorFonts.fontSizeLarge,
+              ),
             ),
             Text(
               alias ?? profile,
               style: GoogleFonts.poppins(
-                  color: TaskWarriorColors.white, fontSize: 12),
+                color: TaskWarriorColors.white,
+                fontSize: TaskWarriorFonts.fontSizeSmall,
+              ),
             ),
           ],
         ),

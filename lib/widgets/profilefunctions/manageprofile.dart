@@ -54,7 +54,7 @@ class ManageProfile extends StatelessWidget {
         'Manage selected profile',
         style: GoogleFonts.poppins(
           fontWeight: TaskWarriorFonts.bold,
-          fontSize: 15,
+          fontSize: TaskWarriorFonts.fontSizeMedium,
           color: AppSettings.isDarkMode
               ? TaskWarriorColors.white
               : TaskWarriorColors.black,

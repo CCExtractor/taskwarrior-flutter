@@ -442,7 +442,7 @@ class TagsWidget extends StatelessWidget {
                       text: '$name:'.padRight(13),
                       style: GoogleFonts.poppins(
                         fontWeight: TaskWarriorFonts.bold,
-                        fontSize: 15,
+                        fontSize: TaskWarriorFonts.fontSizeMedium,
                         color: AppSettings.isDarkMode
                             ? TaskWarriorColors.white
                             : TaskWarriorColors.black,

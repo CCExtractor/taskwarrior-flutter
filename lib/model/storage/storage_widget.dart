@@ -287,7 +287,7 @@ class _StorageWidgetState extends State<StorageWidget> {
                       Text(
                         "Syncing",
                         style: GoogleFonts.poppins(
-                          fontSize: 18.0,
+                          fontSize: TaskWarriorFonts.fontSizeLarge,
                           fontWeight: TaskWarriorFonts.bold,
                         ),
                       ),
@@ -295,7 +295,7 @@ class _StorageWidgetState extends State<StorageWidget> {
                       Text(
                         "Please wait...",
                         style: GoogleFonts.poppins(
-                          fontSize: 12.0,
+                          fontSize: TaskWarriorFonts.fontSizeSmall,
                           fontWeight: TaskWarriorFonts.regular,
                         ),
                       ),
