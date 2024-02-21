@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loggy/loggy.dart';
 import 'package:taskwarrior/config/taskwarriorcolors.dart';
+import 'package:taskwarrior/config/taskwarriorfonts.dart';
 import 'package:taskwarrior/widgets/taskdetails/profiles_widget.dart';
 // ignore_for_file: use_build_context_synchronously
 
@@ -321,12 +322,16 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
             Text(
               "Configure TaskServer",
               style: GoogleFonts.poppins(
-                  color: TaskWarriorColors.white, fontSize: 18),
+                color: TaskWarriorColors.white,
+                fontSize: TaskWarriorFonts.fontSizeLarge,
+              ),
             ),
             Text(
               alias ?? profile,
               style: GoogleFonts.poppins(
-                  color: TaskWarriorColors.white, fontSize: 12),
+                color: TaskWarriorColors.white,
+                fontSize: TaskWarriorFonts.fontSizeSmall,
+              ),
             ),
           ],
         ),
@@ -425,7 +430,7 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                                           Text(
                                             'Configure TaskRc',
                                             style: TextStyle(
-                                              fontWeight: FontWeight.bold,
+                                              fontWeight: TaskWarriorFonts.bold,
                                               color: AppSettings.isDarkMode
                                                   ? TaskWarriorColors.white
                                                   : TaskWarriorColors.black,

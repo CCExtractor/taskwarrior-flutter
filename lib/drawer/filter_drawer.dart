@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/config/taskwarriorcolors.dart';
+import 'package:taskwarrior/config/taskwarriorfonts.dart';
 import 'package:taskwarrior/controller/filter_drawer_tour_controller.dart';
 import 'package:taskwarrior/drawer/filter_drawer_tour.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
@@ -107,11 +108,11 @@ class _FilterDrawerState extends State<FilterDrawer> {
                   child: Text(
                     'Apply Filters',
                     style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.bold,
+                        fontWeight: TaskWarriorFonts.bold,
                         color: (AppSettings.isDarkMode
                             ? TaskWarriorColors.kprimaryTextColor
                             : TaskWarriorColors.kLightPrimaryTextColor),
-                        fontSize: 25),
+                        fontSize: TaskWarriorFonts.fontSizeExtraLarge),
                   ),
                 ),
               ),
@@ -138,8 +139,8 @@ class _FilterDrawerState extends State<FilterDrawer> {
                         TextSpan(
                           text: 'Status : ',
                           style: GoogleFonts.poppins(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
+                            fontWeight: TaskWarriorFonts.bold,
+                            fontSize: TaskWarriorFonts.fontSizeMedium,
                             color: AppSettings.isDarkMode
                                 ? TaskWarriorColors.white
                                 : TaskWarriorColors.black,
@@ -150,7 +151,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                               ? 'pending'
                               : 'completed',
                           style: GoogleFonts.poppins(
-                            fontSize: 15,
+                            fontSize: TaskWarriorFonts.fontSizeMedium,
                             color: AppSettings.isDarkMode
                                 ? TaskWarriorColors.white
                                 : TaskWarriorColors.black,
@@ -210,7 +211,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                                 ? TaskWarriorColors.kprimaryTextColor
                                 : TaskWarriorColors.kLightSecondaryTextColor),
                             //
-                            fontSize: 18),
+                            fontSize: TaskWarriorFonts.fontSizeLarge),
                         //textAlign: TextAlign.right,
                       ),
                     ),
@@ -253,7 +254,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                             color: (AppSettings.isDarkMode
                                 ? TaskWarriorColors.kprimaryTextColor
                                 : TaskWarriorColors.kLightPrimaryTextColor),
-                            fontSize: 18),
+                            fontSize: TaskWarriorFonts.fontSizeLarge),
                         // textAlign: TextAlign.right,
                       ),
                     ),
@@ -328,7 +329,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                           child: Text(
                             'Reset Sort',
                             style: GoogleFonts.poppins(
-                                fontSize: 15,
+                                fontSize: TaskWarriorFonts.fontSizeMedium,
                                 color: AppSettings.isDarkMode
                                     ? TaskWarriorColors.kLightSecondaryTextColor
                                     : TaskWarriorColors.ksecondaryTextColor),

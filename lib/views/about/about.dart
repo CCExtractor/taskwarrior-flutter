@@ -5,6 +5,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sizer/sizer.dart';
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/config/taskwarriorcolors.dart';
+import 'package:taskwarrior/config/taskwarriorfonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AboutPage extends StatefulWidget {
@@ -59,8 +60,8 @@ class _AboutPageState extends State<AboutPage> {
               Text(
                 "Taskwarrior",
                 style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
+                  fontWeight: TaskWarriorFonts.bold,
+                  fontSize: TaskWarriorFonts.fontSizeLarge,
                   color: AppSettings.isDarkMode
                       ? TaskWarriorColors.white
                       : TaskWarriorColors.black,
@@ -91,8 +92,8 @@ class _AboutPageState extends State<AboutPage> {
                                   TextSpan(
                                     text: 'Version: ',
                                     style: GoogleFonts.poppins(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15,
+                                      fontWeight: TaskWarriorFonts.bold,
+                                      fontSize: TaskWarriorFonts.fontSizeMedium,
                                       color: AppSettings.isDarkMode
                                           ? TaskWarriorColors.white
                                           : TaskWarriorColors.black,
@@ -101,7 +102,7 @@ class _AboutPageState extends State<AboutPage> {
                                   TextSpan(
                                     text: appInfoLines[1],
                                     style: GoogleFonts.poppins(
-                                      fontSize: 15,
+                                      fontSize: TaskWarriorFonts.fontSizeMedium,
                                       color: AppSettings.isDarkMode
                                           ? TaskWarriorColors.white
                                           : TaskWarriorColors.black,
@@ -116,8 +117,8 @@ class _AboutPageState extends State<AboutPage> {
                                   TextSpan(
                                     text: 'Package: ',
                                     style: GoogleFonts.poppins(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15,
+                                      fontWeight: TaskWarriorFonts.bold,
+                                      fontSize: TaskWarriorFonts.fontSizeMedium,
                                       color: AppSettings.isDarkMode
                                           ? TaskWarriorColors.white
                                           : TaskWarriorColors.black,
@@ -126,7 +127,7 @@ class _AboutPageState extends State<AboutPage> {
                                   TextSpan(
                                     text: appInfoLines[0],
                                     style: GoogleFonts.poppins(
-                                      fontSize: 15,
+                                      fontSize: TaskWarriorFonts.fontSizeMedium,
                                       color: AppSettings.isDarkMode
                                           ? TaskWarriorColors.white
                                           : TaskWarriorColors.black,
@@ -149,8 +150,8 @@ class _AboutPageState extends State<AboutPage> {
                 introduction,
                 textAlign: TextAlign.center,
                 style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 12,
+                  fontWeight: TaskWarriorFonts.medium,
+                  fontSize: TaskWarriorFonts.fontSizeSmall,
                   color: AppSettings.isDarkMode
                       ? TaskWarriorColors.white
                       : TaskWarriorColors.black,
@@ -194,8 +195,8 @@ class _AboutPageState extends State<AboutPage> {
                       label: Text(
                         "GitHub",
                         style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 12,
+                          fontWeight: TaskWarriorFonts.medium,
+                          fontSize: TaskWarriorFonts.fontSizeSmall,
                           color: AppSettings.isDarkMode
                               ? TaskWarriorColors.black
                               : TaskWarriorColors.white,
@@ -232,8 +233,8 @@ class _AboutPageState extends State<AboutPage> {
                       label: Text(
                         "CCExtractor",
                         style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 12,
+                          fontWeight: TaskWarriorFonts.medium,
+                          fontSize: TaskWarriorFonts.fontSizeSmall,
                           color: AppSettings.isDarkMode
                               ? TaskWarriorColors.black
                               : TaskWarriorColors.white,
@@ -250,8 +251,8 @@ class _AboutPageState extends State<AboutPage> {
                 "Eager to enhance this project? Visit our GitHub repository.",
                 textAlign: TextAlign.center,
                 style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
+                  fontWeight: TaskWarriorFonts.semiBold,
+                  fontSize: TaskWarriorFonts.fontSizeSmall,
                   color: AppSettings.isDarkMode
                       ? TaskWarriorColors.white
                       : TaskWarriorColors.black,

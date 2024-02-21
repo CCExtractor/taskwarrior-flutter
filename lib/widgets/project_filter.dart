@@ -5,6 +5,7 @@ import 'package:sizer/sizer.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/config/taskwarriorcolors.dart';
+import 'package:taskwarrior/config/taskwarriorfonts.dart';
 import 'package:taskwarrior/widgets/taskw.dart';
 
 class InheritedProjects extends InheritedWidget {
@@ -57,8 +58,8 @@ class ProjectsColumn extends StatelessWidget {
                   Text(
                     "Project : ",
                     style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
+                      fontWeight: TaskWarriorFonts.bold,
+                      fontSize: TaskWarriorFonts.fontSizeMedium,
                       color: AppSettings.isDarkMode
                           ? TaskWarriorColors.white
                           : TaskWarriorColors.black,
@@ -76,7 +77,7 @@ class ProjectsColumn extends StatelessWidget {
                                 ? "Not selected"
                                 : projectFilter,
                             style: GoogleFonts.poppins(
-                              fontSize: 12,
+                              fontSize: TaskWarriorFonts.fontSizeSmall,
                               color: AppSettings.isDarkMode
                                   ? TaskWarriorColors.white
                                   : TaskWarriorColors.black,
@@ -97,8 +98,8 @@ class ProjectsColumn extends StatelessWidget {
                   Text(
                     "All Projects",
                     style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 12,
+                      fontWeight: TaskWarriorFonts.semiBold,
+                      fontSize: TaskWarriorFonts.fontSizeSmall,
                       color: AppSettings.isDarkMode
                           ? TaskWarriorColors.white
                           : TaskWarriorColors.black,
@@ -120,7 +121,7 @@ class ProjectsColumn extends StatelessWidget {
                       color: AppSettings.isDarkMode
                           ? TaskWarriorColors.white
                           : TaskWarriorColors.black,
-                      fontSize: 14,
+                      fontSize: TaskWarriorFonts.fontSizeSmall,
                     ),
                   ),
                   SizedBox(

@@ -11,6 +11,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:loggy/loggy.dart';
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/config/taskwarriorcolors.dart';
+import 'package:taskwarrior/config/taskwarriorfonts.dart';
 
 import 'package:taskwarrior/model/json.dart';
 import 'package:taskwarrior/model/storage.dart';
@@ -286,16 +287,16 @@ class _StorageWidgetState extends State<StorageWidget> {
                       Text(
                         "Syncing",
                         style: GoogleFonts.poppins(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
+                          fontSize: TaskWarriorFonts.fontSizeLarge,
+                          fontWeight: TaskWarriorFonts.bold,
                         ),
                       ),
                       const SizedBox(height: 8.0),
                       Text(
                         "Please wait...",
                         style: GoogleFonts.poppins(
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.normal,
+                          fontSize: TaskWarriorFonts.fontSizeSmall,
+                          fontWeight: TaskWarriorFonts.regular,
                         ),
                       ),
                     ],

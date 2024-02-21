@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/config/taskwarriorcolors.dart';
+import 'package:taskwarrior/config/taskwarriorfonts.dart';
 import 'package:taskwarrior/controller/WidgetController.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
 import 'package:taskwarrior/widgets/taskfunctions/taskparser.dart';
@@ -180,7 +181,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
               color: AppSettings.isDarkMode
                   ? TaskWarriorColors.white
                   : TaskWarriorColors.black,
-              fontWeight: FontWeight.bold,
+              fontWeight: TaskWarriorFonts.bold,
               height: 3.3,
             ),
           ),
@@ -334,7 +335,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
               Text(
                 'Priority :  ',
                 style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.bold,
+                  fontWeight: TaskWarriorFonts.bold,
                   color: AppSettings.isDarkMode
                       ? TaskWarriorColors.white
                       : TaskWarriorColors.black,

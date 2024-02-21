@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/config/taskwarriorcolors.dart';
+import 'package:taskwarrior/config/taskwarriorfonts.dart';
 
 ///Common widget for Report chart indicator
 class CommonChartIndicator extends StatelessWidget {
@@ -20,8 +21,8 @@ class CommonChartIndicator extends StatelessWidget {
             Text(
               title,
               style: GoogleFonts.poppins(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
+                fontWeight: TaskWarriorFonts.bold,
+                fontSize: TaskWarriorFonts.fontSizeMedium,
                 color: AppSettings.isDarkMode
                     ? TaskWarriorColors.white
                     : TaskWarriorColors.black,
@@ -45,8 +46,8 @@ class CommonChartIndicator extends StatelessWidget {
                 Text(
                   "Completed",
                   style: GoogleFonts.poppins(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 16,
+                    fontWeight: TaskWarriorFonts.regular,
+                    fontSize: TaskWarriorFonts.fontSizeMedium,
                     color: AppSettings.isDarkMode
                         ? TaskWarriorColors.white
                         : TaskWarriorColors.black,
@@ -64,8 +65,8 @@ class CommonChartIndicator extends StatelessWidget {
                 Text(
                   "Pending",
                   style: GoogleFonts.poppins(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 16,
+                    fontWeight: TaskWarriorFonts.regular,
+                    fontSize: TaskWarriorFonts.fontSizeMedium,
                     color: AppSettings.isDarkMode
                         ? TaskWarriorColors.white
                         : TaskWarriorColors.black,

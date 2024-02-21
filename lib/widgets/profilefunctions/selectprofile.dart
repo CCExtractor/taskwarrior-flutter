@@ -5,6 +5,7 @@ import 'package:sizer/sizer.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/config/taskwarriorcolors.dart';
+import 'package:taskwarrior/config/taskwarriorfonts.dart';
 
 class SelectProfile extends StatelessWidget {
   const SelectProfile(
@@ -44,8 +45,8 @@ class SelectProfile extends StatelessWidget {
             'Current Profile:',
             overflow: TextOverflow.fade,
             style: GoogleFonts.poppins(
-              fontWeight: FontWeight.bold,
-              fontSize: 15,
+              fontWeight: TaskWarriorFonts.bold,
+              fontSize: TaskWarriorFonts.fontSizeMedium,
               color: AppSettings.isDarkMode
                   ? TaskWarriorColors.white
                   : TaskWarriorColors.black,
@@ -56,7 +57,7 @@ class SelectProfile extends StatelessWidget {
           ),
           Text(currentProfile,
               style: GoogleFonts.poppins(
-                fontSize: 12,
+                fontSize: TaskWarriorFonts.fontSizeSmall,
                 color: AppSettings.isDarkMode
                     ? TaskWarriorColors.grey
                     : TaskWarriorColors.lightGrey,
@@ -75,8 +76,8 @@ class SelectProfile extends StatelessWidget {
                 'All Profiles:',
                 overflow: TextOverflow.fade,
                 style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15,
+                  fontWeight: TaskWarriorFonts.bold,
+                  fontSize: TaskWarriorFonts.fontSizeMedium,
                   color: AppSettings.isDarkMode
                       ? TaskWarriorColors.white
                       : TaskWarriorColors.black,

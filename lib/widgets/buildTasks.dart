@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/config/taskwarriorcolors.dart';
+import 'package:taskwarrior/config/taskwarriorfonts.dart';
 import 'package:taskwarrior/model/json.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
 import 'package:taskwarrior/services/task_details.dart';
@@ -163,7 +164,7 @@ class _TasksBuilderState extends State<TasksBuilder> {
                         : 'Click on the bottom right button to start adding tasks',
                     textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
-                      fontSize: 20,
+                      fontSize: TaskWarriorFonts.fontSizeLarge,
                       color: AppSettings.isDarkMode
                           ? TaskWarriorColors.kLightPrimaryBackgroundColor
                           : TaskWarriorColors.kprimaryBackgroundColor,

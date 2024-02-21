@@ -7,6 +7,7 @@ import 'package:taskwarrior/config/taskwarriorcolors.dart';
 import 'dart:io';
 
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:taskwarrior/config/taskwarriorfonts.dart';
 import 'package:taskwarrior/model/chart.dart';
 import 'package:taskwarrior/model/json/task.dart';
 import 'package:taskwarrior/model/storage.dart';
@@ -61,7 +62,7 @@ class _BurnDownWeeklyState extends State<BurnDownWeekly>
               Text(
                 weekNumber,
                 style: const TextStyle(
-                  fontWeight: FontWeight.bold,
+                  fontWeight: TaskWarriorFonts.bold,
                 ),
               ),
               Text(
@@ -158,8 +159,8 @@ class _BurnDownWeeklyState extends State<BurnDownWeekly>
                 title: AxisTitle(
                   text: 'Weeks - Year',
                   textStyle: GoogleFonts.poppins(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
+                    fontWeight: TaskWarriorFonts.bold,
+                    fontSize: TaskWarriorFonts.fontSizeSmall,
                     color: AppSettings.isDarkMode ? Colors.white : Colors.black,
                   ),
                 ),
@@ -168,9 +169,9 @@ class _BurnDownWeeklyState extends State<BurnDownWeekly>
                 title: AxisTitle(
                   text: 'Tasks',
                   textStyle: GoogleFonts.poppins(
-                    fontWeight: FontWeight.bold,
+                    fontWeight: TaskWarriorFonts.bold,
                     color: AppSettings.isDarkMode ? Colors.white : Colors.black,
-                    fontSize: 12,
+                    fontSize: TaskWarriorFonts.fontSizeSmall,
                   ),
                 ),
               ),

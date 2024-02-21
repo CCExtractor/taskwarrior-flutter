@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/config/taskwarriorcolors.dart';
+import 'package:taskwarrior/config/taskwarriorfonts.dart';
 import 'package:taskwarrior/controller/reports_tour_controller.dart';
 import 'package:taskwarrior/model/json/task.dart';
 import 'package:taskwarrior/model/storage.dart';
@@ -134,11 +135,11 @@ class _ReportsHomeState extends State<ReportsHome>
             controller: _tabController,
             labelColor: TaskWarriorColors.white,
             labelStyle: GoogleFonts.poppins(
-              fontWeight: FontWeight.w500,
-              fontSize: 12,
+              fontWeight: TaskWarriorFonts.medium,
+              fontSize: TaskWarriorFonts.fontSizeSmall,
             ),
             unselectedLabelStyle: GoogleFonts.poppins(
-              fontWeight: FontWeight.w300,
+              fontWeight: TaskWarriorFonts.light,
             ),
             onTap: (value) {
               setState(() {
@@ -188,8 +189,8 @@ class _ReportsHomeState extends State<ReportsHome>
                     Text(
                       'No Task found',
                       style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 12,
+                        fontWeight: TaskWarriorFonts.medium,
+                        fontSize: TaskWarriorFonts.fontSizeSmall,
                         color: AppSettings.isDarkMode
                             ? TaskWarriorColors.white
                             : TaskWarriorColors.black,
@@ -203,8 +204,8 @@ class _ReportsHomeState extends State<ReportsHome>
                     Text(
                       'Add a task to see reports',
                       style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 12,
+                        fontWeight: TaskWarriorFonts.light,
+                        fontSize: TaskWarriorFonts.fontSizeSmall,
                         color: AppSettings.isDarkMode
                             ? TaskWarriorColors.white
                             : TaskWarriorColors.black,
