@@ -213,15 +213,6 @@ Future<void> _showExitConfirmationDialog(BuildContext context) async {
     barrierDismissible: false, // Prevents closing the dialog by tapping outside
     builder: (BuildContext context) {
       return Utils.showAlertDialog(
-        surfaceTintColor: AppSettings.isDarkMode
-            ? TaskWarriorColors.kdialogBackGroundColor
-            : TaskWarriorColors.kLightDialogBackGroundColor,
-        shadowColor: AppSettings.isDarkMode
-            ? TaskWarriorColors.kdialogBackGroundColor
-            : TaskWarriorColors.kLightDialogBackGroundColor,
-        backgroundColor: AppSettings.isDarkMode
-            ? TaskWarriorColors.kdialogBackGroundColor
-            : TaskWarriorColors.kLightDialogBackGroundColor,
         title: Text(
           'Exit App',
           style: TextStyle(
