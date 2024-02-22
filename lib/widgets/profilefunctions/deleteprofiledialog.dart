@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/config/taskwarriorcolors.dart';
+import 'package:taskwarrior/utility/utilities.dart';
 import 'package:taskwarrior/widgets/taskdetails/profiles_widget.dart';
 
 class DeleteProfileDialog extends StatelessWidget {
@@ -19,16 +20,7 @@ class DeleteProfileDialog extends StatelessWidget {
     return Center(
       child: SingleChildScrollView(
         child: Center(
-          child: AlertDialog(
-            surfaceTintColor: AppSettings.isDarkMode
-                ? TaskWarriorColors.kdialogBackGroundColor
-                : TaskWarriorColors.kLightDialogBackGroundColor,
-            shadowColor: AppSettings.isDarkMode
-                ? TaskWarriorColors.kdialogBackGroundColor
-                : TaskWarriorColors.kLightDialogBackGroundColor,
-            backgroundColor: AppSettings.isDarkMode
-                ? TaskWarriorColors.kdialogBackGroundColor
-                : TaskWarriorColors.kLightDialogBackGroundColor,
+          child: Utils.showAlertDialog(
             scrollable: true,
             title: Text(
               'Delete Profile?',

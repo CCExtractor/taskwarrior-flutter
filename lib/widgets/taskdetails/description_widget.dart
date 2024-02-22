@@ -6,6 +6,7 @@ import 'package:loggy/loggy.dart';
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/config/taskwarriorcolors.dart';
 import 'package:taskwarrior/config/taskwarriorfonts.dart';
+import 'package:taskwarrior/utility/utilities.dart';
 
 class DescriptionWidget extends StatelessWidget {
   const DescriptionWidget(
@@ -66,16 +67,7 @@ class DescriptionWidget extends StatelessWidget {
           );
           showDialog(
             context: context,
-            builder: (context) => AlertDialog(
-              surfaceTintColor: AppSettings.isDarkMode
-                  ? TaskWarriorColors.kdialogBackGroundColor
-                  : TaskWarriorColors.kLightDialogBackGroundColor,
-              shadowColor: AppSettings.isDarkMode
-                  ? TaskWarriorColors.kdialogBackGroundColor
-                  : TaskWarriorColors.kLightDialogBackGroundColor,
-              backgroundColor: AppSettings.isDarkMode
-                  ? TaskWarriorColors.kdialogBackGroundColor
-                  : TaskWarriorColors.kLightDialogBackGroundColor,
+            builder: (context) => Utils.showAlertDialog(
               scrollable: true,
               title: Text(
                 'Edit description',
@@ -195,16 +187,7 @@ class ProjectWidget extends StatelessWidget {
           );
           showDialog(
             context: context,
-            builder: (context) => AlertDialog(
-              surfaceTintColor: AppSettings.isDarkMode
-                  ? TaskWarriorColors.kdialogBackGroundColor
-                  : TaskWarriorColors.kLightDialogBackGroundColor,
-              shadowColor: AppSettings.isDarkMode
-                  ? TaskWarriorColors.kdialogBackGroundColor
-                  : TaskWarriorColors.kLightDialogBackGroundColor,
-              backgroundColor: AppSettings.isDarkMode
-                  ? TaskWarriorColors.kdialogBackGroundColor
-                  : TaskWarriorColors.kLightDialogBackGroundColor,
+            builder: (context) => Utils.showAlertDialog(
               scrollable: true,
               title: Text(
                 'Edit project',

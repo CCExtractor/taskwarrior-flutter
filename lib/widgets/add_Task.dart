@@ -12,6 +12,7 @@ import 'package:taskwarrior/config/taskwarriorcolors.dart';
 import 'package:taskwarrior/config/taskwarriorfonts.dart';
 import 'package:taskwarrior/controller/WidgetController.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
+import 'package:taskwarrior/utility/utilities.dart';
 import 'package:taskwarrior/widgets/taskfunctions/taskparser.dart';
 import 'package:taskwarrior/widgets/taskw.dart';
 
@@ -49,16 +50,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
 
     return Center(
       child: SingleChildScrollView(
-        child: AlertDialog(
-          surfaceTintColor: AppSettings.isDarkMode
-              ? TaskWarriorColors.kdialogBackGroundColor
-              : TaskWarriorColors.kLightDialogBackGroundColor,
-          shadowColor: AppSettings.isDarkMode
-              ? TaskWarriorColors.kdialogBackGroundColor
-              : TaskWarriorColors.kLightDialogBackGroundColor,
-          backgroundColor: AppSettings.isDarkMode
-              ? TaskWarriorColors.kdialogBackGroundColor
-              : TaskWarriorColors.kLightDialogBackGroundColor,
+        child: Utils.showAlertDialog(
           title: Center(
             child: Text(
               title,

@@ -8,6 +8,7 @@ import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/config/taskwarriorcolors.dart';
 import 'package:taskwarrior/config/taskwarriorfonts.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
+import 'package:taskwarrior/utility/utilities.dart';
 import 'package:taskwarrior/views/about/about.dart';
 import 'package:taskwarrior/views/profile/profile.dart';
 import 'package:taskwarrior/views/reports/reports_home.dart';
@@ -211,7 +212,7 @@ Future<void> _showExitConfirmationDialog(BuildContext context) async {
     context: context,
     barrierDismissible: false, // Prevents closing the dialog by tapping outside
     builder: (BuildContext context) {
-      return AlertDialog(
+      return Utils.showAlertDialog(
         surfaceTintColor: AppSettings.isDarkMode
             ? TaskWarriorColors.kdialogBackGroundColor
             : TaskWarriorColors.kLightDialogBackGroundColor,
