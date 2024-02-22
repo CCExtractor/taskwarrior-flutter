@@ -10,6 +10,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/config/taskwarriorcolors.dart';
 import 'package:taskwarrior/config/taskwarriorfonts.dart';
+import 'package:taskwarrior/utility/utilities.dart';
 import 'package:taskwarrior/widgets/pallete.dart';
 import 'package:taskwarrior/widgets/taskdetails/profiles_widget.dart';
 
@@ -260,22 +261,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                 showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      surfaceTintColor: AppSettings.isDarkMode
-                                          ? TaskWarriorColors
-                                              .kdialogBackGroundColor
-                                          : TaskWarriorColors
-                                              .kLightDialogBackGroundColor,
-                                      shadowColor: AppSettings.isDarkMode
-                                          ? TaskWarriorColors
-                                              .kdialogBackGroundColor
-                                          : TaskWarriorColors
-                                              .kLightDialogBackGroundColor,
-                                      backgroundColor: AppSettings.isDarkMode
-                                          ? TaskWarriorColors
-                                              .kdialogBackGroundColor
-                                          : TaskWarriorColors
-                                              .kLightDialogBackGroundColor,
+                                    return Utils.showAlertDialog(
                                       title: Text(
                                         'Reset to default',
                                         style: GoogleFonts.poppins(
@@ -414,16 +400,7 @@ class _SettingsPageState extends State<SettingsPage> {
             showDialog(
               context: context,
               builder: (BuildContext context) {
-                return AlertDialog(
-                  surfaceTintColor: AppSettings.isDarkMode
-                      ? TaskWarriorColors.kdialogBackGroundColor
-                      : TaskWarriorColors.kLightDialogBackGroundColor,
-                  shadowColor: AppSettings.isDarkMode
-                      ? TaskWarriorColors.kdialogBackGroundColor
-                      : TaskWarriorColors.kLightDialogBackGroundColor,
-                  backgroundColor: AppSettings.isDarkMode
-                      ? TaskWarriorColors.kdialogBackGroundColor
-                      : TaskWarriorColors.kLightDialogBackGroundColor,
+                return Utils.showAlertDialog(
                   title: Text(
                     'Error',
                     style: GoogleFonts.poppins(

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:loggy/loggy.dart';
 import 'package:taskwarrior/config/taskwarriorcolors.dart';
 import 'package:taskwarrior/config/taskwarriorfonts.dart';
+import 'package:taskwarrior/utility/utilities.dart';
 import 'package:taskwarrior/widgets/taskdetails/profiles_widget.dart';
 // ignore_for_file: use_build_context_synchronously
 
@@ -77,16 +78,7 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
       context: context,
       barrierDismissible: false,
       builder: (context) {
-        return AlertDialog(
-          surfaceTintColor: AppSettings.isDarkMode
-              ? TaskWarriorColors.kdialogBackGroundColor
-              : TaskWarriorColors.kLightDialogBackGroundColor,
-          shadowColor: AppSettings.isDarkMode
-              ? TaskWarriorColors.kdialogBackGroundColor
-              : TaskWarriorColors.kLightDialogBackGroundColor,
-          backgroundColor: AppSettings.isDarkMode
-              ? TaskWarriorColors.kdialogBackGroundColor
-              : TaskWarriorColors.kLightDialogBackGroundColor,
+        return Utils.showAlertDialog(
           title: const Text('Fetching statistics...'),
           content: const Column(
             mainAxisSize: MainAxisSize.min,
@@ -114,16 +106,7 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
       // Show statistics in a dialog
       await showDialog(
         context: context,
-        builder: (context) => AlertDialog(
-          surfaceTintColor: AppSettings.isDarkMode
-              ? TaskWarriorColors.kdialogBackGroundColor
-              : TaskWarriorColors.kLightDialogBackGroundColor,
-          shadowColor: AppSettings.isDarkMode
-              ? TaskWarriorColors.kdialogBackGroundColor
-              : TaskWarriorColors.kLightDialogBackGroundColor,
-          backgroundColor: AppSettings.isDarkMode
-              ? TaskWarriorColors.kdialogBackGroundColor
-              : TaskWarriorColors.kLightDialogBackGroundColor,
+        builder: (context) => Utils.showAlertDialog(
           scrollable: true,
           title: Text(
             'Statistics:',
@@ -840,7 +823,9 @@ class _PemWidgetState extends State<PemWidget> {
     var name = widget.storage.guiPemFiles.pemFilename(widget.pem);
     String identifier = "";
     try {
-      identifier = fingerprint(contents!).toUpperCase();
+      if (contents != null) {
+        identifier = fingerprint(contents).toUpperCase(); // Null check removed
+      }
     } catch (e) {
       debugPrint(e.toString());
     }

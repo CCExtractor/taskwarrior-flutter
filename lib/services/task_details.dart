@@ -10,6 +10,7 @@ import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/config/taskwarriorcolors.dart';
 import 'package:taskwarrior/config/taskwarriorfonts.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
+import 'package:taskwarrior/utility/utilities.dart';
 import 'package:taskwarrior/views/home/home.dart';
 import 'package:taskwarrior/widgets/pallete.dart';
 import 'package:taskwarrior/widgets/taskdetails.dart';
@@ -86,16 +87,7 @@ class _DetailRouteState extends State<DetailRoute> {
         return showDialog(
           context: context,
           builder: (context) {
-            return AlertDialog(
-              surfaceTintColor: AppSettings.isDarkMode
-                  ? TaskWarriorColors.kdialogBackGroundColor
-                  : TaskWarriorColors.kLightDialogBackGroundColor,
-              shadowColor: AppSettings.isDarkMode
-                  ? TaskWarriorColors.kdialogBackGroundColor
-                  : TaskWarriorColors.kLightDialogBackGroundColor,
-              backgroundColor: AppSettings.isDarkMode
-                  ? TaskWarriorColors.kdialogBackGroundColor
-                  : TaskWarriorColors.kLightDialogBackGroundColor,
+            return Utils.showAlertDialog(
               title: Text(
                 'Do you want to save changes?',
                 style: TextStyle(
@@ -219,16 +211,7 @@ class _DetailRouteState extends State<DetailRoute> {
                   showDialog(
                     context: context,
                     builder: (context) {
-                      return AlertDialog(
-                        surfaceTintColor: AppSettings.isDarkMode
-                            ? TaskWarriorColors.kdialogBackGroundColor
-                            : TaskWarriorColors.kLightDialogBackGroundColor,
-                        shadowColor: AppSettings.isDarkMode
-                            ? TaskWarriorColors.kdialogBackGroundColor
-                            : TaskWarriorColors.kLightDialogBackGroundColor,
-                        backgroundColor: AppSettings.isDarkMode
-                            ? TaskWarriorColors.kdialogBackGroundColor
-                            : TaskWarriorColors.kLightDialogBackGroundColor,
+                      return Utils.showAlertDialog(
                         scrollable: true,
                         title: Text(
                           'Review changes:',

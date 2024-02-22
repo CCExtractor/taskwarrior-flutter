@@ -5,6 +5,7 @@ import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/config/taskwarriorcolors.dart';
 import 'package:taskwarrior/model/storage/savefile.dart';
 import 'package:taskwarrior/taskserver/ntaskserver.dart';
+import 'package:taskwarrior/utility/utilities.dart';
 import 'package:taskwarrior/widgets/pallete.dart';
 import 'package:taskwarrior/widgets/profilefunctions.dart';
 import 'package:taskwarrior/widgets/taskdetails.dart';
@@ -85,16 +86,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return AlertDialog(
-                      surfaceTintColor: AppSettings.isDarkMode
-                          ? TaskWarriorColors.kdialogBackGroundColor
-                          : TaskWarriorColors.kLightDialogBackGroundColor,
-                      shadowColor: AppSettings.isDarkMode
-                          ? TaskWarriorColors.kdialogBackGroundColor
-                          : TaskWarriorColors.kLightDialogBackGroundColor,
-                      backgroundColor: AppSettings.isDarkMode
-                          ? TaskWarriorColors.kdialogBackGroundColor
-                          : TaskWarriorColors.kLightDialogBackGroundColor,
+                    return Utils.showAlertDialog(
                       title: Text(
                         "Export Format",
                         style: TextStyle(

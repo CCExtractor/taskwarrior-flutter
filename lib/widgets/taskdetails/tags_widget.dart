@@ -8,6 +8,7 @@ import 'package:loggy/loggy.dart';
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/config/taskwarriorcolors.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
+import 'package:taskwarrior/utility/utilities.dart';
 import 'package:taskwarrior/widgets/taskw.dart';
 
 class TagsWidget extends StatelessWidget {
@@ -194,16 +195,7 @@ class TagsRouteState extends State<TagsRoute> {
           var controller = TextEditingController();
           showDialog(
             context: context,
-            builder: (context) => AlertDialog(
-              surfaceTintColor: AppSettings.isDarkMode
-                  ? TaskWarriorColors.kdialogBackGroundColor
-                  : TaskWarriorColors.kLightDialogBackGroundColor,
-              shadowColor: AppSettings.isDarkMode
-                  ? TaskWarriorColors.kdialogBackGroundColor
-                  : TaskWarriorColors.kLightDialogBackGroundColor,
-              backgroundColor: AppSettings.isDarkMode
-                  ? TaskWarriorColors.kdialogBackGroundColor
-                  : TaskWarriorColors.kLightDialogBackGroundColor,
+            builder: (context) => Utils.showAlertDialog(
               scrollable: true,
               title: Text(
                 'Add tag',
