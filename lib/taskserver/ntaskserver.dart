@@ -326,7 +326,7 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
             ),
             onPressed: () async {
               String url =
-                  "https://github.com/Pavel401/taskwarrior-flutter/blob/main/README.md#taskserver-setup";
+                  "https://github.com/CCExtractor/taskwarrior-flutter?tab=readme-ov-file#taskwarrior-mobile-app";
               if (!await launchUrl(Uri.parse(url))) {
                 throw Exception('Could not launch $url');
               }
