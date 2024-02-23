@@ -1,7 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously, file_names
 
 import 'dart:developer';
-
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,7 +12,6 @@ import 'package:taskwarrior/config/taskwarriorcolors.dart';
 import 'package:taskwarrior/config/taskwarriorfonts.dart';
 import 'package:taskwarrior/controller/WidgetController.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
-import 'package:taskwarrior/utility/utilities.dart';
 import 'package:taskwarrior/widgets/taskfunctions/taskparser.dart';
 import 'package:taskwarrior/widgets/taskw.dart';
 
@@ -31,6 +30,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   String priority = 'M';
   final tagcontroller = TextEditingController();
   List<String> tags = [];
+  bool inThePast = false;
 
   @override
   void initState() {
@@ -47,10 +47,18 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   @override
   Widget build(BuildContext context) {
     const title = 'Add Task';
-
     return Center(
       child: SingleChildScrollView(
-        child: Utils.showAlertDialog(
+        child: AlertDialog(
+          surfaceTintColor: AppSettings.isDarkMode
+              ? TaskWarriorColors.kdialogBackGroundColor
+              : TaskWarriorColors.kLightDialogBackGroundColor,
+          shadowColor: AppSettings.isDarkMode
+              ? TaskWarriorColors.kdialogBackGroundColor
+              : TaskWarriorColors.kLightDialogBackGroundColor,
+          backgroundColor: AppSettings.isDarkMode
+              ? TaskWarriorColors.kdialogBackGroundColor
+              : TaskWarriorColors.kLightDialogBackGroundColor,
           title: Center(
             child: Text(
               title,
@@ -180,22 +188,26 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
           Expanded(
             child: GestureDetector(
               child: TextFormField(
-                style: TextStyle(
-                  color: AppSettings.isDarkMode
-                      ? TaskWarriorColors.white
-                      : TaskWarriorColors.black,
-                ),
+                style: inThePast
+                    ? TextStyle(color: TaskWarriorColors.red)
+                    : TextStyle(
+                        color: AppSettings.isDarkMode
+                            ? TaskWarriorColors.white
+                            : TaskWarriorColors.black,
+                      ),
                 readOnly: true,
                 controller: TextEditingController(
                   text: (due != null) ? dueString : null,
                 ),
                 decoration: InputDecoration(
                   hintText: 'Select due date',
-                  hintStyle: TextStyle(
-                    color: AppSettings.isDarkMode
-                        ? TaskWarriorColors.white
-                        : TaskWarriorColors.black,
-                  ),
+                  hintStyle: inThePast
+                      ? TextStyle(color: TaskWarriorColors.red)
+                      : TextStyle(
+                          color: AppSettings.isDarkMode
+                              ? TaskWarriorColors.white
+                              : TaskWarriorColors.black,
+                        ),
                 ),
                 onTap: () async {
                   var date = await showDatePicker(
@@ -287,27 +299,24 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                           minutes: time.minute,
                         ),
                       );
-                      if (dateTime.isAfter(DateTime.now())) {
-                        due = dateTime.toUtc();
-
-                        dueString =
-                            DateFormat("dd-MM-yyyy HH:mm").format(dateTime);
-                        setState(() {});
+                      due = dateTime.toUtc();
+                      dueString =
+                          DateFormat("dd-MM-yyyy HH:mm").format(dateTime);
+                      if (dateTime.isBefore(DateTime.now())) {
+                        //Try changing the color. in the settings and Due display.
+                        setState(() {
+                          inThePast = true;
+                        });
+                        //Replaced the snackBar to display message in the current context.
+                        // ignore: avoid_single_cascade_in_expression_statements
+                        Flushbar(
+                          message: 'The selected time is in the past',
+                          duration: const Duration(seconds: 3),
+                        )..show(context);
                       } else {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(
-                              'Please select a due date and time in the future.',
-                              style: TextStyle(
-                                color: AppSettings.isDarkMode
-                                    ? TaskWarriorColors.kprimaryTextColor
-                                    : TaskWarriorColors.kLightPrimaryTextColor,
-                              ),
-                            ),
-                            backgroundColor: AppSettings.isDarkMode
-                                ? TaskWarriorColors.ksecondaryBackgroundColor
-                                : TaskWarriorColors
-                                    .kLightSecondaryBackgroundColor,
-                            duration: const Duration(seconds: 2)));
+                        setState(() {
+                          inThePast = false;
+                        });
                       }
                     }
                   }
