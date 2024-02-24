@@ -159,9 +159,43 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
       // Dismiss the loading dialog
       Navigator.of(context).pop();
 
+      //Displaying Error message.
+      showDialog(
+          context: context,
+          builder: (context) => Utils.showAlertDialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                        20), // Adjust the radius as needed
+                  ),
+                  actionsPadding: const EdgeInsets.all(5),
+                  title: Text(
+                    "Error",
+                    style: TextStyle(color: TaskWarriorColors.red),
+                  ),
+                  content: Text(
+                    trace.toString().startsWith("#0")
+                        ? "Please set up your Task Server."
+                        : e.toString(),
+                    style: TextStyle(
+                      color: AppSettings.isDarkMode
+                          ? TaskWarriorColors.white
+                          : TaskWarriorColors.black,
+                    ),
+                  ),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        "OK",
+                        style: TextStyle(color: TaskWarriorColors.grey),
+                      ),
+                    )
+                  ]));
+
       // Log the error and trace
       logError(e, trace);
-
       // Refresh the state of ProfilesWidget
       ProfilesWidget.of(context).setState(() {});
     }
