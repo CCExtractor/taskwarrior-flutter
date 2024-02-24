@@ -56,7 +56,6 @@ dependencies:
   crypto: ^3.0.1
   flutter_platform_widgets: ^6.0.2
   file_picker: ^6.1.1
-  another_flushbar: ^1.12.30
 
 dev_dependencies:
   build_runner: ^2.1.11

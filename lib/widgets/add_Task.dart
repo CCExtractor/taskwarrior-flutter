@@ -1,7 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously, file_names
 
 import 'dart:developer';
-import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -47,50 +46,53 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   @override
   Widget build(BuildContext context) {
     const title = 'Add Task';
-    return Center(
-      child: SingleChildScrollView(
-        child: AlertDialog(
-          surfaceTintColor: AppSettings.isDarkMode
-              ? TaskWarriorColors.kdialogBackGroundColor
-              : TaskWarriorColors.kLightDialogBackGroundColor,
-          shadowColor: AppSettings.isDarkMode
-              ? TaskWarriorColors.kdialogBackGroundColor
-              : TaskWarriorColors.kLightDialogBackGroundColor,
-          backgroundColor: AppSettings.isDarkMode
-              ? TaskWarriorColors.kdialogBackGroundColor
-              : TaskWarriorColors.kLightDialogBackGroundColor,
-          title: Center(
-            child: Text(
-              title,
-              style: TextStyle(
-                color: AppSettings.isDarkMode
-                    ? TaskWarriorColors.white
-                    : TaskWarriorColors.black,
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Center(
+        child: SingleChildScrollView(
+          child: AlertDialog(
+            surfaceTintColor: AppSettings.isDarkMode
+                ? TaskWarriorColors.kdialogBackGroundColor
+                : TaskWarriorColors.kLightDialogBackGroundColor,
+            shadowColor: AppSettings.isDarkMode
+                ? TaskWarriorColors.kdialogBackGroundColor
+                : TaskWarriorColors.kLightDialogBackGroundColor,
+            backgroundColor: AppSettings.isDarkMode
+                ? TaskWarriorColors.kdialogBackGroundColor
+                : TaskWarriorColors.kLightDialogBackGroundColor,
+            title: Center(
+              child: Text(
+                title,
+                style: TextStyle(
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.white
+                      : TaskWarriorColors.black,
+                ),
               ),
             ),
-          ),
-          content: Form(
-            key: formKey,
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.8,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  const SizedBox(height: 8),
-                  buildName(),
-                  const SizedBox(height: 12),
-                  buildDueDate(context),
-                  const SizedBox(height: 8),
-                  buildPriority(),
-                  buildTags(),
-                ],
+            content: Form(
+              key: formKey,
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    const SizedBox(height: 8),
+                    buildName(),
+                    const SizedBox(height: 12),
+                    buildDueDate(context),
+                    const SizedBox(height: 8),
+                    buildPriority(),
+                    buildTags(),
+                  ],
+                ),
               ),
             ),
+            actions: <Widget>[
+              buildCancelButton(context),
+              buildAddButton(context),
+            ],
           ),
-          actions: <Widget>[
-            buildCancelButton(context),
-            buildAddButton(context),
-          ],
         ),
       ),
     );
@@ -307,17 +309,28 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                         setState(() {
                           inThePast = true;
                         });
-                        //Replaced the snackBar to display message in the current context.
-                        // ignore: avoid_single_cascade_in_expression_statements
-                        Flushbar(
-                          message: 'The selected time is in the past',
-                          duration: const Duration(seconds: 3),
-                        )..show(context);
+
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(
+                              "The selected time is in the past.",
+                              style: TextStyle(
+                                color: AppSettings.isDarkMode
+                                    ? TaskWarriorColors.kprimaryTextColor
+                                    : TaskWarriorColors.kLightPrimaryTextColor,
+                              ),
+                            ),
+                            backgroundColor: AppSettings.isDarkMode
+                                ? TaskWarriorColors.ksecondaryBackgroundColor
+                                : TaskWarriorColors
+                                    .kLightSecondaryBackgroundColor,
+                            duration: const Duration(seconds: 2)));
                       } else {
                         setState(() {
                           inThePast = false;
                         });
                       }
+
+                      // setState(() {});
                     }
                   }
                 },
