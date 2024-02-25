@@ -159,9 +159,24 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
       // Dismiss the loading dialog
       Navigator.of(context).pop();
 
+      //Displaying Error message.
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+            trace.toString().startsWith("#0")
+                ? "Please set up your TaskServer."
+                : e.toString(),
+            style: TextStyle(
+              color: AppSettings.isDarkMode
+                  ? TaskWarriorColors.kprimaryTextColor
+                  : TaskWarriorColors.kLightPrimaryTextColor,
+            ),
+          ),
+          backgroundColor: AppSettings.isDarkMode
+              ? TaskWarriorColors.ksecondaryBackgroundColor
+              : TaskWarriorColors.kLightSecondaryBackgroundColor,
+          duration: const Duration(seconds: 2)));
       // Log the error and trace
       logError(e, trace);
-
       // Refresh the state of ProfilesWidget
       ProfilesWidget.of(context).setState(() {});
     }

@@ -1,7 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously, file_names
 
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,7 +11,6 @@ import 'package:taskwarrior/config/taskwarriorcolors.dart';
 import 'package:taskwarrior/config/taskwarriorfonts.dart';
 import 'package:taskwarrior/controller/WidgetController.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
-import 'package:taskwarrior/utility/utilities.dart';
 import 'package:taskwarrior/widgets/taskfunctions/taskparser.dart';
 import 'package:taskwarrior/widgets/taskw.dart';
 
@@ -31,6 +29,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   String priority = 'M';
   final tagcontroller = TextEditingController();
   List<String> tags = [];
+  bool inThePast = false;
 
   @override
   void initState() {
@@ -47,42 +46,53 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   @override
   Widget build(BuildContext context) {
     const title = 'Add Task';
-
-    return Center(
-      child: SingleChildScrollView(
-        child: Utils.showAlertDialog(
-          title: Center(
-            child: Text(
-              title,
-              style: TextStyle(
-                color: AppSettings.isDarkMode
-                    ? TaskWarriorColors.white
-                    : TaskWarriorColors.black,
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Center(
+        child: SingleChildScrollView(
+          child: AlertDialog(
+            surfaceTintColor: AppSettings.isDarkMode
+                ? TaskWarriorColors.kdialogBackGroundColor
+                : TaskWarriorColors.kLightDialogBackGroundColor,
+            shadowColor: AppSettings.isDarkMode
+                ? TaskWarriorColors.kdialogBackGroundColor
+                : TaskWarriorColors.kLightDialogBackGroundColor,
+            backgroundColor: AppSettings.isDarkMode
+                ? TaskWarriorColors.kdialogBackGroundColor
+                : TaskWarriorColors.kLightDialogBackGroundColor,
+            title: Center(
+              child: Text(
+                title,
+                style: TextStyle(
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.white
+                      : TaskWarriorColors.black,
+                ),
               ),
             ),
-          ),
-          content: Form(
-            key: formKey,
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.8,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  const SizedBox(height: 8),
-                  buildName(),
-                  const SizedBox(height: 12),
-                  buildDueDate(context),
-                  const SizedBox(height: 8),
-                  buildPriority(),
-                  buildTags(),
-                ],
+            content: Form(
+              key: formKey,
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    const SizedBox(height: 8),
+                    buildName(),
+                    const SizedBox(height: 12),
+                    buildDueDate(context),
+                    const SizedBox(height: 8),
+                    buildPriority(),
+                    buildTags(),
+                  ],
+                ),
               ),
             ),
+            actions: <Widget>[
+              buildCancelButton(context),
+              buildAddButton(context),
+            ],
           ),
-          actions: <Widget>[
-            buildCancelButton(context),
-            buildAddButton(context),
-          ],
         ),
       ),
     );
@@ -180,22 +190,26 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
           Expanded(
             child: GestureDetector(
               child: TextFormField(
-                style: TextStyle(
-                  color: AppSettings.isDarkMode
-                      ? TaskWarriorColors.white
-                      : TaskWarriorColors.black,
-                ),
+                style: inThePast
+                    ? TextStyle(color: TaskWarriorColors.red)
+                    : TextStyle(
+                        color: AppSettings.isDarkMode
+                            ? TaskWarriorColors.white
+                            : TaskWarriorColors.black,
+                      ),
                 readOnly: true,
                 controller: TextEditingController(
                   text: (due != null) ? dueString : null,
                 ),
                 decoration: InputDecoration(
                   hintText: 'Select due date',
-                  hintStyle: TextStyle(
-                    color: AppSettings.isDarkMode
-                        ? TaskWarriorColors.white
-                        : TaskWarriorColors.black,
-                  ),
+                  hintStyle: inThePast
+                      ? TextStyle(color: TaskWarriorColors.red)
+                      : TextStyle(
+                          color: AppSettings.isDarkMode
+                              ? TaskWarriorColors.white
+                              : TaskWarriorColors.black,
+                        ),
                 ),
                 onTap: () async {
                   var date = await showDatePicker(
@@ -287,16 +301,18 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                           minutes: time.minute,
                         ),
                       );
-                      if (dateTime.isAfter(DateTime.now())) {
-                        due = dateTime.toUtc();
+                      due = dateTime.toUtc();
+                      dueString =
+                          DateFormat("dd-MM-yyyy HH:mm").format(dateTime);
+                      if (dateTime.isBefore(DateTime.now())) {
+                        //Try changing the color. in the settings and Due display.
+                        setState(() {
+                          inThePast = true;
+                        });
 
-                        dueString =
-                            DateFormat("dd-MM-yyyy HH:mm").format(dateTime);
-                        setState(() {});
-                      } else {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text(
-                              'Please select a due date and time in the future.',
+                              "The selected time is in the past.",
                               style: TextStyle(
                                 color: AppSettings.isDarkMode
                                     ? TaskWarriorColors.kprimaryTextColor
@@ -308,7 +324,13 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                                 : TaskWarriorColors
                                     .kLightSecondaryBackgroundColor,
                             duration: const Duration(seconds: 2)));
+                      } else {
+                        setState(() {
+                          inThePast = false;
+                        });
                       }
+
+                      // setState(() {});
                     }
                   }
                 },

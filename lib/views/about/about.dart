@@ -111,29 +111,37 @@ class _AboutPageState extends State<AboutPage> {
                                 ],
                               ),
                             ),
-                            RichText(
-                              text: TextSpan(
-                                children: <TextSpan>[
-                                  TextSpan(
-                                    text: 'Package: ',
-                                    style: GoogleFonts.poppins(
-                                      fontWeight: TaskWarriorFonts.bold,
-                                      fontSize: TaskWarriorFonts.fontSizeMedium,
-                                      color: AppSettings.isDarkMode
-                                          ? TaskWarriorColors.white
-                                          : TaskWarriorColors.black,
-                                    ),
+                            SizedBox(
+                              width: 85.w,
+                              child: FittedBox(
+                                fit: BoxFit.fitWidth,
+                                child: RichText(
+                                  text: TextSpan(
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text: 'Package: ',
+                                        style: GoogleFonts.poppins(
+                                          fontWeight: TaskWarriorFonts.bold,
+                                          fontSize:
+                                              TaskWarriorFonts.fontSizeMedium,
+                                          color: AppSettings.isDarkMode
+                                              ? TaskWarriorColors.white
+                                              : TaskWarriorColors.black,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: appInfoLines[0],
+                                        style: GoogleFonts.poppins(
+                                          fontSize:
+                                              TaskWarriorFonts.fontSizeMedium,
+                                          color: AppSettings.isDarkMode
+                                              ? TaskWarriorColors.white
+                                              : TaskWarriorColors.black,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  TextSpan(
-                                    text: appInfoLines[0],
-                                    style: GoogleFonts.poppins(
-                                      fontSize: TaskWarriorFonts.fontSizeMedium,
-                                      color: AppSettings.isDarkMode
-                                          ? TaskWarriorColors.white
-                                          : TaskWarriorColors.black,
-                                    ),
-                                  ),
-                                ],
+                                ),
                               ),
                             ),
                           ],
