@@ -112,7 +112,7 @@ class _AboutPageState extends State<AboutPage> {
                               ),
                             ),
                             SizedBox(
-                              width: 95.w,
+                              width: 85.w,
                               child: FittedBox(
                                 fit: BoxFit.fitWidth,
                                 child: RichText(
