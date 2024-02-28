@@ -11,10 +11,11 @@ import 'package:taskwarrior/config/taskwarriorcolors.dart';
 import 'package:taskwarrior/config/taskwarriorfonts.dart';
 import 'package:taskwarrior/model/json.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
+import 'package:taskwarrior/services/notification_services.dart';
 import 'package:taskwarrior/services/task_details.dart';
 import 'package:taskwarrior/services/task_list_tem.dart';
 import 'package:taskwarrior/widgets/taskfunctions/modify.dart';
-import '../services/notification_services.dart';
+
 import 'pallete.dart';
 
 class TasksBuilder extends StatefulWidget {
@@ -219,7 +220,7 @@ class _TasksBuilderState extends State<TasksBuilder> {
                               motion: const DrawerMotion(),
                               children: [
                                 SlidableAction(
-                                  onPressed: (context) async {
+                                  onPressed: (context) {
                                     // Delete task without confirmation
                                     setStatus('deleted', task.uuid);
                                     if (task.due != null) {
