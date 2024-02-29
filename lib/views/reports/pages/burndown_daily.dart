@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages, prefer_typing_uninitialized_variables
+// ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -7,6 +7,7 @@ import 'package:taskwarrior/config/taskwarriorcolors.dart';
 import 'dart:io';
 
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:taskwarrior/config/taskwarriorfonts.dart';
 import 'package:taskwarrior/model/chart.dart';
 import 'package:taskwarrior/model/json/task.dart';
 import 'package:taskwarrior/model/storage.dart';
@@ -15,7 +16,6 @@ import 'package:taskwarrior/utility/utilities.dart';
 import 'package:taskwarrior/views/home/home.dart';
 import 'package:taskwarrior/views/reports/widgets/commonChartIndicator.dart';
 import 'package:taskwarrior/widgets/taskdetails/profiles_widget.dart';
-import 'package:path_provider/path_provider.dart';
 
 class BurnDownDaily extends StatefulWidget {
   const BurnDownDaily({super.key});
@@ -63,7 +63,7 @@ class _BurnDownDailyState extends State<BurnDownDaily>
               Text(
                 'Date: $date',
                 style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.bold,
+                  fontWeight: TaskWarriorFonts.bold,
                 ),
               ),
               Text(
@@ -83,23 +83,21 @@ class _BurnDownDailyState extends State<BurnDownDaily>
       storageWidget = StorageWidget.of(context);
       var currentProfile = ProfilesWidget.of(context).currentProfile;
 
-      getApplicationDocumentsDirectory().then((directory) {
-        setState(() {
-          baseDirectory = directory;
-          storage = Storage(
-            Directory('${baseDirectory!.path}/profiles/$currentProfile'),
-          );
-        });
-
-        ///fetch all data contains all the tasks
-        allData = storage.data.allData();
-
-        ///check if allData is not empty
-        if (allData.isNotEmpty) {
-          ///sort the data by daily burn down
-          sortBurnDownDaily();
-        }
+      Directory baseDirectory = ProfilesWidget.of(context).getBaseDirectory();
+      setState(() {
+        storage = Storage(
+          Directory('${baseDirectory.path}/profiles/$currentProfile'),
+        );
       });
+
+      ///fetch all data contains all the tasks
+      allData = storage.data.allData();
+
+      ///check if allData is not empty
+      if (allData.isNotEmpty) {
+        ///sort the data by daily burn down
+        sortBurnDownDaily();
+      }
     });
   }
 
@@ -161,9 +159,9 @@ class _BurnDownDailyState extends State<BurnDownDaily>
                 title: AxisTitle(
                   text: 'Day - Month',
                   textStyle: GoogleFonts.poppins(
-                    fontWeight: FontWeight.bold,
+                    fontWeight: TaskWarriorFonts.bold,
                     color: AppSettings.isDarkMode ? Colors.white : Colors.black,
-                    fontSize: 12,
+                    fontSize: TaskWarriorFonts.fontSizeSmall,
                   ),
                 ),
               ),
@@ -171,8 +169,8 @@ class _BurnDownDailyState extends State<BurnDownDaily>
                 title: AxisTitle(
                   text: 'Tasks',
                   textStyle: GoogleFonts.poppins(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
+                    fontWeight: TaskWarriorFonts.bold,
+                    fontSize: TaskWarriorFonts.fontSizeSmall,
                     color: AppSettings.isDarkMode ? Colors.white : Colors.black,
                   ),
                 ),
@@ -183,7 +181,7 @@ class _BurnDownDailyState extends State<BurnDownDaily>
                 StackedColumnSeries<ChartData, String>(
                   groupName: 'Group A',
                   enableTooltip: true,
-                  color: Appcolors.green,
+                  color: TaskWarriorColors.green,
                   dataSource: dailyInfo.entries
                       .map((entry) => ChartData(
                             entry.key,
@@ -199,7 +197,7 @@ class _BurnDownDailyState extends State<BurnDownDaily>
                 /// This is the pending tasks
                 StackedColumnSeries<ChartData, String>(
                   groupName: 'Group A',
-                  color: Appcolors.yellow,
+                  color: TaskWarriorColors.yellow,
                   enableTooltip: true,
                   dataSource: dailyInfo.entries
                       .map((entry) => ChartData(

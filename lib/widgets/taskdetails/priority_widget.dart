@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
+import 'package:taskwarrior/config/taskwarriorfonts.dart';
 
 class PriorityWidget extends StatelessWidget {
   const PriorityWidget(
@@ -34,8 +35,8 @@ class PriorityWidget extends StatelessWidget {
                     TextSpan(
                       text: '$name:'.padRight(13),
                       style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
+                        fontWeight: TaskWarriorFonts.bold,
+                        fontSize: TaskWarriorFonts.fontSizeMedium,
                         color: AppSettings.isDarkMode
                             ? Colors.white
                             : Colors.black,
@@ -44,7 +45,7 @@ class PriorityWidget extends StatelessWidget {
                     TextSpan(
                       text: value ?? "not selected",
                       style: GoogleFonts.poppins(
-                        fontSize: 15,
+                        fontSize: TaskWarriorFonts.fontSizeMedium,
                         color: AppSettings.isDarkMode
                             ? Colors.white
                             : Colors.black,

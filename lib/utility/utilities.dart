@@ -1,4 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:taskwarrior/config/app_settings.dart';
+import 'package:taskwarrior/config/taskwarriorcolors.dart';
 
 class Utils {
   static String getWeekNumber(DateTime? date) {
@@ -47,5 +50,66 @@ class Utils {
       default:
         return '';
     }
+  }
+
+  static AlertDialog showAlertDialog({
+    Key? key,
+    Widget? icon,
+    EdgeInsetsGeometry? iconPadding,
+    Color? iconColor,
+    Widget? title,
+    EdgeInsetsGeometry? titlePadding,
+    TextStyle? titleTextStyle,
+    Widget? content,
+    EdgeInsetsGeometry? contentPadding,
+    TextStyle? contentTextStyle,
+    List<Widget>? actions,
+    EdgeInsetsGeometry? actionsPadding,
+    MainAxisAlignment? actionsAlignment,
+    OverflowBarAlignment? actionsOverflowAlignment,
+    VerticalDirection? actionsOverflowDirection,
+    double? actionsOverflowButtonSpacing,
+    EdgeInsetsGeometry? buttonPadding,
+    Color? backgroundColor,
+    double? elevation,
+    Color? shadowColor,
+    Color? surfaceTintColor,
+    String? semanticLabel,
+    Clip clipBehavior = Clip.none,
+    ShapeBorder? shape,
+    AlignmentGeometry? alignment,
+    bool scrollable = false,
+  }) {
+    return AlertDialog(
+      surfaceTintColor: AppSettings.isDarkMode
+          ? TaskWarriorColors.kdialogBackGroundColor
+          : TaskWarriorColors.kLightDialogBackGroundColor,
+      shadowColor: AppSettings.isDarkMode
+          ? TaskWarriorColors.kdialogBackGroundColor
+          : TaskWarriorColors.kLightDialogBackGroundColor,
+      backgroundColor: AppSettings.isDarkMode
+          ? TaskWarriorColors.kdialogBackGroundColor
+          : TaskWarriorColors.kLightDialogBackGroundColor,
+      key: key,
+      title: title,
+      titlePadding: titlePadding,
+      titleTextStyle: titleTextStyle,
+      content: content,
+      contentPadding: contentPadding,
+      contentTextStyle: contentTextStyle,
+      actions: actions,
+      actionsPadding: actionsPadding,
+      actionsAlignment: actionsAlignment,
+      actionsOverflowAlignment: actionsOverflowAlignment,
+      actionsOverflowDirection: actionsOverflowDirection,
+      actionsOverflowButtonSpacing: actionsOverflowButtonSpacing,
+      buttonPadding: buttonPadding,
+      elevation: elevation,
+      semanticLabel: semanticLabel,
+      clipBehavior: clipBehavior,
+      shape: shape,
+      alignment: alignment,
+      scrollable: scrollable,
+    );
   }
 }

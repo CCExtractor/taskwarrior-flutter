@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
+import 'package:taskwarrior/config/taskwarriorcolors.dart';
+import 'package:taskwarrior/config/taskwarriorfonts.dart';
 
 class TagFilterMetadata {
   const TagFilterMetadata({
@@ -42,10 +44,12 @@ class TagFiltersWrap extends StatelessWidget {
           onSelected: (_) => filters.toggleTagUnion(),
           label: Text(filters.tagUnion ? 'OR' : 'AND',
               style: GoogleFonts.poppins(
-                  color: AppSettings.isDarkMode ? Colors.black : Colors.white)),
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.black
+                      : TaskWarriorColors.white)),
           backgroundColor: AppSettings.isDarkMode
-              ? const Color.fromARGB(255, 220, 216, 216)
-              : const Color.fromARGB(255, 48, 46, 46),
+              ? TaskWarriorColors.kLightSecondaryBackgroundColor
+              : TaskWarriorColors.ksecondaryBackgroundColor,
         ),
         for (var entry in filters.tags.entries)
           FilterChip(
@@ -53,12 +57,15 @@ class TagFiltersWrap extends StatelessWidget {
             label: Text(
               entry.value.display,
               style: GoogleFonts.poppins(
-                  fontWeight: entry.value.selected ? FontWeight.w700 : null,
-                  color: AppSettings.isDarkMode ? Colors.black : Colors.white),
+                  fontWeight:
+                      entry.value.selected ? TaskWarriorFonts.bold : null,
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.black
+                      : TaskWarriorColors.white),
             ),
             backgroundColor: AppSettings.isDarkMode
-                ? const Color.fromARGB(255, 220, 216, 216)
-                : const Color.fromARGB(255, 48, 46, 46),
+                ? TaskWarriorColors.kLightSecondaryBackgroundColor
+                : TaskWarriorColors.kprimaryBackgroundColor,
           ),
       ],
     );

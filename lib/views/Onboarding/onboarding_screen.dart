@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:taskwarrior/config/taskwarriorcolors.dart';
+import 'package:taskwarrior/config/taskwarriorfonts.dart';
 import 'package:taskwarrior/controller/onboarding_controller.dart';
 import 'package:taskwarrior/views/Onboarding/Model/onboarding_contents.dart';
 import 'package:taskwarrior/views/Onboarding/Components/size_config.dart';
@@ -27,9 +29,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   AnimatedContainer _buildDots({int? index}) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(50)),
-        color: Color(0xFF000000),
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(50)),
+        color: TaskWarriorColors.black,
       ),
       margin: const EdgeInsets.only(right: 5),
       height: 10,
@@ -61,7 +63,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 },
               ),
             ),
-            SizedBox(height: height*5/100,),
+            SizedBox(
+              height: height * 5 / 100,
+            ),
             Expanded(
               flex: 1,
               child: SingleChildScrollView(child: _buildBottomSection(width)),
@@ -90,21 +94,25 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               content.title,
               textAlign: TextAlign.center,
               style: GoogleFonts.poppins(
-                fontWeight: FontWeight.w600,
+                fontWeight: TaskWarriorFonts.semiBold,
                 fontSize: (width <= 550) ? 30 : 35,
               ),
             ),
-            SizedBox(height: height*2/100,),
+            SizedBox(
+              height: height * 2 / 100,
+            ),
             // Flexible(flex: 1, child: Container()),
             Text(
               content.desc,
               style: GoogleFonts.poppins(
-                fontWeight: FontWeight.w300,
+                fontWeight: TaskWarriorFonts.light,
                 fontSize: (width <= 550) ? 17 : 17,
               ),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: height*2/100,)
+            SizedBox(
+              height: height * 2 / 100,
+            )
             // Flexible(flex: 1, child: Container()),
           ],
         ),
@@ -143,7 +151,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               (Route<dynamic> route) => false);
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.black,
+          backgroundColor: TaskWarriorColors.black,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(50),
           ),
@@ -155,8 +163,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         child: Text(
           "Start",
           style: GoogleFonts.poppins(
-            fontWeight: FontWeight.w300,
-            color: Colors.white,
+            fontWeight: TaskWarriorFonts.light,
+            color: TaskWarriorColors.white,
             fontSize: (width <= 550) ? 17 : 17,
           ),
         ),
@@ -177,15 +185,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             style: TextButton.styleFrom(
               elevation: 0,
               textStyle: TextStyle(
-                fontWeight: FontWeight.w600,
+                fontWeight: TaskWarriorFonts.semiBold,
                 fontSize: (width <= 550) ? 13 : 17,
               ),
             ),
             child: Text(
               "Skip",
               style: GoogleFonts.poppins(
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
+                fontWeight: TaskWarriorFonts.bold,
+                color: TaskWarriorColors.black,
                 fontSize: (width <= 550) ? 12 : 12,
               ),
             ),
@@ -198,7 +206,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               );
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.black,
+              backgroundColor: TaskWarriorColors.black,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(50),
               ),
@@ -211,8 +219,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             child: Text(
               "Next",
               style: GoogleFonts.poppins(
-                fontWeight: FontWeight.w300,
-                color: Colors.white,
+                fontWeight: TaskWarriorFonts.light,
+                color: TaskWarriorColors.white,
                 fontSize: (width <= 550) ? 12 : 12,
               ),
             ),

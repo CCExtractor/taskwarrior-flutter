@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:taskwarrior/config/app_settings.dart';
+import 'package:taskwarrior/config/taskwarriorcolors.dart';
+import 'package:taskwarrior/utility/utilities.dart';
 
 import 'package:taskwarrior/widgets/taskdetails.dart';
 
@@ -20,16 +23,36 @@ class RenameProfileDialog extends StatelessWidget {
 
     return SingleChildScrollView(
       child: Center(
-        child: AlertDialog(
+        child: Utils.showAlertDialog(
           scrollable: true,
-          title: const Text('Rename Alias'),
-          content: TextField(controller: controller),
+          title: Text(
+            'Rename Alias',
+            style: TextStyle(
+              color: AppSettings.isDarkMode
+                  ? TaskWarriorColors.white
+                  : TaskWarriorColors.black,
+            ),
+          ),
+          content: TextField(
+              style: TextStyle(
+                color: AppSettings.isDarkMode
+                    ? TaskWarriorColors.white
+                    : TaskWarriorColors.black,
+              ),
+              controller: controller),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Cancel'),
+              child: Text(
+                'Cancel',
+                style: TextStyle(
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.white
+                      : TaskWarriorColors.black,
+                ),
+              ),
             ),
             ElevatedButton(
               onPressed: () {
@@ -39,7 +62,14 @@ class RenameProfileDialog extends StatelessWidget {
                 );
                 Navigator.of(context).pop();
               },
-              child: const Text('Submit'),
+              child: Text(
+                'Submit',
+                style: TextStyle(
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.black
+                      : TaskWarriorColors.black,
+                ),
+              ),
             ),
           ],
         ),

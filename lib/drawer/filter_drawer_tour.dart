@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:taskwarrior/config/taskwarriorcolors.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 List<TargetFocus> filterDrawer({
@@ -31,7 +32,7 @@ List<TargetFocus> filterDrawer({
                     "Filter tasks based on their completion status",
                     textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
-                      color: Colors.white,
+                      color: TaskWarriorColors.white,
                     ),
                   ),
                 ],
@@ -64,7 +65,7 @@ List<TargetFocus> filterDrawer({
                     "Filter tasks based on the projects",
                     textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
-                      color: Colors.white,
+                      color: TaskWarriorColors.white,
                     ),
                   ),
                 ],
@@ -97,7 +98,7 @@ List<TargetFocus> filterDrawer({
                     "Toggle between AND and OR tag union types",
                     textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
-                      color: Colors.white,
+                      color: TaskWarriorColors.white,
                     ),
                   ),
                 ],
@@ -130,7 +131,7 @@ List<TargetFocus> filterDrawer({
                     "Sort tasks based on time of creation, urgency, due date, start date, etc.",
                     textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
-                      color: Colors.white,
+                      color: TaskWarriorColors.white,
                     ),
                   ),
                 ],

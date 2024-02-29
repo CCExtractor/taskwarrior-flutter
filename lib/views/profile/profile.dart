@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
+import 'package:taskwarrior/config/taskwarriorcolors.dart';
 import 'package:taskwarrior/model/storage/savefile.dart';
 import 'package:taskwarrior/taskserver/ntaskserver.dart';
+import 'package:taskwarrior/utility/utilities.dart';
 import 'package:taskwarrior/widgets/pallete.dart';
 import 'package:taskwarrior/widgets/profilefunctions.dart';
 import 'package:taskwarrior/widgets/taskdetails.dart';
@@ -30,23 +32,24 @@ class _ProfilePageState extends State<ProfilePage> {
         backgroundColor: Palette.kToDark.shade200,
         title: Text(
           profilesMap.length == 1 ? 'Profile' : 'Profiles',
-          style: GoogleFonts.poppins(color: Colors.white),
+          style: GoogleFonts.poppins(color: TaskWarriorColors.white),
         ),
         leading: IconButton(
           onPressed: () {
             // Navigator.pushReplacementNamed(context, PageRoutes.home);
             Navigator.of(context).pop();
           },
-          icon: const Icon(
+          icon: Icon(
             Icons.chevron_left,
-            color: Colors.white,
+            color: TaskWarriorColors.white,
             size: 30,
           ),
         ),
       ),
       //primary: false,
-      backgroundColor:
-          AppSettings.isDarkMode ? Palette.kToDark.shade200 : Colors.white,
+      backgroundColor: AppSettings.isDarkMode
+          ? TaskWarriorColors.kprimaryBackgroundColor
+          : TaskWarriorColors.kLightPrimaryBackgroundColor,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -83,12 +86,33 @@ class _ProfilePageState extends State<ProfilePage> {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: const Text("Export Format"),
-                      content: const Text("Choose the export format:"),
+                    return Utils.showAlertDialog(
+                      title: Text(
+                        "Export Format",
+                        style: TextStyle(
+                          color: AppSettings.isDarkMode
+                              ? TaskWarriorColors.white
+                              : TaskWarriorColors.black,
+                        ),
+                      ),
+                      content: Text(
+                        "Choose the export format:",
+                        style: TextStyle(
+                          color: AppSettings.isDarkMode
+                              ? TaskWarriorColors.white
+                              : TaskWarriorColors.black,
+                        ),
+                      ),
                       actions: <Widget>[
                         TextButton(
-                          child: const Text("JSON"),
+                          child: Text(
+                            "JSON",
+                            style: TextStyle(
+                              color: AppSettings.isDarkMode
+                                  ? TaskWarriorColors.white
+                                  : TaskWarriorColors.black,
+                            ),
+                          ),
                           onPressed: () {
                             Navigator.of(context).pop();
                             exportTasks(
@@ -98,7 +122,14 @@ class _ProfilePageState extends State<ProfilePage> {
                           },
                         ),
                         TextButton(
-                          child: const Text("TXT"),
+                          child: Text(
+                            "TXT",
+                            style: TextStyle(
+                              color: AppSettings.isDarkMode
+                                  ? TaskWarriorColors.white
+                                  : TaskWarriorColors.black,
+                            ),
+                          ),
                           onPressed: () {
                             Navigator.of(context).pop();
                             exportTasks(
@@ -116,17 +147,31 @@ class _ProfilePageState extends State<ProfilePage> {
                 try {
                   profilesWidget.copyConfigToNewProfile(currentProfile);
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: const Text('Profile Config Copied'),
+                      content: Text(
+                        'Profile Config Copied',
+                        style: TextStyle(
+                          color: AppSettings.isDarkMode
+                              ? TaskWarriorColors.white
+                              : TaskWarriorColors.black,
+                        ),
+                      ),
                       backgroundColor: AppSettings.isDarkMode
-                          ? const Color.fromARGB(255, 61, 61, 61)
-                          : const Color.fromARGB(255, 39, 39, 39),
+                          ? TaskWarriorColors.ksecondaryBackgroundColor
+                          : TaskWarriorColors.kLightSecondaryBackgroundColor,
                       duration: const Duration(seconds: 2)));
                 } catch (e) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: const Text('Profile Config Copy Failed'),
+                      content: Text(
+                        'Profile Config Copy Failed',
+                        style: TextStyle(
+                          color: AppSettings.isDarkMode
+                              ? TaskWarriorColors.white
+                              : TaskWarriorColors.black,
+                        ),
+                      ),
                       backgroundColor: AppSettings.isDarkMode
-                          ? const Color.fromARGB(255, 61, 61, 61)
-                          : const Color.fromARGB(255, 39, 39, 39),
+                          ? TaskWarriorColors.ksecondaryBackgroundColor
+                          : TaskWarriorColors.kLightSecondaryBackgroundColor,
                       duration: const Duration(seconds: 2)));
                 }
               },
@@ -189,36 +234,51 @@ class ProfilesColumn extends StatelessWidget {
               try {
                 addProfile();
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: const Text('Profile Added Successfully'),
+                    content: Text(
+                      'Profile Added Successfully',
+                      style: TextStyle(
+                        color: AppSettings.isDarkMode
+                            ? TaskWarriorColors.kprimaryTextColor
+                            : TaskWarriorColors.kLightPrimaryTextColor,
+                      ),
+                    ),
                     backgroundColor: AppSettings.isDarkMode
-                        ? const Color.fromARGB(255, 61, 61, 61)
-                        : const Color.fromARGB(255, 39, 39, 39),
+                        ? TaskWarriorColors.ksecondaryBackgroundColor
+                        : TaskWarriorColors.kLightSecondaryBackgroundColor,
                     duration: const Duration(seconds: 2)));
               } catch (e) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: const Text('Profile Additon Failed'),
+                    content: Text(
+                      'Profile Additon Failed',
+                      style: TextStyle(
+                        color: AppSettings.isDarkMode
+                            ? TaskWarriorColors.kprimaryTextColor
+                            : TaskWarriorColors.kLightPrimaryTextColor,
+                      ),
+                    ),
                     backgroundColor: AppSettings.isDarkMode
-                        ? const Color.fromARGB(255, 61, 61, 61)
-                        : const Color.fromARGB(255, 39, 39, 39),
+                        ? TaskWarriorColors.ksecondaryBackgroundColor
+                        : TaskWarriorColors.kLightSecondaryBackgroundColor,
                     duration: const Duration(seconds: 2)));
               }
             },
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all<Color>(
                 AppSettings.isDarkMode
-                    ? const Color.fromARGB(255, 61, 61, 61)
-                    : Colors.white,
+                    ? TaskWarriorColors.ksecondaryBackgroundColor
+                    : TaskWarriorColors.kLightSecondaryBackgroundColor,
               ),
             ),
             icon: Icon(Icons.add,
                 color: AppSettings.isDarkMode
-                    ? Colors.deepPurpleAccent
-                    : Colors.deepPurple),
+                    ? TaskWarriorColors.deepPurpleAccent
+                    : TaskWarriorColors.deepPurple),
             label: Text(
               'Add new Profile',
               style: TextStyle(
-                color:
-                    AppSettings.isDarkMode ? Colors.white : Colors.deepPurple,
+                color: AppSettings.isDarkMode
+                    ? TaskWarriorColors.white
+                    : TaskWarriorColors.black,
               ),
             ),
           )

@@ -9,6 +9,9 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:loggy/loggy.dart';
+import 'package:taskwarrior/config/app_settings.dart';
+import 'package:taskwarrior/config/taskwarriorcolors.dart';
+import 'package:taskwarrior/config/taskwarriorfonts.dart';
 
 import 'package:taskwarrior/model/json.dart';
 import 'package:taskwarrior/model/storage.dart';
@@ -250,12 +253,19 @@ class _StorageWidgetState extends State<StorageWidget> {
     try {
       final connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.none) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
-                'You are not connected to the internet. Please check your network connection.'),
-          ),
-        );
+              'You are not connected to the internet. Please check your network connection.',
+              style: TextStyle(
+                color: AppSettings.isDarkMode
+                    ? TaskWarriorColors.kprimaryTextColor
+                    : TaskWarriorColors.kLightPrimaryTextColor,
+              ),
+            ),
+            backgroundColor: AppSettings.isDarkMode
+                ? TaskWarriorColors.ksecondaryBackgroundColor
+                : TaskWarriorColors.kLightSecondaryBackgroundColor,
+            duration: const Duration(seconds: 2)));
       } else {
         if (isDialogNeeded) {
           showDialog(
@@ -277,16 +287,16 @@ class _StorageWidgetState extends State<StorageWidget> {
                       Text(
                         "Syncing",
                         style: GoogleFonts.poppins(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
+                          fontSize: TaskWarriorFonts.fontSizeLarge,
+                          fontWeight: TaskWarriorFonts.bold,
                         ),
                       ),
                       const SizedBox(height: 8.0),
                       Text(
                         "Please wait...",
                         style: GoogleFonts.poppins(
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.normal,
+                          fontSize: TaskWarriorFonts.fontSizeSmall,
+                          fontWeight: TaskWarriorFonts.regular,
                         ),
                       ),
                     ],
@@ -307,11 +317,19 @@ class _StorageWidgetState extends State<StorageWidget> {
           Get.back();
         }
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('${header['code']}: ${header['status']}'),
-          ),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+              '${header['code']}: ${header['status']}',
+              style: TextStyle(
+                color: AppSettings.isDarkMode
+                    ? TaskWarriorColors.kprimaryTextColor
+                    : TaskWarriorColors.kLightPrimaryTextColor,
+              ),
+            ),
+            backgroundColor: AppSettings.isDarkMode
+                ? TaskWarriorColors.ksecondaryBackgroundColor
+                : TaskWarriorColors.kLightSecondaryBackgroundColor,
+            duration: const Duration(seconds: 2)));
       }
     } catch (e, trace) {
       if (isDialogNeeded) {
