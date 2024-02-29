@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:home_widget/home_widget.dart';
 
 import 'package:loggy/loggy.dart';
 import 'package:path_provider/path_provider.dart';
@@ -63,6 +64,20 @@ Future main([List<String> args = const []]) async {
               return const AppSetupPlaceholder();
             }
           })));
+   HomeWidget.widgetClicked.listen((uri) async{
+    if (uri != null) {
+      debugPrint("i am here and uri is $uri");
+      String? uuid = uri.queryParameters["uuid"];
+      debugPrint('uuid is $uuid');
+      if (uuid!=null) {
+      //  Future.delayed(Duration(seconds: 5)).then((value) =>  Navigator.push(context, MaterialPageRoute(builder: (context) => DetailRoute(uuid),)));
+      }
+    }
+    if (uri?.host == "cardClicked") {
+      final taskUUID = uri!.queryParameters["uuid"];
+      debugPrint(taskUUID);
+    }
+  });
 }
 
 Future<List<Directory>> getDirectories() async {
@@ -72,6 +87,7 @@ Future<List<Directory>> getDirectories() async {
   Directory baseDirectory =
       (directory != null) ? Directory(directory) : defaultDirectory;
   return [defaultDirectory, baseDirectory];
+
 }
 
 Future init() async {

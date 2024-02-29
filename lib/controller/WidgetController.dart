@@ -56,17 +56,15 @@ class WidgetController extends GetxController {
         l.add({
           "description": "$i.${task.description}",
           "urgency": 'urgencyLevel : ${urgency(task)}',
+          "uuid":task.uuid
         });
         i++;
       }
     }
     if (l.isEmpty) {
-      l.add({
-        "description": "No tasks added yet.",
-        "urgency": "urgencyLevel : 0"
-      });
+      l.add({"description": "No tasks added yet.", "urgency": "urgencyLevel : 0","uuid":""});
     }
-    await HomeWidget.saveWidgetData('tasks', jsonEncode(l));
+    await HomeWidget.saveWidgetData("tasks", jsonEncode(l));
   }
 
   Future updateWidget() async {
