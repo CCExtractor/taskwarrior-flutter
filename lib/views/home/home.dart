@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:home_widget/home_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
@@ -12,6 +13,7 @@ import 'package:taskwarrior/controller/home_tour_controller.dart';
 import 'package:taskwarrior/drawer/filter_drawer.dart';
 import 'package:taskwarrior/drawer/nav_drawer.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
+import 'package:taskwarrior/services/task_details.dart';
 import 'package:taskwarrior/taskserver/ntaskserver.dart';
 import 'package:taskwarrior/views/home/home_tour.dart';
 import 'package:taskwarrior/widgets/add_Task.dart';
@@ -147,9 +149,28 @@ class _HomePageState extends State<HomePage> {
   }
 
   bool hideKey = true;
-
+  bool isHomeWidgetTaskTapped = false;
+  late String uuid;
   @override
   Widget build(BuildContext context) {
+
+    HomeWidget.widgetClicked.listen((uri) async{
+      // print('i am here and uri is $uri');
+      // print('is tapped is i am being called');
+    if (uri != null) {
+      if (uri.host == "cardclicked") {
+        if (uri.queryParameters["uuid"] != null) {
+        uuid = uri.queryParameters["uuid"] as String;
+        setState(() {
+          isHomeWidgetTaskTapped = true;
+        });
+        // print('is tapped is $isHomeWidgetTaskTapped');
+      }
+      debugPrint('uuid is $uuid');
+    }
+    }
+    
+  });
     Server? server;
     Credentials? credentials;
 
@@ -201,7 +222,7 @@ class _HomePageState extends State<HomePage> {
       tagFilters: tagFilters,
     );
 
-    return Scaffold(
+    return isHomeWidgetTaskTapped == false ? Scaffold(
       appBar: AppBar(
         backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
         surfaceTintColor: TaskWarriorColors.kprimaryBackgroundColor,
@@ -399,7 +420,7 @@ class _HomePageState extends State<HomePage> {
         }),
       ),
       resizeToAvoidBottomInset: false,
-    );
+    ) : DetailRoute(uuid);
   }
 
   refresh() {

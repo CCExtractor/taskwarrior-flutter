@@ -6,7 +6,7 @@
     <string name="text_data_key">textData</string>
     <string name="image_data_key">imageData</string>
     <string name="app_widget_launch_action">es.antonborri.home_widget.action.LAUNCH</string>
-    <string name="app_widget_card_clicked_uri">TaskWarriorAppWidget://cardClicked</string>
+    <string name="app_widget_card_clicked_uri">taskwarriorappwidget://cardclicked</string>
     <string name="my_widget_description">This widget shows pending tasks from TaskWarrior app</string>
     <string name="appwidget_text">TaskWarrior</string>
     <string name="add_widget">Add widget</string>

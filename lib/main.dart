@@ -12,9 +12,11 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
+import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/controller/WidgetController.dart';
 import 'package:taskwarrior/controller/onboarding_controller.dart';
 import 'package:taskwarrior/routes/pageroute.dart';
+import 'package:taskwarrior/services/task_details.dart';
 import 'package:taskwarrior/views/Onboarding/onboarding_screen.dart';
 import 'package:taskwarrior/views/profile/profile.dart';
 import 'package:taskwarrior/widgets/app_placeholder.dart';
@@ -64,20 +66,7 @@ Future main([List<String> args = const []]) async {
               return const AppSetupPlaceholder();
             }
           })));
-   HomeWidget.widgetClicked.listen((uri) async{
-    if (uri != null) {
-      debugPrint("i am here and uri is $uri");
-      String? uuid = uri.queryParameters["uuid"];
-      debugPrint('uuid is $uuid');
-      if (uuid!=null) {
-      //  Future.delayed(Duration(seconds: 5)).then((value) =>  Navigator.push(context, MaterialPageRoute(builder: (context) => DetailRoute(uuid),)));
-      }
-    }
-    if (uri?.host == "cardClicked") {
-      final taskUUID = uri!.queryParameters["uuid"];
-      debugPrint(taskUUID);
-    }
-  });
+  
 }
 
 Future<List<Directory>> getDirectories() async {
@@ -113,6 +102,9 @@ class _MyAppState extends State<MyApp> {
   Directory? baseDirectory;
   List<Task> allData = [];
   bool stopTraver = false;
+
+  bool isHomeWidgetTaskTapped = false;
+  late String uuid;
   @override
   void initState() {
     super.initState();
@@ -120,6 +112,23 @@ class _MyAppState extends State<MyApp> {
     ///sort the data by daily burn down
 
     notificationService.initiliazeNotification();
+    helperFunction();
+  }
+
+  void helperFunction() async {
+    Uri? myUri = await HomeWidget.initiallyLaunchedFromHomeWidget();
+    if (myUri != null) {
+      if (myUri.host == "cardclicked") {
+        if (myUri.queryParameters["uuid"] != null) {
+          uuid = myUri.queryParameters["uuid"] as String;
+          setState(() {
+            isHomeWidgetTaskTapped = true;
+          });
+          // print('is tapped is $isHomeWidgetTaskTapped');
+        }
+        // debugPrint('uuid is $uuid');
+      }
+    }
   }
 
   @override
@@ -154,7 +163,17 @@ class _MyAppState extends State<MyApp> {
           PageRoutes.profile: (context) => const ProfilePage(),
         },
 
-        home: CheckOnboardingStatus(),
+        home: isHomeWidgetTaskTapped == false
+            ? CheckOnboardingStatus()
+            : FutureBuilder(future: Future.delayed(const Duration(seconds: 2)), builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return  Scaffold(
+                  backgroundColor: 
+              AppSettings.isDarkMode ? Palette.kToDark.shade200 : Colors.white,
+                  body: const Center(child:  CircularProgressIndicator()));
+              }
+              return DetailRoute(uuid);
+            },),
       );
     }));
   }
