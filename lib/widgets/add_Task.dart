@@ -27,14 +27,24 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   DateTime? due;
   String dueString = '';
   String priority = 'M';
-  bool use24hourFormate = false;
   final tagcontroller = TextEditingController();
   List<String> tags = [];
   bool inThePast = false;
-
+  bool change24hr = false;
   @override
   void initState() {
     super.initState();
+    checkto24hr();
+  }
+
+  Future<void> checkto24hr() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      change24hr = prefs.getBool(
+            '24hourformate',
+          ) ??
+          false;
+    });
   }
 
   @override
@@ -71,26 +81,6 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                 ),
               ),
             ),
-          ),
-          content: Form(
-            key: formKey,
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.8,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  const SizedBox(height: 8),
-                  buildName(),
-                  const SizedBox(height: 12),
-                  buildDueDate(context),
-                  const SizedBox(height: 8),
-                  buildPriority(),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  buildformate(),
-                  buildTags(),
-                ],
             content: Form(
               key: formKey,
               child: SizedBox(
@@ -265,12 +255,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                                   onSurface: TaskWarriorColors.black,
                                 ),
                         ),
-                        child: MediaQuery(
-                          data: MediaQuery.of(context).copyWith(
-                            alwaysUse24HourFormat: use24hourFormate,
-                          ),
-                          child: child!),
-                        );
+                        child: child!,
                       );
                     },
                     fieldHintText: "Month/Date/Year",
@@ -313,7 +298,11 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                                     onSurface: TaskWarriorColors.black,
                                   ),
                           ),
-                          child: child!,
+                          child: MediaQuery(
+                              data: MediaQuery.of(context).copyWith(
+                                alwaysUse24HourFormat: change24hr,
+                              ),
+                              child: child!),
                         );
                       },
                       context: context,
@@ -416,40 +405,6 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
           ),
         ],
       );
-  Widget buildformate() {
-    return Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-      Text(
-        'Click to Choose:',
-        style: GoogleFonts.poppins(
-          fontWeight: FontWeight.bold,
-          color: AppSettings.isDarkMode ? Colors.white : Colors.black,
-        ),
-      ),
-      const SizedBox(
-        width: 5.0,
-      ),
-      Wrap(
-        spacing: 5.0,
-        children: List<Widget>.generate(
-          1,
-          (int index) {
-            return ChoiceChip(
-                label: const Text(
-                  '24hour',
-                ),
-                selected: use24hourFormate,
-                onSelected: (bool? selected) {
-                  if (selected != use24hourFormate) {
-                    setState(() {
-                      use24hourFormate = selected!;
-                    });
-                  }
-                });
-          },
-        ),
-      )
-    ]);
-  }
 
   Widget buildCancelButton(BuildContext context) => TextButton(
         child: Text(

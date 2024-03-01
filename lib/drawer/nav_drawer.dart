@@ -135,6 +135,7 @@ class _NavDrawerState extends State<NavDrawer> {
                 bool syncOnStart = false;
                 bool syncOnTaskCreate = false;
                 bool delaytask = false;
+                bool change24hr = false;
 
                 ///check if auto sync is on or off
                 final SharedPreferences prefs =
@@ -144,6 +145,7 @@ class _NavDrawerState extends State<NavDrawer> {
                   syncOnTaskCreate =
                       prefs.getBool('sync-OnTaskCreate') ?? false;
                   delaytask = prefs.getBool('delaytask') ?? false;
+                  change24hr = prefs.getBool('24hourformate') ?? false;
                 });
                 // print(syncOnStart);
                 // print(syncOnTaskCreate);
@@ -153,6 +155,7 @@ class _NavDrawerState extends State<NavDrawer> {
                       isSyncOnStartActivel: syncOnStart,
                       isSyncOnTaskCreateActivel: syncOnTaskCreate,
                       delaytask: delaytask,
+                      change24hr: change24hr,
                     ),
                   ),
                 );
