@@ -4,6 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:loggy/loggy.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
+import 'package:taskwarrior/config/taskwarriorcolors.dart';
+import 'package:taskwarrior/config/taskwarriorfonts.dart';
+import 'package:taskwarrior/utility/utilities.dart';
 
 class DescriptionWidget extends StatelessWidget {
   const DescriptionWidget(
@@ -36,8 +39,8 @@ class DescriptionWidget extends StatelessWidget {
                     TextSpan(
                       text: '$name:'.padRight(13),
                       style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
+                        fontWeight: TaskWarriorFonts.bold,
+                        fontSize: TaskWarriorFonts.fontSizeMedium,
                         color: AppSettings.isDarkMode
                             ? Colors.white
                             : Colors.black,
@@ -46,7 +49,7 @@ class DescriptionWidget extends StatelessWidget {
                     TextSpan(
                       text: value ?? "not selected",
                       style: GoogleFonts.poppins(
-                        fontSize: 15,
+                        fontSize: TaskWarriorFonts.fontSizeMedium,
                         color: AppSettings.isDarkMode
                             ? Colors.white
                             : Colors.black,
@@ -64,10 +67,22 @@ class DescriptionWidget extends StatelessWidget {
           );
           showDialog(
             context: context,
-            builder: (context) => AlertDialog(
+            builder: (context) => Utils.showAlertDialog(
               scrollable: true,
-              title: const Text('Edit description'),
+              title: Text(
+                'Edit description',
+                style: TextStyle(
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.white
+                      : TaskWarriorColors.black,
+                ),
+              ),
               content: TextField(
+                style: TextStyle(
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.white
+                      : TaskWarriorColors.black,
+                ),
                 autofocus: true,
                 maxLines: null,
                 controller: controller,
@@ -77,7 +92,14 @@ class DescriptionWidget extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Text('Cancel'),
+                  child: Text(
+                    'Cancel',
+                    style: TextStyle(
+                      color: AppSettings.isDarkMode
+                          ? TaskWarriorColors.white
+                          : TaskWarriorColors.black,
+                    ),
+                  ),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -88,7 +110,14 @@ class DescriptionWidget extends StatelessWidget {
                       logError(e, trace);
                     }
                   },
-                  child: const Text('Submit'),
+                  child: Text(
+                    'Submit',
+                    style: TextStyle(
+                      color: AppSettings.isDarkMode
+                          ? TaskWarriorColors.black
+                          : TaskWarriorColors.black,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -130,8 +159,8 @@ class ProjectWidget extends StatelessWidget {
                     TextSpan(
                       text: '$name:'.padRight(13),
                       style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
+                        fontWeight: TaskWarriorFonts.bold,
+                        fontSize: TaskWarriorFonts.fontSizeMedium,
                         color: AppSettings.isDarkMode
                             ? Colors.white
                             : Colors.black,
@@ -140,7 +169,7 @@ class ProjectWidget extends StatelessWidget {
                     TextSpan(
                       text: value ?? "not selected",
                       style: GoogleFonts.poppins(
-                        fontSize: 15,
+                        fontSize: TaskWarriorFonts.fontSizeMedium,
                         color: AppSettings.isDarkMode
                             ? Colors.white
                             : Colors.black,
@@ -158,10 +187,22 @@ class ProjectWidget extends StatelessWidget {
           );
           showDialog(
             context: context,
-            builder: (context) => AlertDialog(
+            builder: (context) => Utils.showAlertDialog(
               scrollable: true,
-              title: const Text('Edit project'),
+              title: Text(
+                'Edit project',
+                style: TextStyle(
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.white
+                      : TaskWarriorColors.black,
+                ),
+              ),
               content: TextField(
+                style: TextStyle(
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.white
+                      : TaskWarriorColors.black,
+                ),
                 autofocus: true,
                 maxLines: null,
                 controller: controller,
@@ -171,7 +212,14 @@ class ProjectWidget extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Text('Cancel'),
+                  child: Text(
+                    'Cancel',
+                    style: TextStyle(
+                      color: AppSettings.isDarkMode
+                          ? TaskWarriorColors.white
+                          : TaskWarriorColors.black,
+                    ),
+                  ),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -183,7 +231,14 @@ class ProjectWidget extends StatelessWidget {
                       logError(e, trace);
                     }
                   },
-                  child: const Text('Submit'),
+                  child: Text(
+                    'Submit',
+                    style: TextStyle(
+                      color: AppSettings.isDarkMode
+                          ? TaskWarriorColors.black
+                          : TaskWarriorColors.black,
+                    ),
+                  ),
                 ),
               ],
             ),

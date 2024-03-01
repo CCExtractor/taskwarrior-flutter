@@ -3,16 +3,19 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
+import 'package:taskwarrior/config/taskwarriorcolors.dart';
+import 'package:taskwarrior/config/taskwarriorfonts.dart';
 import 'package:taskwarrior/model/json.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
+import 'package:taskwarrior/services/notification_services.dart';
 import 'package:taskwarrior/services/task_details.dart';
 import 'package:taskwarrior/services/task_list_tem.dart';
 import 'package:taskwarrior/widgets/taskfunctions/modify.dart';
+
 import 'pallete.dart';
 
 class TasksBuilder extends StatefulWidget {
@@ -34,6 +37,10 @@ class _TasksBuilderState extends State<TasksBuilder> {
   late Modify modify;
   ScrollController scrollController = ScrollController();
   bool showbtn = false;
+  Task? lastDeletedTask;
+  Task? lastCompletedTask;
+  bool isUndoInProgress = false; // track undo action
+
   @override
   void initState() {
     scrollController.addListener(() {
@@ -72,12 +79,48 @@ class _TasksBuilderState extends State<TasksBuilder> {
     modify.save(
       modified: () => now,
     );
+
+    // Show a snackbar with an undo action
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: const Text('Task Updated'),
-        backgroundColor: AppSettings.isDarkMode
-            ? const Color.fromARGB(255, 61, 61, 61)
-            : const Color.fromARGB(255, 39, 39, 39),
-        duration: const Duration(seconds: 2)));
+      content: Text(
+        'Task Updated',
+        style: TextStyle(
+          color: AppSettings.isDarkMode
+              ? TaskWarriorColors.kprimaryTextColor
+              : TaskWarriorColors.kLightPrimaryTextColor,
+        ),
+      ),
+      backgroundColor: AppSettings.isDarkMode
+          ? TaskWarriorColors.ksecondaryBackgroundColor
+          : TaskWarriorColors.kLightSecondaryBackgroundColor,
+      duration: const Duration(seconds: 2),
+      action: SnackBarAction(
+        label: 'Undo',
+        onPressed: () {
+          // Undo the task status change
+          undoChanges();
+        },
+      ),
+    ));
+  }
+
+  void undoChanges() {
+    if (isUndoInProgress) {
+      return; // If undo is already in progress, do nothing
+    }
+    isUndoInProgress = true;
+    ScaffoldMessenger.of(context).removeCurrentSnackBar();
+
+    if (lastDeletedTask != null) {
+      setStatus('pending', lastDeletedTask!.uuid);
+      lastDeletedTask = null;
+    }
+
+    if (lastCompletedTask != null) {
+      setStatus('pending', lastCompletedTask!.uuid);
+      lastCompletedTask = null;
+    }
+    isUndoInProgress = false;
   }
 
   // final bool darkmode;
@@ -101,13 +144,13 @@ class _TasksBuilderState extends State<TasksBuilder> {
                   );
             },
             backgroundColor: AppSettings.isDarkMode
-                ? Colors.white
-                : Palette.kToDark.shade200,
+                ? TaskWarriorColors.kLightPrimaryBackgroundColor
+                : TaskWarriorColors.kprimaryBackgroundColor,
             child: Icon(
               Icons.arrow_upward,
               color: AppSettings.isDarkMode
-                  ? Palette.kToDark.shade200
-                  : Colors.white,
+                  ? TaskWarriorColors.kprimaryBackgroundColor
+                  : TaskWarriorColors.kLightPrimaryBackgroundColor,
             ),
           ),
         ),
@@ -122,10 +165,10 @@ class _TasksBuilderState extends State<TasksBuilder> {
                         : 'Click on the bottom right button to start adding tasks',
                     textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
-                      fontSize: 20,
+                      fontSize: TaskWarriorFonts.fontSizeLarge,
                       color: AppSettings.isDarkMode
-                          ? Colors.white
-                          : Palette.kToDark.shade200,
+                          ? TaskWarriorColors.kLightPrimaryBackgroundColor
+                          : TaskWarriorColors.kprimaryBackgroundColor,
                     ),
                   ),
                 ),
@@ -143,54 +186,33 @@ class _TasksBuilderState extends State<TasksBuilder> {
                               children: [
                                 SlidableAction(
                                   onPressed: (context) {
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return AlertDialog(
-                                          title: const Text(
-                                              'Do you want to save changes?'),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () {
-                                                setStatus(
-                                                    'completed', task.uuid);
-                                                if (task.due != null) {
-                                                  DateTime? dtb = task.due;
-                                                  dtb = dtb!.add(const Duration(
-                                                      minutes: 1));
-                                                  final FlutterLocalNotificationsPlugin
-                                                      flutterLocalNotificationsPlugin =
-                                                      FlutterLocalNotificationsPlugin();
-                                                  flutterLocalNotificationsPlugin
-                                                      .cancel(dtb.day * 100 +
-                                                          dtb.hour * 10 +
-                                                          dtb.minute);
-                                                  if (kDebugMode) {
-                                                    print("Task due is $dtb");
-                                                    print(dtb.day * 100 +
-                                                        dtb.hour * 10 +
-                                                        dtb.minute);
-                                                  }
-                                                }
+                                    // Complete task without confirmation
+                                    setStatus('completed', task.uuid);
+                                    if (task.due != null) {
+                                      DateTime? dtb = task.due;
+                                      dtb =
+                                          dtb!.add(const Duration(minutes: 1));
+                                      NotificationService notificationService =
+                                          NotificationService();
+                                      //Task ID is set to null when creating the notification id.
+                                      int notificationId = notificationService
+                                          .calculateNotificationId(task.due!,
+                                              task.description, null);
+                                      notificationService
+                                          .cancelNotification(notificationId);
 
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: const Text('Yes'),
-                                            ),
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: const Text('No'),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
+                                      if (kDebugMode) {
+                                        print("Task due is $dtb");
+                                        print(dtb.day * 100 +
+                                            dtb.hour * 10 +
+                                            dtb.minute);
+                                      }
+                                    }
+                                    lastCompletedTask = task;
                                   },
                                   icon: Icons.done,
                                   label: "COMPLETE",
-                                  backgroundColor: Colors.green,
+                                  backgroundColor: TaskWarriorColors.green,
                                 ),
                               ],
                             ),
@@ -199,64 +221,46 @@ class _TasksBuilderState extends State<TasksBuilder> {
                               children: [
                                 SlidableAction(
                                   onPressed: (context) {
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return AlertDialog(
-                                          title: const Text(
-                                              'Do you want to save changes?'),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () {
-                                                setStatus('deleted', task.uuid);
-                                                if (task.due != null) {
-                                                  DateTime? dtb = task.due;
-                                                  dtb = dtb!.add(const Duration(
-                                                      minutes: 1));
-                                                  final FlutterLocalNotificationsPlugin
-                                                      flutterLocalNotificationsPlugin =
-                                                      FlutterLocalNotificationsPlugin();
-                                                  flutterLocalNotificationsPlugin
-                                                      .cancel(dtb.day * 100 +
-                                                          dtb.hour * 10 +
-                                                          dtb.minute);
-                                                  if (kDebugMode) {
-                                                    print("Task due is $dtb");
-                                                    print(dtb.day * 100 +
-                                                        dtb.hour * 10 +
-                                                        dtb.minute);
-                                                  }
-                                                }
+                                    // Delete task without confirmation
+                                    setStatus('deleted', task.uuid);
+                                    if (task.due != null) {
+                                      DateTime? dtb = task.due;
+                                      dtb =
+                                          dtb!.add(const Duration(minutes: 1));
 
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: const Text('Yes'),
-                                            ),
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: const Text('No'),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
+                                      //Task ID is set to null when creating the notification id.
+                                      NotificationService notificationService =
+                                          NotificationService();
+
+                                      int notificationId = notificationService
+                                          .calculateNotificationId(task.due!,
+                                              task.description, null);
+                                      notificationService
+                                          .cancelNotification(notificationId);
+
+                                      if (kDebugMode) {
+                                        print("Task due is $dtb");
+                                        print(dtb.day * 100 +
+                                            dtb.hour * 10 +
+                                            dtb.minute);
+                                      }
+                                    }
+                                    lastDeletedTask = task;
                                   },
                                   icon: Icons.delete,
                                   label: "DELETE",
-                                  backgroundColor: Colors.red,
+                                  backgroundColor: TaskWarriorColors.red,
                                 ),
                               ],
                             ),
                             child: Card(
                               color: AppSettings.isDarkMode
                                   ? Palette.kToDark
-                                  : Colors.white,
+                                  : TaskWarriorColors.white,
                               child: InkWell(
                                 splashColor: AppSettings.isDarkMode
-                                    ? Colors.black
-                                    : Colors.grey.shade200,
+                                    ? TaskWarriorColors.black
+                                    : TaskWarriorColors.borderColor,
                                 onTap: () => Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -275,11 +279,11 @@ class _TasksBuilderState extends State<TasksBuilder> {
                         : Card(
                             color: AppSettings.isDarkMode
                                 ? Palette.kToDark
-                                : Colors.white,
+                                : TaskWarriorColors.white,
                             child: InkWell(
                               splashColor: AppSettings.isDarkMode
-                                  ? Colors.black
-                                  : Colors.grey.shade200,
+                                  ? TaskWarriorColors.black
+                                  : TaskWarriorColors.borderColor,
                               onTap: () => Navigator.push(
                                 context,
                                 MaterialPageRoute(

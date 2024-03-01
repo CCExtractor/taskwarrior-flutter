@@ -1,6 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
+import 'package:taskwarrior/config/taskwarriorcolors.dart';
 
 class ThemeSwitcherClipper extends StatefulWidget {
   final bool isDarkMode;
@@ -36,7 +37,9 @@ class _ThemeSwitcherClipperState extends State<ThemeSwitcherClipper> {
               child: Icon(
                 widget.isDarkMode ? Icons.dark_mode : Icons.light_mode,
                 key: UniqueKey(),
-                color: widget.isDarkMode ? Colors.white : Colors.black,
+                color: widget.isDarkMode
+                    ? TaskWarriorColors.white
+                    : TaskWarriorColors.black,
                 size: 40,
               ),
             )),

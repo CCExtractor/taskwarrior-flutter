@@ -4,13 +4,16 @@ import 'package:flutter/material.dart';
 
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:home_widget/home_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
+import 'package:taskwarrior/config/taskwarriorcolors.dart';
 import 'package:taskwarrior/controller/home_tour_controller.dart';
 import 'package:taskwarrior/drawer/filter_drawer.dart';
 import 'package:taskwarrior/drawer/nav_drawer.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
+import 'package:taskwarrior/services/task_details.dart';
 import 'package:taskwarrior/taskserver/ntaskserver.dart';
 import 'package:taskwarrior/views/home/home_tour.dart';
 import 'package:taskwarrior/widgets/add_Task.dart';
@@ -70,7 +73,7 @@ class _HomePageState extends State<HomePage> {
           menuKey: menuKey,
           refreshKey: refreshKey,
         ),
-        colorShadow: Colors.black,
+        colorShadow: TaskWarriorColors.black,
         paddingFocus: 10,
         opacityShadow: 0.8,
         hideSkip: true,
@@ -91,7 +94,7 @@ class _HomePageState extends State<HomePage> {
               else
                 {
                   // ignore: avoid_print
-                  print('User has seen this page'),
+                  debugPrint('User has seen this page'),
                   // User has seen this page
                 }
             });
@@ -146,9 +149,28 @@ class _HomePageState extends State<HomePage> {
   }
 
   bool hideKey = true;
-
+  bool isHomeWidgetTaskTapped = false;
+  late String uuid;
   @override
   Widget build(BuildContext context) {
+
+    HomeWidget.widgetClicked.listen((uri) async{
+      // print('i am here and uri is $uri');
+      // print('is tapped is i am being called');
+    if (uri != null) {
+      if (uri.host == "cardclicked") {
+        if (uri.queryParameters["uuid"] != null) {
+        uuid = uri.queryParameters["uuid"] as String;
+        setState(() {
+          isHomeWidgetTaskTapped = true;
+        });
+        // print('is tapped is $isHomeWidgetTaskTapped');
+      }
+      debugPrint('uuid is $uuid');
+    }
+    }
+    
+  });
     Server? server;
     Credentials? credentials;
 
@@ -200,34 +222,45 @@ class _HomePageState extends State<HomePage> {
       tagFilters: tagFilters,
     );
 
-    return Scaffold(
+    return isHomeWidgetTaskTapped == false ? Scaffold(
       appBar: AppBar(
-        backgroundColor: Palette.kToDark.shade200,
-        title:
-            Text('Home Page', style: GoogleFonts.poppins(color: Colors.white)),
+        backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
+        surfaceTintColor: TaskWarriorColors.kprimaryBackgroundColor,
+        title: Text('Home Page',
+            style: GoogleFonts.poppins(color: TaskWarriorColors.white)),
         actions: [
           IconButton(
             key: searchKey1,
             icon: (storageWidget.searchVisible)
-                ? const Tooltip(
+                ? Tooltip(
                     message: 'Cancel',
-                    child: Icon(Icons.cancel, color: Colors.white))
-                : const Tooltip(
+                    child: Icon(Icons.cancel, color: TaskWarriorColors.white))
+                : Tooltip(
                     message: 'Search',
-                    child: Icon(Icons.search, color: Colors.white)),
+                    child: Icon(Icons.search, color: TaskWarriorColors.white)),
             onPressed: storageWidget.toggleSearch,
           ),
           Builder(
             builder: (context) => IconButton(
               key: refreshKey,
-              icon: const Icon(Icons.refresh, color: Colors.white),
+              icon: Icon(Icons.refresh, color: TaskWarriorColors.white),
               onPressed: () {
                 if (server != null || credentials != null) {
                   storageWidget.synchronize(context, true);
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: const Text('TaskServer is not configured'),
+                      backgroundColor: AppSettings.isDarkMode
+                          ? TaskWarriorColors.ksecondaryBackgroundColor
+                          : TaskWarriorColors.kLightSecondaryBackgroundColor,
+                      content: Text(
+                        'TaskServer is not configured',
+                        style: TextStyle(
+                          color: AppSettings.isDarkMode
+                              ? TaskWarriorColors.white
+                              : TaskWarriorColors.black,
+                        ),
+                      ),
                       action: SnackBarAction(
                         label: 'Set Up',
                         onPressed: () {
@@ -239,7 +272,7 @@ class _HomePageState extends State<HomePage> {
                             setState(() {});
                           });
                         },
-                        textColor: Colors.purple,
+                        textColor: TaskWarriorColors.purple,
                       ),
                     ),
                   );
@@ -250,9 +283,9 @@ class _HomePageState extends State<HomePage> {
           Builder(
             builder: (context) => IconButton(
               key: filterKey,
-              icon: const Tooltip(
+              icon: Tooltip(
                 message: 'Filters',
-                child: Icon(Icons.filter_list, color: Colors.white),
+                child: Icon(Icons.filter_list, color: TaskWarriorColors.white),
               ),
               onPressed: () => Scaffold.of(context).openEndDrawer(),
             ),
@@ -261,8 +294,9 @@ class _HomePageState extends State<HomePage> {
         leading: Builder(
           builder: (context) => IconButton(
             key: menuKey,
-            icon: const Tooltip(
-                message: 'Menu', child: Icon(Icons.menu, color: Colors.white)),
+            icon: Tooltip(
+                message: 'Menu',
+                child: Icon(Icons.menu, color: TaskWarriorColors.white)),
             onPressed: () => Scaffold.of(context).openDrawer(),
           ),
         ),
@@ -271,8 +305,9 @@ class _HomePageState extends State<HomePage> {
       body: DoubleBackToCloseApp(
         snackBar: const SnackBar(content: Text('Tap back again to exit')),
         child: Container(
-          color:
-              AppSettings.isDarkMode ? Palette.kToDark.shade200 : Colors.white,
+          color: AppSettings.isDarkMode
+              ? Palette.kToDark.shade200
+              : TaskWarriorColors.white,
           child: Padding(
             padding: const EdgeInsets.only(left: 8.0, right: 8.0),
             child: Column(
@@ -283,6 +318,10 @@ class _HomePageState extends State<HomePage> {
                     margin: const EdgeInsets.symmetric(
                         horizontal: 10, vertical: 10),
                     child: SearchBar(
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                          (TaskWarriorColors.kLightPrimaryBackgroundColor)),
+                      surfaceTintColor: MaterialStateProperty.all<Color>(
+                          (TaskWarriorColors.kLightPrimaryBackgroundColor)),
                       controller: storageWidget.searchController,
                       // shape:,
                       onChanged: (value) {
@@ -294,14 +333,18 @@ class _HomePageState extends State<HomePage> {
                           if (states.contains(MaterialState.focused)) {
                             return RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12.0),
-                              side: const BorderSide(
-                                  color: Colors.black, width: 2.0),
+                              side: BorderSide(
+                                color: TaskWarriorColors.black,
+                                width: 2.0,
+                              ),
                             );
                           } else {
                             return RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12.0),
-                              side: const BorderSide(
-                                  color: Colors.black, width: 1.5),
+                              side: BorderSide(
+                                color: TaskWarriorColors.black,
+                                width: 1.5,
+                              ),
                             );
                           }
                         },
@@ -311,8 +354,8 @@ class _HomePageState extends State<HomePage> {
                         (storageWidget.searchController.text.isNotEmpty)
                             ? IconButton(
                                 key: GlobalKey(),
-                                icon: const Icon(Icons.cancel,
-                                    color: Colors.black),
+                                icon: Icon(Icons.cancel,
+                                    color: TaskWarriorColors.black),
                                 onPressed: () {
                                   storageWidget.searchController.clear();
                                   storageWidget.search(
@@ -346,15 +389,16 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
         key: addKey,
         heroTag: "btn3",
-        backgroundColor:
-            AppSettings.isDarkMode ? Colors.white : Palette.kToDark.shade200,
+        backgroundColor: AppSettings.isDarkMode
+            ? TaskWarriorColors.kLightPrimaryBackgroundColor
+            : TaskWarriorColors.kprimaryBackgroundColor,
         child: Tooltip(
           message: 'Add Task',
           child: Icon(
             Icons.add,
             color: AppSettings.isDarkMode
-                ? Palette.kToDark.shade200
-                : Colors.white,
+                ? TaskWarriorColors.kprimaryBackgroundColor
+                : TaskWarriorColors.white,
           ),
         ),
         onPressed: () => showDialog(
@@ -376,7 +420,7 @@ class _HomePageState extends State<HomePage> {
         }),
       ),
       resizeToAvoidBottomInset: false,
-    );
+    ) : DetailRoute(uuid);
   }
 
   refresh() {

@@ -5,7 +5,10 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:taskwarrior/config/app_settings.dart';
+import 'package:taskwarrior/config/taskwarriorcolors.dart';
+import 'package:taskwarrior/config/taskwarriorfonts.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
+import 'package:taskwarrior/utility/utilities.dart';
 import 'package:taskwarrior/views/about/about.dart';
 import 'package:taskwarrior/views/profile/profile.dart';
 import 'package:taskwarrior/views/reports/reports_home.dart';
@@ -30,14 +33,23 @@ class _NavDrawerState extends State<NavDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: AppSettings.isDarkMode ? Colors.black : Colors.white,
+      backgroundColor: AppSettings.isDarkMode
+          ? TaskWarriorColors.kprimaryBackgroundColor
+          : TaskWarriorColors.kLightPrimaryBackgroundColor,
+      surfaceTintColor: AppSettings.isDarkMode
+          ? TaskWarriorColors.kprimaryBackgroundColor
+          : TaskWarriorColors.kLightPrimaryBackgroundColor,
       child: Container(
-        color: AppSettings.isDarkMode ? Colors.black : Colors.white,
+        color: AppSettings.isDarkMode
+            ? TaskWarriorColors.kprimaryBackgroundColor
+            : TaskWarriorColors.kLightPrimaryBackgroundColor,
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
             Container(
-              color: AppSettings.isDarkMode ? Colors.black : Colors.white,
+              color: AppSettings.isDarkMode
+                  ? TaskWarriorColors.kprimaryBackgroundColor
+                  : TaskWarriorColors.kLightPrimaryBackgroundColor,
               padding: const EdgeInsets.only(top: 50, left: 15, right: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -45,10 +57,11 @@ class _NavDrawerState extends State<NavDrawer> {
                   Text(
                     'Menu',
                     style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                      color:
-                          AppSettings.isDarkMode ? Colors.white : Colors.black,
+                      fontSize: TaskWarriorFonts.fontSizeExtraLarge,
+                      fontWeight: TaskWarriorFonts.bold,
+                      color: AppSettings.isDarkMode
+                          ? TaskWarriorColors.white
+                          : TaskWarriorColors.black,
                     ),
                   ),
                   Padding(
@@ -66,8 +79,8 @@ class _NavDrawerState extends State<NavDrawer> {
                             ? Icons.dark_mode
                             : Icons.light_mode,
                         color: AppSettings.isDarkMode
-                            ? Colors.white
-                            : Colors.black,
+                            ? TaskWarriorColors.white
+                            : TaskWarriorColors.black,
                         size: 15,
                       ),
                     ),
@@ -76,7 +89,9 @@ class _NavDrawerState extends State<NavDrawer> {
               ),
             ),
             Container(
-              color: AppSettings.isDarkMode ? Colors.black : Colors.white,
+              color: AppSettings.isDarkMode
+                  ? TaskWarriorColors.kprimaryBackgroundColor
+                  : TaskWarriorColors.kLightPrimaryBackgroundColor,
               height: 3.h,
             ),
             buildMenuItem(
@@ -119,8 +134,7 @@ class _NavDrawerState extends State<NavDrawer> {
               onTap: () async {
                 bool syncOnStart = false;
                 bool syncOnTaskCreate = false;
-                bool delaytask= false;
-
+                bool delaytask = false;
 
                 ///check if auto sync is on or off
                 final SharedPreferences prefs =
@@ -129,8 +143,7 @@ class _NavDrawerState extends State<NavDrawer> {
                   syncOnStart = prefs.getBool('sync-onStart') ?? false;
                   syncOnTaskCreate =
                       prefs.getBool('sync-OnTaskCreate') ?? false;
-                  delaytask =
-                      prefs.getBool('delaytask') ?? false;
+                  delaytask = prefs.getBool('delaytask') ?? false;
                 });
                 // print(syncOnStart);
                 // print(syncOnTaskCreate);
@@ -165,20 +178,26 @@ class _NavDrawerState extends State<NavDrawer> {
     return InkWell(
       onTap: onTap,
       child: Container(
-        color: AppSettings.isDarkMode ? Colors.black : Colors.white,
+        color: AppSettings.isDarkMode
+            ? TaskWarriorColors.kprimaryBackgroundColor
+            : TaskWarriorColors.kLightPrimaryBackgroundColor,
         padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 10),
         child: Row(
           children: [
             Icon(
               icon,
-              color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+              color: AppSettings.isDarkMode
+                  ? TaskWarriorColors.white
+                  : TaskWarriorColors.black,
             ),
             const SizedBox(width: 10),
             Text(
               text,
               style: TextStyle(
-                color: AppSettings.isDarkMode ? Colors.white : Colors.black,
-                fontSize: 18,
+                color: AppSettings.isDarkMode
+                    ? TaskWarriorColors.white
+                    : TaskWarriorColors.black,
+                fontSize: TaskWarriorFonts.fontSizeMedium,
               ),
             ),
           ],
@@ -193,18 +212,46 @@ Future<void> _showExitConfirmationDialog(BuildContext context) async {
     context: context,
     barrierDismissible: false, // Prevents closing the dialog by tapping outside
     builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text('Exit App'),
-        content: const Text('Are you sure you want to exit the app?'),
+      return Utils.showAlertDialog(
+        title: Text(
+          'Exit App',
+          style: TextStyle(
+            color: AppSettings.isDarkMode
+                ? TaskWarriorColors.white
+                : TaskWarriorColors.black,
+          ),
+        ),
+        content: Text(
+          'Are you sure you want to exit the app?',
+          style: TextStyle(
+            color: AppSettings.isDarkMode
+                ? TaskWarriorColors.white
+                : TaskWarriorColors.black,
+          ),
+        ),
         actions: <Widget>[
           TextButton(
-            child: const Text('Cancel'),
+            child: Text(
+              'Cancel',
+              style: TextStyle(
+                color: AppSettings.isDarkMode
+                    ? TaskWarriorColors.white
+                    : TaskWarriorColors.black,
+              ),
+            ),
             onPressed: () {
               Navigator.of(context).pop(); // Close the dialog
             },
           ),
           TextButton(
-            child: const Text('Exit'),
+            child: Text(
+              'Exit',
+              style: TextStyle(
+                color: AppSettings.isDarkMode
+                    ? TaskWarriorColors.white
+                    : TaskWarriorColors.black,
+              ),
+            ),
             onPressed: () {
               Navigator.of(context).pop(); // Close the dialog
               SystemNavigator.pop(); // Exit the app

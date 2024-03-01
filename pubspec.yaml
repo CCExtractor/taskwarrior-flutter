@@ -44,7 +44,7 @@ dependencies:
       url: https://github.com/bvoq/flutter-permission-handler.git
       path: permission_handler
       ref: master
-  shared_preferences: ^2.0.13
+  shared_preferences: ^2.2.2
   shared_preferences_web: ^2.0.3
   sizer: ^2.0.15
   syncfusion_flutter_charts: ^23.2.7
@@ -54,6 +54,8 @@ dependencies:
   url_launcher: ^6.1.14
   uuid: ^4.2.2
   crypto: ^3.0.1
+  flutter_platform_widgets: ^6.0.2
+  file_picker: ^6.1.1
 
 dev_dependencies:
   build_runner: ^2.1.11

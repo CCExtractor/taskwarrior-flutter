@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages, prefer_typing_uninitialized_variables
+// ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'dart:io';
 
@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/config/taskwarriorcolors.dart';
+import 'package:taskwarrior/config/taskwarriorfonts.dart';
 import 'package:taskwarrior/controller/reports_tour_controller.dart';
 import 'package:taskwarrior/model/json/task.dart';
 import 'package:taskwarrior/model/storage.dart';
@@ -15,9 +16,7 @@ import 'package:taskwarrior/views/reports/pages/burndown_daily.dart';
 import 'package:taskwarrior/views/reports/pages/burndown_monthly.dart';
 import 'package:taskwarrior/views/reports/pages/burndown_weekly.dart';
 import 'package:taskwarrior/views/reports/reports_tour.dart';
-import 'package:taskwarrior/widgets/pallete.dart';
 import 'package:taskwarrior/widgets/taskdetails/profiles_widget.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class ReportsHome extends StatefulWidget {
@@ -54,7 +53,7 @@ class _ReportsHomeState extends State<ReportsHome>
         weekly: weekly,
         monthly: monthly,
       ),
-      colorShadow: Colors.black,
+      colorShadow: TaskWarriorColors.black,
       paddingFocus: 10,
       opacityShadow: 0.8,
       hideSkip: true,
@@ -96,17 +95,15 @@ class _ReportsHomeState extends State<ReportsHome>
       storageWidget = StorageWidget.of(context);
       var currentProfile = ProfilesWidget.of(context).currentProfile;
 
-      getApplicationDocumentsDirectory().then((directory) {
-        setState(() {
-          baseDirectory = directory;
-          storage = Storage(
-            Directory('${baseDirectory!.path}/profiles/$currentProfile'),
-          );
-        });
-
-        ///fetch all data contains all the tasks
-        allData = storage.data.allData();
+      Directory baseDirectory = ProfilesWidget.of(context).getBaseDirectory();
+      setState(() {
+        storage = Storage(
+          Directory('${baseDirectory.path}/profiles/$currentProfile'),
+        );
       });
+
+      ///fetch all data contains all the tasks
+      allData = storage.data.allData();
     });
   }
 
@@ -117,10 +114,10 @@ class _ReportsHomeState extends State<ReportsHome>
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Palette.kToDark.shade200,
+        backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
         title: Text(
           'Reports',
-          style: GoogleFonts.poppins(color: Colors.white),
+          style: GoogleFonts.poppins(color: TaskWarriorColors.white),
         ),
         leading: GestureDetector(
           onTap: () {
@@ -128,7 +125,7 @@ class _ReportsHomeState extends State<ReportsHome>
           },
           child: Icon(
             Icons.chevron_left,
-            color: Appcolors.white,
+            color: TaskWarriorColors.white,
           ),
         ),
         bottom: PreferredSize(
@@ -136,13 +133,13 @@ class _ReportsHomeState extends State<ReportsHome>
               height * 0.1), // Adjust the preferred height as needed
           child: TabBar(
             controller: _tabController,
-            labelColor: Appcolors.white,
+            labelColor: TaskWarriorColors.white,
             labelStyle: GoogleFonts.poppins(
-              fontWeight: FontWeight.w500,
-              fontSize: 12,
+              fontWeight: TaskWarriorFonts.medium,
+              fontSize: TaskWarriorFonts.fontSizeSmall,
             ),
             unselectedLabelStyle: GoogleFonts.poppins(
-              fontWeight: FontWeight.w300,
+              fontWeight: TaskWarriorFonts.light,
             ),
             onTap: (value) {
               setState(() {
@@ -172,8 +169,9 @@ class _ReportsHomeState extends State<ReportsHome>
           ),
         ),
       ),
-      backgroundColor:
-          AppSettings.isDarkMode ? Palette.kToDark.shade200 : Colors.white,
+      backgroundColor: AppSettings.isDarkMode
+          ? TaskWarriorColors.kprimaryBackgroundColor
+          : TaskWarriorColors.white,
       body: allData.isEmpty
           ? Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -181,7 +179,9 @@ class _ReportsHomeState extends State<ReportsHome>
               children: [
                 Icon(
                   Icons.heart_broken,
-                  color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.white
+                      : TaskWarriorColors.black,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -189,11 +189,11 @@ class _ReportsHomeState extends State<ReportsHome>
                     Text(
                       'No Task found',
                       style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 12,
+                        fontWeight: TaskWarriorFonts.medium,
+                        fontSize: TaskWarriorFonts.fontSizeSmall,
                         color: AppSettings.isDarkMode
-                            ? Colors.white
-                            : Colors.black,
+                            ? TaskWarriorColors.white
+                            : TaskWarriorColors.black,
                       ),
                     ),
                   ],
@@ -204,11 +204,11 @@ class _ReportsHomeState extends State<ReportsHome>
                     Text(
                       'Add a task to see reports',
                       style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 12,
+                        fontWeight: TaskWarriorFonts.light,
+                        fontSize: TaskWarriorFonts.fontSizeSmall,
                         color: AppSettings.isDarkMode
-                            ? Colors.white
-                            : Colors.black,
+                            ? TaskWarriorColors.white
+                            : TaskWarriorColors.black,
                       ),
                     ),
                   ],

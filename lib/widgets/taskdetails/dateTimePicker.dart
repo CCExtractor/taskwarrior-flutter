@@ -6,6 +6,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 import 'package:taskwarrior/config/app_settings.dart';
+import 'package:taskwarrior/config/taskwarriorcolors.dart';
+import 'package:taskwarrior/config/taskwarriorfonts.dart';
 
 class DateTimeWidget extends StatelessWidget {
   const DateTimeWidget({
@@ -39,8 +41,8 @@ class DateTimeWidget extends StatelessWidget {
                     TextSpan(
                       text: '$name:'.padRight(13),
                       style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
+                        fontWeight: TaskWarriorFonts.bold,
+                        fontSize: TaskWarriorFonts.fontSizeMedium,
                         color: AppSettings.isDarkMode
                             ? Colors.white
                             : Colors.black,
@@ -49,7 +51,7 @@ class DateTimeWidget extends StatelessWidget {
                     TextSpan(
                       text: value ?? "not selected",
                       style: GoogleFonts.poppins(
-                        fontSize: 15,
+                        fontSize: TaskWarriorFonts.fontSizeMedium,
                         color: AppSettings.isDarkMode
                             ? Colors.white
                             : Colors.black,
@@ -100,9 +102,19 @@ class DateTimeWidget extends StatelessWidget {
               // Check if the selected time is in the past
               if (dateTime.isBefore(DateTime.now())) {
                 // Show a message that past times can't be set
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Can't set times in the past")),
-                );
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(
+                      "Can't set times in the past",
+                      style: TextStyle(
+                        color: AppSettings.isDarkMode
+                            ? TaskWarriorColors.kprimaryTextColor
+                            : TaskWarriorColors.kLightPrimaryTextColor,
+                      ),
+                    ),
+                    backgroundColor: AppSettings.isDarkMode
+                        ? TaskWarriorColors.ksecondaryBackgroundColor
+                        : TaskWarriorColors.kLightSecondaryBackgroundColor,
+                    duration: const Duration(seconds: 2)));
               } else {
                 // If the time is not in the past, proceed as usual
                 return callback(dateTime.toUtc());
@@ -148,8 +160,8 @@ class StartWidget extends StatelessWidget {
                     TextSpan(
                       text: '$name:'.padRight(13),
                       style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
+                        fontWeight: TaskWarriorFonts.bold,
+                        fontSize: TaskWarriorFonts.fontSizeMedium,
                         color: AppSettings.isDarkMode
                             ? Colors.white
                             : Colors.black,
@@ -158,7 +170,7 @@ class StartWidget extends StatelessWidget {
                     TextSpan(
                       text: value ?? "not selected",
                       style: GoogleFonts.poppins(
-                        fontSize: 15,
+                        fontSize: TaskWarriorFonts.fontSizeMedium,
                         color: AppSettings.isDarkMode
                             ? Colors.white
                             : Colors.black,
