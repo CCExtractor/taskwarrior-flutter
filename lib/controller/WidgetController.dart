@@ -7,8 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart'; // Import the GetX package
 import 'package:home_widget/home_widget.dart';
-// ignore: depend_on_referenced_packages
-import 'package:path_provider/path_provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:taskwarrior/views/home/home.dart';
 import 'package:taskwarrior/widgets/taskdetails/profiles_widget.dart';
@@ -36,7 +34,7 @@ class WidgetController extends GetxController {
       storageWidget = StorageWidget.of(context!); // Use Get.context from GetX
       var currentProfile = ProfilesWidget.of(context!).currentProfile;
 
-      baseDirectory = await getApplicationDocumentsDirectory();
+      baseDirectory = ProfilesWidget.of(context!).getBaseDirectory();
       storage =
           Storage(Directory('${baseDirectory!.path}/profiles/$currentProfile'));
 

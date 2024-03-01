@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/config/taskwarriorcolors.dart';
+import 'package:taskwarrior/config/taskwarriorfonts.dart';
 
 ///Common widget for Report chart indicator
 class CommonChartIndicator extends StatelessWidget {
@@ -20,9 +21,11 @@ class CommonChartIndicator extends StatelessWidget {
             Text(
               title,
               style: GoogleFonts.poppins(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-                color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                fontWeight: TaskWarriorFonts.bold,
+                fontSize: TaskWarriorFonts.fontSizeMedium,
+                color: AppSettings.isDarkMode
+                    ? TaskWarriorColors.white
+                    : TaskWarriorColors.black,
               ),
             )
           ],
@@ -38,14 +41,16 @@ class CommonChartIndicator extends StatelessWidget {
                 Container(
                   height: 20,
                   width: 80,
-                  decoration: BoxDecoration(color: Appcolors.green),
+                  decoration: BoxDecoration(color: TaskWarriorColors.green),
                 ),
                 Text(
                   "Completed",
                   style: GoogleFonts.poppins(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 16,
-                    color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                    fontWeight: TaskWarriorFonts.regular,
+                    fontSize: TaskWarriorFonts.fontSizeMedium,
+                    color: AppSettings.isDarkMode
+                        ? TaskWarriorColors.white
+                        : TaskWarriorColors.black,
                   ),
                 ),
               ],
@@ -55,14 +60,16 @@ class CommonChartIndicator extends StatelessWidget {
                 Container(
                   height: 20,
                   width: 80,
-                  decoration: BoxDecoration(color: Appcolors.yellow),
+                  decoration: BoxDecoration(color: TaskWarriorColors.yellow),
                 ),
                 Text(
                   "Pending",
                   style: GoogleFonts.poppins(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 16,
-                    color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                    fontWeight: TaskWarriorFonts.regular,
+                    fontSize: TaskWarriorFonts.fontSizeMedium,
+                    color: AppSettings.isDarkMode
+                        ? TaskWarriorColors.white
+                        : TaskWarriorColors.black,
                   ),
                 ),
               ],

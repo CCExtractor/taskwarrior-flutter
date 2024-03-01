@@ -10,6 +10,7 @@ import 'package:home_widget/home_widget.dart';
 import 'package:loggy/loggy.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/controller/WidgetController.dart';
@@ -52,17 +53,30 @@ Future main([List<String> args = const []]) async {
   }
   SystemChrome.setPreferredOrientations(
           [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
-      .then((value) => runApp(
-            FutureBuilder<Directory>(
-              future: getApplicationDocumentsDirectory(),
-              builder: (context, snapshot) => (snapshot.hasData)
-                  ? ProfilesWidget(
-                      baseDirectory: testingDirectory ?? snapshot.data!,
-                      child: const MyApp(),
-                    )
-                  : const AppSetupPlaceholder(),
-            ),
-          ));
+      .then((value) => runApp(FutureBuilder<List<Directory>>(
+          future: getDirectories(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return ProfilesWidget(
+                defaultDirectory: snapshot.data![0],
+                baseDirectory: testingDirectory ?? snapshot.data![1],
+                child: const MyApp(),
+              );
+            } else {
+              return const AppSetupPlaceholder();
+            }
+          })));
+  
+}
+
+Future<List<Directory>> getDirectories() async {
+  Directory defaultDirectory = await getApplicationDocumentsDirectory();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? directory = prefs.getString('baseDirectory');
+  Directory baseDirectory =
+      (directory != null) ? Directory(directory) : defaultDirectory;
+  return [defaultDirectory, baseDirectory];
+
 }
 
 Future init() async {

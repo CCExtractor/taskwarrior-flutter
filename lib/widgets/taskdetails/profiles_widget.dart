@@ -15,10 +15,12 @@ import 'package:taskwarrior/widgets/taskw.dart';
 class ProfilesWidget extends StatefulWidget {
   const ProfilesWidget({
     Key? key,
+    required this.defaultDirectory,
     required this.baseDirectory,
     required this.child,
   }) : super(key: key);
 
+  final Directory defaultDirectory;
   final Directory baseDirectory;
   final Widget child;
 
@@ -31,14 +33,16 @@ class ProfilesWidget extends StatefulWidget {
 }
 
 class _ProfilesWidgetState extends State<ProfilesWidget> {
+  late Directory baseDirectory;
   late Map<String, String?> profilesMap;
   late String currentProfile;
 
-  Profiles get _profiles => Profiles(widget.baseDirectory);
+  Profiles get _profiles => Profiles(baseDirectory);
 
   @override
   void initState() {
     super.initState();
+    baseDirectory = widget.baseDirectory;
     _checkProfiles();
     profilesMap = _profiles.profilesMap();
     currentProfile = _profiles.getCurrentProfile()!;
@@ -53,6 +57,20 @@ class _ProfilesWidgetState extends State<ProfilesWidget> {
         .containsKey(_profiles.getCurrentProfile())) {
       _profiles.setCurrentProfile(_profiles.profilesMap().keys.first);
     }
+  }
+
+  Directory getDefaultDirectory() {
+    return widget.defaultDirectory;
+  }
+
+  Directory getBaseDirectory() {
+    return baseDirectory;
+  }
+
+  void setBaseDirectory(Directory newBaseDirectory) {
+    baseDirectory = newBaseDirectory;
+    profilesMap = _profiles.profilesMap();
+    setState(() {});
   }
 
   void addProfile() {
@@ -94,6 +112,9 @@ class _ProfilesWidgetState extends State<ProfilesWidget> {
   @override
   Widget build(BuildContext context) {
     return InheritedProfiles(
+      getDefaultDirectory: getDefaultDirectory,
+      getBaseDirectory: getBaseDirectory,
+      setBaseDirectory: setBaseDirectory,
       addProfile: addProfile,
       copyConfigToNewProfile: copyConfigToNewProfile,
       deleteProfile: deleteProfile,
@@ -105,7 +126,7 @@ class _ProfilesWidgetState extends State<ProfilesWidget> {
       setState: setState,
       child: StorageWidget(
         profile: Directory(
-          '${widget.baseDirectory.path}/profiles/$currentProfile',
+          '${baseDirectory.path}/profiles/$currentProfile',
         ),
         child: widget.child,
       ),
@@ -116,6 +137,9 @@ class _ProfilesWidgetState extends State<ProfilesWidget> {
 class InheritedProfiles extends InheritedModel<String> {
   const InheritedProfiles({
     super.key,
+    required this.getDefaultDirectory,
+    required this.getBaseDirectory,
+    required this.setBaseDirectory,
     required this.addProfile,
     required this.copyConfigToNewProfile,
     required this.deleteProfile,
@@ -128,6 +152,9 @@ class InheritedProfiles extends InheritedModel<String> {
     required child,
   }) : super(child: child);
 
+  final Directory Function() getDefaultDirectory;
+  final Directory Function() getBaseDirectory;
+  final void Function(Directory) setBaseDirectory;
   final Function() addProfile;
   final Function(String) copyConfigToNewProfile;
   final Function(String) deleteProfile;
