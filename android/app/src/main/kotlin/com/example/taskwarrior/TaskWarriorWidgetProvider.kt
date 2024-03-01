@@ -38,7 +38,7 @@ class TaskWarriorWidgetProvider : AppWidgetProvider() {
 						flags = Intent.	FLAG_ACTIVITY_NEW_TASK
                 		context?.startActivity(this)
 					}
-					HomeWidgetLaunchIntent.getActivity(context, MainActivity::class.java, Uri.parse("TaskWarrior://taskView?taskId=$uuid"))
+					// HomeWidgetLaunchIntent.getActivity(context, MainActivity::class.java, Uri.parse("TaskWarrior://taskView?taskId=$uuid"))
 				}
 		}
 		super.onReceive(context, intent)
