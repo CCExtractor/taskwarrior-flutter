@@ -3,7 +3,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -12,9 +11,11 @@ import 'package:taskwarrior/config/taskwarriorcolors.dart';
 import 'package:taskwarrior/config/taskwarriorfonts.dart';
 import 'package:taskwarrior/model/json.dart';
 import 'package:taskwarrior/model/storage/storage_widget.dart';
+import 'package:taskwarrior/services/notification_services.dart';
 import 'package:taskwarrior/services/task_details.dart';
 import 'package:taskwarrior/services/task_list_tem.dart';
 import 'package:taskwarrior/widgets/taskfunctions/modify.dart';
+
 import 'pallete.dart';
 
 class TasksBuilder extends StatefulWidget {
@@ -191,13 +192,15 @@ class _TasksBuilderState extends State<TasksBuilder> {
                                       DateTime? dtb = task.due;
                                       dtb =
                                           dtb!.add(const Duration(minutes: 1));
-                                      final FlutterLocalNotificationsPlugin
-                                          flutterLocalNotificationsPlugin =
-                                          FlutterLocalNotificationsPlugin();
-                                      flutterLocalNotificationsPlugin.cancel(
-                                          dtb.day * 100 +
-                                              dtb.hour * 10 +
-                                              dtb.minute);
+                                      NotificationService notificationService =
+                                          NotificationService();
+                                      //Task ID is set to null when creating the notification id.
+                                      int notificationId = notificationService
+                                          .calculateNotificationId(task.due!,
+                                              task.description, null);
+                                      notificationService
+                                          .cancelNotification(notificationId);
+
                                       if (kDebugMode) {
                                         print("Task due is $dtb");
                                         print(dtb.day * 100 +
@@ -224,13 +227,17 @@ class _TasksBuilderState extends State<TasksBuilder> {
                                       DateTime? dtb = task.due;
                                       dtb =
                                           dtb!.add(const Duration(minutes: 1));
-                                      final FlutterLocalNotificationsPlugin
-                                          flutterLocalNotificationsPlugin =
-                                          FlutterLocalNotificationsPlugin();
-                                      flutterLocalNotificationsPlugin.cancel(
-                                          dtb.day * 100 +
-                                              dtb.hour * 10 +
-                                              dtb.minute);
+
+                                      //Task ID is set to null when creating the notification id.
+                                      NotificationService notificationService =
+                                          NotificationService();
+
+                                      int notificationId = notificationService
+                                          .calculateNotificationId(task.due!,
+                                              task.description, null);
+                                      notificationService
+                                          .cancelNotification(notificationId);
+
                                       if (kDebugMode) {
                                         print("Task due is $dtb");
                                         print(dtb.day * 100 +
