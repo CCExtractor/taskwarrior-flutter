@@ -154,13 +154,20 @@ class Data {
 
     if (task.status == 'pending' && task.due != null) {
       int notificationid = notificationService.calculateNotificationId(
-          task.due!, task.description, task.id);
+          task.due!, task.description, false, task.entry);
       notificationService.cancelNotification(notificationid);
       notificationService.sendNotification(
-          task.due!, task.description, task.id);
+          task.due!, task.description, false, task.entry);
+      if (task.wait != null) {
+        int waitNotificationId = notificationService.calculateNotificationId(
+            task.wait!, task.description, true, task.entry);
+        notificationService.cancelNotification(waitNotificationId);
+        notificationService.sendNotification(
+            task.wait!, task.description, true, task.entry);
+      }
     } else if (task.due != null) {
       int notificationid = notificationService.calculateNotificationId(
-          task.due!, task.description, task.id);
+          task.due!, task.description, false, task.entry);
 
       notificationService.cancelNotification(notificationid);
     }

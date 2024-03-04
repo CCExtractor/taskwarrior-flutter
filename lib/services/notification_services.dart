@@ -35,9 +35,10 @@ class NotificationService {
   }
 
   // Function to create a unique notification ID
-  int calculateNotificationId(
-      DateTime scheduledTime, String taskname, int? taskid) {
-    String combinedString = '${scheduledTime.toIso8601String()}$taskname';
+  int calculateNotificationId(DateTime scheduledTime, String taskname,
+      bool isWait, DateTime entryTime) {
+    String combinedString =
+        '${entryTime.toIso8601String().substring(0, 19)}$taskname';
 
     // Calculate SHA-256 hash
     var sha2561 = sha256.convert(utf8.encode(combinedString));
@@ -45,14 +46,15 @@ class NotificationService {
     // Convert the first 8 characters of the hash to an integer
     int notificationId =
         int.parse(sha2561.toString().substring(0, 8), radix: 16) % 2147483647;
-    if (taskid != null) {
-      notificationId = (notificationId + taskid) % 2147483647;
+    if (isWait) {
+      notificationId = (notificationId + 2) % 2147483647;
     }
 
     return notificationId;
   }
 
-  void sendNotification(DateTime dtb, String taskname, int? taskid) async {
+  void sendNotification(
+      DateTime dtb, String taskname, bool isWait, DateTime entryTime) async {
     DateTime dateTime = DateTime.now();
     tz.initializeTimeZones();
     if (kDebugMode) {
@@ -90,13 +92,16 @@ class NotificationService {
     );
 
     // Generate a unique notification ID based on the scheduled time and task name
-    int notificationId = calculateNotificationId(dtb, taskname, taskid);
+    int notificationId =
+        calculateNotificationId(dtb, taskname, isWait, entryTime);
 
     await _flutterLocalNotificationsPlugin
         .zonedSchedule(
             notificationId,
             'Task Warrior Reminder',
-            'Hey! Your task of $taskname is still pending',
+            isWait
+                ? "Hey! Don't forget your task of $taskname"
+                : 'Hey! Your task of $taskname is still pending',
             scheduledAt,
             notificationDetails,
             uiLocalNotificationDateInterpretation:

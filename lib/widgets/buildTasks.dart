@@ -192,14 +192,8 @@ class _TasksBuilderState extends State<TasksBuilder> {
                                       DateTime? dtb = task.due;
                                       dtb =
                                           dtb!.add(const Duration(minutes: 1));
-                                      NotificationService notificationService =
-                                          NotificationService();
-                                      //Task ID is set to null when creating the notification id.
-                                      int notificationId = notificationService
-                                          .calculateNotificationId(task.due!,
-                                              task.description, null);
-                                      notificationService
-                                          .cancelNotification(notificationId);
+
+                                      cancelNotification(task);
 
                                       if (kDebugMode) {
                                         print("Task due is $dtb");
@@ -229,14 +223,7 @@ class _TasksBuilderState extends State<TasksBuilder> {
                                           dtb!.add(const Duration(minutes: 1));
 
                                       //Task ID is set to null when creating the notification id.
-                                      NotificationService notificationService =
-                                          NotificationService();
-
-                                      int notificationId = notificationService
-                                          .calculateNotificationId(task.due!,
-                                              task.description, null);
-                                      notificationService
-                                          .cancelNotification(notificationId);
+                                      cancelNotification(task);
 
                                       if (kDebugMode) {
                                         print("Task due is $dtb");
@@ -300,5 +287,20 @@ class _TasksBuilderState extends State<TasksBuilder> {
                           ),
                 ],
               ));
+  }
+
+  void cancelNotification(Task task) {
+    //Task ID is set to null when creating the notification id.
+    NotificationService notificationService = NotificationService();
+
+    int notificationId = notificationService.calculateNotificationId(
+        task.due!, task.description, false, task.entry);
+    notificationService.cancelNotification(notificationId);
+
+    if (task.wait != null) {
+      notificationId = notificationService.calculateNotificationId(
+          task.wait!, task.description, true, task.entry);
+      notificationService.cancelNotification(notificationId);
+    }
   }
 }
