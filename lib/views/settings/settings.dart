@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:path/path.dart' as path;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:file_picker/file_picker.dart';
+import "package:file_picker/file_picker.dart";
 import 'package:taskwarrior/config/app_settings.dart';
 import 'package:taskwarrior/config/taskwarriorcolors.dart';
 import 'package:taskwarrior/config/taskwarriorfonts.dart';
@@ -20,10 +20,12 @@ class SettingsPage extends StatefulWidget {
     required this.isSyncOnStartActivel,
     required this.isSyncOnTaskCreateActivel,
     required this.delaytask,
+    required this.change24hr,
   });
   bool isSyncOnStartActivel;
   bool isSyncOnTaskCreateActivel;
   bool delaytask;
+  bool change24hr;
 
   @override
   _SettingsPageState createState() => _SettingsPageState();
@@ -373,7 +375,39 @@ class _SettingsPageState extends State<SettingsPage> {
                       ),
                     ],
                   ),
-                )
+                ),
+                const Divider(),
+                ListTile(
+                  title: Text(
+                    'Enable 24HR formte',
+                    style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.bold,
+                      fontSize: TaskWarriorFonts.fontSizeMedium,
+                      color: AppSettings.isDarkMode
+                          ? TaskWarriorColors.white
+                          : TaskWarriorColors.black,
+                    ),
+                  ),
+                  subtitle: Text(
+                    'Switch to Right to convert in 24hr formate',
+                    style: GoogleFonts.poppins(
+                      color: TaskWarriorColors.grey,
+                      fontSize: TaskWarriorFonts.fontSizeSmall,
+                    ),
+                  ),
+                  trailing: Switch(
+                    value: widget.change24hr,
+                    onChanged: (bool value) async {
+                      setState(() {
+                        widget.change24hr = value;
+                      });
+
+                      final SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      await prefs.setBool('24hourformate', value);
+                    },
+                  ),
+                ),
               ],
             ),
     );

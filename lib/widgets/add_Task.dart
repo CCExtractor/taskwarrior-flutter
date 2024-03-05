@@ -30,10 +30,21 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   final tagcontroller = TextEditingController();
   List<String> tags = [];
   bool inThePast = false;
-
+  bool change24hr = false;
   @override
   void initState() {
     super.initState();
+    checkto24hr();
+  }
+
+  Future<void> checkto24hr() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      change24hr = prefs.getBool(
+            '24hourformate',
+          ) ??
+          false;
+    });
   }
 
   @override
@@ -287,7 +298,11 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                                     onSurface: TaskWarriorColors.black,
                                   ),
                           ),
-                          child: child!,
+                          child: MediaQuery(
+                              data: MediaQuery.of(context).copyWith(
+                                alwaysUse24HourFormat: change24hr,
+                              ),
+                              child: child!),
                         );
                       },
                       context: context,
