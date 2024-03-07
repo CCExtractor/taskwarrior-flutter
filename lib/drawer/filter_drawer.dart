@@ -198,6 +198,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     const Divider(
                       color: Color.fromARGB(0, 48, 46, 46),
@@ -242,6 +243,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                 ),
                 //height: 30,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     const Divider(
                       color: Color.fromARGB(0, 48, 46, 46),
