@@ -93,7 +93,7 @@ class ProjectsColumn extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
                     "All Projects",
