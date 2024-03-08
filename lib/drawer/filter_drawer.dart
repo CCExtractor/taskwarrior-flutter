@@ -263,26 +263,41 @@ class _FilterDrawerState extends State<FilterDrawer> {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Wrap(
-                        spacing: 8,
-                        runSpacing: 4,
-                        children: [
-                          for (var sort in [
-                            'Created',
-                            'Modified',
-                            'Start Time',
-                            'Due till',
-                            'Priority',
-                            'Project',
-                            'Tags',
-                            'Urgency',
-                          ])
-                            ChoiceChip(
+                      child: Container(
+                        height: 100,
+                        decoration: BoxDecoration(
+                          color: (AppSettings.isDarkMode
+                                ? TaskWarriorColors.kLightSecondaryTextColor
+                                : TaskWarriorColors.kprimaryTextColor),
+                          borderRadius: BorderRadius.circular(8),
+                          border:
+                              Border.all(color: TaskWarriorColors.borderColor),
+                        ),
+                        child: GridView.builder(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 8,
+                            mainAxisSpacing: 4,
+                          ),
+
+                          itemCount:
+                              8, // Replace with the actual number of items
+                          itemBuilder: (context, index) {
+                            final sort = [
+                              'Created',
+                              'Modified',
+                              'Start Time',
+                              'Due till',
+                              'Priority',
+                              'Project',
+                              'Tags',
+                              'Urgency'
+                            ][index];
+                            return ChoiceChip(
                               label:
                                   (storageWidget.selectedSort.startsWith(sort))
-                                      ? Text(
-                                          storageWidget.selectedSort,
-                                        )
+                                      ? Text(storageWidget.selectedSort)
                                       : Text(sort),
                               selected: false,
                               onSelected: (_) {
@@ -296,15 +311,17 @@ class _FilterDrawerState extends State<FilterDrawer> {
                                 }
                               },
                               labelStyle: GoogleFonts.poppins(
-                                  color: AppSettings.isDarkMode
-                                      ? TaskWarriorColors.black
-                                      : TaskWarriorColors.white),
+                                color: AppSettings.isDarkMode
+                                    ? TaskWarriorColors.black
+                                    : TaskWarriorColors.white,
+                              ),
                               backgroundColor: AppSettings.isDarkMode
                                   ? TaskWarriorColors
                                       .kLightSecondaryBackgroundColor
                                   : TaskWarriorColors.ksecondaryBackgroundColor,
-                            ),
-                        ],
+                            );
+                          },
+                        ),
                       ),
                     ),
                     const Divider(
