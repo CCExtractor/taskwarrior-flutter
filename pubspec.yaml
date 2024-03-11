@@ -38,12 +38,12 @@ dependencies:
   loggy: ^2.0.1+1
   package_info_plus: ^4.0.2
   pem: ^2.0.1
-  # permission_handler: ^10.2.0
-  permission_handler:
-    git:
-      url: https://github.com/bvoq/flutter-permission-handler.git
-      path: permission_handler
-      ref: master
+  permission_handler: ^10.2.0
+  # permission_handler:
+  #   git:
+  #     url: https://github.com/bvoq/flutter-permission-handler.git
+  #     path: permission_handler
+  #     ref: master
   shared_preferences: ^2.2.2
   shared_preferences_web: ^2.0.3
   sizer: ^2.0.15
