@@ -327,6 +327,7 @@ class _HomePageState extends State<HomePage> {
                       onChanged: (value) {
                         storageWidget.search(value);
                       },
+                      autoFocus: true,
 
                       shape: MaterialStateProperty.resolveWith<OutlinedBorder?>(
                         (Set<MaterialState> states) {
