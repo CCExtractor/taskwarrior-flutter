@@ -18,10 +18,12 @@ class SettingsPage extends StatefulWidget {
   SettingsPage({
     super.key,
     required this.isSyncOnStartActivel,
+    required this.isJsonSyncActivel,
     required this.isSyncOnTaskCreateActivel,
     required this.delaytask,
     required this.change24hr,
   });
+  bool isJsonSyncActivel;
   bool isSyncOnStartActivel;
   bool isSyncOnTaskCreateActivel;
   bool delaytask;
@@ -81,9 +83,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
       ),
-      backgroundColor: AppSettings.isDarkMode
-          ? TaskWarriorColors.kprimaryBackgroundColor
-          : TaskWarriorColors.white,
+      backgroundColor: AppSettings.isDarkMode ? TaskWarriorColors.kprimaryBackgroundColor : TaskWarriorColors.white,
       body: (isMovingDirectory)
           ? Center(
               child: Column(
@@ -98,9 +98,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   style: GoogleFonts.poppins(
                     fontWeight: FontWeight.bold,
                     fontSize: TaskWarriorFonts.fontSizeMedium,
-                    color: AppSettings.isDarkMode
-                        ? TaskWarriorColors.white
-                        : TaskWarriorColors.black,
+                    color: AppSettings.isDarkMode ? TaskWarriorColors.white : TaskWarriorColors.black,
                   ),
                 )
               ],
@@ -113,9 +111,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     style: GoogleFonts.poppins(
                       fontWeight: FontWeight.bold,
                       fontSize: TaskWarriorFonts.fontSizeMedium,
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.white
-                          : TaskWarriorColors.black,
+                      color: AppSettings.isDarkMode ? TaskWarriorColors.white : TaskWarriorColors.black,
                     ),
                   ),
                   subtitle: Text(
@@ -132,8 +128,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         widget.isSyncOnStartActivel = value;
                       });
 
-                      final SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
+                      final SharedPreferences prefs = await SharedPreferences.getInstance();
                       await prefs.setBool('sync-onStart', value);
                     },
                   ),
@@ -145,9 +140,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     style: GoogleFonts.poppins(
                       fontWeight: FontWeight.bold,
                       fontSize: TaskWarriorFonts.fontSizeMedium,
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.white
-                          : TaskWarriorColors.black,
+                      color: AppSettings.isDarkMode ? TaskWarriorColors.white : TaskWarriorColors.black,
                     ),
                   ),
                   subtitle: Text(
@@ -164,8 +157,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         widget.isSyncOnTaskCreateActivel = value;
                       });
 
-                      final SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
+                      final SharedPreferences prefs = await SharedPreferences.getInstance();
                       await prefs.setBool('sync-OnTaskCreate', value);
                     },
                   ),
@@ -177,9 +169,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     style: GoogleFonts.poppins(
                       fontWeight: FontWeight.bold,
                       fontSize: TaskWarriorFonts.fontSizeMedium,
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.white
-                          : TaskWarriorColors.black,
+                      color: AppSettings.isDarkMode ? TaskWarriorColors.white : TaskWarriorColors.black,
                     ),
                   ),
                   subtitle: Text(
@@ -196,8 +186,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         widget.delaytask = value;
                       });
 
-                      final SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
+                      final SharedPreferences prefs = await SharedPreferences.getInstance();
                       await prefs.setBool('delaytask', value);
                     },
                   ),
@@ -209,9 +198,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     style: GoogleFonts.poppins(
                       fontWeight: FontWeight.bold,
                       fontSize: TaskWarriorFonts.fontSizeMedium,
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.white
-                          : TaskWarriorColors.black,
+                      color: AppSettings.isDarkMode ? TaskWarriorColors.white : TaskWarriorColors.black,
                     ),
                   ),
                   subtitle: Column(
@@ -233,32 +220,25 @@ class _SettingsPageState extends State<SettingsPage> {
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all<Color>(
                                 AppSettings.isDarkMode
-                                    ? TaskWarriorColors
-                                        .ksecondaryBackgroundColor
-                                    : TaskWarriorColors
-                                        .kLightSecondaryBackgroundColor,
+                                    ? TaskWarriorColors.ksecondaryBackgroundColor
+                                    : TaskWarriorColors.kLightSecondaryBackgroundColor,
                               ),
                             ),
                             onPressed: () {
                               if (getBaseDirectory() == "Default") {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content: Text(
-                                          'Already default',
-                                          style: TextStyle(
-                                            color: AppSettings.isDarkMode
-                                                ? TaskWarriorColors
-                                                    .kprimaryTextColor
-                                                : TaskWarriorColors
-                                                    .kLightPrimaryTextColor,
-                                          ),
-                                        ),
-                                        backgroundColor: AppSettings.isDarkMode
-                                            ? TaskWarriorColors
-                                                .ksecondaryBackgroundColor
-                                            : TaskWarriorColors
-                                                .kLightSecondaryBackgroundColor,
-                                        duration: const Duration(seconds: 2)));
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                    content: Text(
+                                      'Already default',
+                                      style: TextStyle(
+                                        color: AppSettings.isDarkMode
+                                            ? TaskWarriorColors.kprimaryTextColor
+                                            : TaskWarriorColors.kLightPrimaryTextColor,
+                                      ),
+                                    ),
+                                    backgroundColor: AppSettings.isDarkMode
+                                        ? TaskWarriorColors.ksecondaryBackgroundColor
+                                        : TaskWarriorColors.kLightSecondaryBackgroundColor,
+                                    duration: const Duration(seconds: 2)));
                               } else {
                                 showDialog(
                                   context: context,
@@ -268,8 +248,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                         'Reset to default',
                                         style: GoogleFonts.poppins(
                                           fontWeight: FontWeight.bold,
-                                          fontSize:
-                                              TaskWarriorFonts.fontSizeMedium,
+                                          fontSize: TaskWarriorFonts.fontSizeMedium,
                                           color: AppSettings.isDarkMode
                                               ? TaskWarriorColors.white
                                               : TaskWarriorColors.black,
@@ -279,8 +258,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                         "Are you sure you want to reset the directory to the default?",
                                         style: GoogleFonts.poppins(
                                           color: TaskWarriorColors.grey,
-                                          fontSize:
-                                              TaskWarriorFonts.fontSizeMedium,
+                                          fontSize: TaskWarriorFonts.fontSizeMedium,
                                         ),
                                       ),
                                       actions: [
@@ -302,23 +280,13 @@ class _SettingsPageState extends State<SettingsPage> {
                                             Navigator.pop(context);
                                             isMovingDirectory = true;
                                             setState(() {});
-                                            InheritedProfiles profilesWidget =
-                                                ProfilesWidget.of(context);
-                                            Directory source = profilesWidget
-                                                .getBaseDirectory();
-                                            Directory destination =
-                                                profilesWidget
-                                                    .getDefaultDirectory();
-                                            moveDirectory(source.path,
-                                                    destination.path)
-                                                .then((value) async {
-                                              profilesWidget.setBaseDirectory(
-                                                  destination);
-                                              SharedPreferences prefs =
-                                                  await SharedPreferences
-                                                      .getInstance();
-                                              await prefs
-                                                  .remove('baseDirectory');
+                                            InheritedProfiles profilesWidget = ProfilesWidget.of(context);
+                                            Directory source = profilesWidget.getBaseDirectory();
+                                            Directory destination = profilesWidget.getDefaultDirectory();
+                                            moveDirectory(source.path, destination.path).then((value) async {
+                                              profilesWidget.setBaseDirectory(destination);
+                                              SharedPreferences prefs = await SharedPreferences.getInstance();
+                                              await prefs.remove('baseDirectory');
                                               isMovingDirectory = false;
                                               setState(() {});
                                             });
@@ -341,9 +309,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             child: Text(
                               'Reset to default',
                               style: TextStyle(
-                                color: AppSettings.isDarkMode
-                                    ? TaskWarriorColors.white
-                                    : TaskWarriorColors.deepPurple,
+                                color: AppSettings.isDarkMode ? TaskWarriorColors.white : TaskWarriorColors.deepPurple,
                               ),
                             ),
                           ),
@@ -353,10 +319,8 @@ class _SettingsPageState extends State<SettingsPage> {
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all<Color>(
                                 AppSettings.isDarkMode
-                                    ? TaskWarriorColors
-                                        .ksecondaryBackgroundColor
-                                    : TaskWarriorColors
-                                        .kLightSecondaryBackgroundColor,
+                                    ? TaskWarriorColors.ksecondaryBackgroundColor
+                                    : TaskWarriorColors.kLightSecondaryBackgroundColor,
                               ),
                             ),
                             onPressed: () {
@@ -365,9 +329,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             child: Text(
                               'Change directory',
                               style: TextStyle(
-                                color: AppSettings.isDarkMode
-                                    ? TaskWarriorColors.white
-                                    : TaskWarriorColors.deepPurple,
+                                color: AppSettings.isDarkMode ? TaskWarriorColors.white : TaskWarriorColors.deepPurple,
                               ),
                             ),
                           ),
@@ -379,17 +341,15 @@ class _SettingsPageState extends State<SettingsPage> {
                 const Divider(),
                 ListTile(
                   title: Text(
-                    'Enable 24HR formte',
+                    'Enable 24HR format',
                     style: GoogleFonts.poppins(
                       fontWeight: FontWeight.bold,
                       fontSize: TaskWarriorFonts.fontSizeMedium,
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.white
-                          : TaskWarriorColors.black,
+                      color: AppSettings.isDarkMode ? TaskWarriorColors.white : TaskWarriorColors.black,
                     ),
                   ),
                   subtitle: Text(
-                    'Switch to Right to convert in 24hr formate',
+                    'Switch to Right to convert in 24hr format',
                     style: GoogleFonts.poppins(
                       color: TaskWarriorColors.grey,
                       fontSize: TaskWarriorFonts.fontSizeSmall,
@@ -402,9 +362,37 @@ class _SettingsPageState extends State<SettingsPage> {
                         widget.change24hr = value;
                       });
 
-                      final SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
+                      final SharedPreferences prefs = await SharedPreferences.getInstance();
                       await prefs.setBool('24hourformate', value);
+                    },
+                  ),
+                ),
+                const Divider(),
+                ListTile(
+                  title: Text(
+                    'Sync JSON Files',
+                    style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.bold,
+                      fontSize: TaskWarriorFonts.fontSizeMedium,
+                      color: AppSettings.isDarkMode ? TaskWarriorColors.white : TaskWarriorColors.black,
+                    ),
+                  ),
+                  subtitle: Text(
+                    'Automatically sync data on app startup',
+                    style: GoogleFonts.poppins(
+                      color: TaskWarriorColors.grey,
+                      fontSize: TaskWarriorFonts.fontSizeSmall,
+                    ),
+                  ),
+                  trailing: Switch(
+                    value: widget.isSyncOnStartActivel,
+                    onChanged: (bool value) async {
+                      setState(() {
+                        widget.isJsonSyncActivel = value;
+                      });
+
+                      final SharedPreferences prefs = await SharedPreferences.getInstance();
+                      await prefs.setBool('json-sync', value);
                     },
                   ),
                 ),
@@ -440,9 +428,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     style: GoogleFonts.poppins(
                       fontWeight: FontWeight.bold,
                       fontSize: TaskWarriorFonts.fontSizeMedium,
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.white
-                          : TaskWarriorColors.black,
+                      color: AppSettings.isDarkMode ? TaskWarriorColors.white : TaskWarriorColors.black,
                     ),
                   ),
                   content: Text(
@@ -464,9 +450,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       child: Text(
                         'OK',
                         style: GoogleFonts.poppins(
-                          color: AppSettings.isDarkMode
-                              ? TaskWarriorColors.white
-                              : TaskWarriorColors.black,
+                          color: AppSettings.isDarkMode ? TaskWarriorColors.white : TaskWarriorColors.black,
                         ),
                       ),
                     )
@@ -499,8 +483,7 @@ class _SettingsPageState extends State<SettingsPage> {
     return "success";
   }
 
-  Future<void> moveDirectoryRecurse(
-      String fromDirectory, String toDirectory) async {
+  Future<void> moveDirectoryRecurse(String fromDirectory, String toDirectory) async {
     Directory fromDir = Directory(fromDirectory);
     Directory toDir = Directory(toDirectory);
 
@@ -512,15 +495,13 @@ class _SettingsPageState extends State<SettingsPage> {
       if (entity is File) {
         // If it's a file, move it to the toDirectory
         File file = entity;
-        String newPath = path.join(
-            toDirectory, path.relative(file.path, from: fromDirectory));
+        String newPath = path.join(toDirectory, path.relative(file.path, from: fromDirectory));
         await File(newPath).writeAsBytes(await file.readAsBytes());
         await file.delete();
       } else if (entity is Directory) {
         // If it's a directory, create it in the toDirectory and recursively move its contents
         Directory dir = entity;
-        String newPath = path.join(
-            toDirectory, path.relative(dir.path, from: fromDirectory));
+        String newPath = path.join(toDirectory, path.relative(dir.path, from: fromDirectory));
         Directory newDir = Directory(newPath);
         await newDir.create(recursive: true);
         await moveDirectoryRecurse(dir.path, newPath);
