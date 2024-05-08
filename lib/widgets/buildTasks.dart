@@ -175,7 +175,7 @@ class _TasksBuilderState extends State<TasksBuilder> {
               )
             : ListView(
                 controller: scrollController,
-                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
+                padding: const EdgeInsets.only(top: 4, left: 2, right: 2, bottom: 80),
                 children: [
                   for (var task in widget.taskData)
                     widget.pendingFilter
