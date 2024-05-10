@@ -379,7 +379,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 const Divider(),
                 ListTile(
                   title: Text(
-                    'Enable 24HR formte',
+                    'Enable 24HR format',
                     style: GoogleFonts.poppins(
                       fontWeight: FontWeight.bold,
                       fontSize: TaskWarriorFonts.fontSizeMedium,
@@ -389,7 +389,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
                   subtitle: Text(
-                    'Switch to Right to convert in 24hr formate',
+                    'Switch to Right to convert in 24hr format',
                     style: GoogleFonts.poppins(
                       color: TaskWarriorColors.grey,
                       fontSize: TaskWarriorFonts.fontSizeSmall,
