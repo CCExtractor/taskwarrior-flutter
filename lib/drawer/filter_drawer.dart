@@ -141,20 +141,14 @@ class _FilterDrawerState extends State<FilterDrawer> {
                           style: GoogleFonts.poppins(
                             fontWeight: TaskWarriorFonts.bold,
                             fontSize: TaskWarriorFonts.fontSizeMedium,
-                            color: AppSettings.isDarkMode
-                                ? TaskWarriorColors.white
-                                : TaskWarriorColors.black,
+                            color: AppSettings.isDarkMode ? TaskWarriorColors.white : TaskWarriorColors.black,
                           ),
                         ),
                         TextSpan(
-                          text: widget.filters.pendingFilter
-                              ? 'pending'
-                              : 'completed',
+                          text: widget.filters.pendingFilter ? 'pending' : 'completed',
                           style: GoogleFonts.poppins(
                             fontSize: TaskWarriorFonts.fontSizeMedium,
-                            color: AppSettings.isDarkMode
-                                ? TaskWarriorColors.white
-                                : TaskWarriorColors.black,
+                            color: AppSettings.isDarkMode ? TaskWarriorColors.white : TaskWarriorColors.black,
                           ),
                         ),
                       ],
@@ -164,6 +158,32 @@ class _FilterDrawerState extends State<FilterDrawer> {
                   textColor: AppSettings.isDarkMode
                       ? TaskWarriorColors.kprimaryTextColor
                       : TaskWarriorColors.kLightSecondaryTextColor,
+                ),
+              ),
+              const Divider(
+                color: Color.fromARGB(0, 48, 46, 46),
+              ),
+              const Divider(
+                color: Color.fromARGB(0, 48, 46, 46),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  color: tileColor,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: TaskWarriorColors.borderColor),
+                ),
+                child: GestureDetector(
+                  onTap: 
+                    widget.filters.toggleWaitingFilter,
+                  child: Text(
+                    'Waiting',
+                    style: GoogleFonts.poppins(
+                        color: (AppSettings.isDarkMode
+                            ? TaskWarriorColors.kprimaryTextColor
+                            : TaskWarriorColors.kLightSecondaryTextColor),
+                        //
+                        fontSize: TaskWarriorFonts.fontSizeLarge),
+                  ),
                 ),
               ),
               const Divider(
@@ -280,30 +300,25 @@ class _FilterDrawerState extends State<FilterDrawer> {
                             'Urgency',
                           ])
                             ChoiceChip(
-                              label:
-                                  (storageWidget.selectedSort.startsWith(sort))
-                                      ? Text(
-                                          storageWidget.selectedSort,
-                                        )
-                                      : Text(sort),
+                              label: (storageWidget.selectedSort.startsWith(sort))
+                                  ? Text(
+                                      storageWidget.selectedSort,
+                                    )
+                                  : Text(sort),
                               selected: false,
                               onSelected: (_) {
                                 if (storageWidget.selectedSort == '$sort+') {
                                   storageWidget.selectSort('$sort-');
-                                } else if (storageWidget.selectedSort ==
-                                    '$sort-') {
+                                } else if (storageWidget.selectedSort == '$sort-') {
                                   storageWidget.selectSort(sort);
                                 } else {
                                   storageWidget.selectSort('$sort+');
                                 }
                               },
                               labelStyle: GoogleFonts.poppins(
-                                  color: AppSettings.isDarkMode
-                                      ? TaskWarriorColors.black
-                                      : TaskWarriorColors.white),
+                                  color: AppSettings.isDarkMode ? TaskWarriorColors.black : TaskWarriorColors.white),
                               backgroundColor: AppSettings.isDarkMode
-                                  ? TaskWarriorColors
-                                      .kLightSecondaryBackgroundColor
+                                  ? TaskWarriorColors.kLightSecondaryBackgroundColor
                                   : TaskWarriorColors.ksecondaryBackgroundColor,
                             ),
                         ],
@@ -321,11 +336,9 @@ class _FilterDrawerState extends State<FilterDrawer> {
                               : TaskWarriorColors.ksecondaryBackgroundColor),
                       child: TextButton(
                           onPressed: () {
-                            if (storageWidget.selectedSort.endsWith('+') ||
-                                storageWidget.selectedSort.endsWith('-')) {
+                            if (storageWidget.selectedSort.endsWith('+') || storageWidget.selectedSort.endsWith('-')) {
                               storageWidget.selectSort(
-                                  storageWidget.selectedSort.substring(0,
-                                      storageWidget.selectedSort.length - 1));
+                                  storageWidget.selectedSort.substring(0, storageWidget.selectedSort.length - 1));
                             }
                           },
                           child: Text(

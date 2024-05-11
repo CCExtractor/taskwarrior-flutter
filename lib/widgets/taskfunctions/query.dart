@@ -45,6 +45,7 @@ class Query {
   }
 
   void toggleWaitingFilter() {
+    print("toggle waiting called");
     _waitingFilter.writeAsStringSync(
       json.encode(!getWaitingFilter()),
     );

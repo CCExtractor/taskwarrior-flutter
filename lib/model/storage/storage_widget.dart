@@ -203,6 +203,7 @@ class _StorageWidgetState extends State<StorageWidget> {
   }
 
   void toggleWaitingFilter() {
+    print("toggle waiting called in storage widget");
     Query(storage.tabs.tab()).toggleWaitingFilter();
     waitingFilter = Query(storage.tabs.tab()).getWaitingFilter();
     _refreshTasks();
