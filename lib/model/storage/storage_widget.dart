@@ -56,6 +56,7 @@ class StorageWidget extends StatefulWidget {
 class _StorageWidgetState extends State<StorageWidget> {
   late Storage storage;
   late bool pendingFilter;
+  late bool waitingFilter;
   late String projectFilter;
   late bool tagUnion;
   late String selectedSort;
@@ -89,6 +90,7 @@ class _StorageWidgetState extends State<StorageWidget> {
 
   void _profileSet() {
     pendingFilter = Query(storage.tabs.tab()).getPendingFilter();
+    waitingFilter = Query(storage.tabs.tab()).getWaitingFilter();
     projectFilter = Query(storage.tabs.tab()).projectFilter();
     tagUnion = Query(storage.tabs.tab()).tagUnion();
     selectedSort = Query(storage.tabs.tab()).getSelectedSort();
@@ -103,12 +105,14 @@ class _StorageWidgetState extends State<StorageWidget> {
 
   void _refreshTasks() {
     if (pendingFilter) {
-      queriedTasks = storage.data
-          .pendingData()
-          .where((task) => task.status == 'pending')
-          .toList();
+      queriedTasks = storage.data.pendingData().where((task) => task.status == 'pending').toList();
     } else {
       queriedTasks = storage.data.completedData();
+    }
+
+    if (waitingFilter) {
+      var currentTime = DateTime.now();
+      queriedTasks = queriedTasks.where((task) => task.wait != null && task.wait!.isAfter(currentTime)).toList();
     }
 
     if (projectFilter.isNotEmpty) {
@@ -127,13 +131,11 @@ class _StorageWidgetState extends State<StorageWidget> {
         if (selectedTags.isEmpty) {
           return true;
         }
-        return selectedTags.any((tag) => (tag.startsWith('+'))
-            ? tags.contains(tag.substring(1))
-            : !tags.contains(tag.substring(1)));
+        return selectedTags
+            .any((tag) => (tag.startsWith('+')) ? tags.contains(tag.substring(1)) : !tags.contains(tag.substring(1)));
       } else {
-        return selectedTags.every((tag) => (tag.startsWith('+'))
-            ? tags.contains(tag.substring(1))
-            : !tags.contains(tag.substring(1)));
+        return selectedTags
+            .every((tag) => (tag.startsWith('+')) ? tags.contains(tag.substring(1)) : !tags.contains(tag.substring(1)));
       }
     }).toList();
 
@@ -154,8 +156,7 @@ class _StorageWidgetState extends State<StorageWidget> {
       searchedTasks = searchedTasks
           .where((task) =>
               task.description.contains(searchTerm) ||
-              (task.annotations?.asList() ?? []).any(
-                  (annotation) => annotation.description.contains(searchTerm)))
+              (task.annotations?.asList() ?? []).any((annotation) => annotation.description.contains(searchTerm)))
           .toList();
     }
     pendingTags = _pendingTags();
@@ -197,6 +198,13 @@ class _StorageWidgetState extends State<StorageWidget> {
   void togglePendingFilter() {
     Query(storage.tabs.tab()).togglePendingFilter();
     pendingFilter = Query(storage.tabs.tab()).getPendingFilter();
+    _refreshTasks();
+    setState(() {});
+  }
+
+  void toggleWaitingFilter() {
+    Query(storage.tabs.tab()).toggleWaitingFilter();
+    waitingFilter = Query(storage.tabs.tab()).getWaitingFilter();
     _refreshTasks();
     setState(() {});
   }
@@ -365,6 +373,7 @@ class _StorageWidgetState extends State<StorageWidget> {
   void setInitialTabIndex(int index) {
     storage.tabs.setInitialTabIndex(index);
     pendingFilter = Query(storage.tabs.tab()).getPendingFilter();
+    waitingFilter = Query(storage.tabs.tab()).getWaitingFilter();
     selectedSort = Query(storage.tabs.tab()).getSelectedSort();
     selectedTags = Query(storage.tabs.tab()).getSelectedTags();
     projectFilter = Query(storage.tabs.tab()).projectFilter();
@@ -388,6 +397,7 @@ class _StorageWidgetState extends State<StorageWidget> {
   void removeTab(int index) {
     storage.tabs.removeTab(index);
     pendingFilter = Query(storage.tabs.tab()).getPendingFilter();
+    waitingFilter = Query(storage.tabs.tab()).getWaitingFilter();
     selectedSort = Query(storage.tabs.tab()).getSelectedSort();
     selectedTags = Query(storage.tabs.tab()).getSelectedTags();
     _refreshTasks();
@@ -414,6 +424,7 @@ class _StorageWidgetState extends State<StorageWidget> {
       pendingTags: pendingTags,
       projects: projects,
       pendingFilter: pendingFilter,
+      waitingFilter: waitingFilter,
       projectFilter: projectFilter,
       tagUnion: tagUnion,
       selectedSort: selectedSort,
@@ -421,6 +432,7 @@ class _StorageWidgetState extends State<StorageWidget> {
       mergeTask: mergeTask,
       synchronize: synchronize,
       togglePendingFilter: togglePendingFilter,
+      toggleWaitingFilter: toggleWaitingFilter,
       toggleProjectFilter: toggleProjectFilter,
       toggleTagUnion: toggleTagUnion,
       selectSort: selectSort,
@@ -454,6 +466,7 @@ class InheritedStorage extends InheritedModel<String> {
     required this.pendingTags,
     required this.projects,
     required this.pendingFilter,
+    required this.waitingFilter,
     required this.projectFilter,
     required this.tagUnion,
     required this.selectedSort,
@@ -462,6 +475,7 @@ class InheritedStorage extends InheritedModel<String> {
     required this.mergeTask,
     required this.synchronize,
     required this.togglePendingFilter,
+    required this.toggleWaitingFilter,
     required this.toggleProjectFilter,
     required this.toggleTagUnion,
     required this.toggleTagFilter,
@@ -488,6 +502,7 @@ class InheritedStorage extends InheritedModel<String> {
   final Map<String, TagMetadata> pendingTags;
   final Map<String, ProjectNode> projects;
   final bool pendingFilter;
+  final bool waitingFilter;
   final String projectFilter;
   final bool tagUnion;
   final String selectedSort;
@@ -496,6 +511,7 @@ class InheritedStorage extends InheritedModel<String> {
   final void Function(Task) mergeTask;
   final void Function(BuildContext, bool) synchronize;
   final void Function() togglePendingFilter;
+  final void Function() toggleWaitingFilter;
   final void Function(String) toggleProjectFilter;
   final void Function() toggleTagUnion;
   final void Function(String) selectSort;
@@ -521,8 +537,7 @@ class InheritedStorage extends InheritedModel<String> {
   }
 
   @override
-  bool updateShouldNotifyDependent(
-      InheritedStorage oldWidget, Set<String> dependencies) {
+  bool updateShouldNotifyDependent(InheritedStorage oldWidget, Set<String> dependencies) {
     return true;
   }
 }

@@ -30,7 +30,9 @@ import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 class Filters {
   const Filters({
     required this.pendingFilter,
+    required this.waitingFilter,
     required this.togglePendingFilter,
+    required this.toggleWaitingFilter,
     required this.tagFilters,
     required this.projects,
     required this.projectFilter,
@@ -38,7 +40,9 @@ class Filters {
   });
 
   final bool pendingFilter;
+  final bool waitingFilter;
   final void Function() togglePendingFilter;
+  final void Function() toggleWaitingFilter;
   final TagFilters tagFilters;
   final dynamic projects;
   final String projectFilter;
@@ -189,6 +193,7 @@ class _HomePageState extends State<HomePage> {
     var taskData = storageWidget.tasks;
 
     var pendingFilter = storageWidget.pendingFilter;
+    var waitingFilter = storageWidget.waitingFilter;
     var pendingTags = storageWidget.pendingTags;
 
     var selectedTagsMap = {
@@ -215,7 +220,9 @@ class _HomePageState extends State<HomePage> {
     );
     var filters = Filters(
       pendingFilter: pendingFilter,
+      waitingFilter: waitingFilter,
       togglePendingFilter: storageWidget.togglePendingFilter,
+      toggleWaitingFilter: storageWidget.toggleWaitingFilter,
       projects: storageWidget.projects,
       projectFilter: storageWidget.projectFilter,
       toggleProjectFilter: storageWidget.toggleProjectFilter,
@@ -377,6 +384,7 @@ class _HomePageState extends State<HomePage> {
                         // darkmode: AppSettings.isDarkMode,
                         taskData: taskData,
                         pendingFilter: pendingFilter,
+                        waitingFilter: waitingFilter,
                         searchVisible: storageWidget.searchVisible),
                   ),
                 ),

@@ -8,11 +8,11 @@ import 'package:taskwarrior/model/json.dart';
 import 'package:taskwarrior/widgets/taskw.dart';
 
 class TaskListItem extends StatefulWidget {
-  const TaskListItem(this.task,
-      {this.pendingFilter = false, super.key, required this.darkmode});
+  const TaskListItem(this.task, {this.pendingFilter = false,this.waitingFilter = false, super.key, required this.darkmode});
 
   final Task task;
   final bool pendingFilter;
+  final bool waitingFilter;
   final bool darkmode;
 
   @override
@@ -52,9 +52,8 @@ class _TaskListItemState extends State<TaskListItem> {
         content: Text(
           'Task Updated',
           style: TextStyle(
-            color: AppSettings.isDarkMode
-                ? TaskWarriorColors.kprimaryTextColor
-                : TaskWarriorColors.kLightPrimaryTextColor,
+            color:
+                AppSettings.isDarkMode ? TaskWarriorColors.kprimaryTextColor : TaskWarriorColors.kLightPrimaryTextColor,
           ),
         ),
         backgroundColor: AppSettings.isDarkMode
@@ -67,9 +66,7 @@ class _TaskListItemState extends State<TaskListItem> {
   Widget build(BuildContext context) {
     MaterialColor colours = Colors.grey;
     var colour = widget.darkmode ? Colors.white : Colors.black;
-    var dimColor = widget.darkmode
-        ? const Color.fromARGB(137, 248, 248, 248)
-        : const Color.fromARGB(136, 17, 17, 17);
+    var dimColor = widget.darkmode ? const Color.fromARGB(137, 248, 248, 248) : const Color.fromARGB(136, 17, 17, 17);
 
     if (widget.task.priority == 'H') {
       colours = Colors.red;
@@ -84,11 +81,8 @@ class _TaskListItemState extends State<TaskListItem> {
       return Container(
         decoration: BoxDecoration(
           border: Border.all(
-            color: (widget.task.due != null &&
-                    isDueWithinOneDay(widget.task.due!) &&
-                    useDelayTask)
-                ? Colors
-                    .red // Set border color to red if due within 1 day and useDelayTask is true
+            color: (widget.task.due != null && isDueWithinOneDay(widget.task.due!) && useDelayTask)
+                ? Colors.red // Set border color to red if due within 1 day and useDelayTask is true
                 : dimColor, // Set default border color
           ),
           borderRadius: BorderRadius.circular(8.0),
@@ -118,9 +112,7 @@ class _TaskListItemState extends State<TaskListItem> {
                 ],
               ),
               Text(
-                (widget.task.annotations != null)
-                    ? ' [${widget.task.annotations!.length}]'
-                    : '',
+                (widget.task.annotations != null) ? ' [${widget.task.annotations!.length}]' : '',
                 style: GoogleFonts.poppins(
                   color: colour,
                 ),

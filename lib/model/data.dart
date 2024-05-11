@@ -79,6 +79,13 @@ class Data {
         .toList();
   }
 
+  List<Task> waitingData() {
+    var data = _allData().where((task) => task.status == 'waiting');
+    return [
+      for (var task in data) task.rebuild((b) => b..id = 0),
+    ];
+  }
+
   List<Task> allData() {
     var data = pendingData()..addAll(_completedData());
     return data;
