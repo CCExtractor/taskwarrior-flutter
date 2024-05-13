@@ -169,20 +169,24 @@ class _FilterDrawerState extends State<FilterDrawer> {
               Container(
                 decoration: BoxDecoration(
                   color: tileColor,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(2),
                   border: Border.all(color: TaskWarriorColors.borderColor),
                 ),
-                child: GestureDetector(
-                  onTap: 
-                    widget.filters.toggleWaitingFilter,
-                  child: Text(
-                    'Show waiting',
-                    style: GoogleFonts.poppins(
-                        color: (AppSettings.isDarkMode
-                            ? TaskWarriorColors.kprimaryTextColor
-                            : TaskWarriorColors.kLightSecondaryTextColor),
-                        //
-                        fontSize: TaskWarriorFonts.fontSizeLarge),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: GestureDetector(
+                    onTap: 
+                      widget.filters.toggleWaitingFilter,
+                    child: Text(
+                      widget.filters.waitingFilter ? 'Show waiting':
+                      'Hide waiting',
+                      style: GoogleFonts.poppins(
+                          color: (AppSettings.isDarkMode
+                              ? TaskWarriorColors.kprimaryTextColor
+                              : TaskWarriorColors.kLightSecondaryTextColor),
+                          //
+                          fontSize: TaskWarriorFonts.fontSizeMedium,),
+                    ),
                   ),
                 ),
               ),
