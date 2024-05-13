@@ -176,7 +176,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
                   onTap: 
                     widget.filters.toggleWaitingFilter,
                   child: Text(
-                    'Waiting',
+                    'Show waiting',
                     style: GoogleFonts.poppins(
                         color: (AppSettings.isDarkMode
                             ? TaskWarriorColors.kprimaryTextColor
