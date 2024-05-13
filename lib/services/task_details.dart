@@ -85,6 +85,7 @@ class _DetailRouteState extends State<DetailRoute> {
         }
         // ignore: use_build_context_synchronously
         return showDialog(
+          // ignore: use_build_context_synchronously
           context: context,
           builder: (context) {
             return Utils.showAlertDialog(
