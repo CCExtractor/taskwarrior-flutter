@@ -105,14 +105,22 @@ class _StorageWidgetState extends State<StorageWidget> {
 
   void _refreshTasks() {
     if (pendingFilter) {
-      queriedTasks = storage.data.pendingData().where((task) => task.status == 'pending').toList();
+      queriedTasks = storage.data
+          .pendingData()
+          .where((task) => task.status == 'pending')
+          .toList();
     } else {
       queriedTasks = storage.data.completedData();
     }
 
     if (waitingFilter) {
       var currentTime = DateTime.now();
-      queriedTasks = queriedTasks.where((task) => task.wait != null && task.wait!.isAfter(currentTime)).toList();
+      queriedTasks = queriedTasks
+          .where((task) =>
+              task.wait == null ||
+              task.wait!.isBefore(currentTime) ||
+              task.wait!.isAtSameMomentAs(currentTime))
+          .toList();
     }
 
     if (projectFilter.isNotEmpty) {
@@ -131,11 +139,13 @@ class _StorageWidgetState extends State<StorageWidget> {
         if (selectedTags.isEmpty) {
           return true;
         }
-        return selectedTags
-            .any((tag) => (tag.startsWith('+')) ? tags.contains(tag.substring(1)) : !tags.contains(tag.substring(1)));
+        return selectedTags.any((tag) => (tag.startsWith('+'))
+            ? tags.contains(tag.substring(1))
+            : !tags.contains(tag.substring(1)));
       } else {
-        return selectedTags
-            .every((tag) => (tag.startsWith('+')) ? tags.contains(tag.substring(1)) : !tags.contains(tag.substring(1)));
+        return selectedTags.every((tag) => (tag.startsWith('+'))
+            ? tags.contains(tag.substring(1))
+            : !tags.contains(tag.substring(1)));
       }
     }).toList();
 
@@ -156,7 +166,8 @@ class _StorageWidgetState extends State<StorageWidget> {
       searchedTasks = searchedTasks
           .where((task) =>
               task.description.contains(searchTerm) ||
-              (task.annotations?.asList() ?? []).any((annotation) => annotation.description.contains(searchTerm)))
+              (task.annotations?.asList() ?? []).any(
+                  (annotation) => annotation.description.contains(searchTerm)))
           .toList();
     }
     pendingTags = _pendingTags();
@@ -537,7 +548,8 @@ class InheritedStorage extends InheritedModel<String> {
   }
 
   @override
-  bool updateShouldNotifyDependent(InheritedStorage oldWidget, Set<String> dependencies) {
+  bool updateShouldNotifyDependent(
+      InheritedStorage oldWidget, Set<String> dependencies) {
     return true;
   }
 }
