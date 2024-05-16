@@ -8,6 +8,7 @@ class Query {
 
   File get _selectedSort => File('${_queryStorage.path}/selectedSort');
   File get _pendingFilter => File('${_queryStorage.path}/pendingFilter');
+  File get _waitingFilter => File('${_queryStorage.path}/waitingFilter');
   File get _projectFilter => File('${_queryStorage.path}/projectFilter');
   File get _tagUnion => File('${_queryStorage.path}/tagUnion');
   File get _selectedTags => File('${_queryStorage.path}/selectedTags');
@@ -41,6 +42,21 @@ class Query {
         ..writeAsStringSync('true');
     }
     return json.decode(_pendingFilter.readAsStringSync());
+  }
+
+  void toggleWaitingFilter() {
+    _waitingFilter.writeAsStringSync(
+      json.encode(!getWaitingFilter()),
+    );
+  }
+
+  bool getWaitingFilter() {
+    if (!_waitingFilter.existsSync()) {
+      _waitingFilter
+        ..createSync(recursive: true)
+        ..writeAsStringSync('true');
+    }
+    return json.decode(_waitingFilter.readAsStringSync());
   }
 
   void toggleProjectFilter(String project) {
@@ -91,8 +107,6 @@ class Query {
         ..createSync(recursive: true)
         ..writeAsStringSync(json.encode([]));
     }
-    return (json.decode(_selectedTags.readAsStringSync()) as List)
-        .cast<String>()
-        .toSet();
+    return (json.decode(_selectedTags.readAsStringSync()) as List).cast<String>().toSet();
   }
 }

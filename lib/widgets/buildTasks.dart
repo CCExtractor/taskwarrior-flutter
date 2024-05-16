@@ -23,10 +23,12 @@ class TasksBuilder extends StatefulWidget {
       {super.key,
       required this.taskData,
       required this.pendingFilter,
+      required this.waitingFilter,
       required this.searchVisible});
 
   final List<Task> taskData;
   final bool pendingFilter;
+  final bool waitingFilter;
   final bool searchVisible;
 
   @override
