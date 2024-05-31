@@ -72,7 +72,9 @@ class PemWidget extends StatelessWidget {
             height: 10,
           ),
           GestureDetector(
-            onTap: onTapCallBack(pem, storage),
+            onTap: () {
+              onTapCallBack(pem, storage);
+            },
             // onTap: () {
             //   manageTaskServerController.onTapPEMWidget(pem, storage);
             // },
@@ -98,7 +100,9 @@ class PemWidget extends StatelessWidget {
             // onLongPress: () {
             //   manageTaskServerController.onLongPressPEMWidget(pem, name);
             // },
-            onLongPress: onLongPressCallBack(pem, name),
+            onLongPress: () {
+              onLongPressCallBack(pem, name);
+            },
             // onLongPress: (widget.pem != 'server.cert' && name != null)
             //     ? () {
             //         widget.storage.guiPemFiles.removePemFile(widget.pem);

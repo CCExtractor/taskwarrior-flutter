@@ -19,8 +19,8 @@ class ManageTaskServerController extends GetxController {
   RxString profile = ''.obs;
   late Storage storage;
   late RxString alias;
-   Server? server;
-   Credentials? credentials;
+  Server? server;
+  Credentials? credentials;
   final TextEditingController taskrcContentController = TextEditingController();
   RxBool isTaskDServerActive = true.obs;
   RxBool hideKey = true.obs;
@@ -175,27 +175,25 @@ class ManageTaskServerController extends GetxController {
     }
   }
 
-  void onTapPEMWidget(String pem, Storage storagePem) {
-    (pem == 'server.cert')
-        ? () {
-            storagePem.guiPemFiles.removeServerCert();
-            Get.find<SplashController>().update();
-          }
-        : () async {
-            await setConfig(
-              storage: storagePem,
-              key: pem,
-            );
-            update();
-          };
+  void onTapPEMWidget(String pem, Storage storagePem) async {
+    if (pem == 'server.cert') {
+      storagePem.guiPemFiles.removeServerCert();
+      Get.find<SplashController>().update();
+    } else {
+      await setConfig(
+        storage: storagePem,
+        key: pem,
+      );
+      update();
+    }
   }
 
   void onLongPressPEMWidget(String pem, String? name) {
-    (pem != 'server.cert' && name != null)
-        ? () {
-            storage.guiPemFiles.removePemFile(pem);
-            update();
-          }
-        : null;
+    if (pem != 'server.cert' && name != null) {
+      storage.guiPemFiles.removePemFile(pem);
+      update();
+    } else {
+      null;
+    }
   }
 }
