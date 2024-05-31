@@ -16,11 +16,11 @@ import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 class ManageTaskServerController extends GetxController {
   final HomeController homeController = Get.find<HomeController>();
   final SplashController splashController = Get.find<SplashController>();
-  late RxString profile;
+  RxString profile = ''.obs;
   late Storage storage;
   late RxString alias;
-  late Server? server;
-  late Credentials? credentials;
+   Server? server;
+   Credentials? credentials;
   final TextEditingController taskrcContentController = TextEditingController();
   RxBool isTaskDServerActive = true.obs;
   RxBool hideKey = true.obs;

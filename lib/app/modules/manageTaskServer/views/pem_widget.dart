@@ -2,19 +2,21 @@ import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:pem/pem.dart';
 import 'package:taskwarrior/app/models/storage.dart';
+import 'package:taskwarrior/app/modules/manageTaskServer/controllers/manage_task_server_controller.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
 class PemWidget extends StatelessWidget {
-  const PemWidget(
-      {required this.storage,
-      required this.pem,
-      super.key,
-      required this.optionString,
-      required this.listTileTitle,
-      required this.onTapCallBack,
-      required this.onLongPressCallBack,
-      });
+  const PemWidget({
+    required this.storage,
+    required this.pem,
+    super.key,
+    required this.optionString,
+    required this.listTileTitle,
+    required this.onTapCallBack,
+    required this.onLongPressCallBack,
+    // required this.manageTaskServerController,
+  });
 
   final Storage storage;
   final String pem;
@@ -22,6 +24,7 @@ class PemWidget extends StatelessWidget {
   final String listTileTitle;
   final Function(String pem, Storage storagePem) onTapCallBack;
   final Function(String pem, String? name) onLongPressCallBack;
+  // final ManageTaskServerController manageTaskServerController;
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +72,10 @@ class PemWidget extends StatelessWidget {
             height: 10,
           ),
           GestureDetector(
-            onTap: onTapCallBack(pem , storage),
+            onTap: onTapCallBack(pem, storage),
+            // onTap: () {
+            //   manageTaskServerController.onTapPEMWidget(pem, storage);
+            // },
             // onTap: (pem == 'server.cert')
             //     ? () {
             //         widget.storage.guiPemFiles.removeServerCert();
@@ -89,7 +95,10 @@ class PemWidget extends StatelessWidget {
             //           () {},
             //         );
             //       },
-            onLongPress: onLongPressCallBack(pem , name),
+            // onLongPress: () {
+            //   manageTaskServerController.onLongPressPEMWidget(pem, name);
+            // },
+            onLongPress: onLongPressCallBack(pem, name),
             // onLongPress: (widget.pem != 'server.cert' && name != null)
             //     ? () {
             //         widget.storage.guiPemFiles.removePemFile(widget.pem);
