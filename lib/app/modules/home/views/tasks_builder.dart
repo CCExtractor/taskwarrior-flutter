@@ -23,7 +23,6 @@ class TasksBuilder extends StatelessWidget {
     required this.waitingFilter,
     required this.useDelayTask,
     required this.searchVisible,
-
   });
 
   final List<Task> taskData;
@@ -106,147 +105,159 @@ class TasksBuilder extends StatelessWidget {
     print(taskData);
     var storageWidget = Get.find<HomeController>();
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniStartFloat,
-      floatingActionButton: FloatingActionButton(
-        heroTag: "btn2",
-        onPressed: () {
-          // logic to scroll to top
-        },
-        backgroundColor: AppSettings.isDarkMode
-            ? TaskWarriorColors.kLightPrimaryBackgroundColor
-            : TaskWarriorColors.kprimaryBackgroundColor,
-        child: Icon(
-          Icons.arrow_upward,
-          color: AppSettings.isDarkMode
-              ? TaskWarriorColors.kprimaryBackgroundColor
-              : TaskWarriorColors.kLightPrimaryBackgroundColor,
+        floatingActionButtonLocation:
+            FloatingActionButtonLocation.miniStartFloat,
+        floatingActionButton: FloatingActionButton(
+          heroTag: "btn2",
+          onPressed: () {
+            // logic to scroll to top
+          },
+          backgroundColor: AppSettings.isDarkMode
+              ? TaskWarriorColors.kLightPrimaryBackgroundColor
+              : TaskWarriorColors.kprimaryBackgroundColor,
+          child: Icon(
+            Icons.arrow_upward,
+            color: AppSettings.isDarkMode
+                ? TaskWarriorColors.kprimaryBackgroundColor
+                : TaskWarriorColors.kLightPrimaryBackgroundColor,
+          ),
         ),
-      ),
-      backgroundColor: Colors.transparent,
-      body: Obx(()=>taskData.isEmpty
-          ? Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Center(
-                child: Text(
-                  (searchVisible)
-                      ? 'Search Not Found :('
-                      : 'Click on the bottom right button to start adding tasks',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontFamily: FontFamily.poppins,
-                      fontSize: TaskWarriorFonts.fontSizeLarge,
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.kLightPrimaryBackgroundColor
-                          : TaskWarriorColors.kprimaryBackgroundColor),
-                  // style: GoogleFonts.poppins(
-                  //   fontSize: TaskWarriorFonts.fontSizeLarge,
-                  //   color: AppSettings.isDarkMode
-                  //       ? TaskWarriorColors.kLightPrimaryBackgroundColor
-                  //       : TaskWarriorColors.kprimaryBackgroundColor,
-                  // ),
-                ),
-              ),
-            )
-          : ListView.builder(
-              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
-              itemCount: taskData.length,
-              itemBuilder: (context, index) {
-                var task = taskData[index];
-                return pendingFilter
-                    ? Slidable(
-                        key: ValueKey(task.uuid),
-                        startActionPane: ActionPane(
-                          motion: const BehindMotion(),
-                          children: [
-                            SlidableAction(
-                              onPressed: (context) {
-                                // Complete task without confirmation
-                                setStatus(context, 'completed', task.uuid);
-                                if (task.due != null) {
-                                  DateTime? dtb = task.due;
-                                  dtb = dtb!.add(const Duration(minutes: 1));
-                                  cancelNotification(task);
-                                }
-                              },
-                              icon: Icons.done,
-                              label: "COMPLETE",
-                              backgroundColor: TaskWarriorColors.green,
-                            ),
-                          ],
-                        ),
-                        endActionPane: ActionPane(
-                          motion: const DrawerMotion(),
-                          children: [
-                            SlidableAction(
-                              onPressed: (context) {
-                                // Delete task without confirmation
-                                setStatus(context, 'deleted', task.uuid);
-                                if (task.due != null) {
-                                  DateTime? dtb = task.due;
-                                  dtb = dtb!.add(const Duration(minutes: 1));
-                                  cancelNotification(task);
-                                }
-                              },
-                              icon: Icons.delete,
-                              label: "DELETE",
-                              backgroundColor: TaskWarriorColors.red,
-                            ),
-                          ],
-                        ),
-                        child: Card(
+        backgroundColor: Colors.transparent,
+        body: Obx(
+          () => taskData.isEmpty
+              ? Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Center(
+                    child: Text(
+                      (searchVisible)
+                          ? 'Search Not Found :('
+                          : 'Click on the bottom right button to start adding tasks',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontFamily: FontFamily.poppins,
+                          fontSize: TaskWarriorFonts.fontSizeLarge,
                           color: AppSettings.isDarkMode
-                              ? Palette.kToDark
-                              : TaskWarriorColors.white,
-                          child: InkWell(
-                            splashColor: AppSettings.isDarkMode
-                                ? TaskWarriorColors.black
-                                : TaskWarriorColors.borderColor,
-                            onTap: () {
-                              Get.toNamed(Routes.DETAIL_ROUTE,
-                                  arguments: ["uuid", task.uuid]);
-                            },
-                            // child: Text(task.entry.toString()),
-                            // onTap: () => Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //     builder: (context) => DetailRouteView(task.uuid),
-                            //   ),
-                            // ),
-                            child: TaskListItem(
-                              task,
-                              pendingFilter: pendingFilter,
-                              darkmode: AppSettings.isDarkMode,
-                              useDelayTask: useDelayTask, modify: Modify(
-      getTask: storageWidget.getTask,
-      mergeTask: storageWidget.mergeTask,
-      uuid: task.uuid,
-    ),
+                              ? TaskWarriorColors.kLightPrimaryBackgroundColor
+                              : TaskWarriorColors.kprimaryBackgroundColor),
+                      // style: GoogleFonts.poppins(
+                      //   fontSize: TaskWarriorFonts.fontSizeLarge,
+                      //   color: AppSettings.isDarkMode
+                      //       ? TaskWarriorColors.kLightPrimaryBackgroundColor
+                      //       : TaskWarriorColors.kprimaryBackgroundColor,
+                      // ),
+                    ),
+                  ),
+                )
+              : ListView.builder(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
+                  itemCount: taskData.length,
+                  itemBuilder: (context, index) {
+                    var task = taskData[index];
+                    return pendingFilter
+                        ? Slidable(
+                            key: ValueKey(task.uuid),
+                            startActionPane: ActionPane(
+                              motion: const BehindMotion(),
+                              children: [
+                                SlidableAction(
+                                  onPressed: (context) {
+                                    // Complete task without confirmation
+                                    setStatus(context, 'completed', task.uuid);
+                                    if (task.due != null) {
+                                      DateTime? dtb = task.due;
+                                      dtb =
+                                          dtb!.add(const Duration(minutes: 1));
+                                      cancelNotification(task);
+                                    }
+                                  },
+                                  icon: Icons.done,
+                                  label: "COMPLETE",
+                                  backgroundColor: TaskWarriorColors.green,
+                                ),
+                              ],
                             ),
-                          ),
-                        ),
-                      )
-                    : Card(
-                        color: AppSettings.isDarkMode
-                            ? Palette.kToDark
-                            : TaskWarriorColors.white,
-                        child: InkWell(
-                          splashColor: AppSettings.isDarkMode
-                              ? TaskWarriorColors.black
-                              : TaskWarriorColors.borderColor,
-                          onTap: () {
-                            Get.toNamed(Routes.DETAIL_ROUTE,
-                                arguments: ["uuid", task.uuid]);
-                          },
-                          child: Text(task.entry.toString()),
-                          // child: TaskListItem(
-                          //   task,
-                          //   pendingFilter: pendingFilter,
-                          //   darkmode: AppSettings.isDarkMode,
-                          // ),
-                        ),
-                      );
-              },
-            ),)
-    );
+                            endActionPane: ActionPane(
+                              motion: const DrawerMotion(),
+                              children: [
+                                SlidableAction(
+                                  onPressed: (context) {
+                                    // Delete task without confirmation
+                                    setStatus(context, 'deleted', task.uuid);
+                                    if (task.due != null) {
+                                      DateTime? dtb = task.due;
+                                      dtb =
+                                          dtb!.add(const Duration(minutes: 1));
+                                      cancelNotification(task);
+                                    }
+                                  },
+                                  icon: Icons.delete,
+                                  label: "DELETE",
+                                  backgroundColor: TaskWarriorColors.red,
+                                ),
+                              ],
+                            ),
+                            child: Card(
+                              color: AppSettings.isDarkMode
+                                  ? Palette.kToDark
+                                  : TaskWarriorColors.white,
+                              child: InkWell(
+                                splashColor: AppSettings.isDarkMode
+                                    ? TaskWarriorColors.black
+                                    : TaskWarriorColors.borderColor,
+                                onTap: () {
+                                  Get.toNamed(Routes.DETAIL_ROUTE,
+                                      arguments: ["uuid", task.uuid]);
+                                },
+                                // child: Text(task.entry.toString()),
+                                // onTap: () => Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //     builder: (context) => DetailRouteView(task.uuid),
+                                //   ),
+                                // ),
+                                child: TaskListItem(
+                                  task,
+                                  pendingFilter: pendingFilter,
+                                  darkmode: AppSettings.isDarkMode,
+                                  useDelayTask: useDelayTask,
+                                  modify: Modify(
+                                    getTask: storageWidget.getTask,
+                                    mergeTask: storageWidget.mergeTask,
+                                    uuid: task.uuid,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        : Card(
+                            color: AppSettings.isDarkMode
+                                ? Palette.kToDark
+                                : TaskWarriorColors.white,
+                            child: InkWell(
+                              splashColor: AppSettings.isDarkMode
+                                  ? TaskWarriorColors.black
+                                  : TaskWarriorColors.borderColor,
+                              onTap: () {
+                                Get.toNamed(Routes.DETAIL_ROUTE,
+                                    arguments: ["uuid", task.uuid]);
+                              },
+                              // child: Text(task.entry.toString()),
+                              child: TaskListItem(
+                                task,
+                                pendingFilter: pendingFilter,
+                                darkmode: AppSettings.isDarkMode,
+                                useDelayTask: useDelayTask,
+                                modify: Modify(
+                                  getTask: storageWidget.getTask,
+                                  mergeTask: storageWidget.mergeTask,
+                                  uuid: task.uuid,
+                                ),
+                              ),
+                            ),
+                          );
+                  },
+                ),
+        ));
   }
 }
