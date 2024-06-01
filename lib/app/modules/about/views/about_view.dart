@@ -191,8 +191,8 @@ class AboutView extends GetView<AboutController> {
                         }
                       },
                       icon: SvgPicture.asset(Assets.svg.github.path,
-                          width: 150,
-                          height: 150,
+                          width: 20,
+                          height: 20,
                           colorFilter: ColorFilter.mode(
                               AppSettings.isDarkMode
                                   ? TaskWarriorColors.black
@@ -229,8 +229,8 @@ class AboutView extends GetView<AboutController> {
                         }
                       },
                       icon: SvgPicture.asset("assets/svg/link.svg",
-                          width: 150,
-                          height: 150,
+                          width: 20,
+                          height: 20,
                           colorFilter: ColorFilter.mode(
                               AppSettings.isDarkMode
                                   ? TaskWarriorColors.black
