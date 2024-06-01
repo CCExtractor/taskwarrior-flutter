@@ -169,6 +169,7 @@ class SettingsView extends GetView<SettingsController> {
                           final SharedPreferences prefs =
                               await SharedPreferences.getInstance();
                           await prefs.setBool('delaytask', value);
+                          Get.find<HomeController>().useDelayTask.value = value;
                         },
                       ),
                     )),
