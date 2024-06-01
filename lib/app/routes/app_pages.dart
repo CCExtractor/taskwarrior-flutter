@@ -2,8 +2,7 @@ import 'package:get/get.dart';
 
 import '../modules/about/bindings/about_binding.dart';
 import '../modules/about/views/about_view.dart';
-import '../modules/checkOnboardingStatus/bindings/check_onboarding_status_binding.dart';
-import '../modules/checkOnboardingStatus/views/check_onboarding_status_view.dart';
+
 import '../modules/detailRoute/bindings/detail_route_binding.dart';
 import '../modules/detailRoute/views/detail_route_view.dart';
 import '../modules/home/bindings/home_binding.dart';
@@ -38,11 +37,6 @@ class AppPages {
       name: _Paths.ONBOARDING,
       page: () => const OnboardingView(),
       binding: OnboardingBinding(),
-    ),
-    GetPage(
-      name: _Paths.CHECK_ONBOARDING_STATUS,
-      page: () => const CheckOnboardingStatusView(),
-      binding: CheckOnboardingStatusBinding(),
     ),
     GetPage(
       name: _Paths.SPLASH,

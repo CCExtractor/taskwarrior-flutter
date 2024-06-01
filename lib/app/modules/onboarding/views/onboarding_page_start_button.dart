@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:taskwarrior/app/modules/home/views/home_view.dart';
 import 'package:taskwarrior/app/modules/onboarding/controllers/onboarding_controller.dart';
+import 'package:taskwarrior/app/routes/app_pages.dart';
 import 'package:taskwarrior/app/utils/constants/constants.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 
@@ -16,9 +17,11 @@ class OnboardingPageStartButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: () {
           controller.markOnboardingAsCompleted();
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => const HomeView()),
-              (Route<dynamic> route) => false);
+          // Navigator.of(context).pushAndRemoveUntil(
+          //   MaterialPageRoute(builder: (context) => const HomeView()),
+          //   (Route<dynamic> route) => false,
+          // );
+          Get.toNamed(Routes.HOME);
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: TaskWarriorColors.black,

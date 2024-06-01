@@ -4,6 +4,8 @@ import 'package:taskwarrior/app/modules/onboarding/controllers/onboarding_contro
 class OnboardingBinding extends Bindings {
   @override
   void dependencies() {
-    Get.find<OnboardingController>();
+    Get.put<OnboardingController>(
+      OnboardingController(),
+    );
   }
 }

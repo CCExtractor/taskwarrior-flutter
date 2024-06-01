@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taskwarrior/app/models/storage.dart';
+import 'package:taskwarrior/app/modules/home/views/home_view.dart';
 import 'package:taskwarrior/app/routes/app_pages.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/profiles.dart';
 
@@ -21,7 +22,7 @@ class SplashController extends GetxController {
       _checkProfiles();
       profilesMap.value = _profiles.profilesMap();
       currentProfile.value = _profiles.getCurrentProfile()!;
-      Get.toNamed(Routes.CHECK_ONBOARDING_STATUS);
+      sendToNextPage();
     });
   }
 
@@ -82,5 +83,22 @@ class SplashController extends GetxController {
 
   Storage getStorage(String profile) {
     return _profiles.getStorage(profile);
+  }
+
+  RxBool hasCompletedOnboarding = false.obs;
+
+  Future<void> checkOnboardingStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    hasCompletedOnboarding.value =
+        prefs.getBool('onboarding_completed') ?? false;
+  }
+
+  void sendToNextPage() async {
+    await checkOnboardingStatus();
+    if (hasCompletedOnboarding.value) {
+      Get.toNamed(Routes.HOME);
+    } else {
+      Get.toNamed(Routes.ONBOARDING);
+    }
   }
 }
