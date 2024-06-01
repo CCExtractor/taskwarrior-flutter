@@ -63,18 +63,77 @@ class DateTimeWidget extends StatelessWidget {
             ],
           ),
         ),
+        // onTap: () async {
+        //   var initialDate = DateFormat("E, M/d/y h:mm:ss a").parse(
+        //       value?.replaceAll(RegExp(r'\s+'), ' ') ??
+        //           DateFormat("E, M/d/y h:mm:ss a").format(DateTime.now()));
+
+        //   var date = await showDatePicker(
+        //     context: context,
+        //     initialDate: initialDate,
+        //     firstDate: DateTime
+        //         .now(), // sets the earliest selectable date to the current date. This prevents the user from selecting a date in the past.
+        //     lastDate: DateTime(2037, 12, 31), // < 2038-01-19T03:14:08.000Z
+        //   );
+        //   if (date != null) {
+        //     var time = await showTimePicker(
+        //       context: context,
+        //       initialTime: TimeOfDay.now(),
+        //     );
+        //     if (time != null) {
+        //       var dateTime = date.add(
+        //         Duration(
+        //           hours: time.hour,
+        //           minutes: time.minute,
+        //         ),
+        //       );
+        //       dateTime = dateTime.add(
+        //         Duration(
+        //           hours: time.hour - dateTime.hour,
+        //         ),
+        //       );
+        //       // Check if the selected time is in the past
+        //       if (dateTime.isBefore(DateTime.now())) {
+        //         // Show a message that past times can't be set
+        //         ScaffoldMessenger.of(context).showSnackBar(
+        //           SnackBar(
+        //             content: Text(
+        //               "Can't set times in the past",
+        //               style: TextStyle(
+        //                 color: AppSettings.isDarkMode
+        //                     ? TaskWarriorColors.kprimaryTextColor
+        //                     : TaskWarriorColors.kLightPrimaryTextColor,
+        //               ),
+        //             ),
+        //             backgroundColor: AppSettings.isDarkMode
+        //                 ? TaskWarriorColors.ksecondaryBackgroundColor
+        //                 : TaskWarriorColors.kLightSecondaryBackgroundColor,
+        //             duration: const Duration(seconds: 2),
+        //           ),
+        //         );
+        //       } else {
+        //         // If the time is not in the past, proceed as usual
+        //         return callback(dateTime.toUtc());
+        //       }
+        //     }
+        //   }
+        // },
         onTap: () async {
-          var initialDate = DateFormat("E, M/d/y h:mm:ss a").parse(
+          var parsedDate = DateFormat("E, M/d/y h:mm:ss a").parse(
               value?.replaceAll(RegExp(r'\s+'), ' ') ??
                   DateFormat("E, M/d/y h:mm:ss a").format(DateTime.now()));
+
+          var now = DateTime.now();
+          var initialDate = parsedDate.isBefore(now) ? now : parsedDate;
 
           var date = await showDatePicker(
             context: context,
             initialDate: initialDate,
-            firstDate: DateTime
-                .now(), // sets the earliest selectable date to the current date. This prevents the user from selecting a date in the past.
+            firstDate:
+                now,
             lastDate: DateTime(2037, 12, 31), // < 2038-01-19T03:14:08.000Z
           );
+
           if (date != null) {
             var time = await showTimePicker(
               context: context,
@@ -87,14 +146,10 @@ class DateTimeWidget extends StatelessWidget {
                   minutes: time.minute,
                 ),
               );
-              dateTime = dateTime.add(
-                Duration(
-                  hours: time.hour - dateTime.hour,
-                ),
-              );
-              // Check if the selected time is in the past
+
+
               if (dateTime.isBefore(DateTime.now())) {
-                // Show a message that past times can't be set
+
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
@@ -112,12 +167,13 @@ class DateTimeWidget extends StatelessWidget {
                   ),
                 );
               } else {
-                // If the time is not in the past, proceed as usual
+
                 return callback(dateTime.toUtc());
               }
             }
           }
         },
+
         onLongPress: () => callback(null),
       ),
     );
