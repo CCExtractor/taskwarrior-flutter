@@ -11,8 +11,10 @@ import 'package:taskwarrior/app/models/storage/client.dart';
 import 'package:taskwarrior/app/models/storage/set_config.dart';
 import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
 import 'package:taskwarrior/app/modules/manageTaskServer/views/pem_widget.dart';
-import 'package:taskwarrior/app/utils/constants/constants.dart';
+import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
+import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
+
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -112,7 +114,8 @@ class ManageTaskServerView extends GetView<ManageTaskServerController> {
                     .reduce(max);
 
                 // Dismiss the loading dialog
-                Navigator.of(context).pop();
+                // Navigator.of(context).pop();
+                Get.back();
 
                 // Show statistics in a dialog
                 await showDialog(
@@ -134,11 +137,11 @@ class ManageTaskServerView extends GetView<ManageTaskServerController> {
                               for (var key in header.keys.toList())
                                 Text(
                                   '${'$key:'.padRight(maxKeyLength + 1)} ${header[key]}',
-                                  style: const TextStyle(
-                                      // color: AppSettings.isDarkMode
-                                      //     ? TaskWarriorColors.white
-                                      //     : TaskWarriorColors.black,
-                                      ),
+                                  style: TextStyle(
+                                    color: AppSettings.isDarkMode
+                                        ? TaskWarriorColors.white
+                                        : TaskWarriorColors.black,
+                                  ),
                                 ),
                             ],
                           ),
@@ -148,15 +151,16 @@ class ManageTaskServerView extends GetView<ManageTaskServerController> {
                     actions: [
                       ElevatedButton(
                         onPressed: () {
-                          Navigator.of(context).pop();
+                          // Navigator.of(context).pop();
+                          Get.back();
                         },
-                        child: const Text(
+                        child: Text(
                           'Ok',
                           style: TextStyle(
-                              // color: AppSettings.isDarkMode
-                              //     ? TaskWarriorColors.white
-                              //     : TaskWarriorColors.black,
-                              ),
+                            color: AppSettings.isDarkMode
+                                ? TaskWarriorColors.white
+                                : TaskWarriorColors.black,
+                          ),
                         ),
                       ),
                     ],
@@ -164,7 +168,8 @@ class ManageTaskServerView extends GetView<ManageTaskServerController> {
                 );
               } on Exception catch (e, trace) {
                 // Dismiss the loading dialog
-                Navigator.of(context).pop();
+                // Navigator.of(context).pop();
+                Get.back();
 
                 //Displaying Error message.
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -172,15 +177,15 @@ class ManageTaskServerView extends GetView<ManageTaskServerController> {
                       trace.toString().startsWith("#0")
                           ? "Please set up your TaskServer."
                           : e.toString(),
-                      style: const TextStyle(
-                          // color: AppSettings.isDarkMode
-                          //     ? TaskWarriorColors.kprimaryTextColor
-                          //     : TaskWarriorColors.kLightPrimaryTextColor,
-                          ),
+                      style: TextStyle(
+                        color: AppSettings.isDarkMode
+                            ? TaskWarriorColors.kprimaryTextColor
+                            : TaskWarriorColors.kLightPrimaryTextColor,
+                      ),
                     ),
-                    // backgroundColor: AppSettings.isDarkMode
-                    //     ? TaskWarriorColors.ksecondaryBackgroundColor
-                    //     : TaskWarriorColors.kLightSecondaryBackgroundColor,
+                    backgroundColor: AppSettings.isDarkMode
+                        ? TaskWarriorColors.ksecondaryBackgroundColor
+                        : TaskWarriorColors.kLightSecondaryBackgroundColor,
                     duration: const Duration(seconds: 2)));
                 // Log the error and trace
                 logError(e, trace);
@@ -193,9 +198,9 @@ class ManageTaskServerView extends GetView<ManageTaskServerController> {
           color: TaskWarriorColors.white,
         ),
       ),
-      // backgroundColor: AppSettings.isDarkMode
-      //     ? TaskWarriorColors.kprimaryBackgroundColor
-      //     : TaskWarriorColors.kLightPrimaryBackgroundColor,
+      backgroundColor: AppSettings.isDarkMode
+          ? TaskWarriorColors.kprimaryBackgroundColor
+          : TaskWarriorColors.kLightPrimaryBackgroundColor,
       body: Padding(
         padding: const EdgeInsets.only(left: 20, right: 20),
         child: ListView(
@@ -211,13 +216,13 @@ class ManageTaskServerView extends GetView<ManageTaskServerController> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     "Configure TASKRC",
                     style: TextStyle(
-                        // color: AppSettings.isDarkMode
-                        //     ? TaskWarriorColors.white
-                        //     : TaskWarriorColors.black,
-                        ),
+                      color: AppSettings.isDarkMode
+                          ? TaskWarriorColors.white
+                          : TaskWarriorColors.black,
+                    ),
                   ),
                   const SizedBox(height: 10),
                   GestureDetector(
@@ -250,22 +255,22 @@ class ManageTaskServerView extends GetView<ManageTaskServerController> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         children: [
-                                          const Text(
+                                          Text(
                                             'Configure TaskRc',
                                             style: TextStyle(
                                               fontWeight: TaskWarriorFonts.bold,
-                                              // color: AppSettings.isDarkMode
-                                              //     ? TaskWarriorColors.white
-                                              //     : TaskWarriorColors.black,
+                                              color: AppSettings.isDarkMode
+                                                  ? TaskWarriorColors.white
+                                                  : TaskWarriorColors.black,
                                             ),
                                           ),
-                                          const Text(
+                                          Text(
                                             'Paste the taskrc content or select taskrc file',
                                             style: TextStyle(
-                                                // color: AppSettings.isDarkMode
-                                                //     ? TaskWarriorColors.white
-                                                //     : TaskWarriorColors.black,
-                                                ),
+                                              color: AppSettings.isDarkMode
+                                                  ? TaskWarriorColors.white
+                                                  : TaskWarriorColors.black,
+                                            ),
                                           ),
                                           const SizedBox(height: 16.0),
                                           Padding(
@@ -273,26 +278,23 @@ class ManageTaskServerView extends GetView<ManageTaskServerController> {
                                             child: SizedBox(
                                               height: Get.height * 0.15,
                                               child: TextField(
-                                                style: const TextStyle(
-                                                    // color:
-                                                    //     AppSettings.isDarkMode
-                                                    //         ? TaskWarriorColors
-                                                    //             .white
-                                                    //         : TaskWarriorColors
-                                                    //             .black
-                                                    ),
+                                                style: TextStyle(
+                                                    color:
+                                                        AppSettings.isDarkMode
+                                                            ? TaskWarriorColors
+                                                                .white
+                                                            : TaskWarriorColors
+                                                                .black),
                                                 controller: controller
                                                     .taskrcContentController,
                                                 maxLines: 8,
                                                 decoration: InputDecoration(
-                                                    counterStyle:
-                                                        const TextStyle(
-                                                            // color: AppSettings.isDarkMode
-                                                            //     ? TaskWarriorColors
-                                                            //         .white
-                                                            //     : TaskWarriorColors
-                                                            //         .black
-                                                            ),
+                                                    counterStyle: TextStyle(
+                                                        color: AppSettings.isDarkMode
+                                                            ? TaskWarriorColors
+                                                                .white
+                                                            : TaskWarriorColors
+                                                                .black),
                                                     suffixIconConstraints:
                                                         const BoxConstraints(
                                                       maxHeight: 24,
@@ -322,25 +324,25 @@ class ManageTaskServerView extends GetView<ManageTaskServerController> {
                                               ),
                                             ),
                                           ),
-                                          const Text(
+                                          Text(
                                             "Or",
                                             style: TextStyle(
-                                                // color: AppSettings.isDarkMode
-                                                //     ? TaskWarriorColors.white
-                                                //     : TaskWarriorColors.black,
-                                                ),
+                                              color: AppSettings.isDarkMode
+                                                  ? TaskWarriorColors.white
+                                                  : TaskWarriorColors.black,
+                                            ),
                                           ),
                                           FilledButton.tonal(
-                                            // style: ButtonStyle(
-                                            //     backgroundColor: AppSettings
-                                            //             .isDarkMode
-                                            //         ? MaterialStateProperty.all<
-                                            //                 Color>(
-                                            //             TaskWarriorColors.black)
-                                            //         : MaterialStateProperty.all<
-                                            //                 Color>(
-                                            //             TaskWarriorColors
-                                            //                 .white)),
+                                            style: ButtonStyle(
+                                                backgroundColor: AppSettings
+                                                        .isDarkMode
+                                                    ? WidgetStateProperty.all<
+                                                            Color>(
+                                                        TaskWarriorColors.black)
+                                                    : WidgetStateProperty.all<
+                                                            Color>(
+                                                        TaskWarriorColors
+                                                            .white)),
                                             onPressed: () async {
                                               await setConfig(
                                                 storage: controller.storage,
@@ -349,13 +351,13 @@ class ManageTaskServerView extends GetView<ManageTaskServerController> {
                                               setState(() {});
                                               Get.back();
                                             },
-                                            child: const Text(
+                                            child: Text(
                                               'Select TASKRC file',
                                               style: TextStyle(
-                                                  // color: AppSettings.isDarkMode
-                                                  //     ? TaskWarriorColors.white
-                                                  //     : TaskWarriorColors.black,
-                                                  ),
+                                                color: AppSettings.isDarkMode
+                                                    ? TaskWarriorColors.white
+                                                    : TaskWarriorColors.black,
+                                              ),
                                             ),
                                           ),
                                         ],
@@ -386,16 +388,16 @@ class ManageTaskServerView extends GetView<ManageTaskServerController> {
                             controller.taskrcContentController.text.isEmpty
                                 ? "Set TaskRc"
                                 : "Taskrc file is verified",
-                            style: const TextStyle(
-                                // color: AppSettings.isDarkMode
-                                //     ? TaskWarriorColors.white
-                                //     : TaskWarriorColors.black,
-                                ),
+                            style: TextStyle(
+                              color: AppSettings.isDarkMode
+                                  ? TaskWarriorColors.white
+                                  : TaskWarriorColors.black,
+                            ),
                           ),
                           Container(
                             height: 30,
                             width: 30,
-                            decoration:  BoxDecoration(
+                            decoration: BoxDecoration(
                               color: AppSettings.isDarkMode
                                   ? TaskWarriorColors
                                       .kLightSecondaryBackgroundColor
@@ -409,11 +411,11 @@ class ManageTaskServerView extends GetView<ManageTaskServerController> {
                                       Icons.check,
                                       color: TaskWarriorColors.green,
                                     )
-                                  : const Icon(
+                                  : Icon(
                                       Icons.chevron_right_rounded,
-                                      // color: AppSettings.isDarkMode
-                                      //     ? TaskWarriorColors.black
-                                      //     : TaskWarriorColors.white,
+                                      color: AppSettings.isDarkMode
+                                          ? TaskWarriorColors.black
+                                          : TaskWarriorColors.white,
                                     ),
                             ),
                           ),
@@ -437,13 +439,13 @@ class ManageTaskServerView extends GetView<ManageTaskServerController> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                           Text(
+                          Text(
                             "TaskD Server Info",
                             style: TextStyle(
-                                color: AppSettings.isDarkMode
-                                    ? TaskWarriorColors.white
-                                    : TaskWarriorColors.black,
-                                ),
+                              color: AppSettings.isDarkMode
+                                  ? TaskWarriorColors.white
+                                  : TaskWarriorColors.black,
+                            ),
                           ),
                           const SizedBox(height: 10),
                           GestureDetector(
@@ -464,26 +466,26 @@ class ManageTaskServerView extends GetView<ManageTaskServerController> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   controller.server == null
-                                      ?  Text(
+                                      ? Text(
                                           'Not Configured',
                                           style: TextStyle(
-                                              color: AppSettings.isDarkMode
-                                                  ? TaskWarriorColors.white
-                                                  : TaskWarriorColors.black,
-                                              ),
+                                            color: AppSettings.isDarkMode
+                                                ? TaskWarriorColors.white
+                                                : TaskWarriorColors.black,
+                                          ),
                                         )
                                       : Text(
                                           '${controller.server}',
-                                          style:  TextStyle(
-                                              color: AppSettings.isDarkMode
-                                                  ? TaskWarriorColors.white
-                                                  : TaskWarriorColors.black,
-                                              ),
+                                          style: TextStyle(
+                                            color: AppSettings.isDarkMode
+                                                ? TaskWarriorColors.white
+                                                : TaskWarriorColors.black,
+                                          ),
                                         ),
                                   Container(
                                     height: 30,
                                     width: 30,
-                                    decoration:  BoxDecoration(
+                                    decoration: BoxDecoration(
                                       color: AppSettings.isDarkMode
                                           ? TaskWarriorColors
                                               .kLightSecondaryBackgroundColor
@@ -497,7 +499,7 @@ class ManageTaskServerView extends GetView<ManageTaskServerController> {
                                               Icons.check,
                                               color: TaskWarriorColors.green,
                                             )
-                                          :  Icon(
+                                          : Icon(
                                               Icons.chevron_right_rounded,
                                               color: AppSettings.isDarkMode
                                                   ? TaskWarriorColors.black
@@ -521,13 +523,13 @@ class ManageTaskServerView extends GetView<ManageTaskServerController> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                           Text(
+                          Text(
                             "TaskD Server Credentials",
                             style: TextStyle(
-                                color: AppSettings.isDarkMode
-                                    ? TaskWarriorColors.white
-                                    : TaskWarriorColors.black,
-                                ),
+                              color: AppSettings.isDarkMode
+                                  ? TaskWarriorColors.white
+                                  : TaskWarriorColors.black,
+                            ),
                           ),
                           const SizedBox(height: 10),
                           GestureDetector(
@@ -547,13 +549,13 @@ class ManageTaskServerView extends GetView<ManageTaskServerController> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   controller.credentialsString == null
-                                      ? const Text(
+                                      ? Text(
                                           'Not Configured',
                                           style: TextStyle(
-                                              // color: AppSettings.isDarkMode
-                                              //     ? TaskWarriorColors.white
-                                              //     : TaskWarriorColors.black,
-                                              ),
+                                            color: AppSettings.isDarkMode
+                                                ? TaskWarriorColors.white
+                                                : TaskWarriorColors.black,
+                                          ),
                                         )
                                       : SizedBox(
                                           width: MediaQuery.of(context)
@@ -565,11 +567,11 @@ class ManageTaskServerView extends GetView<ManageTaskServerController> {
                                             child: Text(
                                               controller
                                                   .credentialsString!.value,
-                                              style: const TextStyle(
-                                                  // color: AppSettings.isDarkMode
-                                                  //     ? TaskWarriorColors.white
-                                                  //     : TaskWarriorColors.black,
-                                                  ),
+                                              style: TextStyle(
+                                                color: AppSettings.isDarkMode
+                                                    ? TaskWarriorColors.white
+                                                    : TaskWarriorColors.black,
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -581,7 +583,7 @@ class ManageTaskServerView extends GetView<ManageTaskServerController> {
                                     child: Container(
                                       height: 30,
                                       width: 30,
-                                      decoration:  BoxDecoration(
+                                      decoration: BoxDecoration(
                                         color: AppSettings.isDarkMode
                                             ? TaskWarriorColors
                                                 .kLightPrimaryBackgroundColor
@@ -590,7 +592,7 @@ class ManageTaskServerView extends GetView<ManageTaskServerController> {
                                         shape: BoxShape.circle,
                                       ),
                                       child: controller.credentials == null
-                                          ?  Icon(
+                                          ? Icon(
                                               Icons.chevron_right_rounded,
                                               color: AppSettings.isDarkMode
                                                   ? TaskWarriorColors.black

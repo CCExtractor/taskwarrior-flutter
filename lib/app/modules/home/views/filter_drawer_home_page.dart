@@ -41,8 +41,8 @@ class FilterDrawer extends StatelessWidget {
               Container(
                 height: 45,
                 alignment: Alignment.center,
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 0.0),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 0.0),
                   child: Text(
                     'Apply Filters',
                     // style: GoogleFonts.poppins(
@@ -51,6 +51,14 @@ class FilterDrawer extends StatelessWidget {
                     //         ? TaskWarriorColors.kprimaryTextColor
                     //         : TaskWarriorColors.kLightPrimaryTextColor),
                     //     fontSize: TaskWarriorFonts.fontSizeExtraLarge),
+                    style: TextStyle(
+                      fontFamily: FontFamily.poppins,
+                      fontWeight: TaskWarriorFonts.bold,
+                      color: (AppSettings.isDarkMode
+                          ? TaskWarriorColors.kprimaryTextColor
+                          : TaskWarriorColors.kLightPrimaryTextColor),
+                      fontSize: TaskWarriorFonts.fontSizeExtraLarge,
+                    ),
                   ),
                 ),
               ),
@@ -227,24 +235,22 @@ class FilterDrawer extends StatelessWidget {
                     const Divider(
                       color: Color.fromARGB(0, 48, 46, 46),
                     ),
-                     Padding(
+                    Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                      child: Text(
-                        'Sort By',
-                        // style: GoogleFonts.poppins(
-                        //     color: (AppSettings.isDarkMode
-                        //         ? TaskWarriorColors.kprimaryTextColor
-                        //         : TaskWarriorColors.kLightPrimaryTextColor),
-                        //     fontSize: TaskWarriorFonts.fontSizeLarge),
-                        // textAlign: TextAlign.right,
-                        style: TextStyle(
-                              fontFamily: FontFamily.poppins,
-                              fontSize: TaskWarriorFonts.fontSizeMedium,
-                              color: AppSettings.isDarkMode
-                                  ? TaskWarriorColors.white
-                                  : TaskWarriorColors.black,
-                            )
-                      ),
+                      child: Text('Sort By',
+                          // style: GoogleFonts.poppins(
+                          //     color: (AppSettings.isDarkMode
+                          //         ? TaskWarriorColors.kprimaryTextColor
+                          //         : TaskWarriorColors.kLightPrimaryTextColor),
+                          //     fontSize: TaskWarriorFonts.fontSizeLarge),
+                          // textAlign: TextAlign.right,
+                          style: TextStyle(
+                            fontFamily: FontFamily.poppins,
+                            fontSize: TaskWarriorFonts.fontSizeMedium,
+                            color: AppSettings.isDarkMode
+                                ? TaskWarriorColors.white
+                                : TaskWarriorColors.black,
+                          )),
                     ),
                     const Divider(
                       color: Color.fromARGB(0, 48, 46, 46),
@@ -319,22 +325,19 @@ class FilterDrawer extends StatelessWidget {
                                         1));
                           }
                         },
-                        child:  Text(
-                          'Reset Sort',
-                          // style: GoogleFonts.poppins(
-                          //     fontSize: TaskWarriorFonts.fontSizeMedium,
-                          //     color: AppSettings.isDarkMode
-                          //         ? TaskWarriorColors.kLightSecondaryTextColor
-                          //         : TaskWarriorColors.ksecondaryTextColor),
-                          style: TextStyle(
+                        child: Text('Reset Sort',
+                            // style: GoogleFonts.poppins(
+                            //     fontSize: TaskWarriorFonts.fontSizeMedium,
+                            //     color: AppSettings.isDarkMode
+                            //         ? TaskWarriorColors.kLightSecondaryTextColor
+                            //         : TaskWarriorColors.ksecondaryTextColor),
+                            style: TextStyle(
                               fontFamily: FontFamily.poppins,
                               fontSize: TaskWarriorFonts.fontSizeMedium,
                               color: AppSettings.isDarkMode
                                   ? TaskWarriorColors.white
                                   : TaskWarriorColors.black,
-                            )
-                        ),
-
+                            )),
                       ),
                     ),
                     const Divider(

@@ -5,7 +5,6 @@ import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
-
 class RenameProfileDialog extends StatelessWidget {
   const RenameProfileDialog({
     required this.profile,
@@ -44,7 +43,8 @@ class RenameProfileDialog extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                // Navigator.of(context).pop();
+                Get.back();
               },
               child: Text(
                 'Cancel',
@@ -61,7 +61,8 @@ class RenameProfileDialog extends StatelessWidget {
                   profile: profile,
                   alias: controller.text,
                 );
-                Navigator.of(context).pop();
+                // Navigator.of(context).pop();
+                Get.back();
               },
               child: Text(
                 'Submit',

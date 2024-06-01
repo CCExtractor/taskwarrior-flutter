@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:loggy/loggy.dart';
 import 'package:taskwarrior/app/utils/constants/constants.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
-
 
 class DescriptionWidget extends StatelessWidget {
   const DescriptionWidget(
@@ -89,7 +89,8 @@ class DescriptionWidget extends StatelessWidget {
               actions: [
                 TextButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    // Navigator.of(context).pop();
+                    Get.back();
                   },
                   child: Text(
                     'Cancel',
@@ -104,7 +105,8 @@ class DescriptionWidget extends StatelessWidget {
                   onPressed: () {
                     try {
                       callback(controller.text);
-                      Navigator.of(context).pop();
+                      // Navigator.of(context).pop();
+                      Get.back();
                     } on FormatException catch (e, trace) {
                       logError(e, trace);
                     }
@@ -209,7 +211,8 @@ class ProjectWidget extends StatelessWidget {
               actions: [
                 TextButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    // Navigator.of(context).pop();
+                    Get.back();
                   },
                   child: Text(
                     'Cancel',
@@ -225,7 +228,8 @@ class ProjectWidget extends StatelessWidget {
                     try {
                       callback(
                           (controller.text == '') ? null : controller.text);
-                      Navigator.of(context).pop();
+                      // Navigator.of(context).pop();
+                      Get.back();
                     } on FormatException catch (e, trace) {
                       logError(e, trace);
                     }

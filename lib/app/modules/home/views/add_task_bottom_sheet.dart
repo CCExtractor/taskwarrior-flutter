@@ -411,7 +411,8 @@ class AddTaskBottomSheet extends StatelessWidget {
             homeController.tagcontroller.text = '';
             homeController.tags.value = [];
             homeController.update();
-            Navigator.of(context).pop();
+            // Navigator.of(context).pop();
+            Get.back();
             widgetController.fetchAllData();
 
             homeController.update();

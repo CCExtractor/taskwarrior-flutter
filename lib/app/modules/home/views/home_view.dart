@@ -9,6 +9,7 @@ import 'package:taskwarrior/app/modules/home/views/filter_drawer_home_page.dart'
 import 'package:taskwarrior/app/modules/home/views/nav_drawer.dart';
 import 'package:taskwarrior/app/modules/home/views/tasks_builder.dart';
 import 'package:taskwarrior/app/modules/manageTaskServer/views/manage_task_server_view.dart';
+import 'package:taskwarrior/app/routes/app_pages.dart';
 import 'package:taskwarrior/app/utils/constants/palette.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
@@ -80,25 +81,27 @@ class HomeView extends GetView<HomeController> {
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: const Text(
+                            content: Text(
                               'TaskServer is not configured',
                               style: TextStyle(
-                                  // color: AppSettings.isDarkMode
-                                  //     ? TaskWarriorColors.white
-                                  //     : TaskWarriorColors.black,
-                                  ),
+                                color: AppSettings.isDarkMode
+                                    ? TaskWarriorColors.white
+                                    : TaskWarriorColors.black,
+                              ),
                             ),
                             action: SnackBarAction(
                               label: 'Set Up',
                               onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) =>
-                                          const ManageTaskServerView(),
-                                    )).then((value) {
-                                  // setState(() {});
-                                });
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //     builder: (_) =>
+                                //         const ManageTaskServerView(),
+                                //   ),
+                                // ).then((value) {
+                                //   // setState(() {});
+                                // });
+                                Get.toNamed(Routes.MANAGE_TASK_SERVER);
                               },
                               textColor: TaskWarriorColors.purple,
                             ),
@@ -152,10 +155,9 @@ class HomeView extends GetView<HomeController> {
                               backgroundColor: WidgetStateProperty.all<Color>(
                                   (TaskWarriorColors
                                       .kLightPrimaryBackgroundColor)),
-                              surfaceTintColor:
-                                  WidgetStateProperty.all<Color>(
-                                      (TaskWarriorColors
-                                          .kLightPrimaryBackgroundColor)),
+                              surfaceTintColor: WidgetStateProperty.all<Color>(
+                                  (TaskWarriorColors
+                                      .kLightPrimaryBackgroundColor)),
                               controller: controller.searchController,
                               // shape:,
                               onChanged: (value) {

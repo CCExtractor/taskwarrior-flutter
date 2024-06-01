@@ -230,7 +230,8 @@ class TagsRouteState extends State<TagsRoute> {
               actions: [
                 TextButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    // Navigator.of(context).pop();
+                    Get.back();
                   },
                   child: Text(
                     'Cancel',
@@ -247,7 +248,8 @@ class TagsRouteState extends State<TagsRoute> {
                       try {
                         validateTaskTags(controller.text);
                         _addTag(controller.text);
-                        Navigator.of(context).pop();
+                        // Navigator.of(context).pop();
+                        Get.back();
                       } on FormatException catch (e, trace) {
                         logError(e, trace);
                       }

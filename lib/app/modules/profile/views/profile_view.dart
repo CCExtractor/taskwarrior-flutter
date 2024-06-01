@@ -29,7 +29,8 @@ class ProfileView extends GetView<ProfileController> {
         leading: IconButton(
           onPressed: () {
             // Navigator.pushReplacementNamed(context, PageRoutes.home);
-            Navigator.of(context).pop();
+            // Navigator.of(context).pop();
+            Get.back();
           },
           icon: Icon(
             Icons.chevron_left,
@@ -111,7 +112,8 @@ class ProfileView extends GetView<ProfileController> {
                               ),
                             ),
                             onPressed: () {
-                              Navigator.of(context).pop();
+                              // Navigator.of(context).pop();
+                              Get.back();
                               exportTasks(
                                 contents: tasks,
                                 suggestedName: 'tasks-$now.json',
@@ -128,7 +130,8 @@ class ProfileView extends GetView<ProfileController> {
                               ),
                             ),
                             onPressed: () {
-                              Navigator.of(context).pop();
+                              // Navigator.of(context).pop();
+                              Get.back();
                               exportTasks(
                                 contents: tasks,
                                 suggestedName: 'tasks-$now.txt',

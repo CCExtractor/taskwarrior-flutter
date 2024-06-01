@@ -56,6 +56,7 @@ class NavDrawer extends StatelessWidget {
                       onTap: (bool newMode) async {
                         AppSettings.isDarkMode = newMode;
                         await SelectedTheme.saveMode(AppSettings.isDarkMode);
+                        Get.back();
                         homeController.update();
                       },
                       child: Icon(

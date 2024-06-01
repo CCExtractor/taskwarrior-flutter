@@ -34,7 +34,8 @@ class DeleteProfileDialog extends StatelessWidget {
             actions: [
               TextButton(
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  // Navigator.of(context).pop();
+                  Get.back();
                 },
                 child: Text(
                   'Cancel',
@@ -49,7 +50,8 @@ class DeleteProfileDialog extends StatelessWidget {
                 onPressed: () {
                   try {
                     Get.find<SplashController>().deleteProfile(profile);
-                    Navigator.of(context).pop();
+                    // Navigator.of(context).pop();
+                    Get.back();
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
                           'Profile: ${profile.characters} Deleted Successfully',

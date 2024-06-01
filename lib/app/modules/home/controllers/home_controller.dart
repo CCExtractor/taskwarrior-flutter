@@ -16,10 +16,12 @@ import 'package:taskwarrior/app/models/storage/client.dart';
 import 'package:taskwarrior/app/models/tag_meta_data.dart';
 import 'package:taskwarrior/app/modules/splash/controllers/splash_controller.dart';
 import 'package:taskwarrior/app/services/tag_filter.dart';
+import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/comparator.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/projects.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/query.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/tags.dart';
+import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
 class HomeController extends GetxController {
   final SplashController splashController = Get.find<SplashController>();
@@ -226,19 +228,19 @@ class HomeController extends GetxController {
     try {
       final connectivityResult = await Connectivity().checkConnectivity();
       if (connectivityResult == ConnectivityResult.none) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
               'You are not connected to the internet. Please check your network connection.',
               style: TextStyle(
-                  // color: AppSettings.isDarkMode
-                  //     ? TaskWarriorColors.kprimaryTextColor
-                  //     : TaskWarriorColors.kLightPrimaryTextColor,
-                  ),
+                color: AppSettings.isDarkMode
+                    ? TaskWarriorColors.kprimaryTextColor
+                    : TaskWarriorColors.kLightPrimaryTextColor,
+              ),
             ),
-            // backgroundColor: AppSettings.isDarkMode
-            //     ? TaskWarriorColors.ksecondaryBackgroundColor
-            //     : TaskWarriorColors.kLightSecondaryBackgroundColor,
-            duration: Duration(seconds: 2)));
+            backgroundColor: AppSettings.isDarkMode
+                ? TaskWarriorColors.ksecondaryBackgroundColor
+                : TaskWarriorColors.kLightSecondaryBackgroundColor,
+            duration: const Duration(seconds: 2)));
       } else {
         if (isDialogNeeded) {
           showDialog(
@@ -292,15 +294,15 @@ class HomeController extends GetxController {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
               '${header['code']}: ${header['status']}',
-              style: const TextStyle(
-                  // color: AppSettings.isDarkMode
-                  //     ? TaskWarriorColors.kprimaryTextColor
-                  //     : TaskWarriorColors.kLightPrimaryTextColor,
+              style:  TextStyle(
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.kprimaryTextColor
+                      : TaskWarriorColors.kLightPrimaryTextColor,
                   ),
             ),
-            // backgroundColor: AppSettings.isDarkMode
-            //     ? TaskWarriorColors.ksecondaryBackgroundColor
-            //     : TaskWarriorColors.kLightSecondaryBackgroundColor,
+            backgroundColor: AppSettings.isDarkMode
+                ? TaskWarriorColors.ksecondaryBackgroundColor
+                : TaskWarriorColors.kLightSecondaryBackgroundColor,
             duration: const Duration(seconds: 2)));
       }
     } catch (e, trace) {
