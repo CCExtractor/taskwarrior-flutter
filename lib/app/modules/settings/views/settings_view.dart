@@ -11,6 +11,7 @@ import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
 import 'package:taskwarrior/app/modules/splash/controllers/splash_controller.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
+import 'package:taskwarrior/app/utils/home_path/impl/home.dart';
 
 import '../controllers/settings_controller.dart';
 
@@ -381,6 +382,7 @@ class SettingsView extends GetView<SettingsController> {
                           final SharedPreferences prefs =
                               await SharedPreferences.getInstance();
                           await prefs.setBool('24hourformate', value);
+                          Get.find<HomeController>().change24hr.value = value;
                         },
                       ),
                     )),
