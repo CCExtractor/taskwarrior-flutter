@@ -30,7 +30,7 @@ class ProjectsColumn extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Text(
+              Text(
                 "Project : ",
                 // style: GoogleFonts.poppins(
                 //   fontWeight: TaskWarriorFonts.bold,
@@ -39,6 +39,14 @@ class ProjectsColumn extends StatelessWidget {
                 //       ? TaskWarriorColors.white
                 //       : TaskWarriorColors.black,
                 // ),
+                style: TextStyle(
+                  fontFamily: FontFamily.poppins,
+                  fontWeight: TaskWarriorFonts.bold,
+                  fontSize: TaskWarriorFonts.fontSizeSmall,
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.white
+                      : TaskWarriorColors.black,
+                ),
               ),
               SizedBox(
                 child: SingleChildScrollView(
@@ -217,10 +225,10 @@ class ProjectTile extends StatelessWidget {
                         : '(${node.tasks}) ${node.subtasks}',
                     maxLines: 1,
                     style: GoogleFonts.poppins(
-                        color: AppSettings.isDarkMode
-                            ? TaskWarriorColors.black
-                            : TaskWarriorColors.white,
-                        ),
+                      color: AppSettings.isDarkMode
+                          ? TaskWarriorColors.black
+                          : TaskWarriorColors.white,
+                    ),
                   ),
                 ),
               ],
