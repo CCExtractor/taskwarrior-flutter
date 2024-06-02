@@ -11,7 +11,6 @@ import 'package:taskwarrior/app/modules/home/views/nav_drawer.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/taskserver/taskserver.dart';
 import 'package:taskwarrior/app/utils/home_path/home_path.dart' as rc;
-import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
 import '../controllers/home_controller.dart';
 

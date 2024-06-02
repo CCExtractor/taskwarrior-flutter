@@ -6,6 +6,7 @@ import 'package:taskwarrior/app/modules/reports/views/burn_down_daily.dart';
 import 'package:taskwarrior/app/modules/reports/views/burn_down_monthly.dart';
 import 'package:taskwarrior/app/modules/reports/views/burn_down_weekly.dart';
 import 'package:taskwarrior/app/utils/constants/constants.dart';
+import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
 import '../controllers/reports_controller.dart';
@@ -92,7 +93,15 @@ class ReportsView extends GetView<ReportsController> {
                     children: [
                       Text(
                         'No Task found',
-                        style: GoogleFonts.poppins(
+                        // style: GoogleFonts.poppins(
+                        //   fontWeight: TaskWarriorFonts.medium,
+                        //   fontSize: TaskWarriorFonts.fontSizeSmall,
+                        //   color: AppSettings.isDarkMode
+                        //       ? TaskWarriorColors.white
+                        //       : TaskWarriorColors.black,
+                        // ),
+                        style: TextStyle(
+                          fontFamily: FontFamily.poppins,
                           fontWeight: TaskWarriorFonts.medium,
                           fontSize: TaskWarriorFonts.fontSizeSmall,
                           color: AppSettings.isDarkMode
@@ -107,7 +116,15 @@ class ReportsView extends GetView<ReportsController> {
                     children: [
                       Text(
                         'Add a task to see reports',
-                        style: GoogleFonts.poppins(
+                        // style: GoogleFonts.poppins(
+                        //   fontWeight: TaskWarriorFonts.light,
+                        //   fontSize: TaskWarriorFonts.fontSizeSmall,
+                        //   color: AppSettings.isDarkMode
+                        //       ? TaskWarriorColors.white
+                        //       : TaskWarriorColors.black,
+                        // ),
+                        style: TextStyle(
+                          fontFamily: FontFamily.poppins,
                           fontWeight: TaskWarriorFonts.light,
                           fontSize: TaskWarriorFonts.fontSizeSmall,
                           color: AppSettings.isDarkMode
@@ -128,7 +145,9 @@ class ReportsView extends GetView<ReportsController> {
                   BurnDownWeekly(
                     reportsController: controller,
                   ),
-                  BurnDownMonthly(reportsController: controller,),
+                  BurnDownMonthly(
+                    reportsController: controller,
+                  ),
                 ],
               ),
       ),

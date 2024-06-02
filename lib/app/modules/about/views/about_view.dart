@@ -1,18 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:package_info_plus/package_info_plus.dart';
+
 import 'package:taskwarrior/app/modules/about/views/about_page_app_bar.dart';
 import 'package:taskwarrior/app/modules/about/views/about_page_body.dart';
-import 'package:taskwarrior/app/utils/gen/assets.gen.dart';
-import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../controllers/about_controller.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
-import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
 class AboutView extends GetView<AboutController> {

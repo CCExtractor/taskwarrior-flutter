@@ -1,19 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
-import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:package_info_plus/package_info_plus.dart';
-import 'package:taskwarrior/app/utils/gen/assets.gen.dart';
-import 'package:url_launcher/url_launcher.dart';
 
-import '../controllers/about_controller.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
-import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
-import 'package:taskwarrior/app/utils/theme/app_settings.dart';
-
-import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
+import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 
 class AboutPageAppBar extends StatelessWidget implements PreferredSizeWidget {
   const AboutPageAppBar({super.key});
@@ -25,7 +14,11 @@ class AboutPageAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
       title: Text(
         'About',
-        style: GoogleFonts.poppins(color: TaskWarriorColors.white),
+        // style: GoogleFonts.poppins(color: TaskWarriorColors.white),
+        style: TextStyle(
+          fontFamily: FontFamily.poppins,
+          color: TaskWarriorColors.white,
+        ),
       ),
       leading: GestureDetector(
         onTap: () {
@@ -39,6 +32,6 @@ class AboutPageAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
- @override
+  @override
   Size get preferredSize => AppBar().preferredSize;
 }

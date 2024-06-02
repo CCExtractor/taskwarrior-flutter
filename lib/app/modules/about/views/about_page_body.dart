@@ -2,27 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:taskwarrior/app/modules/about/views/about_page_app_bar.dart';
 import 'package:taskwarrior/app/utils/gen/assets.gen.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../controllers/about_controller.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
-
-import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
 
 class AboutPageBody extends StatelessWidget {
   const AboutPageBody({super.key});
 
   @override
   Widget build(BuildContext context) {
-	String introduction =
+    String introduction =
         "This project aims to build an app for Taskwarrior. It is your task management app across all platforms. It helps you manage your tasks and filter them as per your needs.";
 
     return Padding(
@@ -85,7 +79,15 @@ class AboutPageBody extends StatelessWidget {
                               children: <TextSpan>[
                                 TextSpan(
                                   text: 'Version: ',
-                                  style: GoogleFonts.poppins(
+                                  //   style: GoogleFonts.poppins(
+                                  //     fontWeight: TaskWarriorFonts.bold,
+                                  //     fontSize: TaskWarriorFonts.fontSizeMedium,
+                                  //     color: AppSettings.isDarkMode
+                                  //         ? TaskWarriorColors.white
+                                  //         : TaskWarriorColors.black,
+                                  //   ),
+                                  style: TextStyle(
+                                    fontFamily: FontFamily.poppins,
                                     fontWeight: TaskWarriorFonts.bold,
                                     fontSize: TaskWarriorFonts.fontSizeMedium,
                                     color: AppSettings.isDarkMode

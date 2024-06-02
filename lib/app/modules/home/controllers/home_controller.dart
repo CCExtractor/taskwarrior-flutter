@@ -471,6 +471,6 @@ class HomeController extends GetxController {
 
   void initDarkMode() {
     isDarkModeOn.value = AppSettings.isDarkMode;
-    print("called and value is" + isDarkModeOn.value.toString());
+    print("called and value is${isDarkModeOn.value}");
   }
 }

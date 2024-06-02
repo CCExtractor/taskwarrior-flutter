@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'package:loggy/loggy.dart';
 import 'package:taskwarrior/app/utils/constants/constants.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
+import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
 class DescriptionWidget extends StatelessWidget {
@@ -37,21 +37,36 @@ class DescriptionWidget extends StatelessWidget {
                   children: <TextSpan>[
                     TextSpan(
                       text: '$name:'.padRight(13),
-                      style: GoogleFonts.poppins(
+                      // style: GoogleFonts.poppins(
+                      //   fontWeight: TaskWarriorFonts.bold,
+                      //   fontSize: TaskWarriorFonts.fontSizeMedium,
+                      //   color: AppSettings.isDarkMode
+                      //       ? Colors.white
+                      //       : Colors.black,
+                      // ),
+                      style: TextStyle(
+                        fontFamily: FontFamily.poppins,
                         fontWeight: TaskWarriorFonts.bold,
                         fontSize: TaskWarriorFonts.fontSizeMedium,
                         color: AppSettings.isDarkMode
-                            ? Colors.white
-                            : Colors.black,
+                            ? TaskWarriorColors.white
+                            : TaskWarriorColors.black,
                       ),
                     ),
                     TextSpan(
                       text: value ?? "not selected",
-                      style: GoogleFonts.poppins(
+                      // style: GoogleFonts.poppins(
+                      //   fontSize: TaskWarriorFonts.fontSizeMedium,
+                      //   color: AppSettings.isDarkMode
+                      //       ? Colors.white
+                      //       : Colors.black,
+                      // ),
+                      style: TextStyle(
+                        fontFamily: FontFamily.poppins,
                         fontSize: TaskWarriorFonts.fontSizeMedium,
                         color: AppSettings.isDarkMode
-                            ? Colors.white
-                            : Colors.black,
+                            ? TaskWarriorColors.white
+                            : TaskWarriorColors.black,
                       ),
                     ),
                   ],
@@ -159,21 +174,36 @@ class ProjectWidget extends StatelessWidget {
                   children: <TextSpan>[
                     TextSpan(
                       text: '$name:'.padRight(13),
-                      style: GoogleFonts.poppins(
+                      // style: GoogleFonts.poppins(
+                      //   fontWeight: TaskWarriorFonts.bold,
+                      //   fontSize: TaskWarriorFonts.fontSizeMedium,
+                      //   color: AppSettings.isDarkMode
+                      //       ? Colors.white
+                      //       : Colors.black,
+                      // ),
+                      style: TextStyle(
+                        fontFamily: FontFamily.poppins,
                         fontWeight: TaskWarriorFonts.bold,
                         fontSize: TaskWarriorFonts.fontSizeMedium,
                         color: AppSettings.isDarkMode
-                            ? Colors.white
-                            : Colors.black,
+                            ? TaskWarriorColors.white
+                            : TaskWarriorColors.black,
                       ),
                     ),
                     TextSpan(
                       text: value ?? "not selected",
-                      style: GoogleFonts.poppins(
+                      // style: GoogleFonts.poppins(
+                      //   fontSize: TaskWarriorFonts.fontSizeMedium,
+                      //   color: AppSettings.isDarkMode
+                      //       ? Colors.white
+                      //       : Colors.black,
+                      // ),
+                      style: TextStyle(
+                        fontFamily: FontFamily.poppins,
                         fontSize: TaskWarriorFonts.fontSizeMedium,
                         color: AppSettings.isDarkMode
-                            ? Colors.white
-                            : Colors.black,
+                            ? TaskWarriorColors.white
+                            : TaskWarriorColors.black,
                       ),
                     ),
                   ],

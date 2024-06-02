@@ -1,11 +1,11 @@
 // ignore_for_file: file_names, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'package:intl/intl.dart';
 
 import 'package:taskwarrior/app/utils/constants/constants.dart';
+import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
 class DateTimeWidget extends StatelessWidget {
@@ -40,21 +40,36 @@ class DateTimeWidget extends StatelessWidget {
                   children: <TextSpan>[
                     TextSpan(
                       text: '$name:'.padRight(13),
-                      style: GoogleFonts.poppins(
+                      // style: GoogleFonts.poppins(
+                      //   fontWeight: TaskWarriorFonts.bold,
+                      //   fontSize: TaskWarriorFonts.fontSizeMedium,
+                      //   color: AppSettings.isDarkMode
+                      //       ? Colors.white
+                      //       : Colors.black,
+                      // ),
+                      style: TextStyle(
+                        fontFamily: FontFamily.poppins,
                         fontWeight: TaskWarriorFonts.bold,
                         fontSize: TaskWarriorFonts.fontSizeMedium,
                         color: AppSettings.isDarkMode
-                            ? Colors.white
-                            : Colors.black,
+                            ? TaskWarriorColors.white
+                            : TaskWarriorColors.black,
                       ),
                     ),
                     TextSpan(
                       text: value ?? "not selected",
-                      style: GoogleFonts.poppins(
+                      // style: GoogleFonts.poppins(
+                      //   fontSize: TaskWarriorFonts.fontSizeMedium,
+                      //   color: AppSettings.isDarkMode
+                      //       ? Colors.white
+                      //       : Colors.black,
+                      // ),
+                      style: TextStyle(
+                        fontFamily: FontFamily.poppins,
                         fontSize: TaskWarriorFonts.fontSizeMedium,
                         color: AppSettings.isDarkMode
-                            ? Colors.white
-                            : Colors.black,
+                            ? TaskWarriorColors.white
+                            : TaskWarriorColors.black,
                       ),
                     ),
                   ],
@@ -129,8 +144,7 @@ class DateTimeWidget extends StatelessWidget {
           var date = await showDatePicker(
             context: context,
             initialDate: initialDate,
-            firstDate:
-                now,
+            firstDate: now,
             lastDate: DateTime(2037, 12, 31), // < 2038-01-19T03:14:08.000Z
           );
 
@@ -147,9 +161,7 @@ class DateTimeWidget extends StatelessWidget {
                 ),
               );
 
-
               if (dateTime.isBefore(DateTime.now())) {
-
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
@@ -167,7 +179,6 @@ class DateTimeWidget extends StatelessWidget {
                   ),
                 );
               } else {
-
                 return callback(dateTime.toUtc());
               }
             }
@@ -211,21 +222,36 @@ class StartWidget extends StatelessWidget {
                   children: <TextSpan>[
                     TextSpan(
                       text: '$name:'.padRight(13),
-                      style: GoogleFonts.poppins(
+                      // style: GoogleFonts.poppins(
+                      //   fontWeight: TaskWarriorFonts.bold,
+                      //   fontSize: TaskWarriorFonts.fontSizeMedium,
+                      //   color: AppSettings.isDarkMode
+                      //       ? Colors.white
+                      //       : Colors.black,
+                      // ),
+                      style: TextStyle(
+                        fontFamily: FontFamily.poppins,
                         fontWeight: TaskWarriorFonts.bold,
                         fontSize: TaskWarriorFonts.fontSizeMedium,
                         color: AppSettings.isDarkMode
-                            ? Colors.white
-                            : Colors.black,
+                            ? TaskWarriorColors.white
+                            : TaskWarriorColors.black,
                       ),
                     ),
                     TextSpan(
                       text: value ?? "not selected",
-                      style: GoogleFonts.poppins(
+                      // style: GoogleFonts.poppins(
+                      //   fontSize: TaskWarriorFonts.fontSizeMedium,
+                      //   color: AppSettings.isDarkMode
+                      //       ? Colors.white
+                      //       : Colors.black,
+                      // ),
+                      style: TextStyle(
+                        fontFamily: FontFamily.poppins,
                         fontSize: TaskWarriorFonts.fontSizeMedium,
                         color: AppSettings.isDarkMode
-                            ? Colors.white
-                            : Colors.black,
+                            ? TaskWarriorColors.white
+                            : TaskWarriorColors.black,
                       ),
                     ),
                   ],
