@@ -400,7 +400,7 @@ class AddTaskBottomSheet extends StatelessWidget {
               task = task.rebuild((t) => t..tags.replace(homeController.tags));
             }
             Get.find<HomeController>().mergeTask(task);
-            print(task);
+            // print(task);
 
             // StorageWidget.of(context).mergeTask(task);
             homeController.namecontroller.text = '';

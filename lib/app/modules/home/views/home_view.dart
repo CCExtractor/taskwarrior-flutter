@@ -8,8 +8,10 @@ import 'package:taskwarrior/app/modules/home/views/home_page_app_bar.dart';
 import 'package:taskwarrior/app/modules/home/views/home_page_body.dart';
 import 'package:taskwarrior/app/modules/home/views/home_page_floating_action_button.dart';
 import 'package:taskwarrior/app/modules/home/views/nav_drawer.dart';
+import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/taskserver/taskserver.dart';
 import 'package:taskwarrior/app/utils/home_path/home_path.dart' as rc;
+import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
 import '../controllers/home_controller.dart';
 
@@ -41,26 +43,28 @@ class HomeView extends GetView<HomeController> {
     // var pendingTags = controller.pendingTags;
 
     return isHomeWidgetTaskTapped == false
-        ? Scaffold(
-            appBar: HomePageAppBar(
-              server: server,
-              credentials: credentials,
-              controller: controller,
-            ),
-            // drawer: Obx(
-            //   () => NavDrawer(controller: controller, notifyParent: refresh),
-            // ),
-            drawer: NavDrawer(homeController: controller),
-            body: HomePageBody(controller: controller),
-            endDrawer: Obx(
-              () => FilterDrawer(
-                filters: controller.getFilters(),
-                homeController: controller,
+        ? Obx(
+            () => Scaffold(
+              appBar: HomePageAppBar(
+                server: server,
+                credentials: credentials,
+                controller: controller,
               ),
+              backgroundColor: controller.isDarkModeOn.value
+                  ? TaskWarriorColors.kprimaryBackgroundColor
+                  : TaskWarriorColors.kLightPrimaryBackgroundColor,
+              drawer: NavDrawer(homeController: controller),
+              body: HomePageBody(controller: controller),
+              endDrawer: Obx(
+                () => FilterDrawer(
+                  filters: controller.getFilters(),
+                  homeController: controller,
+                ),
+              ),
+              floatingActionButton:
+                  HomePageFloatingActionButton(controller: controller),
+              resizeToAvoidBottomInset: false,
             ),
-            floatingActionButton:
-                HomePageFloatingActionButton(controller: controller),
-            resizeToAvoidBottomInset: false,
           )
         : const DetailRouteView();
   }

@@ -24,7 +24,7 @@ class AboutView extends GetView<AboutController> {
       backgroundColor: AppSettings.isDarkMode
           ? TaskWarriorColors.kprimaryBackgroundColor
           : TaskWarriorColors.white,
-      body: AboutPageBody(),
+      body: const AboutPageBody(),
     );
   }
 }

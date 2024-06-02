@@ -52,6 +52,7 @@ class HomeController extends GetxController {
     serverCertExists = RxBool(storage.guiPemFiles.serverCertExists());
     _profileSet();
     loadDelayTask();
+    initDarkMode();
   }
 
   void _profileSet() {
@@ -294,11 +295,11 @@ class HomeController extends GetxController {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
               '${header['code']}: ${header['status']}',
-              style:  TextStyle(
-                  color: AppSettings.isDarkMode
-                      ? TaskWarriorColors.kprimaryTextColor
-                      : TaskWarriorColors.kLightPrimaryTextColor,
-                  ),
+              style: TextStyle(
+                color: AppSettings.isDarkMode
+                    ? TaskWarriorColors.kprimaryTextColor
+                    : TaskWarriorColors.kLightPrimaryTextColor,
+              ),
             ),
             backgroundColor: AppSettings.isDarkMode
                 ? TaskWarriorColors.ksecondaryBackgroundColor
@@ -464,5 +465,12 @@ class HomeController extends GetxController {
   Future<void> loadDelayTask() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     useDelayTask.value = prefs.getBool('delaytask') ?? false;
+  }
+
+  RxBool isDarkModeOn = false.obs;
+
+  void initDarkMode() {
+    isDarkModeOn.value = AppSettings.isDarkMode;
+    print("called and value is" + isDarkModeOn.value.toString());
   }
 }
