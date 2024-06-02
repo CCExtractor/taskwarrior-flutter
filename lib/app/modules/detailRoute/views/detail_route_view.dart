@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -76,34 +78,36 @@ class DetailRouteView extends GetView<DetailRouteController> {
                 ),
               )),
           body: Padding(
-            padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-            child: ListView(
-              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
-              children: [
-                for (var entry in {
-                  'description': controller.modify.draft.description,
-                  'status': controller.modify.draft.status,
-                  'entry': controller.modify.draft.entry,
-                  'modified': controller.modify.draft.modified,
-                  'start': controller.modify.draft.start,
-                  'end': controller.modify.draft.end,
-                  'due': controller.modify.draft.due,
-                  'wait': controller.modify.draft.wait,
-                  'until': controller.modify.draft.until,
-                  'priority': controller.modify.draft.priority,
-                  'project': controller.modify.draft.project,
-                  'tags': controller.modify.draft.tags,
-                  'urgency': urgency(controller.modify.draft),
-                }.entries)
-                  AttributeWidget(
-                    name: entry.key,
-                    value: entry.value,
-                    callback: (newValue) =>
-                        controller.setAttribute(entry.key, newValue),
-                  ),
-              ],
-            ),
-          ),
+              padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+              child: Obx(
+                () => ListView(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
+                  children: [
+                    for (var entry in {
+                      'description': controller.descriptionValue.value,
+                      'status': controller.statusValue.value,
+                      'entry': controller.entryValue.value,
+                      'modified': controller.modifiedValue.value,
+                      'start': controller.startValue.value,
+                      'end': controller.endValue.value,
+                      'due': controller.dueValue.value,
+                      'wait': controller.waitValue.value,
+                      'until': controller.untilValue.value,
+                      'priority': controller.priorityValue?.value,
+                      'project': controller.projectValue?.value,
+                      'tags': controller.tagsValue?.value,
+                      'urgency': controller.urgencyValue.value,
+                    }.entries)
+                      AttributeWidget(
+                        name: entry.key,
+                        value: entry.value,
+                        callback: (newValue) =>
+                            controller.setAttribute(entry.key, newValue),
+                      ),
+                  ],
+                ),
+              )),
           floatingActionButton: controller.modify.changes.isEmpty
               ? const SizedBox.shrink()
               : FloatingActionButton(
