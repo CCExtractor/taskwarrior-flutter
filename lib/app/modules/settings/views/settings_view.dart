@@ -101,15 +101,17 @@ class SettingsView extends GetView<SettingsController> {
                       fontSize: TaskWarriorFonts.fontSizeSmall,
                     ),
                   ),
-                  trailing: Switch(
-                    value: controller.isSyncOnStartActivel.value,
-                    onChanged: (bool value) async {
-                      controller.isSyncOnStartActivel.value = value;
+                  trailing: Obx(
+                    () => Switch(
+                      value: controller.isSyncOnStartActivel.value,
+                      onChanged: (bool value) async {
+                        controller.isSyncOnStartActivel.value = value;
 
-                      final SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      await prefs.setBool('sync-onStart', value);
-                    },
+                        final SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+                        await prefs.setBool('sync-onStart', value);
+                      },
+                    ),
                   ),
                 ),
                 const Divider(),
