@@ -173,9 +173,7 @@ class AddTaskBottomSheet extends StatelessWidget {
                       ),
                 readOnly: true,
                 controller: TextEditingController(
-                  text: (homeController.due != null)
-                      ? homeController.dueString.value
-                      : null,
+                  text: homeController.dueString.value
                 ),
                 decoration: InputDecoration(
                   hintText: 'Select due date',
