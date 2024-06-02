@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:taskwarrior/app/modules/home/views/home_view.dart';
 import 'package:taskwarrior/app/modules/onboarding/controllers/onboarding_controller.dart';
 import 'package:taskwarrior/app/routes/app_pages.dart';
 import 'package:taskwarrior/app/utils/constants/constants.dart';

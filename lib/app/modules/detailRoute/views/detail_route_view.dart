@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +11,6 @@ import 'package:taskwarrior/app/modules/detailRoute/views/status_widget.dart';
 import 'package:taskwarrior/app/modules/detailRoute/views/tags_widget.dart';
 import 'package:taskwarrior/app/utils/constants/constants.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
-import 'package:taskwarrior/app/utils/taskfunctions/urgency.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
 class DetailRouteView extends GetView<DetailRouteController> {

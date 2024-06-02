@@ -1,24 +1,15 @@
-import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:taskwarrior/app/modules/detailRoute/views/detail_route_view.dart';
-import 'package:taskwarrior/app/modules/home/views/add_task_bottom_sheet.dart';
 
 import 'package:taskwarrior/app/modules/home/views/filter_drawer_home_page.dart';
 import 'package:taskwarrior/app/modules/home/views/home_page_app_bar.dart';
 import 'package:taskwarrior/app/modules/home/views/home_page_body.dart';
 import 'package:taskwarrior/app/modules/home/views/home_page_floating_action_button.dart';
 import 'package:taskwarrior/app/modules/home/views/nav_drawer.dart';
-import 'package:taskwarrior/app/modules/home/views/tasks_builder.dart';
-import 'package:taskwarrior/app/modules/manageTaskServer/views/manage_task_server_view.dart';
-import 'package:taskwarrior/app/routes/app_pages.dart';
-import 'package:taskwarrior/app/utils/constants/palette.dart';
-import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
-import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 import 'package:taskwarrior/app/utils/taskserver/taskserver.dart';
 import 'package:taskwarrior/app/utils/home_path/home_path.dart' as rc;
-import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
 import '../controllers/home_controller.dart';
 
