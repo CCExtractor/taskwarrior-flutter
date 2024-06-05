@@ -617,32 +617,44 @@ class ManageTaskServerView extends GetView<ManageTaskServerController> {
                     ),
                   ],
                 )),
-            for (var pem in [
-              'taskd.certificate',
-              'taskd.key',
-              'taskd.ca',
-              if (homeController.serverCertExists.value) 'server.cert',
-            ])
-              PemWidget(
-                storage: controller.storage,
-                pem: pem,
-                optionString: pem == "taskd.certificate"
-                    ? "Configure your certificate"
-                    : pem == "taskd.key"
-                        ? "Configure TaskServer key"
-                        : pem == "taskd.ca"
-                            ? "Configure Server Certificate"
-                            : "Configure Server Certificate",
-                listTileTitle: pem == "taskd.certificate"
-                    ? "Select Certificate"
-                    : pem == "taskd.key"
-                        ? "Select key"
-                        : pem == "taskd.ca"
-                            ? "Select Certificate"
-                            : "Select Certificate",
-                onTapCallBack: controller.onTapPEMWidget,
-                onLongPressCallBack: controller.onLongPressPEMWidget,
-              ),
+            GetBuilder<ManageTaskServerController>(
+              builder: (controller) {
+                List<Widget> pemWidgets = [];
+                for (var pem in [
+                  'taskd.certificate',
+                  'taskd.key',
+                  'taskd.ca',
+                  if (controller.homeController.serverCertExists.value)
+                    'server.cert',
+                ]) {
+                  pemWidgets.add(
+                    PemWidget(
+                      storage: controller.storage,
+                      pem: pem,
+                      optionString: pem == "taskd.certificate"
+                          ? "Configure your certificate"
+                          : pem == "taskd.key"
+                              ? "Configure TaskServer key"
+                              : pem == "taskd.ca"
+                                  ? "Configure Server Certificate"
+                                  : "Configure Server Certificate",
+                      listTileTitle: pem == "taskd.certificate"
+                          ? "Select Certificate"
+                          : pem == "taskd.key"
+                              ? "Select key"
+                              : pem == "taskd.ca"
+                                  ? "Select Certificate"
+                                  : "Select Certificate",
+                      onTapCallBack: controller.onTapPEMWidget,
+                      onLongPressCallBack: controller.onLongPressPEMWidget,
+                    ),
+                  );
+                }
+                return Column(
+                  children: pemWidgets,
+                );
+              },
+            )
           ],
         ),
       ),
