@@ -203,7 +203,7 @@ class TaskListItem extends StatelessWidget {
                   style: TextStyle(
                       fontFamily: FontFamily.poppins,
                       color: dimColor,
-                      fontSize: TaskWarriorFonts.fontSizeExtraLarge),
+                      fontSize: TaskWarriorFonts.fontSizeSmall),
                 ),
               ),
             ),
