@@ -14,17 +14,23 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
   final HomeController controller;
   final Server? server;
   final Credentials? credentials;
-  const HomePageAppBar({required this.server,required this.credentials,required this.controller, super.key});
+  const HomePageAppBar(
+      {required this.server,
+      required this.credentials,
+      required this.controller,
+      super.key});
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
       surfaceTintColor: TaskWarriorColors.kprimaryBackgroundColor,
-      title: Text(
-        'Home Page',
-        style: TextStyle(
-            fontFamily: FontFamily.poppins, color: TaskWarriorColors.white),
+      title: Center(
+        child: Text(
+          'Home Page',
+          style: TextStyle(
+              fontFamily: FontFamily.poppins, color: TaskWarriorColors.white),
+        ),
       ),
       actions: [
         Obx(
