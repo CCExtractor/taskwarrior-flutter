@@ -9,7 +9,6 @@ import 'package:get/get.dart';
 import 'package:loggy/loggy.dart';
 import 'package:taskwarrior/app/models/storage/client.dart';
 import 'package:taskwarrior/app/models/storage/set_config.dart';
-import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
 import 'package:taskwarrior/app/modules/manageTaskServer/views/pem_widget.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
@@ -25,7 +24,6 @@ class ManageTaskServerView extends GetView<ManageTaskServerController> {
   const ManageTaskServerView({super.key});
   @override
   Widget build(BuildContext context) {
-    final HomeController homeController = Get.find<HomeController>();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
