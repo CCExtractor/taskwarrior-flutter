@@ -1,14 +1,14 @@
 // ignore_for_file: use_build_context_synchronously
 
-
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:taskwarrior/app/modules/settings/views/settings_page_enable_24hr_format_list_tile.dart';
-import 'package:taskwarrior/app/modules/settings/views/settings_page_highlist_task_list_tile.dart';
-import 'package:taskwarrior/app/modules/settings/views/settings_page_on_task_create_list_tile.dart';
-import 'package:taskwarrior/app/modules/settings/views/settings_page_on_task_start_list_tile.dart';
+import 'package:taskwarrior/app/modules/settings/views/settings_page_enable_24hr_format_list_tile_trailing.dart';
+import 'package:taskwarrior/app/modules/settings/views/settings_page_highlist_task_list_tile_trailing.dart';
+import 'package:taskwarrior/app/modules/settings/views/settings_page_list_tile.dart';
+import 'package:taskwarrior/app/modules/settings/views/settings_page_on_task_create_list_tile_trailing.dart';
+import 'package:taskwarrior/app/modules/settings/views/settings_page_on_task_start_list_tile_trailing.dart';
 import 'package:taskwarrior/app/modules/settings/views/settings_page_select_directory_list_tile.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 
@@ -82,15 +82,39 @@ class SettingsView extends GetView<SettingsController> {
             ))
           : ListView(
               children: [
-                SettingsPageOnTaskStartListTile(controller: controller),
+                SettingsPageListTile(
+                  title: "Sync on Start",
+                  subTitle: "Automatically sync data on app start",
+                  trailing: SettingsPageOnTaskStartListTileTrailing(
+                    controller: controller,
+                  ),
+                ),
                 const Divider(),
-                SettingsPageOnTaskCreateListTile(controller: controller),
+                SettingsPageListTile(
+                  title: "Sync on Task Create",
+                  subTitle: "Enable automatic syncing when creating a new task",
+                  trailing: SettingsPageOnTaskCreateListTileTrailing(
+                    controller: controller,
+                  ),
+                ),
                 const Divider(),
-                SettingsPageHighlistTaskListTile(controller: controller),
+                SettingsPageListTile(
+                  title: "Highlight the task",
+                  subTitle: "Make the border of task if only 1 day left",
+                  trailing: SettingsPageHighlistTaskListTileTrailing(
+                    controller: controller,
+                  ),
+                ),
                 const Divider(),
                 SettingsPageSelectDirectoryListTile(controller: controller),
                 const Divider(),
-                SettingsPageEnable24hrFormatListTile(controller: controller),
+                SettingsPageListTile(
+                  title: "Enable 24hr format",
+                  subTitle: "Switch right to enable 24 hr format",
+                  trailing: SettingsPageEnable24hrFormatListTileTrailing(
+                    controller: controller,
+                  ),
+                ),
               ],
             ),
     );
