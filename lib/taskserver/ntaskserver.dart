@@ -79,13 +79,27 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
       barrierDismissible: false,
       builder: (context) {
         return Utils.showAlertDialog(
-          title: const Text('Fetching statistics...'),
-          content: const Column(
+          title: Text(
+            'Fetching statistics...',
+            style: TextStyle(
+              color: AppSettings.isDarkMode
+                  ? TaskWarriorColors.white
+                  : TaskWarriorColors.black,
+            ),
+          ),
+          content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              CircularProgressIndicator(),
-              SizedBox(height: 16),
-              Text('Please wait...'),
+              const CircularProgressIndicator(),
+              const SizedBox(height: 16),
+              Text(
+                'Please wait...',
+                style: TextStyle(
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.white
+                      : TaskWarriorColors.black,
+                ),
+              ),
             ],
           ),
         );
@@ -140,6 +154,13 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
           ),
           actions: [
             ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: WidgetStateProperty.all<Color>(
+                  AppSettings.isDarkMode
+                      ? TaskWarriorColors.kLightSecondaryBackgroundColor
+                      : TaskWarriorColors.ksecondaryBackgroundColor,
+                ),
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -147,8 +168,8 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                 'Ok',
                 style: TextStyle(
                   color: AppSettings.isDarkMode
-                      ? TaskWarriorColors.white
-                      : TaskWarriorColors.black,
+                      ? TaskWarriorColors.black
+                      : TaskWarriorColors.white,
                 ),
               ),
             ),
@@ -505,10 +526,10 @@ class _ManageTaskServerState extends State<ManageTaskServer> {
                                             style: ButtonStyle(
                                                 backgroundColor: AppSettings
                                                         .isDarkMode
-                                                    ? MaterialStateProperty.all<
+                                                    ? WidgetStateProperty.all<
                                                             Color>(
                                                         TaskWarriorColors.black)
-                                                    : MaterialStateProperty.all<
+                                                    : WidgetStateProperty.all<
                                                             Color>(
                                                         TaskWarriorColors
                                                             .white)),
