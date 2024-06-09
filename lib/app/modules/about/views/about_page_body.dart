@@ -29,6 +29,9 @@ class AboutPageBody extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
+              height: Get.height * 0.02,
+            ),
+            SizedBox(
                 child: SvgPicture.asset(
               Assets.svg.logo.path,
               height: Get.height * 0.2,
@@ -39,17 +42,10 @@ class AboutPageBody extends StatelessWidget {
             ),
             Text(
               "Taskwarrior",
-              // style: GoogleFonts.poppins(
-              //   fontWeight: TaskWarriorFonts.bold,
-              //   fontSize: TaskWarriorFonts.fontSizeLarge,
-              //   color: AppSettings.isDarkMode
-              //       ? TaskWarriorColors.white
-              //       : TaskWarriorColors.black,
-              // ),
               style: TextStyle(
                 fontFamily: FontFamily.poppins,
                 fontWeight: TaskWarriorFonts.bold,
-                fontSize: TaskWarriorFonts.fontSizeLarge,
+                fontSize: TaskWarriorFonts.fontSizeExtraLarge,
                 color: AppSettings.isDarkMode
                     ? TaskWarriorColors.white
                     : TaskWarriorColors.black,
@@ -79,13 +75,6 @@ class AboutPageBody extends StatelessWidget {
                               children: <TextSpan>[
                                 TextSpan(
                                   text: 'Version: ',
-                                  //   style: GoogleFonts.poppins(
-                                  //     fontWeight: TaskWarriorFonts.bold,
-                                  //     fontSize: TaskWarriorFonts.fontSizeMedium,
-                                  //     color: AppSettings.isDarkMode
-                                  //         ? TaskWarriorColors.white
-                                  //         : TaskWarriorColors.black,
-                                  //   ),
                                   style: TextStyle(
                                     fontFamily: FontFamily.poppins,
                                     fontWeight: TaskWarriorFonts.bold,
@@ -97,12 +86,6 @@ class AboutPageBody extends StatelessWidget {
                                 ),
                                 TextSpan(
                                   text: appInfoLines[1],
-                                  // style: GoogleFonts.poppins(
-                                  //   fontSize: TaskWarriorFonts.fontSizeMedium,
-                                  //   color: AppSettings.isDarkMode
-                                  //       ? TaskWarriorColors.white
-                                  //       : TaskWarriorColors.black,
-                                  // ),
                                   style: TextStyle(
                                     fontFamily: FontFamily.poppins,
                                     fontSize: TaskWarriorFonts.fontSizeMedium,
@@ -123,14 +106,6 @@ class AboutPageBody extends StatelessWidget {
                                   children: <TextSpan>[
                                     TextSpan(
                                       text: 'Package: ',
-                                      // style: GoogleFonts.poppins(
-                                      //   fontWeight: TaskWarriorFonts.bold,
-                                      //   fontSize:
-                                      //       TaskWarriorFonts.fontSizeMedium,
-                                      //   color: AppSettings.isDarkMode
-                                      //       ? TaskWarriorColors.white
-                                      //       : TaskWarriorColors.black,
-                                      // ),
                                       style: TextStyle(
                                         fontFamily: FontFamily.poppins,
                                         fontWeight: TaskWarriorFonts.bold,
@@ -143,13 +118,6 @@ class AboutPageBody extends StatelessWidget {
                                     ),
                                     TextSpan(
                                       text: appInfoLines[0],
-                                      // style: GoogleFonts.poppins(
-                                      //   fontSize:
-                                      //       TaskWarriorFonts.fontSizeMedium,
-                                      //   color: AppSettings.isDarkMode
-                                      //       ? TaskWarriorColors.white
-                                      //       : TaskWarriorColors.black,
-                                      // ),
                                       style: TextStyle(
                                         fontFamily: FontFamily.poppins,
                                         fontSize:
@@ -177,13 +145,6 @@ class AboutPageBody extends StatelessWidget {
             Text(
               introduction,
               textAlign: TextAlign.center,
-              // style: GoogleFonts.poppins(
-              //   fontWeight: TaskWarriorFonts.medium,
-              //   fontSize: TaskWarriorFonts.fontSizeSmall,
-              //   color: AppSettings.isDarkMode
-              //       ? TaskWarriorColors.white
-              //       : TaskWarriorColors.black,
-              // ),
               style: TextStyle(
                 fontFamily: FontFamily.poppins,
                 fontWeight: TaskWarriorFonts.medium,
@@ -230,13 +191,6 @@ class AboutPageBody extends StatelessWidget {
                             BlendMode.srcIn)),
                     label: Text(
                       "GitHub",
-                      // style: GoogleFonts.poppins(
-                      //   fontWeight: TaskWarriorFonts.medium,
-                      //   fontSize: TaskWarriorFonts.fontSizeSmall,
-                      //   color: AppSettings.isDarkMode
-                      //       ? TaskWarriorColors.black
-                      //       : TaskWarriorColors.white,
-                      // ),
                       style: TextStyle(
                         fontFamily: FontFamily.poppins,
                         fontWeight: TaskWarriorFonts.medium,
@@ -276,13 +230,6 @@ class AboutPageBody extends StatelessWidget {
                             BlendMode.srcIn)),
                     label: Text(
                       "CCExtractor",
-                      // style: GoogleFonts.poppins(
-                      //   fontWeight: TaskWarriorFonts.medium,
-                      //   fontSize: TaskWarriorFonts.fontSizeSmall,
-                      //   color: AppSettings.isDarkMode
-                      //       ? TaskWarriorColors.black
-                      //       : TaskWarriorColors.white,
-                      // ),
                       style: TextStyle(
                         fontFamily: FontFamily.poppins,
                         fontWeight: TaskWarriorFonts.medium,
@@ -297,22 +244,15 @@ class AboutPageBody extends StatelessWidget {
               ],
             ),
             SizedBox(
-              height: Get.height * 0.02,
+              height: Get.height * 0.04,
             ),
             Text(
               "Eager to enhance this project? Visit our GitHub repository.",
               textAlign: TextAlign.center,
-              // style: GoogleFonts.poppins(
-              //   fontWeight: TaskWarriorFonts.semiBold,
-              //   fontSize: TaskWarriorFonts.fontSizeSmall,
-              //   color: AppSettings.isDarkMode
-              //       ? TaskWarriorColors.white
-              //       : TaskWarriorColors.black,
-              // ),
               style: TextStyle(
                 fontFamily: FontFamily.poppins,
                 fontWeight: TaskWarriorFonts.semiBold,
-                fontSize: TaskWarriorFonts.fontSizeSmall,
+                fontSize: TaskWarriorFonts.fontSizeMedium,
                 color: AppSettings.isDarkMode
                     ? TaskWarriorColors.white
                     : TaskWarriorColors.black,
