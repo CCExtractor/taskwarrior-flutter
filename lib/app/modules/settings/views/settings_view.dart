@@ -4,12 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:taskwarrior/app/modules/settings/views/settings_page_enable_24hr_format_list_tile_trailing.dart';
-import 'package:taskwarrior/app/modules/settings/views/settings_page_highlist_task_list_tile_trailing.dart';
-import 'package:taskwarrior/app/modules/settings/views/settings_page_list_tile.dart';
-import 'package:taskwarrior/app/modules/settings/views/settings_page_on_task_create_list_tile_trailing.dart';
-import 'package:taskwarrior/app/modules/settings/views/settings_page_on_task_start_list_tile_trailing.dart';
-import 'package:taskwarrior/app/modules/settings/views/settings_page_select_directory_list_tile.dart';
+import 'package:taskwarrior/app/modules/settings/views/settings_page_body.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 
 import '../controllers/settings_controller.dart';
@@ -59,64 +54,7 @@ class SettingsView extends GetView<SettingsController> {
       backgroundColor: AppSettings.isDarkMode
           ? TaskWarriorColors.kprimaryBackgroundColor
           : TaskWarriorColors.white,
-      body: (controller.isMovingDirectory.value)
-          ? Center(
-              child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const CircularProgressIndicator(),
-                const SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  'Moving data to new directory',
-                  style: GoogleFonts.poppins(
-                    fontWeight: FontWeight.bold,
-                    fontSize: TaskWarriorFonts.fontSizeMedium,
-                    color: AppSettings.isDarkMode
-                        ? TaskWarriorColors.white
-                        : TaskWarriorColors.black,
-                  ),
-                )
-              ],
-            ))
-          : ListView(
-              children: [
-                SettingsPageListTile(
-                  title: "Sync on Start",
-                  subTitle: "Automatically sync data on app start",
-                  trailing: SettingsPageOnTaskStartListTileTrailing(
-                    controller: controller,
-                  ),
-                ),
-                const Divider(),
-                SettingsPageListTile(
-                  title: "Sync on Task Create",
-                  subTitle: "Enable automatic syncing when creating a new task",
-                  trailing: SettingsPageOnTaskCreateListTileTrailing(
-                    controller: controller,
-                  ),
-                ),
-                const Divider(),
-                SettingsPageListTile(
-                  title: "Highlight the task",
-                  subTitle: "Make the border of task if only 1 day left",
-                  trailing: SettingsPageHighlistTaskListTileTrailing(
-                    controller: controller,
-                  ),
-                ),
-                const Divider(),
-                SettingsPageSelectDirectoryListTile(controller: controller),
-                const Divider(),
-                SettingsPageListTile(
-                  title: "Enable 24hr format",
-                  subTitle: "Switch right to enable 24 hr format",
-                  trailing: SettingsPageEnable24hrFormatListTileTrailing(
-                    controller: controller,
-                  ),
-                ),
-              ],
-            ),
+      body: SettingsPageBody(controller: controller),
     );
   }
 }

@@ -4,13 +4,13 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:get/get_rx/get_rx.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:taskwarrior/app/utils/constants/supported_language.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
-
-
 
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
@@ -20,6 +20,13 @@ import 'package:taskwarrior/app/modules/splash/controllers/splash_controller.dar
 
 class SettingsController extends GetxController {
   RxBool isMovingDirectory = false.obs;
+
+  Rx<SupportedLanguage> selectedLanguage = AppSettings.selectedLanguage.obs;
+
+  void setSelectedLanguage(SupportedLanguage language) async {
+    await SelectedLanguage.saveSelectedLanguage(language);
+    selectedLanguage.value = language;
+  }
 
   Future<String> getBaseDirectory() async {
     SplashController profilesWidget = Get.find<SplashController>();
@@ -158,7 +165,8 @@ class SettingsController extends GetxController {
   void onInit() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     isSyncOnStartActivel.value = prefs.getBool('sync-onStart') ?? false;
-    isSyncOnTaskCreateActivel.value = prefs.getBool('sync-OnTaskCreate') ?? false;
+    isSyncOnTaskCreateActivel.value =
+        prefs.getBool('sync-OnTaskCreate') ?? false;
     delaytask.value = prefs.getBool('delaytask') ?? false;
     change24hr.value = prefs.getBool('24hourformate') ?? false;
     super.onInit();
