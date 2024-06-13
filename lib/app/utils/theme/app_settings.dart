@@ -17,7 +17,7 @@ class SelectedTheme {
   }
 }
 
-class LanguageSettings {
+class SelectedLanguage {
   static SharedPreferences? _preferences;
 
   static Future init() async {
@@ -41,14 +41,15 @@ class AppSettings {
 
   static Future init() async {
     await SelectedTheme.init();
+    await SelectedLanguage.init();
     isDarkMode = SelectedTheme.getMode() ?? true;
     selectedLanguage =
-        LanguageSettings.getSelectedLanguage() ?? SupportedLanguage.english;
+        SelectedLanguage.getSelectedLanguage() ?? SupportedLanguage.english;
   }
 
   static Future saveSettings(
       bool isDarkMode, SupportedLanguage language) async {
     await SelectedTheme.saveMode(isDarkMode);
-    await LanguageSettings.saveSelectedLanguage(language);
+    await SelectedLanguage.saveSelectedLanguage(language);
   }
 }
