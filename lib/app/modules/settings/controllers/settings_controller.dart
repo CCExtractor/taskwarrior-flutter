@@ -27,7 +27,8 @@ class SettingsController extends GetxController {
     await SelectedLanguage.saveSelectedLanguage(language);
     selectedLanguage.value = language;
     AppSettings.selectedLanguage = language;
-    Get.find<HomeController>().update();
+    Get.find<HomeController>().selectedLanguage.value = language;
+    
   }
 
   Future<String> getBaseDirectory() async {

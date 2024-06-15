@@ -81,61 +81,71 @@ class NavDrawer extends StatelessWidget {
                   : TaskWarriorColors.kLightPrimaryBackgroundColor,
               height: Get.height * 0.03,
             ),
-            NavDrawerMenuItem(
-              icon: Icons.person_rounded,
-              text: SentenceManager(
-                currentLanguage: homeController.selectedLanguage.value,
-              ).sentences.navDrawerProfile,
-              onTap: () {
-                Get.toNamed(Routes.PROFILE);
-              },
+            Obx(
+              () => NavDrawerMenuItem(
+                icon: Icons.person_rounded,
+                text: SentenceManager(
+                  currentLanguage: homeController.selectedLanguage.value,
+                ).sentences.navDrawerProfile,
+                onTap: () {
+                  Get.toNamed(Routes.PROFILE);
+                },
+              ),
             ),
-            NavDrawerMenuItem(
-              icon: Icons.summarize,
-              text:  SentenceManager(
-                currentLanguage: homeController.selectedLanguage.value,
-              ).sentences.navDrawerReports,
-              onTap: () {
-                Get.toNamed(Routes.REPORTS);
-              },
+            Obx(
+              () => NavDrawerMenuItem(
+                icon: Icons.summarize,
+                text: SentenceManager(
+                  currentLanguage: homeController.selectedLanguage.value,
+                ).sentences.navDrawerReports,
+                onTap: () {
+                  Get.toNamed(Routes.REPORTS);
+                },
+              ),
             ),
-            NavDrawerMenuItem(
-              icon: Icons.info,
-              text:  SentenceManager(
-                currentLanguage: homeController.selectedLanguage.value,
-              ).sentences.navDrawerAbout,
-              onTap: () {
-                Get.toNamed(Routes.ABOUT);
-              },
+            Obx(
+              () => NavDrawerMenuItem(
+                icon: Icons.info,
+                text: SentenceManager(
+                  currentLanguage: homeController.selectedLanguage.value,
+                ).sentences.navDrawerAbout,
+                onTap: () {
+                  Get.toNamed(Routes.ABOUT);
+                },
+              ),
             ),
-            NavDrawerMenuItem(
-              icon: Icons.settings,
-              text:  SentenceManager(
-                currentLanguage: homeController.selectedLanguage.value,
-              ).sentences.navDrawerSettings,
-              onTap: () async {
-                final SharedPreferences prefs =
-                    await SharedPreferences.getInstance();
-                homeController.syncOnStart.value =
-                    prefs.getBool('sync-onStart') ?? false;
-                homeController.syncOnTaskCreate.value =
-                    prefs.getBool('sync-OnTaskCreate') ?? false;
-                homeController.delaytask.value =
-                    prefs.getBool('delaytask') ?? false;
-                homeController.change24hr.value =
-                    prefs.getBool('24hourformate') ?? false;
+            Obx(
+              () => NavDrawerMenuItem(
+                icon: Icons.settings,
+                text: SentenceManager(
+                  currentLanguage: homeController.selectedLanguage.value,
+                ).sentences.navDrawerSettings,
+                onTap: () async {
+                  final SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  homeController.syncOnStart.value =
+                      prefs.getBool('sync-onStart') ?? false;
+                  homeController.syncOnTaskCreate.value =
+                      prefs.getBool('sync-OnTaskCreate') ?? false;
+                  homeController.delaytask.value =
+                      prefs.getBool('delaytask') ?? false;
+                  homeController.change24hr.value =
+                      prefs.getBool('24hourformate') ?? false;
 
-                Get.toNamed(Routes.SETTINGS);
-              },
+                  Get.toNamed(Routes.SETTINGS);
+                },
+              ),
             ),
-            NavDrawerMenuItem(
-              icon: Icons.exit_to_app,
-              text:  SentenceManager(
-                currentLanguage: homeController.selectedLanguage.value,
-              ).sentences.navDrawerExit,
-              onTap: () {
-                _showExitConfirmationDialog(context);
-              },
+            Obx(
+              () => NavDrawerMenuItem(
+                icon: Icons.exit_to_app,
+                text: SentenceManager(
+                  currentLanguage: homeController.selectedLanguage.value,
+                ).sentences.navDrawerExit,
+                onTap: () {
+                  _showExitConfirmationDialog(context);
+                },
+              ),
             ),
           ],
         ),

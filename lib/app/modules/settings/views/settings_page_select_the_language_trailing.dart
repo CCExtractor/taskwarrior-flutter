@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:taskwarrior/app/modules/settings/controllers/settings_controller.dart';
+import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
+import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 import 'package:taskwarrior/app/utils/language/supported_language.dart';
+import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
 class SettingsPageSelectTheLanguageTrailing extends StatelessWidget {
   final SettingsController controller;
@@ -20,9 +23,20 @@ class SettingsPageSelectTheLanguageTrailing extends StatelessWidget {
         items: SupportedLanguage.values.map((language) {
           return DropdownMenuItem<SupportedLanguage>(
             value: language,
-            child: Text(_getLanguageName(language)),
+            child: Text(
+              _getLanguageName(language),
+              style: TextStyle(
+                fontFamily: FontFamily.poppins,
+                color: AppSettings.isDarkMode
+                    ? TaskWarriorColors.white
+                    : TaskWarriorColors.black,
+              ),
+            ),
           );
         }).toList(),
+        dropdownColor: AppSettings.isDarkMode
+            ? TaskWarriorColors.kprimaryBackgroundColor
+            : TaskWarriorColors.kLightPrimaryBackgroundColor
       ),
     );
   }

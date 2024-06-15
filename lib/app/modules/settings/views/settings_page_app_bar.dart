@@ -14,7 +14,8 @@ import '../controllers/settings_controller.dart';
 import 'package:taskwarrior/app/utils/constants/palette.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 
-class SettingsPageAppBar extends StatelessWidget implements PreferredSizeWidget{
+class SettingsPageAppBar extends StatelessWidget
+    implements PreferredSizeWidget {
   final SettingsController controller;
   const SettingsPageAppBar({required this.controller, super.key});
 
@@ -55,7 +56,9 @@ class SettingsPageAppBar extends StatelessWidget implements PreferredSizeWidget{
       ),
       leading: GestureDetector(
         onTap: () {
-          Get.offAllNamed(Routes.SPLASH);
+          //   Get.toNamed(Routes.b)
+          // ;
+          Get.back();
         },
         child: Icon(
           Icons.chevron_left,
