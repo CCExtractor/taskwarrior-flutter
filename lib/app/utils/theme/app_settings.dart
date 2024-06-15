@@ -1,5 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:taskwarrior/app/utils/constants/supported_language.dart';
+import 'package:taskwarrior/app/utils/language/supported_language.dart';
 
 class SelectedTheme {
   static SharedPreferences? _preferences;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:taskwarrior/app/modules/settings/controllers/settings_controller.dart';
-import 'package:taskwarrior/app/utils/constants/supported_language.dart';
+import 'package:taskwarrior/app/utils/language/supported_language.dart';
 
 class SettingsPageSelectTheLanguageTrailing extends StatelessWidget {
   final SettingsController controller;

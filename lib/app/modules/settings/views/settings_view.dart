@@ -5,13 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:taskwarrior/app/modules/settings/views/settings_page_body.dart';
+import 'package:taskwarrior/app/routes/app_pages.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
+
+import 'package:taskwarrior/app/utils/language/sentences.dart';
 
 import '../controllers/settings_controller.dart';
 
 import 'package:taskwarrior/app/utils/constants/palette.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
-import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
 class SettingsView extends GetView<SettingsController> {
   const SettingsView({super.key});
@@ -25,25 +27,35 @@ class SettingsView extends GetView<SettingsController> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Settings',
-              style: GoogleFonts.poppins(
-                color: TaskWarriorColors.white,
-                fontSize: TaskWarriorFonts.fontSizeLarge,
+            Obx(
+              () => Text(
+                SentenceManager(
+                        currentLanguage: controller.selectedLanguage.value)
+                    .sentences
+                    .settingsPageTitle,
+                style: GoogleFonts.poppins(
+                  color: TaskWarriorColors.white,
+                  fontSize: TaskWarriorFonts.fontSizeLarge,
+                ),
               ),
             ),
-            Text(
-              'Configure your preferences',
-              style: GoogleFonts.poppins(
-                color: TaskWarriorColors.white,
-                fontSize: TaskWarriorFonts.fontSizeSmall,
+            Obx(
+              () => Text(
+                SentenceManager(
+                        currentLanguage: controller.selectedLanguage.value)
+                    .sentences
+                    .settingsPageSubtitle,
+                style: GoogleFonts.poppins(
+                  color: TaskWarriorColors.white,
+                  fontSize: TaskWarriorFonts.fontSizeSmall,
+                ),
               ),
             ),
           ],
         ),
         leading: GestureDetector(
           onTap: () {
-            Navigator.pop(context);
+            Get.offAllNamed(Routes.SPLASH);
           },
           child: Icon(
             Icons.chevron_left,
@@ -51,9 +63,6 @@ class SettingsView extends GetView<SettingsController> {
           ),
         ),
       ),
-      backgroundColor: AppSettings.isDarkMode
-          ? TaskWarriorColors.kprimaryBackgroundColor
-          : TaskWarriorColors.white,
       body: SettingsPageBody(controller: controller),
     );
   }
