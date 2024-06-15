@@ -90,12 +90,14 @@ class HomePageBody extends StatelessWidget {
                   child: Scrollbar(
                     child: Obx(
                       () => TasksBuilder(
-                          // darkmode: AppSettings.isDarkMode,
-                          useDelayTask: controller.useDelayTask.value,
-                          taskData: controller.searchedTasks,
-                          pendingFilter: controller.pendingFilter.value,
-                          waitingFilter: controller.waitingFilter.value,
-                          searchVisible: controller.searchVisible.value),
+                        // darkmode: AppSettings.isDarkMode,
+                        useDelayTask: controller.useDelayTask.value,
+                        taskData: controller.searchedTasks,
+                        pendingFilter: controller.pendingFilter.value,
+                        waitingFilter: controller.waitingFilter.value,
+                        searchVisible: controller.searchVisible.value,
+                        selectedLanguage: controller.selectedLanguage.value,
+                      ),
                     ),
                   ),
                 ),

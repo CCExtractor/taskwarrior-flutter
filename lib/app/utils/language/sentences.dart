@@ -2,7 +2,11 @@ import 'package:taskwarrior/app/utils/language/supported_language.dart';
 
 abstract class Sentences {
   String get helloWorld;
+
   String get homePageTitle;
+  String get homePageLastModified;
+  String get homePageDue;
+
   String get settingsPageTitle;
   String get settingsPageSubtitle;
   String get settingsPageMovingDataToNewDirectory;
@@ -37,6 +41,10 @@ class EnglishSentences extends Sentences {
   String get helloWorld => 'Hello, World!';
   @override
   String get homePageTitle => 'Home Page';
+  @override
+  String get homePageLastModified => 'Last Modified';
+  @override
+  String get homePageDue => 'Due';
   @override
   String get settingsPageTitle => 'Settings Page';
   @override
@@ -91,6 +99,10 @@ class HindiSentences extends Sentences {
   String get helloWorld => 'नमस्ते दुनिया!';
   @override
   String get homePageTitle => 'होम पेज';
+  @override
+  String get homePageLastModified => 'अंतिम बार संशोधित';
+  @override
+  String get homePageDue => 'देय';
   @override
   String get settingsPageTitle => 'सेटिंग्स पेज';
   @override
@@ -148,6 +160,10 @@ class MarathiSentences extends Sentences {
   String get helloWorld => 'नमस्कार, जग!';
   @override
   String get homePageTitle => 'होम पेज';
+  @override
+  String get homePageLastModified => 'गेल्या बदल';
+  @override
+  String get homePageDue => 'देय';
   @override
   String get settingsPageTitle => 'सेटिंग्स पेज';
   @override

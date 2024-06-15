@@ -12,6 +12,7 @@ import 'package:taskwarrior/app/utils/constants/palette.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
+import 'package:taskwarrior/app/utils/language/supported_language.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/modify.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
@@ -23,6 +24,7 @@ class TasksBuilder extends StatelessWidget {
     required this.waitingFilter,
     required this.useDelayTask,
     required this.searchVisible,
+    required this.selectedLanguage,
   });
 
   final List<Task> taskData;
@@ -30,6 +32,7 @@ class TasksBuilder extends StatelessWidget {
   final bool waitingFilter;
   final bool searchVisible;
   final bool useDelayTask;
+  final SupportedLanguage selectedLanguage;
 
   void setStatus(BuildContext context, String newValue, String id) {
     var storageWidget = Get.find<HomeController>();
@@ -226,6 +229,7 @@ class TasksBuilder extends StatelessWidget {
                                     mergeTask: storageWidget.mergeTask,
                                     uuid: task.uuid,
                                   ),
+                                  selectedLanguage: selectedLanguage,
                                 ),
                               ),
                             ),
@@ -253,6 +257,7 @@ class TasksBuilder extends StatelessWidget {
                                   mergeTask: storageWidget.mergeTask,
                                   uuid: task.uuid,
                                 ),
+                                  selectedLanguage: selectedLanguage,
                               ),
                             ),
                           );

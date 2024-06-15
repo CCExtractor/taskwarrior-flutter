@@ -3,6 +3,8 @@ import 'package:taskwarrior/app/models/json/task.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
+import 'package:taskwarrior/app/utils/language/sentences.dart';
+import 'package:taskwarrior/app/utils/language/supported_language.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/datetime_differences.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/modify.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/urgency.dart';
@@ -17,6 +19,7 @@ class TaskListItem extends StatelessWidget {
     required this.darkmode,
     required this.useDelayTask,
     required this.modify,
+    required this.selectedLanguage,
   });
 
   final Task task;
@@ -25,6 +28,7 @@ class TaskListItem extends StatelessWidget {
   final bool darkmode;
   final Modify modify;
   final bool useDelayTask;
+  final SupportedLanguage selectedLanguage;
 
   @override
   Widget build(BuildContext context) {
@@ -127,15 +131,11 @@ class TaskListItem extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   child: Text(
                     '${pendingFilter ? '' : '${task.status[0].toUpperCase()}\n'}'
-                            'Last Modified: ${(task.modified != null) ? age(task.modified!) : ((task.start != null) ? age(task.start!) : '-')} | '
-                            'Due: ${(task.due != null) ? when(task.due!) : '-'}'
+                            '${SentenceManager(currentLanguage: selectedLanguage).sentences.homePageLastModified} : ${(task.modified != null) ? age(task.modified!) : ((task.start != null) ? age(task.start!) : '-')} | '
+                            '${SentenceManager(currentLanguage: selectedLanguage).sentences.homePageDue} : ${(task.due != null) ? when(task.due!) : '-'}'
                         .replaceFirst(RegExp(r' \[\]$'), '')
                         .replaceAll(RegExp(r' +'), ' '),
                     overflow: TextOverflow.ellipsis,
-                    // style: GoogleFonts.poppins(
-                    //   color: dimColor,
-                    //   fontSize: TaskWarriorFonts.fontSizeSmall,
-                    // ),
                     style: TextStyle(
                         fontFamily: FontFamily.poppins,
                         color: dimColor,
@@ -191,8 +191,8 @@ class TaskListItem extends StatelessWidget {
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Text(
-                  'Last Modified: ${(task.modified != null) ? age(task.modified!) : ((task.start != null) ? age(task.start!) : '-')} | '
-                          'Due: ${(task.due != null) ? when(task.due!) : '-'}'
+                  '${SentenceManager(currentLanguage: selectedLanguage).sentences.homePageLastModified} :${(task.modified != null) ? age(task.modified!) : ((task.start != null) ? age(task.start!) : '-')} | '
+                          '${SentenceManager(currentLanguage: selectedLanguage).sentences.homePageDue} : ${(task.due != null) ? when(task.due!) : '-'}'
                       .replaceFirst(RegExp(r' \[\]$'), '')
                       .replaceAll(RegExp(r' +'), ' '),
                   overflow: TextOverflow.ellipsis,
