@@ -17,6 +17,7 @@ import 'package:taskwarrior/app/models/tag_meta_data.dart';
 import 'package:taskwarrior/app/modules/splash/controllers/splash_controller.dart';
 import 'package:taskwarrior/app/services/tag_filter.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
+import 'package:taskwarrior/app/utils/language/supported_language.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/comparator.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/projects.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/query.dart';
@@ -40,6 +41,7 @@ class HomeController extends GetxController {
   final RxBool searchVisible = false.obs;
   final TextEditingController searchController = TextEditingController();
   late RxBool serverCertExists;
+  final Rx<SupportedLanguage> selectedLanguage = SupportedLanguage.english.obs;
 
   @override
   void onInit() {
@@ -52,7 +54,7 @@ class HomeController extends GetxController {
     serverCertExists = RxBool(storage.guiPemFiles.serverCertExists());
     _profileSet();
     loadDelayTask();
-    initDarkMode();
+    initLanguageAndDarkMode();
   }
 
   void _profileSet() {
@@ -469,8 +471,9 @@ class HomeController extends GetxController {
 
   RxBool isDarkModeOn = false.obs;
 
-  void initDarkMode() {
+  void initLanguageAndDarkMode() {
     isDarkModeOn.value = AppSettings.isDarkMode;
+    selectedLanguage.value = AppSettings.selectedLanguage;
     print("called and value is${isDarkModeOn.value}");
   }
 }

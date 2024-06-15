@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:taskwarrior/app/routes/app_pages.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
+import 'package:taskwarrior/app/utils/language/sentences.dart';
 import 'package:taskwarrior/app/utils/taskserver/taskserver.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
@@ -27,7 +28,9 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
       surfaceTintColor: TaskWarriorColors.kprimaryBackgroundColor,
       title: Center(
         child: Text(
-          'Home Page',
+          SentenceManager(currentLanguage: controller.selectedLanguage.value)
+              .sentences
+              .homePageTitle,
           style: TextStyle(
               fontFamily: FontFamily.poppins, color: TaskWarriorColors.white),
         ),
@@ -65,15 +68,6 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
                     action: SnackBarAction(
                       label: 'Set Up',
                       onPressed: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (_) =>
-                        //         const ManageTaskServerView(),
-                        //   ),
-                        // ).then((value) {
-                        //   // setState(() {});
-                        // });
                         Get.toNamed(Routes.MANAGE_TASK_SERVER);
                       },
                       textColor: TaskWarriorColors.purple,

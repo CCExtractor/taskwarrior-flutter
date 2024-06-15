@@ -24,6 +24,12 @@ abstract class Sentences {
 
   String get settingsPageSelectDirectoryTitle;
   String get settingsPageSelectDirectoryDescription;
+
+  String get navDrawerProfile;
+  String get navDrawerReports;
+  String get navDrawerAbout;
+  String get navDrawerSettings;
+  String get navDrawerExit;
 }
 
 class EnglishSentences extends Sentences {
@@ -44,29 +50,40 @@ class EnglishSentences extends Sentences {
   String get settingsPageSyncOnStartDescription =>
       'Automatically sync data on app start';
   @override
-  String get settingsPageEnableSyncOnTaskCreateTitle =>
-      'Sync on task create';
+  String get settingsPageEnableSyncOnTaskCreateTitle => 'Sync on task create';
   @override
   String get settingsPageEnableSyncOnTaskCreateDescription =>
       'Enable automatic syncing when creating a new task';
   @override
-  String get settingsPageHighlightTaskTitle =>
-      'Highlight the task';
+  String get settingsPageHighlightTaskTitle => 'Highlight the task';
   @override
   String get settingsPageHighlightTaskDescription =>
       'Make the border of task if only 1 day left';
   @override
   String get settingsPageEnable24hrFormatTitle => 'Enable 24 hr format';
   @override
-  String get settingsPageEnable24hrFormatDescription => 'Switch right to enable 24 hr format';
+  String get settingsPageEnable24hrFormatDescription =>
+      'Switch right to enable 24 hr format';
   @override
   String get settingsPageSelectLanguage => 'Select the language';
   @override
-  String get settingsPageToggleNativeLanguage => 'Toggle between your native language';
+  String get settingsPageToggleNativeLanguage =>
+      'Toggle between your native language';
   @override
   String get settingsPageSelectDirectoryTitle => 'Select the directory';
   @override
-  String get settingsPageSelectDirectoryDescription => 'Select the directory where the TaskWarrior data is stored\nCurrent directory: ';
+  String get settingsPageSelectDirectoryDescription =>
+      'Select the directory where the TaskWarrior data is stored\nCurrent directory: ';
+  @override
+  String get navDrawerProfile => 'Profile';
+  @override
+  String get navDrawerReports => 'Reports';
+  @override
+  String get navDrawerAbout => 'About';
+  @override
+  String get navDrawerSettings => 'Settings';
+  @override
+  String get navDrawerExit => 'Exit';
 }
 
 class HindiSentences extends Sentences {
@@ -99,17 +116,31 @@ class HindiSentences extends Sentences {
   String get settingsPageHighlightTaskDescription =>
       'केवल 1 दिन शेष होने पर कार्य की सीमा बनाएं';
   @override
-  String get settingsPageEnable24hrFormatTitle => '24 घंटे का प्रारूप सक्षम करें';
+  String get settingsPageEnable24hrFormatTitle =>
+      '24 घंटे का प्रारूप सक्षम करें';
   @override
-  String get settingsPageEnable24hrFormatDescription => '24 घंटे का प्रारूप सक्षम करें';
+  String get settingsPageEnable24hrFormatDescription =>
+      '24 घंटे का प्रारूप सक्षम करें';
   @override
   String get settingsPageSelectLanguage => 'भाषा चुनें';
   @override
-  String get settingsPageToggleNativeLanguage => 'अपनी मातृभाषा के बीच टॉगल करें';
+  String get settingsPageToggleNativeLanguage =>
+      'अपनी मातृभाषा के बीच टॉगल करें';
   @override
   String get settingsPageSelectDirectoryTitle => 'निर्देशिका चुनें';
   @override
-  String get settingsPageSelectDirectoryDescription => 'निर्देशिका चुनें जहां TaskWarrior डेटा स्टोर होता है\nवर्तमान निर्देशिका: ';
+  String get settingsPageSelectDirectoryDescription =>
+      'निर्देशिका चुनें जहां TaskWarrior डेटा स्टोर होता है\nवर्तमान निर्देशिका: ';
+  @override
+  String get navDrawerProfile => 'प्रोफ़ाइल';
+  @override
+  String get navDrawerReports => 'रिपोर्ट्स';
+  @override
+  String get navDrawerAbout => 'के बारे में';
+  @override
+  String get navDrawerSettings => 'सेटिंग्स';
+  @override
+  String get navDrawerExit => 'बाहर जाओ';
 }
 
 class MarathiSentences extends Sentences {
@@ -144,15 +175,28 @@ class MarathiSentences extends Sentences {
   @override
   String get settingsPageEnable24hrFormatTitle => '24 तासाचा स्वरूप सक्षम करा';
   @override
-  String get settingsPageEnable24hrFormatDescription => '24 तासाचा स्वरूप सक्षम करा';
+  String get settingsPageEnable24hrFormatDescription =>
+      '24 तासाचा स्वरूप सक्षम करा';
   @override
   String get settingsPageSelectLanguage => 'भाषा निवडा';
   @override
-  String get settingsPageToggleNativeLanguage => 'तुमच्या मूल भाषेतर्फे टॉगल करा';
+  String get settingsPageToggleNativeLanguage =>
+      'तुमच्या मूल भाषेतर्फे टॉगल करा';
   @override
   String get settingsPageSelectDirectoryTitle => 'निर्देशिका निवडा';
   @override
-  String get settingsPageSelectDirectoryDescription => 'निर्देशिका निवडा जिथे TaskWarrior डेटा स्टोर केला जातो\nवर्तमान निर्देशिका: ';
+  String get settingsPageSelectDirectoryDescription =>
+      'निर्देशिका निवडा जिथे TaskWarrior डेटा स्टोर केला जातो\nवर्तमान निर्देशिका: ';
+  @override
+  String get navDrawerProfile => 'प्रोफ़ाइल';
+  @override
+  String get navDrawerReports => 'अहवाल';
+  @override
+  String get navDrawerAbout => 'चरित्र';
+  @override
+  String get navDrawerSettings => 'सेटिंग्स';
+  @override
+  String get navDrawerExit => 'बाहेर पडा';
 }
 
 class SentenceManager {

@@ -4,11 +4,13 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taskwarrior/app/modules/about/views/about_view.dart';
 import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
+import 'package:taskwarrior/app/modules/home/views/home_page_nav_drawer_menu_item.dart';
 import 'package:taskwarrior/app/modules/home/views/theme_clipper.dart';
 import 'package:taskwarrior/app/routes/app_pages.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
+import 'package:taskwarrior/app/utils/language/sentences.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
 class NavDrawer extends StatelessWidget {
@@ -57,7 +59,7 @@ class NavDrawer extends StatelessWidget {
                         AppSettings.isDarkMode = newMode;
                         await SelectedTheme.saveMode(AppSettings.isDarkMode);
                         Get.back();
-                        homeController.initDarkMode();
+                        homeController.initLanguageAndDarkMode();
                       },
                       child: Icon(
                         AppSettings.isDarkMode
@@ -79,47 +81,39 @@ class NavDrawer extends StatelessWidget {
                   : TaskWarriorColors.kLightPrimaryBackgroundColor,
               height: Get.height * 0.03,
             ),
-            buildMenuItem(
+            NavDrawerMenuItem(
               icon: Icons.person_rounded,
-              text: 'Profile',
+              text: SentenceManager(
+                currentLanguage: homeController.selectedLanguage.value,
+              ).sentences.navDrawerProfile,
               onTap: () {
-                // Navigator.of(context).push(
-                //   MaterialPageRoute(
-                //     builder: (context) => const ProfileView(),
-                //   ),
-                // );
                 Get.toNamed(Routes.PROFILE);
-                // Navigator.pushNamed(context, PageRoutes.profile);
               },
             ),
-            buildMenuItem(
+            NavDrawerMenuItem(
               icon: Icons.summarize,
-              text: 'Reports',
+              text:  SentenceManager(
+                currentLanguage: homeController.selectedLanguage.value,
+              ).sentences.navDrawerReports,
               onTap: () {
                 Get.toNamed(Routes.REPORTS);
-                // Navigator.of(context).push(
-                //   MaterialPageRoute(
-                //     builder: (context) => const ReportsHome(),
-                //   ),
-                // );
               },
             ),
-            buildMenuItem(
+            NavDrawerMenuItem(
               icon: Icons.info,
-              text: 'About',
+              text:  SentenceManager(
+                currentLanguage: homeController.selectedLanguage.value,
+              ).sentences.navDrawerAbout,
               onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const AboutView(),
-                  ),
-                );
+                Get.toNamed(Routes.ABOUT);
               },
             ),
-            buildMenuItem(
+            NavDrawerMenuItem(
               icon: Icons.settings,
-              text: 'Settings',
+              text:  SentenceManager(
+                currentLanguage: homeController.selectedLanguage.value,
+              ).sentences.navDrawerSettings,
               onTap: () async {
-                ///check if auto sync is on or off
                 final SharedPreferences prefs =
                     await SharedPreferences.getInstance();
                 homeController.syncOnStart.value =
@@ -130,31 +124,15 @@ class NavDrawer extends StatelessWidget {
                     prefs.getBool('delaytask') ?? false;
                 homeController.change24hr.value =
                     prefs.getBool('24hourformate') ?? false;
-                // syncOnStart = prefs.getBool('sync-onStart') ?? false;
-                // syncOnTaskCreate =
-                //     prefs.getBool('sync-OnTaskCreate') ?? false;
-                // delaytask = prefs.getBool('delaytask') ?? false;
-                // change24hr = prefs.getBool('24hourformate') ?? false;
 
-                // print(syncOnStart);
-                // print(syncOnTaskCreate);
-                // Navigator.of(context).push(
-                //   MaterialPageRoute(
-                //     builder: (context) => SettingsPage(
-                //       isSyncOnStartActivel: homeController.syncOnStart.value,
-                //       isSyncOnTaskCreateActivel:
-                //           homeController.syncOnTaskCreate.value,
-                //       delaytask: homeController.delaytask.value,
-                //       change24hr: homeController.change24hr.value,
-                //     ),
-                //   ),
-                // );
                 Get.toNamed(Routes.SETTINGS);
               },
             ),
-            buildMenuItem(
+            NavDrawerMenuItem(
               icon: Icons.exit_to_app,
-              text: 'Exit',
+              text:  SentenceManager(
+                currentLanguage: homeController.selectedLanguage.value,
+              ).sentences.navDrawerExit,
               onTap: () {
                 _showExitConfirmationDialog(context);
               },
@@ -219,41 +197,6 @@ class NavDrawer extends StatelessWidget {
           ],
         );
       },
-    );
-  }
-
-  Widget buildMenuItem(
-      {required IconData icon,
-      required String text,
-      required VoidCallback onTap}) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        color: AppSettings.isDarkMode
-            ? TaskWarriorColors.kprimaryBackgroundColor
-            : TaskWarriorColors.kLightPrimaryBackgroundColor,
-        padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 10),
-        child: Row(
-          children: [
-            Icon(
-              icon,
-              color: AppSettings.isDarkMode
-                  ? TaskWarriorColors.white
-                  : TaskWarriorColors.black,
-            ),
-            const SizedBox(width: 10),
-            Text(
-              text,
-              style: TextStyle(
-                color: AppSettings.isDarkMode
-                    ? TaskWarriorColors.white
-                    : TaskWarriorColors.black,
-                fontSize: TaskWarriorFonts.fontSizeMedium,
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
