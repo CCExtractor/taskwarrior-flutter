@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:taskwarrior/app/routes/app_pages.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
-import 'package:taskwarrior/app/utils/language/sentences.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/taskserver/taskserver.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 

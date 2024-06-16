@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
-import 'package:taskwarrior/app/utils/language/sentences.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 
 import '../controllers/settings_controller.dart';
 
