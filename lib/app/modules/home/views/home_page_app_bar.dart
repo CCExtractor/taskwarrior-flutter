@@ -59,16 +59,26 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text(
-                      'TaskServer is not configured',
-                      style: TextStyle(
-                        color: AppSettings.isDarkMode
-                            ? TaskWarriorColors.white
-                            : TaskWarriorColors.black,
+                    content: Obx(
+                      () => Text(
+                        SentenceManager(
+                                currentLanguage:
+                                    controller.selectedLanguage.value)
+                            .sentences
+                            .homePageTaskWarriorNotConfigured,
+                        style: TextStyle(
+                          color: AppSettings.isDarkMode
+                              ? TaskWarriorColors.white
+                              : TaskWarriorColors.black,
+                        ),
                       ),
                     ),
                     action: SnackBarAction(
-                      label: 'Set Up',
+                      label: SentenceManager(
+                              currentLanguage:
+                                  controller.selectedLanguage.value)
+                          .sentences
+                          .homePageSetup,
                       onPressed: () {
                         Get.toNamed(Routes.MANAGE_TASK_SERVER);
                       },
@@ -82,9 +92,14 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
         Builder(
           builder: (context) => IconButton(
-            icon: Tooltip(
-              message: 'Filters',
-              child: Icon(Icons.filter_list, color: TaskWarriorColors.white),
+            icon: Obx(
+              () => Tooltip(
+                message: SentenceManager(
+                        currentLanguage: controller.selectedLanguage.value)
+                    .sentences
+                    .homePageFilter,
+                child: Icon(Icons.filter_list, color: TaskWarriorColors.white),
+              ),
             ),
             onPressed: () => Scaffold.of(context).openEndDrawer(),
           ),
@@ -92,9 +107,14 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
       ],
       leading: Builder(
         builder: (context) => IconButton(
-          icon: Tooltip(
-              message: 'Menu',
-              child: Icon(Icons.menu, color: TaskWarriorColors.white)),
+          icon: Obx(
+            () => Tooltip(
+                message: SentenceManager(
+                        currentLanguage: controller.selectedLanguage.value)
+                    .sentences
+                    .homePageMenu,
+                child: Icon(Icons.menu, color: TaskWarriorColors.white)),
+          ),
           onPressed: () => Scaffold.of(context).openDrawer(),
         ),
       ),

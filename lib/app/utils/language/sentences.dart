@@ -6,6 +6,10 @@ abstract class Sentences {
   String get homePageTitle;
   String get homePageLastModified;
   String get homePageDue;
+  String get homePageTaskWarriorNotConfigured;
+  String get homePageSetup;
+  String get homePageFilter;
+  String get homePageMenu;
 
   String get settingsPageTitle;
   String get settingsPageSubtitle;
@@ -45,6 +49,14 @@ class EnglishSentences extends Sentences {
   String get homePageLastModified => 'Last Modified';
   @override
   String get homePageDue => 'Due';
+  @override
+  String get homePageTaskWarriorNotConfigured => 'TaskServer is not configured';
+  @override
+  String get homePageSetup => 'Setup';
+  @override
+  String get homePageFilter => 'Filter';
+  @override
+  String get homePageMenu => 'Menu';
   @override
   String get settingsPageTitle => 'Settings Page';
   @override
@@ -103,6 +115,14 @@ class HindiSentences extends Sentences {
   String get homePageLastModified => 'अंतिम बार संशोधित';
   @override
   String get homePageDue => 'देय';
+  @override
+  String get homePageTaskWarriorNotConfigured => 'TaskServer कॉन्फ़िगर नहीं है';
+  @override
+  String get homePageSetup => 'सेटअप';
+  @override
+  String get homePageFilter => 'फ़िल्टर';
+  @override
+  String get homePageMenu => 'मेन्यू';
   @override
   String get settingsPageTitle => 'सेटिंग्स पेज';
   @override
@@ -164,6 +184,14 @@ class MarathiSentences extends Sentences {
   String get homePageLastModified => 'गेल्या बदल';
   @override
   String get homePageDue => 'देय';
+  @override
+  String get homePageTaskWarriorNotConfigured => 'TaskServer कॉन्फ़िगर नाही';
+  @override
+  String get homePageSetup => 'सेटअप';
+  @override
+  String get homePageFilter => 'फिल्टर';
+  @override
+  String get homePageMenu => 'मेन्यू';
   @override
   String get settingsPageTitle => 'सेटिंग्स पेज';
   @override
