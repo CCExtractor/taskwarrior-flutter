@@ -6,17 +6,25 @@ class MarathiSentences extends Sentences {
   @override
   String get homePageTitle => 'होम पेज';
   @override
-  String get homePageLastModified => 'गेल्या बदल';
+  String get homePageLastModified => 'शेवटचा बदल';
   @override
-  String get homePageDue => 'देय';
+  String get homePageDue => 'द्यावे';
   @override
-  String get homePageTaskWarriorNotConfigured => 'TaskServer कॉन्फ़िगर नाही';
+  String get homePageTaskWarriorNotConfigured => 'TaskServer संरचीत नाही';
   @override
   String get homePageSetup => 'सेटअप';
   @override
   String get homePageFilter => 'फिल्टर';
   @override
-  String get homePageMenu => 'मेन्यू';
+  String get homePageMenu => 'मेनू';
+  @override
+  String get homePageExitApp => 'अ‍ॅप बंद करा';
+  @override
+  String get homePageAreYouSureYouWantToExit => 'आपण खात्री आहात की आपण अ‍ॅप बंद करू इच्छिता?';
+  @override
+  String get homePageExit => 'बाहेर पडा';
+  @override
+  String get homePageCancel => 'रद्द करा';
   @override
   String get settingsPageTitle => 'सेटिंग्स पेज';
   @override

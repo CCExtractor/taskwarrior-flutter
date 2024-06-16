@@ -18,6 +18,14 @@ class EnglishSentences extends Sentences {
   @override
   String get homePageMenu => 'Menu';
   @override
+  String get homePageExitApp => 'Exit App';
+  @override
+  String get homePageAreYouSureYouWantToExit => 'Are you sure you want to exit?';
+  @override
+  String get homePageExit => 'Exit';
+  @override
+  String get homePageCancel => 'Cancel';
+  @override
   String get settingsPageTitle => 'Settings Page';
   @override
   String get settingsPageSubtitle => 'Configure your preferences';

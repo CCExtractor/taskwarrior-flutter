@@ -8,6 +8,10 @@ abstract class Sentences {
   String get homePageSetup;
   String get homePageFilter;
   String get homePageMenu;
+  String get homePageExitApp;
+  String get homePageAreYouSureYouWantToExit;
+  String get homePageExit;
+  String get homePageCancel;
 
   String get settingsPageTitle;
   String get settingsPageSubtitle;

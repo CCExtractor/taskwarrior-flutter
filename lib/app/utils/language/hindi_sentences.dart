@@ -18,6 +18,14 @@ class HindiSentences extends Sentences {
   @override
   String get homePageMenu => 'मेन्यू';
   @override
+  String get homePageExitApp => 'ऐप बंद करें';
+  @override
+  String get homePageAreYouSureYouWantToExit => 'क्या आप वाकई ऐप बंद करना चाहते हैं?';
+  @override
+  String get homePageExit => 'बाहर जाओ';
+  @override
+  String get homePageCancel => 'रद्द करें';
+  @override
   String get settingsPageTitle => 'सेटिंग्स पेज';
   @override
   String get settingsPageSubtitle => 'अपनी पसंद सेट करें';

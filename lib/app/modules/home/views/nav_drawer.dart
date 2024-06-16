@@ -41,7 +41,9 @@ class NavDrawer extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Menu',
+                    SentenceManager(currentLanguage: homeController.selectedLanguage.value)
+                .sentences
+                .homePageMenu,
                     style: TextStyle(
                       fontSize: TaskWarriorFonts.fontSizeExtraLarge,
                       fontWeight: TaskWarriorFonts.bold,
@@ -160,7 +162,9 @@ class NavDrawer extends StatelessWidget {
       builder: (BuildContext context) {
         return Utils.showAlertDialog(
           title: Text(
-            'Exit App',
+             SentenceManager(currentLanguage: homeController.selectedLanguage.value)
+                .sentences
+                .homePageExitApp,
             style: TextStyle(
               color: AppSettings.isDarkMode
                   ? TaskWarriorColors.white
@@ -168,7 +172,9 @@ class NavDrawer extends StatelessWidget {
             ),
           ),
           content: Text(
-            'Are you sure you want to exit the app?',
+            SentenceManager(currentLanguage: homeController.selectedLanguage.value)
+                .sentences
+                .homePageAreYouSureYouWantToExit,
             style: TextStyle(
               color: AppSettings.isDarkMode
                   ? TaskWarriorColors.white
@@ -178,7 +184,9 @@ class NavDrawer extends StatelessWidget {
           actions: <Widget>[
             TextButton(
               child: Text(
-                'Cancel',
+                SentenceManager(currentLanguage: homeController.selectedLanguage.value)
+                .sentences
+                .homePageCancel,
                 style: TextStyle(
                   color: AppSettings.isDarkMode
                       ? TaskWarriorColors.white
@@ -191,7 +199,9 @@ class NavDrawer extends StatelessWidget {
             ),
             TextButton(
               child: Text(
-                'Exit',
+                SentenceManager(currentLanguage: homeController.selectedLanguage.value)
+                .sentences
+                .homePageExit,
                 style: TextStyle(
                   color: AppSettings.isDarkMode
                       ? TaskWarriorColors.white
