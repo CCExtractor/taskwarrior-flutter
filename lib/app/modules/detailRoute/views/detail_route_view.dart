@@ -70,7 +70,7 @@ class DetailRouteView extends GetView<DetailRouteController> {
               leading: BackButton(color: TaskWarriorColors.white),
               backgroundColor: Palette.kToDark,
               title: Text(
-                'id: ${(controller.modify.id == 0) ? '-' : controller.modify.id}',
+                '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageID}: ${(controller.modify.id == 0) ? '-' : controller.modify.id}',
                 style: TextStyle(
                   color: TaskWarriorColors.white,
                 ),

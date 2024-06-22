@@ -22,23 +22,23 @@ class SettingsController extends GetxController {
   RxBool isMovingDirectory = false.obs;
 
   Rx<SupportedLanguage> selectedLanguage = AppSettings.selectedLanguage.obs;
+  RxString baseDirectory = "".obs;
 
   void setSelectedLanguage(SupportedLanguage language) async {
     await SelectedLanguage.saveSelectedLanguage(language);
     selectedLanguage.value = language;
     AppSettings.selectedLanguage = language;
     Get.find<HomeController>().selectedLanguage.value = language;
-    
   }
 
   Future<String> getBaseDirectory() async {
     SplashController profilesWidget = Get.find<SplashController>();
-    Directory baseDirectory = profilesWidget.baseDirectory();
+    Directory baseDir = profilesWidget.baseDirectory();
     Directory defaultDirectory = await profilesWidget.getDefaultDirectory();
-    if (baseDirectory.path == defaultDirectory.path) {
+    if (baseDir.path == defaultDirectory.path) {
       return 'Default';
     } else {
-      return baseDirectory.path;
+      return baseDir.path;
     }
   }
 
@@ -178,6 +178,7 @@ class SettingsController extends GetxController {
     delaytask.value = prefs.getBool('delaytask') ?? false;
     change24hr.value = prefs.getBool('24hourformate') ?? false;
     initDarkMode();
+    baseDirectory.value = await getBaseDirectory();
     super.onInit();
   }
 }

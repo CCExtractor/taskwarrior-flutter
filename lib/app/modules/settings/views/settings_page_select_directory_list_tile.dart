@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taskwarrior/app/modules/splash/controllers/splash_controller.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
 import '../controllers/settings_controller.dart';
@@ -23,7 +24,9 @@ class SettingsPageSelectDirectoryListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(
-        'Select directory',
+        SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+            .sentences
+            .settingsPageSelectDirectoryTitle,
         style: GoogleFonts.poppins(
           fontWeight: FontWeight.bold,
           fontSize: TaskWarriorFonts.fontSizeMedium,
@@ -34,11 +37,13 @@ class SettingsPageSelectDirectoryListTile extends StatelessWidget {
       ),
       subtitle: Column(
         children: [
-          Text(
-            'Select the directory where the TaskWarrior data is stored\nCurrent directory: ${controller.getBaseDirectory()}',
-            style: GoogleFonts.poppins(
-              color: TaskWarriorColors.grey,
-              fontSize: TaskWarriorFonts.fontSizeSmall,
+          Obx(
+            () => Text(
+              '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.settingsPageSelectDirectoryTitle}: ${controller.baseDirectory.value}',
+              style: GoogleFonts.poppins(
+                color: TaskWarriorColors.grey,
+                fontSize: TaskWarriorFonts.fontSizeSmall,
+              ),
             ),
           ),
           const SizedBox(
@@ -147,7 +152,10 @@ class SettingsPageSelectDirectoryListTile extends StatelessWidget {
                   }
                 },
                 child: Text(
-                  'Reset to default',
+                  SentenceManager(
+                          currentLanguage: controller.selectedLanguage.value)
+                      .sentences
+                      .settingsPageSetToDefault,
                   style: TextStyle(
                     color: AppSettings.isDarkMode
                         ? TaskWarriorColors.white
@@ -169,7 +177,10 @@ class SettingsPageSelectDirectoryListTile extends StatelessWidget {
                   controller.pickDirectory(context);
                 },
                 child: Text(
-                  'Change directory',
+                  SentenceManager(
+                          currentLanguage: controller.selectedLanguage.value)
+                      .sentences
+                      .settingsPageChangeDirectory,
                   style: TextStyle(
                     color: AppSettings.isDarkMode
                         ? TaskWarriorColors.white

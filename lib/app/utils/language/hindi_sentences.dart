@@ -66,6 +66,10 @@ class HindiSentences extends Sentences {
   String get settingsPageSelectDirectoryDescription =>
       'निर्देशिका चुनें जहां TaskWarrior डेटा स्टोर होता है\nवर्तमान निर्देशिका: ';
   @override
+  String get settingsPageChangeDirectory => 'निर्देशिका बदलें';
+  @override
+  String get settingsPageSetToDefault => 'डिफॉल्ट पर सेट करें';
+  @override
   String get navDrawerProfile => 'प्रोफ़ाइल';
   @override
   String get navDrawerReports => 'रिपोर्ट्स';
@@ -102,5 +106,7 @@ class HindiSentences extends Sentences {
   String get detailPageTags => 'टैग';
   @override
   String get detailPageUrgency => 'तत्कालता';
+  @override
+  String get detailPageID => 'आयडी';
 
 }

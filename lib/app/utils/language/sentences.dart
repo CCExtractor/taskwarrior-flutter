@@ -16,6 +16,9 @@ abstract class Sentences {
   String get settingsPageTitle;
   String get settingsPageSubtitle;
   String get settingsPageMovingDataToNewDirectory;
+  String get settingsPageChangeDirectory;
+  String get settingsPageSetToDefault;
+
 
   String get settingsPageSyncOnStartTitle;
   String get settingsPageSyncOnStartDescription;
@@ -54,4 +57,5 @@ abstract class Sentences {
   String get detailPageProject;
   String get detailPageTags;
   String get detailPageUrgency;
+  String get detailPageID;
 }

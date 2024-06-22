@@ -65,6 +65,10 @@ class MarathiSentences extends Sentences {
   String get settingsPageSelectDirectoryDescription =>
       'निर्देशिका निवडा जिथे TaskWarrior डेटा स्टोर केला जातो\nवर्तमान निर्देशिका: ';
   @override
+  String get settingsPageChangeDirectory => 'डिरेक्टरी बदला';
+  @override
+  String get settingsPageSetToDefault => 'डीफॉल्टवर सेट करा';
+  @override
   String get navDrawerProfile => 'प्रोफ़ाइल';
   @override
   String get navDrawerReports => 'अहवाल';
@@ -101,5 +105,7 @@ class MarathiSentences extends Sentences {
   String get detailPageTags => 'टॅग';
   @override
   String get detailPageUrgency => 'तातडी';
+  @override
+  String get detailPageID => 'आयडी';
 
 }
