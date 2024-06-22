@@ -16,6 +16,8 @@ class ReportsView extends GetView<ReportsController> {
 
   @override
   Widget build(BuildContext context) {
+    controller.initReportsTour();
+    controller.showReportsTour(context);
     double height = MediaQuery.of(context).size.height; // Screen height
 
     return Scaffold(

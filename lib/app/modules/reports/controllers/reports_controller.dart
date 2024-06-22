@@ -7,18 +7,21 @@ import 'package:taskwarrior/app/models/json/task.dart';
 import 'package:taskwarrior/app/models/storage.dart';
 import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
 import 'package:taskwarrior/app/modules/splash/controllers/splash_controller.dart';
+import 'package:taskwarrior/app/tour/reports_page_tour.dart';
+import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
+import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class ReportsController extends GetxController
     with GetTickerProviderStateMixin {
   late TabController tabController;
-  final daily = GlobalKey();
-  final weekly = GlobalKey();
-  final monthly = GlobalKey();
+  final GlobalKey daily = GlobalKey();
+  final GlobalKey weekly = GlobalKey();
+  final GlobalKey monthly = GlobalKey();
 
   var isSaved = false.obs;
   late TutorialCoachMark tutorialCoachMark;
@@ -64,11 +67,45 @@ class ReportsController extends GetxController
   //   );
   // }
 
+  void initReportsTour() {
+    tutorialCoachMark = TutorialCoachMark(
+      targets: reportsDrawer(
+        daily: daily,
+        weekly: weekly,
+        monthly: monthly,
+      ),
+      colorShadow: TaskWarriorColors.black,
+      paddingFocus: 10,
+      opacityShadow: 0.8,
+      hideSkip: true,
+      onFinish: () {
+        SaveTourStatus.saveReportsTourStatus(true);
+      },
+    );
+  }
+
+  void showReportsTour(BuildContext context) {
+    Future.delayed(
+      const Duration(seconds: 2),
+      () {
+        SaveTourStatus.getReportsTourStatus().then((value) => {
+              if (value == false)
+                {
+                  tutorialCoachMark.show(context: context),
+                }
+              else
+                {
+                  // ignore: avoid_print
+                  print('User has seen this page'),
+                }
+            });
+      },
+    );
+  }
+
   @override
   void onInit() {
     super.onInit();
-    // _initReportsTour();
-    // showReportsTour();
     initDailyReports();
     initWeeklyReports();
     initMonthlyReports();
