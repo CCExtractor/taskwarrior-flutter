@@ -27,6 +27,12 @@ class EnglishSentences extends Sentences {
   String get homePageExit => 'Exit';
   @override
   String get homePageCancel => 'Cancel';
+  @override
+  String get homePageClickOnTheBottomRightButtonToStartAddingTasks =>
+      'Click on the bottom right button to start adding tasks';
+  @override
+  String get homePageSearchNotFound =>
+      'Search Not Found';
 
   @override
   String get settingsPageTitle => 'Settings Page';

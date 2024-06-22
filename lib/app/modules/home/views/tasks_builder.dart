@@ -12,6 +12,7 @@ import 'package:taskwarrior/app/utils/constants/palette.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/language/supported_language.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/modify.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
@@ -133,8 +134,8 @@ class TasksBuilder extends StatelessWidget {
                   child: Center(
                     child: Text(
                       (searchVisible)
-                          ? 'Search Not Found :('
-                          : 'Click on the bottom right button to start adding tasks',
+                          ? '${SentenceManager(currentLanguage: selectedLanguage).sentences.homePageSearchNotFound} :('
+                          : SentenceManager(currentLanguage: selectedLanguage).sentences.homePageClickOnTheBottomRightButtonToStartAddingTasks,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontFamily: FontFamily.poppins,

@@ -27,6 +27,12 @@ class MarathiSentences extends Sentences {
   @override
   String get homePageCancel => 'रद्द करा';
   @override
+  String get homePageClickOnTheBottomRightButtonToStartAddingTasks =>
+      'कार्ये जोडणे सुरू करण्यासाठी तळाशी उजव्या बटणावर क्लिक करा';
+  @override
+  String get homePageSearchNotFound =>
+      'शोध सापडला नाही';
+  @override
   String get settingsPageTitle => 'सेटिंग्स पेज';
   @override
   String get settingsPageSubtitle => 'तुमची पसंती सेट करा';

@@ -12,6 +12,8 @@ abstract class Sentences {
   String get homePageAreYouSureYouWantToExit;
   String get homePageExit;
   String get homePageCancel;
+  String get homePageClickOnTheBottomRightButtonToStartAddingTasks;
+  String get homePageSearchNotFound;
 
   String get settingsPageTitle;
   String get settingsPageSubtitle;

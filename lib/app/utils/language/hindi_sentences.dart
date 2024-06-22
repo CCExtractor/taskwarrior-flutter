@@ -27,6 +27,12 @@ class HindiSentences extends Sentences {
   @override
   String get homePageCancel => 'रद्द करें';
   @override
+  String get homePageClickOnTheBottomRightButtonToStartAddingTasks =>
+      'कार्यों को जोड़ना शुरू करने के लिए नीचे दाएं बटन पर क्लिक करें';
+  @override
+  String get homePageSearchNotFound =>
+      'खोजने पर नहीं मिला';
+  @override
   String get settingsPageTitle => 'सेटिंग्स पेज';
   @override
   String get settingsPageSubtitle => 'अपनी पसंद सेट करें';
