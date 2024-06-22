@@ -74,4 +74,32 @@ class MarathiSentences extends Sentences {
   String get navDrawerSettings => 'सेटिंग्स';
   @override
   String get navDrawerExit => 'बाहेर पडा';
+
+  @override
+  String get detailPageDescription => 'वर्णन';
+  @override
+  String get detailPageStatus => 'स्थिती';
+  @override
+  String get detailPageEntry => 'प्रवेश';
+  @override
+  String get detailPageModified => 'संशोधित';
+  @override
+  String get detailPageStart => 'सुरूवात';
+  @override
+  String get detailPageEnd => 'शेवट';
+  @override
+  String get detailPageDue => 'देय';
+  @override
+  String get detailPageWait => 'प्रतीक्षा';
+  @override
+  String get detailPageUntil => 'पर्यंत';
+  @override
+  String get detailPagePriority => 'प्राधान्य';
+  @override
+  String get detailPageProject => 'प्रकल्प';
+  @override
+  String get detailPageTags => 'टॅग';
+  @override
+  String get detailPageUrgency => 'तातडी';
+
 }

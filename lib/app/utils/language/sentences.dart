@@ -40,4 +40,18 @@ abstract class Sentences {
   String get navDrawerAbout;
   String get navDrawerSettings;
   String get navDrawerExit;
+
+  String get detailPageDescription;
+  String get detailPageStatus;
+  String get detailPageEntry;
+  String get detailPageModified;
+  String get detailPageStart;
+  String get detailPageEnd;
+  String get detailPageDue;
+  String get detailPageWait;
+  String get detailPageUntil;
+  String get detailPagePriority;
+  String get detailPageProject;
+  String get detailPageTags;
+  String get detailPageUrgency;
 }

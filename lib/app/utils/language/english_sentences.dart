@@ -3,6 +3,7 @@ import 'package:taskwarrior/app/utils/language/sentences.dart';
 class EnglishSentences extends Sentences {
   @override
   String get helloWorld => 'Hello, World!';
+  
   @override
   String get homePageTitle => 'Home Page';
   @override
@@ -25,43 +26,38 @@ class EnglishSentences extends Sentences {
   String get homePageExit => 'Exit';
   @override
   String get homePageCancel => 'Cancel';
+  
   @override
   String get settingsPageTitle => 'Settings Page';
   @override
   String get settingsPageSubtitle => 'Configure your preferences';
   @override
-  String get settingsPageMovingDataToNewDirectory =>
-      'Moving data to new directory';
+  String get settingsPageMovingDataToNewDirectory => 'Moving data to new directory';
   @override
   String get settingsPageSyncOnStartTitle => 'Sync on Start';
   @override
-  String get settingsPageSyncOnStartDescription =>
-      'Automatically sync data on app start';
+  String get settingsPageSyncOnStartDescription => 'Automatically sync data on app start';
   @override
   String get settingsPageEnableSyncOnTaskCreateTitle => 'Sync on task create';
   @override
-  String get settingsPageEnableSyncOnTaskCreateDescription =>
-      'Enable automatic syncing when creating a new task';
+  String get settingsPageEnableSyncOnTaskCreateDescription => 'Enable automatic syncing when creating a new task';
   @override
   String get settingsPageHighlightTaskTitle => 'Highlight the task';
   @override
-  String get settingsPageHighlightTaskDescription =>
-      'Make the border of task if only 1 day left';
+  String get settingsPageHighlightTaskDescription => 'Make the border of task if only 1 day left';
   @override
   String get settingsPageEnable24hrFormatTitle => 'Enable 24 hr format';
   @override
-  String get settingsPageEnable24hrFormatDescription =>
-      'Switch right to enable 24 hr format';
+  String get settingsPageEnable24hrFormatDescription => 'Switch right to enable 24 hr format';
   @override
   String get settingsPageSelectLanguage => 'Select the language';
   @override
-  String get settingsPageToggleNativeLanguage =>
-      'Toggle between your native language';
+  String get settingsPageToggleNativeLanguage => 'Toggle between your native language';
   @override
   String get settingsPageSelectDirectoryTitle => 'Select the directory';
   @override
-  String get settingsPageSelectDirectoryDescription =>
-      'Select the directory where the TaskWarrior data is stored\nCurrent directory: ';
+  String get settingsPageSelectDirectoryDescription => 'Select the directory where the TaskWarrior data is stored\nCurrent directory: ';
+  
   @override
   String get navDrawerProfile => 'Profile';
   @override
@@ -72,4 +68,31 @@ class EnglishSentences extends Sentences {
   String get navDrawerSettings => 'Settings';
   @override
   String get navDrawerExit => 'Exit';
+  
+  @override
+  String get detailPageDescription => 'Description';
+  @override
+  String get detailPageStatus => 'Status';
+  @override
+  String get detailPageEntry => 'Entry';
+  @override
+  String get detailPageModified => 'Modified';
+  @override
+  String get detailPageStart => 'Start';
+  @override
+  String get detailPageEnd => 'End';
+  @override
+  String get detailPageDue => 'Due';
+  @override
+  String get detailPageWait => 'Wait';
+  @override
+  String get detailPageUntil => 'Until';
+  @override
+  String get detailPagePriority => 'Priority';
+  @override
+  String get detailPageProject => 'Project';
+  @override
+  String get detailPageTags => 'Tags';
+  @override
+  String get detailPageUrgency => 'Urgency';
 }

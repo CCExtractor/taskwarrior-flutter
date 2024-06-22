@@ -75,4 +75,32 @@ class HindiSentences extends Sentences {
   String get navDrawerSettings => 'सेटिंग्स';
   @override
   String get navDrawerExit => 'बाहर जाओ';
+    
+  @override
+  String get detailPageDescription => 'विवरण';
+  @override
+  String get detailPageStatus => 'स्थिति';
+  @override
+  String get detailPageEntry => 'प्रवेश';
+  @override
+  String get detailPageModified => 'संशोधित';
+  @override
+  String get detailPageStart => 'प्रारंभ';
+  @override
+  String get detailPageEnd => 'अंत';
+  @override
+  String get detailPageDue => 'देय';
+  @override
+  String get detailPageWait => 'प्रतीक्षा करें';
+  @override
+  String get detailPageUntil => 'तक';
+  @override
+  String get detailPagePriority => 'प्राथमिकता';
+  @override
+  String get detailPageProject => 'परियोजना';
+  @override
+  String get detailPageTags => 'टैग';
+  @override
+  String get detailPageUrgency => 'तत्कालता';
+
 }
