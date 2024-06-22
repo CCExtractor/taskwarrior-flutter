@@ -19,6 +19,8 @@ class FilterDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    homeController.initFilterDrawerTour();
+    homeController.showFilterDrawerTour(context);
     var tileColor = AppSettings.isDarkMode
         ? TaskWarriorColors.ksecondaryBackgroundColor
         : TaskWarriorColors.kLightPrimaryBackgroundColor;
@@ -45,7 +47,11 @@ class FilterDrawer extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 0.0),
                   child: Text(
-                    SentenceManager(currentLanguage: homeController.selectedLanguage.value).sentences.filterDrawerApplyFilters,
+                    SentenceManager(
+                            currentLanguage:
+                                homeController.selectedLanguage.value)
+                        .sentences
+                        .filterDrawerApplyFilters,
                     // style: GoogleFonts.poppins(
                     //     fontWeight: TaskWarriorFonts.bold,
                     //     color: (AppSettings.isDarkMode
@@ -79,12 +85,13 @@ class FilterDrawer extends StatelessWidget {
                     left: 8,
                   ),
                   title: RichText(
-                    // key: statusKey,
+                    key: homeController.statusKey,
                     maxLines: 2,
                     text: TextSpan(
                       children: <TextSpan>[
                         TextSpan(
-                            text: '${SentenceManager(currentLanguage: homeController.selectedLanguage.value).sentences.filterDrawerStatus} : ',
+                            text:
+                                '${SentenceManager(currentLanguage: homeController.selectedLanguage.value).sentences.filterDrawerStatus} : ',
                             style: TextStyle(
                               fontFamily: FontFamily.poppins,
                               fontSize: TaskWarriorFonts.fontSizeMedium,
@@ -93,8 +100,17 @@ class FilterDrawer extends StatelessWidget {
                                   : TaskWarriorColors.black,
                             )),
                         TextSpan(
-                            text:
-                                filters.pendingFilter ? SentenceManager(currentLanguage: homeController.selectedLanguage.value).sentences.filterDrawerPending : SentenceManager(currentLanguage: homeController.selectedLanguage.value).sentences.filterDrawerCompleted,
+                            text: filters.pendingFilter
+                                ? SentenceManager(
+                                        currentLanguage: homeController
+                                            .selectedLanguage.value)
+                                    .sentences
+                                    .filterDrawerPending
+                                : SentenceManager(
+                                        currentLanguage: homeController
+                                            .selectedLanguage.value)
+                                    .sentences
+                                    .filterDrawerCompleted,
                             style: TextStyle(
                               fontFamily: FontFamily.poppins,
                               fontSize: TaskWarriorFonts.fontSizeMedium,
@@ -125,7 +141,17 @@ class FilterDrawer extends StatelessWidget {
                   child: GestureDetector(
                     onTap: filters.toggleWaitingFilter,
                     child: Text(
-                        filters.waitingFilter ? SentenceManager(currentLanguage: homeController.selectedLanguage.value).sentences.filterDrawerShowWaiting : SentenceManager(currentLanguage: homeController.selectedLanguage.value).sentences.filterDrawerHideWaiting,
+                        filters.waitingFilter
+                            ? SentenceManager(
+                                    currentLanguage:
+                                        homeController.selectedLanguage.value)
+                                .sentences
+                                .filterDrawerShowWaiting
+                            : SentenceManager(
+                                    currentLanguage:
+                                        homeController.selectedLanguage.value)
+                                .sentences
+                                .filterDrawerHideWaiting,
                         style: TextStyle(
                           fontFamily: FontFamily.poppins,
                           fontSize: TaskWarriorFonts.fontSizeMedium,
@@ -140,7 +166,7 @@ class FilterDrawer extends StatelessWidget {
                 color: Color.fromARGB(0, 48, 46, 46),
               ),
               Container(
-                // key: projectsKey,
+                key: homeController.projectsKey,
                 width: MediaQuery.of(context).size.width * 1,
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
@@ -160,7 +186,7 @@ class FilterDrawer extends StatelessWidget {
                 color: Color.fromARGB(0, 48, 46, 46),
               ),
               Container(
-                // key: filterTagKey,
+                key: homeController.filterTagKey,
                 width: MediaQuery.of(context).size.width * 1,
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
@@ -178,7 +204,11 @@ class FilterDrawer extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 0.0),
                       child: Text(
-                        SentenceManager(currentLanguage: homeController.selectedLanguage.value).sentences.filterDrawerFilterTagBy,
+                        SentenceManager(
+                                currentLanguage:
+                                    homeController.selectedLanguage.value)
+                            .sentences
+                            .filterDrawerFilterTagBy,
                         // style: GoogleFonts.poppins(
                         //     color: (AppSettings.isDarkMode
                         //         ? TaskWarriorColors.kprimaryTextColor
@@ -212,7 +242,7 @@ class FilterDrawer extends StatelessWidget {
                 color: Color.fromARGB(0, 48, 46, 46),
               ),
               Container(
-                // key: sortByKey,
+                key: homeController.sortByKey,
                 width: MediaQuery.of(context).size.width * 1,
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
@@ -229,7 +259,12 @@ class FilterDrawer extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                      child: Text(SentenceManager(currentLanguage: homeController.selectedLanguage.value).sentences.filterDrawerSortBy,
+                      child: Text(
+                          SentenceManager(
+                                  currentLanguage:
+                                      homeController.selectedLanguage.value)
+                              .sentences
+                              .filterDrawerSortBy,
                           // style: GoogleFonts.poppins(
                           //     color: (AppSettings.isDarkMode
                           //         ? TaskWarriorColors.kprimaryTextColor
@@ -254,14 +289,46 @@ class FilterDrawer extends StatelessWidget {
                         runSpacing: 4,
                         children: [
                           for (var sort in [
-                            SentenceManager(currentLanguage: homeController.selectedLanguage.value).sentences.filterDrawerCreated,
-                            SentenceManager(currentLanguage: homeController.selectedLanguage.value).sentences.filterDrawerModified,
-                            SentenceManager(currentLanguage: homeController.selectedLanguage.value).sentences.filterDrawerStartTime,
-                            SentenceManager(currentLanguage: homeController.selectedLanguage.value).sentences.filterDrawerDueTill,
-                            SentenceManager(currentLanguage: homeController.selectedLanguage.value).sentences.filterDrawerPriority,
-                            SentenceManager(currentLanguage: homeController.selectedLanguage.value).sentences.filterDrawerProject,
-                            SentenceManager(currentLanguage: homeController.selectedLanguage.value).sentences.filterDrawerTags,
-                            SentenceManager(currentLanguage: homeController.selectedLanguage.value).sentences.filterDrawerUrgency,
+                            SentenceManager(
+                                    currentLanguage:
+                                        homeController.selectedLanguage.value)
+                                .sentences
+                                .filterDrawerCreated,
+                            SentenceManager(
+                                    currentLanguage:
+                                        homeController.selectedLanguage.value)
+                                .sentences
+                                .filterDrawerModified,
+                            SentenceManager(
+                                    currentLanguage:
+                                        homeController.selectedLanguage.value)
+                                .sentences
+                                .filterDrawerStartTime,
+                            SentenceManager(
+                                    currentLanguage:
+                                        homeController.selectedLanguage.value)
+                                .sentences
+                                .filterDrawerDueTill,
+                            SentenceManager(
+                                    currentLanguage:
+                                        homeController.selectedLanguage.value)
+                                .sentences
+                                .filterDrawerPriority,
+                            SentenceManager(
+                                    currentLanguage:
+                                        homeController.selectedLanguage.value)
+                                .sentences
+                                .filterDrawerProject,
+                            SentenceManager(
+                                    currentLanguage:
+                                        homeController.selectedLanguage.value)
+                                .sentences
+                                .filterDrawerTags,
+                            SentenceManager(
+                                    currentLanguage:
+                                        homeController.selectedLanguage.value)
+                                .sentences
+                                .filterDrawerUrgency,
                           ])
                             Obx(
                               () => ChoiceChip(
@@ -317,7 +384,12 @@ class FilterDrawer extends StatelessWidget {
                                         1));
                           }
                         },
-                        child: Text(SentenceManager(currentLanguage: homeController.selectedLanguage.value).sentences.filterDrawerResetSort,
+                        child: Text(
+                            SentenceManager(
+                                    currentLanguage:
+                                        homeController.selectedLanguage.value)
+                                .sentences
+                                .filterDrawerResetSort,
                             // style: GoogleFonts.poppins(
                             //     fontSize: TaskWarriorFonts.fontSizeMedium,
                             //     color: AppSettings.isDarkMode

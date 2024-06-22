@@ -16,6 +16,7 @@ import 'package:taskwarrior/app/models/storage/client.dart';
 import 'package:taskwarrior/app/models/tag_meta_data.dart';
 import 'package:taskwarrior/app/modules/splash/controllers/splash_controller.dart';
 import 'package:taskwarrior/app/services/tag_filter.dart';
+import 'package:taskwarrior/app/tour/filter_drawer_tour.dart';
 import 'package:taskwarrior/app/tour/home_page_tour.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/language/supported_language.dart';
@@ -520,6 +521,49 @@ class HomeController extends GetxController {
                   // ignore: avoid_print
                   debugPrint('User has seen this page'),
                   // User has seen this page
+                }
+            });
+      },
+    );
+  }
+
+
+  final GlobalKey statusKey = GlobalKey();
+  final GlobalKey projectsKey = GlobalKey();
+  final GlobalKey filterTagKey = GlobalKey();
+  final GlobalKey sortByKey = GlobalKey();
+
+  void initFilterDrawerTour() {
+    tutorialCoachMark = TutorialCoachMark(
+      targets: filterDrawer(
+        statusKey: statusKey,
+        projectsKey: projectsKey,
+        filterTagKey: filterTagKey,
+        sortByKey: sortByKey,
+      ),
+      colorShadow: TaskWarriorColors.black,
+      paddingFocus: 10,
+      opacityShadow: 1.00,
+      hideSkip: true,
+      onFinish: () {
+        SaveTourStatus.saveFilterTourStatus(true);
+      },
+    );
+  }
+
+  void showFilterDrawerTour(BuildContext context) {
+    Future.delayed(
+      const Duration(seconds: 2),
+      () {
+        SaveTourStatus.getFilterTourStatus().then((value) => {
+              if (value == false)
+                {
+                  tutorialCoachMark.show(context: context),
+                }
+              else
+                {
+                  // ignore: avoid_print
+                  print('User has seen this page'),
                 }
             });
       },
