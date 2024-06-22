@@ -16,6 +16,8 @@ class HomePageBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    controller.initInAppTour();
+    controller.showInAppTour(context);
     return DoubleBackToCloseApp(
       snackBar: const SnackBar(content: Text('Tap back again to exit')),
       // ignore: avoid_unnecessary_containers

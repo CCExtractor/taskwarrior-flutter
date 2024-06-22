@@ -40,6 +40,7 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         Obx(
           () => IconButton(
+            key: controller.searchKey1,
             icon: (controller.searchVisible.value)
                 ? Tooltip(
                     message: 'Cancel',
@@ -52,6 +53,7 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
         Builder(
           builder: (context) => IconButton(
+            key: controller.refreshKey,
             icon: Icon(Icons.refresh, color: TaskWarriorColors.white),
             onPressed: () {
               if (server != null || credentials != null) {
@@ -92,6 +94,7 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
         Builder(
           builder: (context) => IconButton(
+            key: controller.filterKey,
             icon: Obx(
               () => Tooltip(
                 message: SentenceManager(
@@ -107,6 +110,7 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
       ],
       leading: Builder(
         builder: (context) => IconButton(
+          key: controller.menuKey,
           icon: Obx(
             () => Tooltip(
                 message: SentenceManager(

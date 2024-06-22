@@ -34,14 +34,47 @@ class SelectedLanguage {
   }
 }
 
+class SaveTourStatus {
+  static SharedPreferences? _preferences;
+
+  static Future init() async {
+    _preferences = await SharedPreferences.getInstance();
+  }
+
+  static Future saveReportsTourStatus(bool status) async {
+    await _preferences?.setBool('reports_tour', status);
+  }
+
+  static Future<bool> getReportsTourStatus() async {
+    return _preferences?.getBool('reports_tour') ?? false;
+  }
+
+  static Future saveInAppTourStatus(bool status) async {
+    await _preferences?.setBool('tour', status);
+  }
+
+  static Future<bool> getInAppTourStatus() async {
+    return _preferences?.getBool('tour') ?? false;
+  }
+
+  static Future saveFilterTourStatus(bool status) async {
+    await _preferences?.setBool('filter_tour', status);
+  }
+
+  static Future<bool> getFilterTourStatus() async {
+    return _preferences?.getBool('filter_tour') ?? false;
+  }
+}
+
 class AppSettings {
   static bool isDarkMode = true;
-
   static SupportedLanguage selectedLanguage = SupportedLanguage.english;
 
   static Future init() async {
     await SelectedTheme.init();
     await SelectedLanguage.init();
+    await SaveTourStatus.init();
+
     isDarkMode = SelectedTheme.getMode() ?? true;
     selectedLanguage =
         SelectedLanguage.getSelectedLanguage() ?? SupportedLanguage.english;

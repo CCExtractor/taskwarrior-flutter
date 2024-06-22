@@ -16,6 +16,7 @@ import 'package:taskwarrior/app/models/storage/client.dart';
 import 'package:taskwarrior/app/models/tag_meta_data.dart';
 import 'package:taskwarrior/app/modules/splash/controllers/splash_controller.dart';
 import 'package:taskwarrior/app/services/tag_filter.dart';
+import 'package:taskwarrior/app/tour/home_page_tour.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/language/supported_language.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/comparator.dart';
@@ -23,6 +24,7 @@ import 'package:taskwarrior/app/utils/taskfunctions/projects.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/query.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/tags.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class HomeController extends GetxController {
   final SplashController splashController = Get.find<SplashController>();
@@ -475,5 +477,52 @@ class HomeController extends GetxController {
     isDarkModeOn.value = AppSettings.isDarkMode;
     selectedLanguage.value = AppSettings.selectedLanguage;
     print("called and value is${isDarkModeOn.value}");
+  }
+
+  final addKey = GlobalKey();
+  final searchKey1 = GlobalKey();
+  final searchKey2 = GlobalKey();
+  final filterKey = GlobalKey();
+  final menuKey = GlobalKey();
+  final refreshKey = GlobalKey();
+
+  late TutorialCoachMark tutorialCoachMark;
+
+  void initInAppTour() {
+    tutorialCoachMark = TutorialCoachMark(
+        targets: addTargetsPage(
+          addKey: addKey,
+          searchKey: searchKey1,
+          filterKey: filterKey,
+          menuKey: menuKey,
+          refreshKey: refreshKey,
+        ),
+        colorShadow: TaskWarriorColors.black,
+        paddingFocus: 10,
+        opacityShadow: 0.8,
+        hideSkip: true,
+        onFinish: () {
+          SaveTourStatus.saveInAppTourStatus(true);
+        });
+  }
+  
+  void showInAppTour(BuildContext context) {
+    Future.delayed(
+      const Duration(seconds: 2),
+      () {
+        SaveTourStatus.getInAppTourStatus().then((value) => {
+              if (value == false)
+                {
+                  tutorialCoachMark.show(context: context),
+                }
+              else
+                {
+                  // ignore: avoid_print
+                  debugPrint('User has seen this page'),
+                  // User has seen this page
+                }
+            });
+      },
+    );
   }
 }

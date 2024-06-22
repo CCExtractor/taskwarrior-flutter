@@ -14,6 +14,7 @@ class HomePageFloatingActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
+        key: controller.addKey,
         heroTag: "btn3",
         backgroundColor: AppSettings.isDarkMode
             ? TaskWarriorColors.kLightPrimaryBackgroundColor
