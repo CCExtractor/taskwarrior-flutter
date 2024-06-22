@@ -109,4 +109,43 @@ class EnglishSentences extends Sentences {
   String get detailPageUrgency => 'Urgency';
   @override
   String get detailPageID => 'ID';
+
+  @override
+  String get filterDrawerApplyFilters => 'Apply Filters';
+  @override
+  String get filterDrawerHideWaiting => 'Hide Waiting';
+  @override
+  String get filterDrawerShowWaiting => 'Show Waiting';
+  @override
+  String get filterDrawerPending => 'Pending';
+  @override
+  String get filterDrawerCompleted => 'Completed';
+  @override
+  String get filterDrawerFilterTagBy => 'Filter Tag By';
+  @override
+  String get filterDrawerAND => 'AND';
+  @override
+  String get filterDrawerOR => 'OR';
+  @override
+  String get filterDrawerSortBy => 'Sort By';
+  @override
+  String get filterDrawerCreated => 'Created';
+  @override
+  String get filterDrawerModified => 'Modified';
+  @override
+  String get filterDrawerStartTime => 'Start Time';
+  @override
+  String get filterDrawerDueTill => 'Due till';
+  @override
+  String get filterDrawerPriority => 'Priority';
+  @override
+  String get filterDrawerProject => 'Project';
+  @override
+  String get filterDrawerTags => 'Tags';
+  @override
+  String get filterDrawerUrgency => 'Urgency';
+  @override
+  String get filterDrawerResetSort => 'Reset Sort';
+  @override
+  String get filterDrawerStatus => 'Status';
 }

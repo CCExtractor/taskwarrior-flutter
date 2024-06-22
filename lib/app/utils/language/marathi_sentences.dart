@@ -20,7 +20,8 @@ class MarathiSentences extends Sentences {
   @override
   String get homePageExitApp => 'अ‍ॅप बंद करा';
   @override
-  String get homePageAreYouSureYouWantToExit => 'आपण खात्री आहात की आपण अ‍ॅप बंद करू इच्छिता?';
+  String get homePageAreYouSureYouWantToExit =>
+      'आपण खात्री आहात की आपण अ‍ॅप बंद करू इच्छिता?';
   @override
   String get homePageExit => 'बाहेर पडा';
   @override
@@ -108,4 +109,42 @@ class MarathiSentences extends Sentences {
   @override
   String get detailPageID => 'आयडी';
 
+  @override
+  String get filterDrawerApplyFilters => 'फिल्टर लागू करा';
+  @override
+  String get filterDrawerHideWaiting => 'वाट लपवा';
+  @override
+  String get filterDrawerShowWaiting => 'वाट दाखवा';
+  @override
+  String get filterDrawerPending => 'प्रलंबित';
+  @override
+  String get filterDrawerCompleted => 'पूर्ण';
+  @override
+  String get filterDrawerFilterTagBy => 'टॅगवर फिल्टर करा';
+  @override
+  String get filterDrawerAND => 'आणि';
+  @override
+  String get filterDrawerOR => 'किंवा';
+  @override
+  String get filterDrawerSortBy => 'यानुसार क्रमबद्ध करा';
+  @override
+  String get filterDrawerCreated => 'सृष्ट';
+  @override
+  String get filterDrawerModified => 'संशोधित';
+  @override
+  String get filterDrawerStartTime => 'सुरूवातीचा वेळ';
+  @override
+  String get filterDrawerDueTill => 'पर्यंतचा देय';
+  @override
+  String get filterDrawerPriority => 'प्राधान्य';
+  @override
+  String get filterDrawerProject => 'प्रकल्प';
+  @override
+  String get filterDrawerTags => 'टॅग्ज';
+  @override
+  String get filterDrawerUrgency => 'तातडी';
+  @override
+  String get filterDrawerResetSort => 'क्रमवारी रीसेट करा';
+  @override
+  String get filterDrawerStatus => 'स्थिति';
 }

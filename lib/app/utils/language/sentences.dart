@@ -19,7 +19,6 @@ abstract class Sentences {
   String get settingsPageChangeDirectory;
   String get settingsPageSetToDefault;
 
-
   String get settingsPageSyncOnStartTitle;
   String get settingsPageSyncOnStartDescription;
 
@@ -58,4 +57,24 @@ abstract class Sentences {
   String get detailPageTags;
   String get detailPageUrgency;
   String get detailPageID;
+
+  String get filterDrawerApplyFilters;
+  String get filterDrawerHideWaiting;
+  String get filterDrawerShowWaiting;
+  String get filterDrawerPending;
+  String get filterDrawerCompleted;
+  String get filterDrawerFilterTagBy;
+  String get filterDrawerAND;
+  String get filterDrawerOR;
+  String get filterDrawerSortBy;
+  String get filterDrawerCreated;
+  String get filterDrawerModified;
+  String get filterDrawerStartTime;
+  String get filterDrawerDueTill;
+  String get filterDrawerPriority;
+  String get filterDrawerProject;
+  String get filterDrawerTags;
+  String get filterDrawerUrgency;
+  String get filterDrawerResetSort;
+  String get filterDrawerStatus;
 }
