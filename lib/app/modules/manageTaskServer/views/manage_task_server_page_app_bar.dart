@@ -16,7 +16,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../controllers/manage_task_server_controller.dart';
 
-class ManageTaskServerPageAppBar extends StatelessWidget implements PreferredSizeWidget{
+class ManageTaskServerPageAppBar extends StatelessWidget
+    implements PreferredSizeWidget {
   final ManageTaskServerController controller;
   const ManageTaskServerPageAppBar({required this.controller, super.key});
 
@@ -85,13 +86,27 @@ class ManageTaskServerPageAppBar extends StatelessWidget implements PreferredSiz
               barrierDismissible: false,
               builder: (context) {
                 return Utils.showAlertDialog(
-                  title: const Text('Fetching statistics...'),
-                  content: const Column(
+                  title: Text(
+                    'Fetching statistics...',
+                    style: TextStyle(
+                      color: AppSettings.isDarkMode
+                          ? TaskWarriorColors.white
+                          : TaskWarriorColors.black,
+                    ),
+                  ),
+                  content: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      CircularProgressIndicator(),
-                      SizedBox(height: 16),
-                      Text('Please wait...'),
+                      const CircularProgressIndicator(),
+                      const SizedBox(height: 16),
+                      Text(
+                        'Please wait...',
+                        style: TextStyle(
+                          color: AppSettings.isDarkMode
+                              ? TaskWarriorColors.white
+                              : TaskWarriorColors.black,
+                        ),
+                      ),
                     ],
                   ),
                 );
@@ -145,6 +160,13 @@ class ManageTaskServerPageAppBar extends StatelessWidget implements PreferredSiz
                   ),
                   actions: [
                     ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: WidgetStateProperty.all<Color>(
+                          AppSettings.isDarkMode
+                              ? TaskWarriorColors.kLightSecondaryBackgroundColor
+                              : TaskWarriorColors.ksecondaryBackgroundColor,
+                        ),
+                      ),
                       onPressed: () {
                         // Navigator.of(context).pop();
                         Get.back();
@@ -153,8 +175,8 @@ class ManageTaskServerPageAppBar extends StatelessWidget implements PreferredSiz
                         'Ok',
                         style: TextStyle(
                           color: AppSettings.isDarkMode
-                              ? TaskWarriorColors.white
-                              : TaskWarriorColors.black,
+                              ? TaskWarriorColors.black
+                              : TaskWarriorColors.white,
                         ),
                       ),
                     ),
@@ -194,6 +216,7 @@ class ManageTaskServerPageAppBar extends StatelessWidget implements PreferredSiz
       ),
     );
   }
+
   @override
   Size get preferredSize => AppBar().preferredSize;
 }

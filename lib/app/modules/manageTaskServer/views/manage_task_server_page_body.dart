@@ -2,8 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:taskwarrior/app/modules/manageTaskServer/controllers/manage_task_server_controller.dart';
 
-
-
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:taskwarrior/app/models/storage/set_config.dart';
@@ -12,7 +10,6 @@ import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
-
 
 class ManageTaskServerPageBody extends StatelessWidget {
   final ManageTaskServerController controller;
