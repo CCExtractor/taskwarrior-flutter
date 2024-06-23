@@ -12,12 +12,14 @@ class SelectProfile extends StatelessWidget {
     this.currentProfile,
     this.profilesMap,
     this.selectProfile, {
+      required this.currentProfileKey,
     super.key,
   });
 
   final String currentProfile;
   final Map profilesMap;
   final void Function(String) selectProfile;
+  final GlobalKey currentProfileKey;
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +45,7 @@ class SelectProfile extends StatelessWidget {
             children: [
               Text(
                 'Current Profile:',
+                key : currentProfileKey,
                 overflow: TextOverflow.fade,
                 style: GoogleFonts.poppins(
                   fontWeight: TaskWarriorFonts.bold,

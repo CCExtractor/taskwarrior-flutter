@@ -19,6 +19,8 @@ class ProfileView extends GetView<ProfileController> {
   const ProfileView({super.key});
   @override
   Widget build(BuildContext context) {
+    controller.initProfilePageTour();
+    controller.showProfilePageTour(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Palette.kToDark.shade200,
@@ -48,6 +50,9 @@ class ProfileView extends GetView<ProfileController> {
           children: [
             Obx(
               () => ProfilesColumn(
+                manageSelectedProfileKey: controller.manageSelectedProfileKey,
+                currentProfileKey: controller.currentProfileKey,
+                addNewProfileKey: controller.addNewProfileKey,
                 controller.profilesMap,
                 controller.currentProfile.value,
                 controller.profilesWidget.addProfile,
@@ -204,6 +209,9 @@ class ProfilesColumn extends StatelessWidget {
     this.export,
     this.copy,
     this.delete, {
+    required this.manageSelectedProfileKey,
+    required this.currentProfileKey,
+    required this.addNewProfileKey,
     super.key,
   });
 
@@ -216,6 +224,9 @@ class ProfilesColumn extends StatelessWidget {
   final void Function() export;
   final void Function() copy;
   final void Function() delete;
+  final GlobalKey manageSelectedProfileKey;
+  final GlobalKey currentProfileKey;
+  final GlobalKey addNewProfileKey;
 
   @override
   Widget build(BuildContext context) {
@@ -224,11 +235,23 @@ class ProfilesColumn extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SelectProfile(currentProfile, profilesMap, selectProfile),
+          SelectProfile(
+            currentProfile,
+            profilesMap,
+            selectProfile,
+            currentProfileKey: currentProfileKey,
+          ),
           const SizedBox(
             height: 6,
           ),
-          ManageProfile(rename, configure, export, copy, delete),
+          ManageProfile(
+            rename,
+            configure,
+            export,
+            copy,
+            delete,
+            manageSelectedProfileKey: manageSelectedProfileKey,
+          ),
           const SizedBox(
             height: 6,
           ),
@@ -284,6 +307,7 @@ class ProfilesColumn extends StatelessWidget {
                     : TaskWarriorColors.deepPurple),
             label: Text(
               'Add new Profile',
+              key: addNewProfileKey,
               style: TextStyle(
                 color: AppSettings.isDarkMode
                     ? TaskWarriorColors.white

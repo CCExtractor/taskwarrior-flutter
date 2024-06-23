@@ -15,7 +15,7 @@ class SplashController extends GetxController {
   Profiles get _profiles => Profiles(baseDirectory.value);
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
     initBaseDir().then((_) {
       _checkProfiles();
