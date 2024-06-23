@@ -44,7 +44,7 @@ class ProfileController extends GetxController {
     Future.delayed(
       const Duration(seconds: 2),
       () {
-        SaveTourStatus.getFilterTourStatus().then((value) => {
+        SaveTourStatus.getProfileTourStatus().then((value) => {
               if (value == false)
                 {
                   tutorialCoachMark.show(context: context),
