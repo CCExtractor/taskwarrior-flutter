@@ -29,15 +29,15 @@ class RenameProfileDialog extends StatelessWidget {
             'Rename Alias',
             style: TextStyle(
               color: AppSettings.isDarkMode
-                  ? TaskWarriorColors.white
-                  : TaskWarriorColors.black,
+                  ? TaskWarriorColors.black
+                  : TaskWarriorColors.white,
             ),
           ),
           content: TextField(
               style: TextStyle(
                 color: AppSettings.isDarkMode
-                    ? TaskWarriorColors.white
-                    : TaskWarriorColors.black,
+                  ? TaskWarriorColors.black
+                  : TaskWarriorColors.white,
               ),
               controller: controller),
           actions: [
