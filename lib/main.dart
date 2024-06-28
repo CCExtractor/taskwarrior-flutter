@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:home_widget/home_widget.dart';
+import 'package:in_app_update/in_app_update.dart';
 
 import 'package:loggy/loggy.dart';
 import 'package:path_provider/path_provider.dart';
@@ -66,7 +67,6 @@ Future main([List<String> args = const []]) async {
               return const AppSetupPlaceholder();
             }
           })));
-  
 }
 
 Future<List<Directory>> getDirectories() async {
@@ -76,7 +76,6 @@ Future<List<Directory>> getDirectories() async {
   Directory baseDirectory =
       (directory != null) ? Directory(directory) : defaultDirectory;
   return [defaultDirectory, baseDirectory];
-
 }
 
 Future init() async {
@@ -113,6 +112,28 @@ class _MyAppState extends State<MyApp> {
 
     notificationService.initiliazeNotification();
     helperFunction();
+  }
+
+  Future<void> checkForUpdate() async {
+    // print('checking for Update');
+    InAppUpdate.checkForUpdate().then((info) {
+      setState(() {
+        if (info.updateAvailability == UpdateAvailability.updateAvailable) {
+          // print('update available');
+          update();
+        }
+      });
+    }).catchError((e) {
+      // print(e.toString());
+    });
+  }
+
+  void update() async {
+    // print('Updating');
+    await InAppUpdate.startFlexibleUpdate();
+    InAppUpdate.completeFlexibleUpdate().then((_) {}).catchError((e) {
+      // print(e.toString());
+    });
   }
 
   void helperFunction() async {
@@ -165,15 +186,19 @@ class _MyAppState extends State<MyApp> {
 
         home: isHomeWidgetTaskTapped == false
             ? CheckOnboardingStatus()
-            : FutureBuilder(future: Future.delayed(const Duration(seconds: 2)), builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return  Scaffold(
-                  backgroundColor: 
-              AppSettings.isDarkMode ? Palette.kToDark.shade200 : Colors.white,
-                  body: const Center(child:  CircularProgressIndicator()));
-              }
-              return DetailRoute(uuid);
-            },),
+            : FutureBuilder(
+                future: Future.delayed(const Duration(seconds: 2)),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Scaffold(
+                        backgroundColor: AppSettings.isDarkMode
+                            ? Palette.kToDark.shade200
+                            : Colors.white,
+                        body: const Center(child: CircularProgressIndicator()));
+                  }
+                  return DetailRoute(uuid);
+                },
+              ),
       );
     }));
   }
