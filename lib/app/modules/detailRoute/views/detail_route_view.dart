@@ -83,59 +83,19 @@ class DetailRouteView extends GetView<DetailRouteController> {
                       const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
                   children: [
                     for (var entry in {
-                      SentenceManager(
-                                  currentLanguage: AppSettings.selectedLanguage)
-                              .sentences
-                              .detailPageDescription:
-                          controller.descriptionValue.value,
-                      SentenceManager(
-                              currentLanguage: AppSettings.selectedLanguage)
-                          .sentences
-                          .detailPageStatus: controller.statusValue.value,
-                      SentenceManager(
-                              currentLanguage: AppSettings.selectedLanguage)
-                          .sentences
-                          .detailPageEntry: controller.entryValue.value,
-                      SentenceManager(
-                              currentLanguage: AppSettings.selectedLanguage)
-                          .sentences
-                          .detailPageModified: controller.modifiedValue.value,
-                      SentenceManager(
-                              currentLanguage: AppSettings.selectedLanguage)
-                          .sentences
-                          .detailPageStart: controller.startValue.value,
-                      SentenceManager(
-                              currentLanguage: AppSettings.selectedLanguage)
-                          .sentences
-                          .detailPageEnd: controller.endValue.value,
-                      SentenceManager(
-                              currentLanguage: AppSettings.selectedLanguage)
-                          .sentences
-                          .detailPageDue: controller.dueValue.value,
-                      SentenceManager(
-                              currentLanguage: AppSettings.selectedLanguage)
-                          .sentences
-                          .detailPageWait: controller.waitValue.value,
-                      SentenceManager(
-                              currentLanguage: AppSettings.selectedLanguage)
-                          .sentences
-                          .detailPageUntil: controller.untilValue.value,
-                      SentenceManager(
-                              currentLanguage: AppSettings.selectedLanguage)
-                          .sentences
-                          .detailPagePriority: controller.priorityValue?.value,
-                      SentenceManager(
-                              currentLanguage: AppSettings.selectedLanguage)
-                          .sentences
-                          .detailPageProject: controller.projectValue?.value,
-                      SentenceManager(
-                              currentLanguage: AppSettings.selectedLanguage)
-                          .sentences
-                          .detailPageTags: controller.tagsValue?.value,
-                      SentenceManager(
-                              currentLanguage: AppSettings.selectedLanguage)
-                          .sentences
-                          .detailPageUrgency: controller.urgencyValue.value,
+                      'description': controller.descriptionValue.value,
+                      'status': controller.statusValue.value,
+                      'entry': controller.entryValue.value,
+                      'modified': controller.modifiedValue.value,
+                      'start': controller.startValue.value,
+                      'end': controller.endValue.value,
+                      'due': controller.dueValue.value,
+                      'wait': controller.waitValue.value,
+                      'until': controller.untilValue.value,
+                      'priority': controller.priorityValue?.value,
+                      'project': controller.projectValue?.value,
+                      'tags': controller.tagsValue?.value,
+                      'urgency': controller.urgencyValue.value,
                     }.entries)
                       AttributeWidget(
                         name: entry.key,
