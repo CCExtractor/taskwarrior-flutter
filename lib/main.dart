@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:in_app_update/in_app_update.dart';
 
 import 'package:loggy/loggy.dart';
 import 'package:path_provider/path_provider.dart';
@@ -102,8 +103,30 @@ class _MyAppState extends State<MyApp> {
     super.initState();
 
     ///sort the data by daily burn down
-
+    checkForUpdate();
     notificationService.initiliazeNotification();
+  }
+
+  Future<void> checkForUpdate() async {
+    // print('checking for Update');
+    InAppUpdate.checkForUpdate().then((info) {
+      setState(() {
+        if (info.updateAvailability == UpdateAvailability.updateAvailable) {
+          // print('update available');
+          update();
+        }
+      });
+    }).catchError((e) {
+      // print(e.toString());
+    });
+  }
+
+  void update() async {
+    // print('Updating');
+    await InAppUpdate.startFlexibleUpdate();
+    InAppUpdate.completeFlexibleUpdate().then((_) {}).catchError((e) {
+      // print(e.toString());
+    });
   }
 
   @override
