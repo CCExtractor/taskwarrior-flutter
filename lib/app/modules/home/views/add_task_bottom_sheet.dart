@@ -359,33 +359,35 @@ class AddTaskBottomSheet extends StatelessWidget {
                 ),
                 textAlign: TextAlign.left,
               ),
-              DropdownButton<String>(
-                dropdownColor: AppSettings.isDarkMode
-                    ? TaskWarriorColors.kdialogBackGroundColor
-                    : TaskWarriorColors.kLightDialogBackGroundColor,
-                value: homeController.priority.value,
-                elevation: 16,
-                style: GoogleFonts.poppins(
-                  color: AppSettings.isDarkMode
-                      ? TaskWarriorColors.white
-                      : TaskWarriorColors.black,
-                ),
-                underline: Container(
-                  height: 1.5,
-                  color: AppSettings.isDarkMode
+              Obx(
+                () => DropdownButton<String>(
+                  dropdownColor: AppSettings.isDarkMode
                       ? TaskWarriorColors.kdialogBackGroundColor
                       : TaskWarriorColors.kLightDialogBackGroundColor,
+                  value: homeController.priority.value,
+                  elevation: 16,
+                  style: GoogleFonts.poppins(
+                    color: AppSettings.isDarkMode
+                        ? TaskWarriorColors.white
+                        : TaskWarriorColors.black,
+                  ),
+                  underline: Container(
+                    height: 1.5,
+                    color: AppSettings.isDarkMode
+                        ? TaskWarriorColors.kdialogBackGroundColor
+                        : TaskWarriorColors.kLightDialogBackGroundColor,
+                  ),
+                  onChanged: (String? newValue) {
+                    homeController.priority.value = newValue!;
+                  },
+                  items: <String>['H', 'M', 'L', 'None']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text('  $value'),
+                    );
+                  }).toList(),
                 ),
-                onChanged: (String? newValue) {
-                  homeController.priority.value = newValue!;
-                },
-                items: <String>['H', 'M', 'L', 'None']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text('  $value'),
-                  );
-                }).toList(),
               )
             ],
           ),
