@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 
 class Utils {
   static String getWeekNumber(DateTime? date) {
@@ -99,6 +100,7 @@ class Utils {
       shape: shape,
       alignment: alignment,
       scrollable: scrollable,
+      backgroundColor: TaskWarriorColors.kdialogBackGroundColor,
     );
   }
 }
