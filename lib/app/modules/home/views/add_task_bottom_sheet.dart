@@ -75,10 +75,12 @@ class AddTaskBottomSheet extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Wrap(
-          spacing: 8.0,
-          runSpacing: 4.0,
-          children: buildTagChips(),
+        Obx(
+          () => Wrap(
+            spacing: 8.0,
+            runSpacing: 4.0,
+            children: buildTagChips(),
+          ),
         ),
         Row(
           children: [
