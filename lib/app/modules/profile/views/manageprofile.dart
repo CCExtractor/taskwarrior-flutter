@@ -14,7 +14,6 @@ class ManageProfile extends StatelessWidget {
     this.copy,
     this.delete, {
     super.key,
-    required this.manageSelectedProfileKey,
   });
 
   final void Function() rename;
@@ -22,7 +21,6 @@ class ManageProfile extends StatelessWidget {
   final void Function() export;
   final void Function() copy;
   final void Function() delete;
-  final GlobalKey manageSelectedProfileKey;
 
   @override
   Widget build(BuildContext context) {
@@ -50,10 +48,8 @@ class ManageProfile extends StatelessWidget {
       textColor: AppSettings.isDarkMode
           ? TaskWarriorColors.white
           : TaskWarriorColors.black,
-      key: const PageStorageKey<String>('manage-profile'),
       title: Text(
         'Manage selected profile',
-        key: manageSelectedProfileKey,
         style: GoogleFonts.poppins(
           fontWeight: TaskWarriorFonts.bold,
           fontSize: TaskWarriorFonts.fontSizeMedium,

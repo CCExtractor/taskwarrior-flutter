@@ -4,7 +4,7 @@ import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 List<TargetFocus> addProfilePage({
   required GlobalKey currentProfileKey,
-  required GlobalKey manageSelectedProfileKey,
+
   required GlobalKey addNewProfileKey,
 }) {
   List<TargetFocus> targets = [];
@@ -42,38 +42,6 @@ List<TargetFocus> addProfilePage({
     ),
   );
 
-  //manageSelectedProfile
-  targets.add(
-    TargetFocus(
-      keyTarget: manageSelectedProfileKey,
-      alignSkip: Alignment.topRight,
-      radius: 10,
-      shape: ShapeLightFocus.Circle,
-      contents: [
-        TargetContent(
-          align: ContentAlign.bottom,
-          builder: (context, controller) {
-            return Container(
-              alignment: Alignment.center,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    "Manage your profile related details here",
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.poppins(
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
-      ],
-    ),
-  );
 
   //addNewProfile
   targets.add(

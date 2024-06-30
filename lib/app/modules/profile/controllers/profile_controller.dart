@@ -20,14 +20,14 @@ class ProfileController extends GetxController {
   late TutorialCoachMark tutorialCoachMark;
 
   final GlobalKey currentProfileKey = GlobalKey();
-  final GlobalKey manageSelectedProfileKey = GlobalKey();
+
   final GlobalKey addNewProfileKey = GlobalKey();
 
   void initProfilePageTour() {
     tutorialCoachMark = TutorialCoachMark(
       targets: addProfilePage(
         currentProfileKey: currentProfileKey,
-        manageSelectedProfileKey: manageSelectedProfileKey,
+
         addNewProfileKey: addNewProfileKey,
       ),
       colorShadow: TaskWarriorColors.black,

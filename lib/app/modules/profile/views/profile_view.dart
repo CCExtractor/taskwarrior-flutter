@@ -50,7 +50,6 @@ class ProfileView extends GetView<ProfileController> {
           children: [
             Obx(
               () => ProfilesColumn(
-                manageSelectedProfileKey: controller.manageSelectedProfileKey,
                 currentProfileKey: controller.currentProfileKey,
                 addNewProfileKey: controller.addNewProfileKey,
                 controller.profilesMap,
@@ -209,7 +208,6 @@ class ProfilesColumn extends StatelessWidget {
     this.export,
     this.copy,
     this.delete, {
-    required this.manageSelectedProfileKey,
     required this.currentProfileKey,
     required this.addNewProfileKey,
     super.key,
@@ -224,7 +222,6 @@ class ProfilesColumn extends StatelessWidget {
   final void Function() export;
   final void Function() copy;
   final void Function() delete;
-  final GlobalKey manageSelectedProfileKey;
   final GlobalKey currentProfileKey;
   final GlobalKey addNewProfileKey;
 
@@ -250,7 +247,6 @@ class ProfilesColumn extends StatelessWidget {
             export,
             copy,
             delete,
-            manageSelectedProfileKey: manageSelectedProfileKey,
           ),
           const SizedBox(
             height: 6,
