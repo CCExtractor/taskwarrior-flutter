@@ -16,7 +16,6 @@ import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/language/supported_language.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/modify.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
-
 class TasksBuilder extends StatelessWidget {
   const TasksBuilder({
     super.key,
@@ -26,6 +25,8 @@ class TasksBuilder extends StatelessWidget {
     required this.useDelayTask,
     required this.searchVisible,
     required this.selectedLanguage,
+    required this.scrollController,
+    required this.showbtn,
   });
 
   final List<Task> taskData;
@@ -34,6 +35,8 @@ class TasksBuilder extends StatelessWidget {
   final bool searchVisible;
   final bool useDelayTask;
   final SupportedLanguage selectedLanguage;
+  final ScrollController scrollController;
+  final bool showbtn;
 
   void setStatus(BuildContext context, String newValue, String id) {
     var storageWidget = Get.find<HomeController>();
@@ -111,19 +114,29 @@ class TasksBuilder extends StatelessWidget {
     return Scaffold(
         floatingActionButtonLocation:
             FloatingActionButtonLocation.miniStartFloat,
-        floatingActionButton: FloatingActionButton(
-          heroTag: "btn2",
-          onPressed: () {
-            // logic to scroll to top
-          },
-          backgroundColor: AppSettings.isDarkMode
-              ? TaskWarriorColors.kLightPrimaryBackgroundColor
-              : TaskWarriorColors.kprimaryBackgroundColor,
-          child: Icon(
-            Icons.arrow_upward,
-            color: AppSettings.isDarkMode
-                ? TaskWarriorColors.kprimaryBackgroundColor
-                : TaskWarriorColors.kLightPrimaryBackgroundColor,
+        floatingActionButton: AnimatedOpacity(
+          duration: const Duration(milliseconds: 100), //show/hide animation
+          opacity: showbtn ? 1.0 : 0.0, //set obacity to 1 on visible, or hide
+          child: FloatingActionButton(
+            heroTag: "btn2",
+            onPressed: () {
+              scrollController.animateTo(
+                  //go to top of scroll
+                  0, //scroll offset to go
+                  duration:
+                      const Duration(milliseconds: 500), //duration of scroll
+                  curve: Curves.fastLinearToSlowEaseIn //scroll type
+                  );
+            },
+            backgroundColor: AppSettings.isDarkMode
+                ? TaskWarriorColors.kLightPrimaryBackgroundColor
+                : TaskWarriorColors.kprimaryBackgroundColor,
+            child: Icon(
+              Icons.arrow_upward,
+              color: AppSettings.isDarkMode
+                  ? TaskWarriorColors.kprimaryBackgroundColor
+                  : TaskWarriorColors.kLightPrimaryBackgroundColor,
+            ),
           ),
         ),
         backgroundColor: Colors.transparent,
@@ -135,7 +148,9 @@ class TasksBuilder extends StatelessWidget {
                     child: Text(
                       (searchVisible)
                           ? '${SentenceManager(currentLanguage: selectedLanguage).sentences.homePageSearchNotFound} :('
-                          : SentenceManager(currentLanguage: selectedLanguage).sentences.homePageClickOnTheBottomRightButtonToStartAddingTasks,
+                          : SentenceManager(currentLanguage: selectedLanguage)
+                              .sentences
+                              .homePageClickOnTheBottomRightButtonToStartAddingTasks,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontFamily: FontFamily.poppins,
@@ -156,6 +171,8 @@ class TasksBuilder extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
                   itemCount: taskData.length,
+                  controller: scrollController,
+                  primary: false,
                   itemBuilder: (context, index) {
                     var task = taskData[index];
                     return pendingFilter
@@ -258,7 +275,7 @@ class TasksBuilder extends StatelessWidget {
                                   mergeTask: storageWidget.mergeTask,
                                   uuid: task.uuid,
                                 ),
-                                  selectedLanguage: selectedLanguage,
+                                selectedLanguage: selectedLanguage,
                               ),
                             ),
                           );

@@ -45,6 +45,8 @@ class HomeController extends GetxController {
   final TextEditingController searchController = TextEditingController();
   late RxBool serverCertExists;
   final Rx<SupportedLanguage> selectedLanguage = SupportedLanguage.english.obs;
+  final ScrollController scrollController = ScrollController();
+  final RxBool showbtn = false.obs;
 
   @override
   void onInit() {
@@ -55,9 +57,24 @@ class HomeController extends GetxController {
       ),
     );
     serverCertExists = RxBool(storage.guiPemFiles.serverCertExists());
+    addListenerToScrollController();
     _profileSet();
     loadDelayTask();
     initLanguageAndDarkMode();
+  }
+
+  void addListenerToScrollController() {
+    scrollController.addListener(() {
+      //scroll listener
+      double showoffset =
+          10.0; //Back to top botton will show on scroll offset 10.0
+
+      if (scrollController.offset > showoffset) {
+        showbtn.value = true;
+      } else {
+        showbtn.value = false;
+      }
+    });
   }
 
   void _profileSet() {
@@ -506,7 +523,7 @@ class HomeController extends GetxController {
           SaveTourStatus.saveInAppTourStatus(true);
         });
   }
-  
+
   void showInAppTour(BuildContext context) {
     Future.delayed(
       const Duration(seconds: 2),
@@ -526,7 +543,6 @@ class HomeController extends GetxController {
       },
     );
   }
-
 
   final GlobalKey statusKey = GlobalKey();
   final GlobalKey projectsKey = GlobalKey();

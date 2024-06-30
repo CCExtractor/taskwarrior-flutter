@@ -99,6 +99,8 @@ class HomePageBody extends StatelessWidget {
                         waitingFilter: controller.waitingFilter.value,
                         searchVisible: controller.searchVisible.value,
                         selectedLanguage: controller.selectedLanguage.value,
+                        scrollController: controller.scrollController,
+                        showbtn: controller.showbtn.value,
                       ),
                     ),
                   ),
