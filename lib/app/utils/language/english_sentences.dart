@@ -159,6 +159,8 @@ class EnglishSentences extends Sentences {
   String get reportsPageCompleted => 'Completed';
   @override
   String get reportsPagePending => 'Pending';
+  @override
+  String get reportsPageTasks => 'Tasks';
 
   @override
   String get reportsPageDaily => 'Daily';

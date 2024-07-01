@@ -159,6 +159,8 @@ class MarathiSentences extends Sentences {
   String get reportsPageCompleted => 'पूर्ण';
   @override
   String get reportsPagePending => 'प्रलंबित';
+  @override
+  String get reportsPageTasks => 'काम';
 
   @override
   String get reportsPageDaily => 'दैनिक';

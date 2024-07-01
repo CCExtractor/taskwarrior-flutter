@@ -83,6 +83,7 @@ abstract class Sentences {
   String get reportsPageTitle;
   String get reportsPageCompleted;
   String get reportsPagePending;
+  String get reportsPageTasks;
 
   String get reportsPageDaily;
   String get reportsPageDailyBurnDownChart;

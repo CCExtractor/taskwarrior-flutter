@@ -159,6 +159,8 @@ class HindiSentences extends Sentences {
   String get reportsPageCompleted => 'पूर्ण';
   @override
   String get reportsPagePending => 'अपूर्ण';
+  @override
+  String get reportsPageTasks => 'कार्य';
 
   @override
   String get reportsPageDaily => 'दैनिक';
