@@ -62,7 +62,7 @@ class AddTaskBottomSheet extends StatelessWidget {
               ),
             ),
             actions: <Widget>[
-              buildCancelButton(context),
+              buildCancelButton(context, homeController),
               buildAddButton(context),
             ],
           ),
@@ -367,7 +367,9 @@ class AddTaskBottomSheet extends StatelessWidget {
         ],
       );
 
-  Widget buildCancelButton(BuildContext context) => TextButton(
+  Widget buildCancelButton(
+          BuildContext context, HomeController homeController) =>
+      TextButton(
         child: Text(
           'Cancel',
           style: TextStyle(
@@ -376,7 +378,15 @@ class AddTaskBottomSheet extends StatelessWidget {
                 : TaskWarriorColors.black,
           ),
         ),
-        onPressed: () => Navigator.of(context).pop("cancel"),
+        onPressed: () {
+          Navigator.of(context).pop("cancel");
+          homeController.namecontroller.text = '';
+          homeController.dueString.value = "";
+          homeController.priority.value = 'M';
+          homeController.tagcontroller.text = '';
+          homeController.tags.value = [];
+          homeController.update();
+        },
       );
 
   Widget buildAddButton(BuildContext context) {
@@ -409,7 +419,7 @@ class AddTaskBottomSheet extends StatelessWidget {
 
             // StorageWidget.of(context).mergeTask(task);
             homeController.namecontroller.text = '';
-            homeController.due.value = null;
+            homeController.dueString.value = "";
             homeController.priority.value = 'M';
             homeController.tagcontroller.text = '';
             homeController.tags.value = [];
