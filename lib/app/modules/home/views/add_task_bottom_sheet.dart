@@ -144,35 +144,6 @@ class AddTaskBottomSheet extends StatelessWidget {
                 ? TaskWarriorColors.white
                 : TaskWarriorColors.black,
           ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8.0),
-            borderSide: BorderSide(
-              color: AppSettings.isDarkMode
-                  ? TaskWarriorColors.white
-                  : TaskWarriorColors.black,
-              width: 1.0,
-            ),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8.0),
-            borderSide: BorderSide(
-              color: AppSettings.isDarkMode
-                  ? TaskWarriorColors.white
-                  : TaskWarriorColors.black,
-              width: 1.0,
-            ),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8.0),
-            borderSide: BorderSide(
-              color: AppSettings.isDarkMode
-                  ? TaskWarriorColors.white
-                  : TaskWarriorColors.black,
-              width: 1.0,
-            ),
-          ),
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0),
         ),
         validator: (name) => name != null && name.isEmpty
             ? 'You cannot leave this field empty!'
