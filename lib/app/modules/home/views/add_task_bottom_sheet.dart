@@ -248,7 +248,7 @@ class AddTaskBottomSheet extends StatelessWidget {
                                     brightness: Brightness.light,
                                     primary: TaskWarriorColors.black,
                                     onPrimary: TaskWarriorColors.white,
-                                    secondary: TaskWarriorColors.white,
+                                    secondary: TaskWarriorColors.grey,
                                     onSecondary: TaskWarriorColors.black,
                                     error: TaskWarriorColors.red,
                                     onError: TaskWarriorColors.white,
