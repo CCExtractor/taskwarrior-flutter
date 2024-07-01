@@ -105,7 +105,10 @@ class ReportsView extends GetView<ReportsController> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'No Task found',
+                        SentenceManager(
+                                currentLanguage: AppSettings.selectedLanguage)
+                            .sentences
+                            .reportsPageNoTasksFound,
                         style: TextStyle(
                           fontFamily: FontFamily.poppins,
                           fontWeight: TaskWarriorFonts.medium,
@@ -121,7 +124,10 @@ class ReportsView extends GetView<ReportsController> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Add a task to see reports',
+                        SentenceManager(
+                                currentLanguage: AppSettings.selectedLanguage)
+                            .sentences
+                            .reportsPageAddTasksToSeeReports,
                         style: TextStyle(
                           fontFamily: FontFamily.poppins,
                           fontWeight: TaskWarriorFonts.light,

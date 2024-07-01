@@ -180,4 +180,10 @@ class HindiSentences extends Sentences {
   String get reportsPageMonthlyBurnDownChart => 'मासिक बर्न डाउन चार्ट';
   @override
   String get reportsPageMonthlyMonthYear => 'माह - वर्ष';
+
+  @override
+  String get reportsPageNoTasksFound => 'कोई कार्य नहीं मिला';
+  @override
+  String get reportsPageAddTasksToSeeReports =>
+      'रिपोर्ट देखने के लिए कार्य जोड़ें';
 }

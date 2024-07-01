@@ -180,4 +180,9 @@ class EnglishSentences extends Sentences {
   String get reportsPageMonthlyBurnDownChart => 'Monthly Burn Down Chart';
   @override
   String get reportsPageMonthlyMonthYear => 'Month - Year';
+
+  @override
+  String get reportsPageNoTasksFound => 'No Tasks Found';
+  @override
+  String get reportsPageAddTasksToSeeReports => 'Add Tasks To See Reports';
 }

@@ -95,5 +95,7 @@ abstract class Sentences {
   String get reportsPageMonthly;
   String get reportsPageMonthlyBurnDownChart;
   String get reportsPageMonthlyMonthYear;
-  
+
+  String get reportsPageNoTasksFound;
+  String get reportsPageAddTasksToSeeReports;
 }
