@@ -532,7 +532,7 @@ class HomeController extends GetxController {
 
   void showInAppTour(BuildContext context) {
     Future.delayed(
-      const Duration(seconds: 1),
+      const Duration(milliseconds: 500),
       () {
         SaveTourStatus.getInAppTourStatus().then((value) => {
               if (value == false)
@@ -575,7 +575,7 @@ class HomeController extends GetxController {
 
   void showFilterDrawerTour(BuildContext context) {
     Future.delayed(
-      const Duration(seconds: 1),
+      const Duration(milliseconds: 500),
       () {
         SaveTourStatus.getFilterTourStatus().then((value) => {
               if (value == false)

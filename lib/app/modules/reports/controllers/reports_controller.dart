@@ -86,7 +86,7 @@ class ReportsController extends GetxController
 
   void showReportsTour(BuildContext context) {
     Future.delayed(
-      const Duration(seconds: 1),
+      const Duration(milliseconds: 500),
       () {
         SaveTourStatus.getReportsTourStatus().then((value) => {
               if (value == false)
@@ -344,7 +344,8 @@ class ReportsController extends GetxController
 
   // monthly report
   late TooltipBehavior monthlyBurndownTooltipBehaviour;
-  RxMap<String, Map<String, int>> monthlyInfo = <String, Map<String, int>>{}.obs;
+  RxMap<String, Map<String, int>> monthlyInfo =
+      <String, Map<String, int>>{}.obs;
 
   void sortBurnDownMonthly() {
     monthlyInfo.value = {};
@@ -396,19 +397,21 @@ class ReportsController extends GetxController
             children: [
               Text(
                 'Month-Year: $monthYear',
-                 style: const TextStyle(
+                style: const TextStyle(
                     fontFamily: FontFamily.poppins,
                     fontWeight: TaskWarriorFonts.bold,
                     color: Colors.black),
               ),
               Text(
-                'Pending: $pendingCount', style: const TextStyle(
+                'Pending: $pendingCount',
+                style: const TextStyle(
                     fontFamily: FontFamily.poppins,
                     fontWeight: TaskWarriorFonts.bold,
                     color: Colors.black),
               ),
               Text(
-                'Completed: $completedCount', style: const TextStyle(
+                'Completed: $completedCount',
+                style: const TextStyle(
                     fontFamily: FontFamily.poppins,
                     fontWeight: TaskWarriorFonts.bold,
                     color: Colors.black),
@@ -431,7 +434,6 @@ class ReportsController extends GetxController
 
       ///fetch all data contains all the tasks
       allData.value = storage.data.allData();
-
 
       ///check if allData is not empty
       if (allData.isNotEmpty) {
