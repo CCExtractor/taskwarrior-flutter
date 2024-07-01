@@ -5,6 +5,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:taskwarrior/app/models/models.dart';
 import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
+import 'package:taskwarrior/app/modules/home/controllers/widget.controller.dart';
 import 'package:taskwarrior/app/modules/home/views/tas_list_item.dart';
 import 'package:taskwarrior/app/routes/app_pages.dart';
 import 'package:taskwarrior/app/services/notification_services.dart';
@@ -16,6 +17,7 @@ import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/language/supported_language.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/modify.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
+
 class TasksBuilder extends StatelessWidget {
   const TasksBuilder({
     super.key,
@@ -211,6 +213,9 @@ class TasksBuilder extends StatelessWidget {
                                           dtb!.add(const Duration(minutes: 1));
                                       cancelNotification(task);
                                     }
+                                    Get.find<WidgetController>().fetchAllData();
+
+                                    Get.find<HomeController>().update();
                                   },
                                   icon: Icons.delete,
                                   label: "DELETE",
