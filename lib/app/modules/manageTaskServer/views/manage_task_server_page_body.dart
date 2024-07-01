@@ -46,6 +46,9 @@ class ManageTaskServerPageBody extends StatelessWidget {
                     showModalBottomSheet(
                       context: context,
                       isScrollControlled: true,
+                      backgroundColor: AppSettings.isDarkMode
+                          ? TaskWarriorColors.kdialogBackGroundColor
+                          : TaskWarriorColors.kLightDialogBackGroundColor,
                       builder: (context) {
                         return StatefulBuilder(
                           builder:
@@ -65,6 +68,7 @@ class ManageTaskServerPageBody extends StatelessWidget {
                                       borderRadius: BorderRadius.vertical(
                                           top: Radius.circular(16.0)),
                                     ),
+
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
