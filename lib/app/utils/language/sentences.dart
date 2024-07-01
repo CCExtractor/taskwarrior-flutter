@@ -79,4 +79,21 @@ abstract class Sentences {
   String get filterDrawerUrgency;
   String get filterDrawerResetSort;
   String get filterDrawerStatus;
+
+  String get reportsPageTitle;
+  String get reportsPageCompleted;
+  String get reportsPagePending;
+
+  String get reportsPageDaily;
+  String get reportsPageDailyBurnDownChart;
+  String get reportsPageDailyDayMonth;
+
+  String get reportsPageWeekly;
+  String get reportsPageWeeklyBurnDownChart;
+  String get reportsPageWeeklyWeeksYear;
+
+  String get reportsPageMonthly;
+  String get reportsPageMonthlyBurnDownChart;
+  String get reportsPageMonthlyMonthYear;
+  
 }

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -8,6 +7,7 @@ import 'package:taskwarrior/app/modules/reports/views/common_chart_indicator.dar
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
 class BurnDownDaily extends StatelessWidget {
@@ -29,12 +29,10 @@ class BurnDownDaily extends StatelessWidget {
                 () => SfCartesianChart(
                   primaryXAxis: CategoryAxis(
                     title: AxisTitle(
-                      text: 'Day - Month',
-                      // textStyle: GoogleFonts.poppins(
-                      // fontWeight: TaskWarriorFonts.bold,
-                      // color: AppSettings.isDarkMode ? Colors.white : Colors.black,
-                      // fontSize: TaskWarriorFonts.fontSizeSmall,
-                      // ),
+                      text: SentenceManager(
+                              currentLanguage: AppSettings.selectedLanguage)
+                          .sentences
+                          .reportsPageDailyDayMonth,
                       textStyle: TextStyle(
                         fontFamily: FontFamily.poppins,
                         fontWeight: TaskWarriorFonts.bold,
@@ -48,11 +46,6 @@ class BurnDownDaily extends StatelessWidget {
                   primaryYAxis: NumericAxis(
                     title: AxisTitle(
                       text: 'Tasks',
-                      // textStyle: GoogleFonts.poppins(
-                      //   fontWeight: TaskWarriorFonts.bold,
-                      //   fontSize: TaskWarriorFonts.fontSizeSmall,
-                      //   color: AppSettings.isDarkMode ? Colors.white : Colors.black,
-                      // ),
                       textStyle: TextStyle(
                         fontFamily: FontFamily.poppins,
                         fontWeight: TaskWarriorFonts.bold,
@@ -103,8 +96,10 @@ class BurnDownDaily extends StatelessWidget {
                 ),
               )),
         ),
-        const CommonChartIndicator(
-          title: 'Daily Burndown Chart',
+        CommonChartIndicator(
+          title: SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+              .sentences
+              .reportsPageDailyBurnDownChart,
         ),
       ],
     );

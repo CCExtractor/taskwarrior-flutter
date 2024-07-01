@@ -6,12 +6,12 @@ import 'package:taskwarrior/app/modules/reports/controllers/reports_controller.d
 import 'package:taskwarrior/app/modules/reports/views/common_chart_indicator.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
-
 
 class BurnDownMonthly extends StatelessWidget {
   final ReportsController reportsController;
-  const BurnDownMonthly({super.key,required this.reportsController});
+  const BurnDownMonthly({super.key, required this.reportsController});
 
   @override
   Widget build(BuildContext context) {
@@ -26,12 +26,10 @@ class BurnDownMonthly extends StatelessWidget {
             child: SfCartesianChart(
               primaryXAxis: CategoryAxis(
                 title: AxisTitle(
-                    text: 'Month - Year',
-                    // textStyle: GoogleFonts.poppins(
-                    //   fontWeight: TaskWarriorFonts.bold,
-                    //   fontSize: TaskWarriorFonts.fontSizeSmall,
-                    //   color: AppSettings.isDarkMode ? Colors.white : Colors.black,
-                    // ),
+                    text: SentenceManager(
+                            currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .reportsPageMonthlyMonthYear,
                     textStyle: TextStyle(
                       fontFamily: FontFamily.poppins,
                       fontWeight: TaskWarriorFonts.bold,
@@ -42,21 +40,15 @@ class BurnDownMonthly extends StatelessWidget {
               ),
               primaryYAxis: NumericAxis(
                 title: AxisTitle(
-                    text: 'Tasks',
-                    // textStyle: GoogleFonts.poppins(
-                    //   fontWeight: TaskWarriorFonts.bold,
-                    //   fontSize: TaskWarriorFonts.fontSizeSmall,
-                    //   color: AppSettings.isDarkMode ? Colors.white : Colors.black,
-                    // ),
                     textStyle: TextStyle(
-                      fontFamily: FontFamily.poppins,
-                      fontWeight: TaskWarriorFonts.bold,
-                      fontSize: TaskWarriorFonts.fontSizeSmall,
-                      color:
-                          AppSettings.isDarkMode ? Colors.white : Colors.black,
-                    )),
+                  fontFamily: FontFamily.poppins,
+                  fontWeight: TaskWarriorFonts.bold,
+                  fontSize: TaskWarriorFonts.fontSizeSmall,
+                  color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                )),
               ),
-              tooltipBehavior:reportsController. monthlyBurndownTooltipBehaviour,
+              tooltipBehavior:
+                  reportsController.monthlyBurndownTooltipBehaviour,
               series: <ChartSeries>[
                 StackedColumnSeries<ChartData, String>(
                   groupName: 'Group A',
@@ -92,9 +84,11 @@ class BurnDownMonthly extends StatelessWidget {
             ),
           ),
         ),
-        const CommonChartIndicator(
-          title: 'Monthly Burndown Chart',
-        )
+        CommonChartIndicator(
+          title: SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+              .sentences
+              .reportsPageMonthlyBurnDownChart,
+        ),
       ],
     );
   }

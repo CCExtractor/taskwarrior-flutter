@@ -30,8 +30,7 @@ class HindiSentences extends Sentences {
   String get homePageClickOnTheBottomRightButtonToStartAddingTasks =>
       'कार्यों को जोड़ना शुरू करने के लिए नीचे दाएं बटन पर क्लिक करें';
   @override
-  String get homePageSearchNotFound =>
-      'खोजने पर नहीं मिला';
+  String get homePageSearchNotFound => 'खोजने पर नहीं मिला';
   @override
   String get settingsPageTitle => 'सेटिंग्स पेज';
   @override
@@ -154,4 +153,31 @@ class HindiSentences extends Sentences {
   String get filterDrawerResetSort => 'सॉर्ट रीसेट करें';
   @override
   String get filterDrawerStatus => 'स्थिती';
+  @override
+  String get reportsPageTitle => 'रिपोर्ट्स';
+  @override
+  String get reportsPageCompleted => 'पूर्ण';
+  @override
+  String get reportsPagePending => 'अपूर्ण';
+
+  @override
+  String get reportsPageDaily => 'दैनिक';
+  @override
+  String get reportsPageDailyBurnDownChart => 'दैनिक बर्न डाउन चार्ट';
+  @override
+  String get reportsPageDailyDayMonth => 'दिन - माह';
+
+  @override
+  String get reportsPageWeekly => 'साप्ताहिक';
+  @override
+  String get reportsPageWeeklyBurnDownChart => 'साप्ताहिक बर्न डाउन चार्ट';
+  @override
+  String get reportsPageWeeklyWeeksYear => 'सप्ताह - वर्ष';
+
+  @override
+  String get reportsPageMonthly => 'मासिक';
+  @override
+  String get reportsPageMonthlyBurnDownChart => 'मासिक बर्न डाउन चार्ट';
+  @override
+  String get reportsPageMonthlyMonthYear => 'माह - वर्ष';
 }

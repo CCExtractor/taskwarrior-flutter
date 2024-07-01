@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
 class CommonChartIndicator extends StatelessWidget {
@@ -17,13 +18,6 @@ class CommonChartIndicator extends StatelessWidget {
           children: [
             Text(
               title,
-              // style: GoogleFonts.poppins(
-              //   fontWeight: TaskWarriorFonts.bold,
-              //   fontSize: TaskWarriorFonts.fontSizeMedium,
-              //   color: AppSettings.isDarkMode
-              //       ? TaskWarriorColors.white
-              //       : TaskWarriorColors.black,
-              // ),
               style: TextStyle(
                 fontFamily: FontFamily.poppins,
                 fontWeight: TaskWarriorFonts.bold,
@@ -47,14 +41,9 @@ class CommonChartIndicator extends StatelessWidget {
                   decoration: BoxDecoration(color: TaskWarriorColors.green),
                 ),
                 Text(
-                  "Completed",
-                  // style: GoogleFonts.poppins(
-                  //   fontWeight: TaskWarriorFonts.regular,
-                  //   fontSize: TaskWarriorFonts.fontSizeMedium,
-                  //   color: AppSettings.isDarkMode
-                  //       ? TaskWarriorColors.white
-                  //       : TaskWarriorColors.black,
-                  // ),
+                  SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                      .sentences
+                      .reportsPageCompleted,
                   style: TextStyle(
                     fontFamily: FontFamily.poppins,
                     fontWeight: TaskWarriorFonts.regular,
@@ -72,14 +61,9 @@ class CommonChartIndicator extends StatelessWidget {
                   decoration: BoxDecoration(color: TaskWarriorColors.yellow),
                 ),
                 Text(
-                  "Pending",
-                  // style: GoogleFonts.poppins(
-                  //   fontWeight: TaskWarriorFonts.regular,
-                  //   fontSize: TaskWarriorFonts.fontSizeMedium,
-                  //   color: AppSettings.isDarkMode
-                  //       ? TaskWarriorColors.white
-                  //       : TaskWarriorColors.black,
-                  // ),
+                  SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                      .sentences
+                      .reportsPagePending,
                   style: TextStyle(
                     fontFamily: FontFamily.poppins,
                     fontWeight: TaskWarriorFonts.regular,

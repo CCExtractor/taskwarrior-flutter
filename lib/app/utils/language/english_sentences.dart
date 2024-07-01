@@ -31,8 +31,7 @@ class EnglishSentences extends Sentences {
   String get homePageClickOnTheBottomRightButtonToStartAddingTasks =>
       'Click on the bottom right button to start adding tasks';
   @override
-  String get homePageSearchNotFound =>
-      'Search Not Found';
+  String get homePageSearchNotFound => 'Search Not Found';
 
   @override
   String get settingsPageTitle => 'Settings Page';
@@ -154,4 +153,31 @@ class EnglishSentences extends Sentences {
   String get filterDrawerResetSort => 'Reset Sort';
   @override
   String get filterDrawerStatus => 'Status';
+  @override
+  String get reportsPageTitle => 'Reports';
+  @override
+  String get reportsPageCompleted => 'Completed';
+  @override
+  String get reportsPagePending => 'Pending';
+
+  @override
+  String get reportsPageDaily => 'Daily';
+  @override
+  String get reportsPageDailyBurnDownChart => 'Daily Burn Down Chart';
+  @override
+  String get reportsPageDailyDayMonth => 'Day - Month';
+
+  @override
+  String get reportsPageWeekly => 'Weekly';
+  @override
+  String get reportsPageWeeklyBurnDownChart => 'Weekly Burn Down Chart';
+  @override
+  String get reportsPageWeeklyWeeksYear => 'Weeks - Year';
+
+  @override
+  String get reportsPageMonthly => 'Monthly';
+  @override
+  String get reportsPageMonthlyBurnDownChart => 'Monthly Burn Down Chart';
+  @override
+  String get reportsPageMonthlyMonthYear => 'Month - Year';
 }

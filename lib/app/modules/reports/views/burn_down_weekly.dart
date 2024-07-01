@@ -9,6 +9,7 @@ import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
 class BurnDownWeekly extends StatelessWidget {
@@ -28,12 +29,10 @@ class BurnDownWeekly extends StatelessWidget {
             child: SfCartesianChart(
               primaryXAxis: CategoryAxis(
                 title: AxisTitle(
-                    text: 'Weeks - Year',
-                    // textStyle: GoogleFonts.poppins(
-                    //   fontWeight: TaskWarriorFonts.bold,
-                    //   fontSize: TaskWarriorFonts.fontSizeSmall,
-                    //   color: AppSettings.isDarkMode ? Colors.white : Colors.black,
-                    // ),
+                    text: SentenceManager(
+                            currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .reportsPageWeeklyWeeksYear,
                     textStyle: TextStyle(
                       fontFamily: FontFamily.poppins,
                       fontWeight: TaskWarriorFonts.bold,
@@ -45,11 +44,6 @@ class BurnDownWeekly extends StatelessWidget {
               primaryYAxis: NumericAxis(
                 title: AxisTitle(
                     text: 'Tasks',
-                    // textStyle: GoogleFonts.poppins(
-                    //   fontWeight: TaskWarriorFonts.bold,
-                    //   color: AppSettings.isDarkMode ? Colors.white : Colors.black,
-                    //   fontSize: TaskWarriorFonts.fontSizeSmall,
-                    // ),
                     textStyle: TextStyle(
                       fontFamily: FontFamily.poppins,
                       fontWeight: TaskWarriorFonts.bold,
@@ -91,10 +85,12 @@ class BurnDownWeekly extends StatelessWidget {
                   dataSource: reportsController.allData
                       .map((task) => ChartData(
                             'Week ${Utils.getWeekNumbertoInt(task.entry)}, ${task.entry.year}',
-                           reportsController. weeklyInfo[Utils.getWeekNumbertoInt(task.entry)]
+                            reportsController.weeklyInfo[
+                                        Utils.getWeekNumbertoInt(task.entry)]
                                     ?['pending'] ??
                                 0,
-                           reportsController. weeklyInfo[Utils.getWeekNumbertoInt(task.entry)]
+                            reportsController.weeklyInfo[
+                                        Utils.getWeekNumbertoInt(task.entry)]
                                     ?['completed'] ??
                                 0,
                           ))
@@ -107,8 +103,10 @@ class BurnDownWeekly extends StatelessWidget {
             ),
           ),
         ),
-        const CommonChartIndicator(
-          title: 'Weekly Burndown Chart',
+        CommonChartIndicator(
+          title: SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+              .sentences
+              .reportsPageWeeklyBurnDownChart,
         ),
       ],
     );

@@ -7,6 +7,7 @@ import 'package:taskwarrior/app/modules/reports/views/burn_down_monthly.dart';
 import 'package:taskwarrior/app/modules/reports/views/burn_down_weekly.dart';
 import 'package:taskwarrior/app/utils/constants/constants.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
 import '../controllers/reports_controller.dart';
@@ -18,13 +19,15 @@ class ReportsView extends GetView<ReportsController> {
   Widget build(BuildContext context) {
     controller.initReportsTour();
     controller.showReportsTour(context);
-    double height = MediaQuery.of(context).size.height; // Screen height
+    double height = MediaQuery.of(context).size.height;
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
         title: Text(
-          'Reports',
+          SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+              .sentences
+              .reportsPageTitle,
           style: GoogleFonts.poppins(color: TaskWarriorColors.white),
         ),
         leading: GestureDetector(
@@ -37,8 +40,7 @@ class ReportsView extends GetView<ReportsController> {
           ),
         ),
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(
-              height * 0.1), // Adjust the preferred height as needed
+          preferredSize: Size.fromHeight(height * 0.1),
           child: TabBar(
             controller: controller.tabController,
             labelColor: TaskWarriorColors.white,
@@ -56,19 +58,28 @@ class ReportsView extends GetView<ReportsController> {
               Tab(
                 key: controller.daily,
                 icon: const Icon(Icons.schedule),
-                text: 'Daily',
+                text: SentenceManager(
+                        currentLanguage: AppSettings.selectedLanguage)
+                    .sentences
+                    .reportsPageDaily,
                 iconMargin: const EdgeInsets.only(bottom: 0.0),
               ),
               Tab(
                 key: controller.weekly,
                 icon: const Icon(Icons.today),
-                text: 'Weekly',
+                text: SentenceManager(
+                        currentLanguage: AppSettings.selectedLanguage)
+                    .sentences
+                    .reportsPageWeekly,
                 iconMargin: const EdgeInsets.only(bottom: 0.0),
               ),
               Tab(
                 key: controller.monthly,
                 icon: const Icon(Icons.date_range),
-                text: 'Monthly',
+                text: SentenceManager(
+                        currentLanguage: AppSettings.selectedLanguage)
+                    .sentences
+                    .reportsPageMonthly,
                 iconMargin: const EdgeInsets.only(bottom: 0.0),
               ),
             ],
@@ -95,13 +106,6 @@ class ReportsView extends GetView<ReportsController> {
                     children: [
                       Text(
                         'No Task found',
-                        // style: GoogleFonts.poppins(
-                        //   fontWeight: TaskWarriorFonts.medium,
-                        //   fontSize: TaskWarriorFonts.fontSizeSmall,
-                        //   color: AppSettings.isDarkMode
-                        //       ? TaskWarriorColors.white
-                        //       : TaskWarriorColors.black,
-                        // ),
                         style: TextStyle(
                           fontFamily: FontFamily.poppins,
                           fontWeight: TaskWarriorFonts.medium,
@@ -118,13 +122,6 @@ class ReportsView extends GetView<ReportsController> {
                     children: [
                       Text(
                         'Add a task to see reports',
-                        // style: GoogleFonts.poppins(
-                        //   fontWeight: TaskWarriorFonts.light,
-                        //   fontSize: TaskWarriorFonts.fontSizeSmall,
-                        //   color: AppSettings.isDarkMode
-                        //       ? TaskWarriorColors.white
-                        //       : TaskWarriorColors.black,
-                        // ),
                         style: TextStyle(
                           fontFamily: FontFamily.poppins,
                           fontWeight: TaskWarriorFonts.light,

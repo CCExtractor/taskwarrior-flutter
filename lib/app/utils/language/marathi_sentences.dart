@@ -30,8 +30,7 @@ class MarathiSentences extends Sentences {
   String get homePageClickOnTheBottomRightButtonToStartAddingTasks =>
       'कार्ये जोडणे सुरू करण्यासाठी तळाशी उजव्या बटणावर क्लिक करा';
   @override
-  String get homePageSearchNotFound =>
-      'शोध सापडला नाही';
+  String get homePageSearchNotFound => 'शोध सापडला नाही';
   @override
   String get settingsPageTitle => 'सेटिंग्स पेज';
   @override
@@ -153,4 +152,32 @@ class MarathiSentences extends Sentences {
   String get filterDrawerResetSort => 'क्रमवारी रीसेट करा';
   @override
   String get filterDrawerStatus => 'स्थिति';
+
+  @override
+  String get reportsPageTitle => 'अहवाल';
+  @override
+  String get reportsPageCompleted => 'पूर्ण';
+  @override
+  String get reportsPagePending => 'प्रलंबित';
+
+  @override
+  String get reportsPageDaily => 'दैनिक';
+  @override
+  String get reportsPageDailyBurnDownChart => 'दैनिक बर्न डाउन चार्ट';
+  @override
+  String get reportsPageDailyDayMonth => 'दिवस - महिना';
+
+  @override
+  String get reportsPageWeekly => 'साप्ताहिक';
+  @override
+  String get reportsPageWeeklyBurnDownChart => 'साप्ताहिक बर्न डाउन चार्ट';
+  @override
+  String get reportsPageWeeklyWeeksYear => 'सप्ताह - वर्ष';
+
+  @override
+  String get reportsPageMonthly => 'मासिक';
+  @override
+  String get reportsPageMonthlyBurnDownChart => 'मासिक बर्न डाउन चार्ट';
+  @override
+  String get reportsPageMonthlyMonthYear => 'महिना - वर्ष';
 }
