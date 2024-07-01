@@ -86,7 +86,7 @@ class ReportsController extends GetxController
 
   void showReportsTour(BuildContext context) {
     Future.delayed(
-      const Duration(seconds: 2),
+      const Duration(seconds: 1),
       () {
         SaveTourStatus.getReportsTourStatus().then((value) => {
               if (value == false)
