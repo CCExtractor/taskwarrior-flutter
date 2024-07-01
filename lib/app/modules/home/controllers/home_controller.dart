@@ -310,10 +310,6 @@ class HomeController extends GetxController {
         pendingTags.value = _pendingTags();
         projects.value = _projects();
 
-        if (isDialogNeeded) {
-          Get.back();
-        }
-
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
               '${header['code']}: ${header['status']}',
@@ -327,10 +323,15 @@ class HomeController extends GetxController {
                 ? TaskWarriorColors.ksecondaryBackgroundColor
                 : TaskWarriorColors.kLightSecondaryBackgroundColor,
             duration: const Duration(seconds: 2)));
+
+        if (isDialogNeeded) {
+          Get.back(closeOverlays: true);
+          return;
+        }
       }
     } catch (e, trace) {
       if (isDialogNeeded) {
-        Get.back();
+        Get.back(closeOverlays: true);
       }
       logError(e, trace);
     }
