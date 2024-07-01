@@ -79,7 +79,12 @@ class HomeController extends GetxController {
 
   void _profileSet() {
     pendingFilter.value = Query(storage.tabs.tab()).getPendingFilter();
-    waitingFilter.value = Query(storage.tabs.tab()).getWaitingFilter();
+    if (Query(storage.tabs.tab()).getWaitingFilter()) {
+      waitingFilter.value = Query(storage.tabs.tab()).getWaitingFilter();
+    } else {
+      Query(storage.tabs.tab()).toggleWaitingFilter();
+      waitingFilter.value = Query(storage.tabs.tab()).getWaitingFilter();
+    }
     projectFilter.value = Query(storage.tabs.tab()).projectFilter();
     tagUnion.value = Query(storage.tabs.tab()).tagUnion();
     selectedSort.value = Query(storage.tabs.tab()).getSelectedSort();
