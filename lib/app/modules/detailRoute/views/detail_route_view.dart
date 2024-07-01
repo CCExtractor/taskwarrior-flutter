@@ -31,7 +31,17 @@ class DetailRouteView extends GetView<DetailRouteController> {
           context: context,
           builder: (context) {
             return AlertDialog(
-              title: const Text('Do you want to save changes?'),
+              backgroundColor: AppSettings.isDarkMode
+                  ? TaskWarriorColors.kdialogBackGroundColor
+                  : TaskWarriorColors.kLightDialogBackGroundColor,
+              title: Text(
+                'Do you want to save changes?',
+                style: TextStyle(
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.white
+                      : TaskWarriorColors.black,
+                ),
+              ),
               actions: [
                 TextButton(
                   onPressed: () {
@@ -40,7 +50,14 @@ class DetailRouteView extends GetView<DetailRouteController> {
 
                     Get.back();
                   },
-                  child: const Text('Yes'),
+                  child: Text(
+                    'Yes',
+                    style: TextStyle(
+                      color: AppSettings.isDarkMode
+                          ? TaskWarriorColors.white
+                          : TaskWarriorColors.black,
+                    ),
+                  ),
                 ),
                 TextButton(
                   onPressed: () {
@@ -48,13 +65,27 @@ class DetailRouteView extends GetView<DetailRouteController> {
 
                     Get.back();
                   },
-                  child: const Text('No'),
+                  child: Text(
+                    'No',
+                    style: TextStyle(
+                      color: AppSettings.isDarkMode
+                          ? TaskWarriorColors.white
+                          : TaskWarriorColors.black,
+                    ),
+                  ),
                 ),
                 TextButton(
                   onPressed: () {
                     Get.back();
                   },
-                  child: const Text('Cancel'),
+                  child: Text(
+                    'Cancel',
+                    style: TextStyle(
+                      color: AppSettings.isDarkMode
+                          ? TaskWarriorColors.white
+                          : TaskWarriorColors.black,
+                    ),
+                  ),
                 ),
               ],
             );
@@ -62,6 +93,62 @@ class DetailRouteView extends GetView<DetailRouteController> {
         );
         return save == true;
       },
+
+      // Utils.showAlertDialog(
+      //     title: Text(
+      //        SentenceManager(currentLanguage: homeController.selectedLanguage.value)
+      //           .sentences
+      //           .homePageExitApp,
+      //       style: TextStyle(
+      //         color: AppSettings.isDarkMode
+      //             ? TaskWarriorColors.white
+      //             : TaskWarriorColors.black,
+      //       ),
+      //     ),
+      //     content: Text(
+      //       SentenceManager(currentLanguage: homeController.selectedLanguage.value)
+      //           .sentences
+      //           .homePageAreYouSureYouWantToExit,
+      //       style: TextStyle(
+      //         color: AppSettings.isDarkMode
+      //             ? TaskWarriorColors.white
+      //             : TaskWarriorColors.black,
+      //       ),
+      //     ),
+      //     actions: <Widget>[
+      //       TextButton(
+      //         child: Text(
+      //           SentenceManager(currentLanguage: homeController.selectedLanguage.value)
+      //           .sentences
+      //           .homePageCancel,
+      //           style: TextStyle(
+      //             color: AppSettings.isDarkMode
+      //                 ? TaskWarriorColors.white
+      //                 : TaskWarriorColors.black,
+      //           ),
+      //         ),
+      //         onPressed: () {
+      //           Navigator.of(context).pop(); // Close the dialog
+      //         },
+      //       ),
+      //       TextButton(
+      //         child: Text(
+      //           SentenceManager(currentLanguage: homeController.selectedLanguage.value)
+      //           .sentences
+      //           .homePageExit,
+      //           style: TextStyle(
+      //             color: AppSettings.isDarkMode
+      //                 ? TaskWarriorColors.white
+      //                 : TaskWarriorColors.black,
+      //           ),
+      //         ),
+      //         onPressed: () {
+      //           Navigator.of(context).pop(); // Close the dialog
+      //           SystemNavigator.pop(); // Exit the app
+      //         },
+      //       ),
+      //     ],
+      //   );
       child: Scaffold(
           backgroundColor: AppSettings.isDarkMode
               ? TaskWarriorColors.kprimaryBackgroundColor
