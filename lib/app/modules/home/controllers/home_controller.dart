@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:home_widget/home_widget.dart';
 import 'package:loggy/loggy.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taskwarrior/app/models/filters.dart';
@@ -15,9 +16,11 @@ import 'package:taskwarrior/app/models/storage.dart';
 import 'package:taskwarrior/app/models/storage/client.dart';
 import 'package:taskwarrior/app/models/tag_meta_data.dart';
 import 'package:taskwarrior/app/modules/splash/controllers/splash_controller.dart';
+import 'package:taskwarrior/app/routes/app_pages.dart';
 import 'package:taskwarrior/app/services/tag_filter.dart';
 import 'package:taskwarrior/app/tour/filter_drawer_tour.dart';
 import 'package:taskwarrior/app/tour/home_page_tour.dart';
+import 'package:taskwarrior/app/utils/constants/palette.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/language/supported_language.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/comparator.dart';
@@ -61,6 +64,7 @@ class HomeController extends GetxController {
     _profileSet();
     loadDelayTask();
     initLanguageAndDarkMode();
+    handleHomeWidgetClicked();
   }
 
   void addListenerToScrollController() {
@@ -590,5 +594,36 @@ class HomeController extends GetxController {
             });
       },
     );
+  }
+
+  late RxString uuid = "".obs;
+  late RxBool isHomeWidgetTaskTapped = false.obs;
+
+  void handleHomeWidgetClicked() async {
+    Uri? myUri = await HomeWidget.initiallyLaunchedFromHomeWidget();
+    if (myUri != null) {
+      if (myUri.host == "cardclicked") {
+        if (myUri.queryParameters["uuid"] != null) {
+          uuid.value = myUri.queryParameters["uuid"] as String;
+          isHomeWidgetTaskTapped.value = true;
+          Future.delayed(const Duration(seconds: 2), () {
+            Get.toNamed(Routes.DETAIL_ROUTE, arguments: ["uuid", uuid.value]);
+          });
+        }
+      }
+    }
+    HomeWidget.widgetClicked.listen((uri) async {
+      if (uri != null) {
+        if (uri.host == "cardclicked") {
+          if (uri.queryParameters["uuid"] != null) {
+            uuid.value = uri.queryParameters["uuid"] as String;
+            isHomeWidgetTaskTapped.value = true;
+          }
+          debugPrint('uuid is $uuid');
+          print("tonamed called");
+          Get.toNamed(Routes.DETAIL_ROUTE, arguments: ["uuid", uuid.value]);
+        }
+      }
+    });
   }
 }

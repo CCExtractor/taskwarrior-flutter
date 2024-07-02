@@ -41,30 +41,28 @@ class HomeView extends GetView<HomeController> {
     // var waitingFilter = controller.waitingFilter;
     // var pendingTags = controller.pendingTags;
 
-    return isHomeWidgetTaskTapped == false
-        ? Obx(
-            () => Scaffold(
-              appBar: HomePageAppBar(
-                server: server,
-                credentials: credentials,
-                controller: controller,
-              ),
-              backgroundColor: controller.isDarkModeOn.value
-                  ? TaskWarriorColors.kprimaryBackgroundColor
-                  : TaskWarriorColors.kLightPrimaryBackgroundColor,
-              drawer: NavDrawer(homeController: controller),
-              body: HomePageBody(controller: controller),
-              endDrawer: Obx(
-                () => FilterDrawer(
-                  filters: controller.getFilters(),
-                  homeController: controller,
-                ),
-              ),
-              floatingActionButton:
-                  HomePageFloatingActionButton(controller: controller),
-              resizeToAvoidBottomInset: false,
-            ),
-          )
-        : const DetailRouteView();
+    return Obx(
+      () => Scaffold(
+        appBar: HomePageAppBar(
+          server: server,
+          credentials: credentials,
+          controller: controller,
+        ),
+        backgroundColor: controller.isDarkModeOn.value
+            ? TaskWarriorColors.kprimaryBackgroundColor
+            : TaskWarriorColors.kLightPrimaryBackgroundColor,
+        drawer: NavDrawer(homeController: controller),
+        body: HomePageBody(controller: controller),
+        endDrawer: Obx(
+          () => FilterDrawer(
+            filters: controller.getFilters(),
+            homeController: controller,
+          ),
+        ),
+        floatingActionButton:
+            HomePageFloatingActionButton(controller: controller),
+        resizeToAvoidBottomInset: false,
+      ),
+    );
   }
 }
