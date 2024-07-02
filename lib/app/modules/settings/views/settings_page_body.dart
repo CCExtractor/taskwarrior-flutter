@@ -24,7 +24,7 @@ import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 class SettingsPageBody extends StatelessWidget {
   final SettingsController controller;
   
-  const SettingsPageBody({required this.controller, Key? key}) : super(key: key);
+  const SettingsPageBody({required this.controller, super.key});
 
   @override
   Widget build(BuildContext context) {

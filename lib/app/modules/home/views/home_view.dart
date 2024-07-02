@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:taskwarrior/app/modules/detailRoute/views/detail_route_view.dart';
 
 import 'package:taskwarrior/app/modules/home/views/filter_drawer_home_page.dart';
 import 'package:taskwarrior/app/modules/home/views/home_page_app_bar.dart';
@@ -18,7 +17,6 @@ class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
   @override
   Widget build(BuildContext context) {
-    bool isHomeWidgetTaskTapped = false;
     Server? server;
     Credentials? credentials;
 

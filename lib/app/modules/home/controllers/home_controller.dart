@@ -20,7 +20,6 @@ import 'package:taskwarrior/app/routes/app_pages.dart';
 import 'package:taskwarrior/app/services/tag_filter.dart';
 import 'package:taskwarrior/app/tour/filter_drawer_tour.dart';
 import 'package:taskwarrior/app/tour/home_page_tour.dart';
-import 'package:taskwarrior/app/utils/constants/palette.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/language/supported_language.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/comparator.dart';
@@ -620,7 +619,6 @@ class HomeController extends GetxController {
             isHomeWidgetTaskTapped.value = true;
           }
           debugPrint('uuid is $uuid');
-          print("tonamed called");
           Get.toNamed(Routes.DETAIL_ROUTE, arguments: ["uuid", uuid.value]);
         }
       }

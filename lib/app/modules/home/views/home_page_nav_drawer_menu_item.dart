@@ -9,11 +9,11 @@ class NavDrawerMenuItem extends StatelessWidget {
   final VoidCallback onTap;
 
   const NavDrawerMenuItem({
-    Key? key,
+    super.key,
     required this.icon,
     required this.text,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

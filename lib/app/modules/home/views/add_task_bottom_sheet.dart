@@ -391,7 +391,6 @@ class AddTaskBottomSheet extends StatelessWidget {
       );
 
   Widget buildAddButton(BuildContext context) {
-    WidgetController widgetController = Get.put(WidgetController(context));
 
     return TextButton(
       child: Text(
