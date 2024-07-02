@@ -63,7 +63,9 @@ class HomeController extends GetxController {
     _profileSet();
     loadDelayTask();
     initLanguageAndDarkMode();
-    handleHomeWidgetClicked();
+    if (Platform.isAndroid) {
+      handleHomeWidgetClicked();
+    }
   }
 
   void addListenerToScrollController() {
