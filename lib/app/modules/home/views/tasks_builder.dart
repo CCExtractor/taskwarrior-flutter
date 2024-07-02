@@ -76,9 +76,9 @@ class TasksBuilder extends StatelessWidget {
       action: SnackBarAction(
         label: 'Undo',
         onPressed: () {
-          // Undo the task status change
           undoChanges(
-              context, id, newValue == 'completed' ? 'pending' : 'deleted');
+              context, id, 'pending');
+
         },
       ),
     ));
@@ -95,6 +95,7 @@ class TasksBuilder extends StatelessWidget {
     modify.save(
       modified: () => DateTime.now().toUtc(),
     );
+    storageWidget.update();
   }
 
   void cancelNotification(Task task) {
