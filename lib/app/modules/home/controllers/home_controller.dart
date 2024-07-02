@@ -606,7 +606,7 @@ class HomeController extends GetxController {
         if (myUri.queryParameters["uuid"] != null) {
           uuid.value = myUri.queryParameters["uuid"] as String;
           isHomeWidgetTaskTapped.value = true;
-          Future.delayed(const Duration(seconds: 2), () {
+          Future.delayed(Duration.zero, () {
             Get.toNamed(Routes.DETAIL_ROUTE, arguments: ["uuid", uuid.value]);
           });
         }
