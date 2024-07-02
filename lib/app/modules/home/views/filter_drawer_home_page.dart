@@ -141,7 +141,7 @@ class FilterDrawer extends StatelessWidget {
                   child: GestureDetector(
                     onTap: filters.toggleWaitingFilter,
                     child: Text(
-                        filters.waitingFilter
+                        !filters.waitingFilter
                             ? SentenceManager(
                                     currentLanguage:
                                         homeController.selectedLanguage.value)
