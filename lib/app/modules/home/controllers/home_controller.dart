@@ -79,7 +79,7 @@ class HomeController extends GetxController {
 
   void _profileSet() {
     pendingFilter.value = Query(storage.tabs.tab()).getPendingFilter();
-    if (Query(storage.tabs.tab()).getWaitingFilter()) {
+    if (!Query(storage.tabs.tab()).getWaitingFilter()) {
       waitingFilter.value = Query(storage.tabs.tab()).getWaitingFilter();
     } else {
       Query(storage.tabs.tab()).toggleWaitingFilter();
