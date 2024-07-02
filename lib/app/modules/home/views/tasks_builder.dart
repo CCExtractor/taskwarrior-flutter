@@ -1,5 +1,7 @@
 // ignore_for_file: file_names
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
@@ -213,9 +215,13 @@ class TasksBuilder extends StatelessWidget {
                                           dtb!.add(const Duration(minutes: 1));
                                       cancelNotification(task);
                                     }
-                                    Get.find<WidgetController>().fetchAllData();
+                                    if (Platform.isAndroid) {
+                                      WidgetController widgetController =
+                                          Get.put(WidgetController(context));
+                                      widgetController.fetchAllData();
 
-                                    Get.find<HomeController>().update();
+                                      widgetController.update();
+                                    }
                                   },
                                   icon: Icons.delete,
                                   label: "DELETE",

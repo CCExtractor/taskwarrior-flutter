@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -426,7 +427,13 @@ class AddTaskBottomSheet extends StatelessWidget {
             homeController.update();
             // Navigator.of(context).pop();
             Get.back();
-            widgetController.fetchAllData();
+            if (Platform.isAndroid) {
+              WidgetController widgetController =
+                  Get.put(WidgetController(context));
+              widgetController.fetchAllData();
+
+              widgetController.update();
+            }
 
             homeController.update();
 
