@@ -14,17 +14,21 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   connectivity_plus: ^5.0.2
+  crypto: ^3.0.1
   cupertino_icons: ^1.0.5
   date_format: ^2.0.6
   double_back_to_close_app: ^2.1.0
+  file_picker: ^6.1.1
   file_picker_writable: ^2.0.3
   file_selector: ^0.9.4
   flutter:
     sdk: flutter
+  flutter_gen: ^5.4.0
   flutter_launcher_icons: ^0.13.1
   flutter_local_notifications: ^16.2.0
   flutter_native_splash: ^2.1.2+1
   flutter_native_timezone: ^2.0.0
+  flutter_platform_widgets: ^6.0.2
   flutter_slidable: ^3.0.1
   flutter_svg: ^2.0.7
   get: ^4.6.5
@@ -34,11 +38,11 @@ dependencies:
   home_widget: ^0.6.0
   http: ^1.1.0
   import_sorter: ^4.6.0
+  in_app_update: ^4.2.3
   intl: ^0.18.0
   loggy: ^2.0.1+1
   package_info_plus: ^4.0.2
   pem: ^2.0.1
-  # permission_handler: ^10.2.0
   permission_handler:
     git:
       url: https://github.com/bvoq/flutter-permission-handler.git
@@ -53,17 +57,13 @@ dependencies:
   tutorial_coach_mark: ^1.2.11
   url_launcher: ^6.1.14
   uuid: ^4.2.2
-  crypto: ^3.0.1
-  flutter_platform_widgets: ^6.0.2
-  file_picker: ^6.1.1
-  flutter_gen: ^5.4.0
 
 dev_dependencies:
+  build_runner: null
+  flutter_gen_runner: null
   flutter_lints: 4.0.0
   flutter_test:
     sdk: flutter
-  build_runner:
-  flutter_gen_runner:
 
 flutter_gen:
   output: lib/app/utils/gen/
