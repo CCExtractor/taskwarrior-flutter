@@ -1,6 +1,10 @@
+// ignore_for_file: body_might_complete_normally_catch_error
+
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:in_app_update/in_app_update.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taskwarrior/app/models/storage.dart';
@@ -17,6 +21,7 @@ class SplashController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
+    checkForUpdate();
     initBaseDir().then((_) {
       _checkProfiles();
       profilesMap.value = _profiles.profilesMap();
@@ -98,6 +103,29 @@ class SplashController extends GetxController {
       Get.toNamed(Routes.HOME);
     } else {
       Get.toNamed(Routes.ONBOARDING);
+    }
+  }
+
+  Future<void> checkForUpdate() async {
+    try {
+      AppUpdateInfo updateInfo = await InAppUpdate.checkForUpdate();
+      if (updateInfo.updateAvailability == UpdateAvailability.updateAvailable) {
+        if (updateInfo.immediateUpdateAllowed) {
+          InAppUpdate.performImmediateUpdate().catchError((e) {
+            debugPrint(e.toString());
+          });
+        } else if (updateInfo.flexibleUpdateAllowed) {
+          InAppUpdate.startFlexibleUpdate().then((_) {
+            InAppUpdate.completeFlexibleUpdate().catchError((e) {
+              debugPrint(e.toString());
+            });
+          }).catchError((e) {
+            debugPrint(e.toString());
+          });
+        }
+      }
+    } catch (e) {
+      debugPrint(e.toString());
     }
   }
 }
