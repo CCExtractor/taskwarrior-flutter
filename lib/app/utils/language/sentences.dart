@@ -46,6 +46,7 @@ abstract class Sentences {
   String get navDrawerReports;
   String get navDrawerAbout;
   String get navDrawerSettings;
+  String get ccsyncCredentials;
   String get navDrawerExit;
 
   String get detailPageDescription;

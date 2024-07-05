@@ -191,7 +191,9 @@ class EnglishSentences extends Sentences {
   @override
   String get taskchampionTileDescription =>
       'Switch to TaskWarrior sync with CCSync or Taskchampion Sync Server';
-
   @override
   String get taskchampionTileTitle => 'Taskchampion sync';
+
+  @override
+  String get ccsyncCredentials => 'CCync credentials';
 }

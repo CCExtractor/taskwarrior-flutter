@@ -10,6 +10,7 @@ import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
+import 'package:taskwarrior/app/utils/taskchampion/taskchampion.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
 class NavDrawer extends StatelessWidget {
@@ -41,9 +42,11 @@ class NavDrawer extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    SentenceManager(currentLanguage: homeController.selectedLanguage.value)
-                .sentences
-                .homePageMenu,
+                    SentenceManager(
+                            currentLanguage:
+                                homeController.selectedLanguage.value)
+                        .sentences
+                        .homePageMenu,
                     style: TextStyle(
                       fontSize: TaskWarriorFonts.fontSizeExtraLarge,
                       fontWeight: TaskWarriorFonts.bold,
@@ -115,6 +118,22 @@ class NavDrawer extends StatelessWidget {
                 },
               ),
             ),
+            Visibility(
+              visible: homeController.taskchampion.value,
+              child: NavDrawerMenuItem(
+                icon: Icons.task_alt,
+                text: SentenceManager(
+                  currentLanguage: homeController.selectedLanguage.value,
+                ).sentences.ccsyncCredentials,
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const ManageTaskChampionCreds(),
+                    ),
+                  );
+                },
+              ),
+            ),
             Obx(
               () => NavDrawerMenuItem(
                 icon: Icons.settings,
@@ -162,7 +181,8 @@ class NavDrawer extends StatelessWidget {
       builder: (BuildContext context) {
         return Utils.showAlertDialog(
           title: Text(
-             SentenceManager(currentLanguage: homeController.selectedLanguage.value)
+            SentenceManager(
+                    currentLanguage: homeController.selectedLanguage.value)
                 .sentences
                 .homePageExitApp,
             style: TextStyle(
@@ -172,7 +192,8 @@ class NavDrawer extends StatelessWidget {
             ),
           ),
           content: Text(
-            SentenceManager(currentLanguage: homeController.selectedLanguage.value)
+            SentenceManager(
+                    currentLanguage: homeController.selectedLanguage.value)
                 .sentences
                 .homePageAreYouSureYouWantToExit,
             style: TextStyle(
@@ -184,9 +205,10 @@ class NavDrawer extends StatelessWidget {
           actions: <Widget>[
             TextButton(
               child: Text(
-                SentenceManager(currentLanguage: homeController.selectedLanguage.value)
-                .sentences
-                .homePageCancel,
+                SentenceManager(
+                        currentLanguage: homeController.selectedLanguage.value)
+                    .sentences
+                    .homePageCancel,
                 style: TextStyle(
                   color: AppSettings.isDarkMode
                       ? TaskWarriorColors.white
@@ -199,9 +221,10 @@ class NavDrawer extends StatelessWidget {
             ),
             TextButton(
               child: Text(
-                SentenceManager(currentLanguage: homeController.selectedLanguage.value)
-                .sentences
-                .homePageExit,
+                SentenceManager(
+                        currentLanguage: homeController.selectedLanguage.value)
+                    .sentences
+                    .homePageExit,
                 style: TextStyle(
                   color: AppSettings.isDarkMode
                       ? TaskWarriorColors.white

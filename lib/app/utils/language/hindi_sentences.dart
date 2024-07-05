@@ -195,4 +195,7 @@ class HindiSentences extends Sentences {
 
   @override
   String get taskchampionTileTitle => 'Taskchampion सिंक';
+
+  @override
+  String get ccsyncCredentials => 'CCync क्रेडेन्शियल';
 }
