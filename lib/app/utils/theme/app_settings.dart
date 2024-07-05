@@ -72,6 +72,14 @@ class SaveTourStatus {
   static Future<bool> getProfileTourStatus() async {
     return _preferences?.getBool('profile_tour') ?? false;
   }
+
+  static Future saveDetailsTourStatus(bool status) async {
+    await _preferences?.setBool('details_tour', status);
+  }
+
+  static Future<bool> getDetailsTourStatus() async {
+    return _preferences?.getBool('details_tour') ?? false;
+  }
 }
 
 class AppSettings {
