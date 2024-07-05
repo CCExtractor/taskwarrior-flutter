@@ -21,7 +21,7 @@ class SplashController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    checkForUpdate();
+    await checkForUpdate();
     initBaseDir().then((_) {
       _checkProfiles();
       profilesMap.value = _profiles.profilesMap();
