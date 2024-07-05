@@ -105,14 +105,19 @@ class NavDrawer extends StatelessWidget {
               visible: homeController.taskchampion.value,
               child: NavDrawerMenuItem(
                   icon: Icons.delete,
-                  text: 'Delete tasks',
+                  text: SentenceManager(
+                    currentLanguage: homeController.selectedLanguage.value,
+                  ).sentences.deleteTaskTitle,
                   onTap: () {
                     showDialog<void>(
                       context: context,
                       builder: (BuildContext context) {
                         return Utils.showAlertDialog(
                           title: Text(
-                            'Delete All Tasks?',
+                            SentenceManager(
+                              currentLanguage:
+                                  homeController.selectedLanguage.value,
+                            ).sentences.deleteTaskConfirmation,
                             style: TextStyle(
                               color: AppSettings.isDarkMode
                                   ? TaskWarriorColors.white
@@ -120,7 +125,10 @@ class NavDrawer extends StatelessWidget {
                             ),
                           ),
                           content: Text(
-                            'The action is irreversible and will delete all the tasks that are stored locally.',
+                            SentenceManager(
+                              currentLanguage:
+                                  homeController.selectedLanguage.value,
+                            ).sentences.deleteTaskWarning,
                             style: TextStyle(
                               color: AppSettings.isDarkMode
                                   ? TaskWarriorColors.white

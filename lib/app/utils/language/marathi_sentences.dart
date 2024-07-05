@@ -197,4 +197,14 @@ class MarathiSentences extends Sentences {
 
   @override
   String get ccsyncCredentials => 'CCync क्रेडेन्शियल';
+
+  @override
+  String get deleteTaskConfirmation => 'कार्य हटवा';
+
+  @override
+  String get deleteTaskTitle => 'सर्व कार्य हटवायचे का?';
+
+  @override
+  String get deleteTaskWarning =>
+      'ही क्रिया अपरिवर्तनीय आहे आणि हे सर्व स्थानिक पातळीवर संग्रहित केलेले कार्य हटवेल.';
 }
