@@ -116,6 +116,7 @@ class SettingsPageBody extends StatelessWidget {
                 controller: controller,
               ),
             ),
+            const Divider(),
             SettingsPageListTile(
               title: SentenceManager(
                       currentLanguage: controller.selectedLanguage.value)

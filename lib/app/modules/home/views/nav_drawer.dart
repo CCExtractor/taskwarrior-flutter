@@ -85,15 +85,34 @@ class NavDrawer extends StatelessWidget {
                   : TaskWarriorColors.kLightPrimaryBackgroundColor,
               height: Get.height * 0.03,
             ),
-            Obx(
-              () => NavDrawerMenuItem(
-                icon: Icons.person_rounded,
+            Visibility(
+              visible: homeController.taskchampion.value,
+              child: NavDrawerMenuItem(
+                icon: Icons.task_alt,
                 text: SentenceManager(
                   currentLanguage: homeController.selectedLanguage.value,
-                ).sentences.navDrawerProfile,
+                ).sentences.ccsyncCredentials,
                 onTap: () {
-                  Get.toNamed(Routes.PROFILE);
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const ManageTaskChampionCreds(),
+                    ),
+                  );
                 },
+              ),
+            ),
+            Visibility(
+              visible: !homeController.taskchampion.value,
+              child: Obx(
+                () => NavDrawerMenuItem(
+                  icon: Icons.person_rounded,
+                  text: SentenceManager(
+                    currentLanguage: homeController.selectedLanguage.value,
+                  ).sentences.navDrawerProfile,
+                  onTap: () {
+                    Get.toNamed(Routes.PROFILE);
+                  },
+                ),
               ),
             ),
             Obx(
@@ -115,22 +134,6 @@ class NavDrawer extends StatelessWidget {
                 ).sentences.navDrawerAbout,
                 onTap: () {
                   Get.toNamed(Routes.ABOUT);
-                },
-              ),
-            ),
-            Visibility(
-              visible: homeController.taskchampion.value,
-              child: NavDrawerMenuItem(
-                icon: Icons.task_alt,
-                text: SentenceManager(
-                  currentLanguage: homeController.selectedLanguage.value,
-                ).sentences.ccsyncCredentials,
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const ManageTaskChampionCreds(),
-                    ),
-                  );
                 },
               ),
             ),
