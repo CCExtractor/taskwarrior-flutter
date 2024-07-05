@@ -23,6 +23,7 @@ import 'package:taskwarrior/app/tour/filter_drawer_tour.dart';
 import 'package:taskwarrior/app/tour/home_page_tour.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/language/supported_language.dart';
+import 'package:taskwarrior/app/utils/taskchampion/taskchampion.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/comparator.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/projects.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/query.dart';
@@ -50,6 +51,7 @@ class HomeController extends GetxController {
   final Rx<SupportedLanguage> selectedLanguage = SupportedLanguage.english.obs;
   final ScrollController scrollController = ScrollController();
   final RxBool showbtn = false.obs;
+  var tasks = <Tasks>[].obs;
 
   @override
   void onInit() {
@@ -69,6 +71,7 @@ class HomeController extends GetxController {
     }
     getUniqueProjects();
     _loadTaskChampion();
+    fetchTasksFromDB();
   }
 
   Future<List<String>> getUniqueProjects() async {
@@ -76,6 +79,28 @@ class HomeController extends GetxController {
     List<String> uniqueProjects = await taskDatabase.fetchUniqueProjects();
     debugPrint('Unique projects: $uniqueProjects');
     return uniqueProjects;
+  }
+
+  Future<void> deleteAllTasksInDB() async {
+    var taskDatabase = TaskDatabase();
+    await taskDatabase.deleteAllTasksInDB();
+    debugPrint('Deleted all tasks from db');
+  }
+
+  Future<void> refreshTasks(String clientId, String encryptionSecret) async {
+    TaskDatabase taskDatabase = TaskDatabase();
+    await taskDatabase.open();
+    List<Tasks> tasksFromServer = await fetchTasks(clientId, encryptionSecret);
+    await updateTasksInDatabase(tasksFromServer);
+    List<Tasks> fetchedTasks = await taskDatabase.fetchTasksFromDatabase();
+    tasks.value = fetchedTasks;
+  }
+
+  Future<void> fetchTasksFromDB() async {
+    TaskDatabase taskDatabase = TaskDatabase();
+    await taskDatabase.open();
+    List<Tasks> fetchedTasks = await taskDatabase.fetchTasksFromDatabase();
+    tasks.value = fetchedTasks;
   }
 
   Future<void> _loadTaskChampion() async {
@@ -440,9 +465,12 @@ class HomeController extends GetxController {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     bool? value;
     value = prefs.getBool('sync-onStart') ?? false;
-
+    String? clientId, encryptionSecret;
+    clientId = await CredentialsStorage.getClientId();
+    encryptionSecret = await CredentialsStorage.getEncryptionSecret();
     if (value) {
       synchronize(context, false);
+      refreshTasks(clientId!, encryptionSecret!);
     } else {}
   }
 
