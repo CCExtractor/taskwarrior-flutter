@@ -64,18 +64,22 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
                 var e = await CredentialsStorage.getEncryptionSecret();
                 if (c != null && e != null) {
                   try {
-                    List<Tasks> tasks = await fetchTasks(c, e);
-                    print(tasks.toList());
-                    await updateTasksInDatabase(tasks);
-                    print('Tasks updated successfully');
-                    Navigator.pushReplacement(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder: (context, animation1, animation2) =>
-                              const HomeView(),
-                          transitionDuration: Duration.zero,
-                          reverseTransitionDuration: Duration.zero,
-                        ));
+                    // List<Tasks> tasks = await fetchTasks(c, e);
+                    // print(
+                    //     '///////////////////////////////////////////////////////////');
+                    // print(tasks.toList());
+                    // await updateTasksInDatabase(tasks);
+                    // print('Tasks updated successfully');
+                    // controller.fetchTasksFromDB();
+                    controller.refreshTasks(c, e);
+                    // Navigator.pushReplacement(
+                    //     context,
+                    //     PageRouteBuilder(
+                    //       pageBuilder: (context, animation1, animation2) =>
+                    //           const HomeView(),
+                    //       transitionDuration: Duration.zero,
+                    //       reverseTransitionDuration: Duration.zero,
+                    //     ));
                   } catch (e) {
                     print('Failed to update tasks: $e');
                     ScaffoldMessenger.of(context).showSnackBar(
