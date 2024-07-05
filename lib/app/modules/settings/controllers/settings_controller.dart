@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:get/get_rx/get_rx.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -163,6 +164,7 @@ class SettingsController extends GetxController {
   RxBool isSyncOnTaskCreateActivel = false.obs;
   RxBool delaytask = false.obs;
   RxBool change24hr = false.obs;
+  RxBool taskchampion = false.obs;
   RxBool isDarkModeOn = false.obs;
 
   void initDarkMode() {
@@ -177,6 +179,7 @@ class SettingsController extends GetxController {
         prefs.getBool('sync-OnTaskCreate') ?? false;
     delaytask.value = prefs.getBool('delaytask') ?? false;
     change24hr.value = prefs.getBool('24hourformate') ?? false;
+    taskchampion.value = prefs.getBool('taskc') ?? false;
     initDarkMode();
     baseDirectory.value = await getBaseDirectory();
     super.onInit();

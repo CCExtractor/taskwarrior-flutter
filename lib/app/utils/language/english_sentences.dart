@@ -187,4 +187,11 @@ class EnglishSentences extends Sentences {
   String get reportsPageNoTasksFound => 'No Tasks Found';
   @override
   String get reportsPageAddTasksToSeeReports => 'Add Tasks To See Reports';
+
+  @override
+  String get taskchampionTileDescription =>
+      'Switch to TaskWarrior sync with CCSync or Taskchampion Sync Server';
+
+  @override
+  String get taskchampionTileTitle => 'Taskchampion sync';
 }

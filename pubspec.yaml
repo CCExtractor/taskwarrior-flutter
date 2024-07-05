@@ -51,6 +51,7 @@ dependencies:
   shared_preferences: ^2.2.2
   shared_preferences_web: ^2.0.3
   sizer: ^2.0.15
+  sqflite: ^2.3.3+1
   syncfusion_flutter_charts: ^23.2.7
   timezone: ^0.9.2
   tuple: ^2.0.0

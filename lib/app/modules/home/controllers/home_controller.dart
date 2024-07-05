@@ -435,6 +435,7 @@ class HomeController extends GetxController {
   RxBool syncOnTaskCreate = false.obs;
   RxBool delaytask = false.obs;
   RxBool change24hr = false.obs;
+  RxBool taskchampion = false.obs;
 
   // dialogue box
 
