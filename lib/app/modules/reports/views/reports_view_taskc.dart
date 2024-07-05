@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:taskwarrior/api_service.dart';
+import 'package:taskwarrior/app/modules/reports/controllers/reports_controller.dart';
 import 'package:taskwarrior/app/modules/reports/controllers/reports_tour_controller.dart';
 import 'package:taskwarrior/app/modules/reports/views/burn_down_daily_taskc.dart';
 import 'package:taskwarrior/app/modules/reports/views/burn_down_monthly_taskc.dart';
@@ -29,7 +31,7 @@ class _ReportsHomeTaskcState extends State<ReportsHomeTaskc>
 
   bool isSaved = false;
   late TutorialCoachMark tutorialCoachMark;
-
+  late ReportsController reportsController;
   int _selectedIndex = 0;
   late TaskDatabase taskDatabase;
   List<Tasks> allTasks = [];
@@ -75,7 +77,9 @@ class _ReportsHomeTaskcState extends State<ReportsHomeTaskc>
     super.initState();
     _initReportsTour();
     _showReportsTour();
-
+    reportsController = Get.find<ReportsController>();
+    reportsController.initReportsTour();
+    reportsController.showReportsTour(context);
     _tabController = TabController(length: 3, vsync: this);
 
     // Initialize the database and fetch data
