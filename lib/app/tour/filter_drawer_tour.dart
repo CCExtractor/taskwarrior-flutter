@@ -6,6 +6,7 @@ import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 List<TargetFocus> filterDrawer({
   required GlobalKey statusKey,
   required GlobalKey projectsKey,
+  required GlobalKey projectsKeyTaskc,
   required GlobalKey filterTagKey,
   required GlobalKey sortByKey,
 }) {
@@ -48,6 +49,39 @@ List<TargetFocus> filterDrawer({
   targets.add(
     TargetFocus(
       keyTarget: projectsKey,
+      alignSkip: Alignment.topRight,
+      radius: 10,
+      shape: ShapeLightFocus.RRect,
+      contents: [
+        TargetContent(
+          align: ContentAlign.top,
+          builder: (context, controller) {
+            return Container(
+              alignment: Alignment.center,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    "Filter tasks based on the projects",
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.poppins(
+                      color: TaskWarriorColors.white,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ],
+    ),
+  );
+
+  // projectsKeyTaskc
+  targets.add(
+    TargetFocus(
+      keyTarget: projectsKeyTaskc,
       alignSkip: Alignment.topRight,
       radius: 10,
       shape: ShapeLightFocus.RRect,

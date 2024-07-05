@@ -473,6 +473,18 @@ class TaskDatabase {
     });
   }
 
+  Future<List<String>> fetchUniqueProjects() async {
+    var taskDatabase = TaskDatabase();
+    await taskDatabase.open();
+    await taskDatabase.ensureDatabaseIsOpen();
+
+    final List<Map<String, dynamic>> result = await taskDatabase._database!
+        .rawQuery(
+            'SELECT DISTINCT project FROM Tasks WHERE project IS NOT NULL');
+
+    return result.map((row) => row['project'] as String).toList();
+  }
+
   Future<List<Tasks>> searchTasks(String query) async {
     final List<Map<String, dynamic>> maps = await _database!.query(
       'tasks',

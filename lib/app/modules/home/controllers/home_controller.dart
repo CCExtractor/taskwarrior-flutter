@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:loggy/loggy.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:taskwarrior/api_service.dart';
 import 'package:taskwarrior/app/models/filters.dart';
 
 import 'package:taskwarrior/app/models/json/task.dart';
@@ -66,7 +67,15 @@ class HomeController extends GetxController {
     if (Platform.isAndroid) {
       handleHomeWidgetClicked();
     }
+    getUniqueProjects();
     _loadTaskChampion();
+  }
+
+  Future<List<String>> getUniqueProjects() async {
+    var taskDatabase = TaskDatabase();
+    List<String> uniqueProjects = await taskDatabase.fetchUniqueProjects();
+    debugPrint('Unique projects: $uniqueProjects');
+    return uniqueProjects;
   }
 
   Future<void> _loadTaskChampion() async {
@@ -563,6 +572,7 @@ class HomeController extends GetxController {
 
   final GlobalKey statusKey = GlobalKey();
   final GlobalKey projectsKey = GlobalKey();
+  final GlobalKey projectsKeyTaskc = GlobalKey();
   final GlobalKey filterTagKey = GlobalKey();
   final GlobalKey sortByKey = GlobalKey();
 
@@ -571,6 +581,7 @@ class HomeController extends GetxController {
       targets: filterDrawer(
         statusKey: statusKey,
         projectsKey: projectsKey,
+        projectsKeyTaskc: projectsKeyTaskc,
         filterTagKey: filterTagKey,
         sortByKey: sortByKey,
       ),

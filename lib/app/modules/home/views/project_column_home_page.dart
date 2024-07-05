@@ -32,13 +32,6 @@ class ProjectsColumn extends StatelessWidget {
             children: [
               Text(
                 "Project : ",
-                // style: GoogleFonts.poppins(
-                //   fontWeight: TaskWarriorFonts.bold,
-                //   fontSize: TaskWarriorFonts.fontSizeMedium,
-                //   color: AppSettings.isDarkMode
-                //       ? TaskWarriorColors.white
-                //       : TaskWarriorColors.black,
-                // ),
                 style: TextStyle(
                   fontFamily: FontFamily.poppins,
                   fontWeight: TaskWarriorFonts.bold,
@@ -57,12 +50,6 @@ class ProjectsColumn extends StatelessWidget {
                     children: [
                       Text(
                         projectFilter == "" ? "Not selected" : projectFilter,
-                        // style: GoogleFonts.poppins(
-                        //   fontSize: TaskWarriorFonts.fontSizeSmall,
-                        //   color: AppSettings.isDarkMode
-                        //       ? TaskWarriorColors.white
-                        //       : TaskWarriorColors.black,
-                        // ),
                         style: TextStyle(
                           fontFamily: FontFamily.poppins,
                           fontSize: TaskWarriorFonts.fontSizeSmall,
@@ -84,13 +71,6 @@ class ProjectsColumn extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text("All Projects",
-                  // style: GoogleFonts.poppins(
-                  //   fontWeight: TaskWarriorFonts.semiBold,
-                  //   fontSize: TaskWarriorFonts.fontSizeSmall,
-                  //   color: AppSettings.isDarkMode
-                  //       ? TaskWarriorColors.white
-                  //       : TaskWarriorColors.black,
-                  // ),
                   style: TextStyle(
                     fontFamily: FontFamily.poppins,
                     fontSize: TaskWarriorFonts.fontSizeSmall,
@@ -115,13 +95,6 @@ class ProjectsColumn extends StatelessWidget {
             children: [
               Text(
                 "No Projects Found",
-                // style: GoogleFonts.poppins(
-                //   color: AppSettings.isDarkMode
-                //       ? TaskWarriorColors.white
-                //       : TaskWarriorColors.black,
-                //   fontSize: TaskWarriorFonts.fontSizeSmall,
-                // ),
-
                 style: TextStyle(
                   fontFamily: FontFamily.poppins,
                   fontSize: TaskWarriorFonts.fontSizeSmall,

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -6,20 +8,48 @@ import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
-class TaskDetails extends StatelessWidget {
+class TaskDetails extends StatefulWidget {
   final Tasks task;
   const TaskDetails({super.key, required this.task});
 
   @override
-  Widget build(BuildContext context) {
-    String description = task.description;
-    String project = task.project ?? '';
-    String status = task.status;
-    String priority = task.priority ?? '';
-    String due = task.due ?? '-';
-    due = _buildDate(due);
-    bool hasChanges = false;
+  State<TaskDetails> createState() => _TaskDetailsState();
+}
 
+class _TaskDetailsState extends State<TaskDetails> {
+  late String description;
+  late String project;
+  late String status;
+  late String priority;
+  late String due;
+  late TaskDatabase taskDatabase;
+
+  bool hasChanges = false;
+
+  @override
+  void initState() {
+    super.initState();
+    description = widget.task.description;
+    project = widget.task.project!;
+    status = widget.task.status;
+    priority = widget.task.priority!;
+    due = widget.task.due ?? '-';
+    due = _buildDate(due);
+    setState(() {
+      taskDatabase = TaskDatabase();
+      taskDatabase.open();
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    taskDatabase = TaskDatabase();
+    taskDatabase.open();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppSettings.isDarkMode
           ? TaskWarriorColors.kprimaryBackgroundColor
@@ -28,7 +58,7 @@ class TaskDetails extends StatelessWidget {
         foregroundColor: TaskWarriorColors.lightGrey,
         backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
         title: Text(
-          'Task: ${task.description}',
+          'Task: ${widget.task.description}',
           style: GoogleFonts.poppins(color: TaskWarriorColors.white),
         ),
       ),
@@ -36,46 +66,63 @@ class TaskDetails extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
-            _buildEditableDetail(context, 'Description:', description, (value) {
-              description = value;
-              hasChanges = true;
+            _buildEditableDetail('Description:', description, (value) {
+              setState(() {
+                description = value;
+                hasChanges = true;
+              });
             }),
-            _buildEditableDetail(context, 'Project:', project, (value) {
-              project = value;
-              hasChanges = true;
+            _buildEditableDetail('Project:', project, (value) {
+              setState(() {
+                project = value;
+                hasChanges = true;
+              });
             }),
-            _buildSelectableDetail(
-                context, 'Status:', status, ['pending', 'completed'], (value) {
-              status = value;
-              hasChanges = true;
+            _buildSelectableDetail('Status:', status, ['pending', 'completed'],
+                (value) {
+              setState(() {
+                status = value;
+                hasChanges = true;
+              });
             }),
-            _buildSelectableDetail(
-                context, 'Priority:', priority, ['H', 'M', 'L'], (value) {
-              priority = value;
-              hasChanges = true;
+            _buildSelectableDetail('Priority:', priority, ['H', 'M', 'L'],
+                (value) {
+              setState(() {
+                priority = value;
+                hasChanges = true;
+              });
             }),
-            _buildDatePickerDetail(context, 'Due:', due, (value) {
-              due = value;
-              hasChanges = true;
+            _buildDatePickerDetail('Due:', due, (value) {
+              setState(() {
+                due = value;
+                hasChanges = true;
+              });
             }),
-            _buildDetail('UUID:', task.uuid!),
-            _buildDetail('Urgency:', task.urgency.toString()),
-            _buildDetail('End:', _buildDate(task.end)),
-            _buildDetail('Entry:', _buildDate(task.entry)),
-            _buildDetail('Modified:', _buildDate(task.modified)),
+            _buildDetail('UUID:', widget.task.uuid!),
+            _buildDetail('Urgency:', widget.task.urgency.toString()),
+            _buildDetail('End:', _buildDate(widget.task.end)),
+            _buildDetail('Entry:', _buildDate(widget.task.entry)),
+            _buildDetail('Modified:', _buildDate(widget.task.modified)),
           ],
         ),
       ),
       floatingActionButton: hasChanges
           ? FloatingActionButton(
               onPressed: () async {
-                TaskDatabase taskDatabase = TaskDatabase();
-                await taskDatabase.open();
-                await taskDatabase.saveEditedTaskInDB(
-                    task.uuid!, description, project, status, priority, due);
-                hasChanges = false;
+                await taskDatabase.saveEditedTaskInDB(widget.task.uuid!,
+                    description, project, status, priority, due);
+                setState(() {
+                  hasChanges = false;
+                });
                 modifyTaskOnTaskwarrior(
-                    description, project, due, priority, status, task.uuid!);
+                  description,
+                  project,
+                  due,
+                  priority,
+                  status,
+                  widget.task.uuid!,
+                );
+                // used this for testing
               },
               child: const Icon(Icons.save),
             )
@@ -83,8 +130,8 @@ class TaskDetails extends StatelessWidget {
     );
   }
 
-  Widget _buildEditableDetail(BuildContext context, String label, String value,
-      Function(String) onChanged) {
+  Widget _buildEditableDetail(
+      String label, String value, Function(String) onChanged) {
     return InkWell(
       onTap: () async {
         final result = await _showEditDialog(context, label, value);
@@ -96,8 +143,8 @@ class TaskDetails extends StatelessWidget {
     );
   }
 
-  Widget _buildSelectableDetail(BuildContext context, String label,
-      String value, List<String> options, Function(String) onChanged) {
+  Widget _buildSelectableDetail(String label, String value,
+      List<String> options, Function(String) onChanged) {
     return InkWell(
       onTap: () async {
         final result = await _showSelectDialog(context, label, value, options);
@@ -109,8 +156,8 @@ class TaskDetails extends StatelessWidget {
     );
   }
 
-  Widget _buildDatePickerDetail(BuildContext context, String label,
-      String value, Function(String) onChanged) {
+  Widget _buildDatePickerDetail(
+      String label, String value, Function(String) onChanged) {
     return InkWell(
       onTap: () async {
         final DateTime? pickedDate = await showDatePicker(
@@ -122,14 +169,26 @@ class TaskDetails extends StatelessWidget {
             return Theme(
               data: Theme.of(context).copyWith(
                 colorScheme: AppSettings.isDarkMode
-                    ? ColorScheme.dark(
+                    ? ColorScheme(
+                        brightness: Brightness.dark,
                         primary: TaskWarriorColors.white,
                         onPrimary: TaskWarriorColors.black,
+                        secondary: TaskWarriorColors.black,
+                        onSecondary: TaskWarriorColors.white,
+                        error: TaskWarriorColors.red,
+                        onError: TaskWarriorColors.black,
+                        surface: TaskWarriorColors.black,
                         onSurface: TaskWarriorColors.white,
                       )
-                    : ColorScheme.light(
+                    : ColorScheme(
+                        brightness: Brightness.light,
                         primary: TaskWarriorColors.black,
                         onPrimary: TaskWarriorColors.white,
+                        secondary: TaskWarriorColors.white,
+                        onSecondary: TaskWarriorColors.black,
+                        error: TaskWarriorColors.red,
+                        onError: TaskWarriorColors.white,
+                        surface: TaskWarriorColors.white,
                         onSurface: TaskWarriorColors.black,
                       ),
               ),

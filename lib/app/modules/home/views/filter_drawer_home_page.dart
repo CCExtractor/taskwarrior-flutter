@@ -3,6 +3,7 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:taskwarrior/app/models/filters.dart';
 import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
 import 'package:taskwarrior/app/modules/home/views/project_column_home_page.dart';
+import 'package:taskwarrior/app/modules/home/views/project_column_taskc.dart';
 import 'package:taskwarrior/app/services/tag_filter.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
@@ -13,7 +14,6 @@ import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 class FilterDrawer extends StatelessWidget {
   final Filters filters;
   final HomeController homeController;
-
   const FilterDrawer(
       {required this.filters, required this.homeController, super.key});
 
@@ -165,81 +165,120 @@ class FilterDrawer extends StatelessWidget {
               const Divider(
                 color: Color.fromARGB(0, 48, 46, 46),
               ),
-              Container(
-                key: homeController.projectsKey,
-                width: MediaQuery.of(context).size.width * 1,
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: tileColor,
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                    color: TaskWarriorColors.borderColor,
+              Visibility(
+                visible: !homeController.taskchampion.value,
+                child: Container(
+                  key: homeController.projectsKey,
+                  width: MediaQuery.of(context).size.width * 1,
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: tileColor,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: TaskWarriorColors.borderColor,
+                    ),
+                  ),
+                  child: ProjectsColumn(
+                    projects: filters.projects,
+                    projectFilter: filters.projectFilter,
+                    callback: filters.toggleProjectFilter,
                   ),
                 ),
-                child: ProjectsColumn(
-                  projects: filters.projects,
-                  projectFilter: filters.projectFilter,
-                  callback: filters.toggleProjectFilter,
+              ),
+              Visibility(
+                visible: homeController.taskchampion.value,
+                child: FutureBuilder<List<String>>(
+                  future: homeController.getUniqueProjects(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<List<String>> snapshot) {
+                    if (snapshot.hasData) {
+                      return Container(
+                        key: homeController.projectsKeyTaskc,
+                        width: MediaQuery.of(context).size.width * 1,
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: tileColor,
+                          borderRadius: BorderRadius.circular(8),
+                          border:
+                              Border.all(color: TaskWarriorColors.borderColor),
+                        ),
+                        child: ProjectColumnTaskc(
+                          callback: filters.toggleProjectFilter,
+                          projects: snapshot.data!,
+                          projectFilter: filters.projectFilter,
+                        ),
+                      );
+                    } else {
+                      return const Center(
+                          child: Text('No projects available.'));
+                    }
+                  },
                 ),
               ),
               const Divider(
                 color: Color.fromARGB(0, 48, 46, 46),
               ),
-              Container(
-                key: homeController.filterTagKey,
-                width: MediaQuery.of(context).size.width * 1,
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: tileColor,
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: TaskWarriorColors.borderColor),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const Divider(
-                      color: Color.fromARGB(0, 48, 46, 46),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                      child: Text(
-                        SentenceManager(
-                                currentLanguage:
-                                    homeController.selectedLanguage.value)
-                            .sentences
-                            .filterDrawerFilterTagBy,
-                        // style: GoogleFonts.poppins(
-                        //     color: (AppSettings.isDarkMode
-                        //         ? TaskWarriorColors.kprimaryTextColor
-                        //         : TaskWarriorColors.kLightSecondaryTextColor),
-                        //     //
-                        //     fontSize: TaskWarriorFonts.fontSizeLarge),
-                        //textAlign: TextAlign.right,
-                        style: TextStyle(
-                          fontFamily: FontFamily.poppins,
-                          fontSize: TaskWarriorFonts.fontSizeMedium,
-                          color: AppSettings.isDarkMode
-                              ? TaskWarriorColors.kprimaryTextColor
-                              : TaskWarriorColors.kLightSecondaryTextColor,
+              Visibility(
+                visible: !homeController.taskchampion.value,
+                child: Container(
+                  key: homeController.filterTagKey,
+                  width: MediaQuery.of(context).size.width * 1,
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: tileColor,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: TaskWarriorColors.borderColor),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const Divider(
+                        color: Color.fromARGB(0, 48, 46, 46),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                        child: Text(
+                          SentenceManager(
+                                  currentLanguage:
+                                      homeController.selectedLanguage.value)
+                              .sentences
+                              .filterDrawerFilterTagBy,
+                          // style: GoogleFonts.poppins(
+                          //     color: (AppSettings.isDarkMode
+                          //         ? TaskWarriorColors.kprimaryTextColor
+                          //         : TaskWarriorColors.kLightSecondaryTextColor),
+                          //     //
+                          //     fontSize: TaskWarriorFonts.fontSizeLarge),
+                          //textAlign: TextAlign.right,
+                          style: TextStyle(
+                            fontFamily: FontFamily.poppins,
+                            fontSize: TaskWarriorFonts.fontSizeMedium,
+                            color: AppSettings.isDarkMode
+                                ? TaskWarriorColors.kprimaryTextColor
+                                : TaskWarriorColors.kLightSecondaryTextColor,
+                          ),
                         ),
                       ),
-                    ),
-                    const Divider(
-                      color: Color.fromARGB(0, 48, 46, 46),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: TagFiltersWrap(filters.tagFilters),
-                    ),
-                    const Divider(
-                      color: Color.fromARGB(0, 48, 46, 46),
-                    ),
-                  ],
+                      const Divider(
+                        color: Color.fromARGB(0, 48, 46, 46),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: TagFiltersWrap(filters.tagFilters),
+                      ),
+                      const Divider(
+                        color: Color.fromARGB(0, 48, 46, 46),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              const Divider(
-                color: Color.fromARGB(0, 48, 46, 46),
+              Visibility(
+                visible: !homeController.taskchampion.value,
+                child: const Divider(
+                  color: Color.fromARGB(0, 48, 46, 46),
+                ),
               ),
               Container(
                 key: homeController.sortByKey,

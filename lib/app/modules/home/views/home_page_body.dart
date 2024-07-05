@@ -116,6 +116,7 @@ class HomePageBody extends StatelessWidget {
                       child: TaskViewBuilder(
                         pendingFilter: controller.pendingFilter.value,
                         selectedSort: controller.selectedSort.value,
+                        project: controller.projectFilter.value,
                       ),
                     )))
               ],

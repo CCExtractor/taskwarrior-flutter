@@ -41,7 +41,7 @@ class TaskViewBuilder extends StatelessWidget {
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else {
-          return FutureBuilder<dynamic>(
+          return FutureBuilder<List<Tasks>>(
             future: _fetchTasks(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -51,12 +51,17 @@ class TaskViewBuilder extends StatelessWidget {
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                 return const Center(child: Text('No tasks available'));
               } else {
-                // Sorting tasks by ID in ascending order
+                // Filter tasks based on the selected project
                 List<Tasks> tasks = List<Tasks>.from(snapshot.data!);
-                tasks.sort((a, b) => b.id.compareTo(a.id));
+                if (project != 'All Projects') {
+                  tasks =
+                      tasks.where((task) => task.project == project).toList();
+                } else {
+                  tasks = List<Tasks>.from(snapshot.data!);
+                }
 
-                _updateTasksInDatabase(tasks);
-                _findTasksWithoutUUIDs();
+                // Apply other filters and sorting
+                tasks.sort((a, b) => b.id.compareTo(a.id));
 
                 tasks = tasks.where((task) {
                   if (pendingFilter) {
@@ -97,15 +102,6 @@ class TaskViewBuilder extends StatelessWidget {
                       return 0;
                   }
                 });
-
-                // Filter tasks based on the pendingFilter
-                tasks = tasks.where((task) {
-                  if (pendingFilter) {
-                    return task.status == 'pending';
-                  } else {
-                    return task.status == 'completed';
-                  }
-                }).toList();
 
                 return Scaffold(
                   backgroundColor: AppSettings.isDarkMode
@@ -274,7 +270,7 @@ class TaskViewBuilder extends StatelessWidget {
     );
   }
 
-  Future<dynamic> _fetchTasks() async {
+  Future<List<Tasks>> _fetchTasks() async {
     TaskDatabase taskDatabase = TaskDatabase();
     await taskDatabase.open();
     return await taskDatabase.fetchTasksFromDatabase();
