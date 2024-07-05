@@ -20,7 +20,6 @@ class HomePageBody extends StatelessWidget {
     controller.showInAppTour(context);
     return DoubleBackToCloseApp(
       snackBar: const SnackBar(content: Text('Tap back again to exit')),
-      // ignore: avoid_unnecessary_containers
       child: Container(
         color: AppSettings.isDarkMode
             ? Palette.kToDark.shade200

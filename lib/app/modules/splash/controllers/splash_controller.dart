@@ -95,9 +95,9 @@ class SplashController extends GetxController {
   void sendToNextPage() async {
     await checkOnboardingStatus();
     if (hasCompletedOnboarding.value) {
-      Get.toNamed(Routes.HOME);
+      Get.offNamed(Routes.HOME);
     } else {
-      Get.toNamed(Routes.ONBOARDING);
+      Get.offNamed(Routes.ONBOARDING);
     }
   }
 }

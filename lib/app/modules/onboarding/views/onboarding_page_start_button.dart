@@ -16,11 +16,7 @@ class OnboardingPageStartButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: () {
           controller.markOnboardingAsCompleted();
-          // Navigator.of(context).pushAndRemoveUntil(
-          //   MaterialPageRoute(builder: (context) => const HomeView()),
-          //   (Route<dynamic> route) => false,
-          // );
-          Get.toNamed(Routes.HOME);
+          Get.offNamed(Routes.HOME);
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: TaskWarriorColors.black,

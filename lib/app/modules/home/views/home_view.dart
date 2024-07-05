@@ -33,12 +33,6 @@ class HomeView extends GetView<HomeController> {
 
     controller.checkForSync(context);
 
-    // var taskData = controller.searchedTasks;
-
-    // var pendingFilter = controller.pendingFilter;
-    // var waitingFilter = controller.waitingFilter;
-    // var pendingTags = controller.pendingTags;
-
     return Obx(
       () => Scaffold(
         appBar: HomePageAppBar(
