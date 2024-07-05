@@ -102,6 +102,66 @@ class NavDrawer extends StatelessWidget {
               ),
             ),
             Visibility(
+              visible: homeController.taskchampion.value,
+              child: NavDrawerMenuItem(
+                  icon: Icons.delete,
+                  text: 'Delete tasks',
+                  onTap: () {
+                    showDialog<void>(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Utils.showAlertDialog(
+                          title: Text(
+                            'Delete All Tasks?',
+                            style: TextStyle(
+                              color: AppSettings.isDarkMode
+                                  ? TaskWarriorColors.white
+                                  : TaskWarriorColors.black,
+                            ),
+                          ),
+                          content: Text(
+                            'The action is irreversible and will delete all the tasks that are stored locally.',
+                            style: TextStyle(
+                              color: AppSettings.isDarkMode
+                                  ? TaskWarriorColors.white
+                                  : TaskWarriorColors.black,
+                            ),
+                          ),
+                          actions: <Widget>[
+                            TextButton(
+                              child: Text(
+                                'Cancel',
+                                style: TextStyle(
+                                  color: AppSettings.isDarkMode
+                                      ? TaskWarriorColors.white
+                                      : TaskWarriorColors.black,
+                                ),
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).pop(); // Close the dialog
+                              },
+                            ),
+                            TextButton(
+                              child: Text(
+                                'Confirm',
+                                style: TextStyle(
+                                  color: AppSettings.isDarkMode
+                                      ? TaskWarriorColors.white
+                                      : TaskWarriorColors.black,
+                                ),
+                              ),
+                              onPressed: () {
+                                homeController.deleteAllTasksInDB();
+                                Navigator.of(context).pop(); // Close the dialog
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }),
+            ),
+            Visibility(
               visible: !homeController.taskchampion.value,
               child: Obx(
                 () => NavDrawerMenuItem(
