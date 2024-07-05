@@ -67,12 +67,12 @@ class Tasks {
   }
 }
 
-String baseUrl = 'YOUR_IP';
-String origin = 'CONTAINER_ORIGIN';
+String baseUrl = 'http://YOUR_IP:8000';
+String origin = 'http://localhost:8080';
 
 Future<List<Tasks>> fetchTasks(String uuid, String encryptionSecret) async {
   String url =
-      '$baseUrl/tasks?email=$origin&origin=$origin&UUID=$uuid&encryptionSecret=$encryptionSecret';
+      '$baseUrl/tasks?email=email&origin=$origin&UUID=$uuid&encryptionSecret=$encryptionSecret';
 
   var response = await http.get(Uri.parse(url), headers: {
     "Content-Type": "application/json",
