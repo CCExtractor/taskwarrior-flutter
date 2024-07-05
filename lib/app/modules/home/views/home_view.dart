@@ -50,7 +50,9 @@ class HomeView extends GetView<HomeController> {
             ? TaskWarriorColors.kprimaryBackgroundColor
             : TaskWarriorColors.kLightPrimaryBackgroundColor,
         drawer: NavDrawer(homeController: controller),
-        body: HomePageBody(controller: controller),
+        body: HomePageBody(
+          controller: controller,
+        ),
         endDrawer: Obx(
           () => FilterDrawer(
             filters: controller.getFilters(),

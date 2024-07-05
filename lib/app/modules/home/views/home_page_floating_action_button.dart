@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:taskwarrior/app/modules/home/views/add_task_bottom_sheet.dart';
+import 'package:taskwarrior/app/modules/home/views/add_task_to_taskc_bottom_sheet.dart';
 
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
@@ -9,7 +10,7 @@ import '../controllers/home_controller.dart';
 
 class HomePageFloatingActionButton extends StatelessWidget {
   final HomeController controller;
-  const HomePageFloatingActionButton({required this.controller,super.key});
+  const HomePageFloatingActionButton({required this.controller, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,16 +29,25 @@ class HomePageFloatingActionButton extends StatelessWidget {
                 : TaskWarriorColors.white,
           ),
         ),
-        onPressed: () => showDialog(
-              context: context,
-              builder: (context) => AddTaskBottomSheet(
-                homeController: controller,
-              ),
-            ).then((value) {
-              if (controller.isSyncNeeded.value && value != "cancel") {
-                controller.isNeededtoSyncOnStart(context);
-              }
-            })
+        onPressed: () => (controller.taskchampion.value)
+            ? (showDialog(
+                context: context,
+                builder: (context) => const AddTaskToTaskcBottomSheet(),
+              ).then((value) {
+                if (controller.isSyncNeeded.value && value != "cancel") {
+                  controller.isNeededtoSyncOnStart(context);
+                }
+              }))
+            : (showDialog(
+                context: context,
+                builder: (context) => AddTaskBottomSheet(
+                  homeController: controller,
+                ),
+              ).then((value) {
+                if (controller.isSyncNeeded.value && value != "cancel") {
+                  controller.isNeededtoSyncOnStart(context);
+                }
+              }))
         // .then((value) {
         //   // print(value);
 

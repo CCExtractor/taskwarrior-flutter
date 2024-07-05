@@ -66,6 +66,12 @@ class HomeController extends GetxController {
     if (Platform.isAndroid) {
       handleHomeWidgetClicked();
     }
+    _loadTaskChampion();
+  }
+
+  Future<void> _loadTaskChampion() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    taskchampion.value = prefs.getBool('taskchampion') ?? false;
   }
 
   void addListenerToScrollController() {
@@ -438,7 +444,6 @@ class HomeController extends GetxController {
   RxBool taskchampion = false.obs;
 
   // dialogue box
-
   final formKey = GlobalKey<FormState>();
   final namecontroller = TextEditingController();
   var due = Rxn<DateTime>();
