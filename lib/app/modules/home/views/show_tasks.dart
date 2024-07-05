@@ -23,17 +23,6 @@ class TaskViewBuilder extends StatelessWidget {
   final bool pendingFilter;
   final String? project;
 
-  Future<void> _loadCredentials(
-      Function(TaskDatabase, String, String) callback) async {
-    String uuid = (await CredentialsStorage.getClientId()) ?? '';
-    String encryptionSecret =
-        (await CredentialsStorage.getEncryptionSecret()) ?? '';
-    TaskDatabase taskDatabase = TaskDatabase();
-    await taskDatabase.open();
-    callback(taskDatabase, uuid, encryptionSecret);
-    // taskDatabase.printDatabaseContents();
-  }
-
   @override
   Widget build(BuildContext context) {
     final HomeController taskController = Get.find<HomeController>();
@@ -242,12 +231,6 @@ class TaskViewBuilder extends StatelessWidget {
               ),
       );
     });
-  }
-
-  Future<List<Tasks>> _fetchTasks() async {
-    TaskDatabase taskDatabase = TaskDatabase();
-    await taskDatabase.open();
-    return await taskDatabase.fetchTasksFromDatabase();
   }
 
   void _markTaskAsCompleted(String uuid) async {

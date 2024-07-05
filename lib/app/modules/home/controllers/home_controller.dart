@@ -548,7 +548,7 @@ class HomeController extends GetxController {
   void initLanguageAndDarkMode() {
     isDarkModeOn.value = AppSettings.isDarkMode;
     selectedLanguage.value = AppSettings.selectedLanguage;
-    print("called and value is${isDarkModeOn.value}");
+    // print("called and value is${isDarkModeOn.value}");
   }
 
   final addKey = GlobalKey();

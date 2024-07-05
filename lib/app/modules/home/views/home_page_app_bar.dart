@@ -1,9 +1,8 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:taskwarrior/api_service.dart';
-import 'package:taskwarrior/app/modules/home/views/home_view.dart';
-
 import 'package:taskwarrior/app/routes/app_pages.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
@@ -81,7 +80,6 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
                     //       reverseTransitionDuration: Duration.zero,
                     //     ));
                   } catch (e) {
-                    print('Failed to update tasks: $e');
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         backgroundColor: AppSettings.isDarkMode

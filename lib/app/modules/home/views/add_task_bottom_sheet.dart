@@ -269,7 +269,7 @@ class AddTaskBottomSheet extends StatelessWidget {
                       initialTime: TimeOfDay.fromDateTime(
                           homeController.due.value ?? DateTime.now()),
                     );
-                    print("date$date Time : $time");
+                    // print("date$date Time : $time");
                     if (time != null) {
                       var dateTime = date.add(
                         Duration(
@@ -277,13 +277,13 @@ class AddTaskBottomSheet extends StatelessWidget {
                           minutes: time.minute,
                         ),
                       );
-                      print(dateTime);
+                      // print(dateTime);
                       homeController.due.value = dateTime.toUtc();
 
-                      print("due value ${homeController.due}");
+                      // print("due value ${homeController.due}");
                       homeController.dueString.value =
                           DateFormat("dd-MM-yyyy HH:mm").format(dateTime);
-                      print(homeController.dueString.value);
+                      // print(homeController.dueString.value);
                       if (dateTime.isBefore(DateTime.now())) {
                         //Try changing the color. in the settings and Due display.
 
@@ -391,7 +391,6 @@ class AddTaskBottomSheet extends StatelessWidget {
       );
 
   Widget buildAddButton(BuildContext context) {
-
     return TextButton(
       child: Text(
         "Add",
@@ -402,7 +401,7 @@ class AddTaskBottomSheet extends StatelessWidget {
         ),
       ),
       onPressed: () async {
-        print(homeController.formKey.currentState);
+        // print(homeController.formKey.currentState);
         if (homeController.formKey.currentState!.validate()) {
           try {
             var task = taskParser(homeController.namecontroller.text)
