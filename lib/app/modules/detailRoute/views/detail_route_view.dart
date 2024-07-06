@@ -11,7 +11,7 @@ import 'package:taskwarrior/app/modules/detailRoute/views/tags_widget.dart';
 import 'package:taskwarrior/app/utils/constants/constants.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
-import 'package:taskwarrior/app/utils/theme/app_settings.dart';
+import 'package:taskwarrior/app/utils/app_settings.dart';
 
 class DetailRouteView extends GetView<DetailRouteController> {
   const DetailRouteView({super.key});

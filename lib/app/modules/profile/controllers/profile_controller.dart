@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:taskwarrior/app/modules/splash/controllers/splash_controller.dart';
 import 'package:taskwarrior/app/tour/profile_page_tour.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
-import 'package:taskwarrior/app/utils/theme/app_settings.dart';
+import 'package:taskwarrior/app/utils/app_settings.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class ProfileController extends GetxController {
@@ -22,6 +22,7 @@ class ProfileController extends GetxController {
   final GlobalKey currentProfileKey = GlobalKey();
 
   final GlobalKey addNewProfileKey = GlobalKey();
+  final GlobalKey manageSelectedProfileKey = GlobalKey();
 
   void initProfilePageTour() {
     tutorialCoachMark = TutorialCoachMark(
@@ -29,6 +30,7 @@ class ProfileController extends GetxController {
         currentProfileKey: currentProfileKey,
 
         addNewProfileKey: addNewProfileKey,
+        manageSelectedProfileKey: manageSelectedProfileKey,
       ),
       colorShadow: TaskWarriorColors.black,
       paddingFocus: 10,

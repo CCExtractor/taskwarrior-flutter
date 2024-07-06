@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 
 import 'package:taskwarrior/app/utils/constants/constants.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
-import 'package:taskwarrior/app/utils/theme/app_settings.dart';
+import 'package:taskwarrior/app/utils/app_settings.dart';
 
 class DateTimeWidget extends StatelessWidget {
   const DateTimeWidget({

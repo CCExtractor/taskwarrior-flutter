@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pem/pem.dart';
 import 'package:taskwarrior/app/models/storage.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
-import 'package:taskwarrior/app/utils/theme/app_settings.dart';
+import 'package:taskwarrior/app/utils/app_settings.dart';
 
 class PemWidget extends StatelessWidget {
   const PemWidget({

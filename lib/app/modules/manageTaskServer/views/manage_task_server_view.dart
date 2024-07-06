@@ -8,7 +8,7 @@ import 'package:taskwarrior/app/modules/manageTaskServer/views/manage_task_serve
 import 'package:taskwarrior/app/modules/manageTaskServer/views/manage_task_server_page_body.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 
-import 'package:taskwarrior/app/utils/theme/app_settings.dart';
+import 'package:taskwarrior/app/utils/app_settings.dart';
 
 import '../controllers/manage_task_server_controller.dart';
 

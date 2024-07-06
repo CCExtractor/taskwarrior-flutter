@@ -11,7 +11,7 @@ import 'package:taskwarrior/app/routes/app_pages.dart';
 import 'package:taskwarrior/app/utils/constants/palette.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
-import 'package:taskwarrior/app/utils/theme/app_settings.dart';
+import 'package:taskwarrior/app/utils/app_settings.dart';
 
 import '../controllers/profile_controller.dart';
 
@@ -52,6 +52,7 @@ class ProfileView extends GetView<ProfileController> {
               () => ProfilesColumn(
                 currentProfileKey: controller.currentProfileKey,
                 addNewProfileKey: controller.addNewProfileKey,
+                manageSelectedProfileKey: controller.manageSelectedProfileKey,
                 controller.profilesMap,
                 controller.currentProfile.value,
                 controller.profilesWidget.addProfile,
@@ -210,6 +211,7 @@ class ProfilesColumn extends StatelessWidget {
     this.delete, {
     required this.currentProfileKey,
     required this.addNewProfileKey,
+    required this.manageSelectedProfileKey,
     super.key,
   });
 
@@ -224,6 +226,7 @@ class ProfilesColumn extends StatelessWidget {
   final void Function() delete;
   final GlobalKey currentProfileKey;
   final GlobalKey addNewProfileKey;
+  final GlobalKey manageSelectedProfileKey;
 
   @override
   Widget build(BuildContext context) {
@@ -247,11 +250,13 @@ class ProfilesColumn extends StatelessWidget {
             export,
             copy,
             delete,
+            manageSelectedProfileKey: manageSelectedProfileKey,
           ),
           const SizedBox(
             height: 6,
           ),
           ElevatedButton.icon(
+            key: addNewProfileKey,
             onPressed: () {
               try {
                 addProfile();
@@ -303,7 +308,6 @@ class ProfilesColumn extends StatelessWidget {
                     : TaskWarriorColors.deepPurple),
             label: Text(
               'Add new Profile',
-              key: addNewProfileKey,
               style: TextStyle(
                 color: AppSettings.isDarkMode
                     ? TaskWarriorColors.white

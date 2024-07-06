@@ -6,6 +6,7 @@ List<TargetFocus> addProfilePage({
   required GlobalKey currentProfileKey,
 
   required GlobalKey addNewProfileKey,
+  required GlobalKey manageSelectedProfileKey,
 }) {
   List<TargetFocus> targets = [];
 
@@ -14,8 +15,7 @@ List<TargetFocus> addProfilePage({
     TargetFocus(
       keyTarget: currentProfileKey,
       alignSkip: Alignment.topRight,
-      radius: 10,
-      shape: ShapeLightFocus.Circle,
+      shape: ShapeLightFocus.RRect,
       contents: [
         TargetContent(
           align: ContentAlign.top,
@@ -43,13 +43,43 @@ List<TargetFocus> addProfilePage({
   );
 
 
+  //manage current profile
+  targets.add(
+    TargetFocus(
+      keyTarget: manageSelectedProfileKey,
+      alignSkip: Alignment.topRight,
+      shape: ShapeLightFocus.RRect,
+      contents: [
+        TargetContent(
+          align: ContentAlign.bottom,
+          builder: (context, controller) {
+            return Container(
+              alignment: Alignment.center,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    "Manage your current profile here",
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.poppins(
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ],
+    ),
+  );
   //addNewProfile
   targets.add(
     TargetFocus(
       keyTarget: addNewProfileKey,
       alignSkip: Alignment.topRight,
-      radius: 10,
-      shape: ShapeLightFocus.Circle,
+      shape: ShapeLightFocus.RRect,
       contents: [
         TargetContent(
           align: ContentAlign.bottom,

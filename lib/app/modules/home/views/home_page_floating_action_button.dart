@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:taskwarrior/app/modules/home/views/add_task_bottom_sheet.dart';
 
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
-import 'package:taskwarrior/app/utils/theme/app_settings.dart';
+import 'package:taskwarrior/app/utils/app_settings.dart';
 
 import '../controllers/home_controller.dart';
 

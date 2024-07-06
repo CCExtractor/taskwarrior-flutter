@@ -11,7 +11,7 @@ import 'package:taskwarrior/app/modules/splash/controllers/splash_controller.dar
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/home_path/home_path.dart' as rc;
 import 'package:taskwarrior/app/utils/taskserver/taskserver.dart';
-import 'package:taskwarrior/app/utils/theme/app_settings.dart';
+import 'package:taskwarrior/app/utils/app_settings.dart';
 
 class ManageTaskServerController extends GetxController {
   final HomeController homeController = Get.find<HomeController>();
