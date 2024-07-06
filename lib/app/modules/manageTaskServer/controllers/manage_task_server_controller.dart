@@ -8,11 +8,11 @@ import 'package:taskwarrior/app/models/storage.dart';
 import 'package:taskwarrior/app/models/storage/set_config.dart';
 import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
 import 'package:taskwarrior/app/modules/splash/controllers/splash_controller.dart';
-import 'package:taskwarrior/app/tour/manage_task_server_page_tour.dart';
+import 'package:taskwarrior/app/utils/tour/manage_task_server_page_tour.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/home_path/home_path.dart' as rc;
 import 'package:taskwarrior/app/utils/taskserver/taskserver.dart';
-import 'package:taskwarrior/app/utils/app_settings.dart';
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class ManageTaskServerController extends GetxController {

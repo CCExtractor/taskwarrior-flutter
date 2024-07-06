@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:taskwarrior/app/modules/home/views/tasks_builder.dart';
 import 'package:taskwarrior/app/utils/constants/palette.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
-import 'package:taskwarrior/app/utils/app_settings.dart';
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 
 import '../controllers/home_controller.dart';
 

@@ -4,7 +4,7 @@ import 'package:taskwarrior/app/modules/settings/controllers/settings_controller
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 import 'package:taskwarrior/app/utils/language/supported_language.dart';
-import 'package:taskwarrior/app/utils/app_settings.dart';
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 
 class SettingsPageSelectTheLanguageTrailing extends StatelessWidget {
   final SettingsController controller;

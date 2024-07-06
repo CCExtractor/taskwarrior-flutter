@@ -9,7 +9,7 @@ import 'package:taskwarrior/app/modules/manageTaskServer/views/pem_widget.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 
-import 'package:taskwarrior/app/utils/app_settings.dart';
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 
 class ManageTaskServerPageBody extends StatelessWidget {
   final ManageTaskServerController controller;

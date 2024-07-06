@@ -19,7 +19,7 @@ import 'package:taskwarrior/app/modules/settings/views/settings_page_on_task_sta
 import 'package:taskwarrior/app/modules/settings/views/settings_page_select_directory_list_tile.dart';
 import 'package:taskwarrior/app/modules/settings/views/settings_page_select_the_language_trailing.dart';
 
-import 'package:taskwarrior/app/utils/app_settings.dart';
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 
 class SettingsPageBody extends StatelessWidget {
   final SettingsController controller;
