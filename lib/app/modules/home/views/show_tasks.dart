@@ -8,7 +8,6 @@ import 'package:taskwarrior/app/modules/home/views/show_details.dart';
 import 'package:taskwarrior/app/utils/constants/palette.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
-import 'package:taskwarrior/app/utils/taskchampion/credentials_storage.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
 class TaskViewBuilder extends StatelessWidget {
@@ -234,23 +233,17 @@ class TaskViewBuilder extends StatelessWidget {
   }
 
   void _markTaskAsCompleted(String uuid) async {
-    String clientId = (await CredentialsStorage.getClientId()) ?? '';
-    String encryptionSecret =
-        (await CredentialsStorage.getEncryptionSecret()) ?? '';
     TaskDatabase taskDatabase = TaskDatabase();
     await taskDatabase.open();
     taskDatabase.markTaskAsCompleted(uuid);
-    completeTask('email', encryptionSecret, clientId, uuid);
+    completeTask('email', uuid);
   }
 
   void _markTaskAsDeleted(String uuid) async {
-    String clientId = (await CredentialsStorage.getClientId()) ?? '';
-    String encryptionSecret =
-        (await CredentialsStorage.getEncryptionSecret()) ?? '';
     TaskDatabase taskDatabase = TaskDatabase();
     await taskDatabase.open();
     taskDatabase.markTaskAsDeleted(uuid);
-    deleteTask('email', encryptionSecret, clientId, uuid);
+    deleteTask('email', uuid);
   }
 
   Color _getPriorityColor(String priority) {

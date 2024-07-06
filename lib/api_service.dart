@@ -141,18 +141,24 @@ Future<void> updateTasksInDatabase(List<Tasks> tasks) async {
           localTask.status,
           localTask.uuid!,
         );
+        if (localTask.status == 'completed') {
+          completeTask('email', localTask.uuid!);
+        } else if (localTask.status == 'deleted') {
+          deleteTask('email', localTask.uuid!);
+        }
       }
     }
   }
 }
 
-Future<void> deleteTask(
-    String email, String encryptionSecret, String uuid, String taskUuid) async {
+Future<void> deleteTask(String email, String taskUuid) async {
+  var c = await CredentialsStorage.getClientId();
+  var e = await CredentialsStorage.getEncryptionSecret();
   final url = Uri.parse('$baseUrl/delete-task');
   final body = jsonEncode({
     'email': email,
-    'encryptionSecret': encryptionSecret,
-    'UUID': uuid,
+    'encryptionSecret': e,
+    'UUID': c,
     'taskuuid': taskUuid,
   });
 
@@ -175,13 +181,14 @@ Future<void> deleteTask(
   }
 }
 
-Future<void> completeTask(
-    String email, String encryptionSecret, String uuid, String taskUuid) async {
+Future<void> completeTask(String email, String taskUuid) async {
+  var c = await CredentialsStorage.getClientId();
+  var e = await CredentialsStorage.getEncryptionSecret();
   final url = Uri.parse('$baseUrl/complete-task');
   final body = jsonEncode({
     'email': email,
-    'encryptionSecret': encryptionSecret,
-    'UUID': uuid,
+    'encryptionSecret': e,
+    'UUID': c,
     'taskuuid': taskUuid,
   });
 
