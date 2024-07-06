@@ -3,11 +3,9 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:taskwarrior/api_service.dart';
 import 'package:taskwarrior/app/modules/reports/controllers/reports_controller.dart';
-import 'package:taskwarrior/app/modules/reports/controllers/reports_tour_controller.dart';
 import 'package:taskwarrior/app/modules/reports/views/burn_down_daily_taskc.dart';
 import 'package:taskwarrior/app/modules/reports/views/burn_down_monthly_taskc.dart';
 import 'package:taskwarrior/app/modules/reports/views/burn_down_weekly_taskc.dart';
-import 'package:taskwarrior/app/tour/reports_page_tour.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
@@ -36,47 +34,9 @@ class _ReportsHomeTaskcState extends State<ReportsHomeTaskc>
   late TaskDatabase taskDatabase;
   List<Tasks> allTasks = [];
 
-  void _initReportsTour() {
-    tutorialCoachMark = TutorialCoachMark(
-      targets: reportsDrawer(
-        daily: daily,
-        weekly: weekly,
-        monthly: monthly,
-      ),
-      colorShadow: TaskWarriorColors.black,
-      paddingFocus: 10,
-      opacityShadow: 0.8,
-      hideSkip: true,
-      onFinish: () {
-        SaveReportsTour().saveReportsTourStatus();
-      },
-    );
-  }
-
-  void _showReportsTour() {
-    Future.delayed(
-      const Duration(seconds: 2),
-      () {
-        SaveReportsTour().getReportsTourStatus().then((value) => {
-              if (value == false)
-                {
-                  tutorialCoachMark.show(context: context),
-                }
-              else
-                {
-                  // ignore: avoid_print
-                  print('User has seen this page'),
-                }
-            });
-      },
-    );
-  }
-
   @override
   void initState() {
     super.initState();
-    _initReportsTour();
-    _showReportsTour();
     reportsController = Get.find<ReportsController>();
     reportsController.initReportsTour();
     reportsController.showReportsTour(context);
