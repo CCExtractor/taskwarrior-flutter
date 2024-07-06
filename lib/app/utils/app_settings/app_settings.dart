@@ -1,11 +1,9 @@
-export 'package:taskwarrior/app/utils/app_settings/save_tour_status.dart';
-export 'package:taskwarrior/app/utils/app_settings/selected_language.dart';
-export 'package:taskwarrior/app/utils/app_settings/selected_theme.dart';
-export 'package:taskwarrior/app/utils/language/supported_language.dart';
-import 'package:taskwarrior/app/utils/app_settings/save_tour_status.dart';
-import 'package:taskwarrior/app/utils/app_settings/selected_language.dart';
-import 'package:taskwarrior/app/utils/app_settings/selected_theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taskwarrior/app/utils/language/supported_language.dart';
+
+part 'save_tour_status.dart';
+part 'selected_theme.dart';
+part 'selected_language.dart';
 
 class AppSettings {
   static bool isDarkMode = true;

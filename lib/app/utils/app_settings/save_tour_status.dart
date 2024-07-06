@@ -1,4 +1,4 @@
-import 'package:shared_preferences/shared_preferences.dart';
+part of 'app_settings.dart';
 
 class SaveTourStatus {
   static SharedPreferences? _preferences;

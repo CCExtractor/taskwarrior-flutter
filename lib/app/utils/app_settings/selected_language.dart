@@ -1,5 +1,4 @@
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:taskwarrior/app/utils/language/supported_language.dart';
+part of 'app_settings.dart';
 
 class SelectedLanguage {
   static SharedPreferences? _preferences;
