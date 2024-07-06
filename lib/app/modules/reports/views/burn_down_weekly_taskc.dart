@@ -68,16 +68,16 @@ class BurnDownWeeklyTask extends StatelessWidget {
           Utils.getWeekNumbertoInt(DateTime.parse(allData[i].entry));
 
       ///check if weeklyInfo contains the week number
-      if (weeklyInfo.containsKey(weekNumber)) {
+      if (weeklyInfo.containsKey(weekNumber.toString())) {
         ///check if the status is pending or completed
         if (allData[i].status == 'pending') {
           ///if the status is pending then add 1 to the pending count
-          weeklyInfo[weekNumber]!['pending'] =
-              (weeklyInfo[weekNumber]!['pending'] ?? 0) + 1;
+          weeklyInfo[weekNumber.toString()]!['pending'] =
+              (weeklyInfo[weekNumber.toString()]!['pending'] ?? 0) + 1;
         } else if (allData[i].status == 'completed') {
           ///if the status is completed then add 1 to the completed count
-          weeklyInfo[weekNumber]!['completed'] =
-              (weeklyInfo[weekNumber]!['completed'] ?? 0) + 1;
+          weeklyInfo[weekNumber.toString()]!['completed'] =
+              (weeklyInfo[weekNumber.toString()]!['completed'] ?? 0) + 1;
         }
       } else {
         ///if weeklyInfo does not contain the week number
