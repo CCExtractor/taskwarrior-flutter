@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: deprecated_member_use, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -50,83 +50,83 @@ class _TaskDetailsState extends State<TaskDetails> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppSettings.isDarkMode
-          ? TaskWarriorColors.kprimaryBackgroundColor
-          : TaskWarriorColors.kLightPrimaryBackgroundColor,
-      appBar: AppBar(
-        foregroundColor: TaskWarriorColors.lightGrey,
-        backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
-        title: Text(
-          'Task: ${widget.task.description}',
-          style: GoogleFonts.poppins(color: TaskWarriorColors.white),
+    return WillPopScope(
+      onWillPop: () async {
+        if (hasChanges) {
+          final action = await _showUnsavedChangesDialog(context);
+          if (action == UnsavedChangesAction.cancel) {
+            return Future.value(false);
+          } else if (action == UnsavedChangesAction.save) {
+            await _saveTask();
+          }
+        }
+        return Future.value(true);
+      },
+      child: Scaffold(
+        backgroundColor: AppSettings.isDarkMode
+            ? TaskWarriorColors.kprimaryBackgroundColor
+            : TaskWarriorColors.kLightPrimaryBackgroundColor,
+        appBar: AppBar(
+          foregroundColor: TaskWarriorColors.lightGrey,
+          backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
+          title: Text(
+            'Task: ${widget.task.description}',
+            style: GoogleFonts.poppins(color: TaskWarriorColors.white),
+          ),
         ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ListView(
-          children: [
-            _buildEditableDetail('Description:', description, (value) {
-              setState(() {
-                description = value;
-                hasChanges = true;
-              });
-            }),
-            _buildEditableDetail('Project:', project, (value) {
-              setState(() {
-                project = value;
-                hasChanges = true;
-              });
-            }),
-            _buildSelectableDetail('Status:', status, ['pending', 'completed'],
-                (value) {
-              setState(() {
-                status = value;
-                hasChanges = true;
-              });
-            }),
-            _buildSelectableDetail('Priority:', priority, ['H', 'M', 'L'],
-                (value) {
-              setState(() {
-                priority = value;
-                hasChanges = true;
-              });
-            }),
-            _buildDatePickerDetail('Due:', due, (value) {
-              setState(() {
-                due = value;
-                hasChanges = true;
-              });
-            }),
-            _buildDetail('UUID:', widget.task.uuid!),
-            _buildDetail('Urgency:', widget.task.urgency.toString()),
-            _buildDetail('End:', _buildDate(widget.task.end)),
-            _buildDetail('Entry:', _buildDate(widget.task.entry)),
-            _buildDetail('Modified:', _buildDate(widget.task.modified)),
-          ],
-        ),
-      ),
-      floatingActionButton: hasChanges
-          ? FloatingActionButton(
-              onPressed: () async {
-                await taskDatabase.saveEditedTaskInDB(widget.task.uuid!,
-                    description, project, status, priority, due);
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: ListView(
+            children: [
+              _buildEditableDetail('Description:', description, (value) {
                 setState(() {
-                  hasChanges = false;
+                  description = value;
+                  hasChanges = true;
                 });
-                modifyTaskOnTaskwarrior(
-                  description,
-                  project,
-                  due,
-                  priority,
-                  status,
-                  widget.task.uuid!,
-                );
-                // used this for testing
-              },
-              child: const Icon(Icons.save),
-            )
-          : null,
+              }),
+              _buildEditableDetail('Project:', project, (value) {
+                setState(() {
+                  project = value;
+                  hasChanges = true;
+                });
+              }),
+              _buildSelectableDetail(
+                  'Status:', status, ['pending', 'completed'], (value) {
+                setState(() {
+                  status = value;
+                  hasChanges = true;
+                });
+              }),
+              _buildSelectableDetail('Priority:', priority, ['H', 'M', 'L'],
+                  (value) {
+                setState(() {
+                  priority = value;
+                  hasChanges = true;
+                });
+              }),
+              _buildDatePickerDetail('Due:', due, (value) {
+                setState(() {
+                  due = value;
+                  hasChanges = true;
+                });
+              }),
+              _buildDetail('UUID:', widget.task.uuid!),
+              _buildDetail('Urgency:', widget.task.urgency.toString()),
+              _buildDetail('End:', _buildDate(widget.task.end)),
+              _buildDetail('Entry:', _buildDate(widget.task.entry)),
+              _buildDetail('Modified:', _buildDate(widget.task.modified)),
+            ],
+          ),
+        ),
+        floatingActionButton: hasChanges
+            ? FloatingActionButton(
+                onPressed: () async {
+                  await _saveTask();
+                },
+                child: const Icon(Icons.save),
+              )
+            : null,
+      ),
     );
   }
 
@@ -169,25 +169,15 @@ class _TaskDetailsState extends State<TaskDetails> {
             return Theme(
               data: Theme.of(context).copyWith(
                 colorScheme: AppSettings.isDarkMode
-                    ? ColorScheme(
-                        brightness: Brightness.dark,
+                    ? ColorScheme.dark(
                         primary: TaskWarriorColors.white,
                         onPrimary: TaskWarriorColors.black,
-                        secondary: TaskWarriorColors.black,
-                        onSecondary: TaskWarriorColors.white,
-                        error: TaskWarriorColors.red,
-                        onError: TaskWarriorColors.black,
                         surface: TaskWarriorColors.black,
                         onSurface: TaskWarriorColors.white,
                       )
-                    : ColorScheme(
-                        brightness: Brightness.light,
+                    : ColorScheme.light(
                         primary: TaskWarriorColors.black,
                         onPrimary: TaskWarriorColors.white,
-                        secondary: TaskWarriorColors.white,
-                        onSecondary: TaskWarriorColors.black,
-                        error: TaskWarriorColors.red,
-                        onError: TaskWarriorColors.white,
                         surface: TaskWarriorColors.white,
                         onSurface: TaskWarriorColors.black,
                       ),
@@ -376,4 +366,74 @@ class _TaskDetailsState extends State<TaskDetails> {
       return '-';
     }
   }
+
+  Future<UnsavedChangesAction?> _showUnsavedChangesDialog(
+      BuildContext context) async {
+    return showDialog<UnsavedChangesAction>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Utils.showAlertDialog(
+          title: Text(
+            'Unsaved Changes',
+            style: TextStyle(
+                color: AppSettings.isDarkMode
+                    ? TaskWarriorColors.kprimaryTextColor
+                    : TaskWarriorColors.kLightPrimaryTextColor),
+          ),
+          content: Text(
+            'You have unsaved changes. What would you like to do?',
+            style: TextStyle(
+                color: AppSettings.isDarkMode
+                    ? TaskWarriorColors.kprimaryTextColor
+                    : TaskWarriorColors.kLightPrimaryTextColor),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(UnsavedChangesAction.cancel);
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(UnsavedChangesAction.discard);
+              },
+              child: const Text('Don\'t Save'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(UnsavedChangesAction.save);
+              },
+              child: const Text('Save'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _saveTask() async {
+    await taskDatabase.saveEditedTaskInDB(
+      widget.task.uuid!,
+      description,
+      project,
+      status,
+      priority,
+      due,
+    );
+    setState(() {
+      hasChanges = false;
+    });
+    modifyTaskOnTaskwarrior(
+      description,
+      project,
+      due,
+      priority,
+      status,
+      widget.task.uuid!,
+    );
+  }
 }
+
+enum UnsavedChangesAction { save, discard, cancel }
