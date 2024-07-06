@@ -9,76 +9,55 @@ import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
-class BurnDownWeeklyTask extends StatefulWidget {
-  const BurnDownWeeklyTask({super.key});
+class BurnDownWeeklyTask extends StatelessWidget {
+  BurnDownWeeklyTask({super.key});
 
-  @override
-  State<BurnDownWeeklyTask> createState() => _BurnDownWeeklyTaskState();
-}
+  final TooltipBehavior _weeklyBurndownTooltipBehaviour = TooltipBehavior(
+    enable: true,
+    builder: (dynamic data, dynamic point, dynamic series, int pointIndex,
+        int seriesIndex) {
+      final String weekNumber = data.x;
+      final int pendingCount = data.y1;
+      final int completedCount = data.y2;
 
-class _BurnDownWeeklyTaskState extends State<BurnDownWeeklyTask>
-    with TickerProviderStateMixin {
-  late TaskDatabase taskDatabase;
-  late TooltipBehavior _weeklyBurndownTooltipBehaviour;
-  Map<int, Map<String, int>> weeklyInfo = {};
-
-  @override
-  void initState() {
-    super.initState();
-
-    ///initialize the _weeklyBurndownTooltipBehaviour tooltip behavior
-    _weeklyBurndownTooltipBehaviour = TooltipBehavior(
-      enable: true,
-      builder: (dynamic data, dynamic point, dynamic series, int pointIndex,
-          int seriesIndex) {
-        final String weekNumber = data.x;
-        final int pendingCount = data.y1;
-        final int completedCount = data.y2;
-
-        return Container(
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                weekNumber,
-                style: const TextStyle(
-                  fontWeight: TaskWarriorFonts.bold,
-                ),
+      return Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(5),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              weekNumber,
+              style: const TextStyle(
+                fontWeight: TaskWarriorFonts.bold,
               ),
-              Text(
-                'Pending: $pendingCount',
-              ),
-              Text(
-                'Completed: $completedCount',
-              ),
-            ],
-          ),
-        );
-      },
-    );
+            ),
+            Text(
+              'Pending: $pendingCount',
+            ),
+            Text(
+              'Completed: $completedCount',
+            ),
+          ],
+        ),
+      );
+    },
+  );
 
-    taskDatabase = TaskDatabase();
-
-    ///fetch all data from the database
-    fetchAllData();
+  Future<Map<String, Map<String, int>>> fetchWeeklyInfo() async {
+    TaskDatabase taskDatabase = TaskDatabase();
+    await taskDatabase.open();
+    List<Tasks> tasks = await taskDatabase.fetchTasksFromDatabase();
+    return sortBurnDownWeekly(tasks);
   }
 
-  void fetchAllData() async {
-    List<Tasks> allData = await taskDatabase.fetchTasksFromDatabase();
-    if (allData.isNotEmpty) {
-      sortBurnDownWeekly(allData);
-    }
-  }
-
-  void sortBurnDownWeekly(List<Tasks> allData) {
+  Map<String, Map<String, int>> sortBurnDownWeekly(List<Tasks> allData) {
     // Initialize weeklyInfo map
-    weeklyInfo = {};
+    Map<String, Map<String, int>> weeklyInfo = {};
 
     // Sort allData by entry date in ascending order
     allData.sort((a, b) => a.entry.compareTo(b.entry));
@@ -102,7 +81,8 @@ class _BurnDownWeeklyTaskState extends State<BurnDownWeeklyTask>
         }
       } else {
         ///if weeklyInfo does not contain the week number
-        weeklyInfo[weekNumber] = {
+        // ignore: collection_methods_unrelated_type
+        weeklyInfo[weekNumber.toString()] = {
           'pending': allData[i].status == 'pending' ? 1 : 0,
           'completed': allData[i].status == 'completed' ? 1 : 0,
         };
@@ -110,86 +90,101 @@ class _BurnDownWeeklyTaskState extends State<BurnDownWeeklyTask>
     }
 
     debugPrint("weeklyInfo $weeklyInfo");
-
-    // Update the state to refresh the chart
-    setState(() {});
+    return weeklyInfo;
   }
 
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height; // Screen height
+    return FutureBuilder<Map<String, Map<String, int>>>(
+        future: fetchWeeklyInfo(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Expanded(
-          child: SizedBox(
-            height: height * 0.6,
-            child: SfCartesianChart(
-              primaryXAxis: CategoryAxis(
-                title: AxisTitle(
-                  text: 'Weeks - Year',
-                  textStyle: GoogleFonts.poppins(
-                    fontWeight: TaskWarriorFonts.bold,
-                    fontSize: TaskWarriorFonts.fontSizeSmall,
-                    color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+
+          Map<String, Map<String, int>> weeklyInfo = snapshot.data ?? {};
+
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: SizedBox(
+                  height: height * 0.6,
+                  child: SfCartesianChart(
+                    primaryXAxis: CategoryAxis(
+                      title: AxisTitle(
+                        text: 'Weeks - Year',
+                        textStyle: GoogleFonts.poppins(
+                          fontWeight: TaskWarriorFonts.bold,
+                          fontSize: TaskWarriorFonts.fontSizeSmall,
+                          color: AppSettings.isDarkMode
+                              ? Colors.white
+                              : Colors.black,
+                        ),
+                      ),
+                    ),
+                    primaryYAxis: NumericAxis(
+                      title: AxisTitle(
+                        text: 'Tasks',
+                        textStyle: GoogleFonts.poppins(
+                          fontWeight: TaskWarriorFonts.bold,
+                          color: AppSettings.isDarkMode
+                              ? Colors.white
+                              : Colors.black,
+                          fontSize: TaskWarriorFonts.fontSizeSmall,
+                        ),
+                      ),
+                    ),
+                    tooltipBehavior: _weeklyBurndownTooltipBehaviour,
+                    series: <ChartSeries>[
+                      ///this is the completed tasks
+                      StackedColumnSeries<ChartData, String>(
+                        groupName: 'Group A',
+                        enableTooltip: true,
+                        color: TaskWarriorColors.green,
+                        dataSource: weeklyInfo.entries
+                            .map((entry) => ChartData(
+                                  'Week ${entry.key}',
+                                  entry.value['pending'] ?? 0,
+                                  entry.value['completed'] ?? 0,
+                                ))
+                            .toList(),
+                        xValueMapper: (ChartData data, _) => data.x,
+                        yValueMapper: (ChartData data, _) => data.y2,
+                        name: 'Completed',
+                      ),
+
+                      ///this is the pending tasks
+                      StackedColumnSeries<ChartData, String>(
+                        groupName: 'Group A',
+                        color: TaskWarriorColors.yellow,
+                        enableTooltip: true,
+                        dataSource: weeklyInfo.entries
+                            .map((entry) => ChartData(
+                                  'Week ${entry.key}',
+                                  entry.value['pending'] ?? 0,
+                                  entry.value['completed'] ?? 0,
+                                ))
+                            .toList(),
+                        xValueMapper: (ChartData data, _) => data.x,
+                        yValueMapper: (ChartData data, _) => data.y1,
+                        name: 'Pending',
+                      ),
+                    ],
                   ),
                 ),
               ),
-              primaryYAxis: NumericAxis(
-                title: AxisTitle(
-                  text: 'Tasks',
-                  textStyle: GoogleFonts.poppins(
-                    fontWeight: TaskWarriorFonts.bold,
-                    color: AppSettings.isDarkMode ? Colors.white : Colors.black,
-                    fontSize: TaskWarriorFonts.fontSizeSmall,
-                  ),
-                ),
+              const CommonChartIndicator(
+                title: 'Weekly Burndown Chart',
               ),
-              tooltipBehavior: _weeklyBurndownTooltipBehaviour,
-              series: <ChartSeries>[
-                ///this is the completed tasks
-                StackedColumnSeries<ChartData, String>(
-                  groupName: 'Group A',
-                  enableTooltip: true,
-                  color: TaskWarriorColors.green,
-                  dataSource: weeklyInfo.entries
-                      .map((entry) => ChartData(
-                            'Week ${entry.key}',
-                            entry.value['pending'] ?? 0,
-                            entry.value['completed'] ?? 0,
-                          ))
-                      .toList(),
-                  xValueMapper: (ChartData data, _) => data.x,
-                  yValueMapper: (ChartData data, _) => data.y2,
-                  name: 'Completed',
-                ),
-
-                ///this is the pending tasks
-                StackedColumnSeries<ChartData, String>(
-                  groupName: 'Group A',
-                  color: TaskWarriorColors.yellow,
-                  enableTooltip: true,
-                  dataSource: weeklyInfo.entries
-                      .map((entry) => ChartData(
-                            'Week ${entry.key}',
-                            entry.value['pending'] ?? 0,
-                            entry.value['completed'] ?? 0,
-                          ))
-                      .toList(),
-                  xValueMapper: (ChartData data, _) => data.x,
-                  yValueMapper: (ChartData data, _) => data.y1,
-                  name: 'Pending',
-                ),
-              ],
-            ),
-          ),
-        ),
-        const CommonChartIndicator(
-          title: 'Weekly Burndown Chart',
-        ),
-      ],
-    );
+            ],
+          );
+        });
   }
 }

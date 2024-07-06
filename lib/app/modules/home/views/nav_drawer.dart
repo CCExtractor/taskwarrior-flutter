@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
 import 'package:taskwarrior/app/modules/home/views/home_page_nav_drawer_menu_item.dart';
 import 'package:taskwarrior/app/modules/home/views/theme_clipper.dart';
+import 'package:taskwarrior/app/modules/reports/views/reports_view_taskc.dart';
 import 'package:taskwarrior/app/routes/app_pages.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
@@ -183,15 +184,32 @@ class NavDrawer extends StatelessWidget {
                 ),
               ),
             ),
-            Obx(
-              () => NavDrawerMenuItem(
-                icon: Icons.summarize,
-                text: SentenceManager(
-                  currentLanguage: homeController.selectedLanguage.value,
-                ).sentences.navDrawerReports,
-                onTap: () {
-                  Get.toNamed(Routes.REPORTS);
-                },
+            Visibility(
+              visible: !homeController.taskchampion.value,
+              child: Obx(
+                () => NavDrawerMenuItem(
+                  icon: Icons.summarize,
+                  text: SentenceManager(
+                    currentLanguage: homeController.selectedLanguage.value,
+                  ).sentences.navDrawerReports,
+                  onTap: () {
+                    Get.toNamed(Routes.REPORTS);
+                  },
+                ),
+              ),
+            ),
+            Visibility(
+              visible: homeController.taskchampion.value,
+              child: Obx(
+                () => NavDrawerMenuItem(
+                  icon: Icons.summarize,
+                  text: SentenceManager(
+                    currentLanguage: homeController.selectedLanguage.value,
+                  ).sentences.navDrawerReports,
+                  onTap: () {
+                    Get.to(() => ReportsHomeTaskc());
+                  },
+                ),
               ),
             ),
             Obx(

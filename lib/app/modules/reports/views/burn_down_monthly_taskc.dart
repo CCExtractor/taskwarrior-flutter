@@ -9,75 +9,54 @@ import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
-class BurnDownMonthlyTaskc extends StatefulWidget {
-  const BurnDownMonthlyTaskc({super.key});
+class BurnDownMonthlyTaskc extends StatelessWidget {
+  BurnDownMonthlyTaskc({super.key});
 
-  @override
-  State<BurnDownMonthlyTaskc> createState() => _BurnDownMonthlyTaskcState();
-}
+  final _monthlyBurndownTooltipBehaviour = TooltipBehavior(
+    enable: true,
+    builder: (dynamic data, dynamic point, dynamic series, int pointIndex,
+        int seriesIndex) {
+      final String monthYear = data.x;
+      final int pendingCount = data.y1;
+      final int completedCount = data.y2;
 
-class _BurnDownMonthlyTaskcState extends State<BurnDownMonthlyTaskc>
-    with TickerProviderStateMixin {
-  late TaskDatabase taskDatabase;
-  Map<String, Map<String, int>> monthlyInfo = {};
-
-  late TooltipBehavior _weeklyBurndownTooltipBehaviour;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _weeklyBurndownTooltipBehaviour = TooltipBehavior(
-      enable: true,
-      builder: (dynamic data, dynamic point, dynamic series, int pointIndex,
-          int seriesIndex) {
-        final String monthYear = data.x;
-        final int pendingCount = data.y1;
-        final int completedCount = data.y2;
-
-        return Container(
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Month-Year: $monthYear',
-                style: const TextStyle(
-                  fontWeight: TaskWarriorFonts.bold,
-                ),
+      return Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(5),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Month-Year: $monthYear',
+              style: const TextStyle(
+                fontWeight: TaskWarriorFonts.bold,
               ),
-              Text(
-                'Pending: $pendingCount',
-              ),
-              Text(
-                'Completed: $completedCount',
-              ),
-            ],
-          ),
-        );
-      },
-    );
+            ),
+            Text(
+              'Pending: $pendingCount',
+            ),
+            Text(
+              'Completed: $completedCount',
+            ),
+          ],
+        ),
+      );
+    },
+  );
 
-    taskDatabase = TaskDatabase();
-
-    ///fetch all data from the database
-    fetchAllData();
+  Future<Map<String, Map<String, int>>> fetchMonthlyInfo() async {
+    TaskDatabase taskDatabase = TaskDatabase();
+    await taskDatabase.open();
+    List<Tasks> tasks = await taskDatabase.fetchTasksFromDatabase();
+    return sortBurnDownMonthly(tasks);
   }
 
-  void fetchAllData() async {
-    List<Tasks> allData = await taskDatabase.fetchTasksFromDatabase();
-    if (allData.isNotEmpty) {
-      sortBurnDownMonthly(allData);
-    }
-  }
-
-  void sortBurnDownMonthly(List<Tasks> allData) {
-    monthlyInfo = {};
+  Map<String, Map<String, int>> sortBurnDownMonthly(List<Tasks> allData) {
+    Map<String, Map<String, int>> monthlyInfo = {};
 
     allData.sort((a, b) => a.entry.compareTo(b.entry));
 
@@ -103,82 +82,99 @@ class _BurnDownMonthlyTaskcState extends State<BurnDownMonthlyTaskc>
     }
 
     debugPrint("monthlyInfo: $monthlyInfo");
-
-    // Update the state to refresh the chart
-    setState(() {});
+    return monthlyInfo;
   }
 
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Expanded(
-          child: SizedBox(
-            height: height * 0.6,
-            child: SfCartesianChart(
-              primaryXAxis: CategoryAxis(
-                title: AxisTitle(
-                  text: 'Month - Year',
-                  textStyle: GoogleFonts.poppins(
-                    fontWeight: TaskWarriorFonts.bold,
-                    fontSize: TaskWarriorFonts.fontSizeSmall,
-                    color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+
+    return FutureBuilder<Map<String, Map<String, int>>>(
+      future: fetchMonthlyInfo(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        }
+
+        Map<String, Map<String, int>> monthlyInfo = snapshot.data ?? {};
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: SizedBox(
+                height: height * 0.6,
+                child: SfCartesianChart(
+                  primaryXAxis: CategoryAxis(
+                    title: AxisTitle(
+                      text: 'Month - Year',
+                      textStyle: GoogleFonts.poppins(
+                        fontWeight: TaskWarriorFonts.bold,
+                        fontSize: TaskWarriorFonts.fontSizeSmall,
+                        color: AppSettings.isDarkMode
+                            ? Colors.white
+                            : Colors.black,
+                      ),
+                    ),
                   ),
+                  primaryYAxis: NumericAxis(
+                    title: AxisTitle(
+                      text: 'Tasks',
+                      textStyle: GoogleFonts.poppins(
+                        fontWeight: TaskWarriorFonts.bold,
+                        fontSize: TaskWarriorFonts.fontSizeSmall,
+                        color: AppSettings.isDarkMode
+                            ? Colors.white
+                            : Colors.black,
+                      ),
+                    ),
+                  ),
+                  tooltipBehavior: _monthlyBurndownTooltipBehaviour,
+                  series: <ChartSeries>[
+                    StackedColumnSeries<ChartData, String>(
+                      groupName: 'Group A',
+                      enableTooltip: true,
+                      color: TaskWarriorColors.green,
+                      dataSource: monthlyInfo.entries
+                          .map((entry) => ChartData(
+                                entry.key,
+                                entry.value['pending'] ?? 0,
+                                entry.value['completed'] ?? 0,
+                              ))
+                          .toList(),
+                      xValueMapper: (ChartData data, _) => data.x,
+                      yValueMapper: (ChartData data, _) => data.y2,
+                      name: 'Completed',
+                    ),
+                    StackedColumnSeries<ChartData, String>(
+                      groupName: 'Group A',
+                      color: TaskWarriorColors.yellow,
+                      enableTooltip: true,
+                      dataSource: monthlyInfo.entries
+                          .map((entry) => ChartData(
+                                entry.key,
+                                entry.value['pending'] ?? 0,
+                                entry.value['completed'] ?? 0,
+                              ))
+                          .toList(),
+                      xValueMapper: (ChartData data, _) => data.x,
+                      yValueMapper: (ChartData data, _) => data.y1,
+                      name: 'Pending',
+                    ),
+                  ],
                 ),
               ),
-              primaryYAxis: NumericAxis(
-                title: AxisTitle(
-                  text: 'Tasks',
-                  textStyle: GoogleFonts.poppins(
-                    fontWeight: TaskWarriorFonts.bold,
-                    fontSize: TaskWarriorFonts.fontSizeSmall,
-                    color: AppSettings.isDarkMode ? Colors.white : Colors.black,
-                  ),
-                ),
-              ),
-              tooltipBehavior: _weeklyBurndownTooltipBehaviour,
-              series: <ChartSeries>[
-                StackedColumnSeries<ChartData, String>(
-                  groupName: 'Group A',
-                  enableTooltip: true,
-                  color: TaskWarriorColors.green,
-                  dataSource: monthlyInfo.entries
-                      .map((entry) => ChartData(
-                            entry.key,
-                            entry.value['pending'] ?? 0,
-                            entry.value['completed'] ?? 0,
-                          ))
-                      .toList(),
-                  xValueMapper: (ChartData data, _) => data.x,
-                  yValueMapper: (ChartData data, _) => data.y2,
-                  name: 'Completed',
-                ),
-                StackedColumnSeries<ChartData, String>(
-                  groupName: 'Group A',
-                  color: TaskWarriorColors.yellow,
-                  enableTooltip: true,
-                  dataSource: monthlyInfo.entries
-                      .map((entry) => ChartData(
-                            entry.key,
-                            entry.value['pending'] ?? 0,
-                            entry.value['completed'] ?? 0,
-                          ))
-                      .toList(),
-                  xValueMapper: (ChartData data, _) => data.x,
-                  yValueMapper: (ChartData data, _) => data.y1,
-                  name: 'Pending',
-                ),
-              ],
             ),
-          ),
-        ),
-        const CommonChartIndicator(
-          title: 'Monthly Burndown Chart',
-        )
-      ],
+            const CommonChartIndicator(
+              title: 'Monthly Burndown Chart',
+            ),
+          ],
+        );
+      },
     );
   }
 }

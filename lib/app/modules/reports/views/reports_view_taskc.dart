@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:taskwarrior/api_service.dart';
+import 'package:get/get.dart';
 import 'package:taskwarrior/app/modules/reports/controllers/reports_controller.dart';
 import 'package:taskwarrior/app/modules/reports/views/burn_down_daily_taskc.dart';
 import 'package:taskwarrior/app/modules/reports/views/burn_down_monthly_taskc.dart';
@@ -8,9 +8,10 @@ import 'package:taskwarrior/app/modules/reports/views/burn_down_weekly_taskc.dar
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
+import 'package:taskwarrior/api_service.dart';
 
 class ReportsHomeTaskc extends StatelessWidget {
-  final ReportsController reportsController = ReportsController();
+  final ReportsController reportsController = Get.put(ReportsController());
   final TaskDatabase taskDatabase = TaskDatabase();
 
   ReportsHomeTaskc({super.key});
@@ -132,13 +133,15 @@ class ReportsHomeTaskc extends StatelessWidget {
                         ),
                       ],
                     )
-                  : IndexedStack(
-                      index: reportsController.selectedIndex.value,
-                      children: const [
-                        BurnDownDailyTaskc(),
-                        BurnDownWeeklyTask(),
-                        BurnDownMonthlyTaskc(),
-                      ],
+                  : Obx(
+                      () => IndexedStack(
+                        index: reportsController.selectedIndex.value,
+                        children: [
+                          BurnDownDailyTaskc(),
+                          BurnDownWeeklyTask(),
+                          BurnDownMonthlyTaskc(),
+                        ],
+                      ),
                     ),
         );
       },
