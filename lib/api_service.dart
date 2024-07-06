@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'package:taskwarrior/app/utils/taskchampion/taskchampion.dart';
+import 'package:taskwarrior/app/utils/taskchampion/credentials_storage.dart';
 
 class Tasks {
   final int id;

@@ -23,7 +23,7 @@ import 'package:taskwarrior/app/tour/filter_drawer_tour.dart';
 import 'package:taskwarrior/app/tour/home_page_tour.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/language/supported_language.dart';
-import 'package:taskwarrior/app/utils/taskchampion/taskchampion.dart';
+import 'package:taskwarrior/app/utils/taskchampion/credentials_storage.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/comparator.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/projects.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/query.dart';

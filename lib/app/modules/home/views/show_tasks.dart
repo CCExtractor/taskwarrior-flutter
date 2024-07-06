@@ -8,7 +8,7 @@ import 'package:taskwarrior/app/modules/home/views/show_details.dart';
 import 'package:taskwarrior/app/utils/constants/palette.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
-import 'package:taskwarrior/app/utils/taskchampion/taskchampion.dart';
+import 'package:taskwarrior/app/utils/taskchampion/credentials_storage.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
 class TaskViewBuilder extends StatelessWidget {
