@@ -8,10 +8,12 @@ import 'package:taskwarrior/app/models/storage.dart';
 import 'package:taskwarrior/app/models/storage/set_config.dart';
 import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
 import 'package:taskwarrior/app/modules/splash/controllers/splash_controller.dart';
+import 'package:taskwarrior/app/tour/manage_task_server_page_tour.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/home_path/home_path.dart' as rc;
 import 'package:taskwarrior/app/utils/taskserver/taskserver.dart';
 import 'package:taskwarrior/app/utils/app_settings.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class ManageTaskServerController extends GetxController {
   final HomeController homeController = Get.find<HomeController>();
@@ -194,6 +196,64 @@ class ManageTaskServerController extends GetxController {
       update();
     } else {
       null;
+    }
+  }
+
+  late TutorialCoachMark tutorialCoachMark;
+
+  final GlobalKey configureTaskRC = GlobalKey();
+  final GlobalKey configureServerCertificate = GlobalKey();
+
+  final GlobalKey configureTaskServerKey = GlobalKey();
+  final GlobalKey configureYourCertificate = GlobalKey();
+
+  void initManageTaskServerPageTour() {
+    tutorialCoachMark = TutorialCoachMark(
+      targets: addManageTaskServerPage(
+        configureTaskRC: configureTaskRC,
+        configureYourCertificate: configureYourCertificate,
+        configureTaskServerKey: configureTaskServerKey,
+        configureServerCertificate: configureServerCertificate,
+      ),
+      colorShadow: TaskWarriorColors.black,
+      paddingFocus: 10,
+      opacityShadow: 1.00,
+      hideSkip: true,
+      onFinish: () {
+        SaveTourStatus.saveManageTaskServerTourStatus(true);
+      },
+    );
+  }
+
+  void showManageTaskServerPageTour(BuildContext context) {
+    Future.delayed(
+      const Duration(milliseconds: 500),
+      () {
+        SaveTourStatus.getManageTaskServerTourStatus().then((value) => {
+              if (value == false)
+                {
+                  tutorialCoachMark.show(context: context),
+                }
+              else
+                {
+                  // ignore: avoid_print
+                  print('User has seen this page'),
+                }
+            });
+      },
+    );
+  }
+
+  GlobalKey getGlobalKey(String pem) {
+    switch (pem) {
+      case 'taskd.ca':
+        return configureServerCertificate;
+      case 'taskd.certificate':
+        return configureYourCertificate;
+      case 'taskd.key':
+        return configureTaskServerKey;
+      default:
+        return configureServerCertificate;
     }
   }
 }

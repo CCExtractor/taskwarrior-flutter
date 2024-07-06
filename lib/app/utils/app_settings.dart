@@ -80,6 +80,14 @@ class SaveTourStatus {
   static Future<bool> getDetailsTourStatus() async {
     return _preferences?.getBool('details_tour') ?? false;
   }
+
+  static Future saveManageTaskServerTourStatus(bool status) async {
+    await _preferences?.setBool('manage_task_server_tour', status);
+  }
+
+  static Future<bool> getManageTaskServerTourStatus() async {
+    return _preferences?.getBool('manage_task_server_tour') ?? false;
+  }
 }
 
 class AppSettings {

@@ -10,7 +10,7 @@ import 'app/routes/app_pages.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences pref = await SharedPreferences.getInstance();
-  pref.setBool('profile_tour', false);
+  pref.setBool('manage_task_server_tour', false);
 
   await AppSettings.init();
   await Permission.notification.isDenied.then((value) {

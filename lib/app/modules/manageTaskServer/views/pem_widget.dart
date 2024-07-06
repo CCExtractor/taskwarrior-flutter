@@ -14,6 +14,7 @@ class PemWidget extends StatelessWidget {
     required this.listTileTitle,
     required this.onTapCallBack,
     required this.onLongPressCallBack,
+    required this.globalKey,
     // required this.manageTaskServerController,
   });
 
@@ -23,6 +24,7 @@ class PemWidget extends StatelessWidget {
   final String listTileTitle;
   final Function(String pem, Storage storagePem) onTapCallBack;
   final Function(String pem, String? name) onLongPressCallBack;
+  final GlobalKey globalKey;
   // final ManageTaskServerController manageTaskServerController;
 
   @override
@@ -51,6 +53,7 @@ class PemWidget extends StatelessWidget {
         ? TaskWarriorColors.ksecondaryBackgroundColor
         : TaskWarriorColors.kLightSecondaryBackgroundColor;
     return Padding(
+      key: globalKey,
       padding: const EdgeInsets.only(
         top: 10,
         bottom: 10,

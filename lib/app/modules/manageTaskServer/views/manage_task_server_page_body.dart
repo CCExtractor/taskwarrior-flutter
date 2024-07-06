@@ -17,6 +17,8 @@ class ManageTaskServerPageBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    controller.initManageTaskServerPageTour();
+    controller.showManageTaskServerPageTour(context);
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20),
       child: ListView(
@@ -24,6 +26,7 @@ class ManageTaskServerPageBody extends StatelessWidget {
         // crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
+            key: controller.configureTaskRC,
             padding: const EdgeInsets.only(
               top: 10,
               bottom: 10,
@@ -460,6 +463,7 @@ class ManageTaskServerPageBody extends StatelessWidget {
                                 : "Select Certificate",
                     onTapCallBack: controller.onTapPEMWidget,
                     onLongPressCallBack: controller.onLongPressPEMWidget,
+                    globalKey: controller.getGlobalKey(pem),
                   ),
                 );
               }
