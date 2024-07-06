@@ -51,6 +51,7 @@ class HomeController extends GetxController {
   final Rx<SupportedLanguage> selectedLanguage = SupportedLanguage.english.obs;
   final ScrollController scrollController = ScrollController();
   final RxBool showbtn = false.obs;
+  late TaskDatabase taskdb;
   var tasks = <Tasks>[].obs;
 
   @override
@@ -69,6 +70,8 @@ class HomeController extends GetxController {
     if (Platform.isAndroid) {
       handleHomeWidgetClicked();
     }
+    taskdb = TaskDatabase();
+    taskdb.open();
     getUniqueProjects();
     _loadTaskChampion();
     fetchTasksFromDB();
@@ -483,6 +486,7 @@ class HomeController extends GetxController {
   // dialogue box
   final formKey = GlobalKey<FormState>();
   final namecontroller = TextEditingController();
+  final projectcontroller = TextEditingController();
   var due = Rxn<DateTime>();
   RxString dueString = ''.obs;
   RxString priority = 'M'.obs;

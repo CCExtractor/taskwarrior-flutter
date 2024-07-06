@@ -2,53 +2,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taskwarrior/api_service.dart';
+import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
-class AddTaskToTaskcBottomSheet extends StatefulWidget {
-  const AddTaskToTaskcBottomSheet({super.key});
-
-  @override
-  State<AddTaskToTaskcBottomSheet> createState() =>
-      _AddTaskToTaskcBottomSheetState();
-}
-
-class _AddTaskToTaskcBottomSheetState extends State<AddTaskToTaskcBottomSheet> {
-  final formKey = GlobalKey<FormState>();
-  final namecontroller = TextEditingController();
-  DateTime? due;
-  String dueString = '';
-  String priority = 'M';
-  final projectController = TextEditingController();
-  String project = '';
-  bool inThePast = false;
-  bool change24hr = false;
-  late TaskDatabase taskdb;
-
-  Future<void> checkto24hr() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      change24hr = prefs.getBool('24hourformate') ?? false;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    checkto24hr();
-    taskdb = TaskDatabase();
-    taskdb.open();
-  }
-
-  @override
-  void dispose() {
-    projectController.dispose();
-    namecontroller.dispose();
-    super.dispose();
-  }
+class AddTaskToTaskcBottomSheet extends StatelessWidget {
+  final HomeController homeController;
+  const AddTaskToTaskcBottomSheet({super.key, required this.homeController});
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +40,7 @@ class _AddTaskToTaskcBottomSheetState extends State<AddTaskToTaskcBottomSheet> {
               ),
             ),
             content: Form(
-              key: formKey,
+              key: homeController.formKey,
               child: SizedBox(
                 width: MediaQuery.of(context).size.width * 0.8,
                 child: Column(
@@ -108,7 +70,7 @@ class _AddTaskToTaskcBottomSheetState extends State<AddTaskToTaskcBottomSheet> {
 
   Widget buildName() => TextFormField(
         autofocus: true,
-        controller: namecontroller,
+        controller: homeController.namecontroller,
         style: TextStyle(
           color: AppSettings.isDarkMode
               ? TaskWarriorColors.white
@@ -129,7 +91,7 @@ class _AddTaskToTaskcBottomSheetState extends State<AddTaskToTaskcBottomSheet> {
 
   Widget buildProject() => TextFormField(
         autofocus: true,
-        controller: projectController,
+        controller: homeController.projectcontroller,
         style: TextStyle(
           color: AppSettings.isDarkMode
               ? TaskWarriorColors.white
@@ -160,7 +122,7 @@ class _AddTaskToTaskcBottomSheetState extends State<AddTaskToTaskcBottomSheet> {
           Expanded(
             child: GestureDetector(
               child: TextFormField(
-                style: inThePast
+                style: homeController.inThePast.value
                     ? TextStyle(color: TaskWarriorColors.red)
                     : TextStyle(
                         color: AppSettings.isDarkMode
@@ -169,11 +131,13 @@ class _AddTaskToTaskcBottomSheetState extends State<AddTaskToTaskcBottomSheet> {
                       ),
                 readOnly: true,
                 controller: TextEditingController(
-                  text: (due != null) ? dueString : null,
+                  text: (homeController.due.value != null)
+                      ? homeController.dueString.value
+                      : null,
                 ),
                 decoration: InputDecoration(
                   hintText: 'Select due date',
-                  hintStyle: inThePast
+                  hintStyle: homeController.inThePast.value
                       ? TextStyle(color: TaskWarriorColors.red)
                       : TextStyle(
                           color: AppSettings.isDarkMode
@@ -215,7 +179,7 @@ class _AddTaskToTaskcBottomSheetState extends State<AddTaskToTaskcBottomSheet> {
                     },
                     fieldHintText: "Month/Date/Year",
                     context: context,
-                    initialDate: due ?? DateTime.now(),
+                    initialDate: homeController.due.value ?? DateTime.now(),
                     firstDate: DateTime.now(),
                     lastDate: DateTime(2037, 12, 31),
                   );
@@ -251,14 +215,15 @@ class _AddTaskToTaskcBottomSheetState extends State<AddTaskToTaskcBottomSheet> {
                           ),
                           child: MediaQuery(
                               data: MediaQuery.of(context).copyWith(
-                                alwaysUse24HourFormat: change24hr,
+                                alwaysUse24HourFormat:
+                                    homeController.change24hr.value,
                               ),
                               child: child!),
                         );
                       },
                       context: context,
-                      initialTime:
-                          TimeOfDay.fromDateTime(due ?? DateTime.now()),
+                      initialTime: TimeOfDay.fromDateTime(
+                          homeController.due.value ?? DateTime.now()),
                     );
                     if (time != null) {
                       var dateTime = date.add(
@@ -267,12 +232,11 @@ class _AddTaskToTaskcBottomSheetState extends State<AddTaskToTaskcBottomSheet> {
                           minutes: time.minute,
                         ),
                       );
-                      due = dateTime.toUtc();
-                      dueString = DateFormat("yyyy-MM-dd").format(dateTime);
+                      homeController.due.value = dateTime.toUtc();
+                      homeController.dueString.value =
+                          DateFormat("yyyy-MM-dd").format(dateTime);
                       if (dateTime.isBefore(DateTime.now())) {
-                        setState(() {
-                          inThePast = true;
-                        });
+                        homeController.inThePast.value = true;
 
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text(
@@ -289,9 +253,7 @@ class _AddTaskToTaskcBottomSheetState extends State<AddTaskToTaskcBottomSheet> {
                                     .kLightSecondaryBackgroundColor,
                             duration: const Duration(seconds: 2)));
                       } else {
-                        setState(() {
-                          inThePast = false;
-                        });
+                        homeController.inThePast.value = false;
                       }
                     }
                   }
@@ -322,7 +284,7 @@ class _AddTaskToTaskcBottomSheetState extends State<AddTaskToTaskcBottomSheet> {
                 dropdownColor: AppSettings.isDarkMode
                     ? TaskWarriorColors.kdialogBackGroundColor
                     : TaskWarriorColors.kLightDialogBackGroundColor,
-                value: priority,
+                value: homeController.priority.value,
                 elevation: 16,
                 style: GoogleFonts.poppins(
                   color: AppSettings.isDarkMode
@@ -336,9 +298,7 @@ class _AddTaskToTaskcBottomSheetState extends State<AddTaskToTaskcBottomSheet> {
                       : TaskWarriorColors.kLightDialogBackGroundColor,
                 ),
                 onChanged: (String? newValue) {
-                  setState(() {
-                    priority = newValue!;
-                  });
+                  homeController.priority.value = newValue!;
                 },
                 items: <String>['H', 'M', 'L', 'None']
                     .map<DropdownMenuItem<String>>((String value) {
@@ -376,26 +336,25 @@ class _AddTaskToTaskcBottomSheetState extends State<AddTaskToTaskcBottomSheet> {
         ),
       ),
       onPressed: () async {
-        if (formKey.currentState!.validate()) {
+        if (homeController.formKey.currentState!.validate()) {
           var task = Tasks(
-              description: namecontroller.text,
+              description: homeController.namecontroller.text,
               status: 'pending',
-              priority: priority,
+              priority: homeController.priority.value,
               entry: DateTime.now().toIso8601String(),
               id: 0,
-              project: projectController.text,
+              project: homeController.projectcontroller.text,
               uuid: '',
               urgency: 0,
-              due: dueString,
+              due: homeController.dueString.value,
               //   dueString.toIso8601String(),
               end: '',
               modified: 'r');
-          await taskdb.insertTask(task);
-          namecontroller.text = '';
-          due = null;
-          priority = 'M';
-          project = '';
-          setState(() {});
+          await homeController.taskdb.insertTask(task);
+          homeController.namecontroller.text = '';
+          homeController.due.value = null;
+          homeController.priority.value = 'M';
+          homeController.projectcontroller.text = '';
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(
                 'Task Added Successfully!',

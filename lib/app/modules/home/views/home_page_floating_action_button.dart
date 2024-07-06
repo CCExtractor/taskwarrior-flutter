@@ -32,7 +32,9 @@ class HomePageFloatingActionButton extends StatelessWidget {
         onPressed: () => (controller.taskchampion.value)
             ? (showDialog(
                 context: context,
-                builder: (context) => const AddTaskToTaskcBottomSheet(),
+                builder: (context) => AddTaskToTaskcBottomSheet(
+                  homeController: controller,
+                ),
               ).then((value) {
                 if (controller.isSyncNeeded.value && value != "cancel") {
                   controller.isNeededtoSyncOnStart(context);
