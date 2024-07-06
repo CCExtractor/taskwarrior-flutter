@@ -107,8 +107,7 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (_) =>
-                                      const ManageTaskChampionCreds(),
+                                  builder: (_) => ManageTaskChampionCreds(),
                                 )).then((value) {});
                           },
                           textColor: TaskWarriorColors.purple,
@@ -144,7 +143,7 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (_) => const ManageTaskChampionCreds(),
+                                builder: (_) => ManageTaskChampionCreds(),
                               )).then((value) {});
                         },
                         textColor: TaskWarriorColors.purple,

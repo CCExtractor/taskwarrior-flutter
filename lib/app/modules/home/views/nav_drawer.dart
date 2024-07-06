@@ -96,7 +96,7 @@ class NavDrawer extends StatelessWidget {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => const ManageTaskChampionCreds(),
+                      builder: (context) => ManageTaskChampionCreds(),
                     ),
                   );
                 },

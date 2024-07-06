@@ -6,49 +6,29 @@ import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ManageTaskChampionCreds extends StatefulWidget {
-  const ManageTaskChampionCreds({super.key});
-
-  @override
-  State<ManageTaskChampionCreds> createState() =>
-      _ManageTaskChampionCredsState();
-}
-
-class _ManageTaskChampionCredsState extends State<ManageTaskChampionCreds> {
-  String encryptionSecret = '';
-  String clientId = '';
-
+class ManageTaskChampionCreds extends StatelessWidget {
   final TextEditingController _encryptionSecretController =
       TextEditingController();
   final TextEditingController _clientIdController = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
+  ManageTaskChampionCreds({super.key}) {
     _loadCredentials();
   }
 
   Future<void> _loadCredentials() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      encryptionSecret = prefs.getString('encryptionSecret') ?? '';
-      clientId = prefs.getString('clientId') ?? '';
-      _encryptionSecretController.text = encryptionSecret;
-      _clientIdController.text = clientId;
-    });
+    _encryptionSecretController.text =
+        prefs.getString('encryptionSecret') ?? '';
+    _clientIdController.text = prefs.getString('clientId') ?? '';
   }
 
-  Future<void> _saveCredentials() async {
+  Future<void> _saveCredentials(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('encryptionSecret', _encryptionSecretController.text);
     await prefs.setString('clientId', _clientIdController.text);
-  }
-
-  @override
-  void dispose() {
-    _encryptionSecretController.dispose();
-    _clientIdController.dispose();
-    super.dispose();
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Credentials saved successfully')),
+    );
   }
 
   @override
@@ -136,14 +116,7 @@ class _ManageTaskChampionCredsState extends State<ManageTaskChampionCreds> {
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
-                    onPressed: () async {
-                      await _saveCredentials();
-                      // ignore: use_build_context_synchronously
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text('Credentials saved successfully')),
-                      );
-                    },
+                    onPressed: () => _saveCredentials(context),
                     child: const Text('Save Credentials'),
                   ),
                   const SizedBox(height: 10),
