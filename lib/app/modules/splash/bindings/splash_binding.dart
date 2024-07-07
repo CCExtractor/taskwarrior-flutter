@@ -7,6 +7,7 @@ class SplashBinding extends Bindings {
   void dependencies() {
     Get.put<SplashController>(
       SplashController(),
+      permanent: true,
     );
   }
 }
