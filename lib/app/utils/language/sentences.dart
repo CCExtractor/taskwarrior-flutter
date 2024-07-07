@@ -33,6 +33,9 @@ abstract class Sentences {
   String get settingsPageEnable24hrFormatTitle;
   String get settingsPageEnable24hrFormatDescription;
 
+  String get taskchampionTileTitle;
+  String get taskchampionTileDescription;
+
   String get settingsPageSelectLanguage;
   String get settingsPageToggleNativeLanguage;
 
@@ -43,6 +46,10 @@ abstract class Sentences {
   String get navDrawerReports;
   String get navDrawerAbout;
   String get navDrawerSettings;
+  String get ccsyncCredentials;
+  String get deleteTaskTitle;
+  String get deleteTaskConfirmation;
+  String get deleteTaskWarning;
   String get navDrawerExit;
 
   String get detailPageDescription;

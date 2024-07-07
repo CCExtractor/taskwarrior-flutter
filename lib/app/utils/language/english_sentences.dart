@@ -187,4 +187,23 @@ class EnglishSentences extends Sentences {
   String get reportsPageNoTasksFound => 'No Tasks Found';
   @override
   String get reportsPageAddTasksToSeeReports => 'Add Tasks To See Reports';
+
+  @override
+  String get taskchampionTileDescription =>
+      'Switch to TaskWarrior sync with CCSync or Taskchampion Sync Server';
+  @override
+  String get taskchampionTileTitle => 'Taskchampion sync';
+
+  @override
+  String get ccsyncCredentials => 'CCync credentials';
+
+  @override
+  String get deleteTaskConfirmation => 'Delete Tasks';
+
+  @override
+  String get deleteTaskTitle => 'Delete All Tasks?';
+
+  @override
+  String get deleteTaskWarning =>
+      'The action is irreversible and will delete all the tasks that are stored locally.';
 }

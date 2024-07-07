@@ -187,4 +187,24 @@ class MarathiSentences extends Sentences {
   String get reportsPageNoTasksFound => 'कोणतेही काम सापडले नाहीत';
   @override
   String get reportsPageAddTasksToSeeReports => 'अहवाल पाहण्यासाठी काम जोडा';
+
+  @override
+  String get taskchampionTileDescription =>
+      'CCSync किंवा Taskchampion Sync Server सह TaskWarrior सिंक वर स्विच करा';
+
+  @override
+  String get taskchampionTileTitle => 'Taskchampion सिंक';
+
+  @override
+  String get ccsyncCredentials => 'CCync क्रेडेन्शियल';
+
+  @override
+  String get deleteTaskConfirmation => 'कार्य हटवा';
+
+  @override
+  String get deleteTaskTitle => 'सर्व कार्य हटवायचे का?';
+
+  @override
+  String get deleteTaskWarning =>
+      'ही क्रिया अपरिवर्तनीय आहे आणि हे सर्व स्थानिक पातळीवर संग्रहित केलेले कार्य हटवेल.';
 }

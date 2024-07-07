@@ -1,11 +1,14 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-
 import 'package:taskwarrior/app/routes/app_pages.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
+import 'package:taskwarrior/app/utils/taskchampion/credentials_storage.dart';
+import 'package:taskwarrior/app/utils/taskchampion/taskchampion.dart';
 import 'package:taskwarrior/app/utils/taskserver/taskserver.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
@@ -55,14 +58,71 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
           builder: (context) => IconButton(
             key: controller.refreshKey,
             icon: Icon(Icons.refresh, color: TaskWarriorColors.white),
-            onPressed: () {
-              if (server != null || credentials != null) {
-                controller.synchronize(context, true);
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Obx(
-                      () => Text(
+            onPressed: () async {
+              if (controller.taskchampion.value) {
+                var c = await CredentialsStorage.getClientId();
+                var e = await CredentialsStorage.getEncryptionSecret();
+                if (c != null && e != null) {
+                  try {
+                    // List<Tasks> tasks = await fetchTasks(c, e);
+                    // print(
+                    //     '///////////////////////////////////////////////////////////');
+                    // print(tasks.toList());
+                    // await updateTasksInDatabase(tasks);
+                    // print('Tasks updated successfully');
+                    // controller.fetchTasksFromDB();
+                    controller.refreshTasks(c, e);
+                    // Navigator.pushReplacement(
+                    //     context,
+                    //     PageRouteBuilder(
+                    //       pageBuilder: (context, animation1, animation2) =>
+                    //           const HomeView(),
+                    //       transitionDuration: Duration.zero,
+                    //       reverseTransitionDuration: Duration.zero,
+                    //     ));
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        backgroundColor: AppSettings.isDarkMode
+                            ? TaskWarriorColors.ksecondaryBackgroundColor
+                            : TaskWarriorColors.kLightSecondaryBackgroundColor,
+                        content: Text(
+                          SentenceManager(
+                                  currentLanguage:
+                                      controller.selectedLanguage.value)
+                              .sentences
+                              .homePageTaskWarriorNotConfigured,
+                          style: TextStyle(
+                            color: AppSettings.isDarkMode
+                                ? TaskWarriorColors.white
+                                : TaskWarriorColors.black,
+                          ),
+                        ),
+                        action: SnackBarAction(
+                          label: SentenceManager(
+                                  currentLanguage:
+                                      controller.selectedLanguage.value)
+                              .sentences
+                              .homePageSetup,
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => ManageTaskChampionCreds(),
+                                )).then((value) {});
+                          },
+                          textColor: TaskWarriorColors.purple,
+                        ),
+                      ),
+                    );
+                  }
+                } else if (c == null || e == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      backgroundColor: AppSettings.isDarkMode
+                          ? TaskWarriorColors.ksecondaryBackgroundColor
+                          : TaskWarriorColors.kLightSecondaryBackgroundColor,
+                      content: Text(
                         SentenceManager(
                                 currentLanguage:
                                     controller.selectedLanguage.value)
@@ -74,20 +134,58 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
                               : TaskWarriorColors.black,
                         ),
                       ),
+                      action: SnackBarAction(
+                        label: SentenceManager(
+                                currentLanguage:
+                                    controller.selectedLanguage.value)
+                            .sentences
+                            .homePageSetup,
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => ManageTaskChampionCreds(),
+                              )).then((value) {});
+                        },
+                        textColor: TaskWarriorColors.purple,
+                      ),
                     ),
-                    action: SnackBarAction(
-                      label: SentenceManager(
-                              currentLanguage:
-                                  controller.selectedLanguage.value)
-                          .sentences
-                          .homePageSetup,
-                      onPressed: () {
-                        Get.toNamed(Routes.MANAGE_TASK_SERVER);
-                      },
-                      textColor: TaskWarriorColors.purple,
+                  );
+                }
+              } else {
+                if (server != null || credentials != null) {
+                  controller.synchronize(context, true);
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Obx(
+                        () => Text(
+                          SentenceManager(
+                                  currentLanguage:
+                                      controller.selectedLanguage.value)
+                              .sentences
+                              .homePageTaskWarriorNotConfigured,
+                          style: TextStyle(
+                            color: AppSettings.isDarkMode
+                                ? TaskWarriorColors.white
+                                : TaskWarriorColors.black,
+                          ),
+                        ),
+                      ),
+                      action: SnackBarAction(
+                        label: SentenceManager(
+                                currentLanguage:
+                                    controller.selectedLanguage.value)
+                            .sentences
+                            .homePageSetup,
+                        onPressed: () {
+                          Get.toNamed(Routes.MANAGE_TASK_SERVER);
+                        },
+                        textColor: TaskWarriorColors.purple,
+                      ),
                     ),
-                  ),
-                );
+                  );
+                }
               }
             },
           ),
