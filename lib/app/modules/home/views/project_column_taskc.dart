@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
-import 'package:taskwarrior/app/utils/theme/app_settings.dart'; // Import your necessary dependencies
+
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 
 class ProjectColumnTaskc extends StatelessWidget {
   const ProjectColumnTaskc({
