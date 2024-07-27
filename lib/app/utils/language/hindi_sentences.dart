@@ -208,4 +208,65 @@ class HindiSentences extends Sentences {
   @override
   String get deleteTaskWarning =>
       'यह क्रिया अपरिवर्तनीय है और यह सभी स्थानीय रूप से संग्रहीत कार्यों को हटा देगी।';
+
+
+  @override
+  String get profilePageProfile => 'प्रोफ़ाइल';
+  @override
+  String get profilePageProfiles => 'प्रोफ़ाइल्स';
+  @override
+  String get profilePageCurrentProfile => 'वर्तमान प्रोफ़ाइल';
+  @override
+  String get profilePageManageSelectedProfile => 'चुनी हुई प्रोफ़ाइल प्रबंधित करें';
+  @override
+  String get profilePageRenameAlias => 'उपनाम बदलें';
+
+  @override
+  String get profilePageConfigureTaskserver => 'टास्क सर्वर कॉन्फ़िगर करें';
+  @override
+  String get profilePageExportTasks => 'कार्य निर्यात करें';
+  @override
+  String get profilePageCopyConfigToNewProfile => 'नई प्रोफ़ाइल पर कॉन्फ़िगरेशन कॉपी करें';
+  @override
+  String get profilePageDeleteProfile => 'प्रोफ़ाइल हटाएँ';
+  @override
+  String get profilePageAddNewProfile => 'नई प्रोफ़ाइल जोड़ें';
+
+  @override
+  String get profilePageRenameAliasDialogueBoxTitle => 'उपनाम बदलें';
+  @override
+  String get profilePageRenameAliasDialogueBoxNewAlias => 'नया उपनाम';
+  @override
+  String get profilePageRenameAliasDialogueBoxCancel => 'रद्द करें';
+  @override
+  String get profilePageRenameAliasDialogueBoxSubmit => 'प्रस्तुत करें';
+
+  @override
+  String get manageTaskServerPageConfigureTaskserver => 'टास्क सर्वर कॉन्फ़िगर करें';
+  @override
+  String get manageTaskServerPageConfigureTASKRC => 'TASKRC कॉन्फ़िगर करें';
+  @override
+  String get manageTaskServerPageSetTaskRC => 'TaskRC सेट करें';
+  @override
+  String get manageTaskServerPageConfigureYourCertificate => 'अपने सर्टिफिकेट को कॉन्फ़िगर करें';
+  @override
+  String get manageTaskServerPageSelectCertificate => 'सर्टिफिकेट चुनें';
+  @override
+  String get manageTaskServerPageConfigureTaskserverKey => 'टास्क सर्वर की कॉन्फ़िगर करें';
+  @override
+  String get manageTaskServerPageSelectKey => 'कुंजी चुनें';
+  @override
+  String get manageTaskServerPageConfigureServerCertificate => 'सर्वर सर्टिफिकेट कॉन्फ़िगर करें';
+
+  @override
+  String get manageTaskServerPageConfigureTaskRCDialogueBoxTitle => 'TaskRC कॉन्फ़िगर करें';
+  @override
+  String get manageTaskServerPageConfigureTaskRCDialogueBoxSubtitle => 'TaskRC सामग्री पेस्ट करें या taskrc फ़ाइल चुनें';
+  @override
+  String get manageTaskServerPageConfigureTaskRCDialogueBoxInputFieldText => 'यहाँ अपनी TaskRC सामग्री पेस्ट करें';
+  @override
+  String get manageTaskServerPageConfigureTaskRCDialogueBoxOr => 'या';
+  @override
+  String get manageTaskServerPageConfigureTaskRCDialogueBoxSelectTaskRC => 'TaskRC फ़ाइल चुनें';
+
 }

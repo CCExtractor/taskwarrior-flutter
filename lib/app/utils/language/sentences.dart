@@ -131,4 +131,10 @@ abstract class Sentences {
   String get manageTaskServerPageConfigureTaskserverKey;
   String get manageTaskServerPageSelectKey;
   String get manageTaskServerPageConfigureServerCertificate;
+
+  String get manageTaskServerPageConfigureTaskRCDialogueBoxTitle;
+  String get manageTaskServerPageConfigureTaskRCDialogueBoxSubtitle;
+  String get manageTaskServerPageConfigureTaskRCDialogueBoxInputFieldText;
+  String get manageTaskServerPageConfigureTaskRCDialogueBoxOr;
+  String get manageTaskServerPageConfigureTaskRCDialogueBoxSelectTaskRC;
 }
