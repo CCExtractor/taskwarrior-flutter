@@ -259,13 +259,20 @@ class EnglishSentences extends Sentences {
       'Configure Server Certificate';
 
   @override
-  String get manageTaskServerPageConfigureTaskRCDialogueBoxTitle => 'Configure TaskRC';
+  String get manageTaskServerPageConfigureTaskRCDialogueBoxTitle =>
+      'Configure TaskRC';
   @override
-  String get manageTaskServerPageConfigureTaskRCDialogueBoxSubtitle => 'Paste the TaskRC content or select taskrc file';
+  String get manageTaskServerPageConfigureTaskRCDialogueBoxSubtitle =>
+      'Paste the TaskRC content or select taskrc file';
   @override
-  String get manageTaskServerPageConfigureTaskRCDialogueBoxInputFieldText => 'Paste your TaskRC content here';
+  String get manageTaskServerPageConfigureTaskRCDialogueBoxInputFieldText =>
+      'Paste your TaskRC content here';
   @override
   String get manageTaskServerPageConfigureTaskRCDialogueBoxOr => 'Or';
   @override
-  String get manageTaskServerPageConfigureTaskRCDialogueBoxSelectTaskRC => 'Select TaskRC file';
+  String get manageTaskServerPageConfigureTaskRCDialogueBoxSelectTaskRC =>
+      'Select TaskRC file';
+  @override
+  String get manageTaskServerPageTaskRCFileIsVerified =>
+      'Task RC File Is Verified';
 }

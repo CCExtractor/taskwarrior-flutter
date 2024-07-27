@@ -261,6 +261,10 @@ class MarathiSentences extends Sentences {
   @override
   String get manageTaskServerPageConfigureServerCertificate =>
       'सर्व्हर सर्टिफिकेट कॉन्फिगर करा';
+      @override
+String get manageTaskServerPageTaskRCFileIsVerified =>
+    'Task RC फाइल पडताळली गेली आहे';
+
 
   @override
   String get manageTaskServerPageConfigureTaskRCDialogueBoxTitle =>

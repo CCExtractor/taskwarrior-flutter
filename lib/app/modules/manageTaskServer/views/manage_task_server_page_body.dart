@@ -34,7 +34,9 @@ class ManageTaskServerPageBody extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Configure TASKRC",
+                  SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                      .sentences
+                      .manageTaskServerPageConfigureTASKRC,
                   style: TextStyle(
                     color: AppSettings.isDarkMode
                         ? TaskWarriorColors.white
@@ -188,10 +190,10 @@ class ManageTaskServerPageBody extends StatelessWidget {
                                           },
                                           child: Text(
                                             SentenceManager(
-                                                  currentLanguage: AppSettings
-                                                      .selectedLanguage)
-                                              .sentences
-                                              .manageTaskServerPageConfigureTaskRCDialogueBoxSelectTaskRC,
+                                                    currentLanguage: AppSettings
+                                                        .selectedLanguage)
+                                                .sentences
+                                                .manageTaskServerPageConfigureTaskRCDialogueBoxSelectTaskRC,
                                             style: TextStyle(
                                               color: AppSettings.isDarkMode
                                                   ? TaskWarriorColors.white
@@ -224,8 +226,16 @@ class ManageTaskServerPageBody extends StatelessWidget {
                       children: [
                         Text(
                           controller.taskrcContentController.text.isEmpty
-                              ? "Set TaskRc"
-                              : "Taskrc file is verified",
+                              ? SentenceManager(
+                                      currentLanguage:
+                                          AppSettings.selectedLanguage)
+                                  .sentences
+                                  .manageTaskServerPageSetTaskRC
+                              : SentenceManager(
+                                      currentLanguage:
+                                          AppSettings.selectedLanguage)
+                                  .sentences
+                                  .manageTaskServerPageTaskRCFileIsVerified,
                           style: TextStyle(
                             color: AppSettings.isDarkMode
                                 ? TaskWarriorColors.white
@@ -466,19 +476,49 @@ class ManageTaskServerPageBody extends StatelessWidget {
                     storage: controller.storage,
                     pem: pem,
                     optionString: pem == "taskd.certificate"
-                        ? "Configure your certificate"
+                        ? SentenceManager(
+                                currentLanguage: AppSettings.selectedLanguage)
+                            .sentences
+                            .manageTaskServerPageConfigureYourCertificate
                         : pem == "taskd.key"
-                            ? "Configure TaskServer key"
+                            ? SentenceManager(
+                                    currentLanguage:
+                                        AppSettings.selectedLanguage)
+                                .sentences
+                                .manageTaskServerPageConfigureTaskserverKey
                             : pem == "taskd.ca"
-                                ? "Configure Server Certificate"
-                                : "Configure Server Certificate",
+                                ? SentenceManager(
+                                        currentLanguage:
+                                            AppSettings.selectedLanguage)
+                                    .sentences
+                                    .manageTaskServerPageConfigureServerCertificate
+                                : SentenceManager(
+                                        currentLanguage:
+                                            AppSettings.selectedLanguage)
+                                    .sentences
+                                    .manageTaskServerPageConfigureServerCertificate,
                     listTileTitle: pem == "taskd.certificate"
-                        ? "Select Certificate"
+                        ? SentenceManager(
+                                currentLanguage: AppSettings.selectedLanguage)
+                            .sentences
+                            .manageTaskServerPageSelectCertificate
                         : pem == "taskd.key"
-                            ? "Select key"
+                            ? SentenceManager(
+                                    currentLanguage:
+                                        AppSettings.selectedLanguage)
+                                .sentences
+                                .manageTaskServerPageSelectKey
                             : pem == "taskd.ca"
-                                ? "Select Certificate"
-                                : "Select Certificate",
+                                ? SentenceManager(
+                                        currentLanguage:
+                                            AppSettings.selectedLanguage)
+                                    .sentences
+                                    .manageTaskServerPageSelectCertificate
+                                : SentenceManager(
+                                        currentLanguage:
+                                            AppSettings.selectedLanguage)
+                                    .sentences
+                                    .manageTaskServerPageSelectCertificate,
                     onTapCallBack: controller.onTapPEMWidget,
                     onLongPressCallBack: controller.onLongPressPEMWidget,
                   ),
