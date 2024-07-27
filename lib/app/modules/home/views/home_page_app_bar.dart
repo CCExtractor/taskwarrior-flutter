@@ -10,7 +10,7 @@ import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/taskchampion/credentials_storage.dart';
 import 'package:taskwarrior/app/utils/taskchampion/taskchampion.dart';
 import 'package:taskwarrior/app/utils/taskserver/taskserver.dart';
-import 'package:taskwarrior/app/utils/theme/app_settings.dart';
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 
 import '../controllers/home_controller.dart';
 

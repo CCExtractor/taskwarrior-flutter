@@ -7,7 +7,8 @@ import 'package:taskwarrior/app/modules/reports/views/burn_down_monthly_taskc.da
 import 'package:taskwarrior/app/modules/reports/views/burn_down_weekly_taskc.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
-import 'package:taskwarrior/app/utils/theme/app_settings.dart';
+
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/api_service.dart';
 
 class ReportsHomeTaskc extends StatelessWidget {

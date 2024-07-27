@@ -7,7 +7,7 @@ import 'package:taskwarrior/app/modules/about/views/about_page_body.dart';
 
 import '../controllers/about_controller.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
-import 'package:taskwarrior/app/utils/theme/app_settings.dart';
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 
 class AboutView extends GetView<AboutController> {
   const AboutView({super.key});

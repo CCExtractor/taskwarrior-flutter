@@ -6,7 +6,8 @@ import 'package:taskwarrior/api_service.dart';
 import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
-import 'package:taskwarrior/app/utils/theme/app_settings.dart';
+
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 
 class AddTaskToTaskcBottomSheet extends StatelessWidget {
   final HomeController homeController;
