@@ -237,4 +237,24 @@ class EnglishSentences extends Sentences {
   String get profilePageRenameAliasDialogueBoxCancel => 'Cancel';
   @override
   String get profilePageRenameAliasDialogueBoxSubmit => 'Submit';
+
+  @override
+  String get manageTaskServerPageConfigureTaskserver => 'Configure Task Server';
+  @override
+  String get manageTaskServerPageConfigureTASKRC => 'Configure TASKRC';
+  @override
+  String get manageTaskServerPageSetTaskRC => 'Set TaskRC';
+  @override
+  String get manageTaskServerPageConfigureYourCertificate =>
+      'Configure Your Certificate';
+  @override
+  String get manageTaskServerPageSelectCertificate => 'Select Certificate';
+  @override
+  String get manageTaskServerPageConfigureTaskserverKey =>
+      'Configure Task Server Key';
+  @override
+  String get manageTaskServerPageSelectKey => 'Select Key';
+  @override
+  String get manageTaskServerPageConfigureServerCertificate =>
+      'Configure Server Certificate';
 }

@@ -122,4 +122,13 @@ abstract class Sentences {
   String get profilePageRenameAliasDialogueBoxNewAlias;
   String get profilePageRenameAliasDialogueBoxCancel;
   String get profilePageRenameAliasDialogueBoxSubmit;
+
+  String get manageTaskServerPageConfigureTaskserver;
+  String get manageTaskServerPageConfigureTASKRC;
+  String get manageTaskServerPageSetTaskRC;
+  String get manageTaskServerPageConfigureYourCertificate;
+  String get manageTaskServerPageSelectCertificate;
+  String get manageTaskServerPageConfigureTaskserverKey;
+  String get manageTaskServerPageSelectKey;
+  String get manageTaskServerPageConfigureServerCertificate;
 }
