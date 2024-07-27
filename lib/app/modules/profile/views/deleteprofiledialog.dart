@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:taskwarrior/app/modules/splash/controllers/splash_controller.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
 class DeleteProfileDialog extends StatelessWidget {
@@ -23,7 +24,10 @@ class DeleteProfileDialog extends StatelessWidget {
           child: Utils.showAlertDialog(
             scrollable: true,
             title: Text(
-              'Delete Profile?',
+              SentenceManager(
+                          currentLanguage: AppSettings.selectedLanguage)
+                      .sentences
+                      .profilePageDeleteProfile,
               style: TextStyle(
                 color: AppSettings.isDarkMode
                     ? TaskWarriorColors.white
