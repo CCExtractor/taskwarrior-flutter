@@ -106,4 +106,20 @@ abstract class Sentences {
 
   String get reportsPageNoTasksFound;
   String get reportsPageAddTasksToSeeReports;
+
+  String get profilePageProfile;
+  String get profilePageProfiles;
+  String get profilePageCurrentProfile;
+  String get profilePageManageSelectedProfile;
+  String get profilePageRenameAlias;
+  String get profilePageConfigureTaskserver;
+  String get profilePageExportTasks;
+  String get profilePageCopyConfigToNewProfile;
+  String get profilePageDeleteProfile;
+  String get profilePageAddNewProfile;
+
+  String get profilePageRenameAliasDialogueBoxTitle;
+  String get profilePageRenameAliasDialogueBoxNewAlias;
+  String get profilePageRenameAliasDialogueBoxCancel;
+  String get profilePageRenameAliasDialogueBoxSubmit;
 }

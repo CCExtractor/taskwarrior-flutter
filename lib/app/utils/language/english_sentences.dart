@@ -206,4 +206,35 @@ class EnglishSentences extends Sentences {
   @override
   String get deleteTaskWarning =>
       'The action is irreversible and will delete all the tasks that are stored locally.';
+
+  @override
+  String get profilePageProfile => 'Profile';
+  @override
+  String get profilePageProfiles => 'Profiles';
+  @override
+  String get profilePageCurrentProfile => 'Current Profile';
+  @override
+  String get profilePageManageSelectedProfile => 'Manage Selected Profile';
+  @override
+  String get profilePageRenameAlias => 'Rename Alias';
+
+  @override
+  String get profilePageConfigureTaskserver => 'Configure Taskserver';
+  @override
+  String get profilePageExportTasks => 'Export Tasks';
+  @override
+  String get profilePageCopyConfigToNewProfile => 'Copy Config To New Profile';
+  @override
+  String get profilePageDeleteProfile => 'Delete Profile';
+  @override
+  String get profilePageAddNewProfile => 'Add New Profile';
+
+  @override
+  String get profilePageRenameAliasDialogueBoxTitle => 'Rename Alias';
+  @override
+  String get profilePageRenameAliasDialogueBoxNewAlias => 'New Alias';
+  @override
+  String get profilePageRenameAliasDialogueBoxCancel => 'Cancel';
+  @override
+  String get profilePageRenameAliasDialogueBoxSubmit => 'Submit';
 }
