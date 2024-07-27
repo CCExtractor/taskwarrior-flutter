@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
@@ -163,6 +165,7 @@ class SettingsController extends GetxController {
   RxBool isSyncOnTaskCreateActivel = false.obs;
   RxBool delaytask = false.obs;
   RxBool change24hr = false.obs;
+  RxBool taskchampion = false.obs;
   RxBool isDarkModeOn = false.obs;
 
   void initDarkMode() {
@@ -177,6 +180,7 @@ class SettingsController extends GetxController {
         prefs.getBool('sync-OnTaskCreate') ?? false;
     delaytask.value = prefs.getBool('delaytask') ?? false;
     change24hr.value = prefs.getBool('24hourformate') ?? false;
+    taskchampion.value = prefs.getBool('taskc') ?? false;
     initDarkMode();
     baseDirectory.value = await getBaseDirectory();
     super.onInit();

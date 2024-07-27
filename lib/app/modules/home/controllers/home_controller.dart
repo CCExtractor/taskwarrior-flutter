@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:loggy/loggy.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:taskwarrior/api_service.dart';
 import 'package:taskwarrior/app/models/filters.dart';
 
 import 'package:taskwarrior/app/models/json/task.dart';
@@ -22,6 +23,7 @@ import 'package:taskwarrior/app/tour/filter_drawer_tour.dart';
 import 'package:taskwarrior/app/tour/home_page_tour.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/language/supported_language.dart';
+import 'package:taskwarrior/app/utils/taskchampion/credentials_storage.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/comparator.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/projects.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/query.dart';
@@ -49,6 +51,8 @@ class HomeController extends GetxController {
   final Rx<SupportedLanguage> selectedLanguage = SupportedLanguage.english.obs;
   final ScrollController scrollController = ScrollController();
   final RxBool showbtn = false.obs;
+  late TaskDatabase taskdb;
+  var tasks = <Tasks>[].obs;
 
   @override
   void onInit() {
@@ -66,6 +70,45 @@ class HomeController extends GetxController {
     if (Platform.isAndroid) {
       handleHomeWidgetClicked();
     }
+    taskdb = TaskDatabase();
+    taskdb.open();
+    getUniqueProjects();
+    _loadTaskChampion();
+    fetchTasksFromDB();
+  }
+
+  Future<List<String>> getUniqueProjects() async {
+    var taskDatabase = TaskDatabase();
+    List<String> uniqueProjects = await taskDatabase.fetchUniqueProjects();
+    debugPrint('Unique projects: $uniqueProjects');
+    return uniqueProjects;
+  }
+
+  Future<void> deleteAllTasksInDB() async {
+    var taskDatabase = TaskDatabase();
+    await taskDatabase.deleteAllTasksInDB();
+    debugPrint('Deleted all tasks from db');
+  }
+
+  Future<void> refreshTasks(String clientId, String encryptionSecret) async {
+    TaskDatabase taskDatabase = TaskDatabase();
+    await taskDatabase.open();
+    List<Tasks> tasksFromServer = await fetchTasks(clientId, encryptionSecret);
+    await updateTasksInDatabase(tasksFromServer);
+    List<Tasks> fetchedTasks = await taskDatabase.fetchTasksFromDatabase();
+    tasks.value = fetchedTasks;
+  }
+
+  Future<void> fetchTasksFromDB() async {
+    TaskDatabase taskDatabase = TaskDatabase();
+    await taskDatabase.open();
+    List<Tasks> fetchedTasks = await taskDatabase.fetchTasksFromDatabase();
+    tasks.value = fetchedTasks;
+  }
+
+  Future<void> _loadTaskChampion() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    taskchampion.value = prefs.getBool('taskchampion') ?? false;
   }
 
   void addListenerToScrollController() {
@@ -425,9 +468,12 @@ class HomeController extends GetxController {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     bool? value;
     value = prefs.getBool('sync-onStart') ?? false;
-
+    String? clientId, encryptionSecret;
+    clientId = await CredentialsStorage.getClientId();
+    encryptionSecret = await CredentialsStorage.getEncryptionSecret();
     if (value) {
       synchronize(context, false);
+      refreshTasks(clientId!, encryptionSecret!);
     } else {}
   }
 
@@ -435,11 +481,12 @@ class HomeController extends GetxController {
   RxBool syncOnTaskCreate = false.obs;
   RxBool delaytask = false.obs;
   RxBool change24hr = false.obs;
+  RxBool taskchampion = false.obs;
 
   // dialogue box
-
   final formKey = GlobalKey<FormState>();
   final namecontroller = TextEditingController();
+  final projectcontroller = TextEditingController();
   var due = Rxn<DateTime>();
   RxString dueString = ''.obs;
   RxString priority = 'M'.obs;
@@ -505,7 +552,7 @@ class HomeController extends GetxController {
   void initLanguageAndDarkMode() {
     isDarkModeOn.value = AppSettings.isDarkMode;
     selectedLanguage.value = AppSettings.selectedLanguage;
-    print("called and value is${isDarkModeOn.value}");
+    // print("called and value is${isDarkModeOn.value}");
   }
 
   final addKey = GlobalKey();
@@ -557,6 +604,7 @@ class HomeController extends GetxController {
 
   final GlobalKey statusKey = GlobalKey();
   final GlobalKey projectsKey = GlobalKey();
+  final GlobalKey projectsKeyTaskc = GlobalKey();
   final GlobalKey filterTagKey = GlobalKey();
   final GlobalKey sortByKey = GlobalKey();
 
@@ -565,6 +613,7 @@ class HomeController extends GetxController {
       targets: filterDrawer(
         statusKey: statusKey,
         projectsKey: projectsKey,
+        projectsKeyTaskc: projectsKeyTaskc,
         filterTagKey: filterTagKey,
         sortByKey: sortByKey,
       ),

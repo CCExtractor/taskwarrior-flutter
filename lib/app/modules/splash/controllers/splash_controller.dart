@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'dart:io';
 
 import 'package:get/get.dart';
@@ -95,9 +97,9 @@ class SplashController extends GetxController {
   void sendToNextPage() async {
     await checkOnboardingStatus();
     if (hasCompletedOnboarding.value) {
-      Get.toNamed(Routes.HOME);
+      Get.offNamed(Routes.HOME);
     } else {
-      Get.toNamed(Routes.ONBOARDING);
+      Get.offNamed(Routes.ONBOARDING);
     }
   }
 }

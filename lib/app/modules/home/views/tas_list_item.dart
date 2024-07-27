@@ -32,6 +32,7 @@ class TaskListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_element
     void saveChanges() async {
       var now = DateTime.now().toUtc();
       modify.save(

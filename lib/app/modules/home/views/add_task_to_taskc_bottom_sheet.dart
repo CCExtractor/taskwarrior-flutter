@@ -1,25 +1,20 @@
-// ignore_for_file: use_build_context_synchronously
-import 'dart:developer';
-import 'dart:io';
-
+// ignore_for_file: use_build_context_synchronously, file_names
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:taskwarrior/api_service.dart';
 import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
-import 'package:taskwarrior/app/modules/home/controllers/widget.controller.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
-import 'package:taskwarrior/app/utils/taskfunctions/taskparser.dart';
-import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
-class AddTaskBottomSheet extends StatelessWidget {
+class AddTaskToTaskcBottomSheet extends StatelessWidget {
   final HomeController homeController;
-  const AddTaskBottomSheet({required this.homeController, super.key});
+  const AddTaskToTaskcBottomSheet({super.key, required this.homeController});
 
   @override
   Widget build(BuildContext context) {
+    const title = 'Add Task';
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Center(
@@ -36,7 +31,7 @@ class AddTaskBottomSheet extends StatelessWidget {
                 : TaskWarriorColors.kLightDialogBackGroundColor,
             title: Center(
               child: Text(
-                'Add Task',
+                title,
                 style: TextStyle(
                   color: AppSettings.isDarkMode
                       ? TaskWarriorColors.white
@@ -53,81 +48,24 @@ class AddTaskBottomSheet extends StatelessWidget {
                   children: <Widget>[
                     const SizedBox(height: 8),
                     buildName(),
+                    const SizedBox(height: 8),
+                    buildProject(),
                     const SizedBox(height: 12),
                     buildDueDate(context),
                     const SizedBox(height: 8),
                     buildPriority(),
-                    buildTags(),
                   ],
                 ),
               ),
             ),
             actions: <Widget>[
-              buildCancelButton(context, homeController),
+              buildCancelButton(context),
               buildAddButton(context),
             ],
           ),
         ),
       ),
     );
-  }
-
-  Widget buildTags() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Obx(
-          () => Wrap(
-            spacing: 8.0,
-            runSpacing: 4.0,
-            children: buildTagChips(),
-          ),
-        ),
-        Row(
-          children: [
-            Expanded(
-              child: TextFormField(
-                controller: homeController.tagcontroller,
-                style: TextStyle(
-                  color: AppSettings.isDarkMode
-                      ? TaskWarriorColors.white
-                      : TaskWarriorColors.black,
-                ),
-                decoration: InputDecoration(
-                  hintText: 'Add tags',
-                  hintStyle: TextStyle(
-                    color: AppSettings.isDarkMode
-                        ? TaskWarriorColors.white
-                        : TaskWarriorColors.black,
-                  ),
-                ),
-                onFieldSubmitted: (tag) {
-                  addTag(tag.trim());
-                },
-              ),
-            ),
-            // Replace ElevatedButton with IconButton
-            IconButton(
-              onPressed: () {
-                addTag(homeController.tagcontroller.text.trim());
-              },
-              icon: const Icon(Icons.add), // Plus icon
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  List<Widget> buildTagChips() {
-    return homeController.tags.map<Widget>((tag) {
-      return InputChip(
-        label: Text(tag),
-        onDeleted: () {
-          removeTag(tag);
-        },
-      );
-    }).toList();
   }
 
   Widget buildName() => TextFormField(
@@ -151,6 +89,24 @@ class AddTaskBottomSheet extends StatelessWidget {
             : null,
       );
 
+  Widget buildProject() => TextFormField(
+        autofocus: true,
+        controller: homeController.projectcontroller,
+        style: TextStyle(
+          color: AppSettings.isDarkMode
+              ? TaskWarriorColors.white
+              : TaskWarriorColors.black,
+        ),
+        decoration: InputDecoration(
+          hintText: 'Enter Project',
+          hintStyle: TextStyle(
+            color: AppSettings.isDarkMode
+                ? TaskWarriorColors.white
+                : TaskWarriorColors.black,
+          ),
+        ),
+      );
+
   Widget buildDueDate(BuildContext context) => Row(
         children: [
           Text(
@@ -165,8 +121,7 @@ class AddTaskBottomSheet extends StatelessWidget {
           ),
           Expanded(
             child: GestureDetector(
-                child: Obx(
-              () => TextFormField(
+              child: TextFormField(
                 style: homeController.inThePast.value
                     ? TextStyle(color: TaskWarriorColors.red)
                     : TextStyle(
@@ -175,8 +130,11 @@ class AddTaskBottomSheet extends StatelessWidget {
                             : TaskWarriorColors.black,
                       ),
                 readOnly: true,
-                controller:
-                    TextEditingController(text: homeController.dueString.value),
+                controller: TextEditingController(
+                  text: (homeController.due.value != null)
+                      ? homeController.dueString.value
+                      : null,
+                ),
                 decoration: InputDecoration(
                   hintText: 'Select due date',
                   hintStyle: homeController.inThePast.value
@@ -186,8 +144,6 @@ class AddTaskBottomSheet extends StatelessWidget {
                               ? TaskWarriorColors.white
                               : TaskWarriorColors.black,
                         ),
-                  contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 12.0, vertical: 16.0),
                 ),
                 onTap: () async {
                   var date = await showDatePicker(
@@ -238,7 +194,7 @@ class AddTaskBottomSheet extends StatelessWidget {
                                     brightness: Brightness.dark,
                                     primary: TaskWarriorColors.white,
                                     onPrimary: TaskWarriorColors.black,
-                                    secondary: TaskWarriorColors.grey,
+                                    secondary: TaskWarriorColors.black,
                                     onSecondary: TaskWarriorColors.white,
                                     error: TaskWarriorColors.red,
                                     onError: TaskWarriorColors.black,
@@ -249,7 +205,7 @@ class AddTaskBottomSheet extends StatelessWidget {
                                     brightness: Brightness.light,
                                     primary: TaskWarriorColors.black,
                                     onPrimary: TaskWarriorColors.white,
-                                    secondary: TaskWarriorColors.grey,
+                                    secondary: TaskWarriorColors.white,
                                     onSecondary: TaskWarriorColors.black,
                                     error: TaskWarriorColors.red,
                                     onError: TaskWarriorColors.white,
@@ -257,19 +213,18 @@ class AddTaskBottomSheet extends StatelessWidget {
                                     onSurface: TaskWarriorColors.black,
                                   ),
                           ),
-                          child: Obx(() => MediaQuery(
+                          child: MediaQuery(
                               data: MediaQuery.of(context).copyWith(
                                 alwaysUse24HourFormat:
                                     homeController.change24hr.value,
                               ),
-                              child: child!)),
+                              child: child!),
                         );
                       },
                       context: context,
                       initialTime: TimeOfDay.fromDateTime(
                           homeController.due.value ?? DateTime.now()),
                     );
-                    // print("date$date Time : $time");
                     if (time != null) {
                       var dateTime = date.add(
                         Duration(
@@ -277,16 +232,10 @@ class AddTaskBottomSheet extends StatelessWidget {
                           minutes: time.minute,
                         ),
                       );
-                      // print(dateTime);
                       homeController.due.value = dateTime.toUtc();
-
-                      // print("due value ${homeController.due}");
                       homeController.dueString.value =
-                          DateFormat("dd-MM-yyyy HH:mm").format(dateTime);
-                      // print(homeController.dueString.value);
+                          DateFormat("yyyy-MM-dd").format(dateTime);
                       if (dateTime.isBefore(DateTime.now())) {
-                        //Try changing the color. in the settings and Due display.
-
                         homeController.inThePast.value = true;
 
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -306,13 +255,11 @@ class AddTaskBottomSheet extends StatelessWidget {
                       } else {
                         homeController.inThePast.value = false;
                       }
-
-                      // setState(() {});
                     }
                   }
                 },
               ),
-            )),
+            ),
           ),
         ],
       );
@@ -333,44 +280,40 @@ class AddTaskBottomSheet extends StatelessWidget {
                 ),
                 textAlign: TextAlign.left,
               ),
-              Obx(
-                () => DropdownButton<String>(
-                  dropdownColor: AppSettings.isDarkMode
+              DropdownButton<String>(
+                dropdownColor: AppSettings.isDarkMode
+                    ? TaskWarriorColors.kdialogBackGroundColor
+                    : TaskWarriorColors.kLightDialogBackGroundColor,
+                value: homeController.priority.value,
+                elevation: 16,
+                style: GoogleFonts.poppins(
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.white
+                      : TaskWarriorColors.black,
+                ),
+                underline: Container(
+                  height: 1.5,
+                  color: AppSettings.isDarkMode
                       ? TaskWarriorColors.kdialogBackGroundColor
                       : TaskWarriorColors.kLightDialogBackGroundColor,
-                  value: homeController.priority.value,
-                  elevation: 16,
-                  style: GoogleFonts.poppins(
-                    color: AppSettings.isDarkMode
-                        ? TaskWarriorColors.white
-                        : TaskWarriorColors.black,
-                  ),
-                  underline: Container(
-                    height: 1.5,
-                    color: AppSettings.isDarkMode
-                        ? TaskWarriorColors.kdialogBackGroundColor
-                        : TaskWarriorColors.kLightDialogBackGroundColor,
-                  ),
-                  onChanged: (String? newValue) {
-                    homeController.priority.value = newValue!;
-                  },
-                  items: <String>['H', 'M', 'L', 'None']
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text('  $value'),
-                    );
-                  }).toList(),
                 ),
+                onChanged: (String? newValue) {
+                  homeController.priority.value = newValue!;
+                },
+                items: <String>['H', 'M', 'L', 'None']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text('  $value'),
+                  );
+                }).toList(),
               )
             ],
           ),
         ],
       );
 
-  Widget buildCancelButton(
-          BuildContext context, HomeController homeController) =>
-      TextButton(
+  Widget buildCancelButton(BuildContext context) => TextButton(
         child: Text(
           'Cancel',
           style: TextStyle(
@@ -379,15 +322,7 @@ class AddTaskBottomSheet extends StatelessWidget {
                 : TaskWarriorColors.black,
           ),
         ),
-        onPressed: () {
-          Navigator.of(context).pop("cancel");
-          homeController.namecontroller.text = '';
-          homeController.dueString.value = "";
-          homeController.priority.value = 'M';
-          homeController.tagcontroller.text = '';
-          homeController.tags.value = [];
-          homeController.update();
-        },
+        onPressed: () => Navigator.of(context).pop("cancel"),
       );
 
   Widget buildAddButton(BuildContext context) {
@@ -401,94 +336,41 @@ class AddTaskBottomSheet extends StatelessWidget {
         ),
       ),
       onPressed: () async {
-        // print(homeController.formKey.currentState);
         if (homeController.formKey.currentState!.validate()) {
-          try {
-            var task = taskParser(homeController.namecontroller.text)
-                .rebuild((b) => b..due = homeController.due.value)
-                .rebuild((p) => p..priority = homeController.priority.value);
-            if (homeController.tagcontroller.text != "") {
-              homeController.tags.add(homeController.tagcontroller.text.trim());
-            }
-            if (homeController.tags.isNotEmpty) {
-              task = task.rebuild((t) => t..tags.replace(homeController.tags));
-            }
-            Get.find<HomeController>().mergeTask(task);
-            // print(task);
-
-            // StorageWidget.of(context).mergeTask(task);
-            homeController.namecontroller.text = '';
-            homeController.dueString.value = "";
-            homeController.priority.value = 'M';
-            homeController.tagcontroller.text = '';
-            homeController.tags.value = [];
-            homeController.update();
-            // Navigator.of(context).pop();
-            Get.back();
-            if (Platform.isAndroid) {
-              WidgetController widgetController =
-                  Get.put(WidgetController(context));
-              widgetController.fetchAllData();
-
-              widgetController.update();
-            }
-
-            homeController.update();
-
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(
-                  'Task Added Successfully. Tap to Edit',
-                  style: TextStyle(
-                    color: AppSettings.isDarkMode
-                        ? TaskWarriorColors.kprimaryTextColor
-                        : TaskWarriorColors.kLightPrimaryTextColor,
-                  ),
+          var task = Tasks(
+              description: homeController.namecontroller.text,
+              status: 'pending',
+              priority: homeController.priority.value,
+              entry: DateTime.now().toIso8601String(),
+              id: 0,
+              project: homeController.projectcontroller.text,
+              uuid: '',
+              urgency: 0,
+              due: homeController.dueString.value,
+              //   dueString.toIso8601String(),
+              end: '',
+              modified: 'r');
+          await homeController.taskdb.insertTask(task);
+          homeController.namecontroller.text = '';
+          homeController.due.value = null;
+          homeController.priority.value = 'M';
+          homeController.projectcontroller.text = '';
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(
+                'Task Added Successfully!',
+                style: TextStyle(
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.kprimaryTextColor
+                      : TaskWarriorColors.kLightPrimaryTextColor,
                 ),
-                backgroundColor: AppSettings.isDarkMode
-                    ? TaskWarriorColors.ksecondaryBackgroundColor
-                    : TaskWarriorColors.kLightSecondaryBackgroundColor,
-                duration: const Duration(seconds: 2)));
-
-            final SharedPreferences prefs =
-                await SharedPreferences.getInstance();
-            bool? value;
-            value = prefs.getBool('sync-OnTaskCreate') ?? false;
-            // late InheritedStorage storageWidget;
-            // storageWidget = StorageWidget.of(context);
-            var storageWidget = Get.find<HomeController>();
-            if (value) {
-              storageWidget.synchronize(context, true);
-            }
-          } on FormatException catch (e) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(
-                  e.message,
-                  style: TextStyle(
-                    color: AppSettings.isDarkMode
-                        ? TaskWarriorColors.kprimaryTextColor
-                        : TaskWarriorColors.kLightPrimaryTextColor,
-                  ),
-                ),
-                backgroundColor: AppSettings.isDarkMode
-                    ? TaskWarriorColors.ksecondaryBackgroundColor
-                    : TaskWarriorColors.kLightSecondaryBackgroundColor,
-                duration: const Duration(seconds: 2)));
-            log(e.toString());
-          }
+              ),
+              backgroundColor: AppSettings.isDarkMode
+                  ? TaskWarriorColors.ksecondaryBackgroundColor
+                  : TaskWarriorColors.kLightSecondaryBackgroundColor,
+              duration: const Duration(seconds: 2)));
+          Navigator.of(context).pop();
         }
       },
     );
-  }
-
-  void addTag(String tag) {
-    if (tag.isNotEmpty) {
-      String trimmedString = tag.trim();
-      homeController.tags.add(trimmedString);
-      homeController.tagcontroller.text = '';
-    }
-  }
-
-  void removeTag(String tag) {
-    homeController.tags.remove(tag);
   }
 }

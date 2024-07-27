@@ -188,4 +188,24 @@ class HindiSentences extends Sentences {
   @override
   String get reportsPageAddTasksToSeeReports =>
       'रिपोर्ट देखने के लिए कार्य जोड़ें';
+
+  @override
+  String get taskchampionTileDescription =>
+      'CCSync या Taskchampion सिंक सर्वर के साथ TaskWarrior सिंक पर स्विच करें';
+
+  @override
+  String get taskchampionTileTitle => 'Taskchampion सिंक';
+
+  @override
+  String get ccsyncCredentials => 'CCync क्रेडेन्शियल';
+
+  @override
+  String get deleteTaskConfirmation => 'कार्य हटाएं';
+
+  @override
+  String get deleteTaskTitle => 'सभी कार्य हटाएं?';
+
+  @override
+  String get deleteTaskWarning =>
+      'यह क्रिया अपरिवर्तनीय है और यह सभी स्थानीय रूप से संग्रहीत कार्यों को हटा देगी।';
 }

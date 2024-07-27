@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:taskwarrior/app/modules/settings/views/settings_page_taskchampion.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 
@@ -23,7 +24,7 @@ import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 
 class SettingsPageBody extends StatelessWidget {
   final SettingsController controller;
-  
+
   const SettingsPageBody({required this.controller, super.key});
 
   @override
@@ -112,6 +113,20 @@ class SettingsPageBody extends StatelessWidget {
                   .sentences
                   .settingsPageEnable24hrFormatDescription,
               trailing: SettingsPageEnable24hrFormatListTileTrailing(
+                controller: controller,
+              ),
+            ),
+            const Divider(),
+            SettingsPageListTile(
+              title: SentenceManager(
+                      currentLanguage: controller.selectedLanguage.value)
+                  .sentences
+                  .taskchampionTileTitle,
+              subTitle: SentenceManager(
+                      currentLanguage: controller.selectedLanguage.value)
+                  .sentences
+                  .taskchampionTileDescription,
+              trailing: SettingsPageTaskchampionTileListTileTrailing(
                 controller: controller,
               ),
             ),

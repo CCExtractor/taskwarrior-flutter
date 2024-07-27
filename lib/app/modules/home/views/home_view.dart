@@ -33,12 +33,6 @@ class HomeView extends GetView<HomeController> {
 
     controller.checkForSync(context);
 
-    // var taskData = controller.searchedTasks;
-
-    // var pendingFilter = controller.pendingFilter;
-    // var waitingFilter = controller.waitingFilter;
-    // var pendingTags = controller.pendingTags;
-
     return Obx(
       () => Scaffold(
         appBar: HomePageAppBar(
@@ -50,7 +44,9 @@ class HomeView extends GetView<HomeController> {
             ? TaskWarriorColors.kprimaryBackgroundColor
             : TaskWarriorColors.kLightPrimaryBackgroundColor,
         drawer: NavDrawer(homeController: controller),
-        body: HomePageBody(controller: controller),
+        body: HomePageBody(
+          controller: controller,
+        ),
         endDrawer: Obx(
           () => FilterDrawer(
             filters: controller.getFilters(),
