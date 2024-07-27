@@ -8,6 +8,7 @@ import 'package:taskwarrior/app/models/storage/set_config.dart';
 import 'package:taskwarrior/app/modules/manageTaskServer/views/pem_widget.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
@@ -76,7 +77,11 @@ class ManageTaskServerPageBody extends StatelessWidget {
                                           MainAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'Configure TaskRc',
+                                          SentenceManager(
+                                                  currentLanguage: AppSettings
+                                                      .selectedLanguage)
+                                              .sentences
+                                              .manageTaskServerPageConfigureTaskRCDialogueBoxTitle,
                                           style: TextStyle(
                                             fontWeight: TaskWarriorFonts.bold,
                                             color: AppSettings.isDarkMode
@@ -85,7 +90,11 @@ class ManageTaskServerPageBody extends StatelessWidget {
                                           ),
                                         ),
                                         Text(
-                                          'Paste the taskrc content or select taskrc file',
+                                          SentenceManager(
+                                                  currentLanguage: AppSettings
+                                                      .selectedLanguage)
+                                              .sentences
+                                              .manageTaskServerPageConfigureTaskRCDialogueBoxSubtitle,
                                           style: TextStyle(
                                             color: AppSettings.isDarkMode
                                                 ? TaskWarriorColors.white
@@ -107,44 +116,52 @@ class ManageTaskServerPageBody extends StatelessWidget {
                                                   .taskrcContentController,
                                               maxLines: 8,
                                               decoration: InputDecoration(
-                                                  counterStyle: TextStyle(
-                                                      color:
-                                                          AppSettings.isDarkMode
-                                                              ? TaskWarriorColors
-                                                                  .white
-                                                              : TaskWarriorColors
-                                                                  .black),
-                                                  suffixIconConstraints:
-                                                      const BoxConstraints(
-                                                    maxHeight: 24,
-                                                    maxWidth: 24,
-                                                  ),
-                                                  isDense: true,
-                                                  suffix: IconButton(
-                                                    onPressed: () async {
-                                                      controller
-                                                          .setContent(context);
-                                                    },
-                                                    icon: const Icon(
-                                                        Icons.content_paste),
-                                                  ),
-                                                  border:
-                                                      const OutlineInputBorder(),
-                                                  labelStyle:
-                                                      GoogleFonts.poppins(
-                                                          color: AppSettings
-                                                                  .isDarkMode
-                                                              ? TaskWarriorColors
-                                                                  .white
-                                                              : TaskWarriorColors
-                                                                  .black),
-                                                  labelText:
-                                                      'Paste your taskrc contents here'),
+                                                counterStyle: TextStyle(
+                                                    color:
+                                                        AppSettings.isDarkMode
+                                                            ? TaskWarriorColors
+                                                                .white
+                                                            : TaskWarriorColors
+                                                                .black),
+                                                suffixIconConstraints:
+                                                    const BoxConstraints(
+                                                  maxHeight: 24,
+                                                  maxWidth: 24,
+                                                ),
+                                                isDense: true,
+                                                suffix: IconButton(
+                                                  onPressed: () async {
+                                                    controller
+                                                        .setContent(context);
+                                                  },
+                                                  icon: const Icon(
+                                                      Icons.content_paste),
+                                                ),
+                                                border:
+                                                    const OutlineInputBorder(),
+                                                labelStyle: GoogleFonts.poppins(
+                                                    color:
+                                                        AppSettings.isDarkMode
+                                                            ? TaskWarriorColors
+                                                                .white
+                                                            : TaskWarriorColors
+                                                                .black),
+                                                labelText: SentenceManager(
+                                                        currentLanguage:
+                                                            AppSettings
+                                                                .selectedLanguage)
+                                                    .sentences
+                                                    .manageTaskServerPageConfigureTaskRCDialogueBoxInputFieldText,
+                                              ),
                                             ),
                                           ),
                                         ),
                                         Text(
-                                          "Or",
+                                          SentenceManager(
+                                                  currentLanguage: AppSettings
+                                                      .selectedLanguage)
+                                              .sentences
+                                              .manageTaskServerPageConfigureTaskRCDialogueBoxOr,
                                           style: TextStyle(
                                             color: AppSettings.isDarkMode
                                                 ? TaskWarriorColors.white
@@ -170,7 +187,11 @@ class ManageTaskServerPageBody extends StatelessWidget {
                                             Get.back();
                                           },
                                           child: Text(
-                                            'Select TASKRC file',
+                                            SentenceManager(
+                                                  currentLanguage: AppSettings
+                                                      .selectedLanguage)
+                                              .sentences
+                                              .manageTaskServerPageConfigureTaskRCDialogueBoxSelectTaskRC,
                                             style: TextStyle(
                                               color: AppSettings.isDarkMode
                                                   ? TaskWarriorColors.white
