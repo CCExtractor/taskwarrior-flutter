@@ -239,6 +239,12 @@ class EnglishSentences extends Sentences {
   String get profilePageRenameAliasDialogueBoxSubmit => 'Submit';
 
   @override
+  String get profilePageExportTasksDialogueTitle => 'Export format';
+  @override
+  String get profilePageExportTasksDialogueSubtitle =>
+      'Choose the export format';
+
+  @override
   String get manageTaskServerPageConfigureTaskserver => 'Configure Task Server';
   @override
   String get manageTaskServerPageConfigureTASKRC => 'Configure TASKRC';

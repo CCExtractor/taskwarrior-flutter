@@ -118,6 +118,9 @@ abstract class Sentences {
   String get profilePageDeleteProfile;
   String get profilePageAddNewProfile;
 
+  String get profilePageExportTasksDialogueTitle;
+  String get profilePageExportTasksDialogueSubtitle;
+
   String get profilePageRenameAliasDialogueBoxTitle;
   String get profilePageRenameAliasDialogueBoxNewAlias;
   String get profilePageRenameAliasDialogueBoxCancel;
@@ -138,5 +141,4 @@ abstract class Sentences {
   String get manageTaskServerPageConfigureTaskRCDialogueBoxInputFieldText;
   String get manageTaskServerPageConfigureTaskRCDialogueBoxOr;
   String get manageTaskServerPageConfigureTaskRCDialogueBoxSelectTaskRC;
-  
 }

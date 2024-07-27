@@ -242,6 +242,11 @@ class MarathiSentences extends Sentences {
   String get profilePageRenameAliasDialogueBoxSubmit => 'सादर करा';
 
   @override
+  String get profilePageExportTasksDialogueTitle => 'निर्यात प्रारूप';
+  @override
+  String get profilePageExportTasksDialogueSubtitle => 'निर्यात प्रारूप निवडा';
+
+  @override
   String get manageTaskServerPageConfigureTaskserver =>
       'टास्क सर्व्हर कॉन्फिगर करा';
   @override
@@ -261,10 +266,9 @@ class MarathiSentences extends Sentences {
   @override
   String get manageTaskServerPageConfigureServerCertificate =>
       'सर्व्हर सर्टिफिकेट कॉन्फिगर करा';
-      @override
-String get manageTaskServerPageTaskRCFileIsVerified =>
-    'Task RC फाइल पडताळली गेली आहे';
-
+  @override
+  String get manageTaskServerPageTaskRCFileIsVerified =>
+      'Task RC फाइल पडताळली गेली आहे';
 
   @override
   String get manageTaskServerPageConfigureTaskRCDialogueBoxTitle =>

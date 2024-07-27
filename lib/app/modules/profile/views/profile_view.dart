@@ -101,7 +101,10 @@ class ProfileView extends GetView<ProfileController> {
                     builder: (BuildContext context) {
                       return Utils.showAlertDialog(
                         title: Text(
-                          "Export Format",
+                          SentenceManager(
+                                currentLanguage: AppSettings.selectedLanguage)
+                            .sentences
+                            .profilePageExportTasksDialogueTitle,
                           style: TextStyle(
                             color: AppSettings.isDarkMode
                                 ? TaskWarriorColors.white
@@ -109,7 +112,10 @@ class ProfileView extends GetView<ProfileController> {
                           ),
                         ),
                         content: Text(
-                          "Choose the export format:",
+                          SentenceManager(
+                                currentLanguage: AppSettings.selectedLanguage)
+                            .sentences
+                            .profilePageExportTasksDialogueSubtitle,
                           style: TextStyle(
                             color: AppSettings.isDarkMode
                                 ? TaskWarriorColors.white

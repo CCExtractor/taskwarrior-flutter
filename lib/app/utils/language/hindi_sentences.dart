@@ -243,6 +243,11 @@ class HindiSentences extends Sentences {
   String get profilePageRenameAliasDialogueBoxSubmit => 'प्रस्तुत करें';
 
   @override
+  String get profilePageExportTasksDialogueTitle => 'निर्यात प्रारूप';
+  @override
+  String get profilePageExportTasksDialogueSubtitle => 'निर्यात प्रारूप चुनें';
+
+  @override
   String get manageTaskServerPageConfigureTaskserver =>
       'टास्क सर्वर कॉन्फ़िगर करें';
   @override
