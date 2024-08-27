@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
+
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
+import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
 import 'package:tuple/tuple.dart';
 
@@ -27,11 +30,41 @@ class ManageProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var triples = [
-      Tuple3(Icons.edit, 'Rename Alias', rename),
-      Tuple3(Icons.link, 'Configure Taskserver', configure),
-      Tuple3(Icons.upload, 'Export tasks', export),
-      Tuple3(Icons.copy, 'Copy config to new profile', copy),
-      Tuple3(Icons.delete, 'Delete profile', delete),
+      Tuple3(
+        Icons.edit,
+        SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+            .sentences
+            .profilePageRenameAlias,
+        rename,
+      ),
+      Tuple3(
+        Icons.link,
+        SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+            .sentences
+            .profilePageConfigureTaskserver,
+        configure,
+      ),
+      Tuple3(
+        Icons.upload,
+        SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+            .sentences
+            .profilePageExportTasks,
+        export,
+      ),
+      Tuple3(
+        Icons.copy,
+        SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+            .sentences
+            .profilePageCopyConfigToNewProfile,
+        copy,
+      ),
+      Tuple3(
+        Icons.delete,
+        SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+            .sentences
+            .profilePageDeleteProfile,
+        delete,
+      ),
     ];
 
     return ExpansionTile(
@@ -52,7 +85,9 @@ class ManageProfile extends StatelessWidget {
           ? TaskWarriorColors.white
           : TaskWarriorColors.black,
       title: Text(
-        'Manage selected profile',
+        SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+            .sentences
+            .profilePageManageSelectedProfile,
         style: GoogleFonts.poppins(
           fontWeight: TaskWarriorFonts.bold,
           fontSize: TaskWarriorFonts.fontSizeMedium,
