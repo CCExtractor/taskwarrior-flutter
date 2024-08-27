@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:built_collection/built_collection.dart';
 import 'package:get/get.dart';
 import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
@@ -46,7 +48,7 @@ class DetailRouteController extends GetxController {
   //                 'status': controller.modify.draft.status,
   //                 'entry': controller.modify.draft.entry,
   //                 'modified': controller.modify.draft.modified,
-                  // 'start': controller.modify.draft.start,
+  // 'start': controller.modify.draft.start,
   //                 'end': controller.modify.draft.end,
   //                 'due': controller.dueValue.value,
   //                 'wait': controller.modify.draft.wait,

@@ -187,4 +187,98 @@ class EnglishSentences extends Sentences {
   String get reportsPageNoTasksFound => 'No Tasks Found';
   @override
   String get reportsPageAddTasksToSeeReports => 'Add Tasks To See Reports';
+
+  @override
+  String get taskchampionTileDescription =>
+      'Switch to TaskWarrior sync with CCSync or Taskchampion Sync Server';
+  @override
+  String get taskchampionTileTitle => 'Taskchampion sync';
+
+  @override
+  String get ccsyncCredentials => 'CCync credentials';
+
+  @override
+  String get deleteTaskConfirmation => 'Delete Tasks';
+
+  @override
+  String get deleteTaskTitle => 'Delete All Tasks?';
+
+  @override
+  String get deleteTaskWarning =>
+      'The action is irreversible and will delete all the tasks that are stored locally.';
+
+  @override
+  String get profilePageProfile => 'Profile';
+  @override
+  String get profilePageProfiles => 'Profiles';
+  @override
+  String get profilePageCurrentProfile => 'Current Profile';
+  @override
+  String get profilePageManageSelectedProfile => 'Manage Selected Profile';
+  @override
+  String get profilePageRenameAlias => 'Rename Alias';
+
+  @override
+  String get profilePageConfigureTaskserver => 'Configure Taskserver';
+  @override
+  String get profilePageExportTasks => 'Export Tasks';
+  @override
+  String get profilePageCopyConfigToNewProfile => 'Copy Config To New Profile';
+  @override
+  String get profilePageDeleteProfile => 'Delete Profile';
+  @override
+  String get profilePageAddNewProfile => 'Add New Profile';
+
+  @override
+  String get profilePageRenameAliasDialogueBoxTitle => 'Rename Alias';
+  @override
+  String get profilePageRenameAliasDialogueBoxNewAlias => 'New Alias';
+  @override
+  String get profilePageRenameAliasDialogueBoxCancel => 'Cancel';
+  @override
+  String get profilePageRenameAliasDialogueBoxSubmit => 'Submit';
+
+  @override
+  String get profilePageExportTasksDialogueTitle => 'Export format';
+  @override
+  String get profilePageExportTasksDialogueSubtitle =>
+      'Choose the export format';
+
+  @override
+  String get manageTaskServerPageConfigureTaskserver => 'Configure Task Server';
+  @override
+  String get manageTaskServerPageConfigureTASKRC => 'Configure TASKRC';
+  @override
+  String get manageTaskServerPageSetTaskRC => 'Set TaskRC';
+  @override
+  String get manageTaskServerPageConfigureYourCertificate =>
+      'Configure Your Certificate';
+  @override
+  String get manageTaskServerPageSelectCertificate => 'Select Certificate';
+  @override
+  String get manageTaskServerPageConfigureTaskserverKey =>
+      'Configure Task Server Key';
+  @override
+  String get manageTaskServerPageSelectKey => 'Select Key';
+  @override
+  String get manageTaskServerPageConfigureServerCertificate =>
+      'Configure Server Certificate';
+
+  @override
+  String get manageTaskServerPageConfigureTaskRCDialogueBoxTitle =>
+      'Configure TaskRC';
+  @override
+  String get manageTaskServerPageConfigureTaskRCDialogueBoxSubtitle =>
+      'Paste the TaskRC content or select taskrc file';
+  @override
+  String get manageTaskServerPageConfigureTaskRCDialogueBoxInputFieldText =>
+      'Paste your TaskRC content here';
+  @override
+  String get manageTaskServerPageConfigureTaskRCDialogueBoxOr => 'Or';
+  @override
+  String get manageTaskServerPageConfigureTaskRCDialogueBoxSelectTaskRC =>
+      'Select TaskRC file';
+  @override
+  String get manageTaskServerPageTaskRCFileIsVerified =>
+      'Task RC File Is Verified';
 }

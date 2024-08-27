@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:taskwarrior/app/modules/splash/controllers/splash_controller.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
 class RenameProfileDialog extends StatelessWidget {
@@ -26,7 +27,10 @@ class RenameProfileDialog extends StatelessWidget {
         child: Utils.showAlertDialog(
           scrollable: true,
           title: Text(
-            'Rename Alias',
+            SentenceManager(
+                          currentLanguage: AppSettings.selectedLanguage)
+                      .sentences
+                      .profilePageRenameAliasDialogueBoxTitle,
             style: TextStyle(
               color: AppSettings.isDarkMode
                   ? TaskWarriorColors.white
@@ -47,7 +51,9 @@ class RenameProfileDialog extends StatelessWidget {
                 Get.back();
               },
               child: Text(
-                'Cancel',
+                SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+              .sentences
+              .profilePageRenameAliasDialogueBoxCancel,
                 style: TextStyle(
                   color: AppSettings.isDarkMode
                       ? TaskWarriorColors.white
@@ -65,7 +71,9 @@ class RenameProfileDialog extends StatelessWidget {
                 Get.back();
               },
               child: Text(
-                'Submit',
+                SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+              .sentences
+              .profilePageRenameAliasDialogueBoxSubmit,
                 style: TextStyle(
                   color: AppSettings.isDarkMode
                       ? TaskWarriorColors.black

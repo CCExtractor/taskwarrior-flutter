@@ -5,11 +5,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
 import 'package:taskwarrior/app/modules/home/views/home_page_nav_drawer_menu_item.dart';
 import 'package:taskwarrior/app/modules/home/views/theme_clipper.dart';
+import 'package:taskwarrior/app/modules/reports/views/reports_view_taskc.dart';
 import 'package:taskwarrior/app/routes/app_pages.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
+import 'package:taskwarrior/app/utils/taskchampion/taskchampion.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
 class NavDrawer extends StatelessWidget {
@@ -41,9 +43,11 @@ class NavDrawer extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    SentenceManager(currentLanguage: homeController.selectedLanguage.value)
-                .sentences
-                .homePageMenu,
+                    SentenceManager(
+                            currentLanguage:
+                                homeController.selectedLanguage.value)
+                        .sentences
+                        .homePageMenu,
                     style: TextStyle(
                       fontSize: TaskWarriorFonts.fontSizeExtraLarge,
                       fontWeight: TaskWarriorFonts.bold,
@@ -82,26 +86,130 @@ class NavDrawer extends StatelessWidget {
                   : TaskWarriorColors.kLightPrimaryBackgroundColor,
               height: Get.height * 0.03,
             ),
-            Obx(
-              () => NavDrawerMenuItem(
-                icon: Icons.person_rounded,
+            Visibility(
+              visible: homeController.taskchampion.value,
+              child: NavDrawerMenuItem(
+                icon: Icons.task_alt,
                 text: SentenceManager(
                   currentLanguage: homeController.selectedLanguage.value,
-                ).sentences.navDrawerProfile,
+                ).sentences.ccsyncCredentials,
                 onTap: () {
-                  Get.toNamed(Routes.PROFILE);
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ManageTaskChampionCreds(),
+                    ),
+                  );
                 },
               ),
             ),
-            Obx(
-              () => NavDrawerMenuItem(
-                icon: Icons.summarize,
-                text: SentenceManager(
-                  currentLanguage: homeController.selectedLanguage.value,
-                ).sentences.navDrawerReports,
-                onTap: () {
-                  Get.toNamed(Routes.REPORTS);
-                },
+            Visibility(
+              visible: homeController.taskchampion.value,
+              child: NavDrawerMenuItem(
+                  icon: Icons.delete,
+                  text: SentenceManager(
+                    currentLanguage: homeController.selectedLanguage.value,
+                  ).sentences.deleteTaskTitle,
+                  onTap: () {
+                    showDialog<void>(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Utils.showAlertDialog(
+                          title: Text(
+                            SentenceManager(
+                              currentLanguage:
+                                  homeController.selectedLanguage.value,
+                            ).sentences.deleteTaskConfirmation,
+                            style: TextStyle(
+                              color: AppSettings.isDarkMode
+                                  ? TaskWarriorColors.white
+                                  : TaskWarriorColors.black,
+                            ),
+                          ),
+                          content: Text(
+                            SentenceManager(
+                              currentLanguage:
+                                  homeController.selectedLanguage.value,
+                            ).sentences.deleteTaskWarning,
+                            style: TextStyle(
+                              color: AppSettings.isDarkMode
+                                  ? TaskWarriorColors.white
+                                  : TaskWarriorColors.black,
+                            ),
+                          ),
+                          actions: <Widget>[
+                            TextButton(
+                              child: Text(
+                                'Cancel',
+                                style: TextStyle(
+                                  color: AppSettings.isDarkMode
+                                      ? TaskWarriorColors.white
+                                      : TaskWarriorColors.black,
+                                ),
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).pop(); // Close the dialog
+                              },
+                            ),
+                            TextButton(
+                              child: Text(
+                                'Confirm',
+                                style: TextStyle(
+                                  color: AppSettings.isDarkMode
+                                      ? TaskWarriorColors.white
+                                      : TaskWarriorColors.black,
+                                ),
+                              ),
+                              onPressed: () {
+                                homeController.deleteAllTasksInDB();
+                                Navigator.of(context).pop(); // Close the dialog
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }),
+            ),
+            Visibility(
+              visible: !homeController.taskchampion.value,
+              child: Obx(
+                () => NavDrawerMenuItem(
+                  icon: Icons.person_rounded,
+                  text: SentenceManager(
+                    currentLanguage: homeController.selectedLanguage.value,
+                  ).sentences.navDrawerProfile,
+                  onTap: () {
+                    Get.toNamed(Routes.PROFILE);
+                  },
+                ),
+              ),
+            ),
+            Visibility(
+              visible: !homeController.taskchampion.value,
+              child: Obx(
+                () => NavDrawerMenuItem(
+                  icon: Icons.summarize,
+                  text: SentenceManager(
+                    currentLanguage: homeController.selectedLanguage.value,
+                  ).sentences.navDrawerReports,
+                  onTap: () {
+                    Get.toNamed(Routes.REPORTS);
+                  },
+                ),
+              ),
+            ),
+            Visibility(
+              visible: homeController.taskchampion.value,
+              child: Obx(
+                () => NavDrawerMenuItem(
+                  icon: Icons.summarize,
+                  text: SentenceManager(
+                    currentLanguage: homeController.selectedLanguage.value,
+                  ).sentences.navDrawerReports,
+                  onTap: () {
+                    Get.to(() => ReportsHomeTaskc());
+                  },
+                ),
               ),
             ),
             Obx(
@@ -162,7 +270,8 @@ class NavDrawer extends StatelessWidget {
       builder: (BuildContext context) {
         return Utils.showAlertDialog(
           title: Text(
-             SentenceManager(currentLanguage: homeController.selectedLanguage.value)
+            SentenceManager(
+                    currentLanguage: homeController.selectedLanguage.value)
                 .sentences
                 .homePageExitApp,
             style: TextStyle(
@@ -172,7 +281,8 @@ class NavDrawer extends StatelessWidget {
             ),
           ),
           content: Text(
-            SentenceManager(currentLanguage: homeController.selectedLanguage.value)
+            SentenceManager(
+                    currentLanguage: homeController.selectedLanguage.value)
                 .sentences
                 .homePageAreYouSureYouWantToExit,
             style: TextStyle(
@@ -184,9 +294,10 @@ class NavDrawer extends StatelessWidget {
           actions: <Widget>[
             TextButton(
               child: Text(
-                SentenceManager(currentLanguage: homeController.selectedLanguage.value)
-                .sentences
-                .homePageCancel,
+                SentenceManager(
+                        currentLanguage: homeController.selectedLanguage.value)
+                    .sentences
+                    .homePageCancel,
                 style: TextStyle(
                   color: AppSettings.isDarkMode
                       ? TaskWarriorColors.white
@@ -199,9 +310,10 @@ class NavDrawer extends StatelessWidget {
             ),
             TextButton(
               child: Text(
-                SentenceManager(currentLanguage: homeController.selectedLanguage.value)
-                .sentences
-                .homePageExit,
+                SentenceManager(
+                        currentLanguage: homeController.selectedLanguage.value)
+                    .sentences
+                    .homePageExit,
                 style: TextStyle(
                   color: AppSettings.isDarkMode
                       ? TaskWarriorColors.white

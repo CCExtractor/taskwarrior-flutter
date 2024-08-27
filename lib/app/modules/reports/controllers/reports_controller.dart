@@ -1,8 +1,11 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:taskwarrior/api_service.dart';
 import 'package:taskwarrior/app/models/json/task.dart';
 import 'package:taskwarrior/app/models/storage.dart';
 import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
@@ -22,7 +25,7 @@ class ReportsController extends GetxController
   final GlobalKey daily = GlobalKey();
   final GlobalKey weekly = GlobalKey();
   final GlobalKey monthly = GlobalKey();
-
+  late TaskDatabase taskDatabase;
   var isSaved = false.obs;
   late TutorialCoachMark tutorialCoachMark;
 
@@ -340,6 +343,11 @@ class ReportsController extends GetxController
         sortBurnDownWeekLy();
       }
     });
+  }
+
+  Future<List<Tasks>> fetchTasks() async {
+    await taskDatabase.open();
+    return await taskDatabase.fetchTasksFromDatabase();
   }
 
   // monthly report

@@ -187,4 +187,101 @@ class MarathiSentences extends Sentences {
   String get reportsPageNoTasksFound => 'कोणतेही काम सापडले नाहीत';
   @override
   String get reportsPageAddTasksToSeeReports => 'अहवाल पाहण्यासाठी काम जोडा';
+
+  @override
+  String get taskchampionTileDescription =>
+      'CCSync किंवा Taskchampion Sync Server सह TaskWarrior सिंक वर स्विच करा';
+
+  @override
+  String get taskchampionTileTitle => 'Taskchampion सिंक';
+
+  @override
+  String get ccsyncCredentials => 'CCync क्रेडेन्शियल';
+
+  @override
+  String get deleteTaskConfirmation => 'कार्य हटवा';
+
+  @override
+  String get deleteTaskTitle => 'सर्व कार्य हटवायचे का?';
+
+  @override
+  String get deleteTaskWarning =>
+      'ही क्रिया अपरिवर्तनीय आहे आणि हे सर्व स्थानिक पातळीवर संग्रहित केलेले कार्य हटवेल.';
+
+  @override
+  String get profilePageProfile => 'प्रोफाइल';
+  @override
+  String get profilePageProfiles => 'प्रोफाइल्स';
+  @override
+  String get profilePageCurrentProfile => 'सद्याचा प्रोफाइल';
+  @override
+  String get profilePageManageSelectedProfile =>
+      'चयनित प्रोफाइल व्यवस्थापित करा';
+  @override
+  String get profilePageRenameAlias => 'उपनाम पुनर्नामित करा';
+
+  @override
+  String get profilePageConfigureTaskserver => 'टास्क सर्व्हर कॉन्फिगर करा';
+  @override
+  String get profilePageExportTasks => 'टास्क निर्यात करा';
+  @override
+  String get profilePageCopyConfigToNewProfile =>
+      'नवीन प्रोफाइलवर कॉन्फिगरेशन कॉपी करा';
+  @override
+  String get profilePageDeleteProfile => 'प्रोफाइल हटवा';
+  @override
+  String get profilePageAddNewProfile => 'नवीन प्रोफाइल जोडा';
+
+  @override
+  String get profilePageRenameAliasDialogueBoxTitle => 'उपनाम पुनर्नामित करा';
+  @override
+  String get profilePageRenameAliasDialogueBoxNewAlias => 'नवा उपनाम';
+  @override
+  String get profilePageRenameAliasDialogueBoxCancel => 'रद्द करा';
+  @override
+  String get profilePageRenameAliasDialogueBoxSubmit => 'सादर करा';
+
+  @override
+  String get profilePageExportTasksDialogueTitle => 'निर्यात प्रारूप';
+  @override
+  String get profilePageExportTasksDialogueSubtitle => 'निर्यात प्रारूप निवडा';
+
+  @override
+  String get manageTaskServerPageConfigureTaskserver =>
+      'टास्क सर्व्हर कॉन्फिगर करा';
+  @override
+  String get manageTaskServerPageConfigureTASKRC => 'TASKRC कॉन्फिगर करा';
+  @override
+  String get manageTaskServerPageSetTaskRC => 'TaskRC सेट करा';
+  @override
+  String get manageTaskServerPageConfigureYourCertificate =>
+      'आपला सर्टिफिकेट कॉन्फिगर करा';
+  @override
+  String get manageTaskServerPageSelectCertificate => 'सर्टिफिकेट निवडा';
+  @override
+  String get manageTaskServerPageConfigureTaskserverKey =>
+      'टास्क सर्व्हर की कॉन्फिगर करा';
+  @override
+  String get manageTaskServerPageSelectKey => 'की निवडा';
+  @override
+  String get manageTaskServerPageConfigureServerCertificate =>
+      'सर्व्हर सर्टिफिकेट कॉन्फिगर करा';
+  @override
+  String get manageTaskServerPageTaskRCFileIsVerified =>
+      'Task RC फाइल पडताळली गेली आहे';
+
+  @override
+  String get manageTaskServerPageConfigureTaskRCDialogueBoxTitle =>
+      'TaskRC कॉन्फिगर करा';
+  @override
+  String get manageTaskServerPageConfigureTaskRCDialogueBoxSubtitle =>
+      'TaskRC सामग्री पेस्ट करा किंवा taskrc फाइल निवडा';
+  @override
+  String get manageTaskServerPageConfigureTaskRCDialogueBoxInputFieldText =>
+      'येथे आपली TaskRC सामग्री पेस्ट करा';
+  @override
+  String get manageTaskServerPageConfigureTaskRCDialogueBoxOr => 'किंवा';
+  @override
+  String get manageTaskServerPageConfigureTaskRCDialogueBoxSelectTaskRC =>
+      'TaskRC फाइल निवडा';
 }

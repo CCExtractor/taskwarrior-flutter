@@ -2,6 +2,7 @@ import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:taskwarrior/app/modules/home/views/show_tasks.dart';
 
 import 'package:taskwarrior/app/modules/home/views/tasks_builder.dart';
 import 'package:taskwarrior/app/utils/constants/palette.dart';
@@ -20,7 +21,6 @@ class HomePageBody extends StatelessWidget {
     controller.showInAppTour(context);
     return DoubleBackToCloseApp(
       snackBar: const SnackBar(content: Text('Tap back again to exit')),
-      // ignore: avoid_unnecessary_containers
       child: Container(
         color: AppSettings.isDarkMode
             ? Palette.kToDark.shade200
@@ -88,23 +88,36 @@ class HomePageBody extends StatelessWidget {
                       hintText: 'Search',
                     ),
                   ),
-                Expanded(
-                  child: Scrollbar(
-                    child: Obx(
-                      () => TasksBuilder(
-                        // darkmode: AppSettings.isDarkMode,
-                        useDelayTask: controller.useDelayTask.value,
-                        taskData: controller.searchedTasks,
-                        pendingFilter: controller.pendingFilter.value,
-                        waitingFilter: controller.waitingFilter.value,
-                        searchVisible: controller.searchVisible.value,
-                        selectedLanguage: controller.selectedLanguage.value,
-                        scrollController: controller.scrollController,
-                        showbtn: controller.showbtn.value,
+                Visibility(
+                  visible: !controller.taskchampion.value,
+                  child: Expanded(
+                    child: Scrollbar(
+                      child: Obx(
+                        () => TasksBuilder(
+                          // darkmode: AppSettings.isDarkMode,
+                          useDelayTask: controller.useDelayTask.value,
+                          taskData: controller.searchedTasks,
+                          pendingFilter: controller.pendingFilter.value,
+                          waitingFilter: controller.waitingFilter.value,
+                          searchVisible: controller.searchVisible.value,
+                          selectedLanguage: controller.selectedLanguage.value,
+                          scrollController: controller.scrollController,
+                          showbtn: controller.showbtn.value,
+                        ),
                       ),
                     ),
                   ),
                 ),
+                Visibility(
+                    visible: controller.taskchampion.value,
+                    child: Expanded(
+                        child: Scrollbar(
+                      child: TaskViewBuilder(
+                        pendingFilter: controller.pendingFilter.value,
+                        selectedSort: controller.selectedSort.value,
+                        project: controller.projectFilter.value,
+                      ),
+                    )))
               ],
             ),
           ),

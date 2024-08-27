@@ -33,6 +33,9 @@ abstract class Sentences {
   String get settingsPageEnable24hrFormatTitle;
   String get settingsPageEnable24hrFormatDescription;
 
+  String get taskchampionTileTitle;
+  String get taskchampionTileDescription;
+
   String get settingsPageSelectLanguage;
   String get settingsPageToggleNativeLanguage;
 
@@ -43,6 +46,10 @@ abstract class Sentences {
   String get navDrawerReports;
   String get navDrawerAbout;
   String get navDrawerSettings;
+  String get ccsyncCredentials;
+  String get deleteTaskTitle;
+  String get deleteTaskConfirmation;
+  String get deleteTaskWarning;
   String get navDrawerExit;
 
   String get detailPageDescription;
@@ -99,4 +106,39 @@ abstract class Sentences {
 
   String get reportsPageNoTasksFound;
   String get reportsPageAddTasksToSeeReports;
+
+  String get profilePageProfile;
+  String get profilePageProfiles;
+  String get profilePageCurrentProfile;
+  String get profilePageManageSelectedProfile;
+  String get profilePageRenameAlias;
+  String get profilePageConfigureTaskserver;
+  String get profilePageExportTasks;
+  String get profilePageCopyConfigToNewProfile;
+  String get profilePageDeleteProfile;
+  String get profilePageAddNewProfile;
+
+  String get profilePageExportTasksDialogueTitle;
+  String get profilePageExportTasksDialogueSubtitle;
+
+  String get profilePageRenameAliasDialogueBoxTitle;
+  String get profilePageRenameAliasDialogueBoxNewAlias;
+  String get profilePageRenameAliasDialogueBoxCancel;
+  String get profilePageRenameAliasDialogueBoxSubmit;
+
+  String get manageTaskServerPageConfigureTaskserver;
+  String get manageTaskServerPageConfigureTASKRC;
+  String get manageTaskServerPageSetTaskRC;
+  String get manageTaskServerPageConfigureYourCertificate;
+  String get manageTaskServerPageSelectCertificate;
+  String get manageTaskServerPageConfigureTaskserverKey;
+  String get manageTaskServerPageSelectKey;
+  String get manageTaskServerPageConfigureServerCertificate;
+  String get manageTaskServerPageTaskRCFileIsVerified;
+
+  String get manageTaskServerPageConfigureTaskRCDialogueBoxTitle;
+  String get manageTaskServerPageConfigureTaskRCDialogueBoxSubtitle;
+  String get manageTaskServerPageConfigureTaskRCDialogueBoxInputFieldText;
+  String get manageTaskServerPageConfigureTaskRCDialogueBoxOr;
+  String get manageTaskServerPageConfigureTaskRCDialogueBoxSelectTaskRC;
 }
