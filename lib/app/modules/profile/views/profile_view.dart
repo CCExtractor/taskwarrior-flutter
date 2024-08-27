@@ -11,6 +11,7 @@ import 'package:taskwarrior/app/routes/app_pages.dart';
 import 'package:taskwarrior/app/utils/constants/palette.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
 import '../controllers/profile_controller.dart';
@@ -25,8 +26,18 @@ class ProfileView extends GetView<ProfileController> {
       appBar: AppBar(
         backgroundColor: Palette.kToDark.shade200,
         title: Obx(() => Text(
-              controller.profilesMap.length == 1 ? 'Profile' : 'Profiles',
-              style: GoogleFonts.poppins(color: TaskWarriorColors.white),
+              controller.profilesMap.length == 1
+                  ? SentenceManager(
+                          currentLanguage: AppSettings.selectedLanguage)
+                      .sentences
+                      .profilePageProfile
+                  : SentenceManager(
+                          currentLanguage: AppSettings.selectedLanguage)
+                      .sentences
+                      .profilePageProfiles,
+              style: GoogleFonts.poppins(
+                color: TaskWarriorColors.white,
+              ),
             )),
         leading: IconButton(
           onPressed: () {
@@ -90,7 +101,10 @@ class ProfileView extends GetView<ProfileController> {
                     builder: (BuildContext context) {
                       return Utils.showAlertDialog(
                         title: Text(
-                          "Export Format",
+                          SentenceManager(
+                                currentLanguage: AppSettings.selectedLanguage)
+                            .sentences
+                            .profilePageExportTasksDialogueTitle,
                           style: TextStyle(
                             color: AppSettings.isDarkMode
                                 ? TaskWarriorColors.white
@@ -98,7 +112,10 @@ class ProfileView extends GetView<ProfileController> {
                           ),
                         ),
                         content: Text(
-                          "Choose the export format:",
+                          SentenceManager(
+                                currentLanguage: AppSettings.selectedLanguage)
+                            .sentences
+                            .profilePageExportTasksDialogueSubtitle,
                           style: TextStyle(
                             color: AppSettings.isDarkMode
                                 ? TaskWarriorColors.white
@@ -302,7 +319,10 @@ class ProfilesColumn extends StatelessWidget {
                     ? TaskWarriorColors.deepPurpleAccent
                     : TaskWarriorColors.deepPurple),
             label: Text(
-              'Add new Profile',
+              SentenceManager(
+                          currentLanguage: AppSettings.selectedLanguage)
+                      .sentences
+                      .profilePageAddNewProfile,
               key: addNewProfileKey,
               style: TextStyle(
                 color: AppSettings.isDarkMode
