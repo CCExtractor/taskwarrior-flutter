@@ -8,7 +8,6 @@ import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
-import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
 class SelectProfile extends StatelessWidget {
   const SelectProfile(
@@ -27,7 +26,7 @@ class SelectProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() => ExpansionTile(
-          key: currentProfileKey,
+          // key: currentProfileKey,
           backgroundColor: AppSettings.isDarkMode
               ? TaskWarriorColors.ksecondaryBackgroundColor
               : TaskWarriorColors.kLightSecondaryBackgroundColor,
@@ -47,7 +46,6 @@ class SelectProfile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Current Profile:',
                 SentenceManager(
                           currentLanguage: AppSettings.selectedLanguage)
                       .sentences

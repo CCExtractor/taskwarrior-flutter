@@ -14,7 +14,6 @@ import 'package:taskwarrior/app/utils/constants/utilites.dart';
 
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
-import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
 import '../controllers/profile_controller.dart';
 
@@ -326,12 +325,11 @@ class ProfilesColumn extends StatelessWidget {
                     ? TaskWarriorColors.deepPurpleAccent
                     : TaskWarriorColors.deepPurple),
             label: Text(
-              'Add new Profile',
               SentenceManager(
                           currentLanguage: AppSettings.selectedLanguage)
                       .sentences
                       .profilePageAddNewProfile,
-              key: addNewProfileKey,
+
               style: TextStyle(
                 color: AppSettings.isDarkMode
                     ? TaskWarriorColors.white

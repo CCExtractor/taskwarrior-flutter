@@ -9,6 +9,7 @@ import 'app/routes/app_pages.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await AppSettings.init();
+
   await Permission.notification.isDenied.then((value) {
     if (value) {
       Permission.notification.request();

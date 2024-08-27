@@ -5,7 +5,6 @@ import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
-import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
 import 'package:tuple/tuple.dart';
 
