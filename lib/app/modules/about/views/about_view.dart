@@ -14,11 +14,13 @@ class AboutView extends GetView<AboutController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const AboutPageAppBar(),
+      appBar: AboutPageAppBar(aboutController: controller,),
       backgroundColor: AppSettings.isDarkMode
           ? TaskWarriorColors.kprimaryBackgroundColor
           : TaskWarriorColors.white,
-      body: const AboutPageBody(),
+      body: AboutPageBody(
+        aboutController: controller,
+      ),
     );
   }
 }

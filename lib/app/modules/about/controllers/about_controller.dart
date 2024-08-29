@@ -1,11 +1,17 @@
 import 'package:get/get.dart';
+import 'package:taskwarrior/app/utils/language/supported_language.dart';
+import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
 class AboutController extends GetxController {
-  //TODO: Implement AboutController
+  final Rx<SupportedLanguage> selectedLanguage = SupportedLanguage.english.obs;
 
-  final count = 0.obs;
+  @override
+  void onInit() {
+    super.onInit();
+    initLanguage();
+  }
 
-
-
-  void increment() => count.value++;
+  void initLanguage() {
+    selectedLanguage.value = AppSettings.selectedLanguage;
+  }
 }

@@ -288,4 +288,38 @@ class FrenchSentences extends Sentences {
   @override
   String get manageTaskServerPageConfigureTaskRCDialogueBoxSelectTaskRC =>
       'Sélectionner un fichier TaskRC';
+
+  @override
+  String get addTaskTitle => "Ajouter une tâche";
+  @override
+  String get addTaskEnterTask => "Entrer une tâche";
+  @override
+  String get addTaskDue => "Échéance";
+  @override
+  String get addTaskSelectDueDate => "Sélectionner la date d'échéance";
+  @override
+  String get addTaskPriority => "Priorité";
+  @override
+  String get addTaskAddTags => "Ajouter des tags";
+  @override
+  String get addTaskCancel => "Annuler";
+  @override
+  String get addTaskAdd => "Ajouter";
+  @override
+  String get addTaskTimeInPast => "L'heure sélectionnée est dans le passé.";
+  @override
+  String get addTaskFieldCannotBeEmpty =>
+      "Vous ne pouvez pas laisser ce champ vide !";
+  @override
+  String get addTaskTaskAddedSuccessfully =>
+      "Tâche ajoutée avec succès. Appuyez pour éditer";
+
+  @override
+  String get aboutPageGitHubLink =>
+      "Enthousiaste à l'idée d'améliorer ce projet ? Visitez notre dépôt GitHub.";
+  @override
+  String get aboutPageProjectDescription =>
+      "Ce projet vise à créer une application pour Taskwarrior. C'est votre application de gestion des tâches sur toutes les plateformes. Elle vous aide à gérer vos tâches et à les filtrer selon vos besoins.";
+  @override
+  String get aboutPageAppBarTitle => "À propos";
 }

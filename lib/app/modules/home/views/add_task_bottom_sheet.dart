@@ -11,6 +11,7 @@ import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
 import 'package:taskwarrior/app/modules/home/controllers/widget.controller.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/taskparser.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
@@ -36,7 +37,10 @@ class AddTaskBottomSheet extends StatelessWidget {
                 : TaskWarriorColors.kLightDialogBackGroundColor,
             title: Center(
               child: Text(
-                'Add Task',
+                SentenceManager(
+                        currentLanguage: homeController.selectedLanguage.value)
+                    .sentences
+                    .addTaskTitle,
                 style: TextStyle(
                   color: AppSettings.isDarkMode
                       ? TaskWarriorColors.white
@@ -94,7 +98,11 @@ class AddTaskBottomSheet extends StatelessWidget {
                       : TaskWarriorColors.black,
                 ),
                 decoration: InputDecoration(
-                  hintText: 'Add tags',
+                  hintText: SentenceManager(
+                          currentLanguage:
+                              homeController.selectedLanguage.value)
+                      .sentences
+                      .addTaskAddTags,
                   hintStyle: TextStyle(
                     color: AppSettings.isDarkMode
                         ? TaskWarriorColors.white
@@ -106,12 +114,11 @@ class AddTaskBottomSheet extends StatelessWidget {
                 },
               ),
             ),
-            // Replace ElevatedButton with IconButton
             IconButton(
               onPressed: () {
                 addTag(homeController.tagcontroller.text.trim());
               },
-              icon: const Icon(Icons.add), // Plus icon
+              icon: const Icon(Icons.add),
             ),
           ],
         ),
@@ -139,7 +146,10 @@ class AddTaskBottomSheet extends StatelessWidget {
               : TaskWarriorColors.black,
         ),
         decoration: InputDecoration(
-          hintText: 'Enter Task',
+          hintText: SentenceManager(
+                  currentLanguage: homeController.selectedLanguage.value)
+              .sentences
+              .addTaskEnterTask,
           hintStyle: TextStyle(
             color: AppSettings.isDarkMode
                 ? TaskWarriorColors.white
@@ -147,14 +157,20 @@ class AddTaskBottomSheet extends StatelessWidget {
           ),
         ),
         validator: (name) => name != null && name.isEmpty
-            ? 'You cannot leave this field empty!'
+            ? SentenceManager(
+                        currentLanguage: homeController.selectedLanguage.value)
+                    .sentences
+                    .addTaskFieldCannotBeEmpty
             : null,
       );
 
   Widget buildDueDate(BuildContext context) => Row(
         children: [
           Text(
-            "Due : ",
+            SentenceManager(
+                    currentLanguage: homeController.selectedLanguage.value)
+                .sentences
+                .addTaskDue,
             style: GoogleFonts.poppins(
               color: AppSettings.isDarkMode
                   ? TaskWarriorColors.white
@@ -178,7 +194,11 @@ class AddTaskBottomSheet extends StatelessWidget {
                 controller:
                     TextEditingController(text: homeController.dueString.value),
                 decoration: InputDecoration(
-                  hintText: 'Select due date',
+                  hintText: SentenceManager(
+                          currentLanguage:
+                              homeController.selectedLanguage.value)
+                      .sentences
+                      .addTaskTitle,
                   hintStyle: homeController.inThePast.value
                       ? TextStyle(color: TaskWarriorColors.red)
                       : TextStyle(
@@ -291,7 +311,11 @@ class AddTaskBottomSheet extends StatelessWidget {
 
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text(
-                              "The selected time is in the past.",
+                              SentenceManager(
+                                      currentLanguage:
+                                          homeController.selectedLanguage.value)
+                                  .sentences
+                                  .addTaskTimeInPast,
                               style: TextStyle(
                                 color: AppSettings.isDarkMode
                                     ? TaskWarriorColors.kprimaryTextColor
@@ -324,7 +348,10 @@ class AddTaskBottomSheet extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                'Priority :  ',
+                "${SentenceManager(
+                        currentLanguage: homeController.selectedLanguage.value)
+                    .sentences
+                    .addTaskPriority} :",
                 style: GoogleFonts.poppins(
                   fontWeight: TaskWarriorFonts.bold,
                   color: AppSettings.isDarkMode
@@ -372,7 +399,10 @@ class AddTaskBottomSheet extends StatelessWidget {
           BuildContext context, HomeController homeController) =>
       TextButton(
         child: Text(
-          'Cancel',
+          SentenceManager(
+                        currentLanguage: homeController.selectedLanguage.value)
+                    .sentences
+                    .addTaskCancel,
           style: TextStyle(
             color: AppSettings.isDarkMode
                 ? TaskWarriorColors.white
@@ -393,7 +423,10 @@ class AddTaskBottomSheet extends StatelessWidget {
   Widget buildAddButton(BuildContext context) {
     return TextButton(
       child: Text(
-        "Add",
+        SentenceManager(
+                        currentLanguage: homeController.selectedLanguage.value)
+                    .sentences
+                    .addTaskAdd,
         style: TextStyle(
           color: AppSettings.isDarkMode
               ? TaskWarriorColors.white
@@ -437,7 +470,10 @@ class AddTaskBottomSheet extends StatelessWidget {
 
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(
-                  'Task Added Successfully. Tap to Edit',
+                  SentenceManager(
+                        currentLanguage: homeController.selectedLanguage.value)
+                    .sentences
+                    .addTaskTaskAddedSuccessfully,
                   style: TextStyle(
                     color: AppSettings.isDarkMode
                         ? TaskWarriorColors.kprimaryTextColor

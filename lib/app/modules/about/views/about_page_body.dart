@@ -3,8 +3,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:taskwarrior/app/modules/about/controllers/about_controller.dart';
 import 'package:taskwarrior/app/utils/gen/assets.gen.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
@@ -12,12 +14,15 @@ import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
 class AboutPageBody extends StatelessWidget {
-  const AboutPageBody({super.key});
+  final AboutController aboutController;
+  const AboutPageBody({required this.aboutController, super.key});
 
   @override
   Widget build(BuildContext context) {
     String introduction =
-        "This project aims to build an app for Taskwarrior. It is your task management app across all platforms. It helps you manage your tasks and filter them as per your needs.";
+        SentenceManager(currentLanguage: aboutController.selectedLanguage.value)
+            .sentences
+            .aboutPageProjectDescription;
 
     return Padding(
       padding: EdgeInsets.only(
@@ -247,7 +252,10 @@ class AboutPageBody extends StatelessWidget {
               height: Get.height * 0.04,
             ),
             Text(
-              "Eager to enhance this project? Visit our GitHub repository.",
+              SentenceManager(
+                      currentLanguage: aboutController.selectedLanguage.value)
+                  .sentences
+                  .aboutPageGitHubLink,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontFamily: FontFamily.poppins,

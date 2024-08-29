@@ -20,13 +20,15 @@ class BengaliSentences extends Sentences {
   @override
   String get homePageExitApp => 'অ্যাপ বন্ধ করুন';
   @override
-  String get homePageAreYouSureYouWantToExit => 'আপনি কি সত্যিই অ্যাপ বন্ধ করতে চান?';
+  String get homePageAreYouSureYouWantToExit =>
+      'আপনি কি সত্যিই অ্যাপ বন্ধ করতে চান?';
   @override
   String get homePageExit => 'বাহির যান';
   @override
   String get homePageCancel => 'বাতিল করুন';
   @override
-  String get homePageClickOnTheBottomRightButtonToStartAddingTasks => 'টাস্ক যোগ করা শুরু করতে নিচে ডানদিকে বোতামে ক্লিক করুন';
+  String get homePageClickOnTheBottomRightButtonToStartAddingTasks =>
+      'টাস্ক যোগ করা শুরু করতে নিচে ডানদিকে বোতামে ক্লিক করুন';
   @override
   String get homePageSearchNotFound => 'অনুসন্ধানে কিছু পাওয়া যায়নি';
   @override
@@ -34,31 +36,41 @@ class BengaliSentences extends Sentences {
   @override
   String get settingsPageSubtitle => 'আপনার পছন্দ সেট করুন';
   @override
-  String get settingsPageMovingDataToNewDirectory => 'নতুন ডিরেক্টরিতে ডেটা স্থানান্তর করা হচ্ছে';
+  String get settingsPageMovingDataToNewDirectory =>
+      'নতুন ডিরেক্টরিতে ডেটা স্থানান্তর করা হচ্ছে';
   @override
-  String get settingsPageSyncOnStartTitle => 'অ্যাপ শুরুতে ডেটা স্বয়ংক্রিয়ভাবে সিঙ্ক করুন';
+  String get settingsPageSyncOnStartTitle =>
+      'অ্যাপ শুরুতে ডেটা স্বয়ংক্রিয়ভাবে সিঙ্ক করুন';
   @override
   String get settingsPageSyncOnStartDescription => 'শুরুতে সিঙ্ক করুন';
   @override
-  String get settingsPageEnableSyncOnTaskCreateTitle => 'নতুন টাস্ক তৈরি করার সময় স্বয়ংক্রিয় সিঙ্কিং সক্ষম করুন';
+  String get settingsPageEnableSyncOnTaskCreateTitle =>
+      'নতুন টাস্ক তৈরি করার সময় স্বয়ংক্রিয় সিঙ্কিং সক্ষম করুন';
   @override
-  String get settingsPageEnableSyncOnTaskCreateDescription => 'নতুন টাস্ক তৈরি করার সময় স্বয়ংক্রিয় সিঙ্কিং সক্ষম করুন';
+  String get settingsPageEnableSyncOnTaskCreateDescription =>
+      'নতুন টাস্ক তৈরি করার সময় স্বয়ংক্রিয় সিঙ্কিং সক্ষম করুন';
   @override
-  String get settingsPageHighlightTaskTitle => 'শুধু 1 দিন বাকি থাকলে টাস্ক হাইলাইট করুন';
+  String get settingsPageHighlightTaskTitle =>
+      'শুধু 1 দিন বাকি থাকলে টাস্ক হাইলাইট করুন';
   @override
-  String get settingsPageHighlightTaskDescription => 'শুধু 1 দিন বাকি থাকলে টাস্ক হাইলাইট করুন';
+  String get settingsPageHighlightTaskDescription =>
+      'শুধু 1 দিন বাকি থাকলে টাস্ক হাইলাইট করুন';
   @override
-  String get settingsPageEnable24hrFormatTitle => '24 ঘণ্টার ফর্ম্যাট সক্রিয় করুন';
+  String get settingsPageEnable24hrFormatTitle =>
+      '24 ঘণ্টার ফর্ম্যাট সক্রিয় করুন';
   @override
-  String get settingsPageEnable24hrFormatDescription => '24 ঘণ্টার ফর্ম্যাট সক্রিয় করুন';
+  String get settingsPageEnable24hrFormatDescription =>
+      '24 ঘণ্টার ফর্ম্যাট সক্রিয় করুন';
   @override
   String get settingsPageSelectLanguage => 'ভাষা নির্বাচন করুন';
   @override
-  String get settingsPageToggleNativeLanguage => 'আপনার মাতৃভাষার মধ্যে টগল করুন';
+  String get settingsPageToggleNativeLanguage =>
+      'আপনার মাতৃভাষার মধ্যে টগল করুন';
   @override
   String get settingsPageSelectDirectoryTitle => 'ডিরেক্টরি নির্বাচন করুন';
   @override
-  String get settingsPageSelectDirectoryDescription => 'টাস্কওয়ারিয়র ডেটা যেখানে সংরক্ষিত হয় সেই ডিরেক্টরি নির্বাচন করুন\nবর্তমান ডিরেক্টরি: ';
+  String get settingsPageSelectDirectoryDescription =>
+      'টাস্কওয়ারিয়র ডেটা যেখানে সংরক্ষিত হয় সেই ডিরেক্টরি নির্বাচন করুন\nবর্তমান ডিরেক্টরি: ';
   @override
   String get settingsPageChangeDirectory => 'ডিরেক্টরি পরিবর্তন করুন';
   @override
@@ -177,7 +189,8 @@ class BengaliSentences extends Sentences {
   String get reportsPageAddTasksToSeeReports => 'রিপোর্ট দেখতে টাস্ক যোগ করুন';
 
   @override
-  String get taskchampionTileDescription => 'TaskWarrior সিঙ্কিং CCSync বা Taskchampion সিঙ্ক সার্ভারে পরিবর্তন করুন';
+  String get taskchampionTileDescription =>
+      'TaskWarrior সিঙ্কিং CCSync বা Taskchampion সিঙ্ক সার্ভারে পরিবর্তন করুন';
 
   @override
   String get taskchampionTileTitle => 'Taskchampion সিঙ্ক';
@@ -192,7 +205,8 @@ class BengaliSentences extends Sentences {
   String get deleteTaskTitle => 'সব টাস্ক মুছুন?';
 
   @override
-  String get deleteTaskWarning => 'এই পদক্ষেপটি অপরিবর্তনীয় এবং সমস্ত স্থানীয়ভাবে সংরক্ষিত টাস্ক মুছে ফেলবে।';
+  String get deleteTaskWarning =>
+      'এই পদক্ষেপটি অপরিবর্তনীয় এবং সমস্ত স্থানীয়ভাবে সংরক্ষিত টাস্ক মুছে ফেলবে।';
 
   @override
   String get profilePageProfile => 'প্রোফাইল';
@@ -201,7 +215,8 @@ class BengaliSentences extends Sentences {
   @override
   String get profilePageCurrentProfile => 'বর্তমান প্রোফাইল';
   @override
-  String get profilePageManageSelectedProfile => 'নির্বাচিত প্রোফাইল পরিচালনা করুন';
+  String get profilePageManageSelectedProfile =>
+      'নির্বাচিত প্রোফাইল পরিচালনা করুন';
   @override
   String get profilePageRenameAlias => 'অ্যালিয়াস পরিবর্তন করুন';
 
@@ -210,14 +225,16 @@ class BengaliSentences extends Sentences {
   @override
   String get profilePageExportTasks => 'টাস্ক রপ্তানী করুন';
   @override
-  String get profilePageCopyConfigToNewProfile => 'নতুন প্রোফাইলে কনফিগারেশন কপি করুন';
+  String get profilePageCopyConfigToNewProfile =>
+      'নতুন প্রোফাইলে কনফিগারেশন কপি করুন';
   @override
   String get profilePageDeleteProfile => 'প্রোফাইল মুছুন';
   @override
   String get profilePageAddNewProfile => 'নতুন প্রোফাইল যোগ করুন';
 
   @override
-  String get profilePageRenameAliasDialogueBoxTitle => 'অ্যালিয়াস পরিবর্তন করুন';
+  String get profilePageRenameAliasDialogueBoxTitle =>
+      'অ্যালিয়াস পরিবর্তন করুন';
   @override
   String get profilePageRenameAliasDialogueBoxNewAlias => 'নতুন অ্যালিয়াস';
   @override
@@ -228,35 +245,80 @@ class BengaliSentences extends Sentences {
   @override
   String get profilePageExportTasksDialogueTitle => 'রপ্তানি ফরম্যাট';
   @override
-  String get profilePageExportTasksDialogueSubtitle => 'রপ্তানি ফরম্যাট নির্বাচন করুন';
+  String get profilePageExportTasksDialogueSubtitle =>
+      'রপ্তানি ফরম্যাট নির্বাচন করুন';
 
   @override
-  String get manageTaskServerPageConfigureTaskserver => 'টাস্ক সার্ভার কনফিগার করুন';
+  String get manageTaskServerPageConfigureTaskserver =>
+      'টাস্ক সার্ভার কনফিগার করুন';
   @override
   String get manageTaskServerPageConfigureTASKRC => 'TASKRC কনফিগার করুন';
   @override
   String get manageTaskServerPageSetTaskRC => 'TaskRC সেট করুন';
   @override
-  String get manageTaskServerPageConfigureYourCertificate => 'আপনার সার্টিফিকেট কনফিগার করুন';
+  String get manageTaskServerPageConfigureYourCertificate =>
+      'আপনার সার্টিফিকেট কনফিগার করুন';
   @override
-  String get manageTaskServerPageSelectCertificate => 'সার্টিফিকেট নির্বাচন করুন';
+  String get manageTaskServerPageSelectCertificate =>
+      'সার্টিফিকেট নির্বাচন করুন';
   @override
-  String get manageTaskServerPageConfigureTaskserverKey => 'টাস্ক সার্ভার কনফিগার করুন কী';
+  String get manageTaskServerPageConfigureTaskserverKey =>
+      'টাস্ক সার্ভার কনফিগার করুন কী';
   @override
   String get manageTaskServerPageSelectKey => 'কী নির্বাচন করুন';
   @override
-  String get manageTaskServerPageConfigureServerCertificate => 'সার্ভার সার্টিফিকেট কনফিগার করুন';
+  String get manageTaskServerPageConfigureServerCertificate =>
+      'সার্ভার সার্টিফিকেট কনফিগার করুন';
   @override
-  String get manageTaskServerPageTaskRCFileIsVerified => 'Task RC ফাইল যাচাই করা হয়েছে';
+  String get manageTaskServerPageTaskRCFileIsVerified =>
+      'Task RC ফাইল যাচাই করা হয়েছে';
 
   @override
-  String get manageTaskServerPageConfigureTaskRCDialogueBoxTitle => 'TaskRC কনফিগার করুন';
+  String get manageTaskServerPageConfigureTaskRCDialogueBoxTitle =>
+      'TaskRC কনফিগার করুন';
   @override
-  String get manageTaskServerPageConfigureTaskRCDialogueBoxSubtitle => 'TaskRC সামগ্রী পেস্ট করুন বা taskrc ফাইল নির্বাচন করুন';
+  String get manageTaskServerPageConfigureTaskRCDialogueBoxSubtitle =>
+      'TaskRC সামগ্রী পেস্ট করুন বা taskrc ফাইল নির্বাচন করুন';
   @override
-  String get manageTaskServerPageConfigureTaskRCDialogueBoxInputFieldText => 'এখানে আপনার TaskRC সামগ্রী পেস্ট করুন';
+  String get manageTaskServerPageConfigureTaskRCDialogueBoxInputFieldText =>
+      'এখানে আপনার TaskRC সামগ্রী পেস্ট করুন';
   @override
   String get manageTaskServerPageConfigureTaskRCDialogueBoxOr => 'অথবা';
   @override
-  String get manageTaskServerPageConfigureTaskRCDialogueBoxSelectTaskRC => 'TaskRC ফাইল নির্বাচন করুন';
+  String get manageTaskServerPageConfigureTaskRCDialogueBoxSelectTaskRC =>
+      'TaskRC ফাইল নির্বাচন করুন';
+
+  @override
+  String get addTaskTitle => "কার্য যোগ করুন";
+  @override
+  String get addTaskEnterTask => "কার্য লিখুন";
+  @override
+  String get addTaskDue => "শেষ সময়";
+  @override
+  String get addTaskSelectDueDate => "শেষ সময় নির্বাচন করুন";
+  @override
+  String get addTaskPriority => "অগ্রাধিকার";
+  @override
+  String get addTaskAddTags => "ট্যাগ যোগ করুন";
+  @override
+  String get addTaskCancel => "বাতিল করুন";
+  @override
+  String get addTaskAdd => "যোগ করুন";
+  @override
+  String get addTaskTimeInPast => "নির্বাচিত সময় অতীতে রয়েছে।";
+  @override
+  String get addTaskFieldCannotBeEmpty =>
+      "আপনি এই ক্ষেত্রটি খালি ছেড়ে দিতে পারবেন না!";
+  @override
+  String get addTaskTaskAddedSuccessfully =>
+      "কর্ম সফলভাবে যোগ করা হয়েছে। সম্পাদনার জন্য ট্যাপ করুন";
+
+  @override
+  String get aboutPageGitHubLink =>
+      "এই প্রকল্পটিকে উন্নত করতে আগ্রহী? আমাদের GitHub রিপোজিটরিতে যান।";
+  @override
+  String get aboutPageProjectDescription =>
+      "এই প্রকল্পের লক্ষ্য Taskwarrior-এর জন্য একটি অ্যাপ তৈরি করা। এটি আপনার সকল প্ল্যাটফর্মে একটি টাস্ক ম্যানেজমেন্ট অ্যাপ। এটি আপনাকে আপনার কাজগুলি পরিচালনা করতে এবং আপনার প্রয়োজন অনুসারে সেগুলি ফিল্টার করতে সাহায্য করে।";
+  @override
+  String get aboutPageAppBarTitle => "সম্পর্কিত";
 }

@@ -1,9 +1,9 @@
 import 'package:taskwarrior/app/utils/language/english_sentences.dart';
 import 'package:taskwarrior/app/utils/language/hindi_sentences.dart';
 import 'package:taskwarrior/app/utils/language/marathi_sentences.dart';
-import 'package:taskwarrior/app/utils/language/french_sentences.dart';  // Import for French
-import 'package:taskwarrior/app/utils/language/spanish_sentences.dart';  // Import for Spanish
-import 'package:taskwarrior/app/utils/language/bengali_sentences.dart';  // Import for Bengali
+import 'package:taskwarrior/app/utils/language/french_sentences.dart';
+import 'package:taskwarrior/app/utils/language/spanish_sentences.dart';
+import 'package:taskwarrior/app/utils/language/bengali_sentences.dart';
 import 'package:taskwarrior/app/utils/language/sentences.dart';
 import 'package:taskwarrior/app/utils/language/supported_language.dart';
 

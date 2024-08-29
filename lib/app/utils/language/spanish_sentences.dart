@@ -20,45 +20,58 @@ class SpanishSentences extends Sentences {
   @override
   String get homePageExitApp => 'Salir de la aplicación';
   @override
-  String get homePageAreYouSureYouWantToExit => '¿Estás seguro de que quieres salir de la aplicación?';
+  String get homePageAreYouSureYouWantToExit =>
+      '¿Estás seguro de que quieres salir de la aplicación?';
   @override
   String get homePageExit => 'Salir';
   @override
   String get homePageCancel => 'Cancelar';
   @override
-  String get homePageClickOnTheBottomRightButtonToStartAddingTasks => 'Haz clic en el botón en la parte inferior derecha para comenzar a agregar tareas';
+  String get homePageClickOnTheBottomRightButtonToStartAddingTasks =>
+      'Haz clic en el botón en la parte inferior derecha para comenzar a agregar tareas';
   @override
-  String get homePageSearchNotFound => 'No se encontraron resultados para la búsqueda';
+  String get homePageSearchNotFound =>
+      'No se encontraron resultados para la búsqueda';
   @override
   String get settingsPageTitle => 'Página de configuración';
   @override
   String get settingsPageSubtitle => 'Configura tus preferencias';
   @override
-  String get settingsPageMovingDataToNewDirectory => 'Moviendo datos a un nuevo directorio';
+  String get settingsPageMovingDataToNewDirectory =>
+      'Moviendo datos a un nuevo directorio';
   @override
-  String get settingsPageSyncOnStartTitle => 'Sincronizar datos automáticamente al inicio';
+  String get settingsPageSyncOnStartTitle =>
+      'Sincronizar datos automáticamente al inicio';
   @override
   String get settingsPageSyncOnStartDescription => 'Sincronizar al iniciar';
   @override
-  String get settingsPageEnableSyncOnTaskCreateTitle => 'Habilitar sincronización automática al crear nuevas tareas';
+  String get settingsPageEnableSyncOnTaskCreateTitle =>
+      'Habilitar sincronización automática al crear nuevas tareas';
   @override
-  String get settingsPageEnableSyncOnTaskCreateDescription => 'Habilitar sincronización automática al crear nuevas tareas';
+  String get settingsPageEnableSyncOnTaskCreateDescription =>
+      'Habilitar sincronización automática al crear nuevas tareas';
   @override
-  String get settingsPageHighlightTaskTitle => 'Resaltar tareas con 1 día restante';
+  String get settingsPageHighlightTaskTitle =>
+      'Resaltar tareas con 1 día restante';
   @override
-  String get settingsPageHighlightTaskDescription => 'Resaltar tareas con 1 día restante';
+  String get settingsPageHighlightTaskDescription =>
+      'Resaltar tareas con 1 día restante';
   @override
-  String get settingsPageEnable24hrFormatTitle => 'Habilitar formato de 24 horas';
+  String get settingsPageEnable24hrFormatTitle =>
+      'Habilitar formato de 24 horas';
   @override
-  String get settingsPageEnable24hrFormatDescription => 'Habilitar formato de 24 horas';
+  String get settingsPageEnable24hrFormatDescription =>
+      'Habilitar formato de 24 horas';
   @override
   String get settingsPageSelectLanguage => 'Seleccionar idioma';
   @override
-  String get settingsPageToggleNativeLanguage => 'Alternar entre idiomas nativos';
+  String get settingsPageToggleNativeLanguage =>
+      'Alternar entre idiomas nativos';
   @override
   String get settingsPageSelectDirectoryTitle => 'Seleccionar directorio';
   @override
-  String get settingsPageSelectDirectoryDescription => 'Selecciona el directorio donde se almacenan los datos de TaskWarrior\nDirectorio actual: ';
+  String get settingsPageSelectDirectoryDescription =>
+      'Selecciona el directorio donde se almacenan los datos de TaskWarrior\nDirectorio actual: ';
   @override
   String get settingsPageChangeDirectory => 'Cambiar directorio';
   @override
@@ -174,10 +187,12 @@ class SpanishSentences extends Sentences {
   @override
   String get reportsPageNoTasksFound => 'No se encontraron tareas';
   @override
-  String get reportsPageAddTasksToSeeReports => 'Agrega tareas para ver informes';
+  String get reportsPageAddTasksToSeeReports =>
+      'Agrega tareas para ver informes';
 
   @override
-  String get taskchampionTileDescription => 'Cambia la sincronización de TaskWarrior al servidor de sincronización CCSync o Taskchampion';
+  String get taskchampionTileDescription =>
+      'Cambia la sincronización de TaskWarrior al servidor de sincronización CCSync o Taskchampion';
 
   @override
   String get taskchampionTileTitle => 'Sincronización Taskchampion';
@@ -192,7 +207,8 @@ class SpanishSentences extends Sentences {
   String get deleteTaskTitle => '¿Eliminar todas las tareas?';
 
   @override
-  String get deleteTaskWarning => 'Esta acción es irreversible y eliminará todas las tareas almacenadas localmente.';
+  String get deleteTaskWarning =>
+      'Esta acción es irreversible y eliminará todas las tareas almacenadas localmente.';
 
   @override
   String get profilePageProfile => 'Perfil';
@@ -201,7 +217,8 @@ class SpanishSentences extends Sentences {
   @override
   String get profilePageCurrentProfile => 'Perfil actual';
   @override
-  String get profilePageManageSelectedProfile => 'Gestionar perfil seleccionado';
+  String get profilePageManageSelectedProfile =>
+      'Gestionar perfil seleccionado';
   @override
   String get profilePageRenameAlias => 'Renombrar alias';
 
@@ -210,7 +227,8 @@ class SpanishSentences extends Sentences {
   @override
   String get profilePageExportTasks => 'Exportar tareas';
   @override
-  String get profilePageCopyConfigToNewProfile => 'Copiar configuración a un nuevo perfil';
+  String get profilePageCopyConfigToNewProfile =>
+      'Copiar configuración a un nuevo perfil';
   @override
   String get profilePageDeleteProfile => 'Eliminar perfil';
   @override
@@ -228,35 +246,78 @@ class SpanishSentences extends Sentences {
   @override
   String get profilePageExportTasksDialogueTitle => 'Formato de exportación';
   @override
-  String get profilePageExportTasksDialogueSubtitle => 'Selecciona el formato de exportación';
+  String get profilePageExportTasksDialogueSubtitle =>
+      'Selecciona el formato de exportación';
 
   @override
-  String get manageTaskServerPageConfigureTaskserver => 'Configurar servidor de tareas';
+  String get manageTaskServerPageConfigureTaskserver =>
+      'Configurar servidor de tareas';
   @override
   String get manageTaskServerPageConfigureTASKRC => 'Configurar TASKRC';
   @override
   String get manageTaskServerPageSetTaskRC => 'Establecer TaskRC';
   @override
-  String get manageTaskServerPageConfigureYourCertificate => 'Configura tu certificado';
+  String get manageTaskServerPageConfigureYourCertificate =>
+      'Configura tu certificado';
   @override
   String get manageTaskServerPageSelectCertificate => 'Seleccionar certificado';
   @override
-  String get manageTaskServerPageConfigureTaskserverKey => 'Configurar clave del servidor de tareas';
+  String get manageTaskServerPageConfigureTaskserverKey =>
+      'Configurar clave del servidor de tareas';
   @override
   String get manageTaskServerPageSelectKey => 'Seleccionar clave';
   @override
-  String get manageTaskServerPageConfigureServerCertificate => 'Configurar certificado del servidor';
+  String get manageTaskServerPageConfigureServerCertificate =>
+      'Configurar certificado del servidor';
   @override
-  String get manageTaskServerPageTaskRCFileIsVerified => 'El archivo Task RC ha sido verificado';
+  String get manageTaskServerPageTaskRCFileIsVerified =>
+      'El archivo Task RC ha sido verificado';
 
   @override
-  String get manageTaskServerPageConfigureTaskRCDialogueBoxTitle => 'Configurar TaskRC';
+  String get manageTaskServerPageConfigureTaskRCDialogueBoxTitle =>
+      'Configurar TaskRC';
   @override
-  String get manageTaskServerPageConfigureTaskRCDialogueBoxSubtitle => 'Pega el contenido de TaskRC o selecciona un archivo taskrc';
+  String get manageTaskServerPageConfigureTaskRCDialogueBoxSubtitle =>
+      'Pega el contenido de TaskRC o selecciona un archivo taskrc';
   @override
-  String get manageTaskServerPageConfigureTaskRCDialogueBoxInputFieldText => 'Pega tu contenido TaskRC aquí';
+  String get manageTaskServerPageConfigureTaskRCDialogueBoxInputFieldText =>
+      'Pega tu contenido TaskRC aquí';
   @override
   String get manageTaskServerPageConfigureTaskRCDialogueBoxOr => 'o';
   @override
-  String get manageTaskServerPageConfigureTaskRCDialogueBoxSelectTaskRC => 'Seleccionar archivo TaskRC';
+  String get manageTaskServerPageConfigureTaskRCDialogueBoxSelectTaskRC =>
+      'Seleccionar archivo TaskRC';
+
+  @override
+  String get addTaskTitle => "Agregar tarea";
+  @override
+  String get addTaskEnterTask => "Ingresar tarea";
+  @override
+  String get addTaskDue => "Vencimiento";
+  @override
+  String get addTaskSelectDueDate => "Seleccionar fecha de vencimiento";
+  @override
+  String get addTaskPriority => "Prioridad";
+  @override
+  String get addTaskAddTags => "Agregar etiquetas";
+  @override
+  String get addTaskCancel => "Cancelar";
+  @override
+  String get addTaskAdd => "Agregar";
+  @override
+  String get addTaskTimeInPast => "La hora seleccionada está en el pasado.";
+  @override
+  String get addTaskFieldCannotBeEmpty => "¡No puedes dejar este campo vacío!";
+  @override
+  String get addTaskTaskAddedSuccessfully =>
+      "Tarea añadida con éxito. Toca para editar";
+
+  @override
+  String get aboutPageGitHubLink =>
+      "¿Desea mejorar este proyecto? Visite nuestro repositorio en GitHub.";
+  @override
+  String get aboutPageProjectDescription =>
+      "Este proyecto tiene como objetivo construir una aplicación para Taskwarrior. Es su aplicación de gestión de tareas en todas las plataformas. Le ayuda a gestionar sus tareas y a filtrarlas según sus necesidades.";
+  @override
+  String get aboutPageAppBarTitle => "Acerca de";
 }
