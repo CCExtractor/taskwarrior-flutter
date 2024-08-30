@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:taskwarrior/app/utils/constants/constants.dart';
-import 'package:taskwarrior/app/utils/theme/app_settings.dart';
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 
 class PriorityWidget extends StatelessWidget {
   const PriorityWidget(
       {required this.name,
       required this.value,
       required this.callback,
+      required this.globalKey,
       super.key});
 
   final String name;
   final dynamic value;
   final void Function(dynamic) callback;
+  final GlobalKey globalKey;
 
   @override
   Widget build(BuildContext context) {
     return Card(
+      key: globalKey,
       color: AppSettings.isDarkMode
           ? const Color.fromARGB(255, 57, 57, 57)
           : Colors.white,

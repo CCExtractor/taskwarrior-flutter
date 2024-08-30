@@ -13,13 +13,15 @@ import 'package:taskwarrior/app/modules/detailRoute/views/tags_widget.dart';
 import 'package:taskwarrior/app/utils/constants/constants.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
-import 'package:taskwarrior/app/utils/theme/app_settings.dart';
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 
 class DetailRouteView extends GetView<DetailRouteController> {
   const DetailRouteView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    controller.initDetailsPageTour();
+    controller.showDetailsPageTour(context);
     return WillPopScope(
       onWillPop: () async {
         if (!controller.onEdit.value) {
@@ -135,6 +137,10 @@ class DetailRouteView extends GetView<DetailRouteController> {
                         value: entry.value,
                         callback: (newValue) =>
                             controller.setAttribute(entry.key, newValue),
+                        waitKey: controller.waitKey,
+                        dueKey: controller.dueKey,
+                        untilKey: controller.untilKey,
+                        priorityKey: controller.priorityKey,
                       ),
                   ],
                 ),
@@ -225,12 +231,20 @@ class AttributeWidget extends StatelessWidget {
     required this.name,
     required this.value,
     required this.callback,
+    required this.waitKey,
+    required this.dueKey,
+    required this.priorityKey,
+    required this.untilKey,
     super.key,
   });
 
   final String name;
   final dynamic value;
   final void Function(dynamic) callback;
+  final GlobalKey waitKey;
+  final GlobalKey dueKey;
+  final GlobalKey untilKey;
+  final GlobalKey priorityKey;
 
   @override
   Widget build(BuildContext context) {
@@ -262,24 +276,28 @@ class AttributeWidget extends StatelessWidget {
           name: name,
           value: localValue,
           callback: callback,
+          globalKey: dueKey,
         );
       case 'wait':
         return DateTimeWidget(
           name: name,
           value: localValue,
           callback: callback,
+          globalKey: waitKey,
         );
       case 'until':
         return DateTimeWidget(
           name: name,
           value: localValue,
           callback: callback,
+          globalKey: untilKey,
         );
       case 'priority':
         return PriorityWidget(
           name: name,
           value: localValue,
           callback: callback,
+          globalKey: priorityKey,
         );
       case 'project':
         return ProjectWidget(

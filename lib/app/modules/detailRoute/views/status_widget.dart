@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:taskwarrior/app/utils/constants/constants.dart';
-import 'package:taskwarrior/app/utils/theme/app_settings.dart';
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 
 
 class StatusWidget extends StatelessWidget {

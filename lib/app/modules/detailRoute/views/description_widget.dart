@@ -5,7 +5,7 @@ import 'package:loggy/loggy.dart';
 import 'package:taskwarrior/app/utils/constants/constants.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
-import 'package:taskwarrior/app/utils/theme/app_settings.dart';
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 
 class DescriptionWidget extends StatelessWidget {
   const DescriptionWidget(

@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
+
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
-import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
 import 'package:tuple/tuple.dart';
 
@@ -14,6 +15,7 @@ class ManageProfile extends StatelessWidget {
     this.export,
     this.copy,
     this.delete, {
+    required this.manageSelectedProfileKey,
     super.key,
   });
 
@@ -22,6 +24,7 @@ class ManageProfile extends StatelessWidget {
   final void Function() export;
   final void Function() copy;
   final void Function() delete;
+  final GlobalKey manageSelectedProfileKey;
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +67,7 @@ class ManageProfile extends StatelessWidget {
     ];
 
     return ExpansionTile(
+      key: manageSelectedProfileKey,
       backgroundColor: AppSettings.isDarkMode
           ? TaskWarriorColors.ksecondaryBackgroundColor
           : TaskWarriorColors.kLightSecondaryBackgroundColor,

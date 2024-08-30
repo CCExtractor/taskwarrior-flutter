@@ -13,8 +13,10 @@ import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
 
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
+
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
-import 'package:taskwarrior/app/utils/theme/app_settings.dart';
+
 import 'package:url_launcher/url_launcher.dart';
 
 import '../controllers/manage_task_server_controller.dart';

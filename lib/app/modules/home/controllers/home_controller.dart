@@ -28,7 +28,7 @@ import 'package:taskwarrior/app/utils/taskfunctions/comparator.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/projects.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/query.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/tags.dart';
-import 'package:taskwarrior/app/utils/theme/app_settings.dart';
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class HomeController extends GetxController {

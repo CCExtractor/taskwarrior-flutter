@@ -2,18 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
-List<TargetFocus> addProfilePage({
-  required GlobalKey currentProfileKey,
-
-  required GlobalKey addNewProfileKey,
-  required GlobalKey manageSelectedProfileKey,
+List<TargetFocus> addDetailsPage({
+  required GlobalKey dueKey,
+  required GlobalKey waitKey,
+  required GlobalKey untilKey,
+  required GlobalKey priorityKey,
 }) {
   List<TargetFocus> targets = [];
 
-  // currentProfile
   targets.add(
     TargetFocus(
-      keyTarget: currentProfileKey,
+      keyTarget: dueKey,
       alignSkip: Alignment.topRight,
       shape: ShapeLightFocus.RRect,
       contents: [
@@ -27,7 +26,7 @@ List<TargetFocus> addProfilePage({
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    "See your current profile here",
+                    "This signifies the due date of the task",
                     textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
                       color: Colors.white,
@@ -42,11 +41,9 @@ List<TargetFocus> addProfilePage({
     ),
   );
 
-
-  //manage current profile
   targets.add(
     TargetFocus(
-      keyTarget: manageSelectedProfileKey,
+      keyTarget: waitKey,
       alignSkip: Alignment.topRight,
       shape: ShapeLightFocus.RRect,
       contents: [
@@ -60,7 +57,7 @@ List<TargetFocus> addProfilePage({
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    "Manage your current profile here",
+                    "This signifies the waiting date of the task \n Task will be visible after this date",
                     textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
                       color: Colors.white,
@@ -74,10 +71,10 @@ List<TargetFocus> addProfilePage({
       ],
     ),
   );
-  //addNewProfile
+
   targets.add(
     TargetFocus(
-      keyTarget: addNewProfileKey,
+      keyTarget: untilKey,
       alignSkip: Alignment.topRight,
       shape: ShapeLightFocus.RRect,
       contents: [
@@ -91,7 +88,38 @@ List<TargetFocus> addProfilePage({
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    "Add a new profile here",
+                    "This shows the last date of the task",
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.poppins(
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ],
+    ),
+  );
+
+  targets.add(
+    TargetFocus(
+      keyTarget: priorityKey,
+      alignSkip: Alignment.topRight,
+      shape: ShapeLightFocus.RRect,
+      contents: [
+        TargetContent(
+          align: ContentAlign.bottom,
+          builder: (context, controller) {
+            return Container(
+              alignment: Alignment.center,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    "This is the priority of the Tasks \n L -> Low \n M -> Medium \n H -> Hard",
                     textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
                       color: Colors.white,

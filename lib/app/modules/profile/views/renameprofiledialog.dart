@@ -3,8 +3,9 @@ import 'package:get/get.dart';
 import 'package:taskwarrior/app/modules/splash/controllers/splash_controller.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
+
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
-import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
 class RenameProfileDialog extends StatelessWidget {
   const RenameProfileDialog({

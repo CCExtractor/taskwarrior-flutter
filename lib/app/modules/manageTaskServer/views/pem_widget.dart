@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pem/pem.dart';
 import 'package:taskwarrior/app/models/storage.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
-import 'package:taskwarrior/app/utils/theme/app_settings.dart';
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 
 class PemWidget extends StatelessWidget {
   const PemWidget({
@@ -14,6 +14,7 @@ class PemWidget extends StatelessWidget {
     required this.listTileTitle,
     required this.onTapCallBack,
     required this.onLongPressCallBack,
+    required this.globalKey,
     // required this.manageTaskServerController,
   });
 
@@ -23,6 +24,7 @@ class PemWidget extends StatelessWidget {
   final String listTileTitle;
   final Function(String pem, Storage storagePem) onTapCallBack;
   final Function(String pem, String? name) onLongPressCallBack;
+  final GlobalKey globalKey;
   // final ManageTaskServerController manageTaskServerController;
 
   @override
@@ -51,6 +53,7 @@ class PemWidget extends StatelessWidget {
         ? TaskWarriorColors.ksecondaryBackgroundColor
         : TaskWarriorColors.kLightSecondaryBackgroundColor;
     return Padding(
+      key: globalKey,
       padding: const EdgeInsets.only(
         top: 10,
         bottom: 10,

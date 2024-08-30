@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:taskwarrior/api_service.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
-import 'package:taskwarrior/app/utils/theme/app_settings.dart';
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 
 class TaskDetails extends StatefulWidget {
   final Tasks task;

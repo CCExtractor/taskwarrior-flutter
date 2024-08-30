@@ -5,15 +5,16 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
+
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
-import 'package:taskwarrior/app/utils/theme/app_settings.dart';
 
 class SelectProfile extends StatelessWidget {
   const SelectProfile(
     this.currentProfile,
     this.profilesMap,
     this.selectProfile, {
-      required this.currentProfileKey,
+    required this.currentProfileKey,
     super.key,
   });
 
@@ -25,7 +26,7 @@ class SelectProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() => ExpansionTile(
-          key: const PageStorageKey<String>('task-list'),
+          // key: currentProfileKey,
           backgroundColor: AppSettings.isDarkMode
               ? TaskWarriorColors.ksecondaryBackgroundColor
               : TaskWarriorColors.kLightSecondaryBackgroundColor,
