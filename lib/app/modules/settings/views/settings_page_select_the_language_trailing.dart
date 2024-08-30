@@ -36,7 +36,7 @@ class SettingsPageSelectTheLanguageTrailing extends StatelessWidget {
         }).toList(),
         dropdownColor: AppSettings.isDarkMode
             ? TaskWarriorColors.kprimaryBackgroundColor
-            : TaskWarriorColors.kLightPrimaryBackgroundColor
+            : TaskWarriorColors.kLightPrimaryBackgroundColor,
       ),
     );
   }
@@ -49,6 +49,12 @@ class SettingsPageSelectTheLanguageTrailing extends StatelessWidget {
         return 'Hindi';
       case SupportedLanguage.marathi:
         return 'Marathi';
+      case SupportedLanguage.french:
+        return 'Français'; 
+      case SupportedLanguage.spanish:
+        return 'Español'; 
+      case SupportedLanguage.bengali:
+        return 'বাংলা'; 
       default:
         return '';
     }

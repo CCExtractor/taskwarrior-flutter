@@ -284,4 +284,38 @@ class MarathiSentences extends Sentences {
   @override
   String get manageTaskServerPageConfigureTaskRCDialogueBoxSelectTaskRC =>
       'TaskRC फाइल निवडा';
+
+  @override
+  String get addTaskTitle => "काम जोडा";
+  @override
+  String get addTaskEnterTask => "काम प्रविष्ट करा";
+  @override
+  String get addTaskDue => "अखेर";
+  @override
+  String get addTaskSelectDueDate => "अखेरची तारीख निवडा";
+  @override
+  String get addTaskPriority => "प्राथमिकता";
+  @override
+  String get addTaskAddTags => "टॅग जोडा";
+  @override
+  String get addTaskCancel => "रद्द करा";
+  @override
+  String get addTaskAdd => "जोडा";
+  @override
+  String get addTaskTimeInPast => "निवडलेला वेळ भूतकाळात आहे.";
+  @override
+  String get addTaskFieldCannotBeEmpty =>
+      "तुम्ही हा फील्ड रिकामा सोडू शकत नाही!";
+  @override
+  String get addTaskTaskAddedSuccessfully =>
+      "काम यशस्वीपणे जोडले गेले. संपादित करण्यासाठी टॅप करा";
+
+  @override
+  String get aboutPageGitHubLink =>
+      "या प्रकल्पाला सुधारण्यासाठी उत्सुक आहात का? आमच्या GitHub रिपॉझिटरीला भेट द्या.";
+  @override
+  String get aboutPageProjectDescription =>
+      "या प्रकल्पाचे उद्दिष्ट Taskwarrior साठी एक अॅप तयार करणे आहे. हे आपल्या सर्व प्लॅटफॉर्मवरील कार्य व्यवस्थापन अॅप आहे. हे आपल्याला आपल्या कार्यांचे व्यवस्थापन करण्यात आणि त्यांना आपल्या गरजेनुसार फिल्टर करण्यात मदत करते.";
+  @override
+  String get aboutPageAppBarTitle => "विषयक";
 }

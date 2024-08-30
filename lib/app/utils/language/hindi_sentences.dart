@@ -285,4 +285,38 @@ class HindiSentences extends Sentences {
   @override
   String get manageTaskServerPageConfigureTaskRCDialogueBoxSelectTaskRC =>
       'TaskRC फ़ाइल चुनें';
+
+  @override
+  String get addTaskTitle => "कार्य जोड़ें";
+  @override
+  String get addTaskEnterTask => "कार्य दर्ज करें";
+  @override
+  String get addTaskDue => "देय";
+  @override
+  String get addTaskSelectDueDate => "नियत तिथि चुनें";
+  @override
+  String get addTaskPriority => "प्राथमिकता";
+  @override
+  String get addTaskAddTags => "टैग जोड़ें";
+  @override
+  String get addTaskCancel => "रद्द करें";
+  @override
+  String get addTaskAdd => "जोड़ें";
+  @override
+  String get addTaskTimeInPast => "चुनी गई समय अतीत में है।";
+  @override
+  String get addTaskFieldCannotBeEmpty =>
+      "आप इस फ़ील्ड को खाली नहीं छोड़ सकते!";
+  @override
+  String get addTaskTaskAddedSuccessfully =>
+      "कार्य सफलतापूर्वक जोड़ा गया। संपादित करने के लिए टैप करें";
+
+  @override
+  String get aboutPageGitHubLink =>
+      "इस परियोजना को बढ़ाने के लिए उत्सुक हैं? हमारे GitHub रिपॉज़िटरी पर जाएं।";
+  @override
+  String get aboutPageProjectDescription =>
+      "यह परियोजना Taskwarrior के लिए एक ऐप बनाने का लक्ष्य रखती है। यह आपके सभी प्लेटफार्मों पर कार्य प्रबंधन ऐप है। यह आपको अपने कार्यों को प्रबंधित करने और उन्हें अपनी आवश्यकताओं के अनुसार छानने में मदद करता है।";
+  @override
+  String get aboutPageAppBarTitle => "के बारे में";
 }

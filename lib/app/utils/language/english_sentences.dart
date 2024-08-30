@@ -281,4 +281,37 @@ class EnglishSentences extends Sentences {
   @override
   String get manageTaskServerPageTaskRCFileIsVerified =>
       'Task RC File Is Verified';
+
+  @override
+  String get addTaskTitle => "Add Task";
+  @override
+  String get addTaskEnterTask => "Enter Task";
+  @override
+  String get addTaskDue => "Due";
+  @override
+  String get addTaskSelectDueDate => "Select Due Date";
+  @override
+  String get addTaskPriority => "Priority";
+  @override
+  String get addTaskAddTags => "Add Tags";
+  @override
+  String get addTaskCancel => "Cancel";
+  @override
+  String get addTaskAdd => "Add";
+  @override
+  String get addTaskTimeInPast => "The selected time is in the past.";
+  @override
+  String get addTaskFieldCannotBeEmpty => "You cannot leave this field empty!";
+  @override
+  String get addTaskTaskAddedSuccessfully =>
+      "Task Added Successfully. Tap to Edit";
+
+  @override
+  String get aboutPageGitHubLink =>
+      "Eager to enhance this project? Visit our GitHub repository.";
+  @override
+  String get aboutPageProjectDescription =>
+      "This project aims to build an app for Taskwarrior. It is your task management app across all platforms. It helps you manage your tasks and filter them as per your needs.";
+  @override
+  String get aboutPageAppBarTitle => "About";
 }

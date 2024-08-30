@@ -141,4 +141,21 @@ abstract class Sentences {
   String get manageTaskServerPageConfigureTaskRCDialogueBoxInputFieldText;
   String get manageTaskServerPageConfigureTaskRCDialogueBoxOr;
   String get manageTaskServerPageConfigureTaskRCDialogueBoxSelectTaskRC;
+
+  String get addTaskTitle;
+  String get addTaskEnterTask;
+  String get addTaskDue;
+  String get addTaskSelectDueDate;
+  String get addTaskPriority;
+  String get addTaskAddTags;
+  String get addTaskCancel;
+  String get addTaskAdd;
+  String get addTaskTimeInPast;
+  String get addTaskFieldCannotBeEmpty;
+  String get addTaskTaskAddedSuccessfully;
+
+  String get aboutPageGitHubLink;
+  String get aboutPageProjectDescription;
+  String get aboutPageAppBarTitle;
+
 }
