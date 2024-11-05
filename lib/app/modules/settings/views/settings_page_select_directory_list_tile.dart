@@ -136,6 +136,7 @@ class SettingsPageSelectDirectoryListTile extends StatelessWidget {
                                       await SharedPreferences.getInstance();
                                   await prefs.remove('baseDirectory');
                                   controller.isMovingDirectory.value = false;
+                                  controller.baseDirectory.value = "Default";
                                 });
                               },
                               child: Text(
