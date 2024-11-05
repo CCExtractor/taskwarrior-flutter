@@ -62,6 +62,7 @@ class SettingsController extends GetxController {
             profilesWidget.setBaseDirectory(destination);
             SharedPreferences prefs = await SharedPreferences.getInstance();
             prefs.setString('baseDirectory', destination.path);
+            baseDirectory.value = destination.path;
           } else {
             showDialog(
               context: context,
