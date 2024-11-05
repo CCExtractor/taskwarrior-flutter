@@ -231,9 +231,9 @@ For easy installation, you can opt for the unofficial Docker container. Check ou
 ![image](https://github.com/Rancho-rachit/taskwarrior-flutter/assets/111473259/b562e125-1ca1-480b-8b96-6d7c709eb4b9)
 
 ### 6. Configure the certificates in the app:
-   - Select `example@gmail.com.cert.pem` for "Configure Server Certificate."
-   - Select `example@gmail.com.key.pem` for "Configure TaskServer Key."
-   - Select `letsencrypt_root_cert.pem` for "Configure Your Certificate."
+   - Select `example@gmail.com.cert.pem` for "Configure your certificate."
+   - Select `example@gmail.com.key.pem` for "Configure TaskServer key."
+   - Select `letsencrypt_root_cert.pem` for "Configure Server Certificate."
 
 ![Configure Certificates](https://github.com/CCExtractor/taskwarrior-flutter/assets/47685150/8b73f087-152a-4207-9d93-87d0b87404d8)
 
