@@ -6,19 +6,13 @@ import 'package:taskwarrior/app/utils/constants/permissions.dart';
 class PermissionsManager {
   static Future<void> requestAllPermissions() async {
     try {
-      final results = await Future.wait(
-          permissions.map((permission) => _requestPermission(permission)));
-
-      for (var i = 0; i < results.length; i++) {
-        final permission = permissions[i];
-        final status = results[i];
-
+      for (var permission in permissions) {
+        final status = await _requestPermission(permission);
+        
         if (status) {
-          print(
-              "Permission '${permission.toString().split('.').last}' granted.");
+          print("Permission '${permission.toString().split('.').last}' granted.");
         } else {
-          print(
-              "Permission '${permission.toString().split('.').last}' denied.");
+          print("Permission '${permission.toString().split('.').last}' denied.");
         }
       }
     } catch (e) {
