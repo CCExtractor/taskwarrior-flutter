@@ -2,7 +2,7 @@ import 'package:taskwarrior/app/utils/language/sentences.dart';
 
 class FrenchSentences extends Sentences {
   @override
-  String get helloWorld => 'Bonjour le monde !';
+  String get helloWorld => 'Bonjour, le monde!';
   @override
   String get homePageTitle => 'Page d\'accueil';
   @override
