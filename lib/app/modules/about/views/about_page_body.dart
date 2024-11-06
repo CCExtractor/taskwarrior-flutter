@@ -225,7 +225,7 @@ class AboutPageBody extends StatelessWidget {
                         throw Exception('Could not launch $url');
                       }
                     },
-                    icon: SvgPicture.asset("assets/svg/link.svg",
+                    icon: SvgPicture.asset(Assets.svg.link.path,
                         width: 20,
                         height: 20,
                         colorFilter: ColorFilter.mode(
