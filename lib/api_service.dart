@@ -212,8 +212,12 @@ Future<void> completeTask(String email, String taskUuid) async {
     } else {
       debugPrint('Failed to complete task: ${response.statusCode}');
       if (response.statusCode != 200) {
-        ScaffoldMessenger.of(context as BuildContext).showSnackBar(
-            const SnackBar(content: Text("Error updating task status!")));
+        ScaffoldMessenger.of(context as BuildContext)
+            .showSnackBar(const SnackBar(
+                content: Text(
+          "Error updating task status!",
+          style: TextStyle(color: Colors.red),
+        )));
       }
     }
   } catch (e) {
@@ -280,8 +284,10 @@ Future<void> modifyTaskOnTaskwarrior(String description, String project,
 
   if (response.statusCode != 200) {
     ScaffoldMessenger.of(context as BuildContext).showSnackBar(SnackBar(
-        content:
-            Text("Error: ${response.statusCode} - ${response.reasonPhrase}")));
+        content: Text(
+      "Error: ${response.statusCode} - ${response.reasonPhrase}",
+      style: const TextStyle(color: Colors.red),
+    )));
   }
 
   var taskDatabase = TaskDatabase();
