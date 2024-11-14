@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -175,6 +176,11 @@ Future<void> deleteTask(String email, String taskUuid) async {
       debugPrint('Task deleted successfully on server');
     } else {
       debugPrint('Failed to delete task: ${response.statusCode}');
+      if (response.statusCode != 200) {
+        ScaffoldMessenger.of(context as BuildContext).showSnackBar(
+            const SnackBar(
+                content: Text("Failed to delete task from server!")));
+      }
     }
   } catch (e) {
     debugPrint('Error deleting task: $e');
@@ -205,6 +211,10 @@ Future<void> completeTask(String email, String taskUuid) async {
       debugPrint('Task completed successfully on server');
     } else {
       debugPrint('Failed to complete task: ${response.statusCode}');
+      if (response.statusCode != 200) {
+        ScaffoldMessenger.of(context as BuildContext).showSnackBar(
+            const SnackBar(content: Text("Error updating task status!")));
+      }
     }
   } catch (e) {
     debugPrint('Error completing task: $e');
@@ -250,7 +260,7 @@ Future<void> modifyTaskOnTaskwarrior(String description, String project,
   var e = await CredentialsStorage.getEncryptionSecret();
   debugPrint(c);
   debugPrint(e);
-  await http.post(
+  final response = await http.post(
     Uri.parse(apiUrl),
     headers: {
       'Content-Type': 'text/plain',
@@ -267,6 +277,12 @@ Future<void> modifyTaskOnTaskwarrior(String description, String project,
       "taskuuid": taskuuid,
     }),
   );
+
+  if (response.statusCode != 200) {
+    ScaffoldMessenger.of(context as BuildContext).showSnackBar(SnackBar(
+        content:
+            Text("Error: ${response.statusCode} - ${response.reasonPhrase}")));
+  }
 
   var taskDatabase = TaskDatabase();
   await taskDatabase.open();
