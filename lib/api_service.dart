@@ -1,7 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages, unnecessary_null_in_if_null_operators
 
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -205,6 +205,11 @@ Future<void> completeTask(String email, String taskUuid) async {
       debugPrint('Task completed successfully on server');
     } else {
       debugPrint('Failed to complete task: ${response.statusCode}');
+      ScaffoldMessenger.of(context as BuildContext).showSnackBar(const SnackBar(
+          content: Text(
+        "Failed to complete task!",
+        style: TextStyle(color: Colors.red),
+      )));
     }
   } catch (e) {
     debugPrint('Error completing task: $e');
@@ -250,7 +255,7 @@ Future<void> modifyTaskOnTaskwarrior(String description, String project,
   var e = await CredentialsStorage.getEncryptionSecret();
   debugPrint(c);
   debugPrint(e);
-  await http.post(
+  final response = await http.post(
     Uri.parse(apiUrl),
     headers: {
       'Content-Type': 'text/plain',
@@ -267,6 +272,14 @@ Future<void> modifyTaskOnTaskwarrior(String description, String project,
       "taskuuid": taskuuid,
     }),
   );
+
+  if (response.statusCode != 200) {
+    ScaffoldMessenger.of(context as BuildContext).showSnackBar(const SnackBar(
+        content: Text(
+      "Failed to update task!",
+      style: TextStyle(color: Colors.red),
+    )));
+  }
 
   var taskDatabase = TaskDatabase();
   await taskDatabase.open();
