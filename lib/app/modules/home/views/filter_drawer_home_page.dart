@@ -135,32 +135,38 @@ class FilterDrawer extends StatelessWidget {
               Container(
                 decoration: BoxDecoration(
                   color: tileColor,
-                  borderRadius: BorderRadius.circular(2),
+                  borderRadius: BorderRadius.circular(8),
                   border: Border.all(color: TaskWarriorColors.borderColor),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: GestureDetector(
-                    onTap: filters.toggleWaitingFilter,
-                    child: Text(
-                        !filters.waitingFilter
-                            ? SentenceManager(
-                                    currentLanguage:
-                                        homeController.selectedLanguage.value)
-                                .sentences
-                                .filterDrawerShowWaiting
-                            : SentenceManager(
-                                    currentLanguage:
-                                        homeController.selectedLanguage.value)
-                                .sentences
-                                .filterDrawerHideWaiting,
-                        style: TextStyle(
-                          fontFamily: FontFamily.poppins,
-                          fontSize: TaskWarriorFonts.fontSizeMedium,
-                          color: AppSettings.isDarkMode
-                              ? TaskWarriorColors.kprimaryTextColor
-                              : TaskWarriorColors.kLightSecondaryTextColor,
-                        )),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                          !filters.waitingFilter
+                              ? SentenceManager(
+                                      currentLanguage:
+                                          homeController.selectedLanguage.value)
+                                  .sentences
+                                  .filterDrawerShowWaiting
+                              : SentenceManager(
+                                      currentLanguage:
+                                          homeController.selectedLanguage.value)
+                                  .sentences
+                                  .filterDrawerHideWaiting,
+                          style: TextStyle(
+                            fontFamily: FontFamily.poppins,
+                            fontSize: TaskWarriorFonts.fontSizeMedium,
+                            color: AppSettings.isDarkMode
+                                ? TaskWarriorColors.kprimaryTextColor
+                                : TaskWarriorColors.kLightSecondaryTextColor,
+                          )),
+                      Switch(
+                        value: filters.waitingFilter,
+                        onChanged: (_) => filters.toggleWaitingFilter(),
+                      )
+                    ],
                   ),
                 ),
               ),
