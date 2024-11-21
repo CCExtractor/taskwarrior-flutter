@@ -135,7 +135,7 @@ class FilterDrawer extends StatelessWidget {
               Container(
                 decoration: BoxDecoration(
                   color: tileColor,
-                  borderRadius: BorderRadius.circular(2),
+                  borderRadius: BorderRadius.circular(8),
                   border: Border.all(color: TaskWarriorColors.borderColor),
                 ),
                 child: Padding(
