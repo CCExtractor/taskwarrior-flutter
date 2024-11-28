@@ -17,17 +17,13 @@ class MockMethodChannel extends Mock implements MethodChannel {}
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  // unused variable. used to mock the initiation of HTTPClient
-  late MockHttpClient mockHttpClient;
   databaseFactory = databaseFactoryFfi;
 
   setUpAll(() {
     sqfliteFfiInit();
   });
 
-  setUp(() {
-    mockHttpClient = MockHttpClient();
-  });
+  setUp(() {});
 
   group('Tasks model', () {
     test('fromJson creates Tasks object', () {
