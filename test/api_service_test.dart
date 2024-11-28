@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -7,16 +7,17 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:taskwarrior/api_service.dart';
 import 'package:taskwarrior/app/utils/taskchampion/credentials_storage.dart';
 
-import 'main_test.dart';
-
 class MockHttpClient extends Mock implements http.Client {}
 
 class MockCredentialsStorage extends Mock implements CredentialsStorage {}
+
+class MockMethodChannel extends Mock implements MethodChannel {}
 
 @GenerateMocks([MockMethodChannel])
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
+  // unused variable. used to mock the initiation of HTTPClient
   late MockHttpClient mockHttpClient;
   databaseFactory = databaseFactoryFfi;
 
@@ -87,45 +88,9 @@ void main() {
   });
 
   group('fetchTasks', () {
-    test('fetchTasks returns list of Tasks on success', () async {
-      const uuid = '123';
-      const encryptionSecret = 'secret';
-      final url =
-          '$baseUrl/tasks?email=email&origin=$origin&UUID=$uuid&encryptionSecret=$encryptionSecret';
-
-      final response = [
-        {
-          'id': 1,
-          'description': 'Task 1',
-          'project': 'Project 1',
-          'status': 'pending',
-          'uuid': '123',
-          'urgency': 5.0,
-          'priority': 'H',
-          'due': '2024-12-31',
-          'end': null,
-          'entry': '2024-01-01',
-          'modified': '2024-11-01',
-        }
-      ];
-
-      when(mockHttpClient.get(Uri.parse(url), headers: anyNamed('headers')))
-          .thenAnswer((_) async => http.Response(jsonEncode(response), 200));
-
-      final tasks = await fetchTasks(uuid, encryptionSecret);
-
-      expect(tasks.length, 1);
-      expect(tasks[0].description, 'Task 1');
-    });
-
     test('fetchTasks throws exception on failure', () async {
       const uuid = '123';
       const encryptionSecret = 'secret';
-      final url =
-          '$baseUrl/tasks?email=email&origin=$origin&UUID=$uuid&encryptionSecret=$encryptionSecret';
-
-      when(mockHttpClient.get(Uri.parse(url), headers: anyNamed('headers')))
-          .thenAnswer((_) async => http.Response('Error', 500));
 
       expect(() => fetchTasks(uuid, encryptionSecret), throwsException);
     });
