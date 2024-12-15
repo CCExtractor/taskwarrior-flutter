@@ -112,6 +112,13 @@ class AddTaskBottomSheet extends StatelessWidget {
                 onFieldSubmitted: (tag) {
                   addTag(tag.trim());
                 },
+                onChanged: (value) {
+                  String trimmedString = value.trim();
+                  if (value.endsWith(" ") &&
+                      trimmedString.split(' ').length == 1) {
+                    addTag(trimmedString);
+                  }
+                },
               ),
             ),
             IconButton(
@@ -158,9 +165,9 @@ class AddTaskBottomSheet extends StatelessWidget {
         ),
         validator: (name) => name != null && name.isEmpty
             ? SentenceManager(
-                        currentLanguage: homeController.selectedLanguage.value)
-                    .sentences
-                    .addTaskFieldCannotBeEmpty
+                    currentLanguage: homeController.selectedLanguage.value)
+                .sentences
+                .addTaskFieldCannotBeEmpty
             : null,
       );
 
@@ -400,9 +407,9 @@ class AddTaskBottomSheet extends StatelessWidget {
       TextButton(
         child: Text(
           SentenceManager(
-                        currentLanguage: homeController.selectedLanguage.value)
-                    .sentences
-                    .addTaskCancel,
+                  currentLanguage: homeController.selectedLanguage.value)
+              .sentences
+              .addTaskCancel,
           style: TextStyle(
             color: AppSettings.isDarkMode
                 ? TaskWarriorColors.white
@@ -425,8 +432,8 @@ class AddTaskBottomSheet extends StatelessWidget {
       child: Text(
         SentenceManager(
                         currentLanguage: homeController.selectedLanguage.value)
-                    .sentences
-                    .addTaskAdd,
+            .sentences
+            .addTaskAdd,
         style: TextStyle(
           color: AppSettings.isDarkMode
               ? TaskWarriorColors.white
@@ -472,8 +479,8 @@ class AddTaskBottomSheet extends StatelessWidget {
                 content: Text(
                   SentenceManager(
                         currentLanguage: homeController.selectedLanguage.value)
-                    .sentences
-                    .addTaskTaskAddedSuccessfully,
+                      .sentences
+                      .addTaskTaskAddedSuccessfully,
                   style: TextStyle(
                     color: AppSettings.isDarkMode
                         ? TaskWarriorColors.kprimaryTextColor
