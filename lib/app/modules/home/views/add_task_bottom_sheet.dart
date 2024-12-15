@@ -526,7 +526,9 @@ class AddTaskBottomSheet extends StatelessWidget {
   void addTag(String tag) {
     if (tag.isNotEmpty) {
       String trimmedString = tag.trim();
-      homeController.tags.add(trimmedString);
+      trimmedString.split(" ").forEach((v) {
+        homeController.tags.add(v);
+      });
       homeController.tagcontroller.text = '';
     }
   }
