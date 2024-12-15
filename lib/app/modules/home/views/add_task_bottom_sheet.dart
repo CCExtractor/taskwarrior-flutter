@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 import 'dart:developer';
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -526,13 +527,19 @@ class AddTaskBottomSheet extends StatelessWidget {
   void addTag(String tag) {
     if (tag.isNotEmpty) {
       String trimmedString = tag.trim();
-      trimmedString.split(" ").forEach((v) {
-        homeController.tags.add(v);
-      });
+      List<String> tags = trimmedString.split(" ");
+      for(tag in tags){
+        if(checkTagIfExists(tag)) {
+          removeTag(tag);
+        }
+        homeController.tags.add(tag);
+      }
       homeController.tagcontroller.text = '';
     }
   }
-
+  bool checkTagIfExists(String tag){
+    return homeController.tags.contains(tag);
+  }
   void removeTag(String tag) {
     homeController.tags.remove(tag);
   }
