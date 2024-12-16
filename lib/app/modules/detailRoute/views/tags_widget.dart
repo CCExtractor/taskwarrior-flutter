@@ -12,6 +12,7 @@ import 'package:taskwarrior/app/utils/constants/constants.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/validate.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/themes/themes.dart';
 
 class TagsWidget extends StatelessWidget {
   const TagsWidget({
@@ -127,9 +128,7 @@ class TagsRouteState extends State<TagsRoute> {
           color: TaskWarriorColors.white,
         ),
       ),
-      backgroundColor: AppSettings.isDarkMode
-          ? TaskWarriorColors.kprimaryBackgroundColor
-          : TaskWarriorColors.kLightPrimaryBackgroundColor,
+      backgroundColor: AppColor.currentAppThemeColor,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(4),
