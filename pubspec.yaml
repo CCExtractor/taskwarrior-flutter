@@ -63,6 +63,7 @@ dependencies:
   tutorial_coach_mark: ^1.2.11
   url_launcher: ^6.1.14
   uuid: ^4.2.2
+  built_collection: ^5.1.1
 
 dev_dependencies:
   build_runner: null
