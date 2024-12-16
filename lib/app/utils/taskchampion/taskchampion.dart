@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
+import 'package:taskwarrior/app/utils/themes/themes.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
@@ -70,9 +71,7 @@ class ManageTaskChampionCreds extends StatelessWidget {
           color: TaskWarriorColors.white,
         ),
       ),
-      backgroundColor: AppSettings.isDarkMode
-          ? TaskWarriorColors.kprimaryBackgroundColor
-          : TaskWarriorColors.kLightPrimaryBackgroundColor,
+      backgroundColor: AppColor.currentAppThemeColor,
       body: Padding(
         padding: const EdgeInsets.only(left: 20, right: 20),
         child: ListView(

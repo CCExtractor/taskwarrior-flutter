@@ -5,8 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:taskwarrior/app/modules/settings/views/settings_page_app_bar.dart';
 import 'package:taskwarrior/app/modules/settings/views/settings_page_body.dart';
-import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
-import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/themes/themes.dart';
 
 import '../controllers/settings_controller.dart';
 
@@ -18,9 +17,7 @@ class SettingsView extends GetView<SettingsController> {
       appBar: SettingsPageAppBar(
         controller: controller,
       ),
-      backgroundColor: AppSettings.isDarkMode
-          ? TaskWarriorColors.kprimaryBackgroundColor
-          : TaskWarriorColors.kLightPrimaryBackgroundColor,
+      backgroundColor: AppColor.currentAppThemeColor,
       body: SettingsPageBody(
         controller: controller,
       ),
