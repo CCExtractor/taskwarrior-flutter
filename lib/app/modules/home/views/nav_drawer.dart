@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:taskwarrior/app/components/drawer_components.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
 import 'package:taskwarrior/app/modules/home/views/home_page_nav_drawer_menu_item.dart';
@@ -38,43 +39,56 @@ class NavDrawer extends StatelessWidget {
               color: AppSettings.isDarkMode
                   ? TaskWarriorColors.kprimaryBackgroundColor
                   : TaskWarriorColors.kLightPrimaryBackgroundColor,
-              padding: const EdgeInsets.only(top: 50, left: 15, right: 10),
-              child: Row(
+              padding: const EdgeInsets.only(top: 0, left: 15, right: 10),
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    SentenceManager(
-                            currentLanguage:
-                                homeController.selectedLanguage.value)
-                        .sentences
-                        .homePageMenu,
-                    style: TextStyle(
-                      fontSize: TaskWarriorFonts.fontSizeExtraLarge,
-                      fontWeight: TaskWarriorFonts.bold,
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.white
-                          : TaskWarriorColors.black,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 10),
-                    child: ThemeSwitcherClipper(
-                      isDarkMode: AppSettings.isDarkMode,
-                      onTap: (bool newMode) async {
-                        AppSettings.isDarkMode = newMode;
-                        await SelectedTheme.saveMode(AppSettings.isDarkMode);
-                        Get.back();
-                        homeController.initLanguageAndDarkMode();
-                      },
-                      child: Icon(
-                        AppSettings.isDarkMode
-                            ? Icons.dark_mode
-                            : Icons.light_mode,
-                        color: AppSettings.isDarkMode
-                            ? TaskWarriorColors.white
-                            : TaskWarriorColors.black,
-                        size: 15,
+                  Container(
+                    height: 150,
+                    decoration: BoxDecoration(
+                      gradient: AppSettings.isDarkMode
+                          ? TaskWarriorColors.kPrimaryGradient
+                          : TaskWarriorColors.kSecondaryGradient,
+                      border: Border.all(color: Colors.grey, width: 1),
+                      borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(8),
+                        bottomRight: Radius.circular(8),
                       ),
+                    ),
+                    padding: const EdgeInsets.all(10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text(
+                          SentenceManager(
+                                  currentLanguage:
+                                      homeController.selectedLanguage.value)
+                              .sentences
+                              .homePageMenu,
+                          style: TextStyle(
+                            fontSize: TaskWarriorFonts.fontSizeExtraLarge,
+                            fontWeight: TaskWarriorFonts.bold,
+                            color: TaskWarriorColors.white,
+                          ),
+                        ),
+                        ThemeSwitcherClipper(
+                          isDarkMode: AppSettings.isDarkMode,
+                          onTap: (bool newMode) async {
+                            AppSettings.isDarkMode = newMode;
+                            await SelectedTheme.saveMode(
+                                AppSettings.isDarkMode);
+                            Get.back();
+                            homeController.initLanguageAndDarkMode();
+                          },
+                          child: Icon(
+                            AppSettings.isDarkMode
+                                ? Icons.dark_mode
+                                : Icons.light_mode,
+                            color: TaskWarriorColors.white,
+                            size: 15,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -173,9 +187,9 @@ class NavDrawer extends StatelessWidget {
             Visibility(
               visible: !homeController.taskchampion.value,
               child: Obx(
-                () => NavDrawerMenuItem(
-                  icon: Icons.person_rounded,
-                  text: SentenceManager(
+                () => CustomListTile(
+                  leadingIcon: Icons.person_rounded,
+                  title: SentenceManager(
                     currentLanguage: homeController.selectedLanguage.value,
                   ).sentences.navDrawerProfile,
                   onTap: () {
@@ -187,9 +201,9 @@ class NavDrawer extends StatelessWidget {
             Visibility(
               visible: !homeController.taskchampion.value,
               child: Obx(
-                () => NavDrawerMenuItem(
-                  icon: Icons.summarize,
-                  text: SentenceManager(
+                () => CustomListTile(
+                  leadingIcon: Icons.summarize,
+                  title: SentenceManager(
                     currentLanguage: homeController.selectedLanguage.value,
                   ).sentences.navDrawerReports,
                   onTap: () {
@@ -201,9 +215,9 @@ class NavDrawer extends StatelessWidget {
             Visibility(
               visible: homeController.taskchampion.value,
               child: Obx(
-                () => NavDrawerMenuItem(
-                  icon: Icons.summarize,
-                  text: SentenceManager(
+                () => CustomListTile(
+                  leadingIcon: Icons.summarize,
+                  title: SentenceManager(
                     currentLanguage: homeController.selectedLanguage.value,
                   ).sentences.navDrawerReports,
                   onTap: () {
@@ -213,9 +227,9 @@ class NavDrawer extends StatelessWidget {
               ),
             ),
             Obx(
-              () => NavDrawerMenuItem(
-                icon: Icons.info,
-                text: SentenceManager(
+              () => CustomListTile(
+                leadingIcon: Icons.info,
+                title: SentenceManager(
                   currentLanguage: homeController.selectedLanguage.value,
                 ).sentences.navDrawerAbout,
                 onTap: () {
@@ -224,9 +238,9 @@ class NavDrawer extends StatelessWidget {
               ),
             ),
             Obx(
-              () => NavDrawerMenuItem(
-                icon: Icons.settings,
-                text: SentenceManager(
+              () => CustomListTile(
+                leadingIcon: Icons.settings,
+                title: SentenceManager(
                   currentLanguage: homeController.selectedLanguage.value,
                 ).sentences.navDrawerSettings,
                 onTap: () async {
@@ -246,9 +260,9 @@ class NavDrawer extends StatelessWidget {
               ),
             ),
             Obx(
-              () => NavDrawerMenuItem(
-                icon: Icons.exit_to_app,
-                text: SentenceManager(
+              () => CustomListTile(
+                leadingIcon: Icons.exit_to_app,
+                title: SentenceManager(
                   currentLanguage: homeController.selectedLanguage.value,
                 ).sentences.navDrawerExit,
                 onTap: () {
@@ -269,6 +283,13 @@ class NavDrawer extends StatelessWidget {
           false, // Prevents closing the dialog by tapping outside
       builder: (BuildContext context) {
         return Utils.showAlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.0),
+            side: const BorderSide(
+              color: Colors.grey, // Set the border color to grey
+              width: 2.0, // Set the border width
+            ),
+          ),
           title: Text(
             SentenceManager(
                     currentLanguage: homeController.selectedLanguage.value)
@@ -309,21 +330,32 @@ class NavDrawer extends StatelessWidget {
               },
             ),
             TextButton(
-              child: Text(
-                SentenceManager(
-                        currentLanguage: homeController.selectedLanguage.value)
-                    .sentences
-                    .homePageExit,
-                style: TextStyle(
-                  color: AppSettings.isDarkMode
-                      ? TaskWarriorColors.white
-                      : TaskWarriorColors.black,
+              onPressed: () {
+                Navigator.of(context).pop();
+                SystemNavigator.pop();
+              },
+              style: ButtonStyle(
+                padding: WidgetStateProperty.all(EdgeInsets.zero),
+              ),
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                decoration: BoxDecoration(
+                  color: Colors.purple, // Purple background
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+                child: Text(
+                  SentenceManager(
+                          currentLanguage:
+                              homeController.selectedLanguage.value)
+                      .sentences
+                      .homePageExit,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-                SystemNavigator.pop(); // Exit the app
-              },
             ),
           ],
         );

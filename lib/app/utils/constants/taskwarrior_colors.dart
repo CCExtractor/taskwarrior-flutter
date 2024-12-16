@@ -34,4 +34,23 @@ class TaskWarriorColors {
   static Color kLightSecondaryTextColor = const Color.fromARGB(255, 48, 46, 46);
   static Color kLightPrimaryDisabledTextColor = const Color(0xffACACAB);
   static Color kLightDialogBackGroundColor = Colors.white;
+
+  // Gradient Color
+  static LinearGradient kPrimaryGradient = LinearGradient(
+    colors: [
+      Colors.deepPurple, // Start color
+      Colors.grey..shade800, // End color
+    ],
+    begin: Alignment.center,
+    end: Alignment.bottomRight,
+  );
+
+  static LinearGradient kSecondaryGradient = LinearGradient(
+    colors: [
+      Colors.grey.shade500, // Start color
+      Colors.grey.shade800, // End color
+    ],
+    begin: Alignment.center,
+    end: Alignment.bottomRight,
+  );
 }
