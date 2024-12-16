@@ -91,9 +91,6 @@ void main() {
       final task1 = createTask();
       final task2 = createTask();
 
-      // Define urgency function to compare tasks
-      int urgency(Task task) => task.entry.microsecondsSinceEpoch;
-
       final comparator = compareTasks('Urgency');
       expect(comparator(task1, task2), equals(0));
     });
