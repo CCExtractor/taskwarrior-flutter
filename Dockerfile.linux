@@ -1,0 +1,27 @@
+FROM ghcr.io/cirruslabs/flutter:3.24.5
+
+WORKDIR /app
+
+COPY . /app
+
+# Install dependencies for Flutter Linux desktop development
+RUN apt-get update && apt-get install -y \
+	libgtk-3-dev \
+	libblkid-dev \
+	liblzma-dev \
+	liblzma5 \
+	libnss3 \
+	libx11-dev \
+	libxkbfile-dev \
+	libcurl4-openssl-dev \
+	xdg-utils \
+	cmake \
+	ninja-build \
+	clang \
+	&& apt-get clean
+
+RUN flutter doctor
+
+RUN flutter config --enable-linux-desktop
+RUN flutter clean
+RUN flutter pub get
