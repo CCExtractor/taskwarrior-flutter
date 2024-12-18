@@ -11,6 +11,7 @@ import 'package:taskwarrior/app/utils/constants/utilites.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 class BurnDownWeekly extends StatelessWidget {
   final ReportsController reportsController;
@@ -18,6 +19,7 @@ class BurnDownWeekly extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     var height = Get.height;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -38,7 +40,7 @@ class BurnDownWeekly extends StatelessWidget {
                       fontWeight: TaskWarriorFonts.bold,
                       fontSize: TaskWarriorFonts.fontSizeSmall,
                       color:
-                          AppSettings.isDarkMode ? Colors.white : Colors.black,
+                          tColors.primaryTextColor,
                     )),
               ),
               primaryYAxis: NumericAxis(
@@ -49,7 +51,7 @@ class BurnDownWeekly extends StatelessWidget {
                       fontWeight: TaskWarriorFonts.bold,
                       fontSize: TaskWarriorFonts.fontSizeSmall,
                       color:
-                          AppSettings.isDarkMode ? Colors.white : Colors.black,
+                          tColors.primaryTextColor,
                     )),
               ),
               tooltipBehavior: reportsController.weeklyBurndownTooltipBehaviour,

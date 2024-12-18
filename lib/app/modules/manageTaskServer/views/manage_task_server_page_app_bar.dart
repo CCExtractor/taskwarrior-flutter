@@ -16,6 +16,7 @@ import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
@@ -28,6 +29,7 @@ class ManageTaskServerPageAppBar extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return AppBar(
       backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
       titleSpacing: 0,
@@ -96,9 +98,7 @@ class ManageTaskServerPageAppBar extends StatelessWidget
                   title: Text(
                     'Fetching statistics...',
                     style: TextStyle(
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.white
-                          : TaskWarriorColors.black,
+                      color: tColors.primaryTextColor,
                     ),
                   ),
                   content: Column(
@@ -109,9 +109,7 @@ class ManageTaskServerPageAppBar extends StatelessWidget
                       Text(
                         'Please wait...',
                         style: TextStyle(
-                          color: AppSettings.isDarkMode
-                              ? TaskWarriorColors.white
-                              : TaskWarriorColors.black,
+                          color: tColors.primaryTextColor,
                         ),
                       ),
                     ],
@@ -155,9 +153,7 @@ class ManageTaskServerPageAppBar extends StatelessWidget
                               Text(
                                 '${'$key:'.padRight(maxKeyLength + 1)} ${header[key]}',
                                 style: TextStyle(
-                                  color: AppSettings.isDarkMode
-                                      ? TaskWarriorColors.white
-                                      : TaskWarriorColors.black,
+                                  color: tColors.primaryTextColor,
                                 ),
                               ),
                           ],
@@ -169,9 +165,7 @@ class ManageTaskServerPageAppBar extends StatelessWidget
                     ElevatedButton(
                       style: ButtonStyle(
                         backgroundColor: WidgetStateProperty.all<Color>(
-                          AppSettings.isDarkMode
-                              ? TaskWarriorColors.kLightSecondaryBackgroundColor
-                              : TaskWarriorColors.ksecondaryBackgroundColor,
+                          tColors.secondaryTextColor!,
                         ),
                       ),
                       onPressed: () {
@@ -181,9 +175,7 @@ class ManageTaskServerPageAppBar extends StatelessWidget
                       child: Text(
                         'Ok',
                         style: TextStyle(
-                          color: AppSettings.isDarkMode
-                              ? TaskWarriorColors.black
-                              : TaskWarriorColors.white,
+                          color: tColors.secondaryBackgroundColor,
                         ),
                       ),
                     ),
@@ -202,14 +194,10 @@ class ManageTaskServerPageAppBar extends StatelessWidget
                         ? "Please set up your TaskServer."
                         : e.toString(),
                     style: TextStyle(
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.kprimaryTextColor
-                          : TaskWarriorColors.kLightPrimaryTextColor,
+                      color: tColors.primaryTextColor,
                     ),
                   ),
-                  backgroundColor: AppSettings.isDarkMode
-                      ? TaskWarriorColors.ksecondaryBackgroundColor
-                      : TaskWarriorColors.kLightSecondaryBackgroundColor,
+                  backgroundColor: tColors.secondaryBackgroundColor,
                   duration: const Duration(seconds: 2)));
               // Log the error and trace
               logError(e, trace);

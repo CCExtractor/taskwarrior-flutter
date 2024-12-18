@@ -7,11 +7,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:taskwarrior/app/modules/settings/views/settings_page_taskchampion.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
-
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import '../controllers/settings_controller.dart';
-
-import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
-
 import 'package:taskwarrior/app/modules/settings/views/settings_page_enable_24hr_format_list_tile_trailing.dart';
 import 'package:taskwarrior/app/modules/settings/views/settings_page_highlist_task_list_tile_trailing.dart';
 import 'package:taskwarrior/app/modules/settings/views/settings_page_list_tile.dart';
@@ -20,8 +17,6 @@ import 'package:taskwarrior/app/modules/settings/views/settings_page_on_task_sta
 import 'package:taskwarrior/app/modules/settings/views/settings_page_select_directory_list_tile.dart';
 import 'package:taskwarrior/app/modules/settings/views/settings_page_select_the_language_trailing.dart';
 
-import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
-
 class SettingsPageBody extends StatelessWidget {
   final SettingsController controller;
 
@@ -29,6 +24,7 @@ class SettingsPageBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Obx(() {
       if (controller.isMovingDirectory.value) {
         return Center(
@@ -44,9 +40,7 @@ class SettingsPageBody extends StatelessWidget {
                 style: GoogleFonts.poppins(
                   fontWeight: FontWeight.bold,
                   fontSize: TaskWarriorFonts.fontSizeMedium,
-                  color: AppSettings.isDarkMode
-                      ? TaskWarriorColors.white
-                      : TaskWarriorColors.black,
+                  color: tColors.primaryTextColor,
                 ),
               ),
             ],

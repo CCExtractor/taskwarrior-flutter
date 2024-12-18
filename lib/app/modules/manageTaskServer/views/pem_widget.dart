@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pem/pem.dart';
 import 'package:taskwarrior/app/models/storage.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
-import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 class PemWidget extends StatelessWidget {
   const PemWidget({
@@ -29,6 +29,7 @@ class PemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     String fingerprint(String pemContents) {
       var firstCertificateBlock = decodePemBlocks(
         PemLabel.certificate,
@@ -49,9 +50,7 @@ class PemWidget extends StatelessWidget {
       debugPrint(e.toString());
     }
 
-    var tileColor = AppSettings.isDarkMode
-        ? TaskWarriorColors.ksecondaryBackgroundColor
-        : TaskWarriorColors.kLightSecondaryBackgroundColor;
+    var tileColor = tColors.primaryBackgroundColor;
     return Padding(
       key: globalKey,
       padding: const EdgeInsets.only(
@@ -65,9 +64,7 @@ class PemWidget extends StatelessWidget {
           Text(
             optionString,
             style: TextStyle(
-              color: AppSettings.isDarkMode
-                  ? TaskWarriorColors.white
-                  : TaskWarriorColors.black,
+              color: tColors.primaryTextColor,
             ),
           ),
           const SizedBox(
@@ -135,9 +132,7 @@ class PemWidget extends StatelessWidget {
                                     ? ''
                                     : "$name = ",
                             style: TextStyle(
-                              color: AppSettings.isDarkMode
-                                  ? TaskWarriorColors.white
-                                  : TaskWarriorColors.black,
+                              color: tColors.primaryTextColor,
                             ),
                           ),
                           Text(
@@ -147,9 +142,7 @@ class PemWidget extends StatelessWidget {
                                     : ""
                                 : identifier,
                             style: TextStyle(
-                              color: AppSettings.isDarkMode
-                                  ? TaskWarriorColors.white
-                                  : TaskWarriorColors.black,
+                              color: tColors.primaryTextColor,
                             ),
                           ),
                         ],
@@ -160,18 +153,14 @@ class PemWidget extends StatelessWidget {
                     height: 30,
                     width: 30,
                     decoration: BoxDecoration(
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.kLightSecondaryBackgroundColor
-                          : TaskWarriorColors.ksecondaryBackgroundColor,
+                      color: tColors.secondaryTextColor,
                       shape: BoxShape.circle,
                     ),
                     child: Center(
                       child: name == null
                           ? Icon(
                               Icons.chevron_right_rounded,
-                              color: AppSettings.isDarkMode
-                                  ? TaskWarriorColors.black
-                                  : TaskWarriorColors.white,
+                              color: tColors.secondaryBackgroundColor,
                             )
                           : Icon(
                               Icons.check,

@@ -5,6 +5,7 @@ import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 import 'package:taskwarrior/app/utils/language/supported_language.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 class SettingsPageSelectTheLanguageTrailing extends StatelessWidget {
   final SettingsController controller;
@@ -14,6 +15,7 @@ class SettingsPageSelectTheLanguageTrailing extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Obx(
       () => DropdownButton<SupportedLanguage>(
         value: controller.selectedLanguage.value,
@@ -27,9 +29,7 @@ class SettingsPageSelectTheLanguageTrailing extends StatelessWidget {
               _getLanguageName(language),
               style: TextStyle(
                 fontFamily: FontFamily.poppins,
-                color: AppSettings.isDarkMode
-                    ? TaskWarriorColors.white
-                    : TaskWarriorColors.black,
+                color: tColors.primaryTextColor,
               ),
             ),
           );

@@ -5,11 +5,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:taskwarrior/api_service.dart';
 import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
 import 'package:taskwarrior/app/modules/home/views/show_details.dart';
-import 'package:taskwarrior/app/utils/constants/palette.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
-
-import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 class TaskViewBuilder extends StatelessWidget {
   const TaskViewBuilder({
@@ -26,7 +24,8 @@ class TaskViewBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final HomeController taskController = Get.find<HomeController>();
-
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    
     return Obx(() {
       List<Tasks> tasks = List<Tasks>.from(taskController.tasks);
 
@@ -80,9 +79,7 @@ class TaskViewBuilder extends StatelessWidget {
       });
 
       return Scaffold(
-        backgroundColor: AppSettings.isDarkMode
-            ? TaskWarriorColors.kprimaryBackgroundColor
-            : TaskWarriorColors.kLightPrimaryBackgroundColor,
+        backgroundColor: tColors.dialogBackgroundColor,
         body: tasks.isEmpty
             ? Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -92,9 +89,7 @@ class TaskViewBuilder extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
                       fontSize: TaskWarriorFonts.fontSizeLarge,
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.kLightPrimaryBackgroundColor
-                          : TaskWarriorColors.kprimaryBackgroundColor,
+                      color: tColors.primaryTextColor,
                     ),
                   ),
                 ),
@@ -122,10 +117,7 @@ class TaskViewBuilder extends StatelessWidget {
                                 content: Text(
                                   'Task Marked As Completed. Refresh to view changes!',
                                   style: TextStyle(
-                                    color: AppSettings.isDarkMode
-                                        ? TaskWarriorColors.kprimaryTextColor
-                                        : TaskWarriorColors
-                                            .kLightPrimaryTextColor,
+                                    color: tColors.primaryTextColor,
                                   ),
                                 ),
                               ),
@@ -148,10 +140,7 @@ class TaskViewBuilder extends StatelessWidget {
                                 content: Text(
                                   'Task Marked As Deleted. Refresh to view changes!',
                                   style: TextStyle(
-                                    color: AppSettings.isDarkMode
-                                        ? TaskWarriorColors.kprimaryTextColor
-                                        : TaskWarriorColors
-                                            .kLightPrimaryTextColor,
+                                    color: tColors.primaryTextColor,
                                   ),
                                 ),
                               ),
@@ -164,13 +153,9 @@ class TaskViewBuilder extends StatelessWidget {
                       ],
                     ),
                     child: Card(
-                      color: AppSettings.isDarkMode
-                          ? Palette.kToDark
-                          : TaskWarriorColors.white,
+                      color: tColors.secondaryBackgroundColor,
                       child: InkWell(
-                        splashColor: AppSettings.isDarkMode
-                            ? TaskWarriorColors.black
-                            : TaskWarriorColors.borderColor,
+                        splashColor: tColors.primaryBackgroundColor,
                         onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -180,13 +165,9 @@ class TaskViewBuilder extends StatelessWidget {
                         child: Container(
                           decoration: BoxDecoration(
                             border: Border.all(
-                              color: AppSettings.isDarkMode
-                                  ? TaskWarriorColors.borderColor
-                                  : TaskWarriorColors.black,
+                              color: tColors.primaryTextColor!,
                             ),
-                            color: AppSettings.isDarkMode
-                                ? Palette.kToDark
-                                : TaskWarriorColors.white,
+                            color: tColors.primaryBackgroundColor,
                             borderRadius: BorderRadius.circular(8.0),
                             boxShadow: const [
                               BoxShadow(
@@ -207,19 +188,13 @@ class TaskViewBuilder extends StatelessWidget {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: GoogleFonts.poppins(
-                                color: AppSettings.isDarkMode
-                                    ? TaskWarriorColors
-                                        .kLightDialogBackGroundColor
-                                    : TaskWarriorColors.kprimaryBackgroundColor,
+                                color: tColors.dialogBackgroundColor,
                               ),
                             ),
                             subtitle: Text(
                               'Urgency: ${task.urgency!.floorToDouble()} | Status: ${task.status}',
                               style: GoogleFonts.poppins(
-                                color: AppSettings.isDarkMode
-                                    ? TaskWarriorColors.ksecondaryTextColor
-                                    : TaskWarriorColors
-                                        .kLightSecondaryTextColor,
+                                color: tColors.secondaryTextColor,
                               ),
                             ),
                           ),

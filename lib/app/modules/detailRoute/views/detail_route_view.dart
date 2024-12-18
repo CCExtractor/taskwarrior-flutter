@@ -14,6 +14,7 @@ import 'package:taskwarrior/app/utils/constants/constants.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 class DetailRouteView extends GetView<DetailRouteController> {
   const DetailRouteView({super.key});
@@ -22,6 +23,7 @@ class DetailRouteView extends GetView<DetailRouteController> {
   Widget build(BuildContext context) {
     controller.initDetailsPageTour();
     controller.showDetailsPageTour(context);
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return WillPopScope(
       onWillPop: () async {
         if (!controller.onEdit.value) {
@@ -35,15 +37,11 @@ class DetailRouteView extends GetView<DetailRouteController> {
           context: context,
           builder: (context) {
             return AlertDialog(
-              backgroundColor: AppSettings.isDarkMode
-                  ? TaskWarriorColors.kdialogBackGroundColor
-                  : TaskWarriorColors.kLightDialogBackGroundColor,
+              backgroundColor: tColors.dialogBackgroundColor,
               title: Text(
                 'Do you want to save changes?',
                 style: TextStyle(
-                  color: AppSettings.isDarkMode
-                      ? TaskWarriorColors.white
-                      : TaskWarriorColors.black,
+                  color: tColors.primaryTextColor,
                 ),
               ),
               actions: [
@@ -57,9 +55,7 @@ class DetailRouteView extends GetView<DetailRouteController> {
                   child: Text(
                     'Yes',
                     style: TextStyle(
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.white
-                          : TaskWarriorColors.black,
+                      color: tColors.primaryTextColor,
                     ),
                   ),
                 ),
@@ -72,9 +68,7 @@ class DetailRouteView extends GetView<DetailRouteController> {
                   child: Text(
                     'No',
                     style: TextStyle(
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.white
-                          : TaskWarriorColors.black,
+                      color: tColors.primaryTextColor,
                     ),
                   ),
                 ),
@@ -85,9 +79,7 @@ class DetailRouteView extends GetView<DetailRouteController> {
                   child: Text(
                     'Cancel',
                     style: TextStyle(
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.white
-                          : TaskWarriorColors.black,
+                      color: tColors.primaryTextColor,
                     ),
                   ),
                 ),
@@ -98,9 +90,7 @@ class DetailRouteView extends GetView<DetailRouteController> {
         return save == true;
       },
       child: Scaffold(
-          backgroundColor: AppSettings.isDarkMode
-              ? TaskWarriorColors.kprimaryBackgroundColor
-              : TaskWarriorColors.kLightPrimaryBackgroundColor,
+          backgroundColor: tColors.primaryBackgroundColor,
           appBar: AppBar(
               leading: BackButton(color: TaskWarriorColors.white),
               backgroundColor: Palette.kToDark,
@@ -148,15 +138,9 @@ class DetailRouteView extends GetView<DetailRouteController> {
           floatingActionButton: controller.modify.changes.isEmpty
               ? const SizedBox.shrink()
               : FloatingActionButton(
-                  backgroundColor: AppSettings.isDarkMode
-                      ? TaskWarriorColors.black
-                      : TaskWarriorColors.white,
-                  foregroundColor: AppSettings.isDarkMode
-                      ? TaskWarriorColors.white
-                      : TaskWarriorColors.black,
-                  splashColor: AppSettings.isDarkMode
-                      ? TaskWarriorColors.black
-                      : TaskWarriorColors.white,
+                  backgroundColor: tColors.primaryTextColor,
+                  foregroundColor: tColors.secondaryBackgroundColor,
+                  splashColor: tColors.primaryTextColor,
                   heroTag: "btn1",
                   onPressed: () {
                     showDialog(
@@ -167,9 +151,7 @@ class DetailRouteView extends GetView<DetailRouteController> {
                           title: Text(
                             'Review changes:',
                             style: TextStyle(
-                              color: AppSettings.isDarkMode
-                                  ? TaskWarriorColors.white
-                                  : TaskWarriorColors.black,
+                              color: tColors.primaryTextColor,
                             ),
                           ),
                           content: SingleChildScrollView(
@@ -182,9 +164,7 @@ class DetailRouteView extends GetView<DetailRouteController> {
                                   .toList()
                                   .join('\n'),
                               style: TextStyle(
-                                color: AppSettings.isDarkMode
-                                    ? TaskWarriorColors.white
-                                    : TaskWarriorColors.black,
+                                color: tColors.primaryTextColor,
                               ),
                             ),
                           ),
@@ -196,9 +176,7 @@ class DetailRouteView extends GetView<DetailRouteController> {
                               child: Text(
                                 'Cancel',
                                 style: TextStyle(
-                                  color: AppSettings.isDarkMode
-                                      ? TaskWarriorColors.white
-                                      : TaskWarriorColors.black,
+                                  color: tColors.primaryTextColor,
                                 ),
                               ),
                             ),
@@ -209,9 +187,7 @@ class DetailRouteView extends GetView<DetailRouteController> {
                               child: Text(
                                 'Submit',
                                 style: TextStyle(
-                                  color: AppSettings.isDarkMode
-                                      ? TaskWarriorColors.black
-                                      : TaskWarriorColors.black,
+                                  color: tColors.primaryBackgroundColor,
                                 ),
                               ),
                             ),
@@ -251,7 +227,7 @@ class AttributeWidget extends StatelessWidget {
     var localValue = (value is DateTime)
         ? DateFormat.yMEd().add_jms().format(value.toLocal())
         : ((value is BuiltList) ? (value).toBuilder() : value);
-
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     switch (name) {
       case 'description':
         return DescriptionWidget(
@@ -313,13 +289,9 @@ class AttributeWidget extends StatelessWidget {
         );
       default:
         return Card(
-          color: AppSettings.isDarkMode
-              ? TaskWarriorColors.ksecondaryBackgroundColor
-              : TaskWarriorColors.kLightSecondaryBackgroundColor,
+          color: tColors.secondaryBackgroundColor,
           child: ListTile(
-            textColor: AppSettings.isDarkMode
-                ? TaskWarriorColors.kprimaryTextColor
-                : TaskWarriorColors.kLightSecondaryTextColor,
+            textColor: tColors.primaryTextColor,
             title: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
@@ -327,17 +299,18 @@ class AttributeWidget extends StatelessWidget {
                   Text(
                     '$name:'.padRight(13),
                     style: TextStyle(
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.white
-                          : TaskWarriorColors.black,
+                        fontFamily: FontFamily.poppins,
+                        fontWeight: TaskWarriorFonts.bold,
+                        fontSize: TaskWarriorFonts.fontSizeMedium,
+                        color: tColors.primaryTextColor,
                     ),
                   ),
                   Text(
                     localValue?.toString() ?? "not selected",
                     style: TextStyle(
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.white
-                          : TaskWarriorColors.black,
+                      fontFamily: FontFamily.poppins,
+                      fontSize: TaskWarriorFonts.fontSizeMedium,
+                      color: tColors.primaryTextColor,
                     ),
                   ),
                 ],
@@ -362,14 +335,11 @@ class TagsWidget extends StatelessWidget {
   final void Function(dynamic) callback;
   @override
   Widget build(BuildContext context) {
+  TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Card(
-      color: AppSettings.isDarkMode
-          ? TaskWarriorColors.ksecondaryBackgroundColor
-          : TaskWarriorColors.kLightSecondaryBackgroundColor,
+      color: tColors.secondaryBackgroundColor,
       child: ListTile(
-        textColor: AppSettings.isDarkMode
-            ? TaskWarriorColors.kprimaryTextColor
-            : TaskWarriorColors.ksecondaryTextColor,
+        textColor: tColors.primaryTextColor,
         title: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
@@ -381,10 +351,9 @@ class TagsWidget extends StatelessWidget {
                         text: '$name:'.padRight(13),
                         style: TextStyle(
                           fontFamily: FontFamily.poppins,
+                          fontWeight: FontWeight.bold,
                           fontSize: TaskWarriorFonts.fontSizeMedium,
-                          color: AppSettings.isDarkMode
-                              ? TaskWarriorColors.white
-                              : TaskWarriorColors.black,
+                          color: tColors.primaryTextColor,
                         )
                         // style: GoogleFonts.poppins(
                         //   fontWeight: TaskWarriorFonts.bold,
@@ -398,9 +367,7 @@ class TagsWidget extends StatelessWidget {
                       text:
                           '${(value as ListBuilder?)?.build() ?? 'not selected'}',
                       style: TextStyle(
-                        color: AppSettings.isDarkMode
-                            ? TaskWarriorColors.white
-                            : TaskWarriorColors.black,
+                        color: tColors.primaryTextColor,
                       ),
                     ),
                   ],

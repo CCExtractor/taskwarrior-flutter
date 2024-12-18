@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:taskwarrior/app/models/json/task.dart';
-import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
@@ -8,7 +7,7 @@ import 'package:taskwarrior/app/utils/language/supported_language.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/datetime_differences.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/modify.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/urgency.dart';
-import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 class TaskListItem extends StatelessWidget {
   const TaskListItem(
@@ -16,7 +15,6 @@ class TaskListItem extends StatelessWidget {
     this.pendingFilter = false,
     this.waitingFilter = false,
     super.key,
-    required this.darkmode,
     required this.useDelayTask,
     required this.modify,
     required this.selectedLanguage,
@@ -25,13 +23,13 @@ class TaskListItem extends StatelessWidget {
   final Task task;
   final bool pendingFilter;
   final bool waitingFilter;
-  final bool darkmode;
   final Modify modify;
   final bool useDelayTask;
   final SupportedLanguage selectedLanguage;
 
   @override
   Widget build(BuildContext context) {
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     // ignore: unused_element
     void saveChanges() async {
       var now = DateTime.now().toUtc();
@@ -42,14 +40,10 @@ class TaskListItem extends StatelessWidget {
           content: Text(
             'Task Updated',
             style: TextStyle(
-              color: AppSettings.isDarkMode
-                  ? TaskWarriorColors.kprimaryTextColor
-                  : TaskWarriorColors.kLightPrimaryTextColor,
+              color: tColors.primaryTextColor,
             ),
           ),
-          backgroundColor: AppSettings.isDarkMode
-              ? TaskWarriorColors.ksecondaryBackgroundColor
-              : TaskWarriorColors.kLightSecondaryBackgroundColor,
+          backgroundColor: tColors.secondaryBackgroundColor,
           duration: const Duration(seconds: 2)));
     }
 
@@ -60,11 +54,8 @@ class TaskListItem extends StatelessWidget {
     }
 
     MaterialColor colours = Colors.grey;
-    var colour = darkmode ? Colors.white : Colors.black;
-    var dimColor = darkmode
-        ? const Color.fromARGB(137, 248, 248, 248)
-        : const Color.fromARGB(136, 17, 17, 17);
-
+    Color colour =tColors.primaryTextColor!;
+    Color dimColor = tColors.dimCol!;
     if (task.priority == 'H') {
       colours = Colors.red;
     } else if (task.priority == 'M') {
