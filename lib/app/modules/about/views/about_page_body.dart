@@ -7,11 +7,10 @@ import 'package:taskwarrior/app/modules/about/controllers/about_controller.dart'
 import 'package:taskwarrior/app/utils/gen/assets.gen.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
-import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 
 class AboutPageBody extends StatelessWidget {
   final AboutController aboutController;
@@ -19,6 +18,7 @@ class AboutPageBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     String introduction =
         SentenceManager(currentLanguage: aboutController.selectedLanguage.value)
             .sentences
@@ -51,9 +51,7 @@ class AboutPageBody extends StatelessWidget {
                 fontFamily: FontFamily.poppins,
                 fontWeight: TaskWarriorFonts.bold,
                 fontSize: TaskWarriorFonts.fontSizeExtraLarge,
-                color: AppSettings.isDarkMode
-                    ? TaskWarriorColors.white
-                    : TaskWarriorColors.black,
+                color: tColors.primaryTextColor,
               ),
             ),
             SizedBox(
@@ -84,9 +82,7 @@ class AboutPageBody extends StatelessWidget {
                                     fontFamily: FontFamily.poppins,
                                     fontWeight: TaskWarriorFonts.bold,
                                     fontSize: TaskWarriorFonts.fontSizeMedium,
-                                    color: AppSettings.isDarkMode
-                                        ? TaskWarriorColors.white
-                                        : TaskWarriorColors.black,
+                                    color: tColors.primaryTextColor,
                                   ),
                                 ),
                                 TextSpan(
@@ -94,9 +90,7 @@ class AboutPageBody extends StatelessWidget {
                                   style: TextStyle(
                                     fontFamily: FontFamily.poppins,
                                     fontSize: TaskWarriorFonts.fontSizeMedium,
-                                    color: AppSettings.isDarkMode
-                                        ? TaskWarriorColors.white
-                                        : TaskWarriorColors.black,
+                                    color: tColors.primaryTextColor,
                                   ),
                                 ),
                               ],
@@ -116,9 +110,7 @@ class AboutPageBody extends StatelessWidget {
                                         fontWeight: TaskWarriorFonts.bold,
                                         fontSize:
                                             TaskWarriorFonts.fontSizeMedium,
-                                        color: AppSettings.isDarkMode
-                                            ? TaskWarriorColors.white
-                                            : TaskWarriorColors.black,
+                                        color: tColors.primaryTextColor,
                                       ),
                                     ),
                                     TextSpan(
@@ -127,9 +119,7 @@ class AboutPageBody extends StatelessWidget {
                                         fontFamily: FontFamily.poppins,
                                         fontSize:
                                             TaskWarriorFonts.fontSizeMedium,
-                                        color: AppSettings.isDarkMode
-                                            ? TaskWarriorColors.white
-                                            : TaskWarriorColors.black,
+                                        color: tColors.primaryTextColor,
                                       ),
                                     ),
                                   ],
@@ -154,9 +144,7 @@ class AboutPageBody extends StatelessWidget {
                 fontFamily: FontFamily.poppins,
                 fontWeight: TaskWarriorFonts.medium,
                 fontSize: TaskWarriorFonts.fontSizeSmall,
-                color: AppSettings.isDarkMode
-                    ? TaskWarriorColors.white
-                    : TaskWarriorColors.black,
+                color: tColors.primaryTextColor,
               ),
             ),
             SizedBox(
@@ -170,9 +158,7 @@ class AboutPageBody extends StatelessWidget {
                   height: Get.height * 0.05,
                   child: ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppSettings.isDarkMode
-                          ? TaskWarriorColors.kLightSecondaryBackgroundColor
-                          : TaskWarriorColors.ksecondaryBackgroundColor,
+                      backgroundColor: tColors.secondaryTextColor,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -190,9 +176,7 @@ class AboutPageBody extends StatelessWidget {
                         width: 20,
                         height: 20,
                         colorFilter: ColorFilter.mode(
-                            AppSettings.isDarkMode
-                                ? TaskWarriorColors.black
-                                : TaskWarriorColors.white,
+                            tColors.secondaryBackgroundColor!,
                             BlendMode.srcIn)),
                     label: Text(
                       "GitHub",
@@ -200,9 +184,7 @@ class AboutPageBody extends StatelessWidget {
                         fontFamily: FontFamily.poppins,
                         fontWeight: TaskWarriorFonts.medium,
                         fontSize: TaskWarriorFonts.fontSizeSmall,
-                        color: AppSettings.isDarkMode
-                            ? TaskWarriorColors.black
-                            : TaskWarriorColors.white,
+                        color: tColors.secondaryBackgroundColor,
                       ),
                     ),
                   ),
@@ -212,9 +194,7 @@ class AboutPageBody extends StatelessWidget {
                   height: Get.height * 0.05,
                   child: ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppSettings.isDarkMode
-                          ? TaskWarriorColors.kLightSecondaryBackgroundColor
-                          : TaskWarriorColors.ksecondaryBackgroundColor,
+                      backgroundColor: tColors.secondaryTextColor,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -229,19 +209,17 @@ class AboutPageBody extends StatelessWidget {
                         width: 20,
                         height: 20,
                         colorFilter: ColorFilter.mode(
-                            AppSettings.isDarkMode
-                                ? TaskWarriorColors.black
-                                : TaskWarriorColors.white,
-                            BlendMode.srcIn)),
+                            tColors.secondaryBackgroundColor!,
+                            BlendMode.srcIn
+                            )
+                        ),
                     label: Text(
                       "CCExtractor",
                       style: TextStyle(
                         fontFamily: FontFamily.poppins,
                         fontWeight: TaskWarriorFonts.medium,
                         fontSize: TaskWarriorFonts.fontSizeSmall,
-                        color: AppSettings.isDarkMode
-                            ? TaskWarriorColors.black
-                            : TaskWarriorColors.white,
+                        color: tColors.secondaryBackgroundColor,
                       ),
                     ),
                   ),
@@ -261,9 +239,7 @@ class AboutPageBody extends StatelessWidget {
                 fontFamily: FontFamily.poppins,
                 fontWeight: TaskWarriorFonts.semiBold,
                 fontSize: TaskWarriorFonts.fontSizeMedium,
-                color: AppSettings.isDarkMode
-                    ? TaskWarriorColors.white
-                    : TaskWarriorColors.black,
+                color: tColors.primaryTextColor,
               ),
             ),
             SizedBox(
