@@ -9,6 +9,7 @@ import 'package:taskwarrior/app/utils/constants/constants.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 import '../controllers/reports_controller.dart';
 
@@ -20,7 +21,7 @@ class ReportsView extends GetView<ReportsController> {
     controller.initReportsTour();
     controller.showReportsTour(context);
     double height = MediaQuery.of(context).size.height;
-
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
@@ -86,9 +87,7 @@ class ReportsView extends GetView<ReportsController> {
           ),
         ),
       ),
-      backgroundColor: AppSettings.isDarkMode
-          ? TaskWarriorColors.kprimaryBackgroundColor
-          : TaskWarriorColors.white,
+      backgroundColor: tColors.primaryBackgroundColor,
       body: Obx(
         () => controller.allData.isEmpty
             ? Column(
@@ -97,9 +96,7 @@ class ReportsView extends GetView<ReportsController> {
                 children: [
                   Icon(
                     Icons.heart_broken,
-                    color: AppSettings.isDarkMode
-                        ? TaskWarriorColors.white
-                        : TaskWarriorColors.black,
+                    color: tColors.primaryTextColor,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -113,9 +110,7 @@ class ReportsView extends GetView<ReportsController> {
                           fontFamily: FontFamily.poppins,
                           fontWeight: TaskWarriorFonts.medium,
                           fontSize: TaskWarriorFonts.fontSizeSmall,
-                          color: AppSettings.isDarkMode
-                              ? TaskWarriorColors.white
-                              : TaskWarriorColors.black,
+                          color: tColors.primaryTextColor,
                         ),
                       ),
                     ],
@@ -132,9 +127,7 @@ class ReportsView extends GetView<ReportsController> {
                           fontFamily: FontFamily.poppins,
                           fontWeight: TaskWarriorFonts.light,
                           fontSize: TaskWarriorFonts.fontSizeSmall,
-                          color: AppSettings.isDarkMode
-                              ? TaskWarriorColors.white
-                              : TaskWarriorColors.black,
+                          color: tColors.primaryTextColor,
                         ),
                       ),
                     ],
