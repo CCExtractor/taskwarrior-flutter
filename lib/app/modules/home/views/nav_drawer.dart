@@ -13,6 +13,7 @@ import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/taskchampion/taskchampion.dart';
+import 'package:taskwarrior/app/utils/themes/themes.dart';
 
 class NavDrawer extends StatelessWidget {
   final HomeController homeController;
@@ -21,12 +22,8 @@ class NavDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: AppSettings.isDarkMode
-          ? TaskWarriorColors.kprimaryBackgroundColor
-          : TaskWarriorColors.kLightPrimaryBackgroundColor,
-      surfaceTintColor: AppSettings.isDarkMode
-          ? TaskWarriorColors.kprimaryBackgroundColor
-          : TaskWarriorColors.kLightPrimaryBackgroundColor,
+      backgroundColor: AppColor.currentAppThemeColor,
+      surfaceTintColor: AppColor.currentAppThemeColor,
       child: Container(
         color: AppSettings.isDarkMode
             ? TaskWarriorColors.kprimaryBackgroundColor

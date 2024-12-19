@@ -12,6 +12,7 @@ import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/themes/themes.dart';
 
 class FilterDrawer extends StatelessWidget {
   final Filters filters;
@@ -27,12 +28,8 @@ class FilterDrawer extends StatelessWidget {
         ? TaskWarriorColors.ksecondaryBackgroundColor
         : TaskWarriorColors.kLightPrimaryBackgroundColor;
     return Drawer(
-      backgroundColor: AppSettings.isDarkMode
-          ? TaskWarriorColors.kprimaryBackgroundColor
-          : TaskWarriorColors.kLightPrimaryBackgroundColor,
-      surfaceTintColor: AppSettings.isDarkMode
-          ? TaskWarriorColors.kprimaryBackgroundColor
-          : TaskWarriorColors.kLightPrimaryBackgroundColor,
+      backgroundColor: AppColor.currentAppThemeColor,
+      surfaceTintColor: AppColor.currentAppThemeColor,
       child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8),

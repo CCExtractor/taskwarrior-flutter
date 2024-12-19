@@ -14,6 +14,7 @@ import 'package:taskwarrior/app/utils/constants/utilites.dart';
 
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
+import 'package:taskwarrior/app/utils/themes/themes.dart';
 
 import '../controllers/profile_controller.dart';
 
@@ -54,9 +55,7 @@ class ProfileView extends GetView<ProfileController> {
         ),
       ),
       //primary: false,
-      backgroundColor: AppSettings.isDarkMode
-          ? TaskWarriorColors.kprimaryBackgroundColor
-          : TaskWarriorColors.kLightPrimaryBackgroundColor,
+      backgroundColor: AppColor.currentAppThemeColor,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -104,9 +103,9 @@ class ProfileView extends GetView<ProfileController> {
                       return Utils.showAlertDialog(
                         title: Text(
                           SentenceManager(
-                                currentLanguage: AppSettings.selectedLanguage)
-                            .sentences
-                            .profilePageExportTasksDialogueTitle,
+                                  currentLanguage: AppSettings.selectedLanguage)
+                              .sentences
+                              .profilePageExportTasksDialogueTitle,
                           style: TextStyle(
                             color: AppSettings.isDarkMode
                                 ? TaskWarriorColors.white
@@ -115,9 +114,9 @@ class ProfileView extends GetView<ProfileController> {
                         ),
                         content: Text(
                           SentenceManager(
-                                currentLanguage: AppSettings.selectedLanguage)
-                            .sentences
-                            .profilePageExportTasksDialogueSubtitle,
+                                  currentLanguage: AppSettings.selectedLanguage)
+                              .sentences
+                              .profilePageExportTasksDialogueSubtitle,
                           style: TextStyle(
                             color: AppSettings.isDarkMode
                                 ? TaskWarriorColors.white
@@ -325,11 +324,9 @@ class ProfilesColumn extends StatelessWidget {
                     ? TaskWarriorColors.deepPurpleAccent
                     : TaskWarriorColors.deepPurple),
             label: Text(
-              SentenceManager(
-                          currentLanguage: AppSettings.selectedLanguage)
-                      .sentences
-                      .profilePageAddNewProfile,
-
+              SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                  .sentences
+                  .profilePageAddNewProfile,
               style: TextStyle(
                 color: AppSettings.isDarkMode
                     ? TaskWarriorColors.white
