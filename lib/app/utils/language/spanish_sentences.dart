@@ -71,7 +71,7 @@ class SpanishSentences extends Sentences {
   String get settingsPageSelectDirectoryTitle => 'Seleccionar directorio';
   @override
   String get settingsPageSelectDirectoryDescription =>
-      'Selecciona el directorio donde se almacenan los datos de TaskWarrior\nDirectorio actual: ';
+      'Selecciona el directorio donde se almacenan los datos de Taskwarrior\nDirectorio actual: ';
   @override
   String get settingsPageChangeDirectory => 'Cambiar directorio';
   @override
@@ -192,7 +192,7 @@ class SpanishSentences extends Sentences {
 
   @override
   String get taskchampionTileDescription =>
-      'Cambia la sincronización de TaskWarrior al servidor de sincronización CCSync o Taskchampion';
+      'Cambia la sincronización de Taskwarrior al servidor de sincronización CCSync o Taskchampion';
 
   @override
   String get taskchampionTileTitle => 'Sincronización Taskchampion';
