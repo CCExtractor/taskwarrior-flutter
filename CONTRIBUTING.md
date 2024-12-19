@@ -5,7 +5,7 @@
 # Getting Started
 
 In order to use the mobile app, you would need the flood backend running on your local machine. There are several ways
-you can do that and all these approaches can be found at [TaskWarrior-Flutter](https://github.com/CCExtractor/taskwarrior-flutter/wiki)
+you can do that and all these approaches can be found at [Taskwarrior-Flutter](https://github.com/CCExtractor/taskwarrior-flutter/wiki)
 
 
 ## Steps

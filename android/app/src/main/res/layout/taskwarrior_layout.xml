@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="16dp"
-		android:text="Task Warrior"
+		android:text="Taskwarrior"
 		android:textColor="#666666"
         android:textSize="24sp"
         android:textStyle="bold"/>
