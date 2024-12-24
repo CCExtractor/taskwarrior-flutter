@@ -1,6 +1,20 @@
 <resources>
-    <color name="light_blue_50">#FFE1F5FE</color>
-    <color name="light_blue_200">#FF81D4FA</color>
-    <color name="light_blue_600">#FF039BE5</color>
-    <color name="light_blue_900">#FF01579B</color>
+    <color name="button_bg">#000000</color>
+    <color name="button_fg">#FFFFFF</color>
+    <color name="title_col">#000</color>
+    <color name="bg">#fff</color>
+    <color name="fg">#000</color>
+    <color name="divider">#4D4D4D</color>
+    <color name="bar_color">#efefef</color>
+    <color name="button_bg_dark">#FFFFFF</color>
+    <color name="button_fg_dark">#000000</color>
+    <color name="title_col_dark">#FFFFFF</color>
+    <color name="bg_dark">#2C2C2C</color>
+    <color name="fg_dark">#FFFFFF</color>
+    <color name="divider_dark">#787878</color>
+    <color name="bar_color_dark">#4D4D4D</color>
+    <color name="high_priority">#FF0000</color>
+    <color name="mid_priority">#FFF200</color>
+    <color name="low_priority">#00FF42</color>
+    <color name="no_priority">#A2A2A2</color>
 </resources>
