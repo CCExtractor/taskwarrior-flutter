@@ -16,6 +16,9 @@ class OnboardingPage extends StatelessWidget {
         padding: const EdgeInsets.all(35.0),
         child: Column(
           children: [
+            SizedBox(
+              height: (Get.height >= 840) ? 120 : 90,
+            ),
             SvgPicture.asset(
               onboardingModel.image,
               height: Get.width / 100 * 30,
