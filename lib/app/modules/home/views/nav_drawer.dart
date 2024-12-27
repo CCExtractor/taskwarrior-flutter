@@ -58,7 +58,7 @@ class NavDrawer extends StatelessWidget {
                         Get.changeThemeMode(newMode ? ThemeMode.dark : ThemeMode.light);
                         AppSettings.isDarkMode = newMode;
                         await SelectedTheme.saveMode(AppSettings.isDarkMode);
-                        Get.back();
+                        // Get.back();
                         homeController.initLanguageAndDarkMode();
                         Get.changeTheme(AppSettings.isDarkMode ? darkTheme : lightTheme);
                       },

@@ -208,7 +208,7 @@ class TasksBuilder extends StatelessWidget {
                                     }
                                     if (Platform.isAndroid) {
                                       WidgetController widgetController =
-                                          Get.put(WidgetController(context));
+                                          Get.put(WidgetController());
                                       widgetController.fetchAllData();
 
                                       widgetController.update();

@@ -28,7 +28,6 @@ class TaskViewBuilder extends StatelessWidget {
     
     return Obx(() {
       List<Tasks> tasks = List<Tasks>.from(taskController.tasks);
-
       // Filter tasks based on the selected project
       if (project != 'All Projects') {
         tasks = tasks.where((task) => task.project == project).toList();

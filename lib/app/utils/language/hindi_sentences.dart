@@ -70,7 +70,7 @@ class HindiSentences extends Sentences {
   String get settingsPageSelectDirectoryTitle => 'निर्देशिका चुनें';
   @override
   String get settingsPageSelectDirectoryDescription =>
-      'निर्देशिका चुनें जहां TaskWarrior डेटा स्टोर होता है\nवर्तमान निर्देशिका: ';
+      'निर्देशिका चुनें जहां Taskwarrior डेटा स्टोर होता है\nवर्तमान निर्देशिका: ';
   @override
   String get settingsPageChangeDirectory => 'निर्देशिका बदलें';
   @override
@@ -191,7 +191,7 @@ class HindiSentences extends Sentences {
 
   @override
   String get taskchampionTileDescription =>
-      'CCSync या Taskchampion सिंक सर्वर के साथ TaskWarrior सिंक पर स्विच करें';
+      'CCSync या Taskchampion सिंक सर्वर के साथ Taskwarrior सिंक पर स्विच करें';
 
   @override
   String get taskchampionTileTitle => 'Taskchampion सिंक';

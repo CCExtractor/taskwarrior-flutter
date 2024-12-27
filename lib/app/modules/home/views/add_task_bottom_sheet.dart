@@ -102,6 +102,13 @@ class AddTaskBottomSheet extends StatelessWidget {
                 onFieldSubmitted: (tag) {
                   addTag(tag.trim());
                 },
+                onChanged: (value) {
+                  String trimmedString = value.trim();
+                  if (value.endsWith(" ") &&
+                      trimmedString.split(' ').length == 1) {
+                    addTag(trimmedString);
+                  }
+                },
               ),
             ),
             IconButton(
@@ -144,9 +151,9 @@ class AddTaskBottomSheet extends StatelessWidget {
         ),
         validator: (name) => name != null && name.isEmpty
             ? SentenceManager(
-                        currentLanguage: homeController.selectedLanguage.value)
-                    .sentences
-                    .addTaskFieldCannotBeEmpty
+                    currentLanguage: homeController.selectedLanguage.value)
+                .sentences
+                .addTaskFieldCannotBeEmpty
             : null,
       );
 
@@ -319,9 +326,9 @@ class AddTaskBottomSheet extends StatelessWidget {
       TextButton(
         child: Text(
           SentenceManager(
-                        currentLanguage: homeController.selectedLanguage.value)
-                    .sentences
-                    .addTaskCancel,
+                  currentLanguage: homeController.selectedLanguage.value)
+              .sentences
+              .addTaskCancel,
           style: TextStyle(
             color: tColors.primaryTextColor,
           ),
@@ -343,8 +350,8 @@ class AddTaskBottomSheet extends StatelessWidget {
       child: Text(
         SentenceManager(
                         currentLanguage: homeController.selectedLanguage.value)
-                    .sentences
-                    .addTaskAdd,
+            .sentences
+            .addTaskAdd,
         style: TextStyle(
           color: tColors.primaryTextColor,
         ),
@@ -376,7 +383,7 @@ class AddTaskBottomSheet extends StatelessWidget {
             Get.back();
             if (Platform.isAndroid) {
               WidgetController widgetController =
-                  Get.put(WidgetController(context));
+                  Get.put(WidgetController());
               widgetController.fetchAllData();
 
               widgetController.update();
@@ -388,8 +395,8 @@ class AddTaskBottomSheet extends StatelessWidget {
                 content: Text(
                   SentenceManager(
                         currentLanguage: homeController.selectedLanguage.value)
-                    .sentences
-                    .addTaskTaskAddedSuccessfully,
+                      .sentences
+                      .addTaskTaskAddedSuccessfully,
                   style: TextStyle(
                     color: tColors.primaryTextColor,
                   ),
@@ -427,11 +434,19 @@ class AddTaskBottomSheet extends StatelessWidget {
   void addTag(String tag) {
     if (tag.isNotEmpty) {
       String trimmedString = tag.trim();
-      homeController.tags.add(trimmedString);
+      List<String> tags = trimmedString.split(" ");
+      for(tag in tags){
+        if(checkTagIfExists(tag)) {
+          removeTag(tag);
+        }
+        homeController.tags.add(tag);
+      }
       homeController.tagcontroller.text = '';
     }
   }
-
+  bool checkTagIfExists(String tag){
+    return homeController.tags.contains(tag);
+  }
   void removeTag(String tag) {
     homeController.tags.remove(tag);
   }

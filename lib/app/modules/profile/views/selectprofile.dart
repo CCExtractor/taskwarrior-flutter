@@ -71,6 +71,7 @@ class SelectProfile extends StatelessWidget {
                     'All Profiles:',
                     overflow: TextOverflow.fade,
                     style: GoogleFonts.poppins(
+
                       fontWeight: TaskWarriorFonts.bold,
                       fontSize: TaskWarriorFonts.fontSizeMedium,
                       color: tColors.primaryTextColor,
@@ -154,6 +155,7 @@ class SelectProfileListTile extends StatelessWidget {
                     overflow: TextOverflow.fade,
                     style: GoogleFonts.poppins(
                       color: tColors.secondaryTextColor,
+                      fontSize: TaskWarriorFonts.fontSizeMedium
                     ),
                   ),
                 ),
@@ -165,6 +167,7 @@ class SelectProfileListTile extends StatelessWidget {
                 uuid,
                 style: GoogleFonts.poppins(
                   color: tColors.secondaryTextColor,
+                  fontSize: TaskWarriorFonts.fontSizeSmall
                 ),
               ),
             ),
