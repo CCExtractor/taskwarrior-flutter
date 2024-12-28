@@ -190,7 +190,7 @@ class BengaliSentences extends Sentences {
 
   @override
   String get taskchampionTileDescription =>
-      'TaskWarrior সিঙ্কিং CCSync বা Taskchampion সিঙ্ক সার্ভারে পরিবর্তন করুন';
+      'Taskwarrior সিঙ্কিং CCSync বা Taskchampion সিঙ্ক সার্ভারে পরিবর্তন করুন';
 
   @override
   String get taskchampionTileTitle => 'Taskchampion সিঙ্ক';

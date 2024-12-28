@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Background (transparent or any desired background color) -->
+    <item android:width="@dimen/dot_img_size" android:height="@dimen/dot_img_size">
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/transparent" />
+        </shape>
+    </item>
+
+    <!-- Dot in the center -->
+    <item
+        android:width="@dimen/dot_size"
+        android:height="@dimen/dot_size"
+        android:gravity="center">
+        <shape android:shape="oval">
+            <solid android:color="@color/no_priority" />
+        </shape>
+    </item>
+</layer-list>

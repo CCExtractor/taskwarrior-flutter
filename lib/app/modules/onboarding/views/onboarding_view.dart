@@ -20,7 +20,7 @@ class OnboardingView extends GetView<OnboardingController> {
             child: Column(
               children: [
                 Expanded(
-                  flex: 3,
+                  flex: 5,
                   child: PageView.builder(
                     physics: const BouncingScrollPhysics(),
                     controller: pageController,
