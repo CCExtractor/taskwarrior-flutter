@@ -10,7 +10,7 @@ import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/taskchampion/credentials_storage.dart';
 import 'package:taskwarrior/app/utils/taskchampion/taskchampion.dart';
 import 'package:taskwarrior/app/utils/taskserver/taskserver.dart';
-import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 import '../controllers/home_controller.dart';
 
@@ -26,6 +26,7 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return AppBar(
       backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
       surfaceTintColor: TaskWarriorColors.kprimaryBackgroundColor,
@@ -83,9 +84,7 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        backgroundColor: AppSettings.isDarkMode
-                            ? TaskWarriorColors.ksecondaryBackgroundColor
-                            : TaskWarriorColors.kLightSecondaryBackgroundColor,
+                        backgroundColor: tColors.secondaryBackgroundColor,
                         content: Text(
                           SentenceManager(
                                   currentLanguage:
@@ -93,9 +92,7 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
                               .sentences
                               .homePageTaskWarriorNotConfigured,
                           style: TextStyle(
-                            color: AppSettings.isDarkMode
-                                ? TaskWarriorColors.white
-                                : TaskWarriorColors.black,
+                            color: tColors.primaryTextColor,
                           ),
                         ),
                         action: SnackBarAction(
@@ -119,9 +116,7 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
                 } else if (c == null || e == null) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      backgroundColor: AppSettings.isDarkMode
-                          ? TaskWarriorColors.ksecondaryBackgroundColor
-                          : TaskWarriorColors.kLightSecondaryBackgroundColor,
+                      backgroundColor: tColors.secondaryBackgroundColor,
                       content: Text(
                         SentenceManager(
                                 currentLanguage:
@@ -129,9 +124,7 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
                             .sentences
                             .homePageTaskWarriorNotConfigured,
                         style: TextStyle(
-                          color: AppSettings.isDarkMode
-                              ? TaskWarriorColors.white
-                              : TaskWarriorColors.black,
+                          color: tColors.primaryTextColor,
                         ),
                       ),
                       action: SnackBarAction(
@@ -158,6 +151,7 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
+                      backgroundColor: tColors.secondaryBackgroundColor,
                       content: Obx(
                         () => Text(
                           SentenceManager(
@@ -166,9 +160,7 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
                               .sentences
                               .homePageTaskWarriorNotConfigured,
                           style: TextStyle(
-                            color: AppSettings.isDarkMode
-                                ? TaskWarriorColors.white
-                                : TaskWarriorColors.black,
+                            color: tColors.primaryTextColor,
                           ),
                         ),
                       ),

@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:google_fonts/google_fonts.dart';
-import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/projects.dart';
-import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 class ProjectsColumn extends StatelessWidget {
   const ProjectsColumn({
@@ -22,6 +21,7 @@ class ProjectsColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Column(
       children: [
         Padding(
@@ -36,9 +36,7 @@ class ProjectsColumn extends StatelessWidget {
                   fontFamily: FontFamily.poppins,
                   fontWeight: TaskWarriorFonts.bold,
                   fontSize: TaskWarriorFonts.fontSizeSmall,
-                  color: AppSettings.isDarkMode
-                      ? TaskWarriorColors.white
-                      : TaskWarriorColors.black,
+                  color: tColors.primaryTextColor,
                 ),
               ),
               SizedBox(
@@ -53,9 +51,7 @@ class ProjectsColumn extends StatelessWidget {
                         style: TextStyle(
                           fontFamily: FontFamily.poppins,
                           fontSize: TaskWarriorFonts.fontSizeSmall,
-                          color: AppSettings.isDarkMode
-                              ? TaskWarriorColors.white
-                              : TaskWarriorColors.black,
+                          color: tColors.primaryTextColor,
                         ),
                       ),
                     ],
@@ -74,9 +70,7 @@ class ProjectsColumn extends StatelessWidget {
                   style: TextStyle(
                     fontFamily: FontFamily.poppins,
                     fontSize: TaskWarriorFonts.fontSizeSmall,
-                    color: AppSettings.isDarkMode
-                        ? TaskWarriorColors.white
-                        : TaskWarriorColors.black,
+                    color: tColors.primaryTextColor,
                   )),
             ],
           ),
@@ -98,9 +92,7 @@ class ProjectsColumn extends StatelessWidget {
                 style: TextStyle(
                   fontFamily: FontFamily.poppins,
                   fontSize: TaskWarriorFonts.fontSizeSmall,
-                  color: AppSettings.isDarkMode
-                      ? TaskWarriorColors.white
-                      : TaskWarriorColors.black,
+                  color: tColors.primaryTextColor,
                 ),
               ),
               SizedBox(
@@ -129,6 +121,8 @@ class ProjectTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+
     var node = projects[project]!;
 
     var title = Row(
@@ -138,30 +132,24 @@ class ProjectTile extends StatelessWidget {
           child: Text(
             project,
             style: GoogleFonts.poppins(
-                color: AppSettings.isDarkMode
-                    ? TaskWarriorColors.white
-                    : TaskWarriorColors.black),
-          ),
+                color: tColors.primaryTextColor,
+            ),
+          ) 
         ),
         Text(
           (node.children.isEmpty)
               ? '${node.subtasks}'
               : '(${node.tasks}) ${node.subtasks}',
           style: GoogleFonts.poppins(
-              color: AppSettings.isDarkMode
-                  ? TaskWarriorColors.white
-                  : TaskWarriorColors.black),
+              color: tColors.primaryTextColor
+           ),
         )
       ],
     );
 
     var radio = Radio(
-      activeColor: AppSettings.isDarkMode
-          ? TaskWarriorColors.white
-          : TaskWarriorColors.ksecondaryBackgroundColor,
-      focusColor: AppSettings.isDarkMode
-          ? TaskWarriorColors.white
-          : TaskWarriorColors.ksecondaryBackgroundColor,
+      activeColor: tColors.primaryTextColor,
+      focusColor: tColors.secondaryTextColor,
       toggleable: true,
       value: project,
       groupValue: projectFilter,
@@ -198,9 +186,7 @@ class ProjectTile extends StatelessWidget {
                         : '(${node.tasks}) ${node.subtasks}',
                     maxLines: 1,
                     style: GoogleFonts.poppins(
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.black
-                          : TaskWarriorColors.white,
+                      color: tColors.primaryTextColor,
                     ),
                   ),
                 ),
@@ -212,12 +198,8 @@ class ProjectTile extends StatelessWidget {
             key: PageStorageKey(project),
             leading: radio,
             title: title,
-            backgroundColor: AppSettings.isDarkMode
-                ? TaskWarriorColors.ksecondaryBackgroundColor
-                : TaskWarriorColors.ksecondaryBackgroundColor,
-            textColor: AppSettings.isDarkMode
-                ? TaskWarriorColors.white
-                : TaskWarriorColors.ksecondaryBackgroundColor,
+            backgroundColor: tColors.primaryTextColor,
+            textColor: tColors.primaryTextColor,
             children: node.children
                 .map((childProject) => ProjectTile(
                       project: childProject,
