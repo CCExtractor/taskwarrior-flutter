@@ -166,7 +166,7 @@ class DateTimeWidget extends StatelessWidget {
                         color: tColors.primaryTextColor,
                       ),
                     ),
-                    backgroundColor: tColors.primaryTextColor,
+                    backgroundColor: tColors.primaryBackgroundColor,
                     duration: const Duration(seconds: 2),
                   ),
                 );

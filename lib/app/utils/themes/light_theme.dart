@@ -15,6 +15,9 @@ ThemeData lightTheme = ThemeData(
       surface: TaskWarriorColors.white,
       onSurface: TaskWarriorColors.black,
   ),
+  timePickerTheme: TimePickerThemeData(
+    dayPeriodColor: TaskWarriorColors.grey
+  ),
   extensions: [
     TaskWarriorColors.lightTheme
   ]

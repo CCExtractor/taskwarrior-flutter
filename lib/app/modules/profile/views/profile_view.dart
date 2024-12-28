@@ -8,7 +8,6 @@ import 'package:taskwarrior/app/modules/profile/views/manageprofile.dart';
 import 'package:taskwarrior/app/modules/profile/views/renameprofiledialog.dart';
 import 'package:taskwarrior/app/modules/profile/views/selectprofile.dart';
 import 'package:taskwarrior/app/routes/app_pages.dart';
-import 'package:taskwarrior/app/utils/constants/palette.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
 
@@ -27,7 +26,7 @@ class ProfileView extends GetView<ProfileController> {
     TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Palette.kToDark.shade200,
+        backgroundColor: TaskWarriorColors.appBarColor,
         title: Obx(() => Text(
               controller.profilesMap.length == 1
                   ? SentenceManager(

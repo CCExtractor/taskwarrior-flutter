@@ -114,7 +114,7 @@ class TasksBuilder extends StatelessWidget {
     return Scaffold(
         floatingActionButtonLocation:
             FloatingActionButtonLocation.miniStartFloat,
-        floatingActionButton: AnimatedOpacity(
+        floatingActionButton: showbtn ? AnimatedOpacity(
           duration: const Duration(milliseconds: 100), //show/hide animation
           opacity: showbtn ? 1.0 : 0.0, //set obacity to 1 on visible, or hide
           child: FloatingActionButton(
@@ -128,13 +128,13 @@ class TasksBuilder extends StatelessWidget {
                   curve: Curves.fastLinearToSlowEaseIn //scroll type
                   );
             },
-            backgroundColor: tColors.secondaryBackgroundColor,
+            backgroundColor: tColors.primaryTextColor,
             child: Icon(
               Icons.arrow_upward,
-              color: tColors.secondaryTextColor,
+              color: tColors.secondaryBackgroundColor,
             ),
           ),
-        ),
+        ) : null,
         backgroundColor: Colors.transparent,
         body: Obx(
           () => taskData.isEmpty
