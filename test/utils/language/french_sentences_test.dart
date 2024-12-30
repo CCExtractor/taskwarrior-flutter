@@ -46,7 +46,7 @@ void main() {
         'Basculer entre les langues natives');
     expect(french.settingsPageSelectDirectoryTitle, 'Choisir un répertoire');
     expect(french.settingsPageSelectDirectoryDescription,
-        'Choisissez le répertoire où les données TaskWarrior sont stockées\nRépertoire actuel : ');
+        'Choisissez le répertoire où les données Taskwarrior sont stockées\nRépertoire actuel : ');
     expect(french.settingsPageChangeDirectory, 'Changer de répertoire');
     expect(french.settingsPageSetToDefault, 'Définir par défaut');
     expect(french.navDrawerProfile, 'Profil');
@@ -107,7 +107,7 @@ void main() {
     expect(french.reportsPageAddTasksToSeeReports,
         'Ajoutez des tâches pour voir les rapports');
     expect(french.taskchampionTileDescription,
-        'Basculez la synchronisation de TaskWarrior vers le serveur de synchronisation CCSync ou Taskchampion');
+        'Basculez la synchronisation de Taskwarrior vers le serveur de synchronisation CCSync ou Taskchampion');
     expect(french.taskchampionTileTitle, 'Synchronisation Taskchampion');
     expect(french.ccsyncCredentials, 'Identifiants CCSync');
     expect(french.deleteTaskConfirmation, 'Supprimer la tâche');
