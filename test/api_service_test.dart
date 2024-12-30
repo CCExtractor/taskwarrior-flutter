@@ -115,10 +115,6 @@ void main() {
       await taskDatabase.open();
     });
 
-    tearDown(() async {
-      await taskDatabase.deleteAllTasksInDB();
-    });
-
     test('insertTask adds a task to the database', () async {
       final task = Tasks(
         id: 1,
