@@ -1,4 +1,4 @@
-# TaskWarrior Mobile App
+# Taskwarrior Mobile App
 
 
 ![Group 3](https://github.com/Pavel401/taskwarrior-flutter/assets/47685150/1ffb623b-b147-4176-9f7c-abda544b257c)
@@ -38,7 +38,7 @@
 
 Taskwarrior is Free and Open Source Software that manages your TODO list from the command line.
 It is flexible, fast, and unobtrusive. It does its job then gets out of your way. The CLI tool and other relevant documentation can be
-found at [TaskWarrior](https://taskwarrior.org/download/).
+found at [Taskwarrior](https://taskwarrior.org/download/).
 
 This project aims to build an app for Taskwarrior. It is your task management app across all platforms. It helps you manage your tasks and filter them as per your needs.
 
@@ -253,4 +253,4 @@ Feel free to reach out if you encounter any issues.
 
 [Mabud Alam](https://www.linkedin.com/in/mabud/)
 
-Project Link: [TaskWarrior](https://github.com/CCExtractor/taskwarrior-flutter)
+Project Link: [Taskwarrior](https://github.com/CCExtractor/taskwarrior-flutter)

@@ -1,0 +1,65 @@
+<!-- container_layout.xml -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container_layout"
+    style="@style/Widget.Android.AppWidget.Container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_dark"
+    android:orientation="vertical"
+    android:padding="0dp"
+    android:theme="@style/Theme.Android.AppWidgetContainer"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/top_bar_height"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:background="@color/bar_color_dark">
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="@dimen/image_width_btn_width"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:src="@drawable/taskwarrior_widget_icon_dark"/>
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/text_task_list"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/fg_dark"/>
+
+        <ImageButton
+            android:id="@+id/add_btn"
+            android:layout_width="@dimen/image_width_btn_width"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/add_task_desc"
+            android:src="@drawable/add_dark"
+            android:background="@drawable/bg_button_add_dark"/>
+
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/list_view"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        />
+
+    <ImageButton
+        android:id="@+id/scrollButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/down_btn_icon_dark"
+        android:background="@color/bar_color_dark"/>
+</LinearLayout>
