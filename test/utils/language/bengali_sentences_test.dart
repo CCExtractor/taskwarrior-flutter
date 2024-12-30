@@ -104,7 +104,7 @@ void main() {
     expect(bengali.reportsPageAddTasksToSeeReports,
         'রিপোর্ট দেখতে টাস্ক যোগ করুন');
     expect(bengali.taskchampionTileDescription,
-        'TaskWarrior সিঙ্কিং CCSync বা Taskchampion সিঙ্ক সার্ভারে পরিবর্তন করুন');
+        'Taskwarrior সিঙ্কিং CCSync বা Taskchampion সিঙ্ক সার্ভারে পরিবর্তন করুন');
     expect(bengali.taskchampionTileTitle, 'Taskchampion সিঙ্ক');
     expect(bengali.ccsyncCredentials, 'CCSync ক্রেডেনশিয়াল');
     expect(bengali.deleteTaskConfirmation, 'টাস্ক মুছুন');

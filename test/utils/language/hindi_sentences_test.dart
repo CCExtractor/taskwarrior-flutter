@@ -46,7 +46,7 @@ void main() {
         'अपनी मातृभाषा के बीच टॉगल करें');
     expect(hindi.settingsPageSelectDirectoryTitle, 'निर्देशिका चुनें');
     expect(hindi.settingsPageSelectDirectoryDescription,
-        'निर्देशिका चुनें जहां TaskWarrior डेटा स्टोर होता है\nवर्तमान निर्देशिका: ');
+        'निर्देशिका चुनें जहां Taskwarrior डेटा स्टोर होता है\nवर्तमान निर्देशिका: ');
     expect(hindi.settingsPageChangeDirectory, 'निर्देशिका बदलें');
     expect(hindi.settingsPageSetToDefault, 'डिफॉल्ट पर सेट करें');
     expect(hindi.navDrawerProfile, 'प्रोफ़ाइल');
@@ -104,7 +104,7 @@ void main() {
     expect(hindi.reportsPageAddTasksToSeeReports,
         'रिपोर्ट देखने के लिए कार्य जोड़ें');
     expect(hindi.taskchampionTileDescription,
-        'CCSync या Taskchampion सिंक सर्वर के साथ TaskWarrior सिंक पर स्विच करें');
+        'CCSync या Taskchampion सिंक सर्वर के साथ Taskwarrior सिंक पर स्विच करें');
     expect(hindi.taskchampionTileTitle, 'Taskchampion सिंक');
     expect(hindi.ccsyncCredentials, 'CCync क्रेडेन्शियल');
     expect(hindi.deleteTaskConfirmation, 'कार्य हटाएं');
