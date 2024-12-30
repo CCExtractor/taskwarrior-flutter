@@ -1,5 +1,9 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get_test/utils/image_test_utils.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:http/http.dart' as http;
@@ -7,23 +11,22 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:taskwarrior/api_service.dart';
 import 'package:taskwarrior/app/utils/taskchampion/credentials_storage.dart';
 
-class MockHttpClient extends Mock implements http.Client {}
+import 'api_service_test.mocks.dart';
 
 class MockCredentialsStorage extends Mock implements CredentialsStorage {}
 
 class MockMethodChannel extends Mock implements MethodChannel {}
 
-@GenerateMocks([MockMethodChannel])
+@GenerateMocks([MockMethodChannel, http.Client])
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   databaseFactory = databaseFactoryFfi;
+  MockClient mockClient = MockClient();
 
   setUpAll(() {
     sqfliteFfiInit();
   });
-
-  setUp(() {});
 
   group('Tasks model', () {
     test('fromJson creates Tasks object', () {
@@ -84,11 +87,25 @@ void main() {
   });
 
   group('fetchTasks', () {
-    test('fetchTasks throws exception on failure', () async {
+    test('Fetch data successfully', () async {
+      final responseJson = jsonEncode({'data': 'Mock data'});
+      when(mockClient.get(
+          Uri.parse(
+              '$baseUrl/tasks?email=email&origin=$origin&UUID=123&encryptionSecret=secret'),
+          headers: {
+            "Content-Type": "application/json",
+          })).thenAnswer((_) async => http.Response(responseJson, 200));
+
+      final result = await fetchTasks('123', 'secret');
+
+      expect(result, isA<List<Tasks>>());
+    });
+
+    test('fetchTasks returns empty array', () async {
       const uuid = '123';
       const encryptionSecret = 'secret';
 
-      expect(() => fetchTasks(uuid, encryptionSecret), throwsException);
+      expect(await fetchTasks(uuid, encryptionSecret), isEmpty);
     });
   });
 
