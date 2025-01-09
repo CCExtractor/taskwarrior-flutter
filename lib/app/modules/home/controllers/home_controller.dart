@@ -508,7 +508,15 @@ class HomeController extends GetxController {
   final projectcontroller = TextEditingController();
   var due = Rxn<DateTime>();
   RxString dueString = ''.obs;
+  final priorityList = ['H', 'M', 'L','X'];
+  final priorityColors = [
+    TaskWarriorColors.red,
+    TaskWarriorColors.yellow,
+    TaskWarriorColors.green,
+    TaskWarriorColors.grey
+  ];
   RxString priority = 'M'.obs;
+
   final tagcontroller = TextEditingController();
   RxList<String> tags = <String>[].obs;
   RxBool inThePast = false.obs;
