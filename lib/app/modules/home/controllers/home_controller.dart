@@ -518,7 +518,7 @@ class HomeController extends GetxController {
 
 
   ];
-  RxString priority = 'M'.obs;
+  RxString priority = 'X'.obs;
 
   final tagcontroller = TextEditingController();
   RxList<String> tags = <String>[].obs;
