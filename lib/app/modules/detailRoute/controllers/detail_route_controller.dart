@@ -34,6 +34,10 @@ class DetailRouteController extends GetxController {
   void setAttribute(String name, dynamic newValue) {
     modify.set(name, newValue);
     onEdit.value = true;
+    if(name == 'start'){
+      debugPrint('Start Value Changed to $newValue');
+      startValue.value = newValue;
+    }
     initValues();
   }
 
@@ -82,7 +86,7 @@ class DetailRouteController extends GetxController {
     statusValue.value = modify.draft.status;
     entryValue.value = modify.draft.entry;
     modifiedValue.value = modify.draft.modified;
-    startValue.value = modify.draft.start;
+    startValue.value ??= null;
     endValue.value = modify.draft.end;
     dueValue.value = modify.draft.due;
     waitValue.value = modify.draft.wait;
