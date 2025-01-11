@@ -44,7 +44,7 @@ void main() {
         'Toggle between your native language');
     expect(english.settingsPageSelectDirectoryTitle, 'Select the directory');
     expect(english.settingsPageSelectDirectoryDescription,
-        'Select the directory where the TaskWarrior data is stored\nCurrent directory: ');
+        'Select the directory where the Taskwarrior data is stored\nCurrent directory: ');
     expect(english.settingsPageChangeDirectory, 'Change Directory');
     expect(english.settingsPageSetToDefault, 'Set To Default');
     expect(english.navDrawerProfile, 'Profile');
@@ -101,7 +101,7 @@ void main() {
     expect(english.reportsPageNoTasksFound, 'No Tasks Found');
     expect(english.reportsPageAddTasksToSeeReports, 'Add Tasks To See Reports');
     expect(english.taskchampionTileDescription,
-        'Switch to TaskWarrior sync with CCSync or Taskchampion Sync Server');
+        'Switch to Taskwarrior sync with CCSync or Taskchampion Sync Server');
     expect(english.taskchampionTileTitle, 'Taskchampion sync');
     expect(english.ccsyncCredentials, 'CCync credentials');
     expect(english.deleteTaskConfirmation, 'Delete Tasks');

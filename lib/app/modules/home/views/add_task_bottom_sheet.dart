@@ -292,28 +292,48 @@ class AddTaskBottomSheet extends StatelessWidget {
                 ),
                 textAlign: TextAlign.left,
               ),
+              const SizedBox(width: 2,),
               Obx(
-                () => DropdownButton<String>(
-                  dropdownColor: tColors.dialogBackgroundColor,
-                  value: homeController.priority.value,
-                  elevation: 16,
-                  style: GoogleFonts.poppins(
-                    color: tColors.primaryTextColor,
-                  ),
-                  underline: Container(
-                    height: 1.5,
-                    color: tColors.secondaryBackgroundColor,
-                  ),
-                  onChanged: (String? newValue) {
-                    homeController.priority.value = newValue!;
-                  },
-                  items: <String>['H', 'M', 'L', 'None']
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text('  $value'),
-                    );
-                  }).toList(),
+                () => Row(
+                  children: [
+                    for(int i=0;i<homeController.priorityList.length;i++)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 2.5),
+                        child: GestureDetector(
+                          onTap: () {
+                            homeController.priority.value = homeController.priorityList[i];
+                            debugPrint(homeController.priority.value);
+                          },
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 100),
+                            height: 30,
+                            width: 37,
+                            decoration: BoxDecoration(
+
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: homeController.priority.value == homeController.priorityList[i]
+                                    ? tColors.primaryTextColor!
+                                    : tColors.primaryBackgroundColor!,
+                              )
+                            ),
+                            child: Center(
+                              child: Text(
+                                homeController.priorityList[i],
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 17,
+                                  color: homeController.priorityColors[i]
+                                ),
+                              ),
+                            ),
+                          ),
+
+                        ),
+                      )
+
+                  ],
                 ),
               )
             ],
