@@ -250,7 +250,7 @@ class AddTaskBottomSheet extends StatelessWidget {
                     },
                     fieldHintText: "Month/Date/Year",
                     context: context,
-                    initialDate: homeController.due.value ?? DateTime.now(),
+                    initialDate: homeController.due.value?? DateTime.now(),
                     firstDate: DateTime.now(),
                     lastDate: DateTime(2037, 12, 31),
                   );
@@ -305,7 +305,7 @@ class AddTaskBottomSheet extends StatelessWidget {
                         ),
                       );
                       // print(dateTime);
-                      homeController.due.value = dateTime.toUtc();
+                      homeController.due.value = dateTime;
 
                       // print("due value ${homeController.due}");
                       homeController.dueString.value =
@@ -460,10 +460,31 @@ class AddTaskBottomSheet extends StatelessWidget {
       ),
       onPressed: () async {
         // print(homeController.formKey.currentState);
+        if(homeController.due.value!=null&&DateTime.now().isAfter(homeController.due.value!)){
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(
+                SentenceManager(
+                    currentLanguage:
+                    homeController.selectedLanguage.value)
+                    .sentences
+                    .addTaskTimeInPast,
+                style: TextStyle(
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.kprimaryTextColor
+                      : TaskWarriorColors.kLightPrimaryTextColor,
+                ),
+              ),
+              backgroundColor: AppSettings.isDarkMode
+                  ? TaskWarriorColors.ksecondaryBackgroundColor
+                  : TaskWarriorColors
+                  .kLightSecondaryBackgroundColor,
+              duration: const Duration(seconds: 2)));
+          return;
+        }
         if (homeController.formKey.currentState!.validate()) {
           try {
             var task = taskParser(homeController.namecontroller.text)
-                .rebuild((b) => b..due = homeController.due.value)
+                .rebuild((b) => b..due = homeController.due.value?.toUtc())
                 .rebuild((p) => p..priority = homeController.priority.value);
             if (homeController.tagcontroller.text != "") {
               homeController.tags.add(homeController.tagcontroller.text.trim());
@@ -480,6 +501,7 @@ class AddTaskBottomSheet extends StatelessWidget {
             homeController.priority.value = 'M';
             homeController.tagcontroller.text = '';
             homeController.tags.value = [];
+            homeController.due.value=null;
             homeController.update();
             // Navigator.of(context).pop();
             Get.back();
