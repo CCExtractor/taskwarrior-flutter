@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -18,7 +19,7 @@ class PermissionController extends GetxController {
       isNotificationGranted.value =
           await Permission.notification.status.isGranted;
     } catch (e) {
-      print('Error checking permissions: $e');
+      debugPrint('Error checking permissions: $e');
     }
   }
 
@@ -41,7 +42,7 @@ class PermissionController extends GetxController {
         Get.offNamed('/home');
       }
     } catch (e) {
-      print('Error requesting permissions: $e');
+      debugPrint('Error requesting permissions: $e');
     } finally {
       isLoading.value = false;
     }
@@ -51,7 +52,7 @@ class PermissionController extends GetxController {
     try {
       await Get.offNamed('/home');
     } catch (e) {
-      print('Error opening settings: $e');
+      debugPrint('Error opening home screen: $e');
     }
   }
 }
