@@ -13,6 +13,8 @@ import '../modules/manageTaskServer/bindings/manage_task_server_binding.dart';
 import '../modules/manageTaskServer/views/manage_task_server_view.dart';
 import '../modules/onboarding/bindings/onboarding_binding.dart';
 import '../modules/onboarding/views/onboarding_view.dart';
+import '../modules/permission/bindings/permission_binding.dart';
+import '../modules/permission/views/permission_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
 import '../modules/reports/bindings/reports_binding.dart';
@@ -74,6 +76,11 @@ class AppPages {
       name: _Paths.SETTINGS,
       page: () => const SettingsView(),
       binding: SettingsBinding(),
+    ),
+    GetPage(
+      name: _Paths.PERMISSION,
+      page: () => const PermissionView(),
+      binding: PermissionBinding(),
     ),
   ];
 }

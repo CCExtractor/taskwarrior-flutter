@@ -16,7 +16,7 @@ class OnboardingPageStartButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: () {
           controller.markOnboardingAsCompleted();
-          Get.offNamed(Routes.HOME);
+          Get.offNamed(Routes.PERMISSION);
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: TaskWarriorColors.black,
