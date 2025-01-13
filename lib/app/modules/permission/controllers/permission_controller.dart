@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:taskwarrior/app/utils/permissions/permissions_manager.dart';
 
 class PermissionController extends GetxController {
   final RxBool isStorageGranted = false.obs;
   final RxBool isNotificationGranted = false.obs;
+  final RxBool isExteternalStorageGranted = false.obs;
   final RxBool isLoading = false.obs;
 
   @override
@@ -18,6 +20,8 @@ class PermissionController extends GetxController {
       isStorageGranted.value = await Permission.storage.status.isGranted;
       isNotificationGranted.value =
           await Permission.notification.status.isGranted;
+      isExteternalStorageGranted.value =
+          await Permission.manageExternalStorage.status.isGranted;
     } catch (e) {
       debugPrint('Error checking permissions: $e');
     }
@@ -27,20 +31,12 @@ class PermissionController extends GetxController {
     try {
       isLoading.value = true;
 
-      PermissionStatus storageStatus;
-      if (GetPlatform.isAndroid) {
-        storageStatus = await Permission.storage.request();
-      } else {
-        storageStatus = await Permission.photos.request();
+      if (!isStorageGranted.value &&
+          !isNotificationGranted.value &&
+          !isExteternalStorageGranted.value) {
+        await PermissionsManager.requestAllPermissions();
       }
-      isStorageGranted.value = storageStatus.isGranted;
-
-      final notificationStatus = await Permission.notification.request();
-      isNotificationGranted.value = notificationStatus.isGranted;
-
-      if (isStorageGranted.value && isNotificationGranted.value) {
-        Get.offNamed('/home');
-      }
+      Get.offNamed('/home');
     } catch (e) {
       debugPrint('Error requesting permissions: $e');
     } finally {
@@ -48,7 +44,7 @@ class PermissionController extends GetxController {
     }
   }
 
-  void openSettings() async {
+  void gotoHome() async {
     try {
       await Get.offNamed('/home');
     } catch (e) {

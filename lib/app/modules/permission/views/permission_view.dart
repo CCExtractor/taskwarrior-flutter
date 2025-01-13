@@ -117,7 +117,7 @@ class PermissionView extends GetView<PermissionController> {
                     )),
                 const SizedBox(height: 16),
                 TextButton(
-                  onPressed: () => controller.openSettings(),
+                  onPressed: () => controller.gotoHome(),
                   style: ButtonStyle(
                     backgroundColor:
                         WidgetStateProperty.all(TaskWarriorColors.grey),
