@@ -46,7 +46,7 @@ class StatusWidget extends StatelessWidget {
                       ),
                     ),
                     TextSpan(
-                      text: value ?? "not selected",
+                      text: value ?? "",
                       style: GoogleFonts.poppins(
                         fontSize: TaskWarriorFonts.fontSizeMedium,
                         color: AppSettings.isDarkMode
