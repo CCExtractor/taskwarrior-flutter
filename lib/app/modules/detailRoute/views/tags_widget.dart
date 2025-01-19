@@ -7,10 +7,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:loggy/loggy.dart';
 import 'package:taskwarrior/app/models/tag_meta_data.dart';
 import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
-
 import 'package:taskwarrior/app/utils/constants/constants.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
-import 'package:taskwarrior/app/utils/taskfunctions/validate.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 
 class TagsWidget extends StatelessWidget {
@@ -22,28 +20,49 @@ class TagsWidget extends StatelessWidget {
   });
 
   final String name;
-  final dynamic value;
-  final void Function(dynamic) callback;
+  final ListBuilder<String>? value;
+  final void Function(ListBuilder<String>?) callback;
 
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: AppSettings.isDarkMode
+          ? TaskWarriorColors.ksecondaryBackgroundColor
+          : TaskWarriorColors.kLightSecondaryBackgroundColor,
       child: ListTile(
-        tileColor: AppSettings.isDarkMode
-            ? const Color.fromARGB(255, 55, 54, 54)
-            : TaskWarriorColors.white,
         textColor: AppSettings.isDarkMode
-            ? TaskWarriorColors.white
-            : const Color.fromARGB(255, 48, 46, 46),
-        title: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              Text(
-                '${'$name:'.padRight(13)}${(value as ListBuilder?)?.build()}',
+            ? TaskWarriorColors.kprimaryTextColor
+            : TaskWarriorColors.ksecondaryTextColor,
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              name,
+              style: TextStyle(
+                color: AppSettings.isDarkMode
+                    ? TaskWarriorColors.kprimaryTextColor
+                    : TaskWarriorColors.ksecondaryTextColor,
               ),
-            ],
-          ),
+            ),
+            Wrap(
+              spacing: 8.0,
+              runSpacing: 4.0,
+              children: value?.build().map((tag) {
+                    return Chip(
+                      label: Text(tag),
+                      backgroundColor: AppSettings.isDarkMode
+                          ? TaskWarriorColors.kprimaryBackgroundColor
+                          : TaskWarriorColors.kLightPrimaryBackgroundColor,
+                      labelStyle: TextStyle(
+                        color: AppSettings.isDarkMode
+                            ? TaskWarriorColors.kprimaryTextColor
+                            : TaskWarriorColors.ksecondaryTextColor,
+                      ),
+                    );
+                  }).toList() ??
+                  [],
+            ),
+          ],
         ),
         onTap: () => Navigator.push(
           context,
@@ -75,7 +94,6 @@ class TagsRouteState extends State<TagsRoute> {
 
   void _addTag(String tag) {
     if (tag.isNotEmpty) {
-      // Add this condition to ensure the tag is not empty
       if (draftTags == null) {
         draftTags = ListBuilder([tag]);
       } else {
@@ -95,6 +113,13 @@ class TagsRouteState extends State<TagsRoute> {
     }
     widget.callback(draftTags ?? ListBuilder([]));
     setState(() {});
+  }
+
+  void _editTag(String oldTag, String newTag) {
+    if (newTag.isNotEmpty && !newTag.contains(" ")) {
+      _removeTag(oldTag);
+      _addTag(newTag);
+    }
   }
 
   @override
@@ -144,7 +169,7 @@ class TagsRouteState extends State<TagsRoute> {
                   for (var tag in draftTags!.build())
                     FilterChip(
                       backgroundColor: TaskWarriorColors.lightGrey,
-                      onSelected: (_) => _removeTag(tag),
+                      onSelected: (_) => _showEditTagDialog(tag),
                       label: Text(
                         '+$tag ${_pendingTags?[tag]?.frequency ?? 0}',
                       ),
@@ -230,7 +255,6 @@ class TagsRouteState extends State<TagsRoute> {
               actions: [
                 TextButton(
                   onPressed: () {
-                    // Navigator.of(context).pop();
                     Get.back();
                   },
                   child: Text(
@@ -248,7 +272,6 @@ class TagsRouteState extends State<TagsRoute> {
                       try {
                         validateTaskTags(controller.text);
                         _addTag(controller.text);
-                        // Navigator.of(context).pop();
                         Get.back();
                       } on FormatException catch (e, trace) {
                         logError(e, trace);
@@ -271,5 +294,89 @@ class TagsRouteState extends State<TagsRoute> {
         child: const Icon(Icons.add),
       ),
     );
+  }
+
+  void _showEditTagDialog(String oldTag) {
+    final formKey = GlobalKey<FormState>();
+    var controller = TextEditingController(text: oldTag);
+    showDialog(
+      context: context,
+      builder: (context) => Utils.showAlertDialog(
+        scrollable: true,
+        title: Text(
+          'Edit tag',
+          style: TextStyle(
+            color: AppSettings.isDarkMode
+                ? TaskWarriorColors.white
+                : TaskWarriorColors.black,
+          ),
+        ),
+        content: Form(
+          key: formKey,
+          child: TextFormField(
+            style: TextStyle(
+              color: AppSettings.isDarkMode
+                  ? TaskWarriorColors.white
+                  : TaskWarriorColors.black,
+            ),
+            validator: (value) {
+              if (value != null) {
+                if (value.isNotEmpty && value.contains(" ")) {
+                  return "Tags cannot contain spaces";
+                }
+              }
+              return null;
+            },
+            autofocus: true,
+            controller: controller,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: Text(
+              'Cancel',
+              style: TextStyle(
+                color: AppSettings.isDarkMode
+                    ? TaskWarriorColors.white
+                    : TaskWarriorColors.black,
+              ),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              if (formKey.currentState!.validate()) {
+                try {
+                  validateTaskTags(controller.text);
+                  _editTag(oldTag, controller.text);
+                  Get.back();
+                } on FormatException catch (e, trace) {
+                  logError(e, trace);
+                }
+              }
+            },
+            child: Text(
+              'Submit',
+              style: TextStyle(
+                color: AppSettings.isDarkMode
+                    ? TaskWarriorColors.black
+                    : TaskWarriorColors.black,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+void validateTaskTags(String tag) {
+  if (tag.isEmpty) {
+    throw const FormatException("Tag cannot be empty");
+  }
+  if (tag.contains(" ")) {
+    throw const FormatException("Tags cannot contain spaces");
   }
 }

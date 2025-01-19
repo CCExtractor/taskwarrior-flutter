@@ -34,7 +34,7 @@ class DetailRouteController extends GetxController {
   void setAttribute(String name, dynamic newValue) {
     modify.set(name, newValue);
     onEdit.value = true;
-    if(name == 'start'){
+    if (name == 'start') {
       debugPrint('Start Value Changed to $newValue');
       startValue.value = newValue;
     }
@@ -101,9 +101,12 @@ class DetailRouteController extends GetxController {
 
   final GlobalKey dueKey = GlobalKey();
   final GlobalKey untilKey = GlobalKey();
-
   final GlobalKey waitKey = GlobalKey();
   final GlobalKey priorityKey = GlobalKey();
+  final GlobalKey modifiedKey = GlobalKey();
+  final GlobalKey startKey = GlobalKey();
+  final GlobalKey endKey = GlobalKey();
+  final GlobalKey entryKey = GlobalKey();
 
   void initDetailsPageTour() {
     tutorialCoachMark = TutorialCoachMark(

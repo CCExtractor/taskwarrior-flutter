@@ -10,6 +10,7 @@ import 'package:taskwarrior/app/modules/detailRoute/views/description_widget.dar
 import 'package:taskwarrior/app/modules/detailRoute/views/priority_widget.dart';
 import 'package:taskwarrior/app/modules/detailRoute/views/status_widget.dart';
 import 'package:taskwarrior/app/modules/detailRoute/views/tags_widget.dart';
+import 'package:taskwarrior/app/modules/detailRoute/views/urgency_widget.dart';
 import 'package:taskwarrior/app/utils/constants/constants.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
@@ -118,19 +119,19 @@ class DetailRouteView extends GetView<DetailRouteController> {
                       const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
                   children: [
                     for (var entry in {
-                      'description': controller.descriptionValue.value,
-                      'status': controller.statusValue.value,
-                      'entry': controller.entryValue.value,
-                      'modified': controller.modifiedValue.value,
-                      'start': controller.startValue.value,
-                      'end': controller.endValue.value,
-                      'due': controller.dueValue.value,
-                      'wait': controller.waitValue.value,
-                      'until': controller.untilValue.value,
-                      'priority': controller.priorityValue?.value,
-                      'project': controller.projectValue?.value,
-                      'tags': controller.tagsValue?.value,
-                      'urgency': controller.urgencyValue.value,
+                      'Task Name': controller.descriptionValue.value,
+                      'Status': controller.statusValue.value,
+                      'Due Date': controller.dueValue.value,
+                      'Priority': controller.priorityValue?.value,
+                      'Urgency': controller.urgencyValue.value,
+                      'Tags': controller.tagsValue?.value,
+                      'Project': controller.projectValue?.value,
+                      'Entry': controller.entryValue.value,
+                      'Modified': controller.modifiedValue.value,
+                      'Start': controller.startValue.value,
+                      'End': controller.endValue.value,
+                      'Wait': controller.waitValue.value,
+                      'Until': controller.untilValue.value,
                     }.entries)
                       AttributeWidget(
                         name: entry.key,
@@ -140,6 +141,9 @@ class DetailRouteView extends GetView<DetailRouteController> {
                         waitKey: controller.waitKey,
                         dueKey: controller.dueKey,
                         untilKey: controller.untilKey,
+                        modifiedKey: controller.modifiedKey,
+                        endKey: controller.endKey,
+                        entryKey: controller.entryKey,
                         priorityKey: controller.priorityKey,
                       ),
                   ],
@@ -233,6 +237,9 @@ class AttributeWidget extends StatelessWidget {
     required this.callback,
     required this.waitKey,
     required this.dueKey,
+    required this.entryKey,
+    required this.modifiedKey,
+    required this.endKey,
     required this.priorityKey,
     required this.untilKey,
     super.key,
@@ -243,6 +250,9 @@ class AttributeWidget extends StatelessWidget {
   final void Function(dynamic) callback;
   final GlobalKey waitKey;
   final GlobalKey dueKey;
+  final GlobalKey entryKey;
+  final GlobalKey modifiedKey;
+  final GlobalKey endKey;
   final GlobalKey untilKey;
   final GlobalKey priorityKey;
 
@@ -253,59 +263,85 @@ class AttributeWidget extends StatelessWidget {
         : ((value is BuiltList) ? (value).toBuilder() : value);
 
     switch (name) {
-      case 'description':
+      case 'Task Name':
         return DescriptionWidget(
           name: name,
           value: localValue,
           callback: callback,
         );
-      case 'status':
+      case 'Urgency':
+        return UrgencyWidget(
+          name: name,
+          value: localValue,
+          callback: callback,
+        );
+      case 'Status':
         return StatusWidget(
           name: name,
           value: localValue,
           callback: callback,
         );
-      case 'start':
+      case 'Start':
         return StartWidget(
           name: name,
           value: localValue,
           callback: callback,
         );
-      case 'due':
+      case 'End':
+        return StartWidget(
+          name: name,
+          value: localValue,
+          callback: callback,
+        );
+      case 'Modified':
+        return DateTimeWidget(
+          name: name,
+          value: localValue,
+          callback: callback,
+          globalKey: modifiedKey,
+        );
+      case 'Entry':
+        return DateTimeWidget(
+          name: name,
+          value: localValue,
+          callback: callback,
+          globalKey: entryKey,
+        );
+      case 'Due Date':
         return DateTimeWidget(
           name: name,
           value: localValue,
           callback: callback,
           globalKey: dueKey,
         );
-      case 'wait':
+      case 'Wait':
         return DateTimeWidget(
           name: name,
           value: localValue,
           callback: callback,
           globalKey: waitKey,
         );
-      case 'until':
+      case 'Until':
         return DateTimeWidget(
           name: name,
           value: localValue,
           callback: callback,
           globalKey: untilKey,
         );
-      case 'priority':
+      case 'Priority':
         return PriorityWidget(
           name: name,
           value: localValue,
           callback: callback,
           globalKey: priorityKey,
         );
-      case 'project':
+      case 'Project':
         return ProjectWidget(
           name: name,
           value: localValue,
           callback: callback,
         );
-      case 'tags':
+      case 'Tags':
         return TagsWidget(
           name: name,
           value: localValue,
@@ -349,73 +385,73 @@ class AttributeWidget extends StatelessWidget {
   }
 }
 
-class TagsWidget extends StatelessWidget {
-  const TagsWidget({
-    required this.name,
-    required this.value,
-    required this.callback,
-    super.key,
-  });
+// class TagsWidget extends StatelessWidget {
+//   const TagsWidget({
+//     required this.name,
+//     required this.value,
+//     required this.callback,
+//     super.key,
+//   });
 
-  final String name;
-  final dynamic value;
-  final void Function(dynamic) callback;
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      color: AppSettings.isDarkMode
-          ? TaskWarriorColors.ksecondaryBackgroundColor
-          : TaskWarriorColors.kLightSecondaryBackgroundColor,
-      child: ListTile(
-        textColor: AppSettings.isDarkMode
-            ? TaskWarriorColors.kprimaryTextColor
-            : TaskWarriorColors.ksecondaryTextColor,
-        title: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              RichText(
-                text: TextSpan(
-                  children: <TextSpan>[
-                    TextSpan(
-                        text: '$name:'.padRight(13),
-                        style: TextStyle(
-                          fontFamily: FontFamily.poppins,
-                          fontSize: TaskWarriorFonts.fontSizeMedium,
-                          color: AppSettings.isDarkMode
-                              ? TaskWarriorColors.white
-                              : TaskWarriorColors.black,
-                        )
-                        // style: GoogleFonts.poppins(
-                        //   fontWeight: TaskWarriorFonts.bold,
-                        //   fontSize: TaskWarriorFonts.fontSizeMedium,
-                        //   color: AppSettings.isDarkMode
-                        //       ? TaskWarriorColors.white
-                        //       : TaskWarriorColors.black,
-                        // ),
-                        ),
-                    TextSpan(
-                      text:
-                          '${(value as ListBuilder?)?.build() ?? 'not selected'}',
-                      style: TextStyle(
-                        color: AppSettings.isDarkMode
-                            ? TaskWarriorColors.white
-                            : TaskWarriorColors.black,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        onTap: () => Get.to(
-          TagsRoute(
-            value: value,
-            callback: callback,
-          ),
-        ),
-      ),
-    );
-  }
-}
+//   final String name;
+//   final dynamic value;
+//   final void Function(dynamic) callback;
+//   @override
+//   Widget build(BuildContext context) {
+//     return Card(
+//       color: AppSettings.isDarkMode
+//           ? TaskWarriorColors.ksecondaryBackgroundColor
+//           : TaskWarriorColors.kLightSecondaryBackgroundColor,
+//       child: ListTile(
+//         textColor: AppSettings.isDarkMode
+//             ? TaskWarriorColors.kprimaryTextColor
+//             : TaskWarriorColors.ksecondaryTextColor,
+//         title: SingleChildScrollView(
+//           scrollDirection: Axis.horizontal,
+//           child: Row(
+//             children: [
+//               RichText(
+//                 text: TextSpan(
+//                   children: <TextSpan>[
+//                     TextSpan(
+//                         text: '$name:'.padRight(13),
+//                         style: TextStyle(
+//                           fontFamily: FontFamily.poppins,
+//                           fontSize: TaskWarriorFonts.fontSizeMedium,
+//                           color: AppSettings.isDarkMode
+//                               ? TaskWarriorColors.white
+//                               : TaskWarriorColors.black,
+//                         )
+//                         // style: GoogleFonts.poppins(
+//                         //   fontWeight: TaskWarriorFonts.bold,
+//                         //   fontSize: TaskWarriorFonts.fontSizeMedium,
+//                         //   color: AppSettings.isDarkMode
+//                         //       ? TaskWarriorColors.white
+//                         //       : TaskWarriorColors.black,
+//                         // ),
+//                         ),
+//                     TextSpan(
+//                       text:
+//                           '${(value as ListBuilder?)?.build() ?? 'not selected'}',
+//                       style: TextStyle(
+//                         color: AppSettings.isDarkMode
+//                             ? TaskWarriorColors.white
+//                             : TaskWarriorColors.black,
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ),
+//         onTap: () => Get.to(
+//           () => TagsRoute(
+//             value: value,
+//             callback: callback,
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
