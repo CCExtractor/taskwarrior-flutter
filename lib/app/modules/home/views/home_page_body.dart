@@ -1,14 +1,11 @@
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:taskwarrior/app/modules/home/views/show_tasks.dart';
-
 import 'package:taskwarrior/app/modules/home/views/tasks_builder.dart';
 import 'package:taskwarrior/app/utils/constants/palette.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
-
 import '../controllers/home_controller.dart';
 
 class HomePageBody extends StatelessWidget {
@@ -19,106 +16,145 @@ class HomePageBody extends StatelessWidget {
   Widget build(BuildContext context) {
     controller.initInAppTour();
     controller.showInAppTour(context);
-    return DoubleBackToCloseApp(
-      snackBar: const SnackBar(content: Text('Tap back again to exit')),
-      child: Container(
-        color: AppSettings.isDarkMode
-            ? Palette.kToDark.shade200
-            : TaskWarriorColors.white,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-          child: Obx(
-            () => Column(
-              children: <Widget>[
-                if (controller.searchVisible.value)
-                  Container(
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 10),
-                    child: SearchBar(
-                      backgroundColor: WidgetStateProperty.all<Color>(
-                          (TaskWarriorColors.kLightPrimaryBackgroundColor)),
-                      surfaceTintColor: WidgetStateProperty.all<Color>(
-                          (TaskWarriorColors.kLightPrimaryBackgroundColor)),
-                      controller: controller.searchController,
-                      // shape:,
-                      onChanged: (value) {
-                        controller.search(value);
-                      },
-
-                      shape: WidgetStateProperty.resolveWith<OutlinedBorder?>(
-                        (Set<WidgetState> states) {
-                          if (states.contains(WidgetState.focused)) {
-                            return RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12.0),
-                              side: BorderSide(
-                                color: TaskWarriorColors.black,
-                                width: 2.0,
-                              ),
-                            );
-                          } else {
-                            return RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12.0),
-                              side: BorderSide(
-                                color: TaskWarriorColors.black,
-                                width: 1.5,
-                              ),
-                            );
-                          }
-                        },
+    return Scaffold(
+      drawer: Drawer(
+        // Add your drawer content here
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: const <Widget>[
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text(
+                'Drawer Header',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.message),
+              title: Text('Messages'),
+            ),
+            ListTile(
+              leading: Icon(Icons.account_circle),
+              title: Text('Profile'),
+            ),
+            ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('Settings'),
+            ),
+          ],
+        ),
+      ),
+      body: GestureDetector(
+        onHorizontalDragEnd: (details) {
+          if (details.primaryVelocity! > 0) {
+            Scaffold.of(context).openDrawer();
+          }
+        },
+        child: DoubleBackToCloseApp(
+          snackBar: const SnackBar(content: Text('Tap back again to exit')),
+          child: Container(
+            color: AppSettings.isDarkMode
+                ? Palette.kToDark.shade200
+                : TaskWarriorColors.white,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+              child: Obx(
+                () => Column(
+                  children: <Widget>[
+                    if (controller.searchVisible.value)
+                      Container(
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 10),
+                        child: SearchBar(
+                          backgroundColor: WidgetStateProperty.all<Color>(
+                              (TaskWarriorColors.kLightPrimaryBackgroundColor)),
+                          surfaceTintColor: WidgetStateProperty.all<Color>(
+                              (TaskWarriorColors.kLightPrimaryBackgroundColor)),
+                          controller: controller.searchController,
+                          onChanged: (value) {
+                            controller.search(value);
+                          },
+                          shape:
+                              WidgetStateProperty.resolveWith<OutlinedBorder?>(
+                            (Set<WidgetState> states) {
+                              if (states.contains(WidgetState.focused)) {
+                                return RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                  side: BorderSide(
+                                    color: TaskWarriorColors.black,
+                                    width: 2.0,
+                                  ),
+                                );
+                              } else {
+                                return RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                  side: BorderSide(
+                                    color: TaskWarriorColors.black,
+                                    width: 1.5,
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                          leading: const Icon(Icons.search_rounded),
+                          trailing: <Widget>[
+                            (controller.searchController.text.isNotEmpty)
+                                ? IconButton(
+                                    key: GlobalKey(),
+                                    icon: Icon(Icons.cancel,
+                                        color: TaskWarriorColors.black),
+                                    onPressed: () {
+                                      controller.searchController.clear();
+                                      controller.search(
+                                          controller.searchController.text);
+                                    },
+                                  )
+                                : const SizedBox(
+                                    width: 0,
+                                    height: 0,
+                                  )
+                          ],
+                          hintText: 'Search',
+                        ),
                       ),
-                      leading: const Icon(Icons.search_rounded),
-                      trailing: <Widget>[
-                        (controller.searchController.text.isNotEmpty)
-                            ? IconButton(
-                                key: GlobalKey(),
-                                icon: Icon(Icons.cancel,
-                                    color: TaskWarriorColors.black),
-                                onPressed: () {
-                                  controller.searchController.clear();
-                                  controller
-                                      .search(controller.searchController.text);
-                                },
-                              )
-                            : const SizedBox(
-                                width: 0,
-                                height: 0,
-                              )
-                      ],
-
-                      hintText: 'Search',
-                    ),
-                  ),
-                Visibility(
-                  visible: !controller.taskchampion.value,
-                  child: Expanded(
-                    child: Scrollbar(
-                      child: Obx(
-                        () => TasksBuilder(
-                          // darkmode: AppSettings.isDarkMode,
-                          useDelayTask: controller.useDelayTask.value,
-                          taskData: controller.searchedTasks,
-                          pendingFilter: controller.pendingFilter.value,
-                          waitingFilter: controller.waitingFilter.value,
-                          searchVisible: controller.searchVisible.value,
-                          selectedLanguage: controller.selectedLanguage.value,
-                          scrollController: controller.scrollController,
-                          showbtn: controller.showbtn.value,
+                    Visibility(
+                      visible: !controller.taskchampion.value,
+                      child: Expanded(
+                        child: Scrollbar(
+                          child: Obx(
+                            () => TasksBuilder(
+                              useDelayTask: controller.useDelayTask.value,
+                              taskData: controller.searchedTasks,
+                              pendingFilter: controller.pendingFilter.value,
+                              waitingFilter: controller.waitingFilter.value,
+                              searchVisible: controller.searchVisible.value,
+                              selectedLanguage:
+                                  controller.selectedLanguage.value,
+                              scrollController: controller.scrollController,
+                              showbtn: controller.showbtn.value,
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                    Visibility(
+                        visible: controller.taskchampion.value,
+                        child: Expanded(
+                            child: Scrollbar(
+                          child: TaskViewBuilder(
+                            pendingFilter: controller.pendingFilter.value,
+                            selectedSort: controller.selectedSort.value,
+                            project: controller.projectFilter.value,
+                          ),
+                        )))
+                  ],
                 ),
-                Visibility(
-                    visible: controller.taskchampion.value,
-                    child: Expanded(
-                        child: Scrollbar(
-                      child: TaskViewBuilder(
-                        pendingFilter: controller.pendingFilter.value,
-                        selectedSort: controller.selectedSort.value,
-                        project: controller.projectFilter.value,
-                      ),
-                    )))
-              ],
+              ),
             ),
           ),
         ),
