@@ -59,6 +59,18 @@ class TaskListItem extends StatelessWidget {
       return difference.inDays <= 1 && difference.inDays >= 0;
     }
 
+    bool isDueTomorrow(DateTime dueDate) {
+      DateTime now = DateTime.now();
+      DateTime tomorrow = now.add(const Duration(days: 1));
+      return dueDate.year == tomorrow.year &&
+          dueDate.month == tomorrow.month &&
+          dueDate.day == tomorrow.day;
+    }
+
+    bool isOverdue(DateTime dueDate) {
+      return dueDate.isBefore(DateTime.now());
+    }
+
     MaterialColor colours = Colors.grey;
     var colour = darkmode ? Colors.white : Colors.black;
     var dimColor = darkmode
@@ -78,12 +90,17 @@ class TaskListItem extends StatelessWidget {
       return Container(
         decoration: BoxDecoration(
           border: Border.all(
-            color: (task.due != null &&
-                    isDueWithinOneDay(task.due!) &&
-                    useDelayTask)
-                ? Colors
-                    .red // Set border color to red if due within 1 day and useDelayTask is true
-                : dimColor, // Set default border color
+            color: (task.due != null && isOverdue(task.due!))
+                ? Colors.red // Set border color to red if overdue
+                : (task.due != null &&
+                        (isDueWithinOneDay(task.due!) ||
+                            task.due!.isBefore(DateTime.now())) &&
+                        useDelayTask)
+                    ? Colors
+                        .red // Set border color to red if due within 1 day or overdue and useDelayTask is true
+                    : (task.due != null && isDueTomorrow(task.due!))
+                        ? Colors.red // Set border color to red if due tomorrow
+                        : dimColor, // Set default border color
           ),
           borderRadius: BorderRadius.circular(8.0),
         ),
@@ -104,9 +121,6 @@ class TaskListItem extends StatelessWidget {
                       '${(task.id == 0) ? '#' : task.id}. ${task.description}',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      // style: GoogleFonts.poppins(
-                      //   color: colour,
-                      // ),
                       style: TextStyle(
                           fontFamily: FontFamily.poppins, color: colour),
                     ),
@@ -117,9 +131,6 @@ class TaskListItem extends StatelessWidget {
                 (task.annotations != null)
                     ? ' [${task.annotations!.length}]'
                     : '',
-                // style: GoogleFonts.poppins(
-                //   color: colour,
-                // ),
                 style: TextStyle(fontFamily: FontFamily.poppins, color: colour),
               ),
             ],
@@ -144,11 +155,16 @@ class TaskListItem extends StatelessWidget {
                   ),
                 ),
               ),
+              if (task.due != null && isOverdue(task.due!))
+                const Text(
+                  'Overdue',
+                  style: TextStyle(
+                      fontFamily: FontFamily.poppins,
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold),
+                ),
               Text(
                 formatUrgency(urgency(task)),
-                // style: GoogleFonts.poppins(
-                //   color: colour,
-                // ),
                 style: TextStyle(fontFamily: FontFamily.poppins, color: colour),
               ),
             ],
@@ -174,9 +190,6 @@ class TaskListItem extends StatelessWidget {
                     '${(task.id == 0) ? '#' : task.id}. ${task.description}',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    // style: GoogleFonts.poppins(
-                    //   color: colour,
-                    // ),
                     style: TextStyle(
                         fontFamily: FontFamily.poppins, color: colour),
                   ),
@@ -197,10 +210,6 @@ class TaskListItem extends StatelessWidget {
                       .replaceFirst(RegExp(r' \[\]$'), '')
                       .replaceAll(RegExp(r' +'), ' '),
                   overflow: TextOverflow.ellipsis,
-                  // style: GoogleFonts.poppins(
-                  //   color: dimColor,
-                  //   fontSize: TaskWarriorFonts.fontSizeSmall,
-                  // ),
                   style: TextStyle(
                       fontFamily: FontFamily.poppins,
                       color: dimColor,
@@ -210,14 +219,66 @@ class TaskListItem extends StatelessWidget {
             ),
             Text(
               formatUrgency(urgency(task)),
-              // style: GoogleFonts.poppins(
-              //   color: colour,
-              // ),
               style: TextStyle(fontFamily: FontFamily.poppins, color: colour),
             ),
           ],
         ),
       );
     }
+  }
+}
+
+class TaskList extends StatelessWidget {
+  final List<Task> tasks;
+  final bool darkmode;
+  final bool useDelayTask;
+  final Modify modify;
+  final SupportedLanguage selectedLanguage;
+
+  const TaskList({
+    super.key,
+    required this.tasks,
+    required this.darkmode,
+    required this.useDelayTask,
+    required this.modify,
+    required this.selectedLanguage,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    // Sort tasks so that overdue tasks are at the top
+    tasks.sort((a, b) {
+      if (a.due != null && b.due != null) {
+        if (a.due!.isBefore(DateTime.now()) &&
+            b.due!.isBefore(DateTime.now())) {
+          return a.due!.compareTo(b.due!);
+        } else if (a.due!.isBefore(DateTime.now())) {
+          return -1;
+        } else if (b.due!.isBefore(DateTime.now())) {
+          return 1;
+        } else {
+          return a.due!.compareTo(b.due!);
+        }
+      } else if (a.due != null) {
+        return -1;
+      } else if (b.due != null) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+
+    return ListView.builder(
+      itemCount: tasks.length,
+      itemBuilder: (context, index) {
+        return TaskListItem(
+          tasks[index],
+          darkmode: darkmode,
+          useDelayTask: useDelayTask,
+          modify: modify,
+          selectedLanguage: selectedLanguage,
+        );
+      },
+    );
   }
 }
