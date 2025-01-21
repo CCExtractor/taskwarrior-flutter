@@ -14,6 +14,7 @@ abstract class Sentences {
   String get homePageCancel;
   String get homePageClickOnTheBottomRightButtonToStartAddingTasks;
   String get homePageSearchNotFound;
+  String get homePageFetchingTasks;
 
   String get settingsPageTitle;
   String get settingsPageSubtitle;
@@ -157,5 +158,4 @@ abstract class Sentences {
   String get aboutPageGitHubLink;
   String get aboutPageProjectDescription;
   String get aboutPageAppBarTitle;
-
 }

@@ -33,6 +33,8 @@ class SpanishSentences extends Sentences {
   String get homePageSearchNotFound =>
       'No se encontraron resultados para la búsqueda';
   @override
+  String get homePageFetchingTasks => 'Obteniendo tareas';
+  @override
   String get settingsPageTitle => 'Página de configuración';
   @override
   String get settingsPageSubtitle => 'Configura tus preferencias';
