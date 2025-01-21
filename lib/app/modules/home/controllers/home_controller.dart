@@ -32,6 +32,7 @@ import 'package:taskwarrior/app/utils/taskfunctions/projects.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/query.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/tags.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:textfield_tags/textfield_tags.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class HomeController extends GetxController {
@@ -45,11 +46,13 @@ class HomeController extends GetxController {
   final RxSet<String> selectedTags = <String>{}.obs;
   final RxList<Task> queriedTasks = <Task>[].obs;
   final RxList<Task> searchedTasks = <Task>[].obs;
+  final RxList<DateTime?> selectedDates = List<DateTime?>.filled(4, null).obs;
   final RxMap<String, TagMetadata> pendingTags = <String, TagMetadata>{}.obs;
   final RxMap<String, ProjectNode> projects = <String, ProjectNode>{}.obs;
   final RxBool sortHeaderVisible = false.obs;
   final RxBool searchVisible = false.obs;
   final TextEditingController searchController = TextEditingController();
+  final StringTagController stringTagController = StringTagController();
   late RxBool serverCertExists;
   final Rx<SupportedLanguage> selectedLanguage = SupportedLanguage.english.obs;
   final ScrollController scrollController = ScrollController();
@@ -78,7 +81,7 @@ class HomeController extends GetxController {
       handleHomeWidgetClicked();
     }
     fetchTasksFromDB();
-        everAll([
+    everAll([
       pendingFilter,
       waitingFilter,
       projectFilter,
@@ -86,13 +89,12 @@ class HomeController extends GetxController {
       selectedSort,
       selectedTags,
     ], (_) {
-        if (Platform.isAndroid) {
-          WidgetController widgetController =
-              Get.put(WidgetController());
-          widgetController.fetchAllData();
+      if (Platform.isAndroid) {
+        WidgetController widgetController = Get.put(WidgetController());
+        widgetController.fetchAllData();
 
-          widgetController.update();
-        }
+        widgetController.update();
+      }
     });
   }
 
@@ -508,15 +510,12 @@ class HomeController extends GetxController {
   final projectcontroller = TextEditingController();
   var due = Rxn<DateTime>();
   RxString dueString = ''.obs;
-  final priorityList = ['L','X','M','H'];
+  final priorityList = ['L', 'X', 'M', 'H'];
   final priorityColors = [
     TaskWarriorColors.green,
     TaskWarriorColors.grey,
     TaskWarriorColors.yellow,
     TaskWarriorColors.red,
-
-
-
   ];
   RxString priority = 'X'.obs;
 
@@ -582,10 +581,9 @@ class HomeController extends GetxController {
   void initLanguageAndDarkMode() {
     isDarkModeOn.value = AppSettings.isDarkMode;
     selectedLanguage.value = AppSettings.selectedLanguage;
-    HomeWidget.saveWidgetData("themeMode", AppSettings.isDarkMode ? "dark" : "light");
-    HomeWidget.updateWidget(
-      androidName: "TaskWarriorWidgetProvider"
-    );
+    HomeWidget.saveWidgetData(
+        "themeMode", AppSettings.isDarkMode ? "dark" : "light");
+    HomeWidget.updateWidget(androidName: "TaskWarriorWidgetProvider");
     // print("called and value is${isDarkModeOn.value}");
   }
 
@@ -679,6 +677,7 @@ class HomeController extends GetxController {
       },
     );
   }
+
   late RxString uuid = "".obs;
   late RxBool isHomeWidgetTaskTapped = false.obs;
 
@@ -693,7 +692,7 @@ class HomeController extends GetxController {
             Get.toNamed(Routes.DETAIL_ROUTE, arguments: ["uuid", uuid.value]);
           });
         }
-      }else if(uri.host == "addclicked"){
+      } else if (uri.host == "addclicked") {
         showAddDialogAfterWidgetClick();
       }
     }
@@ -706,15 +705,17 @@ class HomeController extends GetxController {
           }
           debugPrint('uuid is $uuid');
           Get.toNamed(Routes.DETAIL_ROUTE, arguments: ["uuid", uuid.value]);
-        }else if(uri.host == "addclicked"){
+        } else if (uri.host == "addclicked") {
           showAddDialogAfterWidgetClick();
         }
       }
-      
     });
   }
+
   void showAddDialogAfterWidgetClick() {
-    Widget showDialog = taskchampion.value ? AddTaskToTaskcBottomSheet(homeController: this) : AddTaskBottomSheet(homeController: this);
+    Widget showDialog = taskchampion.value
+        ? AddTaskToTaskcBottomSheet(homeController: this)
+        : AddTaskBottomSheet(homeController: this);
     Get.dialog(showDialog);
   }
 }
