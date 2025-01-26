@@ -32,6 +32,8 @@ class EnglishSentences extends Sentences {
       'Click on the bottom right button to start adding tasks';
   @override
   String get homePageSearchNotFound => 'Search Not Found';
+  @override
+  String get homePageFetchingTasks => 'Fetching Tasks';
 
   @override
   String get settingsPageTitle => 'Settings Page';

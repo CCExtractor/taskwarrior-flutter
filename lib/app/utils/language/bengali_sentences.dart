@@ -32,6 +32,8 @@ class BengaliSentences extends Sentences {
   @override
   String get homePageSearchNotFound => 'অনুসন্ধানে কিছু পাওয়া যায়নি';
   @override
+  String get homePageFetchingTasks => 'টাস্ক আনা হচ্ছে';
+  @override
   String get settingsPageTitle => 'সেটিংস পেজ';
   @override
   String get settingsPageSubtitle => 'আপনার পছন্দ সেট করুন';
