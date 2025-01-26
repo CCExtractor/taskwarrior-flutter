@@ -32,6 +32,8 @@ class MarathiSentences extends Sentences {
   @override
   String get homePageSearchNotFound => 'शोध सापडला नाही';
   @override
+  String get homePageFetchingTasks => 'कार्ये आणत आहे';
+  @override
   String get settingsPageTitle => 'सेटिंग्स पेज';
   @override
   String get settingsPageSubtitle => 'तुमची पसंती सेट करा';
