@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
 import 'package:taskwarrior/app/modules/splash/controllers/splash_controller.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
@@ -55,6 +56,7 @@ class DeleteProfileDialog extends StatelessWidget {
                   try {
                     Get.find<SplashController>().deleteProfile(profile);
                     // Navigator.of(context).pop();
+                    Get.find<HomeController>().refreshTaskWithNewProfile();
                     Get.back();
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
