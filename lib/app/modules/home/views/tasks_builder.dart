@@ -11,14 +11,13 @@ import 'package:taskwarrior/app/modules/home/controllers/widget.controller.dart'
 import 'package:taskwarrior/app/modules/home/views/tas_list_item.dart';
 import 'package:taskwarrior/app/routes/app_pages.dart';
 import 'package:taskwarrior/app/services/notification_services.dart';
-import 'package:taskwarrior/app/utils/constants/palette.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/language/supported_language.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/modify.dart';
-import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 class TasksBuilder extends StatelessWidget {
   const TasksBuilder({
@@ -41,7 +40,6 @@ class TasksBuilder extends StatelessWidget {
   final SupportedLanguage selectedLanguage;
   final ScrollController scrollController;
   final bool showbtn;
-
   void setStatus(BuildContext context, String newValue, String id) {
     var storageWidget = Get.find<HomeController>();
     Modify modify = Modify(
@@ -55,23 +53,19 @@ class TasksBuilder extends StatelessWidget {
 
   void saveChanges(
       BuildContext context, Modify modify, String id, String newValue) async {
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     var now = DateTime.now().toUtc();
     modify.save(
       modified: () => now,
     );
-
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(
         'Task Updated',
         style: TextStyle(
-          color: AppSettings.isDarkMode
-              ? TaskWarriorColors.kprimaryTextColor
-              : TaskWarriorColors.kLightPrimaryTextColor,
+          color: tColors.primaryTextColor,
         ),
       ),
-      backgroundColor: AppSettings.isDarkMode
-          ? TaskWarriorColors.ksecondaryBackgroundColor
-          : TaskWarriorColors.kLightSecondaryBackgroundColor,
+      backgroundColor: tColors.secondaryBackgroundColor,
       duration: const Duration(seconds: 2),
       action: SnackBarAction(
         label: 'Undo',
@@ -115,11 +109,12 @@ class TasksBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // print(taskData);
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     var storageWidget = Get.find<HomeController>();
     return Scaffold(
         floatingActionButtonLocation:
             FloatingActionButtonLocation.miniStartFloat,
-        floatingActionButton: AnimatedOpacity(
+        floatingActionButton: showbtn ? AnimatedOpacity(
           duration: const Duration(milliseconds: 100), //show/hide animation
           opacity: showbtn ? 1.0 : 0.0, //set obacity to 1 on visible, or hide
           child: FloatingActionButton(
@@ -133,17 +128,13 @@ class TasksBuilder extends StatelessWidget {
                   curve: Curves.fastLinearToSlowEaseIn //scroll type
                   );
             },
-            backgroundColor: AppSettings.isDarkMode
-                ? TaskWarriorColors.kLightPrimaryBackgroundColor
-                : TaskWarriorColors.kprimaryBackgroundColor,
+            backgroundColor: tColors.primaryTextColor,
             child: Icon(
               Icons.arrow_upward,
-              color: AppSettings.isDarkMode
-                  ? TaskWarriorColors.kprimaryBackgroundColor
-                  : TaskWarriorColors.kLightPrimaryBackgroundColor,
+              color: tColors.secondaryBackgroundColor,
             ),
           ),
-        ),
+        ) : null,
         backgroundColor: Colors.transparent,
         body: Obx(
           () => taskData.isEmpty
@@ -160,9 +151,8 @@ class TasksBuilder extends StatelessWidget {
                       style: TextStyle(
                           fontFamily: FontFamily.poppins,
                           fontSize: TaskWarriorFonts.fontSizeLarge,
-                          color: AppSettings.isDarkMode
-                              ? TaskWarriorColors.kLightPrimaryBackgroundColor
-                              : TaskWarriorColors.kprimaryBackgroundColor),
+                          color: tColors.primaryTextColor
+                      ),
                       // style: GoogleFonts.poppins(
                       //   fontSize: TaskWarriorFonts.fontSizeLarge,
                       //   color: AppSettings.isDarkMode
@@ -231,13 +221,9 @@ class TasksBuilder extends StatelessWidget {
                               ],
                             ),
                             child: Card(
-                              color: AppSettings.isDarkMode
-                                  ? Palette.kToDark
-                                  : TaskWarriorColors.white,
+                              color: tColors.secondaryBackgroundColor,
                               child: InkWell(
-                                splashColor: AppSettings.isDarkMode
-                                    ? TaskWarriorColors.black
-                                    : TaskWarriorColors.borderColor,
+                                splashColor: tColors.secondaryBackgroundColor,
                                 onTap: () {
                                   Get.toNamed(Routes.DETAIL_ROUTE,
                                       arguments: ["uuid", task.uuid]);
@@ -252,7 +238,6 @@ class TasksBuilder extends StatelessWidget {
                                 child: TaskListItem(
                                   task,
                                   pendingFilter: pendingFilter,
-                                  darkmode: AppSettings.isDarkMode,
                                   useDelayTask: useDelayTask,
                                   modify: Modify(
                                     getTask: storageWidget.getTask,
@@ -265,13 +250,9 @@ class TasksBuilder extends StatelessWidget {
                             ),
                           )
                         : Card(
-                            color: AppSettings.isDarkMode
-                                ? Palette.kToDark
-                                : TaskWarriorColors.white,
+                            color: tColors.secondaryBackgroundColor,
                             child: InkWell(
-                              splashColor: AppSettings.isDarkMode
-                                  ? TaskWarriorColors.black
-                                  : TaskWarriorColors.borderColor,
+                              splashColor: tColors.secondaryBackgroundColor,
                               onTap: () {
                                 Get.toNamed(Routes.DETAIL_ROUTE,
                                     arguments: ["uuid", task.uuid]);
@@ -280,7 +261,6 @@ class TasksBuilder extends StatelessWidget {
                               child: TaskListItem(
                                 task,
                                 pendingFilter: pendingFilter,
-                                darkmode: AppSettings.isDarkMode,
                                 useDelayTask: useDelayTask,
                                 modify: Modify(
                                   getTask: storageWidget.getTask,

@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-
 import 'package:taskwarrior/app/modules/home/views/add_task_bottom_sheet.dart';
 import 'package:taskwarrior/app/modules/home/views/add_task_to_taskc_bottom_sheet.dart';
-
-import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
-import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
-
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import '../controllers/home_controller.dart';
 
 class HomePageFloatingActionButton extends StatelessWidget {
@@ -14,19 +10,16 @@ class HomePageFloatingActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return FloatingActionButton(
         key: controller.addKey,
         heroTag: "btn3",
-        backgroundColor: AppSettings.isDarkMode
-            ? TaskWarriorColors.kLightPrimaryBackgroundColor
-            : TaskWarriorColors.kprimaryBackgroundColor,
+        backgroundColor: tColors.primaryTextColor,
         child: Tooltip(
           message: 'Add Task',
           child: Icon(
             Icons.add,
-            color: AppSettings.isDarkMode
-                ? TaskWarriorColors.kprimaryBackgroundColor
-                : TaskWarriorColors.white,
+            color: tColors.secondaryBackgroundColor,
           ),
         ),
         onPressed: () => (controller.taskchampion.value)

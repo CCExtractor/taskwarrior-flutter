@@ -7,9 +7,8 @@ import 'package:taskwarrior/app/modules/reports/views/burn_down_monthly_taskc.da
 import 'package:taskwarrior/app/modules/reports/views/burn_down_weekly_taskc.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
-
-import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/api_service.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 class ReportsHomeTaskc extends StatelessWidget {
   final ReportsController reportsController = Get.put(ReportsController());
@@ -31,7 +30,7 @@ class ReportsHomeTaskc extends StatelessWidget {
       future: fetchTasks(),
       builder: (context, snapshot) {
         List<Tasks> allTasks = snapshot.data ?? [];
-
+        TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
         return Scaffold(
           appBar: AppBar(
             backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
@@ -86,9 +85,7 @@ class ReportsHomeTaskc extends StatelessWidget {
               ),
             ),
           ),
-          backgroundColor: AppSettings.isDarkMode
-              ? TaskWarriorColors.kprimaryBackgroundColor
-              : TaskWarriorColors.white,
+          backgroundColor: tColors.primaryBackgroundColor,
           body: snapshot.connectionState == ConnectionState.waiting
               ? const Center(child: CircularProgressIndicator())
               : allTasks.isEmpty
@@ -98,9 +95,7 @@ class ReportsHomeTaskc extends StatelessWidget {
                       children: [
                         Icon(
                           Icons.heart_broken,
-                          color: AppSettings.isDarkMode
-                              ? TaskWarriorColors.white
-                              : TaskWarriorColors.black,
+                          color: tColors.primaryTextColor,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -110,9 +105,7 @@ class ReportsHomeTaskc extends StatelessWidget {
                               style: GoogleFonts.poppins(
                                 fontWeight: TaskWarriorFonts.medium,
                                 fontSize: TaskWarriorFonts.fontSizeSmall,
-                                color: AppSettings.isDarkMode
-                                    ? TaskWarriorColors.white
-                                    : TaskWarriorColors.black,
+                                color: tColors.primaryTextColor,
                               ),
                             ),
                           ],
@@ -125,9 +118,7 @@ class ReportsHomeTaskc extends StatelessWidget {
                               style: GoogleFonts.poppins(
                                 fontWeight: TaskWarriorFonts.light,
                                 fontSize: TaskWarriorFonts.fontSizeSmall,
-                                color: AppSettings.isDarkMode
-                                    ? TaskWarriorColors.white
-                                    : TaskWarriorColors.black,
+                                color: tColors.primaryTextColor,
                               ),
                             ),
                           ],

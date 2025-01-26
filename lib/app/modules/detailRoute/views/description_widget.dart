@@ -5,7 +5,7 @@ import 'package:loggy/loggy.dart';
 import 'package:taskwarrior/app/utils/constants/constants.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
-import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 class DescriptionWidget extends StatelessWidget {
   const DescriptionWidget(
@@ -20,14 +20,11 @@ class DescriptionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Card(
-      color: AppSettings.isDarkMode
-          ? const Color.fromARGB(255, 57, 57, 57)
-          : Colors.white,
+      color: tColors.secondaryBackgroundColor,
       child: ListTile(
-        textColor: AppSettings.isDarkMode
-            ? Colors.white
-            : const Color.fromARGB(255, 48, 46, 46),
+        textColor: tColors.primaryTextColor,
         title: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
@@ -48,9 +45,7 @@ class DescriptionWidget extends StatelessWidget {
                         fontFamily: FontFamily.poppins,
                         fontWeight: TaskWarriorFonts.bold,
                         fontSize: TaskWarriorFonts.fontSizeMedium,
-                        color: AppSettings.isDarkMode
-                            ? TaskWarriorColors.white
-                            : TaskWarriorColors.black,
+                        color: tColors.primaryTextColor,
                       ),
                     ),
                     TextSpan(
@@ -64,9 +59,7 @@ class DescriptionWidget extends StatelessWidget {
                       style: TextStyle(
                         fontFamily: FontFamily.poppins,
                         fontSize: TaskWarriorFonts.fontSizeMedium,
-                        color: AppSettings.isDarkMode
-                            ? TaskWarriorColors.white
-                            : TaskWarriorColors.black,
+                        color: tColors.primaryTextColor,
                       ),
                     ),
                   ],
@@ -86,16 +79,12 @@ class DescriptionWidget extends StatelessWidget {
               title: Text(
                 'Edit description',
                 style: TextStyle(
-                  color: AppSettings.isDarkMode
-                      ? TaskWarriorColors.white
-                      : TaskWarriorColors.black,
+                  color: tColors.primaryTextColor,
                 ),
               ),
               content: TextField(
                 style: TextStyle(
-                  color: AppSettings.isDarkMode
-                      ? TaskWarriorColors.white
-                      : TaskWarriorColors.black,
+                  color: tColors.primaryTextColor,
                 ),
                 autofocus: true,
                 maxLines: null,
@@ -110,9 +99,7 @@ class DescriptionWidget extends StatelessWidget {
                   child: Text(
                     'Cancel',
                     style: TextStyle(
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.white
-                          : TaskWarriorColors.black,
+                      color: tColors.primaryTextColor,
                     ),
                   ),
                 ),
@@ -129,9 +116,7 @@ class DescriptionWidget extends StatelessWidget {
                   child: Text(
                     'Submit',
                     style: TextStyle(
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.black
-                          : TaskWarriorColors.black,
+                      color: tColors.primaryTextColor,
                     ),
                   ),
                 ),
@@ -157,14 +142,11 @@ class ProjectWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Card(
-      color: AppSettings.isDarkMode
-          ? const Color.fromARGB(255, 57, 57, 57)
-          : Colors.white,
+      color: tColors.secondaryBackgroundColor,
       child: ListTile(
-        textColor: AppSettings.isDarkMode
-            ? Colors.white
-            : const Color.fromARGB(255, 48, 46, 46),
+        textColor: tColors.primaryTextColor,
         title: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
@@ -185,9 +167,7 @@ class ProjectWidget extends StatelessWidget {
                         fontFamily: FontFamily.poppins,
                         fontWeight: TaskWarriorFonts.bold,
                         fontSize: TaskWarriorFonts.fontSizeMedium,
-                        color: AppSettings.isDarkMode
-                            ? TaskWarriorColors.white
-                            : TaskWarriorColors.black,
+                        color: tColors.primaryTextColor,
                       ),
                     ),
                     TextSpan(
@@ -201,9 +181,7 @@ class ProjectWidget extends StatelessWidget {
                       style: TextStyle(
                         fontFamily: FontFamily.poppins,
                         fontSize: TaskWarriorFonts.fontSizeMedium,
-                        color: AppSettings.isDarkMode
-                            ? TaskWarriorColors.white
-                            : TaskWarriorColors.black,
+                        color: tColors.primaryTextColor,
                       ),
                     ),
                   ],
@@ -223,16 +201,12 @@ class ProjectWidget extends StatelessWidget {
               title: Text(
                 'Edit project',
                 style: TextStyle(
-                  color: AppSettings.isDarkMode
-                      ? TaskWarriorColors.white
-                      : TaskWarriorColors.black,
+                  color: tColors.primaryTextColor,
                 ),
               ),
               content: TextField(
                 style: TextStyle(
-                  color: AppSettings.isDarkMode
-                      ? TaskWarriorColors.white
-                      : TaskWarriorColors.black,
+                  color: tColors.primaryTextColor,
                 ),
                 autofocus: true,
                 maxLines: null,
@@ -247,9 +221,7 @@ class ProjectWidget extends StatelessWidget {
                   child: Text(
                     'Cancel',
                     style: TextStyle(
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.white
-                          : TaskWarriorColors.black,
+                      color: tColors.primaryTextColor,
                     ),
                   ),
                 ),
@@ -267,9 +239,7 @@ class ProjectWidget extends StatelessWidget {
                   child: Text(
                     'Submit',
                     style: TextStyle(
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.black
-                          : TaskWarriorColors.black,
+                      color: tColors.primaryTextColor,
                     ),
                   ),
                 ),

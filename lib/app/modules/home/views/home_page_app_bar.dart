@@ -10,7 +10,7 @@ import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/taskchampion/credentials_storage.dart';
 import 'package:taskwarrior/app/utils/taskchampion/taskchampion.dart';
 import 'package:taskwarrior/app/utils/taskserver/taskserver.dart';
-import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 import '../controllers/home_controller.dart';
 
@@ -25,12 +25,12 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
       super.key});
 
   void _showLoadingSnackBar(BuildContext context, String message) {
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         duration: const Duration(days: 1),
-        backgroundColor: AppSettings.isDarkMode
-            ? TaskWarriorColors.ksecondaryBackgroundColor
-            : TaskWarriorColors.kLightSecondaryBackgroundColor,
+        backgroundColor: tColors.secondaryBackgroundColor,
         content: Row(
           children: [
             SizedBox(
@@ -38,18 +38,14 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
               height: 20,
               child: CircularProgressIndicator(
                 strokeWidth: 2,
-                color: AppSettings.isDarkMode
-                    ? TaskWarriorColors.white
-                    : TaskWarriorColors.black,
+                color: tColors.primaryTextColor,
               ),
             ),
             const SizedBox(width: 16),
             Text(
               message,
               style: TextStyle(
-                color: AppSettings.isDarkMode
-                    ? TaskWarriorColors.white
-                    : TaskWarriorColors.black,
+                color: tColors.primaryTextColor,
               ),
             ),
           ],
@@ -59,17 +55,15 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   void _showResultSnackBar(BuildContext context, String message, bool isError) {
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        backgroundColor: AppSettings.isDarkMode
-            ? TaskWarriorColors.ksecondaryBackgroundColor
-            : TaskWarriorColors.kLightSecondaryBackgroundColor,
+        backgroundColor: tColors.secondaryBackgroundColor,
         content: Text(
           message,
           style: TextStyle(
-            color: AppSettings.isDarkMode
-                ? TaskWarriorColors.white
-                : TaskWarriorColors.black,
+            color: tColors.primaryTextColor,
           ),
         ),
         action: isError
