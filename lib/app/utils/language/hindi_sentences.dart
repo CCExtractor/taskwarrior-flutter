@@ -32,6 +32,8 @@ class HindiSentences extends Sentences {
   @override
   String get homePageSearchNotFound => 'खोजने पर नहीं मिला';
   @override
+  String get homePageFetchingTasks => 'कार्य लाये जा रहे हैं';
+  @override
   String get settingsPageTitle => 'सेटिंग्स पेज';
   @override
   String get settingsPageSubtitle => 'अपनी पसंद सेट करें';

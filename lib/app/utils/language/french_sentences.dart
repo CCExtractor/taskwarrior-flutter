@@ -32,6 +32,8 @@ class FrenchSentences extends Sentences {
   @override
   String get homePageSearchNotFound => 'Aucun résultat pour la recherche';
   @override
+  String get homePageFetchingTasks => 'Récupération de tâches';
+  @override
   String get settingsPageTitle => 'Page des paramètres';
   @override
   String get settingsPageSubtitle => 'Configurez vos préférences';
