@@ -13,6 +13,7 @@ class ManageTaskChampionCreds extends StatelessWidget {
   final TextEditingController _encryptionSecretController =
       TextEditingController();
   final TextEditingController _clientIdController = TextEditingController();
+  final TextEditingController _ccsyncBackendUrlController = TextEditingController();
 
   ManageTaskChampionCreds({super.key}) {
     _loadCredentials();
@@ -23,12 +24,14 @@ class ManageTaskChampionCreds extends StatelessWidget {
     _encryptionSecretController.text =
         prefs.getString('encryptionSecret') ?? '';
     _clientIdController.text = prefs.getString('clientId') ?? '';
+    _ccsyncBackendUrlController.text = prefs.getString('championApiUrl') ?? '';
   }
 
   Future<void> _saveCredentials(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('encryptionSecret', _encryptionSecretController.text);
     await prefs.setString('clientId', _clientIdController.text);
+    await prefs.setString('championApiUrl', _ccsyncBackendUrlController.text);
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Credentials saved successfully')),
     );
@@ -109,6 +112,24 @@ class ManageTaskChampionCreds extends StatelessWidget {
                     controller: _clientIdController,
                     decoration: InputDecoration(
                       labelText: 'Client ID',
+                      labelStyle: TextStyle(
+                        color: AppSettings.isDarkMode
+                            ? TaskWarriorColors.white
+                            : TaskWarriorColors.black,
+                      ),
+                      border: const OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  TextField(
+                    style: TextStyle(
+                      color: AppSettings.isDarkMode
+                          ? TaskWarriorColors.white
+                          : TaskWarriorColors.black,
+                    ),
+                    controller: _ccsyncBackendUrlController,
+                    decoration: InputDecoration(
+                      labelText: 'CCSync Backend URL',
                       labelStyle: TextStyle(
                         color: AppSettings.isDarkMode
                             ? TaskWarriorColors.white
