@@ -70,18 +70,23 @@ String origin = 'http://localhost:8080';
 
 Future<List<Tasks>> fetchTasks(String uuid, String encryptionSecret) async {
   var baseUrl = await CredentialsStorage.getApiUrl();
-  String url =
-      '$baseUrl/tasks?email=email&origin=$origin&UUID=$uuid&encryptionSecret=$encryptionSecret';
+  try {
+    String url =
+        '$baseUrl/tasks?email=email&origin=$origin&UUID=$uuid&encryptionSecret=$encryptionSecret';
 
-  var response = await http.get(Uri.parse(url), headers: {
-    "Content-Type": "application/json",
-  }).timeout(const Duration(seconds: 10000));
-  if (response.statusCode == 200) {
-    List<dynamic> allTasks = jsonDecode(response.body);
-    debugPrint(allTasks.toString());
-    return allTasks.map((task) => Tasks.fromJson(task)).toList();
-  } else {
-    throw Exception('Failed to load tasks');
+    var response = await http.get(Uri.parse(url), headers: {
+      "Content-Type": "application/json",
+    }).timeout(const Duration(seconds: 10000));
+    if (response.statusCode == 200) {
+      List<dynamic> allTasks = jsonDecode(response.body);
+      debugPrint(allTasks.toString());
+      return allTasks.map((task) => Tasks.fromJson(task)).toList();
+    } else {
+      throw Exception('Failed to load tasks');
+    }
+  } catch (e) {
+    debugPrint('Error fetching tasks: $e');
+    return [];
   }
 }
 
