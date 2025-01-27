@@ -60,6 +60,7 @@ class HomeController extends GetxController {
   late TaskDatabase taskdb;
   WebSocketChannel? wsChannel;
   var tasks = <Tasks>[].obs;
+  final RxBool isRefreshing = false.obs;
 
   @override
   void onInit() {
@@ -98,8 +99,7 @@ class HomeController extends GetxController {
       selectedTags,
     ], (_) {
       if (Platform.isAndroid) {
-          WidgetController widgetController =
-              Get.put(WidgetController());
+        WidgetController widgetController = Get.put(WidgetController());
         widgetController.fetchAllData();
 
         widgetController.update();
@@ -519,15 +519,12 @@ class HomeController extends GetxController {
   final projectcontroller = TextEditingController();
   var due = Rxn<DateTime>();
   RxString dueString = ''.obs;
-  final priorityList = ['L','X','M','H'];
+  final priorityList = ['L', 'X', 'M', 'H'];
   final priorityColors = [
     TaskWarriorColors.green,
     TaskWarriorColors.grey,
     TaskWarriorColors.yellow,
     TaskWarriorColors.red,
-
-
-
   ];
   RxString priority = 'None'.obs;
 
@@ -593,10 +590,9 @@ class HomeController extends GetxController {
   void initLanguageAndDarkMode() {
     isDarkModeOn.value = AppSettings.isDarkMode;
     selectedLanguage.value = AppSettings.selectedLanguage;
-    HomeWidget.saveWidgetData("themeMode", AppSettings.isDarkMode ? "dark" : "light");
-    HomeWidget.updateWidget(
-      androidName: "TaskWarriorWidgetProvider"
-    );
+    HomeWidget.saveWidgetData(
+        "themeMode", AppSettings.isDarkMode ? "dark" : "light");
+    HomeWidget.updateWidget(androidName: "TaskWarriorWidgetProvider");
     // print("called and value is${isDarkModeOn.value}");
   }
 
@@ -690,6 +686,7 @@ class HomeController extends GetxController {
       },
     );
   }
+
   late RxString uuid = "".obs;
   late RxBool isHomeWidgetTaskTapped = false.obs;
 
@@ -704,7 +701,7 @@ class HomeController extends GetxController {
             Get.toNamed(Routes.DETAIL_ROUTE, arguments: ["uuid", uuid.value]);
           });
         }
-      }else if(uri.host == "addclicked"){
+      } else if (uri.host == "addclicked") {
         showAddDialogAfterWidgetClick();
       }
     }
@@ -717,15 +714,17 @@ class HomeController extends GetxController {
           }
           debugPrint('uuid is $uuid');
           Get.toNamed(Routes.DETAIL_ROUTE, arguments: ["uuid", uuid.value]);
-        }else if(uri.host == "addclicked"){
+        } else if (uri.host == "addclicked") {
           showAddDialogAfterWidgetClick();
         }
       }
-      
     });
   }
+
   void showAddDialogAfterWidgetClick() {
-    Widget showDialog = taskchampion.value ? AddTaskToTaskcBottomSheet(homeController: this) : AddTaskBottomSheet(homeController: this);
+    Widget showDialog = taskchampion.value
+        ? AddTaskToTaskcBottomSheet(homeController: this)
+        : AddTaskBottomSheet(homeController: this);
     Get.dialog(showDialog);
   }
 
