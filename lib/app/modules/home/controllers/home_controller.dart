@@ -27,12 +27,15 @@ import 'package:taskwarrior/app/tour/home_page_tour.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/language/supported_language.dart';
 import 'package:taskwarrior/app/utils/taskchampion/credentials_storage.dart';
+import 'package:taskwarrior/app/utils/taskchampion/websocket.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/comparator.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/projects.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/query.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/tags.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
+import 'package:web_socket_channel/status.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class HomeController extends GetxController {
   final SplashController splashController = Get.find<SplashController>();
@@ -55,6 +58,7 @@ class HomeController extends GetxController {
   final ScrollController scrollController = ScrollController();
   final RxBool showbtn = false.obs;
   late TaskDatabase taskdb;
+  WebSocketChannel? wsChannel;
   var tasks = <Tasks>[].obs;
   final RxBool isRefreshing = false.obs;
 
@@ -75,6 +79,13 @@ class HomeController extends GetxController {
     taskdb.open();
     getUniqueProjects();
     _loadTaskChampion();
+    ever(taskchampion, (bool value) async {
+      if (value) {
+        wsChannel = await initCCSyncUpdatesWs();
+      } else {
+        if (wsChannel != null) wsChannel?.sink.close(goingAway);
+      }
+    });
     if (Platform.isAndroid) {
       handleHomeWidgetClicked();
     }
@@ -515,7 +526,7 @@ class HomeController extends GetxController {
     TaskWarriorColors.yellow,
     TaskWarriorColors.red,
   ];
-  RxString priority = 'X'.obs;
+  RxString priority = 'None'.obs;
 
   final tagcontroller = TextEditingController();
   RxList<String> tags = <String>[].obs;
@@ -715,5 +726,61 @@ class HomeController extends GetxController {
         ? AddTaskToTaskcBottomSheet(homeController: this)
         : AddTaskBottomSheet(homeController: this);
     Get.dialog(showDialog);
+  }
+
+  Future<WebSocketChannel> initCCSyncUpdatesWs() async {
+    Map<String, String> successMessages = {
+      "Add Task": "Task added successfully",
+      "Edit Task": "Task edited successfully",
+      "Complete Task": "Task completed successfully",
+      "Delete Task": "Task deleted successfully",
+    };
+    Map<String, String> failureMessages = {
+      "Add Task": "Task addition failed",
+      "Edit Task": "Task edit failed",
+      "Complete Task": "Task completion failed",
+      "Delete Task": "Task deletion failed",
+    };
+    String? clientId = await CredentialsStorage.getClientId();
+    return listenForTaskUpdates(getWsUrl(baseUrl, clientId),
+        (TaskUpdate update) {
+      debugPrint("Success: ${update.job} ${successMessages[update.job]!}");
+      if (successMessages.containsKey(update.job)) {
+        ScaffoldMessenger.of(Get.context!).showSnackBar(SnackBar(
+            content: Text(
+              '${successMessages[update.job]}',
+              style: TextStyle(
+                color: AppSettings.isDarkMode
+                    ? TaskWarriorColors.kprimaryTextColor
+                    : TaskWarriorColors.kLightPrimaryTextColor,
+              ),
+            ),
+            backgroundColor: AppSettings.isDarkMode
+                ? TaskWarriorColors.ksecondaryBackgroundColor
+                : TaskWarriorColors.kLightSecondaryBackgroundColor,
+            duration: const Duration(seconds: 2)));
+      }
+    }, (TaskUpdate update) {
+      ScaffoldMessenger.of(Get.context!).showSnackBar(SnackBar(
+          content: Text(
+            '${failureMessages[update.job]}',
+            style: TextStyle(
+              color: AppSettings.isDarkMode
+                  ? TaskWarriorColors.kprimaryTextColor
+                  : TaskWarriorColors.kLightPrimaryTextColor,
+            ),
+          ),
+          backgroundColor: AppSettings.isDarkMode
+              ? TaskWarriorColors.ksecondaryBackgroundColor
+              : TaskWarriorColors.kLightSecondaryBackgroundColor,
+          duration: const Duration(seconds: 2)));
+    });
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
+    taskdb.close();
+    if (wsChannel != null) wsChannel?.sink.close();
   }
 }
