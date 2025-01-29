@@ -32,6 +32,8 @@ class FrenchSentences extends Sentences {
   @override
   String get homePageSearchNotFound => 'Aucun résultat pour la recherche';
   @override
+  String get homePageFetchingTasks => 'Récupération de tâches';
+  @override
   String get settingsPageTitle => 'Page des paramètres';
   @override
   String get settingsPageSubtitle => 'Configurez vos préférences';
@@ -69,7 +71,7 @@ class FrenchSentences extends Sentences {
   String get settingsPageSelectDirectoryTitle => 'Choisir un répertoire';
   @override
   String get settingsPageSelectDirectoryDescription =>
-      'Choisissez le répertoire où les données TaskWarrior sont stockées\nRépertoire actuel : ';
+      'Choisissez le répertoire où les données Taskwarrior sont stockées\nRépertoire actuel : ';
   @override
   String get settingsPageChangeDirectory => 'Changer de répertoire';
   @override
@@ -193,7 +195,7 @@ class FrenchSentences extends Sentences {
 
   @override
   String get taskchampionTileDescription =>
-      'Basculez la synchronisation de TaskWarrior vers le serveur de synchronisation CCSync ou Taskchampion';
+      'Basculez la synchronisation de Taskwarrior vers le serveur de synchronisation CCSync ou Taskchampion';
 
   @override
   String get taskchampionTileTitle => 'Synchronisation Taskchampion';

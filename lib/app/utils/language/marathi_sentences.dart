@@ -32,6 +32,8 @@ class MarathiSentences extends Sentences {
   @override
   String get homePageSearchNotFound => 'शोध सापडला नाही';
   @override
+  String get homePageFetchingTasks => 'कार्ये आणत आहे';
+  @override
   String get settingsPageTitle => 'सेटिंग्स पेज';
   @override
   String get settingsPageSubtitle => 'तुमची पसंती सेट करा';
@@ -69,7 +71,7 @@ class MarathiSentences extends Sentences {
   String get settingsPageSelectDirectoryTitle => 'निर्देशिका निवडा';
   @override
   String get settingsPageSelectDirectoryDescription =>
-      'निर्देशिका निवडा जिथे TaskWarrior डेटा स्टोर केला जातो\nवर्तमान निर्देशिका: ';
+      'निर्देशिका निवडा जिथे Taskwarrior डेटा स्टोर केला जातो\nवर्तमान निर्देशिका: ';
   @override
   String get settingsPageChangeDirectory => 'डिरेक्टरी बदला';
   @override
@@ -190,7 +192,7 @@ class MarathiSentences extends Sentences {
 
   @override
   String get taskchampionTileDescription =>
-      'CCSync किंवा Taskchampion Sync Server सह TaskWarrior सिंक वर स्विच करा';
+      'CCSync किंवा Taskchampion Sync Server सह Taskwarrior सिंक वर स्विच करा';
 
   @override
   String get taskchampionTileTitle => 'Taskchampion सिंक';

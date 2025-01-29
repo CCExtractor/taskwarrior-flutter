@@ -32,6 +32,8 @@ class EnglishSentences extends Sentences {
       'Click on the bottom right button to start adding tasks';
   @override
   String get homePageSearchNotFound => 'Search Not Found';
+  @override
+  String get homePageFetchingTasks => 'Fetching Tasks';
 
   @override
   String get settingsPageTitle => 'Settings Page';
@@ -69,7 +71,7 @@ class EnglishSentences extends Sentences {
   String get settingsPageSelectDirectoryTitle => 'Select the directory';
   @override
   String get settingsPageSelectDirectoryDescription =>
-      'Select the directory where the TaskWarrior data is stored\nCurrent directory: ';
+      'Select the directory where the Taskwarrior data is stored\nCurrent directory: ';
   @override
   String get settingsPageChangeDirectory => 'Change Directory';
   @override
@@ -190,7 +192,7 @@ class EnglishSentences extends Sentences {
 
   @override
   String get taskchampionTileDescription =>
-      'Switch to TaskWarrior sync with CCSync or Taskchampion Sync Server';
+      'Switch to Taskwarrior sync with CCSync or Taskchampion Sync Server';
   @override
   String get taskchampionTileTitle => 'Taskchampion sync';
 

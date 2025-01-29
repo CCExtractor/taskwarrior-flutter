@@ -98,7 +98,7 @@ class NotificationService {
     await _flutterLocalNotificationsPlugin
         .zonedSchedule(
             notificationId,
-            'Task Warrior Reminder',
+            'Taskwarrior Reminder',
             isWait
                 ? "Hey! Don't forget your task of $taskname"
                 : 'Hey! Your task of $taskname is still pending',

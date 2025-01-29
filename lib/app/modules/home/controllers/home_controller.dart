@@ -16,6 +16,9 @@ import 'package:taskwarrior/app/models/json/task.dart';
 import 'package:taskwarrior/app/models/storage.dart';
 import 'package:taskwarrior/app/models/storage/client.dart';
 import 'package:taskwarrior/app/models/tag_meta_data.dart';
+import 'package:taskwarrior/app/modules/home/controllers/widget.controller.dart';
+import 'package:taskwarrior/app/modules/home/views/add_task_bottom_sheet.dart';
+import 'package:taskwarrior/app/modules/home/views/add_task_to_taskc_bottom_sheet.dart';
 import 'package:taskwarrior/app/modules/splash/controllers/splash_controller.dart';
 import 'package:taskwarrior/app/routes/app_pages.dart';
 import 'package:taskwarrior/app/services/tag_filter.dart';
@@ -53,6 +56,7 @@ class HomeController extends GetxController {
   final RxBool showbtn = false.obs;
   late TaskDatabase taskdb;
   var tasks = <Tasks>[].obs;
+  final RxBool isRefreshing = false.obs;
 
   @override
   void onInit() {
@@ -67,14 +71,29 @@ class HomeController extends GetxController {
     _profileSet();
     loadDelayTask();
     initLanguageAndDarkMode();
-    if (Platform.isAndroid) {
-      handleHomeWidgetClicked();
-    }
     taskdb = TaskDatabase();
     taskdb.open();
     getUniqueProjects();
     _loadTaskChampion();
+    if (Platform.isAndroid) {
+      handleHomeWidgetClicked();
+    }
     fetchTasksFromDB();
+    everAll([
+      pendingFilter,
+      waitingFilter,
+      projectFilter,
+      tagUnion,
+      selectedSort,
+      selectedTags,
+    ], (_) {
+      if (Platform.isAndroid) {
+        WidgetController widgetController = Get.put(WidgetController());
+        widgetController.fetchAllData();
+
+        widgetController.update();
+      }
+    });
   }
 
   Future<List<String>> getUniqueProjects() async {
@@ -489,7 +508,15 @@ class HomeController extends GetxController {
   final projectcontroller = TextEditingController();
   var due = Rxn<DateTime>();
   RxString dueString = ''.obs;
-  RxString priority = 'M'.obs;
+  final priorityList = ['L', 'X', 'M', 'H'];
+  final priorityColors = [
+    TaskWarriorColors.green,
+    TaskWarriorColors.grey,
+    TaskWarriorColors.yellow,
+    TaskWarriorColors.red,
+  ];
+  RxString priority = 'X'.obs;
+
   final tagcontroller = TextEditingController();
   RxList<String> tags = <String>[].obs;
   RxBool inThePast = false.obs;
@@ -552,6 +579,9 @@ class HomeController extends GetxController {
   void initLanguageAndDarkMode() {
     isDarkModeOn.value = AppSettings.isDarkMode;
     selectedLanguage.value = AppSettings.selectedLanguage;
+    HomeWidget.saveWidgetData(
+        "themeMode", AppSettings.isDarkMode ? "dark" : "light");
+    HomeWidget.updateWidget(androidName: "TaskWarriorWidgetProvider");
     // print("called and value is${isDarkModeOn.value}");
   }
 
@@ -650,16 +680,18 @@ class HomeController extends GetxController {
   late RxBool isHomeWidgetTaskTapped = false.obs;
 
   void handleHomeWidgetClicked() async {
-    Uri? myUri = await HomeWidget.initiallyLaunchedFromHomeWidget();
-    if (myUri != null) {
-      if (myUri.host == "cardclicked") {
-        if (myUri.queryParameters["uuid"] != null) {
-          uuid.value = myUri.queryParameters["uuid"] as String;
+    Uri? uri = await HomeWidget.initiallyLaunchedFromHomeWidget();
+    if (uri != null) {
+      if (uri.host == "cardclicked") {
+        if (uri.queryParameters["uuid"] != null) {
+          uuid.value = uri.queryParameters["uuid"] as String;
           isHomeWidgetTaskTapped.value = true;
           Future.delayed(Duration.zero, () {
             Get.toNamed(Routes.DETAIL_ROUTE, arguments: ["uuid", uuid.value]);
           });
         }
+      } else if (uri.host == "addclicked") {
+        showAddDialogAfterWidgetClick();
       }
     }
     HomeWidget.widgetClicked.listen((uri) async {
@@ -671,8 +703,17 @@ class HomeController extends GetxController {
           }
           debugPrint('uuid is $uuid');
           Get.toNamed(Routes.DETAIL_ROUTE, arguments: ["uuid", uuid.value]);
+        } else if (uri.host == "addclicked") {
+          showAddDialogAfterWidgetClick();
         }
       }
     });
+  }
+
+  void showAddDialogAfterWidgetClick() {
+    Widget showDialog = taskchampion.value
+        ? AddTaskToTaskcBottomSheet(homeController: this)
+        : AddTaskBottomSheet(homeController: this);
+    Get.dialog(showDialog);
   }
 }

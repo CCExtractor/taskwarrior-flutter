@@ -32,6 +32,8 @@ class BengaliSentences extends Sentences {
   @override
   String get homePageSearchNotFound => 'অনুসন্ধানে কিছু পাওয়া যায়নি';
   @override
+  String get homePageFetchingTasks => 'টাস্ক আনা হচ্ছে';
+  @override
   String get settingsPageTitle => 'সেটিংস পেজ';
   @override
   String get settingsPageSubtitle => 'আপনার পছন্দ সেট করুন';
@@ -190,7 +192,7 @@ class BengaliSentences extends Sentences {
 
   @override
   String get taskchampionTileDescription =>
-      'TaskWarrior সিঙ্কিং CCSync বা Taskchampion সিঙ্ক সার্ভারে পরিবর্তন করুন';
+      'Taskwarrior সিঙ্কিং CCSync বা Taskchampion সিঙ্ক সার্ভারে পরিবর্তন করুন';
 
   @override
   String get taskchampionTileTitle => 'Taskchampion সিঙ্ক';

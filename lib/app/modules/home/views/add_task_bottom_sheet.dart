@@ -112,6 +112,13 @@ class AddTaskBottomSheet extends StatelessWidget {
                 onFieldSubmitted: (tag) {
                   addTag(tag.trim());
                 },
+                onChanged: (value) {
+                  String trimmedString = value.trim();
+                  if (value.endsWith(" ") &&
+                      trimmedString.split(' ').length == 1) {
+                    addTag(trimmedString);
+                  }
+                },
               ),
             ),
             IconButton(
@@ -158,9 +165,9 @@ class AddTaskBottomSheet extends StatelessWidget {
         ),
         validator: (name) => name != null && name.isEmpty
             ? SentenceManager(
-                        currentLanguage: homeController.selectedLanguage.value)
-                    .sentences
-                    .addTaskFieldCannotBeEmpty
+                    currentLanguage: homeController.selectedLanguage.value)
+                .sentences
+                .addTaskFieldCannotBeEmpty
             : null,
       );
 
@@ -243,7 +250,7 @@ class AddTaskBottomSheet extends StatelessWidget {
                     },
                     fieldHintText: "Month/Date/Year",
                     context: context,
-                    initialDate: homeController.due.value ?? DateTime.now(),
+                    initialDate: homeController.due.value?? DateTime.now(),
                     firstDate: DateTime.now(),
                     lastDate: DateTime(2037, 12, 31),
                   );
@@ -298,7 +305,7 @@ class AddTaskBottomSheet extends StatelessWidget {
                         ),
                       );
                       // print(dateTime);
-                      homeController.due.value = dateTime.toUtc();
+                      homeController.due.value = dateTime;
 
                       // print("due value ${homeController.due}");
                       homeController.dueString.value =
@@ -360,34 +367,52 @@ class AddTaskBottomSheet extends StatelessWidget {
                 ),
                 textAlign: TextAlign.left,
               ),
+              const SizedBox(width: 2,),
               Obx(
-                () => DropdownButton<String>(
-                  dropdownColor: AppSettings.isDarkMode
-                      ? TaskWarriorColors.kdialogBackGroundColor
-                      : TaskWarriorColors.kLightDialogBackGroundColor,
-                  value: homeController.priority.value,
-                  elevation: 16,
-                  style: GoogleFonts.poppins(
-                    color: AppSettings.isDarkMode
-                        ? TaskWarriorColors.white
-                        : TaskWarriorColors.black,
-                  ),
-                  underline: Container(
-                    height: 1.5,
-                    color: AppSettings.isDarkMode
-                        ? TaskWarriorColors.kdialogBackGroundColor
-                        : TaskWarriorColors.kLightDialogBackGroundColor,
-                  ),
-                  onChanged: (String? newValue) {
-                    homeController.priority.value = newValue!;
-                  },
-                  items: <String>['H', 'M', 'L', 'None']
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text('  $value'),
-                    );
-                  }).toList(),
+                () => Row(
+                  children: [
+                    for(int i=0;i<homeController.priorityList.length;i++)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 2.5),
+                        child: GestureDetector(
+                          onTap: () {
+                            homeController.priority.value = homeController.priorityList[i];
+                            debugPrint(homeController.priority.value);
+                          },
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 100),
+                            height: 30,
+                            width: 37,
+                            decoration: BoxDecoration(
+
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: homeController.priority.value == homeController.priorityList[i]
+                                    ? AppSettings.isDarkMode
+                                      ? TaskWarriorColors.kLightPrimaryBackgroundColor
+                                        : TaskWarriorColors.kprimaryBackgroundColor
+                                    : AppSettings.isDarkMode
+                                      ? TaskWarriorColors.kprimaryBackgroundColor
+                                        : TaskWarriorColors.kLightPrimaryBackgroundColor,
+                              )
+                            ),
+                            child: Center(
+                              child: Text(
+                                homeController.priorityList[i],
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 17,
+                                  color: homeController.priorityColors[i]
+                                ),
+                              ),
+                            ),
+                          ),
+
+                        ),
+                      )
+
+                  ],
                 ),
               )
             ],
@@ -400,9 +425,9 @@ class AddTaskBottomSheet extends StatelessWidget {
       TextButton(
         child: Text(
           SentenceManager(
-                        currentLanguage: homeController.selectedLanguage.value)
-                    .sentences
-                    .addTaskCancel,
+                  currentLanguage: homeController.selectedLanguage.value)
+              .sentences
+              .addTaskCancel,
           style: TextStyle(
             color: AppSettings.isDarkMode
                 ? TaskWarriorColors.white
@@ -425,8 +450,8 @@ class AddTaskBottomSheet extends StatelessWidget {
       child: Text(
         SentenceManager(
                         currentLanguage: homeController.selectedLanguage.value)
-                    .sentences
-                    .addTaskAdd,
+            .sentences
+            .addTaskAdd,
         style: TextStyle(
           color: AppSettings.isDarkMode
               ? TaskWarriorColors.white
@@ -435,10 +460,31 @@ class AddTaskBottomSheet extends StatelessWidget {
       ),
       onPressed: () async {
         // print(homeController.formKey.currentState);
+        if(homeController.due.value!=null&&DateTime.now().isAfter(homeController.due.value!)){
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(
+                SentenceManager(
+                    currentLanguage:
+                    homeController.selectedLanguage.value)
+                    .sentences
+                    .addTaskTimeInPast,
+                style: TextStyle(
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.kprimaryTextColor
+                      : TaskWarriorColors.kLightPrimaryTextColor,
+                ),
+              ),
+              backgroundColor: AppSettings.isDarkMode
+                  ? TaskWarriorColors.ksecondaryBackgroundColor
+                  : TaskWarriorColors
+                  .kLightSecondaryBackgroundColor,
+              duration: const Duration(seconds: 2)));
+          return;
+        }
         if (homeController.formKey.currentState!.validate()) {
           try {
             var task = taskParser(homeController.namecontroller.text)
-                .rebuild((b) => b..due = homeController.due.value)
+                .rebuild((b) => b..due = homeController.due.value?.toUtc())
                 .rebuild((p) => p..priority = homeController.priority.value);
             if (homeController.tagcontroller.text != "") {
               homeController.tags.add(homeController.tagcontroller.text.trim());
@@ -455,12 +501,13 @@ class AddTaskBottomSheet extends StatelessWidget {
             homeController.priority.value = 'M';
             homeController.tagcontroller.text = '';
             homeController.tags.value = [];
+            homeController.due.value=null;
             homeController.update();
             // Navigator.of(context).pop();
             Get.back();
             if (Platform.isAndroid) {
               WidgetController widgetController =
-                  Get.put(WidgetController(context));
+                  Get.put(WidgetController());
               widgetController.fetchAllData();
 
               widgetController.update();
@@ -472,8 +519,8 @@ class AddTaskBottomSheet extends StatelessWidget {
                 content: Text(
                   SentenceManager(
                         currentLanguage: homeController.selectedLanguage.value)
-                    .sentences
-                    .addTaskTaskAddedSuccessfully,
+                      .sentences
+                      .addTaskTaskAddedSuccessfully,
                   style: TextStyle(
                     color: AppSettings.isDarkMode
                         ? TaskWarriorColors.kprimaryTextColor
@@ -519,11 +566,19 @@ class AddTaskBottomSheet extends StatelessWidget {
   void addTag(String tag) {
     if (tag.isNotEmpty) {
       String trimmedString = tag.trim();
-      homeController.tags.add(trimmedString);
+      List<String> tags = trimmedString.split(" ");
+      for(tag in tags){
+        if(checkTagIfExists(tag)) {
+          removeTag(tag);
+        }
+        homeController.tags.add(tag);
+      }
       homeController.tagcontroller.text = '';
     }
   }
-
+  bool checkTagIfExists(String tag){
+    return homeController.tags.contains(tag);
+  }
   void removeTag(String tag) {
     homeController.tags.remove(tag);
   }

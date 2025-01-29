@@ -2,30 +2,25 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/list_item_container"
+    android:background="@drawable/border_style"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-	android:background="@drawable/border_style"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
 
-    <!-- Title TextView -->
+    <ImageView
+        android:id="@+id/dot"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@android:drawable/ic_menu_help" />
+
     <TextView
-        android:id="@+id/title_textview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Task Title"
-		android:textColor="#666666"
-        android:textSize="18sp"
-        android:textStyle="bold"/>
-
-    <!-- Urgency Level TextView -->
-    <TextView
-        android:id="@+id/urgency_textview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-		
-        android:text="Urgency Level"
-        android:textSize="14sp"
-        android:textColor="#666666"/>
-
+        android:scrollHorizontally="true"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:id="@+id/todo__title"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="5dp"
+        android:textColor="@color/fg"/>
 </LinearLayout>
