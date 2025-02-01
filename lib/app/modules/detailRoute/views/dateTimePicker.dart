@@ -60,7 +60,7 @@ class DateTimeWidget extends StatelessWidget {
                       ),
                     ),
                     TextSpan(
-                      text: value ?? "not selected",
+                      text: value ?? "",
                       // style: GoogleFonts.poppins(
                       //   fontSize: TaskWarriorFonts.fontSizeMedium,
                       //   color: AppSettings.isDarkMode
@@ -242,7 +242,7 @@ class StartWidget extends StatelessWidget {
                       ),
                     ),
                     TextSpan(
-                      text: value ?? "not selected",
+                      text: value ?? "",
                       // style: GoogleFonts.poppins(
                       //   fontSize: TaskWarriorFonts.fontSizeMedium,
                       //   color: AppSettings.isDarkMode

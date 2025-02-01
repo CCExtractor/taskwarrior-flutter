@@ -45,7 +45,7 @@ class ProjectColumnTaskc extends StatelessWidget {
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Text(
-                    projectFilter.isEmpty ? "Not selected" : projectFilter,
+                    projectFilter.isEmpty ? "" : projectFilter,
                     style: TextStyle(
                       fontFamily: FontFamily.poppins,
                       fontSize: TaskWarriorFonts.fontSizeSmall,

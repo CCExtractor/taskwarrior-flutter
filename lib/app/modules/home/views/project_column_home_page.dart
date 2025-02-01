@@ -49,7 +49,7 @@ class ProjectsColumn extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        projectFilter == "" ? "Not selected" : projectFilter,
+                        projectFilter == "" ? "" : projectFilter,
                         style: TextStyle(
                           fontFamily: FontFamily.poppins,
                           fontSize: TaskWarriorFonts.fontSizeSmall,

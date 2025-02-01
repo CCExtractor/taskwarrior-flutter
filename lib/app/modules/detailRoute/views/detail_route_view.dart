@@ -333,7 +333,7 @@ class AttributeWidget extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    localValue?.toString() ?? "not selected",
+                    localValue?.toString() ?? "",
                     style: TextStyle(
                       color: AppSettings.isDarkMode
                           ? TaskWarriorColors.white
@@ -396,7 +396,7 @@ class TagsWidget extends StatelessWidget {
                         ),
                     TextSpan(
                       text:
-                          '${(value as ListBuilder?)?.build() ?? 'not selected'}',
+                          '${(value as ListBuilder?)?.build() ?? ''}',
                       style: TextStyle(
                         color: AppSettings.isDarkMode
                             ? TaskWarriorColors.white
