@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:taskwarrior/app/modules/home/views/add_task_bottom_sheet.dart';
-import 'package:taskwarrior/app/modules/home/views/add_task_to_taskc_bottom_sheet.dart';
+import 'package:taskwarrior/app/modules/home/views/add_task_bottom_sheet_new.dart';
 
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
@@ -30,18 +29,33 @@ class HomePageFloatingActionButton extends StatelessWidget {
           ),
         ),
         onPressed: () => (controller.taskchampion.value)
-            ? (showDialog(
+            ? (showModalBottomSheet(
                 context: context,
-                builder: (context) => AddTaskToTaskcBottomSheet(
+                isScrollControlled: true,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(0),
+                    topRight: Radius.circular(0),
+                  ),
+                ),
+                builder: (context) => AddTaskBottomSheet(
                   homeController: controller,
+                  forTaskC: true,
                 ),
               ).then((value) {
                 if (controller.isSyncNeeded.value && value != "cancel") {
                   controller.isNeededtoSyncOnStart(context);
                 }
               }))
-            : (showDialog(
+            : (showModalBottomSheet(
                 context: context,
+                isScrollControlled: true,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(0),
+                    topRight: Radius.circular(0),
+                  ),
+                ),
                 builder: (context) => AddTaskBottomSheet(
                   homeController: controller,
                 ),
