@@ -59,7 +59,11 @@ class AddTaskBottomSheet extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: () {
-                      onSaveButtonClicked(context);
+                      if (forTaskC) {
+                        onSaveButtonClickedTaskC(context);
+                      } else {
+                        onSaveButtonClicked(context);
+                      }
                     },
                     child: const Text("Save"),
                   ),
@@ -161,6 +165,12 @@ class AddTaskBottomSheet extends StatelessWidget {
           ),
           onChanged: (value) => homeController.projectcontroller.text = value,
           focusNode: focusNode,
+          validator: (value) {
+            if (value != null && value.contains(" ")) {
+              return "Can not have Whitespace";
+            }
+            return null;
+          },
         ),
       );
 
@@ -173,6 +183,7 @@ class AddTaskBottomSheet extends StatelessWidget {
         onDateChanges: (List<DateTime?> p0) {
           homeController.selectedDates.value = p0;
         },
+        onlyDueDate: forTaskC,
       );
 
   Widget buildPriority(BuildContext context) => Column(
@@ -260,18 +271,22 @@ class AddTaskBottomSheet extends StatelessWidget {
 
   void onSaveButtonClickedTaskC(BuildContext context) async {
     if (homeController.formKey.currentState!.validate()) {
+      debugPrint("tags ${homeController.tags}");
       var task = Tasks(
           description: homeController.namecontroller.text,
           status: 'pending',
           priority: homeController.priority.value,
           entry: DateTime.now().toIso8601String(),
           id: 0,
-          project: homeController.projectcontroller.text,
+          project: homeController.projectcontroller.text != ""
+              ? homeController.projectcontroller.text
+              : null,
           uuid: '',
           urgency: 0,
           due: getDueDate(homeController.selectedDates).toString(),
           end: '',
-          modified: 'r');
+          modified: 'r',
+          tags: homeController.tags);
       await homeController.taskdb.insertTask(task);
       homeController.namecontroller.text = '';
       homeController.due.value = null;

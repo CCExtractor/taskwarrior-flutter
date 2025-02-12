@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -19,38 +20,56 @@ class Tasks {
   final String? end;
   final String entry;
   final String? modified;
+  final List<dynamic>? tags;
 
-  Tasks({
-    required this.id,
-    required this.description,
-    required this.project,
-    required this.status,
-    required this.uuid,
-    required this.urgency,
-    required this.priority,
-    required this.due,
-    required this.end,
-    required this.entry,
-    required this.modified,
-  });
+  Tasks(
+      {required this.id,
+      required this.description,
+      required this.project,
+      required this.status,
+      required this.uuid,
+      required this.urgency,
+      required this.priority,
+      required this.due,
+      required this.end,
+      required this.entry,
+      required this.modified,
+      required this.tags});
 
   factory Tasks.fromJson(Map<String, dynamic> json) {
     return Tasks(
-      id: json['id'],
-      description: json['description'],
-      project: json['project'],
-      status: json['status'],
-      uuid: json['uuid'],
-      urgency: json['urgency'].toDouble(),
-      priority: json['priority'],
-      due: json['due'],
-      end: json['end'],
-      entry: json['entry'],
-      modified: json['modified'],
-    );
+        id: json['id'],
+        description: json['description'],
+        project: json['project'],
+        status: json['status'],
+        uuid: json['uuid'],
+        urgency: json['urgency'].toDouble(),
+        priority: json['priority'],
+        due: json['due'],
+        end: json['end'],
+        entry: json['entry'],
+        modified: json['modified'],
+        tags: json['tags']);
+  }
+  factory Tasks.fromDbJson(Map<String, dynamic> json) {
+    debugPrint("FROM: $json");
+    return Tasks(
+        id: json['id'],
+        description: json['description'],
+        project: json['project'],
+        status: json['status'],
+        uuid: json['uuid'],
+        urgency: json['urgency'].toDouble(),
+        priority: json['priority'],
+        due: json['due'],
+        end: json['end'],
+        entry: json['entry'],
+        modified: json['modified'],
+        tags: json['tags'].toString().split(' '));
   }
 
   Map<String, dynamic> toJson() {
+    debugPrint("TAGS: $tags");
     return {
       'id': id,
       'description': description,
@@ -63,6 +82,24 @@ class Tasks {
       'end': end,
       'entry': entry,
       'modified': modified,
+      'tags': tags
+    };
+  }
+
+  Map<String, dynamic> toDbJson() {
+    return {
+      'id': id,
+      'description': description,
+      'project': project,
+      'status': status,
+      'uuid': uuid,
+      'urgency': urgency,
+      'priority': priority,
+      'due': due,
+      'end': end,
+      'entry': entry,
+      'modified': modified,
+      'tags': tags != null ? tags?.join(" ") : ""
     };
   }
 }
@@ -100,8 +137,8 @@ Future<void> updateTasksInDatabase(List<Tasks> tasks) async {
   //add tasks without UUID to the server and delete them from database
   for (var task in tasksWithoutUUID) {
     try {
-      await addTaskAndDeleteFromDatabase(
-          task.description, task.project!, task.due!, task.priority!);
+      await addTaskAndDeleteFromDatabase(task.description, task.project!,
+          task.due!, task.priority!, task.tags != null ? task.tags! : []);
     } catch (e) {
       debugPrint('Failed to add task without UUID to server: $e');
     }
@@ -221,14 +258,15 @@ Future<void> completeTask(String email, String taskUuid) async {
   }
 }
 
-Future<void> addTaskAndDeleteFromDatabase(
-    String description, String project, String due, String priority) async {
+Future<void> addTaskAndDeleteFromDatabase(String description, String project,
+    String due, String priority, List<dynamic> tags) async {
   String apiUrl = '$baseUrl/add-task';
   var c = await CredentialsStorage.getClientId();
   var e = await CredentialsStorage.getEncryptionSecret();
+  debugPrint("Database Adding Tags $tags $description");
   debugPrint(c);
   debugPrint(e);
-  await http.post(
+  var res = await http.post(
     Uri.parse(apiUrl),
     headers: {
       'Content-Type': 'text/plain',
@@ -241,9 +279,10 @@ Future<void> addTaskAndDeleteFromDatabase(
       'project': project,
       'due': due,
       'priority': priority,
+      'tags': tags
     }),
   );
-
+  debugPrint('Database res  ${res.body}');
   var taskDatabase = TaskDatabase();
   await taskDatabase.open();
   await taskDatabase._database!.delete(
@@ -302,9 +341,11 @@ class TaskDatabase {
     var databasesPath = await getDatabasesPath();
     String path = join(databasesPath, 'tasks.db');
 
-    _database = await openDatabase(path, version: 1,
+    _database = await openDatabase(path,
+        version: 1,
+        onOpen: (db) async => await addTagsColumnIfNeeded(db),
         onCreate: (Database db, version) async {
-      await db.execute('''
+          await db.execute('''
         CREATE TABLE Tasks (
           uuid TEXT PRIMARY KEY,
           id INTEGER,
@@ -319,7 +360,16 @@ class TaskDatabase {
           modified TEXT
         )
       ''');
-    });
+        });
+  }
+
+  Future<void> addTagsColumnIfNeeded(Database db) async {
+    try {
+      await db.rawQuery("SELECT tags FROM Tasks LIMIT 0");
+    } catch (e) {
+      await db.execute("ALTER TABLE Tasks ADD COLUMN tags TEXT");
+      debugPrint("Added Column tags");
+    }
   }
 
   Future<void> ensureDatabaseIsOpen() async {
@@ -332,20 +382,21 @@ class TaskDatabase {
     await ensureDatabaseIsOpen();
 
     final List<Map<String, dynamic>> maps = await _database!.query('Tasks');
+    debugPrint("Database fetch ${maps.last}");
     var a = List.generate(maps.length, (i) {
       return Tasks(
-        id: maps[i]['id'],
-        description: maps[i]['description'],
-        project: maps[i]['project'],
-        status: maps[i]['status'],
-        uuid: maps[i]['uuid'],
-        urgency: maps[i]['urgency'],
-        priority: maps[i]['priority'],
-        due: maps[i]['due'],
-        end: maps[i]['end'],
-        entry: maps[i]['entry'],
-        modified: maps[i]['modified'],
-      );
+          id: maps[i]['id'],
+          description: maps[i]['description'],
+          project: maps[i]['project'],
+          status: maps[i]['status'],
+          uuid: maps[i]['uuid'],
+          urgency: maps[i]['urgency'],
+          priority: maps[i]['priority'],
+          due: maps[i]['due'],
+          end: maps[i]['end'],
+          entry: maps[i]['entry'],
+          modified: maps[i]['modified'],
+          tags: maps[i]['tags'] != null ? maps[i]['tags'].split(' ') : []);
     });
     // debugPrint('Tasks from db');
     // debugPrint(a.toString());
@@ -374,12 +425,13 @@ class TaskDatabase {
 
   Future<void> insertTask(Tasks task) async {
     await ensureDatabaseIsOpen();
-
-    await _database!.insert(
+    debugPrint("Database Insert");
+    var dbi = await _database!.insert(
       'Tasks',
-      task.toJson(),
+      task.toDbJson(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+    debugPrint("Database Insert ${task.toDbJson()} $dbi");
   }
 
   Future<void> updateTask(Tasks task) async {
@@ -387,7 +439,7 @@ class TaskDatabase {
 
     await _database!.update(
       'Tasks',
-      task.toJson(),
+      task.toDbJson(),
       where: 'uuid = ?',
       whereArgs: [task.uuid],
     );
@@ -403,7 +455,7 @@ class TaskDatabase {
     );
 
     if (maps.isNotEmpty) {
-      return Tasks.fromJson(maps.first);
+      return Tasks.fromDbJson(maps.first);
     } else {
       return null;
     }
@@ -470,7 +522,7 @@ class TaskDatabase {
     );
 
     return List.generate(maps.length, (i) {
-      return Tasks.fromJson(maps[i]);
+      return Tasks.fromDbJson(maps[i]);
     });
   }
 
@@ -480,21 +532,21 @@ class TaskDatabase {
       where: 'project = ?',
       whereArgs: [project],
     );
-
+    debugPrint("DB Stored for $maps");
     return List.generate(maps.length, (i) {
       return Tasks(
-        uuid: maps[i]['uuid'],
-        id: maps[i]['id'],
-        description: maps[i]['description'],
-        project: maps[i]['project'],
-        status: maps[i]['status'],
-        urgency: maps[i]['urgency'],
-        priority: maps[i]['priority'],
-        due: maps[i]['due'],
-        end: maps[i]['end'],
-        entry: maps[i]['entry'],
-        modified: maps[i]['modified'],
-      );
+          uuid: maps[i]['uuid'],
+          id: maps[i]['id'],
+          description: maps[i]['description'],
+          project: maps[i]['project'],
+          status: maps[i]['status'],
+          urgency: maps[i]['urgency'],
+          priority: maps[i]['priority'],
+          due: maps[i]['due'],
+          end: maps[i]['end'],
+          entry: maps[i]['entry'],
+          modified: maps[i]['modified'],
+          tags: maps[i]['tags'].toString().split(' '));
     });
   }
 
@@ -517,7 +569,7 @@ class TaskDatabase {
       whereArgs: ['%$query%', '%$query%'],
     );
     return List.generate(maps.length, (i) {
-      return Tasks.fromJson(maps[i]);
+      return Tasks.fromDbJson(maps[i]);
     });
   }
 

@@ -3,10 +3,9 @@ import 'package:taskwarrior/app/utils/taskfunctions/add_task_dialog_utils.dart';
 
 class AddTaskDatePickerInput extends StatefulWidget {
   final Function(List<DateTime?>)? onDateChanges;
-  const AddTaskDatePickerInput({
-    super.key,
-    this.onDateChanges,
-  });
+  final bool onlyDueDate;
+  const AddTaskDatePickerInput(
+      {super.key, this.onDateChanges, this.onlyDueDate = false});
 
   @override
   _AddTaskDatePickerInputState createState() => _AddTaskDatePickerInputState();
@@ -63,53 +62,56 @@ class _AddTaskDatePickerInputState extends State<AddTaskDatePickerInput> {
           child: buildDatePicker(context, currentIndex),
         ),
         // Navigation buttons
-        Row(
-          children: [
-            Expanded(
-              child: TextButton.icon(
-                onPressed: _showPreviousItem,
-                label: Text(
-                  prevDateText,
-                  style: TextStyle(
-                    fontSize: 12,
-                    decoration: isPreviousDateSelected
-                        ? TextDecoration.none
-                        : TextDecoration.underline,
-                    decorationStyle: TextDecorationStyle.wavy,
+        Visibility(
+          visible: !widget.onlyDueDate,
+          child: Row(
+            children: [
+              Expanded(
+                child: TextButton.icon(
+                  onPressed: _showPreviousItem,
+                  label: Text(
+                    prevDateText,
+                    style: TextStyle(
+                      fontSize: 12,
+                      decoration: isPreviousDateSelected
+                          ? TextDecoration.none
+                          : TextDecoration.underline,
+                      decorationStyle: TextDecorationStyle.wavy,
+                    ),
                   ),
-                ),
-                icon: const Icon(
-                  Icons.arrow_back_ios_rounded,
-                  size: 12,
-                  color: Colors.black,
-                ),
-                iconAlignment: IconAlignment.start,
-              ),
-            ),
-            const SizedBox(width: 8), // Space between buttons
-            Expanded(
-              child: TextButton.icon(
-                onPressed: _showNextItem,
-                label: Text(
-                  nextDateText,
-                  style: TextStyle(
-                    fontSize: 12,
-                    decoration: isNextDateSelected
-                        ? TextDecoration.none
-                        : TextDecoration.underline,
-                    decorationStyle: TextDecorationStyle.wavy,
+                  icon: const Icon(
+                    Icons.arrow_back_ios_rounded,
+                    size: 12,
+                    color: Colors.black,
                   ),
+                  iconAlignment: IconAlignment.start,
                 ),
-                icon: const Icon(
-                  Icons.arrow_forward_ios_rounded,
-                  size: 12,
-                  color: Colors.black,
-                ),
-                iconAlignment: IconAlignment.end,
               ),
-            ),
-          ],
-        ),
+              const SizedBox(width: 8), // Space between buttons
+              Expanded(
+                child: TextButton.icon(
+                  onPressed: _showNextItem,
+                  label: Text(
+                    nextDateText,
+                    style: TextStyle(
+                      fontSize: 12,
+                      decoration: isNextDateSelected
+                          ? TextDecoration.none
+                          : TextDecoration.underline,
+                      decorationStyle: TextDecorationStyle.wavy,
+                    ),
+                  ),
+                  icon: const Icon(
+                    Icons.arrow_forward_ios_rounded,
+                    size: 12,
+                    color: Colors.black,
+                  ),
+                  iconAlignment: IconAlignment.end,
+                ),
+              ),
+            ],
+          ),
+        )
       ],
     );
   }

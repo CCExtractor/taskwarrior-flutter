@@ -350,7 +350,8 @@ class AddTaskToTaskcBottomSheet extends StatelessWidget {
               due: homeController.dueString.value,
               //   dueString.toIso8601String(),
               end: '',
-              modified: 'r');
+              modified: 'r',
+              tags: homeController.tags);
           await homeController.taskdb.insertTask(task);
           homeController.namecontroller.text = '';
           homeController.due.value = null;

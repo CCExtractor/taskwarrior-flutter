@@ -40,6 +40,7 @@ class HomePageFloatingActionButton extends StatelessWidget {
                 ),
                 builder: (context) => AddTaskBottomSheet(
                   homeController: controller,
+                  forTaskC: true,
                 ),
               ).then((value) {
                 if (controller.isSyncNeeded.value && value != "cancel") {
