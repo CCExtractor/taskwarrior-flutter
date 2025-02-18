@@ -1,0 +1,10 @@
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="200dp"
+    android:minHeight="150dp"
+    android:updatePeriodMillis="0"
+    android:initialLayout="@layout/report_layout"
+    android:resizeMode="horizontal|vertical"
+	android:previewImage="@drawable/preview_report"
+    android:widgetCategory="home_screen"
+    android:description="@string/my_widget_description2">
+</appwidget-provider>
