@@ -66,11 +66,10 @@ class Tasks {
     };
   }
 }
-
-String baseUrl = 'http://YOUR_IP:8000';
 String origin = 'http://localhost:8080';
 
 Future<List<Tasks>> fetchTasks(String uuid, String encryptionSecret) async {
+  var baseUrl = await CredentialsStorage.getApiUrl();
   try {
     String url =
         '$baseUrl/tasks?email=email&origin=$origin&UUID=$uuid&encryptionSecret=$encryptionSecret';
@@ -157,6 +156,7 @@ Future<void> updateTasksInDatabase(List<Tasks> tasks) async {
 }
 
 Future<void> deleteTask(String email, String taskUuid) async {
+  var baseUrl = await CredentialsStorage.getApiUrl();
   var c = await CredentialsStorage.getClientId();
   var e = await CredentialsStorage.getEncryptionSecret();
   final url = Uri.parse('$baseUrl/delete-task');
@@ -189,6 +189,7 @@ Future<void> deleteTask(String email, String taskUuid) async {
 Future<void> completeTask(String email, String taskUuid) async {
   var c = await CredentialsStorage.getClientId();
   var e = await CredentialsStorage.getEncryptionSecret();
+  var baseUrl = await CredentialsStorage.getApiUrl();
   final url = Uri.parse('$baseUrl/complete-task');
   final body = jsonEncode({
     'email': email,
@@ -223,6 +224,7 @@ Future<void> completeTask(String email, String taskUuid) async {
 
 Future<void> addTaskAndDeleteFromDatabase(
     String description, String project, String due, String priority) async {
+  var baseUrl = await CredentialsStorage.getApiUrl();
   String apiUrl = '$baseUrl/add-task';
   var c = await CredentialsStorage.getClientId();
   var e = await CredentialsStorage.getEncryptionSecret();
@@ -255,9 +257,10 @@ Future<void> addTaskAndDeleteFromDatabase(
 
 Future<void> modifyTaskOnTaskwarrior(String description, String project,
     String due, String priority, String status, String taskuuid) async {
-  String apiUrl = '$baseUrl/modify-task';
+  var baseUrl = await CredentialsStorage.getApiUrl();
   var c = await CredentialsStorage.getClientId();
   var e = await CredentialsStorage.getEncryptionSecret();
+  String apiUrl = '$baseUrl/modify-task';
   debugPrint(c);
   debugPrint(e);
   final response = await http.post(
