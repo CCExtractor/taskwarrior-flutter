@@ -65,7 +65,7 @@ class BurnDownDaily extends StatelessWidget {
                       ),
                       tooltipBehavior:
                           reportsController.dailyBurndownTooltipBehaviour,
-                      series: <ChartSeries>[
+                      series: <CartesianSeries>[
                         /// This is the completed tasks
                         StackedColumnSeries<ChartData, String>(
                           groupName: 'Group A',
