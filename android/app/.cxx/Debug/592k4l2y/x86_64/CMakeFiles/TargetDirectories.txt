@@ -1,0 +1,2 @@
+/Users/saptarshiadhikari/work/taskwarrior-flutter/android/app/.cxx/Debug/592k4l2y/x86_64/CMakeFiles/edit_cache.dir
+/Users/saptarshiadhikari/work/taskwarrior-flutter/android/app/.cxx/Debug/592k4l2y/x86_64/CMakeFiles/rebuild_cache.dir
