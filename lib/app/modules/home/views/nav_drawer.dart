@@ -24,76 +24,87 @@ class NavDrawer extends StatelessWidget {
       backgroundColor: AppSettings.isDarkMode
           ? TaskWarriorColors.kprimaryBackgroundColor
           : TaskWarriorColors.kLightPrimaryBackgroundColor,
-      surfaceTintColor: AppSettings.isDarkMode
-          ? TaskWarriorColors.kprimaryBackgroundColor
-          : TaskWarriorColors.kLightPrimaryBackgroundColor,
       child: Container(
         color: AppSettings.isDarkMode
             ? TaskWarriorColors.kprimaryBackgroundColor
             : TaskWarriorColors.kLightPrimaryBackgroundColor,
-        child: ListView(
-          padding: EdgeInsets.zero,
+        child: Column(
           children: [
-            Container(
+            _buildHeader(context),
+            Expanded(child: _buildMenuItems(context)),
+            _buildExitButton(context),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeader(BuildContext context) {
+    return Container(
+      color: AppSettings.isDarkMode
+          ? TaskWarriorColors.kprimaryBackgroundColor
+          : TaskWarriorColors.kLightPrimaryBackgroundColor,
+      padding: const EdgeInsets.only(top: 50, left: 15, right: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            SentenceManager(
+                    currentLanguage: homeController.selectedLanguage.value)
+                .sentences
+                .homePageMenu,
+            style: TextStyle(
+              fontSize: TaskWarriorFonts.fontSizeExtraLarge,
+              fontWeight: TaskWarriorFonts.bold,
               color: AppSettings.isDarkMode
-                  ? TaskWarriorColors.kprimaryBackgroundColor
-                  : TaskWarriorColors.kLightPrimaryBackgroundColor,
-              padding: const EdgeInsets.only(top: 50, left: 15, right: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    SentenceManager(
-                            currentLanguage:
-                                homeController.selectedLanguage.value)
-                        .sentences
-                        .homePageMenu,
-                    style: TextStyle(
-                      fontSize: TaskWarriorFonts.fontSizeExtraLarge,
-                      fontWeight: TaskWarriorFonts.bold,
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.white
-                          : TaskWarriorColors.black,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 10),
-                    child: ThemeSwitcherClipper(
-                      isDarkMode: AppSettings.isDarkMode,
-                      onTap: (bool newMode) async {
-                        AppSettings.isDarkMode = newMode;
-                        await SelectedTheme.saveMode(AppSettings.isDarkMode);
-                        // Get.back();
-                        homeController.initLanguageAndDarkMode();
-                      },
-                      child: Icon(
-                        AppSettings.isDarkMode
-                            ? Icons.dark_mode
-                            : Icons.light_mode,
-                        color: AppSettings.isDarkMode
-                            ? TaskWarriorColors.white
-                            : TaskWarriorColors.black,
-                        size: 15,
-                      ),
-                    ),
-                  ),
-                ],
+                  ? TaskWarriorColors.white
+                  : TaskWarriorColors.black,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              transitionBuilder: (Widget child, Animation<double> animation) {
+                return ScaleTransition(scale: animation, child: child);
+              },
+              child: IconButton(
+                key: ValueKey<bool>(AppSettings.isDarkMode),
+                icon: Icon(
+                  AppSettings.isDarkMode ? Icons.dark_mode : Icons.light_mode,
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.white
+                      : TaskWarriorColors.black,
+                ),
+                onPressed: () async {
+                  AppSettings.isDarkMode = !AppSettings.isDarkMode;
+                  await SelectedTheme.saveMode(AppSettings.isDarkMode);
+                  homeController.initLanguageAndDarkMode();
+                },
               ),
             ),
-            Container(
-              color: AppSettings.isDarkMode
-                  ? TaskWarriorColors.kprimaryBackgroundColor
-                  : TaskWarriorColors.kLightPrimaryBackgroundColor,
-              height: Get.height * 0.03,
-            ),
-            Visibility(
-              visible: homeController.taskchampion.value,
-              child: NavDrawerMenuItem(
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMenuItems(BuildContext context) {
+    return ListView(
+      padding: EdgeInsets.zero,
+      children: [
+        SizedBox(height: Get.height * 0.03),
+        Visibility(
+          visible: homeController.taskchampion.value,
+          child: Column(
+            children: [
+              NavDrawerMenuItem(
                 icon: Icons.task_alt,
                 text: SentenceManager(
                   currentLanguage: homeController.selectedLanguage.value,
                 ).sentences.ccsyncCredentials,
                 onTap: () {
+                  Navigator.of(context).pop(); // Close the drawer
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => ManageTaskChampionCreds(),
@@ -101,130 +112,109 @@ class NavDrawer extends StatelessWidget {
                   );
                 },
               ),
-            ),
-            Visibility(
-              visible: homeController.taskchampion.value,
-              child: NavDrawerMenuItem(
-                  icon: Icons.delete,
-                  text: SentenceManager(
-                    currentLanguage: homeController.selectedLanguage.value,
-                  ).sentences.deleteTaskTitle,
-                  onTap: () {
-                    showDialog<void>(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return Utils.showAlertDialog(
-                          title: Text(
-                            SentenceManager(
-                              currentLanguage:
-                                  homeController.selectedLanguage.value,
-                            ).sentences.deleteTaskConfirmation,
-                            style: TextStyle(
-                              color: AppSettings.isDarkMode
-                                  ? TaskWarriorColors.white
-                                  : TaskWarriorColors.black,
-                            ),
-                          ),
-                          content: Text(
-                            SentenceManager(
-                              currentLanguage:
-                                  homeController.selectedLanguage.value,
-                            ).sentences.deleteTaskWarning,
-                            style: TextStyle(
-                              color: AppSettings.isDarkMode
-                                  ? TaskWarriorColors.white
-                                  : TaskWarriorColors.black,
-                            ),
-                          ),
-                          actions: <Widget>[
-                            TextButton(
-                              child: Text(
-                                'Cancel',
-                                style: TextStyle(
-                                  color: AppSettings.isDarkMode
-                                      ? TaskWarriorColors.white
-                                      : TaskWarriorColors.black,
-                                ),
-                              ),
-                              onPressed: () {
-                                Navigator.of(context).pop(); // Close the dialog
-                              },
-                            ),
-                            TextButton(
-                              child: Text(
-                                'Confirm',
-                                style: TextStyle(
-                                  color: AppSettings.isDarkMode
-                                      ? TaskWarriorColors.white
-                                      : TaskWarriorColors.black,
-                                ),
-                              ),
-                              onPressed: () {
-                                homeController.deleteAllTasksInDB();
-                                Navigator.of(context).pop(); // Close the dialog
-                              },
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  }),
-            ),
-            Visibility(
-              visible: !homeController.taskchampion.value,
-              child: Obx(
-                () => NavDrawerMenuItem(
+              Divider(color: Colors.grey.shade700),
+            ],
+          ),
+        ),
+        Visibility(
+          visible: homeController.taskchampion.value,
+          child: Column(
+            children: [
+              NavDrawerMenuItem(
+                icon: Icons.delete,
+                text: SentenceManager(
+                  currentLanguage: homeController.selectedLanguage.value,
+                ).sentences.deleteTaskTitle,
+                onTap: () {
+                  Navigator.of(context).pop(); // Close the drawer
+                  _showDeleteConfirmationDialog(context);
+                },
+              ),
+              Divider(color: Colors.grey.shade700),
+            ],
+          ),
+        ),
+        Visibility(
+          visible: !homeController.taskchampion.value,
+          child: Obx(
+            () => Column(
+              children: [
+                NavDrawerMenuItem(
                   icon: Icons.person_rounded,
                   text: SentenceManager(
                     currentLanguage: homeController.selectedLanguage.value,
                   ).sentences.navDrawerProfile,
                   onTap: () {
+                    Navigator.of(context).pop(); // Close the drawer
                     Get.toNamed(Routes.PROFILE);
                   },
                 ),
-              ),
+                Divider(color: Colors.grey.shade700),
+              ],
             ),
-            Visibility(
-              visible: !homeController.taskchampion.value,
-              child: Obx(
-                () => NavDrawerMenuItem(
+          ),
+        ),
+        Visibility(
+          visible: !homeController.taskchampion.value,
+          child: Obx(
+            () => Column(
+              children: [
+                NavDrawerMenuItem(
                   icon: Icons.summarize,
                   text: SentenceManager(
                     currentLanguage: homeController.selectedLanguage.value,
                   ).sentences.navDrawerReports,
                   onTap: () {
+                    Navigator.of(context).pop(); // Close the drawer
                     Get.toNamed(Routes.REPORTS);
                   },
                 ),
-              ),
+                Divider(color: Colors.grey.shade700),
+              ],
             ),
-            Visibility(
-              visible: homeController.taskchampion.value,
-              child: Obx(
-                () => NavDrawerMenuItem(
+          ),
+        ),
+        Visibility(
+          visible: homeController.taskchampion.value,
+          child: Obx(
+            () => Column(
+              children: [
+                NavDrawerMenuItem(
                   icon: Icons.summarize,
                   text: SentenceManager(
                     currentLanguage: homeController.selectedLanguage.value,
                   ).sentences.navDrawerReports,
                   onTap: () {
+                    Navigator.of(context).pop(); // Close the drawer
                     Get.to(() => ReportsHomeTaskc());
                   },
                 ),
-              ),
+                Divider(color: Colors.grey.shade700),
+              ],
             ),
-            Obx(
-              () => NavDrawerMenuItem(
+          ),
+        ),
+        Obx(
+          () => Column(
+            children: [
+              NavDrawerMenuItem(
                 icon: Icons.info,
                 text: SentenceManager(
                   currentLanguage: homeController.selectedLanguage.value,
                 ).sentences.navDrawerAbout,
                 onTap: () {
+                  Navigator.of(context).pop(); // Close the drawer
                   Get.toNamed(Routes.ABOUT);
                 },
               ),
-            ),
-            Obx(
-              () => NavDrawerMenuItem(
+              Divider(color: Colors.grey.shade700),
+            ],
+          ),
+        ),
+        Obx(
+          () => Column(
+            children: [
+              NavDrawerMenuItem(
                 icon: Icons.settings,
                 text: SentenceManager(
                   currentLanguage: homeController.selectedLanguage.value,
@@ -241,24 +231,96 @@ class NavDrawer extends StatelessWidget {
                   homeController.change24hr.value =
                       prefs.getBool('24hourformate') ?? false;
 
+                  Navigator.of(context).pop(); // Close the drawer
                   Get.toNamed(Routes.SETTINGS);
                 },
               ),
+              Divider(color: Colors.grey.shade700),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildExitButton(BuildContext context) {
+    return Obx(
+      () => Column(
+        children: [
+          Divider(color: Colors.grey.shade700),
+          NavDrawerMenuItem(
+            icon: Icons.exit_to_app,
+            text: SentenceManager(
+              currentLanguage: homeController.selectedLanguage.value,
+            ).sentences.navDrawerExit,
+            onTap: () {
+              Navigator.of(context).pop(); // Close the drawer
+              _showExitConfirmationDialog(context);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _showDeleteConfirmationDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Utils.showAlertDialog(
+          title: Text(
+            SentenceManager(
+                    currentLanguage: homeController.selectedLanguage.value)
+                .sentences
+                .deleteTaskConfirmation,
+            style: TextStyle(
+              color: AppSettings.isDarkMode
+                  ? TaskWarriorColors.white
+                  : TaskWarriorColors.black,
             ),
-            Obx(
-              () => NavDrawerMenuItem(
-                icon: Icons.exit_to_app,
-                text: SentenceManager(
-                  currentLanguage: homeController.selectedLanguage.value,
-                ).sentences.navDrawerExit,
-                onTap: () {
-                  _showExitConfirmationDialog(context);
-                },
+          ),
+          content: Text(
+            SentenceManager(
+                    currentLanguage: homeController.selectedLanguage.value)
+                .sentences
+                .deleteTaskWarning,
+            style: TextStyle(
+              color: AppSettings.isDarkMode
+                  ? TaskWarriorColors.white
+                  : TaskWarriorColors.black,
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                'Cancel',
+                style: TextStyle(
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.white
+                      : TaskWarriorColors.black,
+                ),
               ),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+            TextButton(
+              child: Text(
+                'Confirm',
+                style: TextStyle(
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.white
+                      : TaskWarriorColors.black,
+                ),
+              ),
+              onPressed: () {
+                homeController.deleteAllTasksInDB();
+                Navigator.of(context).pop(); // Close the dialog
+              },
             ),
           ],
-        ),
-      ),
+        );
+      },
     );
   }
 
