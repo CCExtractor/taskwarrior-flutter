@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
-import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 
 
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 
 class SettingsPageListTile extends StatelessWidget {
@@ -21,15 +21,14 @@ class SettingsPageListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return ListTile(
       title: Text(
         title,
         style: GoogleFonts.poppins(
           fontWeight: FontWeight.bold,
           fontSize: TaskWarriorFonts.fontSizeMedium,
-          color: AppSettings.isDarkMode
-              ? TaskWarriorColors.white
-              : TaskWarriorColors.black,
+          color: tColors.primaryTextColor,
         ),
       ),
       subtitle: Text(
