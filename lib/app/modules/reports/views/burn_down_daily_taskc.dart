@@ -129,7 +129,7 @@ class BurnDownDailyTaskc extends StatelessWidget {
                     ),
                   ),
                   tooltipBehavior: _dailyBurndownTooltipBehaviour,
-                  series: <ChartSeries>[
+                  series: <CartesianSeries>[
                     StackedColumnSeries<ChartData, String>(
                       groupName: 'Group A',
                       enableTooltip: true,
