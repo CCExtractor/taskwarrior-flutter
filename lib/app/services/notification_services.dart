@@ -107,7 +107,7 @@ class NotificationService {
             uiLocalNotificationDateInterpretation:
                 UILocalNotificationDateInterpretation.absoluteTime,
             // ignore: deprecated_member_use
-            androidAllowWhileIdle: true)
+            androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle)
         .then((value) {
       if (kDebugMode) {
         print('Notification scheduled successfully');
