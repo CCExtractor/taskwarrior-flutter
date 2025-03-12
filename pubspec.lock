@@ -37,10 +37,10 @@ packages:
     dependency: transitive
     description:
       name: args
-      sha256: bf9f5caeea8d8fe6721a9c358dd8a5c1947b27f1cfaa18b39c301273594919e6
+      sha256: d0481093c50b1da8910eb0bb301626d4d8eb7284aa739614d2b394ee09e3ea04
       url: "https://pub.dev"
     source: hosted
-    version: "2.6.0"
+    version: "2.7.0"
   async:
     dependency: transitive
     description:
@@ -332,10 +332,11 @@ packages:
   file_picker_writable:
     dependency: "direct main"
     description:
-      name: file_picker_writable
-      sha256: bb7ad0ec8b7f0cc1df668538114319a5bcd6be506dce60a54b87ad64fbdbb6ab
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: "feature/fix-kotlin-issue"
+      resolved-ref: ff1a0715872058707cbe1fe00ca76d234a986845
+      url: "https://github.com/amake/file_picker_writable.git"
+    source: git
     version: "2.1.0+1"
   file_selector:
     dependency: "direct main"
@@ -486,14 +487,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.5"
-  flutter_native_timezone:
-    dependency: "direct main"
-    description:
-      name: flutter_native_timezone
-      sha256: ed7bfb982f036243de1c068e269182a877100c994f05143c8b26a325e28c1b02
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.0"
   flutter_platform_widgets:
     dependency: "direct main"
     description:
@@ -531,6 +524,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_timezone:
+    dependency: "direct main"
+    description:
+      name: flutter_timezone
+      sha256: bc286cecb0366d88e6c4644e3962ebd1ce1d233abc658eb1e0cd803389f84b64
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.1.0"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -836,10 +837,10 @@ packages:
     dependency: transitive
     description:
       name: package_config
-      sha256: "92d4488434b520a62570293fbd33bb556c7d49230791c1b4bbd973baf6d2dc67"
+      sha256: f096c55ebb7deb7e384101542bfba8c52696c1b56fca2eb62827989ef2353bbc
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.1"
+    version: "2.2.0"
   package_info_plus:
     dependency: "direct main"
     description:
@@ -931,48 +932,51 @@ packages:
   permission_handler:
     dependency: "direct main"
     description:
-      path: permission_handler
-      ref: master
-      resolved-ref: "5f9cd3a698dd64975f68a36c581a1097bc47563c"
-      url: "https://github.com/bvoq/flutter-permission-handler.git"
-    source: git
-    version: "10.2.0"
+      name: permission_handler
+      sha256: "59adad729136f01ea9e35a48f5d1395e25cba6cea552249ddbe9cf950f5d7849"
+      url: "https://pub.dev"
+    source: hosted
+    version: "11.4.0"
   permission_handler_android:
     dependency: transitive
     description:
-      path: permission_handler_android
-      ref: master
-      resolved-ref: "5f9cd3a698dd64975f68a36c581a1097bc47563c"
-      url: "https://github.com/bvoq/flutter-permission-handler.git"
-    source: git
-    version: "10.2.0"
+      name: permission_handler_android
+      sha256: d3971dcdd76182a0c198c096b5db2f0884b0d4196723d21a866fc4cdea057ebc
+      url: "https://pub.dev"
+    source: hosted
+    version: "12.1.0"
   permission_handler_apple:
     dependency: transitive
     description:
-      path: permission_handler_apple
-      ref: master
-      resolved-ref: "5f9cd3a698dd64975f68a36c581a1097bc47563c"
-      url: "https://github.com/bvoq/flutter-permission-handler.git"
-    source: git
-    version: "9.0.7"
+      name: permission_handler_apple
+      sha256: f84a188e79a35c687c132a0a0556c254747a08561e99ab933f12f6ca71ef3c98
+      url: "https://pub.dev"
+    source: hosted
+    version: "9.4.6"
+  permission_handler_html:
+    dependency: transitive
+    description:
+      name: permission_handler_html
+      sha256: "38f000e83355abb3392140f6bc3030660cfaef189e1f87824facb76300b4ff24"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.3+5"
   permission_handler_platform_interface:
     dependency: transitive
     description:
-      path: permission_handler_platform_interface
-      ref: master
-      resolved-ref: "5f9cd3a698dd64975f68a36c581a1097bc47563c"
-      url: "https://github.com/bvoq/flutter-permission-handler.git"
-    source: git
-    version: "3.9.0"
+      name: permission_handler_platform_interface
+      sha256: eb99b295153abce5d683cac8c02e22faab63e50679b937fa1bf67d58bb282878
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.3.0"
   permission_handler_windows:
     dependency: transitive
     description:
-      path: permission_handler_windows
-      ref: master
-      resolved-ref: "5f9cd3a698dd64975f68a36c581a1097bc47563c"
-      url: "https://github.com/bvoq/flutter-permission-handler.git"
-    source: git
-    version: "0.1.2"
+      name: permission_handler_windows
+      sha256: "1a790728016f79a41216d88672dbc5df30e686e811ad4e698bfc51f76ad91f1e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.1"
   petitparser:
     dependency: transitive
     description:
@@ -1266,6 +1270,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.1"
+  syncfusion_flutter_calendar:
+    dependency: "direct main"
+    description:
+      name: syncfusion_flutter_calendar
+      sha256: "11b01bc7ad1d240d7c644081bda79e61c0a8d26eec7eba67bfc7274310562897"
+      url: "https://pub.dev"
+    source: hosted
+    version: "28.2.11"
   syncfusion_flutter_charts:
     dependency: "direct main"
     description:
@@ -1282,6 +1294,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "28.2.11"
+  syncfusion_flutter_datepicker:
+    dependency: transitive
+    description:
+      name: syncfusion_flutter_datepicker
+      sha256: "73ece73742f123c750d674461c6902cbdf32fbd695c15fdf7e8487d290bb7179"
+      url: "https://pub.dev"
+    source: hosted
+    version: "28.2.11+1"
   synchronized:
     dependency: transitive
     description:
@@ -1542,10 +1562,10 @@ packages:
     dependency: transitive
     description:
       name: win32
-      sha256: b89e6e24d1454e149ab20fbb225af58660f0c0bf4475544650700d8e2da54aef
+      sha256: dc6ecaa00a7c708e5b4d10ee7bec8c270e9276dfcab1783f57e9962d7884305f
       url: "https://pub.dev"
     source: hosted
-    version: "5.11.0"
+    version: "5.12.0"
   xdg_directories:
     dependency: transitive
     description:
