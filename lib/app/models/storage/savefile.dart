@@ -1,20 +1,19 @@
 import 'dart:io';
 import 'dart:typed_data';
-
-import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:file_selector/file_selector.dart';
+import 'package:file_picker_writable/file_picker_writable.dart';
 
 Future<void> saveServerCert(String contents) async {
   if (Platform.isLinux || Platform.isMacOS || Platform.isWindows) {
-    // ignore: deprecated_member_use
-    var path = await getSavePath(
+    var saveLocation = await getSaveLocation(
       suggestedName: 'server.cert.pem',
     );
-    var data = Uint8List.fromList(contents.codeUnits);
-    var file = XFile.fromData(
-      data,
-    );
-    await file.saveTo(path!);
+
+    if (saveLocation != null) {
+      var data = Uint8List.fromList(contents.codeUnits);
+      var file = XFile.fromData(data);
+      await file.saveTo(saveLocation.path);
+    }
   } else {
     await FilePickerWritable().openFileForCreate(
       fileName: 'server.cert.pem',
@@ -28,15 +27,15 @@ Future<void> exportTasks({
   required String suggestedName,
 }) async {
   if (Platform.isLinux || Platform.isMacOS || Platform.isWindows) {
-    // ignore: deprecated_member_use
-    var path = await getSavePath(
+    var saveLocation = await getSaveLocation(
       suggestedName: suggestedName,
     );
-    var data = Uint8List.fromList(contents.codeUnits);
-    var file = XFile.fromData(
-      data,
-    );
-    await file.saveTo(path!);
+
+    if (saveLocation != null) {
+      var data = Uint8List.fromList(contents.codeUnits);
+      var file = XFile.fromData(data);
+      await file.saveTo(saveLocation.path);
+    }
   } else {
     await FilePickerWritable().openFileForCreate(
       fileName: suggestedName,
