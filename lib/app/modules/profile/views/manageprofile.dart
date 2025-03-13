@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 
 import 'package:tuple/tuple.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 class ManageProfile extends StatelessWidget {
   const ManageProfile(
@@ -28,6 +28,7 @@ class ManageProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     var triples = [
       Tuple3(
         Icons.edit,
@@ -68,21 +69,11 @@ class ManageProfile extends StatelessWidget {
 
     return ExpansionTile(
       key: manageSelectedProfileKey,
-      backgroundColor: AppSettings.isDarkMode
-          ? TaskWarriorColors.ksecondaryBackgroundColor
-          : TaskWarriorColors.kLightSecondaryBackgroundColor,
-      iconColor: AppSettings.isDarkMode
-          ? TaskWarriorColors.white
-          : TaskWarriorColors.black,
-      collapsedIconColor: AppSettings.isDarkMode
-          ? TaskWarriorColors.white
-          : TaskWarriorColors.black,
-      collapsedTextColor: AppSettings.isDarkMode
-          ? TaskWarriorColors.white
-          : TaskWarriorColors.ksecondaryBackgroundColor,
-      textColor: AppSettings.isDarkMode
-          ? TaskWarriorColors.white
-          : TaskWarriorColors.black,
+      backgroundColor: tColors.secondaryBackgroundColor,
+      iconColor: tColors.primaryTextColor,
+      collapsedIconColor: tColors.primaryTextColor,
+      collapsedTextColor: tColors.primaryTextColor,
+      textColor: tColors.primaryTextColor,
       title: Text(
         SentenceManager(currentLanguage: AppSettings.selectedLanguage)
             .sentences
@@ -90,20 +81,14 @@ class ManageProfile extends StatelessWidget {
         style: GoogleFonts.poppins(
           fontWeight: TaskWarriorFonts.bold,
           fontSize: TaskWarriorFonts.fontSizeMedium,
-          color: AppSettings.isDarkMode
-              ? TaskWarriorColors.white
-              : TaskWarriorColors.black,
+          color: tColors.primaryTextColor,
         ),
       ),
       children: [
         for (var triple in triples)
           ListTile(
-            textColor: AppSettings.isDarkMode
-                ? TaskWarriorColors.ksecondaryTextColor
-                : TaskWarriorColors.kLightSecondaryTextColor,
-            iconColor: AppSettings.isDarkMode
-                ? TaskWarriorColors.white
-                : TaskWarriorColors.kLightSecondaryTextColor,
+            textColor: tColors.secondaryTextColor,
+            iconColor: tColors.secondaryTextColor,
             leading: Padding(
               padding: const EdgeInsets.all(12),
               child: Icon(triple.item1),

@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 
 import 'package:taskwarrior/app/utils/constants/constants.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
-import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 class DateTimeWidget extends StatelessWidget {
   const DateTimeWidget({
@@ -25,15 +25,12 @@ class DateTimeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Card(
       key: globalKey,
-      color: AppSettings.isDarkMode
-          ? const Color.fromARGB(255, 57, 57, 57)
-          : Colors.white,
+      color: tColors.secondaryBackgroundColor,
       child: ListTile(
-        textColor: AppSettings.isDarkMode
-            ? Colors.white
-            : const Color.fromARGB(255, 48, 46, 46),
+        textColor: tColors.primaryTextColor,
         title: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
@@ -54,9 +51,7 @@ class DateTimeWidget extends StatelessWidget {
                         fontFamily: FontFamily.poppins,
                         fontWeight: TaskWarriorFonts.bold,
                         fontSize: TaskWarriorFonts.fontSizeMedium,
-                        color: AppSettings.isDarkMode
-                            ? TaskWarriorColors.white
-                            : TaskWarriorColors.black,
+                        color: tColors.primaryTextColor,
                       ),
                     ),
                     TextSpan(
@@ -70,9 +65,7 @@ class DateTimeWidget extends StatelessWidget {
                       style: TextStyle(
                         fontFamily: FontFamily.poppins,
                         fontSize: TaskWarriorFonts.fontSizeMedium,
-                        color: AppSettings.isDarkMode
-                            ? TaskWarriorColors.white
-                            : TaskWarriorColors.black,
+                        color: tColors.primaryTextColor,
                       ),
                     ),
                   ],
@@ -170,14 +163,10 @@ class DateTimeWidget extends StatelessWidget {
                     content: Text(
                       "Can't set times in the past",
                       style: TextStyle(
-                        color: AppSettings.isDarkMode
-                            ? TaskWarriorColors.kprimaryTextColor
-                            : TaskWarriorColors.kLightPrimaryTextColor,
+                        color: tColors.primaryTextColor,
                       ),
                     ),
-                    backgroundColor: AppSettings.isDarkMode
-                        ? TaskWarriorColors.ksecondaryBackgroundColor
-                        : TaskWarriorColors.kLightSecondaryBackgroundColor,
+                    backgroundColor: tColors.primaryBackgroundColor,
                     duration: const Duration(seconds: 2),
                   ),
                 );
@@ -208,14 +197,11 @@ class StartWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Card(
-      color: AppSettings.isDarkMode
-          ? const Color.fromARGB(255, 57, 57, 57)
-          : Colors.white,
+      color: tColors.secondaryBackgroundColor,
       child: ListTile(
-        textColor: AppSettings.isDarkMode
-            ? Colors.white
-            : const Color.fromARGB(255, 48, 46, 46),
+        textColor: tColors.secondaryBackgroundColor,
         title: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
@@ -236,9 +222,7 @@ class StartWidget extends StatelessWidget {
                         fontFamily: FontFamily.poppins,
                         fontWeight: TaskWarriorFonts.bold,
                         fontSize: TaskWarriorFonts.fontSizeMedium,
-                        color: AppSettings.isDarkMode
-                            ? TaskWarriorColors.white
-                            : TaskWarriorColors.black,
+                        color: tColors.primaryTextColor,
                       ),
                     ),
                     TextSpan(
@@ -252,9 +236,7 @@ class StartWidget extends StatelessWidget {
                       style: TextStyle(
                         fontFamily: FontFamily.poppins,
                         fontSize: TaskWarriorFonts.fontSizeMedium,
-                        color: AppSettings.isDarkMode
-                            ? TaskWarriorColors.white
-                            : TaskWarriorColors.black,
+                        color: tColors.primaryTextColor,
                       ),
                     ),
                   ],

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:taskwarrior/app/modules/about/controllers/about_controller.dart';
-
-
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
