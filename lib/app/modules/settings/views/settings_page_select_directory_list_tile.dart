@@ -12,6 +12,7 @@ import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 import '../controllers/settings_controller.dart';
 
@@ -24,6 +25,7 @@ class SettingsPageSelectDirectoryListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return ListTile(
       title: Text(
         SentenceManager(currentLanguage: AppSettings.selectedLanguage)
@@ -32,9 +34,7 @@ class SettingsPageSelectDirectoryListTile extends StatelessWidget {
         style: GoogleFonts.poppins(
           fontWeight: FontWeight.bold,
           fontSize: TaskWarriorFonts.fontSizeMedium,
-          color: AppSettings.isDarkMode
-              ? TaskWarriorColors.white
-              : TaskWarriorColors.black,
+          color: tColors.primaryTextColor,
         ),
       ),
       subtitle: Column(
@@ -57,9 +57,7 @@ class SettingsPageSelectDirectoryListTile extends StatelessWidget {
               TextButton(
                 style: ButtonStyle(
                   backgroundColor: WidgetStateProperty.all<Color>(
-                    AppSettings.isDarkMode
-                        ? TaskWarriorColors.ksecondaryBackgroundColor
-                        : TaskWarriorColors.kLightSecondaryBackgroundColor,
+                    tColors.secondaryBackgroundColor!,
                   ),
                 ),
                 onPressed: () async {
@@ -68,14 +66,10 @@ class SettingsPageSelectDirectoryListTile extends StatelessWidget {
                         content: Text(
                           'Already default',
                           style: TextStyle(
-                            color: AppSettings.isDarkMode
-                                ? TaskWarriorColors.kprimaryTextColor
-                                : TaskWarriorColors.kLightPrimaryTextColor,
+                            color: tColors.primaryTextColor,
                           ),
                         ),
-                        backgroundColor: AppSettings.isDarkMode
-                            ? TaskWarriorColors.ksecondaryBackgroundColor
-                            : TaskWarriorColors.kLightSecondaryBackgroundColor,
+                        backgroundColor: tColors.secondaryBackgroundColor,
                         duration: const Duration(seconds: 2)));
                   } else {
                     showDialog(
@@ -87,9 +81,7 @@ class SettingsPageSelectDirectoryListTile extends StatelessWidget {
                             style: GoogleFonts.poppins(
                               fontWeight: FontWeight.bold,
                               fontSize: TaskWarriorFonts.fontSizeMedium,
-                              color: AppSettings.isDarkMode
-                                  ? TaskWarriorColors.white
-                                  : TaskWarriorColors.black,
+                              color: tColors.primaryTextColor,
                             ),
                           ),
                           content: Text(
@@ -107,9 +99,7 @@ class SettingsPageSelectDirectoryListTile extends StatelessWidget {
                               child: Text(
                                 'No',
                                 style: GoogleFonts.poppins(
-                                  color: AppSettings.isDarkMode
-                                      ? TaskWarriorColors.white
-                                      : TaskWarriorColors.black,
+                                  color: tColors.primaryTextColor,
                                 ),
                               ),
                             ),
@@ -142,9 +132,7 @@ class SettingsPageSelectDirectoryListTile extends StatelessWidget {
                               child: Text(
                                 'Yes',
                                 style: GoogleFonts.poppins(
-                                  color: AppSettings.isDarkMode
-                                      ? TaskWarriorColors.white
-                                      : TaskWarriorColors.black,
+                                  color: tColors.primaryTextColor,
                                 ),
                               ),
                             ),
@@ -160,9 +148,7 @@ class SettingsPageSelectDirectoryListTile extends StatelessWidget {
                       .sentences
                       .settingsPageSetToDefault,
                   style: TextStyle(
-                    color: AppSettings.isDarkMode
-                        ? TaskWarriorColors.white
-                        : TaskWarriorColors.deepPurple,
+                    color: tColors.purpleShade,
                   ),
                 ),
               ),
@@ -171,9 +157,7 @@ class SettingsPageSelectDirectoryListTile extends StatelessWidget {
               TextButton(
                 style: ButtonStyle(
                   backgroundColor: WidgetStateProperty.all<Color>(
-                    AppSettings.isDarkMode
-                        ? TaskWarriorColors.ksecondaryBackgroundColor
-                        : TaskWarriorColors.kLightSecondaryBackgroundColor,
+                    tColors.secondaryBackgroundColor!,
                   ),
                 ),
                 onPressed: () {
@@ -185,9 +169,7 @@ class SettingsPageSelectDirectoryListTile extends StatelessWidget {
                       .sentences
                       .settingsPageChangeDirectory,
                   style: TextStyle(
-                    color: AppSettings.isDarkMode
-                        ? TaskWarriorColors.white
-                        : TaskWarriorColors.deepPurple,
+                    color: tColors.purpleShade,
                   ),
                 ),
               ),

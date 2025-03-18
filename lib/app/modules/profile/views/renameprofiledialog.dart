@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:taskwarrior/app/modules/splash/controllers/splash_controller.dart';
-import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
 
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 class RenameProfileDialog extends StatelessWidget {
   const RenameProfileDialog({
@@ -22,7 +22,7 @@ class RenameProfileDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var controller = TextEditingController(text: alias);
-
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return SingleChildScrollView(
       child: Center(
         child: Utils.showAlertDialog(
@@ -33,16 +33,12 @@ class RenameProfileDialog extends StatelessWidget {
                       .sentences
                       .profilePageRenameAliasDialogueBoxTitle,
             style: TextStyle(
-              color: AppSettings.isDarkMode
-                  ? TaskWarriorColors.white
-                  : TaskWarriorColors.black,
+              color: tColors.primaryTextColor,
             ),
           ),
           content: TextField(
               style: TextStyle(
-                color: AppSettings.isDarkMode
-                  ? TaskWarriorColors.white
-                  : TaskWarriorColors.black,
+                color: tColors.primaryTextColor,
               ),
               controller: controller),
           actions: [
@@ -56,13 +52,11 @@ class RenameProfileDialog extends StatelessWidget {
               .sentences
               .profilePageRenameAliasDialogueBoxCancel,
                 style: TextStyle(
-                  color: AppSettings.isDarkMode
-                      ? TaskWarriorColors.white
-                      : TaskWarriorColors.black,
+                  color: tColors.primaryTextColor,
                 ),
               ),
             ),
-            ElevatedButton(
+            TextButton(
               onPressed: () {
                 Get.find<SplashController>().renameProfile(
                   profile: profile,
@@ -75,11 +69,6 @@ class RenameProfileDialog extends StatelessWidget {
                 SentenceManager(currentLanguage: AppSettings.selectedLanguage)
               .sentences
               .profilePageRenameAliasDialogueBoxSubmit,
-                style: TextStyle(
-                  color: AppSettings.isDarkMode
-                      ? TaskWarriorColors.black
-                      : TaskWarriorColors.black,
-                ),
               ),
             ),
           ],
