@@ -76,7 +76,7 @@ Future<List<Tasks>> fetchTasks(String uuid, String encryptionSecret) async {
 
     var response = await http.get(Uri.parse(url), headers: {
       "Content-Type": "application/json",
-    }).timeout(const Duration(seconds: 10000));
+    }).timeout(const Duration(seconds: 10));
     if (response.statusCode == 200) {
       List<dynamic> allTasks = jsonDecode(response.body);
       debugPrint(allTasks.toString());
