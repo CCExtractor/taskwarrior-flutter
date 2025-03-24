@@ -20,7 +20,7 @@ class SettingsPageTaskchampionTileListTileTrailing extends StatelessWidget {
           controller.taskchampion.value = value;
 
           final SharedPreferences prefs = await SharedPreferences.getInstance();
-          await prefs.setBool('taskc', value);
+          await prefs.setBool('settings_taskc', value);
           Get.find<HomeController>().taskchampion.value = value;
         },
       ),
