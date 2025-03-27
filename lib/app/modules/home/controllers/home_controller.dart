@@ -23,6 +23,7 @@ import 'package:taskwarrior/app/routes/app_pages.dart';
 import 'package:taskwarrior/app/services/tag_filter.dart';
 import 'package:taskwarrior/app/tour/filter_drawer_tour.dart';
 import 'package:taskwarrior/app/tour/home_page_tour.dart';
+import 'package:taskwarrior/app/tour/task_swipe_tour.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/language/supported_language.dart';
 import 'package:taskwarrior/app/utils/taskchampion/credentials_storage.dart';
@@ -671,6 +672,34 @@ class HomeController extends GetxController {
             });
       },
     );
+  }
+
+  final taskItemKey = GlobalKey();
+
+  void initTaskSwipeTutorial() {
+    tutorialCoachMark = TutorialCoachMark(
+      targets: addTaskSwipeTutorialTargets(taskItemKey: taskItemKey),
+      colorShadow: TaskWarriorColors.black,
+      paddingFocus: 10,
+      opacityShadow: 1.00,
+      hideSkip: true,
+      onFinish: () {
+        SaveTourStatus.saveTaskSwipeTutorialStatus(true);
+      },
+    );
+  }
+
+  void showTaskSwipeTutorial(BuildContext context) {
+    SaveTourStatus.getTaskSwipeTutorialStatus().then((value) {
+      print("value is $value");
+      print("tasks is ${tasks.isNotEmpty}");
+      if (value == false) {
+        initTaskSwipeTutorial();
+        tutorialCoachMark.show(context: context);
+      } else {
+        debugPrint('User has already seen the task swipe tutorial');
+      }
+    });
   }
 
   late RxString uuid = "".obs;
