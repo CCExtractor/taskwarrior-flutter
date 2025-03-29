@@ -54,4 +54,12 @@ class SaveTourStatus {
   static Future<bool> getManageTaskServerTourStatus() async {
     return _preferences?.getBool('manage_task_server_tour') ?? false;
   }
+
+  static Future saveTaskSwipeTutorialStatus(bool status) async {
+    await _preferences?.setBool('task_swipe_tutorial_completed', status);
+  }
+
+  static Future<bool> getTaskSwipeTutorialStatus() async {
+    return _preferences?.getBool('task_swipe_tutorial_completed') ?? false;
+  }
 }
