@@ -360,7 +360,10 @@ class _TaskDetailsState extends State<TaskDetails> {
 
     try {
       DateTime parsedDate = DateTime.parse(dateString);
-      return DateFormat('yyyy-MM-dd HH:mm:ss').format(parsedDate);
+      String timeFormat = AppSettings.use24HourFormatRx.value
+          ? 'yyyy-MM-dd HH:mm:ss'
+          : 'yyyy-MM-dd hh:mm:ss a';
+      return DateFormat(timeFormat).format(parsedDate);
     } catch (e) {
       debugPrint('Error parsing date: $dateString');
       return '-';
