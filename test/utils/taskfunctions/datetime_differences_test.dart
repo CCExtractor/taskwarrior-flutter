@@ -1,7 +1,13 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get/get.dart';
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/datetime_differences.dart';
 
 void main() {
+  setUp(() {
+    AppSettings.use24HourFormatRx.value = false;
+  });
+
   group('DateTime Differences', () {
     test('age function should return correct string for years', () {
       final now = DateTime.now();
@@ -45,10 +51,40 @@ void main() {
       expect(age(dt), '2s ');
     });
 
+    test('age function should respect use24HourFormat app setting', () {
+      final now = DateTime.now();
+      final dt = now.subtract(const Duration(days: 2)); // 2 days
+
+      // Test with 12-hour format
+      AppSettings.use24HourFormatRx.value = false;
+      expect(age(dt), contains('2d'));
+      expect(age(dt), contains('(hh:mm a)'));
+
+      // Test with 24-hour format
+      AppSettings.use24HourFormatRx.value = true;
+      expect(age(dt), contains('2d'));
+      expect(age(dt), contains('(HH:mm)'));
+    });
+
     test('when function should return correct string for future dates', () {
       final now = DateTime.now();
       final dt = now.add(const Duration(days: 2)); // 2 days from now
       expect(when(dt), '1d ');
+    });
+
+    test('when function should respect use24HourFormat app setting', () {
+      final now = DateTime.now();
+      final dt = now.add(const Duration(days: 2)); // 2 days from now
+
+      // Test with 12-hour format
+      AppSettings.use24HourFormatRx.value = false;
+      expect(when(dt), contains('1d'));
+      expect(when(dt), contains('(hh:mm a)'));
+
+      // Test with 24-hour format
+      AppSettings.use24HourFormatRx.value = true;
+      expect(when(dt), contains('1d'));
+      expect(when(dt), contains('(HH:mm)'));
     });
 
     test(

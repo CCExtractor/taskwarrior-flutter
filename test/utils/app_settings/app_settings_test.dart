@@ -13,12 +13,15 @@ void main() {
     test('should initialize settings correctly', () async {
       expect(AppSettings.isDarkMode, true);
       expect(AppSettings.selectedLanguage, SupportedLanguage.english);
+      expect(AppSettings.use24HourFormatRx.value, false);
     });
 
     test('should save settings correctly', () async {
-      await AppSettings.saveSettings(false, SupportedLanguage.english);
+      await AppSettings.saveSettings(true, SupportedLanguage.english, true);
+      await AppSettings.init();
       expect(AppSettings.isDarkMode, true);
       expect(AppSettings.selectedLanguage, SupportedLanguage.english);
+      expect(AppSettings.use24HourFormatRx.value, true);
     });
   });
 
