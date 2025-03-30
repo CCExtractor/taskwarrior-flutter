@@ -45,7 +45,9 @@ class DeleteProfileDialog extends StatelessWidget {
                   Get.back();
                 },
                 child: Text(
-                  'Cancel',
+                  SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                      .sentences
+                      .cancel,
                   style: TextStyle(
                     color: tColors.primaryTextColor,
                   ),
@@ -60,7 +62,7 @@ class DeleteProfileDialog extends StatelessWidget {
                     Get.back();
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
-                          'Profile: ${profile.characters} Deleted Successfully',
+                          '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.profilePageProfile}: ${profile.characters} ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.profileDeletedSuccessfully}',
                           style: TextStyle(
                             color: tColors.primaryTextColor,
                           ),
@@ -70,7 +72,7 @@ class DeleteProfileDialog extends StatelessWidget {
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
-                          'Profile: ${profile.characters} Deletion Failed',
+                          '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.profilePageProfile}: ${profile.characters} ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.profileDeletionFailed}',
                           style: TextStyle(
                             color: tColors.primaryTextColor,
                           ),
@@ -79,8 +81,13 @@ class DeleteProfileDialog extends StatelessWidget {
                         duration: const Duration(seconds: 2)));
                   }
                 },
-                child: const Text(
-                  'Confirm'
+                child: Text(
+                  SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                      .sentences
+                      .profileDeleteConfirmation,
+                  style: TextStyle(
+                    color: tColors.primaryTextColor,
+                  ),
                 ),
               ),
             ],

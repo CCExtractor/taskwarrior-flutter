@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/gen/assets.gen.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 
 import '../controllers/splash_controller.dart';
 
@@ -26,9 +28,11 @@ class SplashView extends GetView<SplashController> {
             const SizedBox(height: 30.0),
             const CircularProgressIndicator(),
             const SizedBox(height: 16.0),
-            const Text(
-              "Setting up the app...",
-              style: TextStyle(
+            Text(
+              SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                  .sentences
+                  .splashSettingUpApp,
+              style: const TextStyle(
                 fontFamily: FontFamily.poppins,
                 fontSize: TaskWarriorFonts.fontSizeLarge,
               ),

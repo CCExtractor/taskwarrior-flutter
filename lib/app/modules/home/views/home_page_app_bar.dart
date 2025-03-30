@@ -107,10 +107,16 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
             key: controller.searchKey1,
             icon: (controller.searchVisible.value)
                 ? Tooltip(
-                    message: 'Cancel',
+                    message: SentenceManager(
+                            currentLanguage: controller.selectedLanguage.value)
+                        .sentences
+                        .homePageCancelSearchTooltip,
                     child: Icon(Icons.cancel, color: TaskWarriorColors.white))
                 : Tooltip(
-                    message: 'Search',
+                    message: SentenceManager(
+                            currentLanguage: controller.selectedLanguage.value)
+                        .sentences
+                        .homePageSearchTooltip,
                     child: Icon(Icons.search, color: TaskWarriorColors.white)),
             onPressed: controller.toggleSearch,
           ),

@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/projects.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
@@ -31,7 +33,7 @@ class ProjectsColumn extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "Project : ",
+                "${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.project} : ",
                 style: TextStyle(
                   fontFamily: FontFamily.poppins,
                   fontWeight: TaskWarriorFonts.bold,
@@ -47,7 +49,7 @@ class ProjectsColumn extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        projectFilter == "" ? "Not selected" : projectFilter,
+                        projectFilter == "" ? SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.notSelected : projectFilter,
                         style: TextStyle(
                           fontFamily: FontFamily.poppins,
                           fontSize: TaskWarriorFonts.fontSizeSmall,
@@ -66,7 +68,8 @@ class ProjectsColumn extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text("All Projects",
+              Text(SentenceManager(
+                      currentLanguage: AppSettings.selectedLanguage).sentences.allProjects,
                   style: TextStyle(
                     fontFamily: FontFamily.poppins,
                     fontSize: TaskWarriorFonts.fontSizeSmall,
@@ -88,7 +91,10 @@ class ProjectsColumn extends StatelessWidget {
           Column(
             children: [
               Text(
-                "No Projects Found",
+                SentenceManager(
+                        currentLanguage: AppSettings.selectedLanguage)
+                    .sentences
+                    .noProjectsFound,
                 style: TextStyle(
                   fontFamily: FontFamily.poppins,
                   fontSize: TaskWarriorFonts.fontSizeSmall,

@@ -123,7 +123,10 @@ class NavDrawer extends StatelessWidget {
                           actions: <Widget>[
                             TextButton(
                               child: Text(
-                                'Cancel',
+                                SentenceManager(
+                                  currentLanguage:
+                                      homeController.selectedLanguage.value,
+                                ).sentences.homePageCancel,
                                 style: TextStyle(
                                   color: tColors.primaryTextColor,
                                 ),
@@ -134,7 +137,10 @@ class NavDrawer extends StatelessWidget {
                             ),
                             TextButton(
                               child: Text(
-                                'Confirm',
+                                SentenceManager(
+                                  currentLanguage:
+                                      homeController.selectedLanguage.value,
+                                ).sentences.navDrawerConfirm,
                                 style: TextStyle(
                                   color: tColors.primaryTextColor,
                                 ),
