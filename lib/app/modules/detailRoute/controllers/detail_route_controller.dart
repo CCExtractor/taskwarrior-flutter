@@ -16,6 +16,7 @@ class DetailRouteController extends GetxController {
   late String uuid;
   late Modify modify;
   var onEdit = false.obs;
+  var isTourActive = false.obs;
   var isReadOnly = false.obs;
 
   // Description Edit State
@@ -101,7 +102,7 @@ class DetailRouteController extends GetxController {
     );
 
     // Navigate back immediately after showing snackbar
-    Get.back();
+    Get.back(result: true);
   }
 
   //  'description': controller.modify.draft.description,
@@ -182,6 +183,7 @@ class DetailRouteController extends GetxController {
       opacityShadow: 1.00,
       hideSkip: true,
       onFinish: () {
+        isTourActive.value = false;
         SaveTourStatus.saveDetailsTourStatus(true);
       },
     );
@@ -192,7 +194,7 @@ class DetailRouteController extends GetxController {
       const Duration(milliseconds: 500),
       () {
         SaveTourStatus.getDetailsTourStatus().then((value) => {
-              if (!value) {tutorialCoachMark.show(context: context)}
+              if (!value) {isTourActive.value = true,tutorialCoachMark.show(context: context)}
             });
       },
     );

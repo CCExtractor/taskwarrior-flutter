@@ -26,6 +26,7 @@ class ReportsController extends GetxController
   late TaskDatabase taskDatabase;
   var isSaved = false.obs;
   late TutorialCoachMark tutorialCoachMark;
+  final RxBool isReportsTourActive = false.obs;
 
   var selectedIndex = 0.obs;
   var allData = <Task>[].obs;
@@ -80,6 +81,7 @@ class ReportsController extends GetxController
       opacityShadow: 0.8,
       hideSkip: true,
       onFinish: () {
+        isReportsTourActive.value = false;
         SaveTourStatus.saveReportsTourStatus(true);
       },
     );
@@ -92,6 +94,7 @@ class ReportsController extends GetxController
         SaveTourStatus.getReportsTourStatus().then((value) => {
               if (value == false)
                 {
+                  isReportsTourActive.value = true,
                   tutorialCoachMark.show(context: context),
                 }
               else
