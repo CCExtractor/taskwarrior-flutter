@@ -10,6 +10,8 @@ class ProfileController extends GetxController {
   var profilesWidget = Get.find<SplashController>();
   late RxMap<String, String?> profilesMap;
   late RxString currentProfile;
+  final RxBool isProfileTourActive = false.obs;
+
   @override
   void onInit() {
     profilesMap = profilesWidget.profilesMap;
@@ -37,6 +39,7 @@ class ProfileController extends GetxController {
       opacityShadow: 1.00,
       hideSkip: true,
       onFinish: () {
+        isProfileTourActive.value = false;
         SaveTourStatus.saveProfileTourStatus(true);
       },
     );
@@ -49,6 +52,7 @@ class ProfileController extends GetxController {
         SaveTourStatus.getProfileTourStatus().then((value) => {
               if (value == false)
                 {
+                  isProfileTourActive.value = true,
                   tutorialCoachMark.show(context: context),
                 }
               else

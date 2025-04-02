@@ -25,81 +25,95 @@ class DetailRouteView extends GetView<DetailRouteController> {
     controller.showDetailsPageTour(context);
     TaskwarriorColorTheme tColors =
         Theme.of(context).extension<TaskwarriorColorTheme>()!;
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) async {
+        if (didPop) return;
+
+        if (controller.isTourActive.value) {
+          return;
+        }
+
         if (!controller.onEdit.value) {
           // Get.offAll(() => const HomeView());
           Get.back();
-          // Get.toNamed(Routes.HOME);
-          return false;
+          return;
         }
 
-        bool? save = await showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              backgroundColor: tColors.dialogBackgroundColor,
-              title: Text(
-                SentenceManager(currentLanguage: AppSettings.selectedLanguage)
-                    .sentences
-                    .saveChangesConfirmation,
-                style: TextStyle(
-                  color: tColors.primaryTextColor,
+        bool? done = await Get.dialog(
+          AlertDialog(
+            backgroundColor: tColors.dialogBackgroundColor,
+            title: Text(
+              SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                  .sentences
+                  .saveChangesConfirmation,
+              style: TextStyle(
+                color: tColors.primaryTextColor,
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  controller.saveChanges();
+                  // Get.offAll(() => const HomeView());
+
+                  Get.back();
+                },
+                child: Text(
+                  SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                      .sentences
+                      .yes,
+                  style: TextStyle(
+                    color: tColors.primaryTextColor,
+                  ),
                 ),
               ),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    controller.saveChanges();
-                    // Get.offAll(() => const HomeView());
+              TextButton(
+                onPressed: () {
+                  // Get.offAll(() => const HomeView());
 
-                    Get.back();
-                  },
-                  child: Text(
-                    SentenceManager(
-                            currentLanguage: AppSettings.selectedLanguage)
-                        .sentences
-                        .yes,
-                    style: TextStyle(
-                      color: tColors.primaryTextColor,
-                    ),
+                  Get.back(result: true);
+                  controller.onEdit.value = false;
+                },
+                child: Text(
+                  SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                      .sentences
+                      .no,
+                  style: TextStyle(
+                    color: tColors.primaryTextColor,
                   ),
                 ),
-                TextButton(
-                  onPressed: () {
-                    // Get.offAll(() => const HomeView());
-
-                    Get.back();
-                  },
-                  child: Text(
-                    SentenceManager(
-                            currentLanguage: AppSettings.selectedLanguage)
-                        .sentences
-                        .no,
-                    style: TextStyle(
-                      color: tColors.primaryTextColor,
-                    ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Get.back(result: false);
+                },
+                child: Text(
+                  SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                      .sentences
+                      .cancel,
+                  style: TextStyle(
+                    color: tColors.primaryTextColor,
                   ),
                 ),
-                TextButton(
-                  onPressed: () {
-                    Get.back();
-                  },
-                  child: Text(
-                    SentenceManager(
-                            currentLanguage: AppSettings.selectedLanguage)
-                        .sentences
-                        .cancel,
-                    style: TextStyle(
-                      color: tColors.primaryTextColor,
-                    ),
-                  ),
-                ),
-              ],
-            );
-          },
+              ),
+            ],
+          ),
+          barrierDismissible: false,
         );
-        return save == true;
+        //runs when 'yes' or 'no' is clicked
+        if (done == true) {
+          Get.back();
+          // only runs when 'yes' is clicked
+          if (controller.onEdit.value == true) {
+            controller.onEdit.value = false;
+            Get.snackbar(
+              'Task Updated',
+              '',
+              snackPosition: SnackPosition.BOTTOM,
+            );
+          }
+        }
       },
       child: Scaffold(
           backgroundColor: tColors.primaryBackgroundColor,
@@ -155,65 +169,62 @@ class DetailRouteView extends GetView<DetailRouteController> {
                   splashColor: tColors.primaryTextColor,
                   heroTag: "btn1",
                   onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          scrollable: true,
-                          title: Text(
-                            '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.reviewChanges}:',
+                    Get.dialog(
+                      AlertDialog(
+                        scrollable: true,
+                        title: Text(
+                          '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.reviewChanges}:',
+                          style: TextStyle(
+                            color: tColors.primaryTextColor,
+                          ),
+                        ),
+                        content: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Text(
+                            controller.modify.changes.entries
+                                .map((entry) => '${entry.key}:\n'
+                                    '  ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.oldChanges}: ${entry.value['old']}\n'
+                                    '  ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.newChanges}: ${entry.value['new']}')
+                                .toList()
+                                .join('\n'),
                             style: TextStyle(
                               color: tColors.primaryTextColor,
                             ),
                           ),
-                          content: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Get.back();
+                            },
                             child: Text(
-                              controller.modify.changes.entries
-                                  .map((entry) => '${entry.key}:\n'
-                                      '  ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.oldChanges}: ${entry.value['old']}\n'
-                                      '  ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.newChanges}: ${entry.value['new']}')
-                                  .toList()
-                                  .join('\n'),
+                              SentenceManager(
+                                      currentLanguage:
+                                          AppSettings.selectedLanguage)
+                                  .sentences
+                                  .cancel,
                               style: TextStyle(
                                 color: tColors.primaryTextColor,
                               ),
                             ),
                           ),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Get.back();
-                              },
-                              child: Text(
-                                SentenceManager(
-                                        currentLanguage:
-                                            AppSettings.selectedLanguage)
-                                    .sentences
-                                    .cancel,
-                                style: TextStyle(
-                                  color: tColors.primaryTextColor,
-                                ),
+                          TextButton(
+                            onPressed: () {
+                              controller.saveChanges();
+                            },
+                            child: Text(
+                              SentenceManager(
+                                      currentLanguage:
+                                          AppSettings.selectedLanguage)
+                                  .sentences
+                                  .submit,
+                              style: TextStyle(
+                                color: tColors.primaryBackgroundColor,
                               ),
                             ),
-                            TextButton(
-                              onPressed: () {
-                                controller.saveChanges();
-                              },
-                              child: Text(
-                                SentenceManager(
-                                        currentLanguage:
-                                            AppSettings.selectedLanguage)
-                                    .sentences
-                                    .submit,
-                                style: TextStyle(
-                                  color: tColors.primaryBackgroundColor,
-                                ),
-                              ),
-                            ),
-                          ],
-                        );
-                      },
+                          ),
+                        ],
+                      ),
                     );
                   },
                   child: const Icon(Icons.save),
@@ -251,7 +262,7 @@ class AttributeWidget extends StatelessWidget {
         Theme.of(context).extension<TaskwarriorColorTheme>()!;
     // Get the controller to check if the task is read-only
     final DetailRouteController controller = Get.find<DetailRouteController>();
-    
+
     // Always allow status to be edited, but respect read-only for other attributes
     final bool isEditable = !controller.isReadOnly.value || name == 'status';
 
@@ -323,9 +334,10 @@ class AttributeWidget extends StatelessWidget {
           isEditable: isEditable,
         );
       default:
-        final Color? textColor = (isEditable && !['entry', 'modified', 'urgency'].contains(name))
-            ? tColors.primaryTextColor
-            : tColors.primaryDisabledTextColor;
+        final Color? textColor =
+            (isEditable && !['entry', 'modified', 'urgency'].contains(name))
+                ? tColors.primaryTextColor
+                : tColors.primaryDisabledTextColor;
 
         return Card(
           color: tColors.secondaryBackgroundColor,
