@@ -36,6 +36,7 @@
 				<action android:name="es.antonborri.home_widget.action.LAUNCH" />
 			  </intent-filter>
         </activity>
+		
 		<receiver android:name="TaskWarriorWidgetProvider"
             android:exported="true">
             <intent-filter>
@@ -43,6 +44,22 @@
             </intent-filter>
             <meta-data android:name="android.appwidget.provider"
                 android:resource="@xml/taskwarriorconfig" />
+        </receiver>
+		
+		<receiver android:name=".WidgetUpdateReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="UPDATE_WIDGET" />
+            </intent-filter>
+        </receiver>
+
+<receiver android:name=".BurndownChartProvider"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                android:resource="@xml/burndownchartconfig" />
         </receiver>
 
         <!-- Used for Background Work -->

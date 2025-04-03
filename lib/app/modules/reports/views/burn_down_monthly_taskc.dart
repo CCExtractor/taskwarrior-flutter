@@ -135,7 +135,7 @@ class BurnDownMonthlyTaskc extends StatelessWidget {
                     ),
                   ),
                   tooltipBehavior: _monthlyBurndownTooltipBehaviour,
-                  series: <ChartSeries>[
+                  series: <CartesianSeries>[
                     StackedColumnSeries<ChartData, String>(
                       groupName: 'Group A',
                       enableTooltip: true,

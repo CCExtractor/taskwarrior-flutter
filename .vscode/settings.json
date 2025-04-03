@@ -14,5 +14,6 @@
 	"editor.tabSize": 4,
 	"editor.codeActionsOnSave": {
 		"source.fixAll": "explicit"
-	}
+	},
+	"java.configuration.updateBuildConfiguration": "interactive"
 }

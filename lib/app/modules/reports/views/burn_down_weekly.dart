@@ -43,7 +43,10 @@ class BurnDownWeekly extends StatelessWidget {
               ),
               primaryYAxis: NumericAxis(
                 title: AxisTitle(
-                    text: SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.reportsPageTasks,
+                    text: SentenceManager(
+                            currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .reportsPageTasks,
                     textStyle: TextStyle(
                       fontFamily: FontFamily.poppins,
                       fontWeight: TaskWarriorFonts.bold,
@@ -53,7 +56,7 @@ class BurnDownWeekly extends StatelessWidget {
                     )),
               ),
               tooltipBehavior: reportsController.weeklyBurndownTooltipBehaviour,
-              series: <ChartSeries>[
+              series: <CartesianSeries>[
                 ///this is the completed tasks
                 StackedColumnSeries<ChartData, String>(
                   groupName: 'Group A',
