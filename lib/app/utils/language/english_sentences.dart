@@ -53,10 +53,10 @@ class EnglishSentences extends Sentences {
   String get settingsPageEnableSyncOnTaskCreateDescription =>
       'Enable automatic syncing when creating a new task';
   @override
-  String get settingsPageHighlightTaskTitle => 'Highlight the task';
+  String get settingsPageHighlightTaskTitle => 'Highlight urgent tasks';
   @override
   String get settingsPageHighlightTaskDescription =>
-      'Make the border of task if only 1 day left';
+      'Highlight tasks due within 1 day or already overdue';
   @override
   String get settingsPageEnable24hrFormatTitle => 'Enable 24 hr format';
   @override

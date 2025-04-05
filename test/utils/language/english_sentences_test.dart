@@ -33,9 +33,9 @@ void main() {
         english.settingsPageEnableSyncOnTaskCreateTitle, 'Sync on task create');
     expect(english.settingsPageEnableSyncOnTaskCreateDescription,
         'Enable automatic syncing when creating a new task');
-    expect(english.settingsPageHighlightTaskTitle, 'Highlight the task');
+    expect(english.settingsPageHighlightTaskTitle, 'Highlight urgent tasks');
     expect(english.settingsPageHighlightTaskDescription,
-        'Make the border of task if only 1 day left');
+        'Highlight tasks due within 1 day or already overdue');
     expect(english.settingsPageEnable24hrFormatTitle, 'Enable 24 hr format');
     expect(english.settingsPageEnable24hrFormatDescription,
         'Switch right to enable 24 hr format');

@@ -33,10 +33,10 @@ void main() {
         'Activer la synchronisation automatique lors de la création de nouvelles tâches');
     expect(french.settingsPageEnableSyncOnTaskCreateDescription,
         'Activer la synchronisation automatique lors de la création de nouvelles tâches');
-    expect(french.settingsPageHighlightTaskTitle,
-        'Surbrillance des tâches avec 1 jour restant');
+    expect(
+        french.settingsPageHighlightTaskTitle, 'Surligner les tâches urgentes');
     expect(french.settingsPageHighlightTaskDescription,
-        'Surbrillance des tâches avec 1 jour restant');
+        'Surligner les tâches dues dans 1 jour ou en retard');
     expect(french.settingsPageEnable24hrFormatTitle,
         'Activer le format 24 heures');
     expect(french.settingsPageEnable24hrFormatDescription,

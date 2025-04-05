@@ -52,11 +52,10 @@ class FrenchSentences extends Sentences {
   String get settingsPageEnableSyncOnTaskCreateDescription =>
       'Activer la synchronisation automatique lors de la création de nouvelles tâches';
   @override
-  String get settingsPageHighlightTaskTitle =>
-      'Surbrillance des tâches avec 1 jour restant';
+  String get settingsPageHighlightTaskTitle => 'Surligner les tâches urgentes';
   @override
   String get settingsPageHighlightTaskDescription =>
-      'Surbrillance des tâches avec 1 jour restant';
+      'Surligner les tâches dues dans 1 jour ou en retard';
   @override
   String get settingsPageEnable24hrFormatTitle => 'Activer le format 24 heures';
   @override

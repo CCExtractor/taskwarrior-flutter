@@ -35,10 +35,9 @@ void main() {
         'Habilitar sincronización automática al crear nuevas tareas');
     expect(spanish.settingsPageEnableSyncOnTaskCreateDescription,
         'Habilitar sincronización automática al crear nuevas tareas');
-    expect(spanish.settingsPageHighlightTaskTitle,
-        'Resaltar tareas con 1 día restante');
+    expect(spanish.settingsPageHighlightTaskTitle, 'Resaltar tareas urgentes');
     expect(spanish.settingsPageHighlightTaskDescription,
-        'Resaltar tareas con 1 día restante');
+        'Resaltar tareas que vencen en 1 día o están vencidas');
     expect(spanish.settingsPageEnable24hrFormatTitle,
         'Habilitar formato de 24 horas');
     expect(spanish.settingsPageEnable24hrFormatDescription,

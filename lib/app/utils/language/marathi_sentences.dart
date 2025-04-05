@@ -53,10 +53,10 @@ class MarathiSentences extends Sentences {
       'नवीन कार्य तयार करताना स्वयंसिंकिंग सक्षम करा';
   @override
   String get settingsPageHighlightTaskTitle =>
-      'फक्त 1 दिवस शेष असताना कार्याची सीमा बनवा';
+      'तातडीच्या कार्यांना हायलाईट करा';
   @override
   String get settingsPageHighlightTaskDescription =>
-      'फक्त 1 दिवस शेष असताना कार्याची सीमा बनवा';
+      '1 दिवसाच्या आत देय किंवा मुदत संपलेल्या कार्यांना हायलाईट करा';
   @override
   String get settingsPageEnable24hrFormatTitle => '24 तासाचा स्वरूप सक्षम करा';
   @override

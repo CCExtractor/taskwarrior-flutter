@@ -53,11 +53,10 @@ class SpanishSentences extends Sentences {
   String get settingsPageEnableSyncOnTaskCreateDescription =>
       'Habilitar sincronización automática al crear nuevas tareas';
   @override
-  String get settingsPageHighlightTaskTitle =>
-      'Resaltar tareas con 1 día restante';
+  String get settingsPageHighlightTaskTitle => 'Resaltar tareas urgentes';
   @override
   String get settingsPageHighlightTaskDescription =>
-      'Resaltar tareas con 1 día restante';
+      'Resaltar tareas que vencen en 1 día o están vencidas';
   @override
   String get settingsPageEnable24hrFormatTitle =>
       'Habilitar formato de 24 horas';
