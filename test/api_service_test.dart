@@ -2,28 +2,54 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as mockClient;
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:http/http.dart' as http;
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taskwarrior/api_service.dart';
 import 'package:taskwarrior/app/utils/taskchampion/credentials_storage.dart';
 
 import 'api_service_test.mocks.dart';
 
-class MockCredentialsStorage extends Mock implements CredentialsStorage {}
+// Define the missing constants
+const String baseUrl =
+    'https://your-api-base-url.com'; // Replace with your actual base URL
+const String origin =
+    'http://localhost:8080'; // Replace with your actual origin
+
+class MockCredentialsStorage extends Mock implements CredentialsStorage {
+  getApiUrl() {}
+}
 
 class MockMethodChannel extends Mock implements MethodChannel {}
 
-@GenerateMocks([MockMethodChannel, http.Client])
+@GenerateMocks([http.Client, CredentialsStorage])
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  databaseFactory = databaseFactoryFfi;
-  MockClient mockClient = MockClient();
+  // Mock SharedPreferences
+  SharedPreferences.setMockInitialValues({});
+
+  var mockCredentialsStorage = MockCredentialsStorage();
 
   setUpAll(() {
-    sqfliteFfiInit();
+    when(mockCredentialsStorage.getApiUrl())
+        .thenAnswer((_) async => 'https://test-api.com');
+  });
+
+  test('Fetch data successfully', () async {
+    final client = MockClient();
+    when(client.get(any))
+        .thenAnswer((_) async => http.Response('[{"id":1}]', 200));
+
+    final tasks = await fetchTasks(
+      'test-uuid',
+      'test-secret',
+      credentialsStorage: mockCredentialsStorage, // Inject mock
+    );
+
+    expect(tasks, isA<List<Tasks>>());
   });
 
   group('Tasks model', () {
@@ -94,7 +120,8 @@ void main() {
             "Content-Type": "application/json",
           })).thenAnswer((_) async => http.Response(responseJson, 200));
 
-      final result = await fetchTasks('123', 'secret');
+      final result = await fetchTasks('123', 'secret',
+          credentialsStorage: mockCredentialsStorage);
 
       expect(result, isA<List<Tasks>>());
     });
@@ -103,7 +130,10 @@ void main() {
       const uuid = '123';
       const encryptionSecret = 'secret';
 
-      expect(await fetchTasks(uuid, encryptionSecret), isEmpty);
+      expect(
+          await fetchTasks(uuid, encryptionSecret,
+              credentialsStorage: mockCredentialsStorage),
+          isEmpty);
     });
   });
 
