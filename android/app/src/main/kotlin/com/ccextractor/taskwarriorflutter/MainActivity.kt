@@ -11,7 +11,7 @@ import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 
 class MainActivity: FlutterActivity() {
-    private val channel = "com.example.taskwarrior/widget"
+    private val channel = "com.ccextractor.taskwarriorflutter/widget"
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
