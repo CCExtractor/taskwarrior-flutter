@@ -15,6 +15,7 @@ class DetailRouteController extends GetxController {
   late String uuid;
   late Modify modify;
   var onEdit = false.obs;
+  var isReadOnly = false.obs;
 
   @override
   void onInit() {
@@ -29,12 +30,26 @@ class DetailRouteController extends GetxController {
       uuid: uuid,
     );
     initValues();
+
+    // Check if task is completed or deleted and set read-only state
+    isReadOnly.value = (modify.draft.status == 'completed' ||
+        modify.draft.status == 'deleted');
   }
 
   void setAttribute(String name, dynamic newValue) {
+    if (isReadOnly.value && name != 'status') {
+      return;
+    }
+
     modify.set(name, newValue);
     onEdit.value = true;
-    if(name == 'start'){
+
+    // If status is being changed, update read-only state
+    if (name == 'status') {
+      isReadOnly.value = (newValue == 'completed' || newValue == 'deleted');
+    }
+
+    if (name == 'start') {
       debugPrint('Start Value Changed to $newValue');
       startValue.value = newValue;
     }
