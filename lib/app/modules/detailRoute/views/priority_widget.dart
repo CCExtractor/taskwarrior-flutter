@@ -4,25 +4,33 @@ import 'package:taskwarrior/app/utils/constants/constants.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 class PriorityWidget extends StatelessWidget {
-  const PriorityWidget(
-      {required this.name,
-      required this.value,
-      required this.callback,
-      required this.globalKey,
-      super.key});
+  const PriorityWidget({
+    required this.name,
+    required this.value,
+    required this.callback,
+    required this.globalKey,
+    this.isEditable = true,
+    super.key,
+  });
 
   final String name;
   final dynamic value;
   final void Function(dynamic) callback;
   final GlobalKey globalKey;
+  final bool isEditable;
 
   @override
   Widget build(BuildContext context) {
     TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    final Color? textColor = isEditable
+        ? tColors.primaryTextColor
+        : tColors.primaryDisabledTextColor;
+
     return Card(
       key: globalKey,
       color: tColors.secondaryBackgroundColor,
       child: ListTile(
+        enabled: isEditable,
         textColor: tColors.primaryTextColor,
         title: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
@@ -36,14 +44,14 @@ class PriorityWidget extends StatelessWidget {
                       style: GoogleFonts.poppins(
                         fontWeight: TaskWarriorFonts.bold,
                         fontSize: TaskWarriorFonts.fontSizeMedium,
-                        color: tColors.primaryTextColor,
+                        color: textColor,
                       ),
                     ),
                     TextSpan(
                       text: value ?? "not selected",
                       style: GoogleFonts.poppins(
                         fontSize: TaskWarriorFonts.fontSizeMedium,
-                        color: tColors.primaryTextColor,
+                        color: textColor,
                       ),
                     ),
                   ],

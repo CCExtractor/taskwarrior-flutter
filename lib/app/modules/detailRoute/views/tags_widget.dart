@@ -18,38 +18,46 @@ class TagsWidget extends StatelessWidget {
     required this.name,
     required this.value,
     required this.callback,
+    this.isEditable = true,
     super.key,
   });
 
   final String name;
   final dynamic value;
   final void Function(dynamic) callback;
+  final bool isEditable;
 
   @override
   Widget build(BuildContext context) {
     TaskwarriorColorTheme tColors =
         Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    final Color? textColor = isEditable
+        ? tColors.primaryTextColor
+        : tColors.primaryDisabledTextColor;
+
     return Card(
+      color: tColors.primaryBackgroundColor,
       child: ListTile(
+        enabled: isEditable,
         tileColor: tColors.secondaryBackgroundColor,
-        textColor: tColors.primaryTextColor,
+        textColor: textColor,
         title: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
               Text(
                 '${'$name:'.padRight(13)}${(value as ListBuilder?)?.build()}',
+                style: TextStyle(
+                  color: textColor,
+                ),
               ),
             ],
           ),
         ),
-        onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => TagsRoute(
-              value: value,
-              callback: callback,
-            ),
+        onTap: () => Get.to(
+          TagsRoute(
+            value: value,
+            callback: callback,
           ),
         ),
       ),

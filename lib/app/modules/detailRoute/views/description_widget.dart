@@ -8,15 +8,18 @@ import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 class DescriptionWidget extends StatelessWidget {
-  const DescriptionWidget(
-      {required this.name,
-      required this.value,
-      required this.callback,
-      super.key});
+  const DescriptionWidget({
+    required this.name,
+    required this.value,
+    required this.callback,
+    this.isEditable = true,
+    super.key,
+  });
 
   final String name;
   final dynamic value;
   final void Function(dynamic) callback;
+  final bool isEditable;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +28,10 @@ class DescriptionWidget extends StatelessWidget {
     return Card(
       color: tColors.secondaryBackgroundColor,
       child: ListTile(
-        textColor: tColors.primaryTextColor,
+        enabled: isEditable,
+        textColor: isEditable
+            ? tColors.primaryTextColor
+            : tColors.primaryDisabledTextColor,
         title: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
@@ -46,7 +52,9 @@ class DescriptionWidget extends StatelessWidget {
                         fontFamily: FontFamily.poppins,
                         fontWeight: TaskWarriorFonts.bold,
                         fontSize: TaskWarriorFonts.fontSizeMedium,
-                        color: tColors.primaryTextColor,
+                        color: isEditable
+                            ? tColors.primaryTextColor
+                            : tColors.primaryDisabledTextColor,
                       ),
                     ),
                     TextSpan(
@@ -60,7 +68,9 @@ class DescriptionWidget extends StatelessWidget {
                       style: TextStyle(
                         fontFamily: FontFamily.poppins,
                         fontSize: TaskWarriorFonts.fontSizeMedium,
-                        color: tColors.primaryTextColor,
+                        color: isEditable
+                            ? tColors.primaryTextColor
+                            : tColors.primaryDisabledTextColor,
                       ),
                     ),
                   ],
@@ -94,7 +104,6 @@ class DescriptionWidget extends StatelessWidget {
               actions: [
                 TextButton(
                   onPressed: () {
-                    // Navigator.of(context).pop();
                     Get.back();
                   },
                   child: Text(
@@ -108,7 +117,6 @@ class DescriptionWidget extends StatelessWidget {
                   onPressed: () {
                     try {
                       callback(controller.text);
-                      // Navigator.of(context).pop();
                       Get.back();
                     } on FormatException catch (e, trace) {
                       logError(e, trace);
@@ -131,15 +139,18 @@ class DescriptionWidget extends StatelessWidget {
 }
 
 class ProjectWidget extends StatelessWidget {
-  const ProjectWidget(
-      {required this.name,
-      required this.value,
-      required this.callback,
-      super.key});
+  const ProjectWidget({
+    required this.name,
+    required this.value,
+    required this.callback,
+    this.isEditable = true,
+    super.key,
+  });
 
   final String name;
   final dynamic value;
   final void Function(dynamic) callback;
+  final bool isEditable;
 
   @override
   Widget build(BuildContext context) {
@@ -148,7 +159,10 @@ class ProjectWidget extends StatelessWidget {
     return Card(
       color: tColors.secondaryBackgroundColor,
       child: ListTile(
-        textColor: tColors.primaryTextColor,
+        enabled: isEditable,
+        textColor: isEditable
+            ? tColors.primaryTextColor
+            : tColors.primaryDisabledTextColor,
         title: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
@@ -169,7 +183,9 @@ class ProjectWidget extends StatelessWidget {
                         fontFamily: FontFamily.poppins,
                         fontWeight: TaskWarriorFonts.bold,
                         fontSize: TaskWarriorFonts.fontSizeMedium,
-                        color: tColors.primaryTextColor,
+                        color: isEditable
+                            ? tColors.primaryTextColor
+                            : tColors.primaryDisabledTextColor,
                       ),
                     ),
                     TextSpan(
@@ -183,7 +199,9 @@ class ProjectWidget extends StatelessWidget {
                       style: TextStyle(
                         fontFamily: FontFamily.poppins,
                         fontSize: TaskWarriorFonts.fontSizeMedium,
-                        color: tColors.primaryTextColor,
+                        color: isEditable
+                            ? tColors.primaryTextColor
+                            : tColors.primaryDisabledTextColor,
                       ),
                     ),
                   ],
@@ -217,7 +235,6 @@ class ProjectWidget extends StatelessWidget {
               actions: [
                 TextButton(
                   onPressed: () {
-                    // Navigator.of(context).pop();
                     Get.back();
                   },
                   child: Text(
@@ -232,7 +249,6 @@ class ProjectWidget extends StatelessWidget {
                     try {
                       callback(
                           (controller.text == '') ? null : controller.text);
-                      // Navigator.of(context).pop();
                       Get.back();
                     } on FormatException catch (e, trace) {
                       logError(e, trace);

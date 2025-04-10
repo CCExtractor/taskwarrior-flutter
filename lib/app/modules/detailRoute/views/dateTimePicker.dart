@@ -15,6 +15,7 @@ class DateTimeWidget extends StatelessWidget {
     required this.value,
     required this.callback,
     required this.globalKey,
+    this.isEditable = true,
   });
 
   final String name;
@@ -22,15 +23,20 @@ class DateTimeWidget extends StatelessWidget {
   final dynamic value;
   final void Function(dynamic) callback;
   final GlobalKey globalKey;
+  final bool isEditable;
 
   @override
   Widget build(BuildContext context) {
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Card(
       key: globalKey,
       color: tColors.secondaryBackgroundColor,
       child: ListTile(
-        textColor: tColors.primaryTextColor,
+        enabled: isEditable,
+        textColor: isEditable
+            ? tColors.primaryTextColor
+            : tColors.primaryDisabledTextColor,
         title: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
@@ -51,7 +57,9 @@ class DateTimeWidget extends StatelessWidget {
                         fontFamily: FontFamily.poppins,
                         fontWeight: TaskWarriorFonts.bold,
                         fontSize: TaskWarriorFonts.fontSizeMedium,
-                        color: tColors.primaryTextColor,
+                        color: isEditable
+                            ? tColors.primaryTextColor
+                            : tColors.primaryDisabledTextColor,
                       ),
                     ),
                     TextSpan(
@@ -65,7 +73,9 @@ class DateTimeWidget extends StatelessWidget {
                       style: TextStyle(
                         fontFamily: FontFamily.poppins,
                         fontSize: TaskWarriorFonts.fontSizeMedium,
-                        color: tColors.primaryTextColor,
+                        color: isEditable
+                            ? tColors.primaryTextColor
+                            : tColors.primaryDisabledTextColor,
                       ),
                     ),
                   ],
@@ -176,7 +186,6 @@ class DateTimeWidget extends StatelessWidget {
             }
           }
         },
-
         onLongPress: () => callback(null),
       ),
     );
@@ -188,20 +197,26 @@ class StartWidget extends StatelessWidget {
     required this.name,
     required this.value,
     required this.callback,
+    this.isEditable = true,
     super.key,
   });
 
   final String name;
   final dynamic value;
+  final bool isEditable;
   final void Function(dynamic) callback;
 
   @override
   Widget build(BuildContext context) {
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Card(
       color: tColors.secondaryBackgroundColor,
       child: ListTile(
-        textColor: tColors.secondaryBackgroundColor,
+        enabled: isEditable,
+        textColor: isEditable
+            ? tColors.primaryTextColor
+            : tColors.primaryDisabledTextColor,
         title: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
@@ -222,7 +237,9 @@ class StartWidget extends StatelessWidget {
                         fontFamily: FontFamily.poppins,
                         fontWeight: TaskWarriorFonts.bold,
                         fontSize: TaskWarriorFonts.fontSizeMedium,
-                        color: tColors.primaryTextColor,
+                        color: isEditable
+                            ? tColors.primaryTextColor
+                            : tColors.primaryDisabledTextColor,
                       ),
                     ),
                     TextSpan(
@@ -236,7 +253,9 @@ class StartWidget extends StatelessWidget {
                       style: TextStyle(
                         fontFamily: FontFamily.poppins,
                         fontSize: TaskWarriorFonts.fontSizeMedium,
-                        color: tColors.primaryTextColor,
+                        color: isEditable
+                            ? tColors.primaryTextColor
+                            : tColors.primaryDisabledTextColor,
                       ),
                     ),
                   ],
