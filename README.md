@@ -91,7 +91,7 @@ This project aims to build an app for Taskwarrior. It is your task management ap
 1. Clone the repository from GitHub:
 
 ```bash
-git clone https://github.com/NishantSinghal19/taskwarrior-flutter.git
+git clone https://github.com/CCExtractor/taskwarrior-flutter
 ```
 
 2. Navigate to the project's root directory:

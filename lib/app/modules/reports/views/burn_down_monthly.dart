@@ -56,7 +56,7 @@ class BurnDownMonthly extends StatelessWidget {
               ),
               tooltipBehavior:
                   reportsController.monthlyBurndownTooltipBehaviour,
-              series: <ChartSeries>[
+              series: <CartesianSeries>[
                 StackedColumnSeries<ChartData, String>(
                   groupName: 'Group A',
                   enableTooltip: true,
