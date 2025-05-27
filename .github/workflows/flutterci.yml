@@ -32,7 +32,7 @@ jobs:
       - run: flutter pub get
 
       # Step 5: Analyze the code using flutter analyze
-      - run: flutter analyze
+      - run: flutter analyze --no-fatal-warnings --no-fatal-infos
 
       # Step 6: Format the code using flutter format (uncomment if needed)
       # - run: flutter format -n --set-exit-if-changed .

@@ -87,6 +87,7 @@ void main() {
   group('fetchTasks', () {
     test('Fetch data successfully', () async {
       final responseJson = jsonEncode({'data': 'Mock data'});
+      var baseUrl = await CredentialsStorage.getApiUrl();
       when(mockClient.get(
           Uri.parse(
               '$baseUrl/tasks?email=email&origin=$origin&UUID=123&encryptionSecret=secret'),
