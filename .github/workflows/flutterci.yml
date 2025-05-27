@@ -17,32 +17,32 @@ jobs:
     steps:
       # Step 1: Checkout the repository
       - uses: actions/checkout@v2
-      
+
       # Step 2: Setup Java with version 12.x
       - uses: actions/setup-java@v1
         with:
-          java-version: '12.x'
-      
+          java-version: "12.x"
+
       # Step 3: Setup Flutter with version 3.7.11
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '3.22.1'
-      
+          flutter-version: "3.29.2"
+
       # Step 4: Get dependencies using pub get
       - run: flutter pub get
-      
+
       # Step 5: Analyze the code using flutter analyze
       - run: flutter analyze
-      
+
       # Step 6: Format the code using flutter format (uncomment if needed)
       # - run: flutter format -n --set-exit-if-changed .
-      
+
       # Step 7: Run tests using flutter test
       # - run: flutter test
-      
+
       # Step 8: Build APK using flutter build apk
       - run: flutter build apk
-      
+
       # Step 9: Upload the built APK as an artifact
       - uses: actions/upload-artifact@v3
         with:
