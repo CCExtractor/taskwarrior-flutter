@@ -17,6 +17,8 @@ class BurnDownDaily extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     double height = MediaQuery.of(context).size.height;
     return Stack(
       children: [
@@ -40,9 +42,7 @@ class BurnDownDaily extends StatelessWidget {
                           textStyle: TextStyle(
                             fontFamily: FontFamily.poppins,
                             fontWeight: TaskWarriorFonts.bold,
-                            color: AppSettings.isDarkMode
-                                ? Colors.white
-                                : Colors.black,
+                            color: tColors.primaryTextColor,
                             fontSize: TaskWarriorFonts.fontSizeSmall,
                           ),
                         ),
@@ -56,9 +56,7 @@ class BurnDownDaily extends StatelessWidget {
                           textStyle: TextStyle(
                             fontFamily: FontFamily.poppins,
                             fontWeight: TaskWarriorFonts.bold,
-                            color: AppSettings.isDarkMode
-                                ? Colors.white
-                                : Colors.black,
+                            color: tColors.primaryTextColor,
                             fontSize: TaskWarriorFonts.fontSizeSmall,
                           ),
                         ),

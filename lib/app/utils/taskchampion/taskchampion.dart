@@ -3,9 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
@@ -13,7 +13,8 @@ class ManageTaskChampionCreds extends StatelessWidget {
   final TextEditingController _encryptionSecretController =
       TextEditingController();
   final TextEditingController _clientIdController = TextEditingController();
-  final TextEditingController _ccsyncBackendUrlController = TextEditingController();
+  final TextEditingController _ccsyncBackendUrlController =
+      TextEditingController();
 
   ManageTaskChampionCreds({super.key}) {
     _loadCredentials();
@@ -39,6 +40,8 @@ class ManageTaskChampionCreds extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
@@ -73,9 +76,7 @@ class ManageTaskChampionCreds extends StatelessWidget {
           color: TaskWarriorColors.white,
         ),
       ),
-      backgroundColor: AppSettings.isDarkMode
-          ? TaskWarriorColors.kprimaryBackgroundColor
-          : TaskWarriorColors.kLightPrimaryBackgroundColor,
+      backgroundColor: tColors.primaryBackgroundColor,
       body: Padding(
         padding: const EdgeInsets.only(left: 20, right: 20),
         child: ListView(
@@ -87,17 +88,13 @@ class ManageTaskChampionCreds extends StatelessWidget {
                 children: [
                   TextField(
                     style: TextStyle(
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.white
-                          : TaskWarriorColors.black,
+                      color: tColors.primaryTextColor,
                     ),
                     controller: _encryptionSecretController,
                     decoration: InputDecoration(
                       labelText: 'Encryption Secret',
                       labelStyle: TextStyle(
-                        color: AppSettings.isDarkMode
-                            ? TaskWarriorColors.white
-                            : TaskWarriorColors.black,
+                        color: tColors.primaryTextColor,
                       ),
                       border: const OutlineInputBorder(),
                     ),
@@ -105,17 +102,13 @@ class ManageTaskChampionCreds extends StatelessWidget {
                   const SizedBox(height: 10),
                   TextField(
                     style: TextStyle(
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.white
-                          : TaskWarriorColors.black,
+                      color: tColors.primaryTextColor,
                     ),
                     controller: _clientIdController,
                     decoration: InputDecoration(
                       labelText: 'Client ID',
                       labelStyle: TextStyle(
-                        color: AppSettings.isDarkMode
-                            ? TaskWarriorColors.white
-                            : TaskWarriorColors.black,
+                        color: tColors.primaryTextColor,
                       ),
                       border: const OutlineInputBorder(),
                     ),
@@ -123,17 +116,13 @@ class ManageTaskChampionCreds extends StatelessWidget {
                   const SizedBox(height: 10),
                   TextField(
                     style: TextStyle(
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.white
-                          : TaskWarriorColors.black,
+                      color: tColors.primaryTextColor,
                     ),
                     controller: _ccsyncBackendUrlController,
                     decoration: InputDecoration(
                       labelText: 'CCSync Backend URL',
                       labelStyle: TextStyle(
-                        color: AppSettings.isDarkMode
-                            ? TaskWarriorColors.white
-                            : TaskWarriorColors.black,
+                        color: tColors.primaryTextColor,
                       ),
                       border: const OutlineInputBorder(),
                     ),
@@ -148,9 +137,7 @@ class ManageTaskChampionCreds extends StatelessWidget {
                     'Tip: Click on the info icon in the top right corner to get your credentials',
                     style: TextStyle(
                       fontSize: 15,
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.white
-                          : TaskWarriorColors.black,
+                      color: tColors.primaryTextColor,
                     ),
                   ),
                 ],
