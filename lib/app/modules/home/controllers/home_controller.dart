@@ -57,6 +57,8 @@ class HomeController extends GetxController {
   late TaskDatabase taskdb;
   var tasks = <Tasks>[].obs;
   final RxBool isRefreshing = false.obs;
+  final RxBool isFilterTourActive = false.obs;
+  final RxBool isHomeTourActive = false.obs;
 
   @override
   void onInit() {
@@ -608,6 +610,7 @@ class HomeController extends GetxController {
         opacityShadow: 0.8,
         hideSkip: true,
         onFinish: () {
+          isHomeTourActive.value = false;
           SaveTourStatus.saveInAppTourStatus(true);
         });
   }
@@ -619,6 +622,7 @@ class HomeController extends GetxController {
         SaveTourStatus.getInAppTourStatus().then((value) => {
               if (value == false)
                 {
+                  isHomeTourActive.value = true,
                   tutorialCoachMark.show(context: context),
                 }
               else
@@ -652,6 +656,7 @@ class HomeController extends GetxController {
       opacityShadow: 1.00,
       hideSkip: true,
       onFinish: () {
+        isFilterTourActive.value = false;
         SaveTourStatus.saveFilterTourStatus(true);
       },
     );
@@ -664,6 +669,7 @@ class HomeController extends GetxController {
         SaveTourStatus.getFilterTourStatus().then((value) => {
               if (value == false)
                 {
+                  isFilterTourActive.value = true,
                   tutorialCoachMark.show(context: context),
                 }
               else

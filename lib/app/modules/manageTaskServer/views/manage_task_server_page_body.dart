@@ -20,521 +20,553 @@ class ManageTaskServerPageBody extends StatelessWidget {
   Widget build(BuildContext context) {
     controller.initManageTaskServerPageTour();
     controller.showManageTaskServerPageTour(context);
-    return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 20),
-      child: ListView(
-        // mainAxisAlignment: MainAxisAlignment.start,
-        // crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            key: controller.configureTaskRC,
-            padding: const EdgeInsets.only(
-              top: 10,
-              bottom: 10,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  SentenceManager(currentLanguage: AppSettings.selectedLanguage)
-                      .sentences
-                      .manageTaskServerPageConfigureTASKRC,
-                  style: TextStyle(
-                    color: AppSettings.isDarkMode
-                        ? TaskWarriorColors.white
-                        : TaskWarriorColors.black,
-                  ),
+    return Obx(() => PopScope(
+        canPop: !controller.isManageServerTourActive.value,
+        onPopInvokedWithResult: (didPop, result) async {
+          if (controller.isManageServerTourActive.value) {
+            Get.closeAllSnackbars();
+            Get.snackbar(
+              'Tour Active',
+              'Please complete the tour before navigating back.',
+              snackPosition: SnackPosition.BOTTOM,
+            );
+            return;
+          }
+        },
+        child: Padding(
+          padding: const EdgeInsets.only(left: 20, right: 20),
+          child: ListView(
+            // mainAxisAlignment: MainAxisAlignment.start,
+            // crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                key: controller.configureTaskRC,
+                padding: const EdgeInsets.only(
+                  top: 10,
+                  bottom: 10,
                 ),
-                const SizedBox(height: 10),
-                GestureDetector(
-                  onTap: () {
-                    showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      backgroundColor: AppSettings.isDarkMode
-                          ? TaskWarriorColors.kdialogBackGroundColor
-                          : TaskWarriorColors.kLightDialogBackGroundColor,
-                      builder: (context) {
-                        return StatefulBuilder(
-                          builder:
-                              (BuildContext context, StateSetter setState) {
-                            // double heightOfModalBottomSheet =
-                            //     MediaQuery.of(context).size.height * 0.6;
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      SentenceManager(
+                              currentLanguage: AppSettings.selectedLanguage)
+                          .sentences
+                          .manageTaskServerPageConfigureTASKRC,
+                      style: TextStyle(
+                        color: AppSettings.isDarkMode
+                            ? TaskWarriorColors.white
+                            : TaskWarriorColors.black,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    GestureDetector(
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          backgroundColor: AppSettings.isDarkMode
+                              ? TaskWarriorColors.kdialogBackGroundColor
+                              : TaskWarriorColors.kLightDialogBackGroundColor,
+                          builder: (context) {
+                            return StatefulBuilder(
+                              builder:
+                                  (BuildContext context, StateSetter setState) {
+                                // double heightOfModalBottomSheet =
+                                //     MediaQuery.of(context).size.height * 0.6;
 
-                            return Padding(
-                              padding: MediaQuery.of(context).viewInsets,
-                              child: Wrap(
-                                children: [
-                                  Container(
-                                    // height: heightOfModalBottomSheet,
-                                    padding: const EdgeInsets.all(16.0),
-                                    decoration: const BoxDecoration(
-                                      // color: tileColor,
-                                      borderRadius: BorderRadius.vertical(
-                                          top: Radius.circular(16.0)),
-                                    ),
+                                return Padding(
+                                  padding: MediaQuery.of(context).viewInsets,
+                                  child: Wrap(
+                                    children: [
+                                      Container(
+                                        // height: heightOfModalBottomSheet,
+                                        padding: const EdgeInsets.all(16.0),
+                                        decoration: const BoxDecoration(
+                                          // color: tileColor,
+                                          borderRadius: BorderRadius.vertical(
+                                              top: Radius.circular(16.0)),
+                                        ),
 
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          SentenceManager(
-                                                  currentLanguage: AppSettings
-                                                      .selectedLanguage)
-                                              .sentences
-                                              .manageTaskServerPageConfigureTaskRCDialogueBoxTitle,
-                                          style: TextStyle(
-                                            fontWeight: TaskWarriorFonts.bold,
-                                            color: AppSettings.isDarkMode
-                                                ? TaskWarriorColors.white
-                                                : TaskWarriorColors.black,
-                                          ),
-                                        ),
-                                        Text(
-                                          SentenceManager(
-                                                  currentLanguage: AppSettings
-                                                      .selectedLanguage)
-                                              .sentences
-                                              .manageTaskServerPageConfigureTaskRCDialogueBoxSubtitle,
-                                          style: TextStyle(
-                                            color: AppSettings.isDarkMode
-                                                ? TaskWarriorColors.white
-                                                : TaskWarriorColors.black,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 16.0),
-                                        Padding(
-                                          padding: const EdgeInsets.all(12.0),
-                                          child: SizedBox(
-                                            height: Get.height * 0.15,
-                                            child: TextField(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              SentenceManager(
+                                                      currentLanguage:
+                                                          AppSettings
+                                                              .selectedLanguage)
+                                                  .sentences
+                                                  .manageTaskServerPageConfigureTaskRCDialogueBoxTitle,
                                               style: TextStyle(
-                                                  color: AppSettings.isDarkMode
-                                                      ? TaskWarriorColors.white
-                                                      : TaskWarriorColors
-                                                          .black),
-                                              controller: controller
-                                                  .taskrcContentController,
-                                              maxLines: 8,
-                                              decoration: InputDecoration(
-                                                counterStyle: TextStyle(
-                                                    color:
-                                                        AppSettings.isDarkMode
+                                                fontWeight:
+                                                    TaskWarriorFonts.bold,
+                                                color: AppSettings.isDarkMode
+                                                    ? TaskWarriorColors.white
+                                                    : TaskWarriorColors.black,
+                                              ),
+                                            ),
+                                            Text(
+                                              SentenceManager(
+                                                      currentLanguage:
+                                                          AppSettings
+                                                              .selectedLanguage)
+                                                  .sentences
+                                                  .manageTaskServerPageConfigureTaskRCDialogueBoxSubtitle,
+                                              style: TextStyle(
+                                                color: AppSettings.isDarkMode
+                                                    ? TaskWarriorColors.white
+                                                    : TaskWarriorColors.black,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 16.0),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(12.0),
+                                              child: SizedBox(
+                                                height: Get.height * 0.15,
+                                                child: TextField(
+                                                  style: TextStyle(
+                                                      color:
+                                                          AppSettings.isDarkMode
+                                                              ? TaskWarriorColors
+                                                                  .white
+                                                              : TaskWarriorColors
+                                                                  .black),
+                                                  controller: controller
+                                                      .taskrcContentController,
+                                                  maxLines: 8,
+                                                  decoration: InputDecoration(
+                                                    counterStyle: TextStyle(
+                                                        color: AppSettings.isDarkMode
                                                             ? TaskWarriorColors
                                                                 .white
                                                             : TaskWarriorColors
                                                                 .black),
-                                                suffixIconConstraints:
-                                                    const BoxConstraints(
-                                                  maxHeight: 24,
-                                                  maxWidth: 24,
+                                                    suffixIconConstraints:
+                                                        const BoxConstraints(
+                                                      maxHeight: 24,
+                                                      maxWidth: 24,
+                                                    ),
+                                                    isDense: true,
+                                                    suffix: IconButton(
+                                                      onPressed: () async {
+                                                        controller.setContent(
+                                                            context);
+                                                      },
+                                                      icon: const Icon(
+                                                          Icons.content_paste),
+                                                    ),
+                                                    border:
+                                                        const OutlineInputBorder(),
+                                                    labelStyle: GoogleFonts
+                                                        .poppins(
+                                                            color: AppSettings
+                                                                    .isDarkMode
+                                                                ? TaskWarriorColors
+                                                                    .white
+                                                                : TaskWarriorColors
+                                                                    .black),
+                                                    labelText: SentenceManager(
+                                                            currentLanguage:
+                                                                AppSettings
+                                                                    .selectedLanguage)
+                                                        .sentences
+                                                        .manageTaskServerPageConfigureTaskRCDialogueBoxInputFieldText,
+                                                  ),
                                                 ),
-                                                isDense: true,
-                                                suffix: IconButton(
-                                                  onPressed: () async {
-                                                    controller
-                                                        .setContent(context);
-                                                  },
-                                                  icon: const Icon(
-                                                      Icons.content_paste),
-                                                ),
-                                                border:
-                                                    const OutlineInputBorder(),
-                                                labelStyle: GoogleFonts.poppins(
-                                                    color:
-                                                        AppSettings.isDarkMode
-                                                            ? TaskWarriorColors
-                                                                .white
-                                                            : TaskWarriorColors
-                                                                .black),
-                                                labelText: SentenceManager(
+                                              ),
+                                            ),
+                                            Text(
+                                              SentenceManager(
+                                                      currentLanguage:
+                                                          AppSettings
+                                                              .selectedLanguage)
+                                                  .sentences
+                                                  .manageTaskServerPageConfigureTaskRCDialogueBoxOr,
+                                              style: TextStyle(
+                                                color: AppSettings.isDarkMode
+                                                    ? TaskWarriorColors.white
+                                                    : TaskWarriorColors.black,
+                                              ),
+                                            ),
+                                            FilledButton.tonal(
+                                              style: ButtonStyle(
+                                                  backgroundColor: AppSettings
+                                                          .isDarkMode
+                                                      ? WidgetStateProperty.all<
+                                                              Color>(
+                                                          TaskWarriorColors
+                                                              .black)
+                                                      : WidgetStateProperty.all<
+                                                              Color>(
+                                                          TaskWarriorColors
+                                                              .white)),
+                                              onPressed: () async {
+                                                await setConfig(
+                                                  storage: controller.storage,
+                                                  key: 'TASKRC',
+                                                );
+                                                setState(() {});
+                                                Get.back();
+                                              },
+                                              child: Text(
+                                                SentenceManager(
                                                         currentLanguage:
                                                             AppSettings
                                                                 .selectedLanguage)
                                                     .sentences
-                                                    .manageTaskServerPageConfigureTaskRCDialogueBoxInputFieldText,
+                                                    .manageTaskServerPageConfigureTaskRCDialogueBoxSelectTaskRC,
+                                                style: TextStyle(
+                                                  color: AppSettings.isDarkMode
+                                                      ? TaskWarriorColors.white
+                                                      : TaskWarriorColors.black,
+                                                ),
                                               ),
                                             ),
-                                          ),
+                                          ],
                                         ),
-                                        Text(
-                                          SentenceManager(
-                                                  currentLanguage: AppSettings
-                                                      .selectedLanguage)
-                                              .sentences
-                                              .manageTaskServerPageConfigureTaskRCDialogueBoxOr,
-                                          style: TextStyle(
-                                            color: AppSettings.isDarkMode
-                                                ? TaskWarriorColors.white
-                                                : TaskWarriorColors.black,
-                                          ),
-                                        ),
-                                        FilledButton.tonal(
-                                          style: ButtonStyle(
-                                              backgroundColor: AppSettings
-                                                      .isDarkMode
-                                                  ? WidgetStateProperty.all<
-                                                          Color>(
-                                                      TaskWarriorColors.black)
-                                                  : WidgetStateProperty.all<
-                                                          Color>(
-                                                      TaskWarriorColors.white)),
-                                          onPressed: () async {
-                                            await setConfig(
-                                              storage: controller.storage,
-                                              key: 'TASKRC',
-                                            );
-                                            setState(() {});
-                                            Get.back();
-                                          },
-                                          child: Text(
-                                            SentenceManager(
-                                                    currentLanguage: AppSettings
-                                                        .selectedLanguage)
-                                                .sentences
-                                                .manageTaskServerPageConfigureTaskRCDialogueBoxSelectTaskRC,
-                                            style: TextStyle(
-                                              color: AppSettings.isDarkMode
-                                                  ? TaskWarriorColors.white
-                                                  : TaskWarriorColors.black,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
+                                );
+                              },
                             );
                           },
                         );
                       },
-                    );
-                  },
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 1,
-                    //   height: MediaQuery.of(context).size.height * 0.05,
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      // color: tileColor,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: TaskWarriorColors.borderColor),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          controller.taskrcContentController.text.isEmpty
-                              ? SentenceManager(
-                                      currentLanguage:
-                                          AppSettings.selectedLanguage)
-                                  .sentences
-                                  .manageTaskServerPageSetTaskRC
-                              : SentenceManager(
-                                      currentLanguage:
-                                          AppSettings.selectedLanguage)
-                                  .sentences
-                                  .manageTaskServerPageTaskRCFileIsVerified,
-                          style: TextStyle(
-                            color: AppSettings.isDarkMode
-                                ? TaskWarriorColors.white
-                                : TaskWarriorColors.black,
-                          ),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 1,
+                        //   height: MediaQuery.of(context).size.height * 0.05,
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          // color: tileColor,
+                          borderRadius: BorderRadius.circular(8),
+                          border:
+                              Border.all(color: TaskWarriorColors.borderColor),
                         ),
-                        Container(
-                          height: 30,
-                          width: 30,
-                          decoration: BoxDecoration(
-                            color: AppSettings.isDarkMode
-                                ? TaskWarriorColors
-                                    .kLightSecondaryBackgroundColor
-                                : TaskWarriorColors.ksecondaryBackgroundColor,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Center(
-                            child: controller
-                                    .taskrcContentController.text.isNotEmpty
-                                ? Icon(
-                                    Icons.check,
-                                    color: TaskWarriorColors.green,
-                                  )
-                                : Icon(
-                                    Icons.chevron_right_rounded,
-                                    color: AppSettings.isDarkMode
-                                        ? TaskWarriorColors.black
-                                        : TaskWarriorColors.white,
-                                  ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Offstage(
-              offstage: controller.isTaskDServerActive.value,
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      top: 10,
-                      bottom: 10,
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "TaskD Server Info",
-                          style: TextStyle(
-                            color: AppSettings.isDarkMode
-                                ? TaskWarriorColors.white
-                                : TaskWarriorColors.black,
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 1,
-                            //   height: MediaQuery.of(context).size.height * 0.05,
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              // color: tileColor,
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(
-                                color: TaskWarriorColors.borderColor,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              controller.taskrcContentController.text.isEmpty
+                                  ? SentenceManager(
+                                          currentLanguage:
+                                              AppSettings.selectedLanguage)
+                                      .sentences
+                                      .manageTaskServerPageSetTaskRC
+                                  : SentenceManager(
+                                          currentLanguage:
+                                              AppSettings.selectedLanguage)
+                                      .sentences
+                                      .manageTaskServerPageTaskRCFileIsVerified,
+                              style: TextStyle(
+                                color: AppSettings.isDarkMode
+                                    ? TaskWarriorColors.white
+                                    : TaskWarriorColors.black,
                               ),
                             ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                controller.server == null
-                                    ? Text(
-                                        'Not Configured',
-                                        style: TextStyle(
-                                          color: AppSettings.isDarkMode
-                                              ? TaskWarriorColors.white
-                                              : TaskWarriorColors.black,
-                                        ),
+                            Container(
+                              height: 30,
+                              width: 30,
+                              decoration: BoxDecoration(
+                                color: AppSettings.isDarkMode
+                                    ? TaskWarriorColors
+                                        .kLightSecondaryBackgroundColor
+                                    : TaskWarriorColors
+                                        .ksecondaryBackgroundColor,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Center(
+                                child: controller
+                                        .taskrcContentController.text.isNotEmpty
+                                    ? Icon(
+                                        Icons.check,
+                                        color: TaskWarriorColors.green,
                                       )
-                                    : Text(
-                                        '${controller.server}',
-                                        style: TextStyle(
-                                          color: AppSettings.isDarkMode
-                                              ? TaskWarriorColors.white
-                                              : TaskWarriorColors.black,
-                                        ),
+                                    : Icon(
+                                        Icons.chevron_right_rounded,
+                                        color: AppSettings.isDarkMode
+                                            ? TaskWarriorColors.black
+                                            : TaskWarriorColors.white,
                                       ),
-                                Container(
-                                  height: 30,
-                                  width: 30,
-                                  decoration: BoxDecoration(
-                                    color: AppSettings.isDarkMode
-                                        ? TaskWarriorColors
-                                            .kLightSecondaryBackgroundColor
-                                        : TaskWarriorColors
-                                            .ksecondaryBackgroundColor,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: Center(
-                                    child: controller.server != null
-                                        ? Icon(
-                                            Icons.check,
-                                            color: TaskWarriorColors.green,
-                                          )
-                                        : Icon(
-                                            Icons.chevron_right_rounded,
-                                            color: AppSettings.isDarkMode
-                                                ? TaskWarriorColors.black
-                                                : TaskWarriorColors.white,
-                                          ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Offstage(
+                  offstage: controller.isTaskDServerActive.value,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 10,
+                          bottom: 10,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "TaskD Server Info",
+                              style: TextStyle(
+                                color: AppSettings.isDarkMode
+                                    ? TaskWarriorColors.white
+                                    : TaskWarriorColors.black,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            GestureDetector(
+                              onTap: () {},
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 1,
+                                //   height: MediaQuery.of(context).size.height * 0.05,
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  // color: tileColor,
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                    color: TaskWarriorColors.borderColor,
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      top: 10,
-                      bottom: 10,
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "TaskD Server Credentials",
-                          style: TextStyle(
-                            color: AppSettings.isDarkMode
-                                ? TaskWarriorColors.white
-                                : TaskWarriorColors.black,
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 1,
-                            //   height: MediaQuery.of(context).size.height * 0.05,
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              // color: tileColor,
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(
-                                  color: TaskWarriorColors.borderColor),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                controller.credentialsString == null
-                                    ? Text(
-                                        'Not Configured',
-                                        style: TextStyle(
-                                          color: AppSettings.isDarkMode
-                                              ? TaskWarriorColors.white
-                                              : TaskWarriorColors.black,
-                                        ),
-                                      )
-                                    : SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.7,
-                                        child: SingleChildScrollView(
-                                          scrollDirection: Axis.horizontal,
-                                          child: Text(
-                                            controller.credentialsString!.value,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    controller.server == null
+                                        ? Text(
+                                            'Not Configured',
+                                            style: TextStyle(
+                                              color: AppSettings.isDarkMode
+                                                  ? TaskWarriorColors.white
+                                                  : TaskWarriorColors.black,
+                                            ),
+                                          )
+                                        : Text(
+                                            '${controller.server}',
                                             style: TextStyle(
                                               color: AppSettings.isDarkMode
                                                   ? TaskWarriorColors.white
                                                   : TaskWarriorColors.black,
                                             ),
                                           ),
-                                        ),
+                                    Container(
+                                      height: 30,
+                                      width: 30,
+                                      decoration: BoxDecoration(
+                                        color: AppSettings.isDarkMode
+                                            ? TaskWarriorColors
+                                                .kLightSecondaryBackgroundColor
+                                            : TaskWarriorColors
+                                                .ksecondaryBackgroundColor,
+                                        shape: BoxShape.circle,
                                       ),
-                                GestureDetector(
-                                  onTap: () {
-                                    controller.hideKey.value =
-                                        !controller.hideKey.value;
-                                  },
-                                  child: Container(
-                                    height: 30,
-                                    width: 30,
-                                    decoration: BoxDecoration(
-                                      color: AppSettings.isDarkMode
-                                          ? TaskWarriorColors
-                                              .kLightPrimaryBackgroundColor
-                                          : TaskWarriorColors
-                                              .kprimaryBackgroundColor,
-                                      shape: BoxShape.circle,
+                                      child: Center(
+                                        child: controller.server != null
+                                            ? Icon(
+                                                Icons.check,
+                                                color: TaskWarriorColors.green,
+                                              )
+                                            : Icon(
+                                                Icons.chevron_right_rounded,
+                                                color: AppSettings.isDarkMode
+                                                    ? TaskWarriorColors.black
+                                                    : TaskWarriorColors.white,
+                                              ),
+                                      ),
                                     ),
-                                    child: controller.credentials == null
-                                        ? Icon(
-                                            Icons.chevron_right_rounded,
-                                            color: AppSettings.isDarkMode
-                                                ? TaskWarriorColors.black
-                                                : TaskWarriorColors.white,
-                                          )
-                                        : Icon(
-                                            controller.hideKey.value
-                                                ? Icons.visibility_off
-                                                : Icons.visibility,
-                                            color: AppSettings.isDarkMode
-                                                ? TaskWarriorColors.green
-                                                : TaskWarriorColors.green,
-                                          ),
-                                  ),
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
-                ],
-              )),
-          GetBuilder<ManageTaskServerController>(
-            builder: (controller) {
-              List<Widget> pemWidgets = [];
-              for (var pem in [
-                'taskd.certificate',
-                'taskd.key',
-                'taskd.ca',
-                if (controller.homeController.serverCertExists.value)
-                  'server.cert',
-              ]) {
-                pemWidgets.add(
-                  PemWidget(
-                    storage: controller.storage,
-                    pem: pem,
-                    optionString: pem == "taskd.certificate"
-                        ? SentenceManager(
-                                currentLanguage: AppSettings.selectedLanguage)
-                            .sentences
-                            .manageTaskServerPageConfigureYourCertificate
-                        : pem == "taskd.key"
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 10,
+                          bottom: 10,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "TaskD Server Credentials",
+                              style: TextStyle(
+                                color: AppSettings.isDarkMode
+                                    ? TaskWarriorColors.white
+                                    : TaskWarriorColors.black,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            GestureDetector(
+                              onTap: () {},
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 1,
+                                //   height: MediaQuery.of(context).size.height * 0.05,
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  // color: tileColor,
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                      color: TaskWarriorColors.borderColor),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    controller.credentialsString == null
+                                        ? Text(
+                                            'Not Configured',
+                                            style: TextStyle(
+                                              color: AppSettings.isDarkMode
+                                                  ? TaskWarriorColors.white
+                                                  : TaskWarriorColors.black,
+                                            ),
+                                          )
+                                        : SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.7,
+                                            child: SingleChildScrollView(
+                                              scrollDirection: Axis.horizontal,
+                                              child: Text(
+                                                controller
+                                                    .credentialsString!.value,
+                                                style: TextStyle(
+                                                  color: AppSettings.isDarkMode
+                                                      ? TaskWarriorColors.white
+                                                      : TaskWarriorColors.black,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        controller.hideKey.value =
+                                            !controller.hideKey.value;
+                                      },
+                                      child: Container(
+                                        height: 30,
+                                        width: 30,
+                                        decoration: BoxDecoration(
+                                          color: AppSettings.isDarkMode
+                                              ? TaskWarriorColors
+                                                  .kLightPrimaryBackgroundColor
+                                              : TaskWarriorColors
+                                                  .kprimaryBackgroundColor,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: controller.credentials == null
+                                            ? Icon(
+                                                Icons.chevron_right_rounded,
+                                                color: AppSettings.isDarkMode
+                                                    ? TaskWarriorColors.black
+                                                    : TaskWarriorColors.white,
+                                              )
+                                            : Icon(
+                                                controller.hideKey.value
+                                                    ? Icons.visibility_off
+                                                    : Icons.visibility,
+                                                color: AppSettings.isDarkMode
+                                                    ? TaskWarriorColors.green
+                                                    : TaskWarriorColors.green,
+                                              ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )),
+              GetBuilder<ManageTaskServerController>(
+                builder: (controller) {
+                  List<Widget> pemWidgets = [];
+                  for (var pem in [
+                    'taskd.certificate',
+                    'taskd.key',
+                    'taskd.ca',
+                    if (controller.homeController.serverCertExists.value)
+                      'server.cert',
+                  ]) {
+                    pemWidgets.add(
+                      PemWidget(
+                        storage: controller.storage,
+                        pem: pem,
+                        optionString: pem == "taskd.certificate"
                             ? SentenceManager(
                                     currentLanguage:
                                         AppSettings.selectedLanguage)
                                 .sentences
-                                .manageTaskServerPageConfigureTaskserverKey
-                            : pem == "taskd.ca"
+                                .manageTaskServerPageConfigureYourCertificate
+                            : pem == "taskd.key"
                                 ? SentenceManager(
                                         currentLanguage:
                                             AppSettings.selectedLanguage)
                                     .sentences
-                                    .manageTaskServerPageConfigureServerCertificate
-                                : SentenceManager(
-                                        currentLanguage:
-                                            AppSettings.selectedLanguage)
-                                    .sentences
-                                    .manageTaskServerPageConfigureServerCertificate,
-                    listTileTitle: pem == "taskd.certificate"
-                        ? SentenceManager(
-                                currentLanguage: AppSettings.selectedLanguage)
-                            .sentences
-                            .manageTaskServerPageSelectCertificate
-                        : pem == "taskd.key"
+                                    .manageTaskServerPageConfigureTaskserverKey
+                                : pem == "taskd.ca"
+                                    ? SentenceManager(
+                                            currentLanguage:
+                                                AppSettings.selectedLanguage)
+                                        .sentences
+                                        .manageTaskServerPageConfigureServerCertificate
+                                    : SentenceManager(
+                                            currentLanguage:
+                                                AppSettings.selectedLanguage)
+                                        .sentences
+                                        .manageTaskServerPageConfigureServerCertificate,
+                        listTileTitle: pem == "taskd.certificate"
                             ? SentenceManager(
                                     currentLanguage:
                                         AppSettings.selectedLanguage)
                                 .sentences
-                                .manageTaskServerPageSelectKey
-                            : pem == "taskd.ca"
+                                .manageTaskServerPageSelectCertificate
+                            : pem == "taskd.key"
                                 ? SentenceManager(
                                         currentLanguage:
                                             AppSettings.selectedLanguage)
                                     .sentences
-                                    .manageTaskServerPageSelectCertificate
-                                : SentenceManager(
-                                        currentLanguage:
-                                            AppSettings.selectedLanguage)
-                                    .sentences
-                                    .manageTaskServerPageSelectCertificate,
-                    onTapCallBack: controller.onTapPEMWidget,
-                    onLongPressCallBack: controller.onLongPressPEMWidget,
-                    globalKey: controller.getGlobalKey(pem),
-                  ),
-                );
-              }
-              return Column(
-                children: pemWidgets,
-              );
-            },
-          )
-        ],
-      ),
-    );
+                                    .manageTaskServerPageSelectKey
+                                : pem == "taskd.ca"
+                                    ? SentenceManager(
+                                            currentLanguage:
+                                                AppSettings.selectedLanguage)
+                                        .sentences
+                                        .manageTaskServerPageSelectCertificate
+                                    : SentenceManager(
+                                            currentLanguage:
+                                                AppSettings.selectedLanguage)
+                                        .sentences
+                                        .manageTaskServerPageSelectCertificate,
+                        onTapCallBack: controller.onTapPEMWidget,
+                        onLongPressCallBack: controller.onLongPressPEMWidget,
+                        globalKey: controller.getGlobalKey(pem),
+                      ),
+                    );
+                  }
+                  return Column(
+                    children: pemWidgets,
+                  );
+                },
+              )
+            ],
+          ),
+        )));
   }
 }

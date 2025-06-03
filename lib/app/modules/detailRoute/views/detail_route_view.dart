@@ -22,80 +22,92 @@ class DetailRouteView extends GetView<DetailRouteController> {
   Widget build(BuildContext context) {
     controller.initDetailsPageTour();
     controller.showDetailsPageTour(context);
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) async {
+        if (didPop) return;
+
+        if (controller.isTourActive.value) {
+          return;
+        }
+
         if (!controller.onEdit.value) {
           // Get.offAll(() => const HomeView());
           Get.back();
-          // Get.toNamed(Routes.HOME);
-          return false;
+          return;
         }
 
-        bool? save = await showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              backgroundColor: AppSettings.isDarkMode
-                  ? TaskWarriorColors.kdialogBackGroundColor
-                  : TaskWarriorColors.kLightDialogBackGroundColor,
-              title: Text(
-                'Do you want to save changes?',
-                style: TextStyle(
-                  color: AppSettings.isDarkMode
-                      ? TaskWarriorColors.white
-                      : TaskWarriorColors.black,
+        bool? done = await Get.dialog(
+          AlertDialog(
+            backgroundColor: AppSettings.isDarkMode
+                ? TaskWarriorColors.kdialogBackGroundColor
+                : TaskWarriorColors.kLightDialogBackGroundColor,
+            title: Text(
+              'Do you want to save changes?',
+              style: TextStyle(
+                color: AppSettings.isDarkMode
+                    ? TaskWarriorColors.white
+                    : TaskWarriorColors.black,
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  controller.saveChanges();
+                },
+                child: Text(
+                  'Yes',
+                  style: TextStyle(
+                    color: AppSettings.isDarkMode
+                        ? TaskWarriorColors.white
+                        : TaskWarriorColors.black,
+                  ),
                 ),
               ),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    controller.saveChanges();
-                    // Get.offAll(() => const HomeView());
-
-                    Get.back();
-                  },
-                  child: Text(
-                    'Yes',
-                    style: TextStyle(
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.white
-                          : TaskWarriorColors.black,
-                    ),
+              TextButton(
+                onPressed: () {
+                  Get.back(result: true);
+                  controller.onEdit.value = false;
+                },
+                child: Text(
+                  'No',
+                  style: TextStyle(
+                    color: AppSettings.isDarkMode
+                        ? TaskWarriorColors.white
+                        : TaskWarriorColors.black,
                   ),
                 ),
-                TextButton(
-                  onPressed: () {
-                    // Get.offAll(() => const HomeView());
-
-                    Get.back();
-                  },
-                  child: Text(
-                    'No',
-                    style: TextStyle(
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.white
-                          : TaskWarriorColors.black,
-                    ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Get.back(result: false);
+                },
+                child: Text(
+                  'Cancel',
+                  style: TextStyle(
+                    color: AppSettings.isDarkMode
+                        ? TaskWarriorColors.white
+                        : TaskWarriorColors.black,
                   ),
                 ),
-                TextButton(
-                  onPressed: () {
-                    Get.back();
-                  },
-                  child: Text(
-                    'Cancel',
-                    style: TextStyle(
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.white
-                          : TaskWarriorColors.black,
-                    ),
-                  ),
-                ),
-              ],
-            );
-          },
+              ),
+            ],
+          ),
+          barrierDismissible: false,
         );
-        return save == true;
+        //runs when 'yes' or 'no' is clicked
+        if (done == true) {
+          Get.back();
+          // only runs when 'yes' is clicked
+          if (controller.onEdit.value==true) {
+            controller.onEdit.value = false;
+            Get.snackbar(
+              'Task Updated',
+              '',
+              snackPosition: SnackPosition.BOTTOM,
+            );
+          }
+        }
       },
       child: Scaffold(
           backgroundColor: AppSettings.isDarkMode
@@ -159,28 +171,40 @@ class DetailRouteView extends GetView<DetailRouteController> {
                       : TaskWarriorColors.white,
                   heroTag: "btn1",
                   onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          scrollable: true,
-                          title: Text(
-                            'Review changes:',
+                    Get.dialog(
+                      AlertDialog(
+                        scrollable: true,
+                        title: Text(
+                          'Review changes:',
+                          style: TextStyle(
+                            color: AppSettings.isDarkMode
+                                ? TaskWarriorColors.white
+                                : TaskWarriorColors.black,
+                          ),
+                        ),
+                        content: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Text(
+                            controller.modify.changes.entries
+                                .map((entry) => '${entry.key}:\n'
+                                    '  old: ${entry.value['old']}\n'
+                                    '  new: ${entry.value['new']}')
+                                .toList()
+                                .join('\n'),
                             style: TextStyle(
                               color: AppSettings.isDarkMode
                                   ? TaskWarriorColors.white
                                   : TaskWarriorColors.black,
                             ),
                           ),
-                          content: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Get.back();
+                            },
                             child: Text(
-                              controller.modify.changes.entries
-                                  .map((entry) => '${entry.key}:\n'
-                                      '  old: ${entry.value['old']}\n'
-                                      '  new: ${entry.value['new']}')
-                                  .toList()
-                                  .join('\n'),
+                              'Cancel',
                               style: TextStyle(
                                 color: AppSettings.isDarkMode
                                     ? TaskWarriorColors.white
@@ -188,36 +212,21 @@ class DetailRouteView extends GetView<DetailRouteController> {
                               ),
                             ),
                           ),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Get.back();
-                              },
-                              child: Text(
-                                'Cancel',
-                                style: TextStyle(
-                                  color: AppSettings.isDarkMode
-                                      ? TaskWarriorColors.white
-                                      : TaskWarriorColors.black,
-                                ),
+                          ElevatedButton(
+                            onPressed: () {
+                              controller.saveChanges();
+                            },
+                            child: Text(
+                              'Submit',
+                              style: TextStyle(
+                                color: AppSettings.isDarkMode
+                                    ? TaskWarriorColors.black
+                                    : TaskWarriorColors.black,
                               ),
                             ),
-                            ElevatedButton(
-                              onPressed: () {
-                                controller.saveChanges();
-                              },
-                              child: Text(
-                                'Submit',
-                                style: TextStyle(
-                                  color: AppSettings.isDarkMode
-                                      ? TaskWarriorColors.black
-                                      : TaskWarriorColors.black,
-                                ),
-                              ),
-                            ),
-                          ],
-                        );
-                      },
+                          ),
+                        ],
+                      ),
                     );
                   },
                   child: const Icon(Icons.save),
@@ -385,15 +394,7 @@ class TagsWidget extends StatelessWidget {
                           color: AppSettings.isDarkMode
                               ? TaskWarriorColors.white
                               : TaskWarriorColors.black,
-                        )
-                        // style: GoogleFonts.poppins(
-                        //   fontWeight: TaskWarriorFonts.bold,
-                        //   fontSize: TaskWarriorFonts.fontSizeMedium,
-                        //   color: AppSettings.isDarkMode
-                        //       ? TaskWarriorColors.white
-                        //       : TaskWarriorColors.black,
-                        // ),
-                        ),
+                        )),
                     TextSpan(
                       text:
                           '${(value as ListBuilder?)?.build() ?? 'not selected'}',

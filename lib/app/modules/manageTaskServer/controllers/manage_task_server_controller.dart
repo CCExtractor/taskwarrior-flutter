@@ -26,6 +26,7 @@ class ManageTaskServerController extends GetxController {
   final TextEditingController taskrcContentController = TextEditingController();
   RxBool isTaskDServerActive = true.obs;
   RxBool hideKey = true.obs;
+  final RxBool isManageServerTourActive = false.obs;
 
   @override
   void onInit() {
@@ -220,6 +221,7 @@ class ManageTaskServerController extends GetxController {
       opacityShadow: 1.00,
       hideSkip: true,
       onFinish: () {
+        isManageServerTourActive.value = false;
         SaveTourStatus.saveManageTaskServerTourStatus(true);
       },
     );
@@ -232,6 +234,7 @@ class ManageTaskServerController extends GetxController {
         SaveTourStatus.getManageTaskServerTourStatus().then((value) => {
               if (value == false)
                 {
+                  isManageServerTourActive.value = true,
                   tutorialCoachMark.show(context: context),
                 }
               else

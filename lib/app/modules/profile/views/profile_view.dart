@@ -23,196 +23,214 @@ class ProfileView extends GetView<ProfileController> {
   Widget build(BuildContext context) {
     controller.initProfilePageTour();
     controller.showProfilePageTour(context);
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Palette.kToDark.shade200,
-        title: Obx(() => Text(
-              controller.profilesMap.length == 1
-                  ? SentenceManager(
-                          currentLanguage: AppSettings.selectedLanguage)
-                      .sentences
-                      .profilePageProfile
-                  : SentenceManager(
-                          currentLanguage: AppSettings.selectedLanguage)
-                      .sentences
-                      .profilePageProfiles,
-              style: GoogleFonts.poppins(
+    return Obx(() => PopScope(
+        canPop: !controller.isProfileTourActive.value,
+        onPopInvokedWithResult: (didPop, result) async {
+          if (controller.isProfileTourActive.value) {
+            Get.closeAllSnackbars();
+            Get.snackbar(
+              'Tour Active',
+              'Please complete the tour before navigating back.',
+              snackPosition: SnackPosition.BOTTOM,
+            );
+            return;
+          }
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Palette.kToDark.shade200,
+            title: Obx(() => Text(
+                  controller.profilesMap.length == 1
+                      ? SentenceManager(
+                              currentLanguage: AppSettings.selectedLanguage)
+                          .sentences
+                          .profilePageProfile
+                      : SentenceManager(
+                              currentLanguage: AppSettings.selectedLanguage)
+                          .sentences
+                          .profilePageProfiles,
+                  style: GoogleFonts.poppins(
+                    color: TaskWarriorColors.white,
+                  ),
+                )),
+            leading: IconButton(
+              onPressed: () {
+                // Navigator.pushReplacementNamed(context, PageRoutes.home);
+                // Navigator.of(context).pop();
+                Get.back();
+              },
+              icon: Icon(
+                Icons.chevron_left,
                 color: TaskWarriorColors.white,
+                size: 30,
               ),
-            )),
-        leading: IconButton(
-          onPressed: () {
-            // Navigator.pushReplacementNamed(context, PageRoutes.home);
-            // Navigator.of(context).pop();
-            Get.back();
-          },
-          icon: Icon(
-            Icons.chevron_left,
-            color: TaskWarriorColors.white,
-            size: 30,
+            ),
           ),
-        ),
-      ),
-      //primary: false,
-      backgroundColor: AppSettings.isDarkMode
-          ? TaskWarriorColors.kprimaryBackgroundColor
-          : TaskWarriorColors.kLightPrimaryBackgroundColor,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Obx(
-              () => ProfilesColumn(
-                currentProfileKey: controller.currentProfileKey,
-                addNewProfileKey: controller.addNewProfileKey,
-                manageSelectedProfileKey: controller.manageSelectedProfileKey,
-                controller.profilesMap,
-                controller.currentProfile.value,
-                controller.profilesWidget.addProfile,
-                controller.profilesWidget.selectProfile,
-                () => showDialog(
-                  context: context,
-                  builder: (context) => Center(
-                    child: RenameProfileDialog(
-                      profile: controller.currentProfile.value,
-                      alias: controller
-                          .profilesMap[controller.currentProfile.value],
+          //primary: false,
+          backgroundColor: AppSettings.isDarkMode
+              ? TaskWarriorColors.kprimaryBackgroundColor
+              : TaskWarriorColors.kLightPrimaryBackgroundColor,
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                Obx(
+                  () => ProfilesColumn(
+                    currentProfileKey: controller.currentProfileKey,
+                    addNewProfileKey: controller.addNewProfileKey,
+                    manageSelectedProfileKey:
+                        controller.manageSelectedProfileKey,
+                    controller.profilesMap,
+                    controller.currentProfile.value,
+                    controller.profilesWidget.addProfile,
+                    controller.profilesWidget.selectProfile,
+                    () => showDialog(
                       context: context,
+                      builder: (context) => Center(
+                        child: RenameProfileDialog(
+                          profile: controller.currentProfile.value,
+                          alias: controller
+                              .profilesMap[controller.currentProfile.value],
+                          context: context,
+                        ),
+                      ),
+                    ),
+                    // () => Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     // builder: (_) => const ConfigureTaskserverRoute(),
+                    //     builder: (_) => const ManageTaskServerView(),
+                    //   ),
+                    // ),
+                    () => Get.toNamed(Routes.MANAGE_TASK_SERVER),
+                    () {
+                      var tasks = controller.profilesWidget
+                          .getStorage(controller.currentProfile.value)
+                          .data
+                          .export();
+                      var now = DateTime.now()
+                          .toIso8601String()
+                          .replaceAll(RegExp(r'[-:]'), '')
+                          .replaceAll(RegExp(r'\..*'), '');
+
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Utils.showAlertDialog(
+                            title: Text(
+                              SentenceManager(
+                                      currentLanguage:
+                                          AppSettings.selectedLanguage)
+                                  .sentences
+                                  .profilePageExportTasksDialogueTitle,
+                              style: TextStyle(
+                                color: AppSettings.isDarkMode
+                                    ? TaskWarriorColors.white
+                                    : TaskWarriorColors.black,
+                              ),
+                            ),
+                            content: Text(
+                              SentenceManager(
+                                      currentLanguage:
+                                          AppSettings.selectedLanguage)
+                                  .sentences
+                                  .profilePageExportTasksDialogueSubtitle,
+                              style: TextStyle(
+                                color: AppSettings.isDarkMode
+                                    ? TaskWarriorColors.white
+                                    : TaskWarriorColors.black,
+                              ),
+                            ),
+                            actions: <Widget>[
+                              TextButton(
+                                child: Text(
+                                  "JSON",
+                                  style: TextStyle(
+                                    color: AppSettings.isDarkMode
+                                        ? TaskWarriorColors.white
+                                        : TaskWarriorColors.black,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  // Navigator.of(context).pop();
+                                  Get.back();
+                                  exportTasks(
+                                    contents: tasks,
+                                    suggestedName: 'tasks-$now.json',
+                                  );
+                                },
+                              ),
+                              TextButton(
+                                child: Text(
+                                  "TXT",
+                                  style: TextStyle(
+                                    color: AppSettings.isDarkMode
+                                        ? TaskWarriorColors.white
+                                        : TaskWarriorColors.black,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  // Navigator.of(context).pop();
+                                  Get.back();
+                                  exportTasks(
+                                    contents: tasks,
+                                    suggestedName: 'tasks-$now.txt',
+                                  );
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    () {
+                      try {
+                        controller.profilesWidget.copyConfigToNewProfile(
+                          controller.currentProfile.value,
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(
+                              'Profile Config Copied',
+                              style: TextStyle(
+                                color: AppSettings.isDarkMode
+                                    ? TaskWarriorColors.white
+                                    : TaskWarriorColors.black,
+                              ),
+                            ),
+                            backgroundColor: AppSettings.isDarkMode
+                                ? TaskWarriorColors.ksecondaryBackgroundColor
+                                : TaskWarriorColors
+                                    .kLightSecondaryBackgroundColor,
+                            duration: const Duration(seconds: 2)));
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(
+                              'Profile Config Copy Failed',
+                              style: TextStyle(
+                                color: AppSettings.isDarkMode
+                                    ? TaskWarriorColors.white
+                                    : TaskWarriorColors.black,
+                              ),
+                            ),
+                            backgroundColor: AppSettings.isDarkMode
+                                ? TaskWarriorColors.ksecondaryBackgroundColor
+                                : TaskWarriorColors
+                                    .kLightSecondaryBackgroundColor,
+                            duration: const Duration(seconds: 2)));
+                      }
+                    },
+                    () => showDialog(
+                      context: context,
+                      builder: (context) => DeleteProfileDialog(
+                        profile: controller.currentProfile.value,
+                        context: context,
+                      ),
                     ),
                   ),
                 ),
-                // () => Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     // builder: (_) => const ConfigureTaskserverRoute(),
-                //     builder: (_) => const ManageTaskServerView(),
-                //   ),
-                // ),
-                () => Get.toNamed(Routes.MANAGE_TASK_SERVER),
-                () {
-                  var tasks = controller.profilesWidget
-                      .getStorage(controller.currentProfile.value)
-                      .data
-                      .export();
-                  var now = DateTime.now()
-                      .toIso8601String()
-                      .replaceAll(RegExp(r'[-:]'), '')
-                      .replaceAll(RegExp(r'\..*'), '');
-
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return Utils.showAlertDialog(
-                        title: Text(
-                          SentenceManager(
-                                currentLanguage: AppSettings.selectedLanguage)
-                            .sentences
-                            .profilePageExportTasksDialogueTitle,
-                          style: TextStyle(
-                            color: AppSettings.isDarkMode
-                                ? TaskWarriorColors.white
-                                : TaskWarriorColors.black,
-                          ),
-                        ),
-                        content: Text(
-                          SentenceManager(
-                                currentLanguage: AppSettings.selectedLanguage)
-                            .sentences
-                            .profilePageExportTasksDialogueSubtitle,
-                          style: TextStyle(
-                            color: AppSettings.isDarkMode
-                                ? TaskWarriorColors.white
-                                : TaskWarriorColors.black,
-                          ),
-                        ),
-                        actions: <Widget>[
-                          TextButton(
-                            child: Text(
-                              "JSON",
-                              style: TextStyle(
-                                color: AppSettings.isDarkMode
-                                    ? TaskWarriorColors.white
-                                    : TaskWarriorColors.black,
-                              ),
-                            ),
-                            onPressed: () {
-                              // Navigator.of(context).pop();
-                              Get.back();
-                              exportTasks(
-                                contents: tasks,
-                                suggestedName: 'tasks-$now.json',
-                              );
-                            },
-                          ),
-                          TextButton(
-                            child: Text(
-                              "TXT",
-                              style: TextStyle(
-                                color: AppSettings.isDarkMode
-                                    ? TaskWarriorColors.white
-                                    : TaskWarriorColors.black,
-                              ),
-                            ),
-                            onPressed: () {
-                              // Navigator.of(context).pop();
-                              Get.back();
-                              exportTasks(
-                                contents: tasks,
-                                suggestedName: 'tasks-$now.txt',
-                              );
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-                () {
-                  try {
-                    controller.profilesWidget.copyConfigToNewProfile(
-                      controller.currentProfile.value,
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(
-                          'Profile Config Copied',
-                          style: TextStyle(
-                            color: AppSettings.isDarkMode
-                                ? TaskWarriorColors.white
-                                : TaskWarriorColors.black,
-                          ),
-                        ),
-                        backgroundColor: AppSettings.isDarkMode
-                            ? TaskWarriorColors.ksecondaryBackgroundColor
-                            : TaskWarriorColors.kLightSecondaryBackgroundColor,
-                        duration: const Duration(seconds: 2)));
-                  } catch (e) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(
-                          'Profile Config Copy Failed',
-                          style: TextStyle(
-                            color: AppSettings.isDarkMode
-                                ? TaskWarriorColors.white
-                                : TaskWarriorColors.black,
-                          ),
-                        ),
-                        backgroundColor: AppSettings.isDarkMode
-                            ? TaskWarriorColors.ksecondaryBackgroundColor
-                            : TaskWarriorColors.kLightSecondaryBackgroundColor,
-                        duration: const Duration(seconds: 2)));
-                  }
-                },
-                () => showDialog(
-                  context: context,
-                  builder: (context) => DeleteProfileDialog(
-                    profile: controller.currentProfile.value,
-                    context: context,
-                  ),
-                ),
-              ),
+              ],
             ),
-          ],
-        ),
-      ),
-    );
+          ),
+        )));
   }
 }
 
@@ -325,11 +343,9 @@ class ProfilesColumn extends StatelessWidget {
                     ? TaskWarriorColors.deepPurpleAccent
                     : TaskWarriorColors.deepPurple),
             label: Text(
-              SentenceManager(
-                          currentLanguage: AppSettings.selectedLanguage)
-                      .sentences
-                      .profilePageAddNewProfile,
-
+              SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                  .sentences
+                  .profilePageAddNewProfile,
               style: TextStyle(
                 color: AppSettings.isDarkMode
                     ? TaskWarriorColors.white

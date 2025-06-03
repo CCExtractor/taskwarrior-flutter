@@ -15,6 +15,7 @@ class DetailRouteController extends GetxController {
   late String uuid;
   late Modify modify;
   var onEdit = false.obs;
+  var isTourActive = false.obs;
 
   @override
   void onInit() {
@@ -34,7 +35,7 @@ class DetailRouteController extends GetxController {
   void setAttribute(String name, dynamic newValue) {
     modify.set(name, newValue);
     onEdit.value = true;
-    if(name == 'start'){
+    if (name == 'start') {
       debugPrint('Start Value Changed to $newValue');
       startValue.value = newValue;
     }
@@ -44,13 +45,7 @@ class DetailRouteController extends GetxController {
   Future<void> saveChanges() async {
     var now = DateTime.now().toUtc();
     modify.save(modified: () => now);
-    onEdit.value = false;
-    Get.back();
-    Get.snackbar(
-      'Task Updated',
-      '',
-      snackPosition: SnackPosition.BOTTOM,
-    );
+    Get.back(result: true);
   }
 
   //  'description': controller.modify.draft.description,
@@ -118,6 +113,7 @@ class DetailRouteController extends GetxController {
       opacityShadow: 1.00,
       hideSkip: true,
       onFinish: () {
+        isTourActive.value = false;
         SaveTourStatus.saveDetailsTourStatus(true);
       },
     );
@@ -130,6 +126,7 @@ class DetailRouteController extends GetxController {
         SaveTourStatus.getDetailsTourStatus().then((value) => {
               if (value == false)
                 {
+                  isTourActive.value = true,
                   tutorialCoachMark.show(context: context),
                 }
               else
