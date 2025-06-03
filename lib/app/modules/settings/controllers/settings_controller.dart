@@ -181,7 +181,7 @@ class SettingsController extends GetxController {
         prefs.getBool('sync-OnTaskCreate') ?? false;
     delaytask.value = prefs.getBool('delaytask') ?? false;
     change24hr.value = prefs.getBool('24hourformate') ?? false;
-    taskchampion.value = prefs.getBool('taskc') ?? false;
+    taskchampion.value = prefs.getBool('settings_taskc') ?? false;
     initDarkMode();
     baseDirectory.value = await getBaseDirectory();
     super.onInit();
