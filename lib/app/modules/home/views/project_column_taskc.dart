@@ -4,6 +4,7 @@ import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 
 class ProjectColumnTaskc extends StatelessWidget {
   const ProjectColumnTaskc({
@@ -28,7 +29,9 @@ class ProjectColumnTaskc extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "Project : ",
+                SentenceManager(
+                  currentLanguage: AppSettings.selectedLanguage,
+                ).sentences.project,
                 style: TextStyle(
                   fontFamily: FontFamily.poppins,
                   fontWeight: TaskWarriorFonts.bold,
@@ -45,7 +48,12 @@ class ProjectColumnTaskc extends StatelessWidget {
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Text(
-                    projectFilter.isEmpty ? "Not selected" : projectFilter,
+                    projectFilter.isEmpty
+                        ? SentenceManager(
+                                currentLanguage: AppSettings.selectedLanguage)
+                            .sentences
+                            .notSelected
+                        : projectFilter,
                     style: TextStyle(
                       fontFamily: FontFamily.poppins,
                       fontSize: TaskWarriorFonts.fontSizeSmall,
@@ -60,7 +68,9 @@ class ProjectColumnTaskc extends StatelessWidget {
           ),
         ),
         ProjectTileTaskc(
-            project: 'All Projects',
+            project: SentenceManager(
+              currentLanguage: AppSettings.selectedLanguage,
+            ).sentences.allProjects,
             projectFilter: projectFilter,
             callback: callback),
         if (projects.isNotEmpty)
@@ -73,7 +83,9 @@ class ProjectColumnTaskc extends StatelessWidget {
           Column(
             children: [
               Text(
-                "No Projects Found",
+                SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                    .sentences
+                    .noProjectsFound,
                 style: TextStyle(
                   fontFamily: FontFamily.poppins,
                   fontSize: TaskWarriorFonts.fontSizeSmall,

@@ -25,10 +25,9 @@ class DeleteProfileDialog extends StatelessWidget {
           child: Utils.showAlertDialog(
             scrollable: true,
             title: Text(
-              SentenceManager(
-                          currentLanguage: AppSettings.selectedLanguage)
-                      .sentences
-                      .profilePageDeleteProfile,
+              SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                  .sentences
+                  .profilePageDeleteProfile,
               style: TextStyle(
                 color: AppSettings.isDarkMode
                     ? TaskWarriorColors.white
@@ -43,7 +42,9 @@ class DeleteProfileDialog extends StatelessWidget {
                   Get.back();
                 },
                 child: Text(
-                  'Cancel',
+                  SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                      .sentences
+                      .cancel,
                   style: TextStyle(
                     color: AppSettings.isDarkMode
                         ? TaskWarriorColors.white
@@ -60,7 +61,7 @@ class DeleteProfileDialog extends StatelessWidget {
                     Get.back();
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
-                          'Profile: ${profile.characters} Deleted Successfully',
+                          '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.profilePageProfile}: ${profile.characters} ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.profileDeletedSuccessfully}',
                           style: TextStyle(
                             color: AppSettings.isDarkMode
                                 ? TaskWarriorColors.kprimaryTextColor
@@ -74,7 +75,7 @@ class DeleteProfileDialog extends StatelessWidget {
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
-                          'Profile: ${profile.characters} Deletion Failed',
+                          '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.profilePageProfile}: ${profile.characters} ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.profileDeletionFailed}',
                           style: TextStyle(
                             color: AppSettings.isDarkMode
                                 ? TaskWarriorColors.kprimaryTextColor
@@ -88,7 +89,9 @@ class DeleteProfileDialog extends StatelessWidget {
                   }
                 },
                 child: Text(
-                  'Confirm',
+                  SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                      .sentences
+                      .profileDeleteConfirmation,
                   style: TextStyle(
                     color: AppSettings.isDarkMode
                         ? TaskWarriorColors.black

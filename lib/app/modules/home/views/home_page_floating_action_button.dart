@@ -5,6 +5,7 @@ import 'package:taskwarrior/app/modules/home/views/add_task_to_taskc_bottom_shee
 
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 
 import '../controllers/home_controller.dart';
 
@@ -21,7 +22,10 @@ class HomePageFloatingActionButton extends StatelessWidget {
             ? TaskWarriorColors.kLightPrimaryBackgroundColor
             : TaskWarriorColors.kprimaryBackgroundColor,
         child: Tooltip(
-          message: 'Add Task',
+          message: SentenceManager(
+                  currentLanguage: controller.selectedLanguage.value)
+              .sentences
+              .homePageAddTaskTooltip,
           child: Icon(
             Icons.add,
             color: AppSettings.isDarkMode

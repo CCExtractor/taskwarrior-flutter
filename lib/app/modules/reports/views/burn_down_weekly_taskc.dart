@@ -9,6 +9,7 @@ import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
 
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 
 class BurnDownWeeklyTask extends StatelessWidget {
   BurnDownWeeklyTask({super.key});
@@ -38,10 +39,14 @@ class BurnDownWeeklyTask extends StatelessWidget {
               ),
             ),
             Text(
-              'Pending: $pendingCount',
+              '${SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                      .sentences
+                      .reportsPending}: $pendingCount',
             ),
             Text(
-              'Completed: $completedCount',
+              '${SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                      .sentences
+                      .reportsCompleted}: $completedCount',
             ),
           ],
         ),
@@ -105,7 +110,11 @@ class BurnDownWeeklyTask extends StatelessWidget {
           }
 
           if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
+            return Center(
+                child: Text('${SentenceManager(
+                            currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .reportsError}: ${snapshot.error}'));
           }
 
           Map<String, Map<String, int>> weeklyInfo = snapshot.data ?? {};

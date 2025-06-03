@@ -4,6 +4,8 @@ import 'package:taskwarrior/app/modules/onboarding/controllers/onboarding_contro
 import 'package:taskwarrior/app/routes/app_pages.dart';
 import 'package:taskwarrior/app/utils/constants/constants.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 
 class OnboardingPageStartButton extends StatelessWidget {
   final OnboardingController controller;
@@ -32,7 +34,9 @@ class OnboardingPageStartButton extends StatelessWidget {
           ),
         ),
         child: Text(
-          "Start",
+          SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+              .sentences
+              .onboardingStart,
           style: TextStyle(
             fontWeight: TaskWarriorFonts.light,
             fontSize: (Get.width <= 550) ? 17 : 17,

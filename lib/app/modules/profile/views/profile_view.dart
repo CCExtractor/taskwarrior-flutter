@@ -104,9 +104,9 @@ class ProfileView extends GetView<ProfileController> {
                       return Utils.showAlertDialog(
                         title: Text(
                           SentenceManager(
-                                currentLanguage: AppSettings.selectedLanguage)
-                            .sentences
-                            .profilePageExportTasksDialogueTitle,
+                                  currentLanguage: AppSettings.selectedLanguage)
+                              .sentences
+                              .profilePageExportTasksDialogueTitle,
                           style: TextStyle(
                             color: AppSettings.isDarkMode
                                 ? TaskWarriorColors.white
@@ -115,9 +115,9 @@ class ProfileView extends GetView<ProfileController> {
                         ),
                         content: Text(
                           SentenceManager(
-                                currentLanguage: AppSettings.selectedLanguage)
-                            .sentences
-                            .profilePageExportTasksDialogueSubtitle,
+                                  currentLanguage: AppSettings.selectedLanguage)
+                              .sentences
+                              .profilePageExportTasksDialogueSubtitle,
                           style: TextStyle(
                             color: AppSettings.isDarkMode
                                 ? TaskWarriorColors.white
@@ -173,7 +173,10 @@ class ProfileView extends GetView<ProfileController> {
                     );
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
-                          'Profile Config Copied',
+                          SentenceManager(
+                                  currentLanguage: AppSettings.selectedLanguage)
+                              .sentences
+                              .profileConfigCopied,
                           style: TextStyle(
                             color: AppSettings.isDarkMode
                                 ? TaskWarriorColors.white
@@ -187,7 +190,10 @@ class ProfileView extends GetView<ProfileController> {
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
-                          'Profile Config Copy Failed',
+                          SentenceManager(
+                                  currentLanguage: AppSettings.selectedLanguage)
+                              .sentences
+                              .profileConfigCopyFailed,
                           style: TextStyle(
                             color: AppSettings.isDarkMode
                                 ? TaskWarriorColors.white
@@ -281,7 +287,10 @@ class ProfilesColumn extends StatelessWidget {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                       content: Text(
-                        'Profile Added Successfully',
+                        SentenceManager(
+                                currentLanguage: AppSettings.selectedLanguage)
+                            .sentences
+                            .profileAddedSuccessfully,
                         style: TextStyle(
                           color: AppSettings.isDarkMode
                               ? TaskWarriorColors.kprimaryTextColor
@@ -298,7 +307,10 @@ class ProfilesColumn extends StatelessWidget {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      'Profile Additon Failed',
+                      SentenceManager(
+                              currentLanguage: AppSettings.selectedLanguage)
+                          .sentences
+                          .profileAdditionFailed,
                       style: TextStyle(
                         color: AppSettings.isDarkMode
                             ? TaskWarriorColors.kprimaryTextColor
@@ -325,11 +337,9 @@ class ProfilesColumn extends StatelessWidget {
                     ? TaskWarriorColors.deepPurpleAccent
                     : TaskWarriorColors.deepPurple),
             label: Text(
-              SentenceManager(
-                          currentLanguage: AppSettings.selectedLanguage)
-                      .sentences
-                      .profilePageAddNewProfile,
-
+              SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                  .sentences
+                  .profilePageAddNewProfile,
               style: TextStyle(
                 color: AppSettings.isDarkMode
                     ? TaskWarriorColors.white

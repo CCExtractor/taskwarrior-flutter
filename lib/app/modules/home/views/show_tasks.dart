@@ -10,6 +10,7 @@ import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 
 class TaskViewBuilder extends StatelessWidget {
   const TaskViewBuilder({
@@ -87,7 +88,10 @@ class TaskViewBuilder extends StatelessWidget {
                 padding: const EdgeInsets.all(16.0),
                 child: Center(
                   child: Text(
-                    'Click on the bottom right button to start adding tasks',
+                    SentenceManager(
+                            currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .clickOnBottomRightButtonToStartAddingTasks,
                     textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
                       fontSize: TaskWarriorFonts.fontSizeLarge,
@@ -119,7 +123,11 @@ class TaskViewBuilder extends StatelessWidget {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(
-                                  'Task Marked As Completed. Refresh to view changes!',
+                                  SentenceManager(
+                                          currentLanguage:
+                                              AppSettings.selectedLanguage)
+                                      .sentences
+                                      .taskMarkedAsCompleted,
                                   style: TextStyle(
                                     color: AppSettings.isDarkMode
                                         ? TaskWarriorColors.kprimaryTextColor
@@ -131,7 +139,10 @@ class TaskViewBuilder extends StatelessWidget {
                             );
                           },
                           icon: Icons.done,
-                          label: "COMPLETE",
+                          label: SentenceManager(currentLanguage: 
+                              AppSettings.selectedLanguage)
+                              .sentences
+                              .complete,
                           backgroundColor: TaskWarriorColors.green,
                         ),
                       ],
@@ -145,7 +156,11 @@ class TaskViewBuilder extends StatelessWidget {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(
-                                  'Task Marked As Deleted. Refresh to view changes!',
+                                  SentenceManager(
+                                          currentLanguage:
+                                              AppSettings.selectedLanguage)
+                                      .sentences
+                                      .taskMarkedAsDeleted,
                                   style: TextStyle(
                                     color: AppSettings.isDarkMode
                                         ? TaskWarriorColors.kprimaryTextColor
@@ -157,7 +172,10 @@ class TaskViewBuilder extends StatelessWidget {
                             );
                           },
                           icon: Icons.delete,
-                          label: "DELETE",
+                          label: SentenceManager(
+                              currentLanguage: AppSettings.selectedLanguage)
+                              .sentences
+                              .delete,
                           backgroundColor: TaskWarriorColors.red,
                         ),
                       ],
@@ -213,7 +231,7 @@ class TaskViewBuilder extends StatelessWidget {
                               ),
                             ),
                             subtitle: Text(
-                              'Urgency: ${task.urgency!.floorToDouble()} | Status: ${task.status}',
+                              '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageUrgency}: ${task.urgency!.floorToDouble()} | ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageStatus}: ${task.status}',
                               style: GoogleFonts.poppins(
                                 color: AppSettings.isDarkMode
                                     ? TaskWarriorColors.ksecondaryTextColor

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:taskwarrior/app/utils/constants/constants.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 
 
 class StatusWidget extends StatelessWidget {
@@ -46,7 +47,7 @@ class StatusWidget extends StatelessWidget {
                       ),
                     ),
                     TextSpan(
-                      text: value ?? "not selected",
+                      text: value ?? SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.notSelected,
                       style: GoogleFonts.poppins(
                         fontSize: TaskWarriorFonts.fontSizeMedium,
                         color: AppSettings.isDarkMode

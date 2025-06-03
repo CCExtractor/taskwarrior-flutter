@@ -46,11 +46,10 @@ class SelectProfile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                SentenceManager(
-                          currentLanguage: AppSettings.selectedLanguage)
-                      .sentences
-                      .profilePageCurrentProfile,
-                key : currentProfileKey,
+                SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                    .sentences
+                    .profilePageCurrentProfile,
+                key: currentProfileKey,
                 overflow: TextOverflow.fade,
                 style: GoogleFonts.poppins(
                   fontWeight: TaskWarriorFonts.bold,
@@ -81,10 +80,12 @@ class SelectProfile extends StatelessWidget {
               child: Row(
                 children: [
                   Text(
-                    'All Profiles:',
+                    SentenceManager(
+                            currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .profileAllProfiles,
                     overflow: TextOverflow.fade,
                     style: GoogleFonts.poppins(
-
                       fontWeight: TaskWarriorFonts.bold,
                       fontSize: TaskWarriorFonts.fontSizeMedium,
                       color: AppSettings.isDarkMode
@@ -139,7 +140,7 @@ class SelectProfileListTile extends StatelessWidget {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(
-                  'Switched to Profile ${alias ?? uuid}',
+                  '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.profileSwitchedToProfile} ${alias ?? uuid}',
                   style: TextStyle(
                     color: AppSettings.isDarkMode
                         ? TaskWarriorColors.kprimaryTextColor
@@ -176,11 +177,10 @@ class SelectProfileListTile extends StatelessWidget {
                     alias!,
                     overflow: TextOverflow.fade,
                     style: GoogleFonts.poppins(
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.ksecondaryTextColor
-                          : TaskWarriorColors.kLightSecondaryTextColor,
-                      fontSize: TaskWarriorFonts.fontSizeMedium
-                    ),
+                        color: AppSettings.isDarkMode
+                            ? TaskWarriorColors.ksecondaryTextColor
+                            : TaskWarriorColors.kLightSecondaryTextColor,
+                        fontSize: TaskWarriorFonts.fontSizeMedium),
                   ),
                 ),
               ),
@@ -190,11 +190,10 @@ class SelectProfileListTile extends StatelessWidget {
               child: Text(
                 uuid,
                 style: GoogleFonts.poppins(
-                  color: AppSettings.isDarkMode
-                      ? TaskWarriorColors.ksecondaryTextColor
-                      : TaskWarriorColors.kLightSecondaryTextColor,
-                  fontSize: TaskWarriorFonts.fontSizeSmall
-                ),
+                    color: AppSettings.isDarkMode
+                        ? TaskWarriorColors.ksecondaryTextColor
+                        : TaskWarriorColors.kLightSecondaryTextColor,
+                    fontSize: TaskWarriorFonts.fontSizeSmall),
               ),
             ),
           ],

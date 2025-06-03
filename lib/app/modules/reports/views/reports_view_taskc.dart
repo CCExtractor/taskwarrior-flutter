@@ -10,6 +10,7 @@ import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/api_service.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 
 class ReportsHomeTaskc extends StatelessWidget {
   final ReportsController reportsController = Get.put(ReportsController());
@@ -36,7 +37,9 @@ class ReportsHomeTaskc extends StatelessWidget {
           appBar: AppBar(
             backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
             title: Text(
-              'Reports',
+              SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                  .sentences
+                  .reportsPageTitle,
               style: GoogleFonts.poppins(color: TaskWarriorColors.white),
             ),
             leading: GestureDetector(
@@ -67,19 +70,28 @@ class ReportsHomeTaskc extends StatelessWidget {
                   Tab(
                     key: reportsController.daily,
                     icon: const Icon(Icons.schedule),
-                    text: 'Daily',
+                    text: SentenceManager(
+                            currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .reportsPageDaily,
                     iconMargin: const EdgeInsets.only(bottom: 0.0),
                   ),
                   Tab(
                     key: reportsController.weekly,
                     icon: const Icon(Icons.today),
-                    text: 'Weekly',
+                    text: SentenceManager(
+                            currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .reportsPageWeekly,
                     iconMargin: const EdgeInsets.only(bottom: 0.0),
                   ),
                   Tab(
                     key: reportsController.monthly,
                     icon: const Icon(Icons.date_range),
-                    text: 'Monthly',
+                    text: SentenceManager(
+                            currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .reportsPageMonthly,
                     iconMargin: const EdgeInsets.only(bottom: 0.0),
                   ),
                 ],
@@ -106,7 +118,11 @@ class ReportsHomeTaskc extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'No Task found',
+                              SentenceManager(
+                                      currentLanguage:
+                                          AppSettings.selectedLanguage)
+                                  .sentences
+                                  .reportsPageNoTasksFound,
                               style: GoogleFonts.poppins(
                                 fontWeight: TaskWarriorFonts.medium,
                                 fontSize: TaskWarriorFonts.fontSizeSmall,
@@ -121,7 +137,11 @@ class ReportsHomeTaskc extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'Add a task to see reports',
+                              SentenceManager(
+                                      currentLanguage:
+                                          AppSettings.selectedLanguage)
+                                  .sentences
+                                  .reportsPageAddTasksToSeeReports,
                               style: GoogleFonts.poppins(
                                 fontWeight: TaskWarriorFonts.light,
                                 fontSize: TaskWarriorFonts.fontSizeSmall,

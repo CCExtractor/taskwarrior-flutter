@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 
 List<TargetFocus> filterDrawer({
   required GlobalKey statusKey,
@@ -30,7 +32,10 @@ List<TargetFocus> filterDrawer({
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    "Filter tasks based on their completion status",
+                    SentenceManager(
+                            currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .tourFilterStatus,
                     textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
                       color: TaskWarriorColors.white,
@@ -63,7 +68,10 @@ List<TargetFocus> filterDrawer({
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    "Filter tasks based on the projects",
+                    SentenceManager(
+                            currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .tourFilterProjects,
                     textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
                       color: TaskWarriorColors.white,
@@ -96,7 +104,10 @@ List<TargetFocus> filterDrawer({
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    "Filter tasks based on the projects",
+                    SentenceManager(
+                            currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .tourFilterProjects,
                     textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
                       color: TaskWarriorColors.white,
@@ -129,7 +140,10 @@ List<TargetFocus> filterDrawer({
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    "Toggle between AND and OR tag union types",
+                    SentenceManager(
+                            currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .tourFilterTagUnion,
                     textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
                       color: TaskWarriorColors.white,
@@ -162,7 +176,10 @@ List<TargetFocus> filterDrawer({
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    "Sort tasks based on time of creation, urgency, due date, start date, etc.",
+                    SentenceManager(
+                            currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .tourFilterSort,
                     textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
                       color: TaskWarriorColors.white,

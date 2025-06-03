@@ -8,6 +8,7 @@ import 'package:taskwarrior/app/modules/home/views/tasks_builder.dart';
 import 'package:taskwarrior/app/utils/constants/palette.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 
 import '../controllers/home_controller.dart';
 
@@ -20,7 +21,11 @@ class HomePageBody extends StatelessWidget {
     controller.initInAppTour();
     controller.showInAppTour(context);
     return DoubleBackToCloseApp(
-      snackBar: const SnackBar(content: Text('Tap back again to exit')),
+      snackBar: SnackBar(
+          content: Text(SentenceManager(
+                  currentLanguage: controller.selectedLanguage.value)
+              .sentences
+              .homePageTapBackToExit)),
       child: Container(
         color: AppSettings.isDarkMode
             ? Palette.kToDark.shade200
@@ -85,7 +90,11 @@ class HomePageBody extends StatelessWidget {
                               )
                       ],
 
-                      hintText: 'Search',
+                      hintText: SentenceManager(
+                              currentLanguage:
+                                  controller.selectedLanguage.value)
+                          .sentences
+                          .homePageSearchHint,
                     ),
                   ),
                 Visibility(

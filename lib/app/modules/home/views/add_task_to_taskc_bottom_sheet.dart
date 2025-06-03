@@ -8,6 +8,7 @@ import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 
 class AddTaskToTaskcBottomSheet extends StatelessWidget {
   final HomeController homeController;
@@ -15,7 +16,6 @@ class AddTaskToTaskcBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const title = 'Add Task';
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Center(
@@ -32,7 +32,9 @@ class AddTaskToTaskcBottomSheet extends StatelessWidget {
                 : TaskWarriorColors.kLightDialogBackGroundColor,
             title: Center(
               child: Text(
-                title,
+                SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                    .sentences
+                    .addTaskTitle,
                 style: TextStyle(
                   color: AppSettings.isDarkMode
                       ? TaskWarriorColors.white
@@ -78,7 +80,10 @@ class AddTaskToTaskcBottomSheet extends StatelessWidget {
               : TaskWarriorColors.black,
         ),
         decoration: InputDecoration(
-          hintText: 'Enter Task',
+          hintText:
+              SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                  .sentences
+                  .addTaskEnterTask,
           hintStyle: TextStyle(
             color: AppSettings.isDarkMode
                 ? TaskWarriorColors.white
@@ -86,7 +91,9 @@ class AddTaskToTaskcBottomSheet extends StatelessWidget {
           ),
         ),
         validator: (name) => name != null && name.isEmpty
-            ? 'You cannot leave this field empty!'
+            ? SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                .sentences
+                .addTaskFieldCannotBeEmpty
             : null,
       );
 
@@ -99,7 +106,10 @@ class AddTaskToTaskcBottomSheet extends StatelessWidget {
               : TaskWarriorColors.black,
         ),
         decoration: InputDecoration(
-          hintText: 'Enter Project',
+          hintText:
+              SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                  .sentences
+                  .enterProject,
           hintStyle: TextStyle(
             color: AppSettings.isDarkMode
                 ? TaskWarriorColors.white
@@ -111,7 +121,7 @@ class AddTaskToTaskcBottomSheet extends StatelessWidget {
   Widget buildDueDate(BuildContext context) => Row(
         children: [
           Text(
-            "Due : ",
+            "${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.addTaskDue} : ",
             style: GoogleFonts.poppins(
               color: AppSettings.isDarkMode
                   ? TaskWarriorColors.white
@@ -137,7 +147,10 @@ class AddTaskToTaskcBottomSheet extends StatelessWidget {
                       : null,
                 ),
                 decoration: InputDecoration(
-                  hintText: 'Select due date',
+                  hintText: SentenceManager(
+                          currentLanguage: AppSettings.selectedLanguage)
+                      .sentences
+                      .addTaskSelectDueDate,
                   hintStyle: homeController.inThePast.value
                       ? TextStyle(color: TaskWarriorColors.red)
                       : TextStyle(
@@ -241,7 +254,11 @@ class AddTaskToTaskcBottomSheet extends StatelessWidget {
 
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text(
-                              "The selected time is in the past.",
+                              SentenceManager(
+                                      currentLanguage:
+                                          AppSettings.selectedLanguage)
+                                  .sentences
+                                  .addTaskTimeInPast,
                               style: TextStyle(
                                 color: AppSettings.isDarkMode
                                     ? TaskWarriorColors.kprimaryTextColor
@@ -272,7 +289,7 @@ class AddTaskToTaskcBottomSheet extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                'Priority :  ',
+                '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.addTaskPriority} :  ',
                 style: GoogleFonts.poppins(
                   fontWeight: TaskWarriorFonts.bold,
                   color: AppSettings.isDarkMode
@@ -316,7 +333,9 @@ class AddTaskToTaskcBottomSheet extends StatelessWidget {
 
   Widget buildCancelButton(BuildContext context) => TextButton(
         child: Text(
-          'Cancel',
+          SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+              .sentences
+              .addTaskCancel,
           style: TextStyle(
             color: AppSettings.isDarkMode
                 ? TaskWarriorColors.white
@@ -329,7 +348,9 @@ class AddTaskToTaskcBottomSheet extends StatelessWidget {
   Widget buildAddButton(BuildContext context) {
     return TextButton(
       child: Text(
-        "Add",
+        SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+            .sentences
+            .addTaskAdd,
         style: TextStyle(
           color: AppSettings.isDarkMode
               ? TaskWarriorColors.white
@@ -358,7 +379,9 @@ class AddTaskToTaskcBottomSheet extends StatelessWidget {
           homeController.projectcontroller.text = '';
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(
-                'Task Added Successfully!',
+                SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                    .sentences
+                    .addTaskTaskAddedSuccessfully,
                 style: TextStyle(
                   color: AppSettings.isDarkMode
                       ? TaskWarriorColors.kprimaryTextColor

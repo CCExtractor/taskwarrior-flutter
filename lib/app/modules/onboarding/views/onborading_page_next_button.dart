@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:taskwarrior/app/utils/constants/constants.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 
 class OnboardingPageNextButton extends StatelessWidget {
   final PageController pageController;
-  const OnboardingPageNextButton({super.key , required this.pageController});
+  const OnboardingPageNextButton({super.key, required this.pageController});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,9 @@ class OnboardingPageNextButton extends StatelessWidget {
               ),
             ),
             child: Text(
-              "Skip",
+              SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                  .sentences
+                  .onboardingSkip,
               style: TextStyle(
                 fontWeight: TaskWarriorFonts.bold,
                 color: TaskWarriorColors.black,
@@ -54,14 +58,15 @@ class OnboardingPageNextButton extends StatelessWidget {
               textStyle: TextStyle(fontSize: (Get.width <= 550) ? 13 : 17),
             ),
             child: Text(
-              "Next",
+              SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                  .sentences
+                  .onboardingNext,
               style: TextStyle(
                 fontWeight: TaskWarriorFonts.light,
                 color: TaskWarriorColors.white,
                 fontFamily: FontFamily.poppins,
                 fontSize: (Get.width <= 550) ? 12 : 12,
               ),
-              
             ),
           ),
         ],

@@ -291,7 +291,10 @@ class ManageTaskServerPageBody extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "TaskD Server Info",
+                          SentenceManager(
+                                  currentLanguage: AppSettings.selectedLanguage)
+                              .sentences
+                              .taskServerInfo,
                           style: TextStyle(
                             color: AppSettings.isDarkMode
                                 ? TaskWarriorColors.white
@@ -317,7 +320,11 @@ class ManageTaskServerPageBody extends StatelessWidget {
                               children: [
                                 controller.server == null
                                     ? Text(
-                                        'Not Configured',
+                                        SentenceManager(
+                                                currentLanguage: AppSettings
+                                                    .selectedLanguage)
+                                            .sentences
+                                            .notConfigured,
                                         style: TextStyle(
                                           color: AppSettings.isDarkMode
                                               ? TaskWarriorColors.white
@@ -374,7 +381,10 @@ class ManageTaskServerPageBody extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "TaskD Server Credentials",
+                          SentenceManager(
+                                  currentLanguage: AppSettings.selectedLanguage)
+                              .sentences
+                              .taskServerCredentials,
                           style: TextStyle(
                             color: AppSettings.isDarkMode
                                 ? TaskWarriorColors.white
@@ -399,7 +409,11 @@ class ManageTaskServerPageBody extends StatelessWidget {
                               children: [
                                 controller.credentialsString == null
                                     ? Text(
-                                        'Not Configured',
+                                        SentenceManager(
+                                                currentLanguage: AppSettings
+                                                    .selectedLanguage)
+                                            .sentences
+                                            .notConfigured,
                                         style: TextStyle(
                                           color: AppSettings.isDarkMode
                                               ? TaskWarriorColors.white
