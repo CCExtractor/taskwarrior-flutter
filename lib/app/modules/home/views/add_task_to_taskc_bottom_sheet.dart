@@ -352,6 +352,7 @@ class AddTaskToTaskcBottomSheet extends StatelessWidget {
               end: '',
               modified: 'r');
           await homeController.taskdb.insertTask(task);
+          homeController.showTaskSwipeTutorial(context);
           homeController.namecontroller.text = '';
           homeController.due.value = null;
           homeController.priority.value = 'M';
