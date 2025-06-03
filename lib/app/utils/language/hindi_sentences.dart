@@ -52,11 +52,10 @@ class HindiSentences extends Sentences {
   String get settingsPageEnableSyncOnTaskCreateDescription =>
       'नई टास्क बनाते समय स्वचालित सिंकिंग सक्षम करें';
   @override
-  String get settingsPageHighlightTaskTitle =>
-      'केवल 1 दिन शेष होने पर कार्य की सीमा बनाएं';
+  String get settingsPageHighlightTaskTitle => 'तत्काल कार्यों को हाइलाइट करें';
   @override
   String get settingsPageHighlightTaskDescription =>
-      'केवल 1 दिन शेष होने पर कार्य की सीमा बनाएं';
+      '1 दिन के भीतर देय या अतिदेय कार्यों को हाइलाइट करें';
   @override
   String get settingsPageEnable24hrFormatTitle =>
       '24 घंटे का प्रारूप सक्षम करें';

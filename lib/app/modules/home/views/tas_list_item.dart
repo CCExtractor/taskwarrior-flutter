@@ -56,7 +56,13 @@ class TaskListItem extends StatelessWidget {
     bool isDueWithinOneDay(DateTime dueDate) {
       DateTime now = DateTime.now();
       Duration difference = dueDate.difference(now);
-      return difference.inDays <= 1 && difference.inDays >= 0;
+      return difference.inDays < 1 && difference.inMicroseconds > 0;
+    }
+
+    bool isOverDue(DateTime dueDate) {
+      DateTime now = DateTime.now();
+      Duration difference = dueDate.difference(now);
+      return difference.inMicroseconds < 0;
     }
 
     MaterialColor colours = Colors.grey;
@@ -86,6 +92,11 @@ class TaskListItem extends StatelessWidget {
                 : dimColor, // Set default border color
           ),
           borderRadius: BorderRadius.circular(8.0),
+          color: (task.due != null && isOverDue(task.due!) && useDelayTask)
+              ? Colors.red.withAlpha(50)
+              : AppSettings.isDarkMode
+                  ? TaskWarriorColors.ksecondaryBackgroundColor
+                  : TaskWarriorColors.kLightSecondaryBackgroundColor,
         ),
         child: ListTile(
           title: Row(

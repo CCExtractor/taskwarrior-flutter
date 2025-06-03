@@ -33,10 +33,10 @@ void main() {
         'नई टास्क बनाते समय स्वचालित सिंकिंग सक्षम करें');
     expect(hindi.settingsPageEnableSyncOnTaskCreateDescription,
         'नई टास्क बनाते समय स्वचालित सिंकिंग सक्षम करें');
-    expect(hindi.settingsPageHighlightTaskTitle,
-        'केवल 1 दिन शेष होने पर कार्य की सीमा बनाएं');
+    expect(
+        hindi.settingsPageHighlightTaskTitle, 'तत्काल कार्यों को हाइलाइट करें');
     expect(hindi.settingsPageHighlightTaskDescription,
-        'केवल 1 दिन शेष होने पर कार्य की सीमा बनाएं');
+        '1 दिन के भीतर देय या अतिदेय कार्यों को हाइलाइट करें');
     expect(hindi.settingsPageEnable24hrFormatTitle,
         '24 घंटे का प्रारूप सक्षम करें');
     expect(hindi.settingsPageEnable24hrFormatDescription,
