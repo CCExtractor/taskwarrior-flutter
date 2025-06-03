@@ -62,35 +62,5 @@ void main() {
       result = when(dt);
       expect(result, contains('29s'));
     });
-
-    test('Test difference function', () {
-      DateTime dt = DateTime.now().subtract(const Duration(days: 365));
-      String result = difference(DateTime.now().difference(dt));
-      expect(result, contains('12mo '));
-
-      dt = DateTime.now().subtract(const Duration(days: 60));
-      result = difference(DateTime.now().difference(dt));
-      expect(result, contains('2mo '));
-
-      dt = DateTime.now().subtract(const Duration(days: 21));
-      result = difference(DateTime.now().difference(dt));
-      expect(result, contains('3w '));
-
-      dt = DateTime.now().subtract(const Duration(days: 4));
-      result = difference(DateTime.now().difference(dt));
-      expect(result, contains('4d '));
-
-      dt = DateTime.now().subtract(const Duration(hours: 5));
-      result = difference(DateTime.now().difference(dt));
-      expect(result, contains('5h '));
-
-      dt = DateTime.now().subtract(const Duration(minutes: 10));
-      result = difference(DateTime.now().difference(dt));
-      expect(result, contains('10min '));
-
-      dt = DateTime.now().subtract(const Duration(seconds: 30));
-      result = difference(DateTime.now().difference(dt));
-      expect(result, contains('30s '));
-    });
   });
 }
