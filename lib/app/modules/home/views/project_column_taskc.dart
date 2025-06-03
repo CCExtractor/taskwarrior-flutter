@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
-
-import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 class ProjectColumnTaskc extends StatelessWidget {
   const ProjectColumnTaskc({
@@ -19,6 +17,8 @@ class ProjectColumnTaskc extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Column(
       children: [
         Padding(
@@ -33,9 +33,7 @@ class ProjectColumnTaskc extends StatelessWidget {
                   fontFamily: FontFamily.poppins,
                   fontWeight: TaskWarriorFonts.bold,
                   fontSize: TaskWarriorFonts.fontSizeSmall,
-                  color: AppSettings.isDarkMode
-                      ? TaskWarriorColors.white
-                      : TaskWarriorColors.black,
+                  color: tColors.primaryTextColor,
                 ),
               ),
               const SizedBox(
@@ -49,9 +47,7 @@ class ProjectColumnTaskc extends StatelessWidget {
                     style: TextStyle(
                       fontFamily: FontFamily.poppins,
                       fontSize: TaskWarriorFonts.fontSizeSmall,
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.white
-                          : TaskWarriorColors.black,
+                      color: tColors.primaryTextColor,
                     ),
                   ),
                 ),
@@ -77,9 +73,7 @@ class ProjectColumnTaskc extends StatelessWidget {
                 style: TextStyle(
                   fontFamily: FontFamily.poppins,
                   fontSize: TaskWarriorFonts.fontSizeSmall,
-                  color: AppSettings.isDarkMode
-                      ? TaskWarriorColors.white
-                      : TaskWarriorColors.black,
+                  color: tColors.primaryTextColor,
                 ),
               ),
               const SizedBox(
@@ -106,6 +100,8 @@ class ProjectTileTaskc extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return GestureDetector(
       onTap: () => callback(project),
       child: Row(
@@ -119,9 +115,7 @@ class ProjectTileTaskc extends StatelessWidget {
           Text(
             project,
             style: TextStyle(
-              color: AppSettings.isDarkMode
-                  ? TaskWarriorColors.white
-                  : TaskWarriorColors.black,
+              color: tColors.primaryTextColor,
             ),
           ),
           const Spacer(),

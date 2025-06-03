@@ -8,12 +8,12 @@ import 'package:taskwarrior/app/modules/profile/views/manageprofile.dart';
 import 'package:taskwarrior/app/modules/profile/views/renameprofiledialog.dart';
 import 'package:taskwarrior/app/modules/profile/views/selectprofile.dart';
 import 'package:taskwarrior/app/routes/app_pages.dart';
-import 'package:taskwarrior/app/utils/constants/palette.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
 
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 import '../controllers/profile_controller.dart';
 
@@ -23,9 +23,10 @@ class ProfileView extends GetView<ProfileController> {
   Widget build(BuildContext context) {
     controller.initProfilePageTour();
     controller.showProfilePageTour(context);
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Palette.kToDark.shade200,
+        backgroundColor: TaskWarriorColors.appBarColor,
         title: Obx(() => Text(
               controller.profilesMap.length == 1
                   ? SentenceManager(
@@ -54,9 +55,7 @@ class ProfileView extends GetView<ProfileController> {
         ),
       ),
       //primary: false,
-      backgroundColor: AppSettings.isDarkMode
-          ? TaskWarriorColors.kprimaryBackgroundColor
-          : TaskWarriorColors.kLightPrimaryBackgroundColor,
+      backgroundColor: tColors.primaryBackgroundColor,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -108,9 +107,7 @@ class ProfileView extends GetView<ProfileController> {
                             .sentences
                             .profilePageExportTasksDialogueTitle,
                           style: TextStyle(
-                            color: AppSettings.isDarkMode
-                                ? TaskWarriorColors.white
-                                : TaskWarriorColors.black,
+                            color: tColors.primaryTextColor,
                           ),
                         ),
                         content: Text(
@@ -119,9 +116,7 @@ class ProfileView extends GetView<ProfileController> {
                             .sentences
                             .profilePageExportTasksDialogueSubtitle,
                           style: TextStyle(
-                            color: AppSettings.isDarkMode
-                                ? TaskWarriorColors.white
-                                : TaskWarriorColors.black,
+                            color: tColors.primaryTextColor,
                           ),
                         ),
                         actions: <Widget>[
@@ -129,9 +124,7 @@ class ProfileView extends GetView<ProfileController> {
                             child: Text(
                               "JSON",
                               style: TextStyle(
-                                color: AppSettings.isDarkMode
-                                    ? TaskWarriorColors.white
-                                    : TaskWarriorColors.black,
+                                color: tColors.primaryTextColor,
                               ),
                             ),
                             onPressed: () {
@@ -147,9 +140,7 @@ class ProfileView extends GetView<ProfileController> {
                             child: Text(
                               "TXT",
                               style: TextStyle(
-                                color: AppSettings.isDarkMode
-                                    ? TaskWarriorColors.white
-                                    : TaskWarriorColors.black,
+                                color: tColors.primaryTextColor,
                               ),
                             ),
                             onPressed: () {
@@ -175,28 +166,20 @@ class ProfileView extends GetView<ProfileController> {
                         content: Text(
                           'Profile Config Copied',
                           style: TextStyle(
-                            color: AppSettings.isDarkMode
-                                ? TaskWarriorColors.white
-                                : TaskWarriorColors.black,
+                            color: tColors.primaryTextColor,
                           ),
                         ),
-                        backgroundColor: AppSettings.isDarkMode
-                            ? TaskWarriorColors.ksecondaryBackgroundColor
-                            : TaskWarriorColors.kLightSecondaryBackgroundColor,
+                        backgroundColor: tColors.secondaryBackgroundColor,
                         duration: const Duration(seconds: 2)));
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
                           'Profile Config Copy Failed',
                           style: TextStyle(
-                            color: AppSettings.isDarkMode
-                                ? TaskWarriorColors.white
-                                : TaskWarriorColors.black,
+                            color: tColors.primaryTextColor,
                           ),
                         ),
-                        backgroundColor: AppSettings.isDarkMode
-                            ? TaskWarriorColors.ksecondaryBackgroundColor
-                            : TaskWarriorColors.kLightSecondaryBackgroundColor,
+                        backgroundColor: tColors.secondaryBackgroundColor,
                         duration: const Duration(seconds: 2)));
                   }
                 },
@@ -248,6 +231,7 @@ class ProfilesColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Padding(
       padding: const EdgeInsets.only(top: 10.0),
       child: Column(
@@ -283,14 +267,10 @@ class ProfilesColumn extends StatelessWidget {
                       content: Text(
                         'Profile Added Successfully',
                         style: TextStyle(
-                          color: AppSettings.isDarkMode
-                              ? TaskWarriorColors.kprimaryTextColor
-                              : TaskWarriorColors.kLightPrimaryTextColor,
+                          color: tColors.primaryTextColor,
                         ),
                       ),
-                      backgroundColor: AppSettings.isDarkMode
-                          ? TaskWarriorColors.ksecondaryBackgroundColor
-                          : TaskWarriorColors.kLightSecondaryBackgroundColor,
+                      backgroundColor: tColors.secondaryBackgroundColor,
                       duration: const Duration(seconds: 2)),
                 );
                 // Get.find<ProfileController>().update();
@@ -300,14 +280,10 @@ class ProfilesColumn extends StatelessWidget {
                     content: Text(
                       'Profile Additon Failed',
                       style: TextStyle(
-                        color: AppSettings.isDarkMode
-                            ? TaskWarriorColors.kprimaryTextColor
-                            : TaskWarriorColors.kLightPrimaryTextColor,
+                        color: tColors.primaryTextColor,
                       ),
                     ),
-                    backgroundColor: AppSettings.isDarkMode
-                        ? TaskWarriorColors.ksecondaryBackgroundColor
-                        : TaskWarriorColors.kLightSecondaryBackgroundColor,
+                    backgroundColor: tColors.secondaryBackgroundColor,
                     duration: const Duration(seconds: 2),
                   ),
                 );
@@ -315,15 +291,12 @@ class ProfilesColumn extends StatelessWidget {
             },
             style: ButtonStyle(
               backgroundColor: WidgetStateProperty.all<Color>(
-                AppSettings.isDarkMode
-                    ? TaskWarriorColors.ksecondaryBackgroundColor
-                    : TaskWarriorColors.kLightSecondaryBackgroundColor,
+                tColors.secondaryBackgroundColor!,
               ),
             ),
             icon: Icon(Icons.add,
-                color: AppSettings.isDarkMode
-                    ? TaskWarriorColors.deepPurpleAccent
-                    : TaskWarriorColors.deepPurple),
+                color: tColors.purpleShade
+              ),
             label: Text(
               SentenceManager(
                           currentLanguage: AppSettings.selectedLanguage)
@@ -331,9 +304,7 @@ class ProfilesColumn extends StatelessWidget {
                       .profilePageAddNewProfile,
 
               style: TextStyle(
-                color: AppSettings.isDarkMode
-                    ? TaskWarriorColors.white
-                    : TaskWarriorColors.black,
+                color: tColors.primaryTextColor,
               ),
             ),
           )

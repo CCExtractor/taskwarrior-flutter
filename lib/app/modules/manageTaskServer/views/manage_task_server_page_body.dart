@@ -11,6 +11,7 @@ import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 class ManageTaskServerPageBody extends StatelessWidget {
   final ManageTaskServerController controller;
@@ -20,6 +21,7 @@ class ManageTaskServerPageBody extends StatelessWidget {
   Widget build(BuildContext context) {
     controller.initManageTaskServerPageTour();
     controller.showManageTaskServerPageTour(context);
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20),
       child: ListView(
@@ -41,9 +43,7 @@ class ManageTaskServerPageBody extends StatelessWidget {
                       .sentences
                       .manageTaskServerPageConfigureTASKRC,
                   style: TextStyle(
-                    color: AppSettings.isDarkMode
-                        ? TaskWarriorColors.white
-                        : TaskWarriorColors.black,
+                    color: tColors.primaryTextColor,
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -52,9 +52,7 @@ class ManageTaskServerPageBody extends StatelessWidget {
                     showModalBottomSheet(
                       context: context,
                       isScrollControlled: true,
-                      backgroundColor: AppSettings.isDarkMode
-                          ? TaskWarriorColors.kdialogBackGroundColor
-                          : TaskWarriorColors.kLightDialogBackGroundColor,
+                      backgroundColor: tColors.dialogBackgroundColor,
                       builder: (context) {
                         return StatefulBuilder(
                           builder:
@@ -89,9 +87,7 @@ class ManageTaskServerPageBody extends StatelessWidget {
                                               .manageTaskServerPageConfigureTaskRCDialogueBoxTitle,
                                           style: TextStyle(
                                             fontWeight: TaskWarriorFonts.bold,
-                                            color: AppSettings.isDarkMode
-                                                ? TaskWarriorColors.white
-                                                : TaskWarriorColors.black,
+                                            color: tColors.primaryTextColor,
                                           ),
                                         ),
                                         Text(
@@ -101,9 +97,7 @@ class ManageTaskServerPageBody extends StatelessWidget {
                                               .sentences
                                               .manageTaskServerPageConfigureTaskRCDialogueBoxSubtitle,
                                           style: TextStyle(
-                                            color: AppSettings.isDarkMode
-                                                ? TaskWarriorColors.white
-                                                : TaskWarriorColors.black,
+                                            color: tColors.primaryTextColor,
                                           ),
                                         ),
                                         const SizedBox(height: 16.0),
@@ -113,21 +107,15 @@ class ManageTaskServerPageBody extends StatelessWidget {
                                             height: Get.height * 0.15,
                                             child: TextField(
                                               style: TextStyle(
-                                                  color: AppSettings.isDarkMode
-                                                      ? TaskWarriorColors.white
-                                                      : TaskWarriorColors
-                                                          .black),
+                                                  color: tColors.primaryTextColor
+                                                  ),
                                               controller: controller
                                                   .taskrcContentController,
                                               maxLines: 8,
                                               decoration: InputDecoration(
                                                 counterStyle: TextStyle(
-                                                    color:
-                                                        AppSettings.isDarkMode
-                                                            ? TaskWarriorColors
-                                                                .white
-                                                            : TaskWarriorColors
-                                                                .black),
+                                                    color: tColors.primaryTextColor
+                                                  ),
                                                 suffixIconConstraints:
                                                     const BoxConstraints(
                                                   maxHeight: 24,
@@ -143,18 +131,15 @@ class ManageTaskServerPageBody extends StatelessWidget {
                                                       Icons.content_paste),
                                                 ),
                                                 border:
-                                                    const OutlineInputBorder(),
-                                                labelStyle: GoogleFonts.poppins(
-                                                    color:
-                                                        AppSettings.isDarkMode
-                                                            ? TaskWarriorColors
-                                                                .white
-                                                            : TaskWarriorColors
-                                                                .black),
+                                                  const OutlineInputBorder(),
+                                                  labelStyle: GoogleFonts.poppins(
+                                                    color:tColors.primaryTextColor,
+                                                  ),
                                                 labelText: SentenceManager(
                                                         currentLanguage:
                                                             AppSettings
-                                                                .selectedLanguage)
+                                                                .selectedLanguage
+                                                    )
                                                     .sentences
                                                     .manageTaskServerPageConfigureTaskRCDialogueBoxInputFieldText,
                                               ),
@@ -168,21 +153,13 @@ class ManageTaskServerPageBody extends StatelessWidget {
                                               .sentences
                                               .manageTaskServerPageConfigureTaskRCDialogueBoxOr,
                                           style: TextStyle(
-                                            color: AppSettings.isDarkMode
-                                                ? TaskWarriorColors.white
-                                                : TaskWarriorColors.black,
+                                            color: tColors.primaryTextColor,
                                           ),
                                         ),
                                         FilledButton.tonal(
                                           style: ButtonStyle(
-                                              backgroundColor: AppSettings
-                                                      .isDarkMode
-                                                  ? WidgetStateProperty.all<
-                                                          Color>(
-                                                      TaskWarriorColors.black)
-                                                  : WidgetStateProperty.all<
-                                                          Color>(
-                                                      TaskWarriorColors.white)),
+                                              backgroundColor: WidgetStateProperty.all<Color>(tColors.secondaryBackgroundColor!)
+                                          ),
                                           onPressed: () async {
                                             await setConfig(
                                               storage: controller.storage,
@@ -198,9 +175,7 @@ class ManageTaskServerPageBody extends StatelessWidget {
                                                 .sentences
                                                 .manageTaskServerPageConfigureTaskRCDialogueBoxSelectTaskRC,
                                             style: TextStyle(
-                                              color: AppSettings.isDarkMode
-                                                  ? TaskWarriorColors.white
-                                                  : TaskWarriorColors.black,
+                                              color: tColors.primaryTextColor,
                                             ),
                                           ),
                                         ),
@@ -240,19 +215,14 @@ class ManageTaskServerPageBody extends StatelessWidget {
                                   .sentences
                                   .manageTaskServerPageTaskRCFileIsVerified,
                           style: TextStyle(
-                            color: AppSettings.isDarkMode
-                                ? TaskWarriorColors.white
-                                : TaskWarriorColors.black,
+                            color: tColors.primaryTextColor,
                           ),
                         ),
                         Container(
                           height: 30,
                           width: 30,
                           decoration: BoxDecoration(
-                            color: AppSettings.isDarkMode
-                                ? TaskWarriorColors
-                                    .kLightSecondaryBackgroundColor
-                                : TaskWarriorColors.ksecondaryBackgroundColor,
+                            color: tColors.secondaryTextColor,
                             shape: BoxShape.circle,
                           ),
                           child: Center(
@@ -264,9 +234,7 @@ class ManageTaskServerPageBody extends StatelessWidget {
                                   )
                                 : Icon(
                                     Icons.chevron_right_rounded,
-                                    color: AppSettings.isDarkMode
-                                        ? TaskWarriorColors.black
-                                        : TaskWarriorColors.white,
+                                    color: tColors.secondaryBackgroundColor,
                                   ),
                           ),
                         ),
@@ -293,9 +261,7 @@ class ManageTaskServerPageBody extends StatelessWidget {
                         Text(
                           "TaskD Server Info",
                           style: TextStyle(
-                            color: AppSettings.isDarkMode
-                                ? TaskWarriorColors.white
-                                : TaskWarriorColors.black,
+                            color: tColors.primaryTextColor,
                           ),
                         ),
                         const SizedBox(height: 10),
@@ -319,28 +285,20 @@ class ManageTaskServerPageBody extends StatelessWidget {
                                     ? Text(
                                         'Not Configured',
                                         style: TextStyle(
-                                          color: AppSettings.isDarkMode
-                                              ? TaskWarriorColors.white
-                                              : TaskWarriorColors.black,
+                                          color: tColors.primaryTextColor,
                                         ),
                                       )
                                     : Text(
                                         '${controller.server}',
                                         style: TextStyle(
-                                          color: AppSettings.isDarkMode
-                                              ? TaskWarriorColors.white
-                                              : TaskWarriorColors.black,
+                                          color: tColors.primaryTextColor,
                                         ),
                                       ),
                                 Container(
                                   height: 30,
                                   width: 30,
                                   decoration: BoxDecoration(
-                                    color: AppSettings.isDarkMode
-                                        ? TaskWarriorColors
-                                            .kLightSecondaryBackgroundColor
-                                        : TaskWarriorColors
-                                            .ksecondaryBackgroundColor,
+                                    color: tColors.secondaryTextColor,
                                     shape: BoxShape.circle,
                                   ),
                                   child: Center(
@@ -351,9 +309,7 @@ class ManageTaskServerPageBody extends StatelessWidget {
                                           )
                                         : Icon(
                                             Icons.chevron_right_rounded,
-                                            color: AppSettings.isDarkMode
-                                                ? TaskWarriorColors.black
-                                                : TaskWarriorColors.white,
+                                            color: tColors.secondaryBackgroundColor,
                                           ),
                                   ),
                                 ),
@@ -376,9 +332,7 @@ class ManageTaskServerPageBody extends StatelessWidget {
                         Text(
                           "TaskD Server Credentials",
                           style: TextStyle(
-                            color: AppSettings.isDarkMode
-                                ? TaskWarriorColors.white
-                                : TaskWarriorColors.black,
+                            color: tColors.primaryTextColor,
                           ),
                         ),
                         const SizedBox(height: 10),
@@ -401,9 +355,7 @@ class ManageTaskServerPageBody extends StatelessWidget {
                                     ? Text(
                                         'Not Configured',
                                         style: TextStyle(
-                                          color: AppSettings.isDarkMode
-                                              ? TaskWarriorColors.white
-                                              : TaskWarriorColors.black,
+                                          color: tColors.primaryTextColor,
                                         ),
                                       )
                                     : SizedBox(
@@ -415,9 +367,7 @@ class ManageTaskServerPageBody extends StatelessWidget {
                                           child: Text(
                                             controller.credentialsString!.value,
                                             style: TextStyle(
-                                              color: AppSettings.isDarkMode
-                                                  ? TaskWarriorColors.white
-                                                  : TaskWarriorColors.black,
+                                              color: tColors.primaryTextColor,
                                             ),
                                           ),
                                         ),
@@ -431,27 +381,19 @@ class ManageTaskServerPageBody extends StatelessWidget {
                                     height: 30,
                                     width: 30,
                                     decoration: BoxDecoration(
-                                      color: AppSettings.isDarkMode
-                                          ? TaskWarriorColors
-                                              .kLightPrimaryBackgroundColor
-                                          : TaskWarriorColors
-                                              .kprimaryBackgroundColor,
+                                      color: tColors.primaryTextColor,
                                       shape: BoxShape.circle,
                                     ),
                                     child: controller.credentials == null
                                         ? Icon(
                                             Icons.chevron_right_rounded,
-                                            color: AppSettings.isDarkMode
-                                                ? TaskWarriorColors.black
-                                                : TaskWarriorColors.white,
+                                            color: tColors.primaryBackgroundColor,
                                           )
                                         : Icon(
                                             controller.hideKey.value
                                                 ? Icons.visibility_off
                                                 : Icons.visibility,
-                                            color: AppSettings.isDarkMode
-                                                ? TaskWarriorColors.green
-                                                : TaskWarriorColors.green,
+                                            color: TaskWarriorColors.green,
                                           ),
                                   ),
                                 ),

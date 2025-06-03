@@ -3,11 +3,11 @@ import 'package:get/get.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
-import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 class SelectProfile extends StatelessWidget {
   const SelectProfile(
@@ -25,23 +25,14 @@ class SelectProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Obx(() => ExpansionTile(
           // key: currentProfileKey,
-          backgroundColor: AppSettings.isDarkMode
-              ? TaskWarriorColors.ksecondaryBackgroundColor
-              : TaskWarriorColors.kLightSecondaryBackgroundColor,
-          iconColor: AppSettings.isDarkMode
-              ? TaskWarriorColors.white
-              : TaskWarriorColors.black,
-          collapsedIconColor: AppSettings.isDarkMode
-              ? TaskWarriorColors.white
-              : TaskWarriorColors.black,
-          collapsedTextColor: AppSettings.isDarkMode
-              ? TaskWarriorColors.ksecondaryTextColor
-              : TaskWarriorColors.kLightSecondaryTextColor,
-          textColor: AppSettings.isDarkMode
-              ? TaskWarriorColors.white
-              : TaskWarriorColors.black,
+          backgroundColor: tColors.secondaryBackgroundColor,
+          iconColor: tColors.primaryTextColor,
+          collapsedIconColor: tColors.primaryTextColor,
+          collapsedTextColor: tColors.secondaryTextColor,
+          textColor: tColors.primaryTextColor,
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -55,9 +46,7 @@ class SelectProfile extends StatelessWidget {
                 style: GoogleFonts.poppins(
                   fontWeight: TaskWarriorFonts.bold,
                   fontSize: TaskWarriorFonts.fontSizeMedium,
-                  color: AppSettings.isDarkMode
-                      ? TaskWarriorColors.white
-                      : TaskWarriorColors.black,
+                  color: tColors.primaryTextColor,
                 ),
               ),
               SizedBox(
@@ -66,9 +55,7 @@ class SelectProfile extends StatelessWidget {
               Text(currentProfile,
                   style: GoogleFonts.poppins(
                     fontSize: TaskWarriorFonts.fontSizeSmall,
-                    color: AppSettings.isDarkMode
-                        ? TaskWarriorColors.grey
-                        : TaskWarriorColors.lightGrey,
+                    color: tColors.greyShade,
                   ))
             ],
           ),
@@ -87,9 +74,7 @@ class SelectProfile extends StatelessWidget {
 
                       fontWeight: TaskWarriorFonts.bold,
                       fontSize: TaskWarriorFonts.fontSizeMedium,
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.white
-                          : TaskWarriorColors.black,
+                      color: tColors.primaryTextColor,
                     ),
                   ),
                 ],
@@ -126,6 +111,7 @@ class SelectProfileListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -141,25 +127,17 @@ class SelectProfileListTile extends StatelessWidget {
                 content: Text(
                   'Switched to Profile ${alias ?? uuid}',
                   style: TextStyle(
-                    color: AppSettings.isDarkMode
-                        ? TaskWarriorColors.kprimaryTextColor
-                        : TaskWarriorColors.kLightPrimaryTextColor,
+                    color: tColors.primaryTextColor,
                   ),
                 ),
-                backgroundColor: AppSettings.isDarkMode
-                    ? TaskWarriorColors.ksecondaryBackgroundColor
-                    : TaskWarriorColors.kLightSecondaryBackgroundColor,
+                backgroundColor: tColors.secondaryBackgroundColor,
                 duration: const Duration(seconds: 2),
               ),
             );
             Get.find<HomeController>().refreshTaskWithNewProfile();
           },
-          activeColor: AppSettings.isDarkMode
-              ? TaskWarriorColors.white
-              : TaskWarriorColors.ksecondaryBackgroundColor,
-          focusColor: AppSettings.isDarkMode
-              ? TaskWarriorColors.white
-              : TaskWarriorColors.ksecondaryBackgroundColor,
+          activeColor: tColors.primaryTextColor,
+          focusColor: tColors.primaryTextColor,
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -176,9 +154,7 @@ class SelectProfileListTile extends StatelessWidget {
                     alias!,
                     overflow: TextOverflow.fade,
                     style: GoogleFonts.poppins(
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.ksecondaryTextColor
-                          : TaskWarriorColors.kLightSecondaryTextColor,
+                      color: tColors.secondaryTextColor,
                       fontSize: TaskWarriorFonts.fontSizeMedium
                     ),
                   ),
@@ -190,9 +166,7 @@ class SelectProfileListTile extends StatelessWidget {
               child: Text(
                 uuid,
                 style: GoogleFonts.poppins(
-                  color: AppSettings.isDarkMode
-                      ? TaskWarriorColors.ksecondaryTextColor
-                      : TaskWarriorColors.kLightSecondaryTextColor,
+                  color: tColors.secondaryTextColor,
                   fontSize: TaskWarriorFonts.fontSizeSmall
                 ),
               ),
