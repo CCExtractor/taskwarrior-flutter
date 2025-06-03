@@ -8,7 +8,7 @@
 PRODUCT_NAME = taskwarrior
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.ccextractor.taskwarrior
+PRODUCT_BUNDLE_IDENTIFIER = com.ccextractor.taskwarriorflutter
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2024 com.ccextractor. All rights reserved.
