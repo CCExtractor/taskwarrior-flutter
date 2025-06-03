@@ -15,8 +15,18 @@ class AppSettings {
     await SaveTourStatus.init();
 
     isDarkMode = SelectedTheme.getMode() ?? true;
-    selectedLanguage =
-        SelectedLanguage.getSelectedLanguage() ?? SupportedLanguage.english;
+
+    SupportedLanguage? userPreferredLanguage =
+        SelectedLanguage.getSelectedLanguage();
+
+    if (userPreferredLanguage != null) {
+      selectedLanguage = userPreferredLanguage;
+    } else {
+      // If no explicit preference, use the system language (if supported)
+      selectedLanguage = SupportedLanguageExtension.getSystemLanguage();
+      // Save the system language as the user's preference
+      await SelectedLanguage.saveSelectedLanguage(selectedLanguage);
+    }
   }
 
   static Future saveSettings(
