@@ -18,20 +18,31 @@ class TagsWidget extends StatelessWidget {
     required this.name,
     required this.value,
     required this.callback,
+    this.isEditable = true,
     super.key,
   });
 
   final String name;
   final dynamic value;
   final void Function(dynamic) callback;
+  final bool isEditable;
 
   @override
   Widget build(BuildContext context) {
+    final Color textColor = isEditable
+        ? (AppSettings.isDarkMode
+            ? TaskWarriorColors.white
+            : TaskWarriorColors.black)
+        : (AppSettings.isDarkMode
+            ? TaskWarriorColors.grey
+            : TaskWarriorColors.grey);
+
     return Card(
+      color: AppSettings.isDarkMode
+          ? const Color.fromARGB(255, 55, 54, 54)
+          : TaskWarriorColors.white,
       child: ListTile(
-        tileColor: AppSettings.isDarkMode
-            ? const Color.fromARGB(255, 55, 54, 54)
-            : TaskWarriorColors.white,
+        enabled: isEditable,
         textColor: AppSettings.isDarkMode
             ? TaskWarriorColors.white
             : const Color.fromARGB(255, 48, 46, 46),
@@ -41,17 +52,17 @@ class TagsWidget extends StatelessWidget {
             children: [
               Text(
                 '${'$name:'.padRight(13)}${(value as ListBuilder?)?.build()}',
+                style: TextStyle(
+                  color: textColor,
+                ),
               ),
             ],
           ),
         ),
-        onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => TagsRoute(
-              value: value,
-              callback: callback,
-            ),
+        onTap: () => Get.to(
+          TagsRoute(
+            value: value,
+            callback: callback,
           ),
         ),
       ),
