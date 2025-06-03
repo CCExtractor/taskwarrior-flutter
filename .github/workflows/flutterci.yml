@@ -21,7 +21,7 @@ jobs:
       # Step 2: Setup Java with version 12.x
       - uses: actions/setup-java@v1
         with:
-          java-version: "12.x"
+          java-version: "17.x"
 
       # Step 3: Setup Flutter with version 3.7.11
       - uses: subosito/flutter-action@v1
