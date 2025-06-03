@@ -66,10 +66,15 @@ class Tasks {
     };
   }
 }
+
 String origin = 'http://localhost:8080';
 
-Future<List<Tasks>> fetchTasks(String uuid, String encryptionSecret) async {
-  var baseUrl = await CredentialsStorage.getApiUrl();
+Future<List<Tasks>> fetchTasks(
+  String uuid,
+  String encryptionSecret, {
+  required CredentialsStorage credentialsStorage, // Make it required
+}) async {
+  final baseUrl = await CredentialsStorage.getApiUrl();
   try {
     String url =
         '$baseUrl/tasks?email=email&origin=$origin&UUID=$uuid&encryptionSecret=$encryptionSecret';

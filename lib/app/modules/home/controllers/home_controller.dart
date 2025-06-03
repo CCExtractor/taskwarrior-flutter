@@ -112,7 +112,9 @@ class HomeController extends GetxController {
   Future<void> refreshTasks(String clientId, String encryptionSecret) async {
     TaskDatabase taskDatabase = TaskDatabase();
     await taskDatabase.open();
-    List<Tasks> tasksFromServer = await fetchTasks(clientId, encryptionSecret);
+    var mockCredentialsStorage;
+    List<Tasks> tasksFromServer = await fetchTasks(clientId, encryptionSecret,
+        credentialsStorage: mockCredentialsStorage);
     await updateTasksInDatabase(tasksFromServer);
     List<Tasks> fetchedTasks = await taskDatabase.fetchTasksFromDatabase();
     tasks.value = fetchedTasks;
