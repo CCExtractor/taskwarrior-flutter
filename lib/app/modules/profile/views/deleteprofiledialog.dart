@@ -11,12 +11,15 @@ class DeleteProfileDialog extends StatelessWidget {
   const DeleteProfileDialog({
     required this.profile,
     required this.context,
+    required this.profiles,
+    required this.profileName,
     super.key,
   });
 
   final String profile;
   final BuildContext context;
-
+  final RxMap<dynamic, dynamic> profiles;
+  final String? profileName;
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -25,10 +28,9 @@ class DeleteProfileDialog extends StatelessWidget {
           child: Utils.showAlertDialog(
             scrollable: true,
             title: Text(
-              SentenceManager(
-                          currentLanguage: AppSettings.selectedLanguage)
-                      .sentences
-                      .profilePageDeleteProfile,
+              SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                  .sentences
+                  .profilePageDeleteProfile,
               style: TextStyle(
                 color: AppSettings.isDarkMode
                     ? TaskWarriorColors.white
@@ -39,7 +41,8 @@ class DeleteProfileDialog extends StatelessWidget {
             actions: [
               TextButton(
                 onPressed: () {
-                  // Navigator.of(context).pop();
+                  debugPrint("PROFILE$profile${profileName!}");
+                  profiles[profile] = profileName;
                   Get.back();
                 },
                 child: Text(
