@@ -116,12 +116,16 @@ class ProjectTileTaskc extends StatelessWidget {
             groupValue: projectFilter,
             onChanged: (_) => callback(project),
           ),
-          Text(
-            project,
-            style: TextStyle(
-              color: AppSettings.isDarkMode
-                  ? TaskWarriorColors.white
-                  : TaskWarriorColors.black,
+          Expanded(
+            child: Text(
+              project,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: AppSettings.isDarkMode
+                    ? TaskWarriorColors.white
+                    : TaskWarriorColors.black,
+              ),
             ),
           ),
           const Spacer(),
