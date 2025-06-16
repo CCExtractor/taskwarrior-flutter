@@ -217,7 +217,7 @@ class AddTaskToTaskcBottomSheet extends StatelessWidget {
                           child: MediaQuery(
                               data: MediaQuery.of(context).copyWith(
                                 alwaysUse24HourFormat:
-                                    homeController.change24hr.value,
+                                    AppSettings.use24HourFormatRx.value,
                               ),
                               child: child!),
                         );
@@ -234,8 +234,11 @@ class AddTaskToTaskcBottomSheet extends StatelessWidget {
                         ),
                       );
                       homeController.due.value = dateTime.toUtc();
+                      String timeFormat = AppSettings.use24HourFormatRx.value
+                          ? 'yyyy-MM-dd HH:mm'
+                          : 'yyyy-MM-dd hh:mm a';
                       homeController.dueString.value =
-                          DateFormat("yyyy-MM-dd").format(dateTime);
+                          DateFormat(timeFormat).format(dateTime);
                       if (dateTime.isBefore(DateTime.now())) {
                         homeController.inThePast.value = true;
 
