@@ -505,7 +505,7 @@ class AddTaskBottomSheet extends StatelessWidget {
             homeController.update();
             // Navigator.of(context).pop();
             Get.back();
-            if (Platform.isAndroid) {
+            if (Platform.isAndroid||Platform.isIOS) {
               WidgetController widgetController =
                   Get.put(WidgetController());
               widgetController.fetchAllData();
