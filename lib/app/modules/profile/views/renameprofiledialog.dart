@@ -28,10 +28,9 @@ class RenameProfileDialog extends StatelessWidget {
         child: Utils.showAlertDialog(
           scrollable: true,
           title: Text(
-            SentenceManager(
-                          currentLanguage: AppSettings.selectedLanguage)
-                      .sentences
-                      .profilePageRenameAliasDialogueBoxTitle,
+            SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                .sentences
+                .profilePageRenameAliasDialogueBoxTitle,
             style: TextStyle(
               color: AppSettings.isDarkMode
                   ? TaskWarriorColors.white
@@ -41,8 +40,8 @@ class RenameProfileDialog extends StatelessWidget {
           content: TextField(
               style: TextStyle(
                 color: AppSettings.isDarkMode
-                  ? TaskWarriorColors.white
-                  : TaskWarriorColors.black,
+                    ? TaskWarriorColors.white
+                    : TaskWarriorColors.black,
               ),
               controller: controller),
           actions: [
@@ -53,8 +52,8 @@ class RenameProfileDialog extends StatelessWidget {
               },
               child: Text(
                 SentenceManager(currentLanguage: AppSettings.selectedLanguage)
-              .sentences
-              .profilePageRenameAliasDialogueBoxCancel,
+                    .sentences
+                    .profilePageRenameAliasDialogueBoxCancel,
                 style: TextStyle(
                   color: AppSettings.isDarkMode
                       ? TaskWarriorColors.white
@@ -73,8 +72,8 @@ class RenameProfileDialog extends StatelessWidget {
               },
               child: Text(
                 SentenceManager(currentLanguage: AppSettings.selectedLanguage)
-              .sentences
-              .profilePageRenameAliasDialogueBoxSubmit,
+                    .sentences
+                    .profilePageRenameAliasDialogueBoxSubmit,
                 style: TextStyle(
                   color: AppSettings.isDarkMode
                       ? TaskWarriorColors.black
