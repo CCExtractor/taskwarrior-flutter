@@ -22,16 +22,16 @@ class RenameProfileDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var controller = TextEditingController(text: alias);
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return SingleChildScrollView(
       child: Center(
         child: Utils.showAlertDialog(
           scrollable: true,
           title: Text(
-            SentenceManager(
-                          currentLanguage: AppSettings.selectedLanguage)
-                      .sentences
-                      .profilePageRenameAliasDialogueBoxTitle,
+            SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                .sentences
+                .profilePageRenameAliasDialogueBoxTitle,
             style: TextStyle(
               color: tColors.primaryTextColor,
             ),
@@ -49,8 +49,8 @@ class RenameProfileDialog extends StatelessWidget {
               },
               child: Text(
                 SentenceManager(currentLanguage: AppSettings.selectedLanguage)
-              .sentences
-              .profilePageRenameAliasDialogueBoxCancel,
+                    .sentences
+                    .profilePageRenameAliasDialogueBoxCancel,
                 style: TextStyle(
                   color: tColors.primaryTextColor,
                 ),
@@ -67,8 +67,11 @@ class RenameProfileDialog extends StatelessWidget {
               },
               child: Text(
                 SentenceManager(currentLanguage: AppSettings.selectedLanguage)
-              .sentences
-              .profilePageRenameAliasDialogueBoxSubmit,
+                    .sentences
+                    .profilePageRenameAliasDialogueBoxSubmit,
+                style: TextStyle(
+                  color: tColors.primaryTextColor,
+                ),
               ),
             ),
           ],
