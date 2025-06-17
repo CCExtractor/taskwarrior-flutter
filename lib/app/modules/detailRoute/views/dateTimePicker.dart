@@ -15,6 +15,7 @@ class DateTimeWidget extends StatelessWidget {
     required this.value,
     required this.callback,
     required this.globalKey,
+    this.isEditable = true,
   });
 
   final String name;
@@ -22,15 +23,25 @@ class DateTimeWidget extends StatelessWidget {
   final dynamic value;
   final void Function(dynamic) callback;
   final GlobalKey globalKey;
+  final bool isEditable;
 
   @override
   Widget build(BuildContext context) {
+    final Color textColor = isEditable
+        ? (AppSettings.isDarkMode
+            ? TaskWarriorColors.white
+            : TaskWarriorColors.black)
+        : (AppSettings.isDarkMode
+            ? TaskWarriorColors.grey
+            : TaskWarriorColors.grey);
+
     return Card(
       key: globalKey,
       color: AppSettings.isDarkMode
           ? const Color.fromARGB(255, 57, 57, 57)
           : Colors.white,
       child: ListTile(
+        enabled: isEditable,
         textColor: AppSettings.isDarkMode
             ? Colors.white
             : const Color.fromARGB(255, 48, 46, 46),
@@ -54,9 +65,7 @@ class DateTimeWidget extends StatelessWidget {
                         fontFamily: FontFamily.poppins,
                         fontWeight: TaskWarriorFonts.bold,
                         fontSize: TaskWarriorFonts.fontSizeMedium,
-                        color: AppSettings.isDarkMode
-                            ? TaskWarriorColors.white
-                            : TaskWarriorColors.black,
+                        color: textColor,
                       ),
                     ),
                     TextSpan(
@@ -70,9 +79,7 @@ class DateTimeWidget extends StatelessWidget {
                       style: TextStyle(
                         fontFamily: FontFamily.poppins,
                         fontSize: TaskWarriorFonts.fontSizeMedium,
-                        color: AppSettings.isDarkMode
-                            ? TaskWarriorColors.white
-                            : TaskWarriorColors.black,
+                        color: textColor,
                       ),
                     ),
                   ],
@@ -187,7 +194,6 @@ class DateTimeWidget extends StatelessWidget {
             }
           }
         },
-
         onLongPress: () => callback(null),
       ),
     );
@@ -199,20 +205,31 @@ class StartWidget extends StatelessWidget {
     required this.name,
     required this.value,
     required this.callback,
+    this.isEditable = true,
     super.key,
   });
 
   final String name;
   final dynamic value;
+  final bool isEditable;
   final void Function(dynamic) callback;
 
   @override
   Widget build(BuildContext context) {
+    final Color textColor = isEditable
+        ? (AppSettings.isDarkMode
+            ? TaskWarriorColors.white
+            : TaskWarriorColors.black)
+        : (AppSettings.isDarkMode
+            ? TaskWarriorColors.grey
+            : TaskWarriorColors.grey);
+
     return Card(
       color: AppSettings.isDarkMode
           ? const Color.fromARGB(255, 57, 57, 57)
           : Colors.white,
       child: ListTile(
+        enabled: isEditable,
         textColor: AppSettings.isDarkMode
             ? Colors.white
             : const Color.fromARGB(255, 48, 46, 46),
@@ -236,9 +253,7 @@ class StartWidget extends StatelessWidget {
                         fontFamily: FontFamily.poppins,
                         fontWeight: TaskWarriorFonts.bold,
                         fontSize: TaskWarriorFonts.fontSizeMedium,
-                        color: AppSettings.isDarkMode
-                            ? TaskWarriorColors.white
-                            : TaskWarriorColors.black,
+                        color: textColor,
                       ),
                     ),
                     TextSpan(
@@ -252,9 +267,7 @@ class StartWidget extends StatelessWidget {
                       style: TextStyle(
                         fontFamily: FontFamily.poppins,
                         fontSize: TaskWarriorFonts.fontSizeMedium,
-                        color: AppSettings.isDarkMode
-                            ? TaskWarriorColors.white
-                            : TaskWarriorColors.black,
+                        color: textColor,
                       ),
                     ),
                   ],

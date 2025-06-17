@@ -252,12 +252,19 @@ class AttributeWidget extends StatelessWidget {
         ? DateFormat.yMEd().add_jms().format(value.toLocal())
         : ((value is BuiltList) ? (value).toBuilder() : value);
 
+    // Get the controller to check if the task is read-only
+    final DetailRouteController controller = Get.find<DetailRouteController>();
+    
+    // Always allow status to be edited, but respect read-only for other attributes
+    final bool isEditable = !controller.isReadOnly.value || name == 'status';
+
     switch (name) {
       case 'description':
         return DescriptionWidget(
           name: name,
           value: localValue,
           callback: callback,
+          isEditable: isEditable,
         );
       case 'status':
         return StatusWidget(
@@ -270,6 +277,7 @@ class AttributeWidget extends StatelessWidget {
           name: name,
           value: localValue,
           callback: callback,
+          isEditable: isEditable,
         );
       case 'due':
         return DateTimeWidget(
@@ -277,6 +285,7 @@ class AttributeWidget extends StatelessWidget {
           value: localValue,
           callback: callback,
           globalKey: dueKey,
+          isEditable: isEditable,
         );
       case 'wait':
         return DateTimeWidget(
@@ -284,6 +293,7 @@ class AttributeWidget extends StatelessWidget {
           value: localValue,
           callback: callback,
           globalKey: waitKey,
+          isEditable: isEditable,
         );
       case 'until':
         return DateTimeWidget(
@@ -291,6 +301,7 @@ class AttributeWidget extends StatelessWidget {
           value: localValue,
           callback: callback,
           globalKey: untilKey,
+          isEditable: isEditable,
         );
       case 'priority':
         return PriorityWidget(
@@ -298,20 +309,27 @@ class AttributeWidget extends StatelessWidget {
           value: localValue,
           callback: callback,
           globalKey: priorityKey,
+          isEditable: isEditable,
         );
       case 'project':
         return ProjectWidget(
           name: name,
           value: localValue,
           callback: callback,
+          isEditable: isEditable,
         );
       case 'tags':
         return TagsWidget(
           name: name,
           value: localValue,
           callback: callback,
+          isEditable: isEditable,
         );
       default:
+        final Color textColor = (isEditable && !['entry', 'modified', 'urgency'].contains(name))
+            ? (AppSettings.isDarkMode ? TaskWarriorColors.white : TaskWarriorColors.black)
+            : (AppSettings.isDarkMode ? TaskWarriorColors.grey : TaskWarriorColors.grey);
+
         return Card(
           color: AppSettings.isDarkMode
               ? TaskWarriorColors.ksecondaryBackgroundColor
@@ -327,17 +345,13 @@ class AttributeWidget extends StatelessWidget {
                   Text(
                     '$name:'.padRight(13),
                     style: TextStyle(
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.white
-                          : TaskWarriorColors.black,
+                      color: textColor,
                     ),
                   ),
                   Text(
                     localValue?.toString() ?? "not selected",
                     style: TextStyle(
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.white
-                          : TaskWarriorColors.black,
+                      color: textColor,
                     ),
                   ),
                 ],
@@ -346,76 +360,5 @@ class AttributeWidget extends StatelessWidget {
           ),
         );
     }
-  }
-}
-
-class TagsWidget extends StatelessWidget {
-  const TagsWidget({
-    required this.name,
-    required this.value,
-    required this.callback,
-    super.key,
-  });
-
-  final String name;
-  final dynamic value;
-  final void Function(dynamic) callback;
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      color: AppSettings.isDarkMode
-          ? TaskWarriorColors.ksecondaryBackgroundColor
-          : TaskWarriorColors.kLightSecondaryBackgroundColor,
-      child: ListTile(
-        textColor: AppSettings.isDarkMode
-            ? TaskWarriorColors.kprimaryTextColor
-            : TaskWarriorColors.ksecondaryTextColor,
-        title: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              RichText(
-                text: TextSpan(
-                  children: <TextSpan>[
-                    TextSpan(
-                        text: '$name:'.padRight(13),
-                        style: TextStyle(
-                          fontFamily: FontFamily.poppins,
-                          fontSize: TaskWarriorFonts.fontSizeMedium,
-                          color: AppSettings.isDarkMode
-                              ? TaskWarriorColors.white
-                              : TaskWarriorColors.black,
-                        )
-                        // style: GoogleFonts.poppins(
-                        //   fontWeight: TaskWarriorFonts.bold,
-                        //   fontSize: TaskWarriorFonts.fontSizeMedium,
-                        //   color: AppSettings.isDarkMode
-                        //       ? TaskWarriorColors.white
-                        //       : TaskWarriorColors.black,
-                        // ),
-                        ),
-                    TextSpan(
-                      text:
-                          '${(value as ListBuilder?)?.build() ?? 'not selected'}',
-                      style: TextStyle(
-                        color: AppSettings.isDarkMode
-                            ? TaskWarriorColors.white
-                            : TaskWarriorColors.black,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        onTap: () => Get.to(
-          TagsRoute(
-            value: value,
-            callback: callback,
-          ),
-        ),
-      ),
-    );
   }
 }

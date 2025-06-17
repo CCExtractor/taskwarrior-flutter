@@ -4,26 +4,38 @@ import 'package:taskwarrior/app/utils/constants/constants.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 
 class PriorityWidget extends StatelessWidget {
-  const PriorityWidget(
-      {required this.name,
-      required this.value,
-      required this.callback,
-      required this.globalKey,
-      super.key});
+  const PriorityWidget({
+    required this.name,
+    required this.value,
+    required this.callback,
+    required this.globalKey,
+    this.isEditable = true,
+    super.key,
+  });
 
   final String name;
   final dynamic value;
   final void Function(dynamic) callback;
   final GlobalKey globalKey;
+  final bool isEditable;
 
   @override
   Widget build(BuildContext context) {
+    final Color textColor = isEditable
+        ? (AppSettings.isDarkMode
+            ? TaskWarriorColors.white
+            : TaskWarriorColors.black)
+        : (AppSettings.isDarkMode
+            ? TaskWarriorColors.grey
+            : TaskWarriorColors.grey);
+
     return Card(
       key: globalKey,
       color: AppSettings.isDarkMode
           ? const Color.fromARGB(255, 57, 57, 57)
           : Colors.white,
       child: ListTile(
+        enabled: isEditable,
         textColor: AppSettings.isDarkMode
             ? Colors.white
             : const Color.fromARGB(255, 48, 46, 46),
@@ -39,18 +51,14 @@ class PriorityWidget extends StatelessWidget {
                       style: GoogleFonts.poppins(
                         fontWeight: TaskWarriorFonts.bold,
                         fontSize: TaskWarriorFonts.fontSizeMedium,
-                        color: AppSettings.isDarkMode
-                            ? Colors.white
-                            : Colors.black,
+                        color: textColor,
                       ),
                     ),
                     TextSpan(
                       text: value ?? "not selected",
                       style: GoogleFonts.poppins(
                         fontSize: TaskWarriorFonts.fontSizeMedium,
-                        color: AppSettings.isDarkMode
-                            ? Colors.white
-                            : Colors.black,
+                        color: textColor,
                       ),
                     ),
                   ],
