@@ -250,7 +250,7 @@ class AddTaskBottomSheet extends StatelessWidget {
                     },
                     fieldHintText: "Month/Date/Year",
                     context: context,
-                    initialDate: homeController.due.value?? DateTime.now(),
+                    initialDate: homeController.due.value ?? DateTime.now(),
                     firstDate: DateTime.now(),
                     lastDate: DateTime(2037, 12, 31),
                   );
@@ -355,10 +355,7 @@ class AddTaskBottomSheet extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "${SentenceManager(
-                        currentLanguage: homeController.selectedLanguage.value)
-                    .sentences
-                    .addTaskPriority} :",
+                "${SentenceManager(currentLanguage: homeController.selectedLanguage.value).sentences.addTaskPriority} :",
                 style: GoogleFonts.poppins(
                   fontWeight: TaskWarriorFonts.bold,
                   color: AppSettings.isDarkMode
@@ -367,16 +364,19 @@ class AddTaskBottomSheet extends StatelessWidget {
                 ),
                 textAlign: TextAlign.left,
               ),
-              const SizedBox(width: 2,),
+              const SizedBox(
+                width: 2,
+              ),
               Obx(
                 () => Row(
                   children: [
-                    for(int i=0;i<homeController.priorityList.length;i++)
+                    for (int i = 0; i < homeController.priorityList.length; i++)
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 2.5),
                         child: GestureDetector(
                           onTap: () {
-                            homeController.priority.value = homeController.priorityList[i];
+                            homeController.priority.value =
+                                homeController.priorityList[i];
                             debugPrint(homeController.priority.value);
                           },
                           child: AnimatedContainer(
@@ -384,34 +384,34 @@ class AddTaskBottomSheet extends StatelessWidget {
                             height: 30,
                             width: 37,
                             decoration: BoxDecoration(
-
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(
-                                color: homeController.priority.value == homeController.priorityList[i]
-                                    ? AppSettings.isDarkMode
-                                      ? TaskWarriorColors.kLightPrimaryBackgroundColor
-                                        : TaskWarriorColors.kprimaryBackgroundColor
-                                    : AppSettings.isDarkMode
-                                      ? TaskWarriorColors.kprimaryBackgroundColor
-                                        : TaskWarriorColors.kLightPrimaryBackgroundColor,
-                              )
-                            ),
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                  color: homeController.priority.value ==
+                                          homeController.priorityList[i]
+                                      ? AppSettings.isDarkMode
+                                          ? TaskWarriorColors
+                                              .kLightPrimaryBackgroundColor
+                                          : TaskWarriorColors
+                                              .kprimaryBackgroundColor
+                                      : AppSettings.isDarkMode
+                                          ? TaskWarriorColors
+                                              .kprimaryBackgroundColor
+                                          : TaskWarriorColors
+                                              .kLightPrimaryBackgroundColor,
+                                )),
                             child: Center(
                               child: Text(
                                 homeController.priorityList[i],
                                 textAlign: TextAlign.center,
                                 style: GoogleFonts.poppins(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 17,
-                                  color: homeController.priorityColors[i]
-                                ),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 17,
+                                    color: homeController.priorityColors[i]),
                               ),
                             ),
                           ),
-
                         ),
                       )
-
                   ],
                 ),
               )
@@ -448,8 +448,7 @@ class AddTaskBottomSheet extends StatelessWidget {
   Widget buildAddButton(BuildContext context) {
     return TextButton(
       child: Text(
-        SentenceManager(
-                        currentLanguage: homeController.selectedLanguage.value)
+        SentenceManager(currentLanguage: homeController.selectedLanguage.value)
             .sentences
             .addTaskAdd,
         style: TextStyle(
@@ -460,12 +459,12 @@ class AddTaskBottomSheet extends StatelessWidget {
       ),
       onPressed: () async {
         // print(homeController.formKey.currentState);
-        if(homeController.due.value!=null&&DateTime.now().isAfter(homeController.due.value!)){
+        if (homeController.due.value != null &&
+            DateTime.now().isAfter(homeController.due.value!)) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(
                 SentenceManager(
-                    currentLanguage:
-                    homeController.selectedLanguage.value)
+                        currentLanguage: homeController.selectedLanguage.value)
                     .sentences
                     .addTaskTimeInPast,
                 style: TextStyle(
@@ -476,8 +475,7 @@ class AddTaskBottomSheet extends StatelessWidget {
               ),
               backgroundColor: AppSettings.isDarkMode
                   ? TaskWarriorColors.ksecondaryBackgroundColor
-                  : TaskWarriorColors
-                  .kLightSecondaryBackgroundColor,
+                  : TaskWarriorColors.kLightSecondaryBackgroundColor,
               duration: const Duration(seconds: 2)));
           return;
         }
@@ -501,13 +499,12 @@ class AddTaskBottomSheet extends StatelessWidget {
             homeController.priority.value = 'M';
             homeController.tagcontroller.text = '';
             homeController.tags.value = [];
-            homeController.due.value=null;
+            homeController.due.value = null;
             homeController.update();
             // Navigator.of(context).pop();
             Get.back();
             if (Platform.isAndroid) {
-              WidgetController widgetController =
-                  Get.put(WidgetController());
+              WidgetController widgetController = Get.put(WidgetController());
               widgetController.fetchAllData();
 
               widgetController.update();
@@ -518,7 +515,8 @@ class AddTaskBottomSheet extends StatelessWidget {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(
                   SentenceManager(
-                        currentLanguage: homeController.selectedLanguage.value)
+                          currentLanguage:
+                              homeController.selectedLanguage.value)
                       .sentences
                       .addTaskTaskAddedSuccessfully,
                   style: TextStyle(
@@ -542,6 +540,7 @@ class AddTaskBottomSheet extends StatelessWidget {
             if (value) {
               storageWidget.synchronize(context, true);
             }
+            homeController.showTaskSwipeTutorial(context);
           } on FormatException catch (e) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(
@@ -567,8 +566,8 @@ class AddTaskBottomSheet extends StatelessWidget {
     if (tag.isNotEmpty) {
       String trimmedString = tag.trim();
       List<String> tags = trimmedString.split(" ");
-      for(tag in tags){
-        if(checkTagIfExists(tag)) {
+      for (tag in tags) {
+        if (checkTagIfExists(tag)) {
           removeTag(tag);
         }
         homeController.tags.add(tag);
@@ -576,9 +575,11 @@ class AddTaskBottomSheet extends StatelessWidget {
       homeController.tagcontroller.text = '';
     }
   }
-  bool checkTagIfExists(String tag){
+
+  bool checkTagIfExists(String tag) {
     return homeController.tags.contains(tag);
   }
+
   void removeTag(String tag) {
     homeController.tags.remove(tag);
   }
