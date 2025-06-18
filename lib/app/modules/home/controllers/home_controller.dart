@@ -128,7 +128,7 @@ class HomeController extends GetxController {
 
   Future<void> _loadTaskChampion() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    taskchampion.value = prefs.getBool('taskchampion') ?? false;
+    taskchampion.value = prefs.getBool('settings_taskc') ?? false;
   }
 
   void addListenerToScrollController() {
