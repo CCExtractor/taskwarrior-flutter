@@ -23,7 +23,8 @@ class DetailRouteView extends GetView<DetailRouteController> {
   Widget build(BuildContext context) {
     controller.initDetailsPageTour();
     controller.showDetailsPageTour(context);
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return WillPopScope(
       onWillPop: () async {
         if (!controller.onEdit.value) {
@@ -180,7 +181,7 @@ class DetailRouteView extends GetView<DetailRouteController> {
                                 ),
                               ),
                             ),
-                            ElevatedButton(
+                            TextButton(
                               onPressed: () {
                                 controller.saveChanges();
                               },
@@ -227,7 +228,8 @@ class AttributeWidget extends StatelessWidget {
     var localValue = (value is DateTime)
         ? DateFormat.yMEd().add_jms().format(value.toLocal())
         : ((value is BuiltList) ? (value).toBuilder() : value);
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     switch (name) {
       case 'description':
         return DescriptionWidget(
@@ -299,10 +301,10 @@ class AttributeWidget extends StatelessWidget {
                   Text(
                     '$name:'.padRight(13),
                     style: TextStyle(
-                        fontFamily: FontFamily.poppins,
-                        fontWeight: TaskWarriorFonts.bold,
-                        fontSize: TaskWarriorFonts.fontSizeMedium,
-                        color: tColors.primaryTextColor,
+                      fontFamily: FontFamily.poppins,
+                      fontWeight: TaskWarriorFonts.bold,
+                      fontSize: TaskWarriorFonts.fontSizeMedium,
+                      color: tColors.primaryTextColor,
                     ),
                   ),
                   Text(
@@ -335,7 +337,8 @@ class TagsWidget extends StatelessWidget {
   final void Function(dynamic) callback;
   @override
   Widget build(BuildContext context) {
-  TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Card(
       color: tColors.secondaryBackgroundColor,
       child: ListTile(

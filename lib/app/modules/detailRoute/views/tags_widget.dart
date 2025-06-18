@@ -27,7 +27,8 @@ class TagsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Card(
       child: ListTile(
         tileColor: tColors.secondaryBackgroundColor,
@@ -113,7 +114,8 @@ class TagsRouteState extends State<TagsRoute> {
 
   @override
   Widget build(BuildContext context) {
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
@@ -152,8 +154,7 @@ class TagsRouteState extends State<TagsRoute> {
                       'Added tags will appear here',
                       style: GoogleFonts.poppins(
                           fontStyle: FontStyle.italic,
-                          color: tColors.primaryTextColor
-                        ),
+                          color: tColors.primaryTextColor),
                     ),
                   ),
                 Divider(
@@ -223,7 +224,7 @@ class TagsRouteState extends State<TagsRoute> {
                     ),
                   ),
                 ),
-                ElevatedButton(
+                TextButton(
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
                       try {

@@ -20,7 +20,8 @@ class DescriptionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Card(
       color: tColors.secondaryBackgroundColor,
       child: ListTile(
@@ -103,7 +104,7 @@ class DescriptionWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-                ElevatedButton(
+                TextButton(
                   onPressed: () {
                     try {
                       callback(controller.text);
@@ -142,7 +143,8 @@ class ProjectWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Card(
       color: tColors.secondaryBackgroundColor,
       child: ListTile(
@@ -225,7 +227,7 @@ class ProjectWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-                ElevatedButton(
+                TextButton(
                   onPressed: () {
                     try {
                       callback(
