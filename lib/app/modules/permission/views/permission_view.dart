@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:taskwarrior/app/modules/permission/views/permission_section.dart';
-import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import '../controllers/permission_controller.dart';
 
 class PermissionView extends GetView<PermissionController> {
@@ -12,8 +12,8 @@ class PermissionView extends GetView<PermissionController> {
 
   @override
   Widget build(BuildContext context) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     if (Platform.isLinux || Platform.isMacOS || Platform.isWindows) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Get.offAllNamed('/home');
@@ -22,9 +22,7 @@ class PermissionView extends GetView<PermissionController> {
     }
 
     return Scaffold(
-      backgroundColor: isDarkMode
-          ? TaskWarriorColors.kprimaryBackgroundColor
-          : TaskWarriorColors.kLightPrimaryBackgroundColor,
+      backgroundColor: tColors.primaryBackgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -37,9 +35,7 @@ class PermissionView extends GetView<PermissionController> {
                   'Why We Need Your Permission',
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: isDarkMode
-                            ? TaskWarriorColors.kprimaryTextColor
-                            : TaskWarriorColors.kLightPrimaryTextColor,
+                        color: tColors.primaryTextColor,
                       ),
                   textAlign: TextAlign.center,
                 ),
@@ -47,38 +43,31 @@ class PermissionView extends GetView<PermissionController> {
                 Icon(
                   Icons.security,
                   size: 64,
-                  color: AppSettings.isDarkMode
-                      ? TaskWarriorColors.black
-                      : TaskWarriorColors.white,
+                  color: tColors.primaryTextColor,
                 ),
                 const SizedBox(height: 32),
-                PermissionSection(
-                  icon: Icons.folder_outlined,
-                  title: 'Storage Permission',
-                  description:
-                      'We use storage access to save your tasks, preferences, '
-                      'and app data securely on your device. This ensures that you can '
-                      'pick up where you left off seamlessly, even offline.',
-                  isDarkMode: isDarkMode,
-                ),
+                const PermissionSection(
+                    icon: Icons.folder_outlined,
+                    title: 'Storage Permission',
+                    description:
+                        'We use storage access to save your tasks, preferences, '
+                        'and app data securely on your device. This ensures that you can '
+                        'pick up where you left off seamlessly, even offline.'),
                 const SizedBox(height: 24),
-                PermissionSection(
-                  icon: Icons.notifications_outlined,
-                  title: 'Notification Permission',
-                  description:
-                      'Notifications keep you updated with important reminders '
-                      'and updates, ensuring you stay on top of your tasks effortlessly.',
-                  isDarkMode: isDarkMode,
-                ),
+                const PermissionSection(
+                    icon: Icons.notifications_outlined,
+                    title: 'Notification Permission',
+                    description:
+                        'Notifications keep you updated with important reminders '
+                        'and updates, ensuring you stay on top of your tasks effortlessly.'),
                 const SizedBox(height: 24),
                 Text(
                   'Your privacy is our top priority. We never access or share your '
                   'personal files or data without your consent.',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppSettings.isDarkMode
-                            ? TaskWarriorColors.black
-                            : TaskWarriorColors.white,
-                      ),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(color: tColors.primaryTextColor),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 48),
@@ -88,28 +77,20 @@ class PermissionView extends GetView<PermissionController> {
                           : controller.requestPermissions,
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.all(16),
-                        backgroundColor: AppSettings.isDarkMode
-                            ? TaskWarriorColors.black
-                            : TaskWarriorColors.white,
-                        foregroundColor: AppSettings.isDarkMode
-                            ? TaskWarriorColors.kprimaryTextColor
-                            : TaskWarriorColors.kLightPrimaryTextColor,
+                        backgroundColor: tColors.primaryBackgroundColor,
+                        foregroundColor: tColors.primaryTextColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
                       child: controller.isLoading.value
                           ? CircularProgressIndicator(
-                              color: AppSettings.isDarkMode
-                                  ? TaskWarriorColors.black
-                                  : TaskWarriorColors.white,
+                              color: tColors.primaryBackgroundColor,
                             )
                           : Text(
                               'Grant Permissions',
                               style: TextStyle(
-                                color: AppSettings.isDarkMode
-                                    ? TaskWarriorColors.kprimaryTextColor
-                                    : TaskWarriorColors.kLightPrimaryTextColor,
+                                color: tColors.primaryTextColor,
                                 fontSize: 16,
                               ),
                             ),
@@ -124,9 +105,7 @@ class PermissionView extends GetView<PermissionController> {
                   child: Text(
                     'You can manage your permissions anytime later in Settings',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppSettings.isDarkMode
-                              ? TaskWarriorColors.black
-                              : TaskWarriorColors.white,
+                          color: tColors.primaryTextColor,
                         ),
                     textAlign: TextAlign.center,
                   ),

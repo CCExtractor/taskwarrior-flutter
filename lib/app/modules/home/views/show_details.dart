@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:taskwarrior/api_service.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
-import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 class TaskDetails extends StatefulWidget {
   final Tasks task;
@@ -50,6 +50,7 @@ class _TaskDetailsState extends State<TaskDetails> {
 
   @override
   Widget build(BuildContext context) {
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return WillPopScope(
       onWillPop: () async {
         if (hasChanges) {
@@ -63,9 +64,7 @@ class _TaskDetailsState extends State<TaskDetails> {
         return Future.value(true);
       },
       child: Scaffold(
-        backgroundColor: AppSettings.isDarkMode
-            ? TaskWarriorColors.kprimaryBackgroundColor
-            : TaskWarriorColors.kLightPrimaryBackgroundColor,
+        backgroundColor: tColors.primaryBackgroundColor,
         appBar: AppBar(
           foregroundColor: TaskWarriorColors.lightGrey,
           backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
@@ -167,21 +166,7 @@ class _TaskDetailsState extends State<TaskDetails> {
           lastDate: DateTime(2101),
           builder: (BuildContext context, Widget? child) {
             return Theme(
-              data: Theme.of(context).copyWith(
-                colorScheme: AppSettings.isDarkMode
-                    ? ColorScheme.dark(
-                        primary: TaskWarriorColors.white,
-                        onPrimary: TaskWarriorColors.black,
-                        surface: TaskWarriorColors.black,
-                        onSurface: TaskWarriorColors.white,
-                      )
-                    : ColorScheme.light(
-                        primary: TaskWarriorColors.black,
-                        onPrimary: TaskWarriorColors.white,
-                        surface: TaskWarriorColors.white,
-                        onSurface: TaskWarriorColors.black,
-                      ),
-              ),
+              data: Theme.of(context),
               child: child!,
             );
           },
@@ -208,12 +193,11 @@ class _TaskDetailsState extends State<TaskDetails> {
   }
 
   Widget _buildDetail(String label, String value) {
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: AppSettings.isDarkMode
-            ? TaskWarriorColors.ksecondaryBackgroundColor
-            : TaskWarriorColors.kLightSecondaryBackgroundColor,
+        color: tColors.secondaryBackgroundColor,
         borderRadius: BorderRadius.circular(8.0),
         boxShadow: const [
           BoxShadow(
@@ -234,9 +218,7 @@ class _TaskDetailsState extends State<TaskDetails> {
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 18,
-              color: AppSettings.isDarkMode
-                  ? TaskWarriorColors.kprimaryTextColor
-                  : TaskWarriorColors.kLightSecondaryTextColor,
+              color: tColors.primaryTextColor,
             ),
           ),
           const SizedBox(width: 8),
@@ -245,9 +227,7 @@ class _TaskDetailsState extends State<TaskDetails> {
               value,
               style: TextStyle(
                 fontSize: 18,
-                color: AppSettings.isDarkMode
-                    ? TaskWarriorColors.kprimaryTextColor
-                    : TaskWarriorColors.kLightSecondaryTextColor,
+                color: tColors.primaryTextColor,
               ),
             ),
           ),
@@ -258,6 +238,7 @@ class _TaskDetailsState extends State<TaskDetails> {
 
   Future<String?> _showEditDialog(
       BuildContext context, String label, String initialValue) async {
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     final TextEditingController controller =
         TextEditingController(text: initialValue);
     return await showDialog<String>(
@@ -267,22 +248,19 @@ class _TaskDetailsState extends State<TaskDetails> {
           title: Text(
             'Edit $label',
             style: TextStyle(
-                color: AppSettings.isDarkMode
-                    ? TaskWarriorColors.kprimaryTextColor
-                    : TaskWarriorColors.kLightPrimaryTextColor),
+                color: tColors.primaryTextColor
+              ),
           ),
           content: TextField(
             style: TextStyle(
-                color: AppSettings.isDarkMode
-                    ? TaskWarriorColors.kprimaryTextColor
-                    : TaskWarriorColors.kLightPrimaryTextColor),
+                color: tColors.primaryTextColor
+              ),
             controller: controller,
             decoration: InputDecoration(
               hintText: 'Enter new $label',
               hintStyle: TextStyle(
-                  color: AppSettings.isDarkMode
-                      ? TaskWarriorColors.kprimaryTextColor
-                      : TaskWarriorColors.kLightPrimaryTextColor),
+                  color: tColors.primaryTextColor
+                    ),
             ),
           ),
           actions: [
@@ -293,9 +271,8 @@ class _TaskDetailsState extends State<TaskDetails> {
               child: Text(
                 'Cancel',
                 style: TextStyle(
-                    color: AppSettings.isDarkMode
-                        ? TaskWarriorColors.kprimaryTextColor
-                        : TaskWarriorColors.kLightPrimaryTextColor),
+                    color: tColors.primaryTextColor
+                  ),
               ),
             ),
             TextButton(
@@ -305,9 +282,8 @@ class _TaskDetailsState extends State<TaskDetails> {
               child: Text(
                 'Save',
                 style: TextStyle(
-                    color: AppSettings.isDarkMode
-                        ? TaskWarriorColors.kprimaryTextColor
-                        : TaskWarriorColors.kLightPrimaryTextColor),
+                    color: tColors.primaryTextColor
+                  ),
               ),
             ),
           ],
@@ -318,6 +294,7 @@ class _TaskDetailsState extends State<TaskDetails> {
 
   Future<String?> _showSelectDialog(BuildContext context, String label,
       String initialValue, List<String> options) async {
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return await showDialog<String>(
       context: context,
       builder: (context) {
@@ -325,9 +302,8 @@ class _TaskDetailsState extends State<TaskDetails> {
           title: Text(
             'Select $label',
             style: TextStyle(
-                color: AppSettings.isDarkMode
-                    ? TaskWarriorColors.kprimaryTextColor
-                    : TaskWarriorColors.kLightPrimaryTextColor),
+                color: tColors.primaryTextColor
+              ),
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -336,9 +312,8 @@ class _TaskDetailsState extends State<TaskDetails> {
                 title: Text(
                   option,
                   style: TextStyle(
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.kprimaryTextColor
-                          : TaskWarriorColors.kLightPrimaryTextColor),
+                      color: tColors.primaryTextColor
+                    ),
                 ),
                 value: option,
                 groupValue: initialValue,
@@ -369,6 +344,7 @@ class _TaskDetailsState extends State<TaskDetails> {
 
   Future<UnsavedChangesAction?> _showUnsavedChangesDialog(
       BuildContext context) async {
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return showDialog<UnsavedChangesAction>(
       context: context,
       barrierDismissible: false,
@@ -377,16 +353,13 @@ class _TaskDetailsState extends State<TaskDetails> {
           title: Text(
             'Unsaved Changes',
             style: TextStyle(
-                color: AppSettings.isDarkMode
-                    ? TaskWarriorColors.kprimaryTextColor
-                    : TaskWarriorColors.kLightPrimaryTextColor),
+                color: tColors.primaryTextColor),
           ),
           content: Text(
             'You have unsaved changes. What would you like to do?',
             style: TextStyle(
-                color: AppSettings.isDarkMode
-                    ? TaskWarriorColors.kprimaryTextColor
-                    : TaskWarriorColors.kLightPrimaryTextColor),
+                color: tColors.primaryTextColor
+              ),
           ),
           actions: <Widget>[
             TextButton(

@@ -11,7 +11,7 @@ import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
 import 'package:taskwarrior/app/utils/constants/constants.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/validate.dart';
-import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 class TagsWidget extends StatelessWidget {
   const TagsWidget({
@@ -27,14 +27,12 @@ class TagsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Card(
       child: ListTile(
-        tileColor: AppSettings.isDarkMode
-            ? const Color.fromARGB(255, 55, 54, 54)
-            : TaskWarriorColors.white,
-        textColor: AppSettings.isDarkMode
-            ? TaskWarriorColors.white
-            : const Color.fromARGB(255, 48, 46, 46),
+        tileColor: tColors.secondaryBackgroundColor,
+        textColor: tColors.primaryTextColor,
         title: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
@@ -116,6 +114,8 @@ class TagsRouteState extends State<TagsRoute> {
 
   @override
   Widget build(BuildContext context) {
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
@@ -127,9 +127,7 @@ class TagsRouteState extends State<TagsRoute> {
           color: TaskWarriorColors.white,
         ),
       ),
-      backgroundColor: AppSettings.isDarkMode
-          ? TaskWarriorColors.kprimaryBackgroundColor
-          : TaskWarriorColors.kLightPrimaryBackgroundColor,
+      backgroundColor: tColors.secondaryBackgroundColor,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(4),
@@ -156,15 +154,11 @@ class TagsRouteState extends State<TagsRoute> {
                       'Added tags will appear here',
                       style: GoogleFonts.poppins(
                           fontStyle: FontStyle.italic,
-                          color: AppSettings.isDarkMode
-                              ? TaskWarriorColors.kprimaryTextColor
-                              : TaskWarriorColors.kLightPrimaryTextColor),
+                          color: tColors.primaryTextColor),
                     ),
                   ),
                 Divider(
-                  color: AppSettings.isDarkMode
-                      ? const Color.fromARGB(255, 192, 192, 192)
-                      : TaskWarriorColors.kprimaryBackgroundColor,
+                  color: tColors.dividerColor,
                 ),
                 if (_pendingTags != null)
                   for (var tag in _pendingTags!.entries.where((tag) =>
@@ -182,15 +176,9 @@ class TagsRouteState extends State<TagsRoute> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: AppSettings.isDarkMode
-            ? TaskWarriorColors.black
-            : TaskWarriorColors.white,
-        foregroundColor: AppSettings.isDarkMode
-            ? TaskWarriorColors.white
-            : TaskWarriorColors.black,
-        splashColor: AppSettings.isDarkMode
-            ? TaskWarriorColors.black
-            : TaskWarriorColors.white,
+        backgroundColor: tColors.primaryTextColor,
+        foregroundColor: tColors.secondaryBackgroundColor,
+        splashColor: tColors.primaryTextColor,
         heroTag: "btn4",
         onPressed: () {
           final formKey = GlobalKey<FormState>();
@@ -202,18 +190,14 @@ class TagsRouteState extends State<TagsRoute> {
               title: Text(
                 'Add tag',
                 style: TextStyle(
-                  color: AppSettings.isDarkMode
-                      ? TaskWarriorColors.white
-                      : TaskWarriorColors.black,
+                  color: tColors.primaryTextColor,
                 ),
               ),
               content: Form(
                 key: formKey,
                 child: TextFormField(
                   style: TextStyle(
-                    color: AppSettings.isDarkMode
-                        ? TaskWarriorColors.white
-                        : TaskWarriorColors.black,
+                    color: tColors.primaryTextColor,
                   ),
                   validator: (value) {
                     if (value != null) {
@@ -236,13 +220,11 @@ class TagsRouteState extends State<TagsRoute> {
                   child: Text(
                     'Cancel',
                     style: TextStyle(
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.white
-                          : TaskWarriorColors.black,
+                      color: tColors.primaryTextColor,
                     ),
                   ),
                 ),
-                ElevatedButton(
+                TextButton(
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
                       try {
@@ -258,9 +240,7 @@ class TagsRouteState extends State<TagsRoute> {
                   child: Text(
                     'Submit',
                     style: TextStyle(
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.black
-                          : TaskWarriorColors.black,
+                      color: tColors.primaryTextColor,
                     ),
                   ),
                 ),

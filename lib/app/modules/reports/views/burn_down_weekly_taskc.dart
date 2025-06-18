@@ -7,8 +7,7 @@ import 'package:taskwarrior/app/modules/reports/views/common_chart_indicator.dar
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
-
-import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 class BurnDownWeeklyTask extends StatelessWidget {
   BurnDownWeeklyTask({super.key});
@@ -96,6 +95,7 @@ class BurnDownWeeklyTask extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     double height = MediaQuery.of(context).size.height; // Screen height
     return FutureBuilder<Map<String, Map<String, int>>>(
         future: fetchWeeklyInfo(),
@@ -124,9 +124,7 @@ class BurnDownWeeklyTask extends StatelessWidget {
                         textStyle: GoogleFonts.poppins(
                           fontWeight: TaskWarriorFonts.bold,
                           fontSize: TaskWarriorFonts.fontSizeSmall,
-                          color: AppSettings.isDarkMode
-                              ? Colors.white
-                              : Colors.black,
+                          color: tColors.primaryTextColor,
                         ),
                       ),
                     ),
@@ -135,9 +133,7 @@ class BurnDownWeeklyTask extends StatelessWidget {
                         text: 'Tasks',
                         textStyle: GoogleFonts.poppins(
                           fontWeight: TaskWarriorFonts.bold,
-                          color: AppSettings.isDarkMode
-                              ? Colors.white
-                              : Colors.black,
+                          color: tColors.primaryTextColor,
                           fontSize: TaskWarriorFonts.fontSizeSmall,
                         ),
                       ),

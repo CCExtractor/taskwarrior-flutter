@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
 import 'package:taskwarrior/app/modules/splash/controllers/splash_controller.dart';
-import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 class DeleteProfileDialog extends StatelessWidget {
   const DeleteProfileDialog({
@@ -22,6 +22,7 @@ class DeleteProfileDialog extends StatelessWidget {
   final String? profileName;
   @override
   Widget build(BuildContext context) {
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Center(
       child: SingleChildScrollView(
         child: Center(
@@ -32,9 +33,7 @@ class DeleteProfileDialog extends StatelessWidget {
                   .sentences
                   .profilePageDeleteProfile,
               style: TextStyle(
-                color: AppSettings.isDarkMode
-                    ? TaskWarriorColors.white
-                    : TaskWarriorColors.black,
+                color: tColors.primaryTextColor,
               ),
             ),
             // content: TextField(controller: controller),
@@ -48,13 +47,11 @@ class DeleteProfileDialog extends StatelessWidget {
                 child: Text(
                   'Cancel',
                   style: TextStyle(
-                    color: AppSettings.isDarkMode
-                        ? TaskWarriorColors.white
-                        : TaskWarriorColors.black,
+                    color: tColors.primaryTextColor,
                   ),
                 ),
               ),
-              ElevatedButton(
+              TextButton(
                 onPressed: () {
                   try {
                     Get.find<SplashController>().deleteProfile(profile);
@@ -65,38 +62,25 @@ class DeleteProfileDialog extends StatelessWidget {
                         content: Text(
                           'Profile: ${profile.characters} Deleted Successfully',
                           style: TextStyle(
-                            color: AppSettings.isDarkMode
-                                ? TaskWarriorColors.kprimaryTextColor
-                                : TaskWarriorColors.kLightPrimaryTextColor,
+                            color: tColors.primaryTextColor,
                           ),
                         ),
-                        backgroundColor: AppSettings.isDarkMode
-                            ? TaskWarriorColors.ksecondaryBackgroundColor
-                            : TaskWarriorColors.kLightSecondaryBackgroundColor,
+                        backgroundColor: tColors.secondaryBackgroundColor,
                         duration: const Duration(seconds: 2)));
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
                           'Profile: ${profile.characters} Deletion Failed',
                           style: TextStyle(
-                            color: AppSettings.isDarkMode
-                                ? TaskWarriorColors.kprimaryTextColor
-                                : TaskWarriorColors.kLightPrimaryTextColor,
+                            color: tColors.primaryTextColor,
                           ),
                         ),
-                        backgroundColor: AppSettings.isDarkMode
-                            ? TaskWarriorColors.ksecondaryBackgroundColor
-                            : TaskWarriorColors.kLightSecondaryBackgroundColor,
+                        backgroundColor: tColors.secondaryBackgroundColor,
                         duration: const Duration(seconds: 2)));
                   }
                 },
-                child: Text(
-                  'Confirm',
-                  style: TextStyle(
-                    color: AppSettings.isDarkMode
-                        ? TaskWarriorColors.black
-                        : TaskWarriorColors.black,
-                  ),
+                child: const Text(
+                  'Confirm'
                 ),
               ),
             ],

@@ -4,6 +4,7 @@ import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 class CommonChartIndicator extends StatelessWidget {
   final String title;
@@ -11,6 +12,7 @@ class CommonChartIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Column(
       children: [
         Row(
@@ -21,7 +23,7 @@ class CommonChartIndicator extends StatelessWidget {
               style: TextStyle(
                 fontFamily: FontFamily.poppins,
                 fontWeight: TaskWarriorFonts.bold,
-                color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                color: tColors.primaryTextColor,
                 fontSize: TaskWarriorFonts.fontSizeMedium,
               ),
             )
@@ -47,7 +49,7 @@ class CommonChartIndicator extends StatelessWidget {
                   style: TextStyle(
                     fontFamily: FontFamily.poppins,
                     fontWeight: TaskWarriorFonts.regular,
-                    color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                    color: tColors.primaryTextColor,
                     fontSize: TaskWarriorFonts.fontSizeSmall,
                   ),
                 ),
@@ -67,7 +69,7 @@ class CommonChartIndicator extends StatelessWidget {
                   style: TextStyle(
                     fontFamily: FontFamily.poppins,
                     fontWeight: TaskWarriorFonts.regular,
-                    color: AppSettings.isDarkMode ? Colors.white : Colors.black,
+                    color: tColors.primaryTextColor,
                     fontSize: TaskWarriorFonts.fontSizeSmall,
                   ),
                 ),

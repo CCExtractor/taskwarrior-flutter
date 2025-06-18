@@ -7,8 +7,7 @@ import 'package:taskwarrior/app/modules/reports/views/common_chart_indicator.dar
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
-
-import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 class BurnDownMonthlyTaskc extends StatelessWidget {
   BurnDownMonthlyTaskc({super.key});
@@ -89,7 +88,7 @@ class BurnDownMonthlyTaskc extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
-
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return FutureBuilder<Map<String, Map<String, int>>>(
       future: fetchMonthlyInfo(),
       builder: (context, snapshot) {
@@ -116,9 +115,7 @@ class BurnDownMonthlyTaskc extends StatelessWidget {
                       textStyle: GoogleFonts.poppins(
                         fontWeight: TaskWarriorFonts.bold,
                         fontSize: TaskWarriorFonts.fontSizeSmall,
-                        color: AppSettings.isDarkMode
-                            ? Colors.white
-                            : Colors.black,
+                        color: tColors.primaryTextColor,
                       ),
                     ),
                   ),
@@ -128,9 +125,7 @@ class BurnDownMonthlyTaskc extends StatelessWidget {
                       textStyle: GoogleFonts.poppins(
                         fontWeight: TaskWarriorFonts.bold,
                         fontSize: TaskWarriorFonts.fontSizeSmall,
-                        color: AppSettings.isDarkMode
-                            ? Colors.white
-                            : Colors.black,
+                        color: tColors.primaryTextColor,
                       ),
                     ),
                   ),

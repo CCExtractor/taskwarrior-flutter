@@ -1,34 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 class PermissionSection extends StatelessWidget {
   final IconData icon;
   final String title;
   final String description;
-  final bool isDarkMode;
 
   const PermissionSection({
     super.key,
     required this.icon,
     required this.title,
     required this.description,
-    required this.isDarkMode,
   });
 
   @override
   Widget build(BuildContext context) {
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         border: Border.all(
-          color: isDarkMode
-              ? TaskWarriorColors.ksecondaryBackgroundColor
-              : TaskWarriorColors.borderColor,
+          color: tColors.secondaryBackgroundColor!,
         ),
         borderRadius: BorderRadius.circular(12),
-        color: isDarkMode
-            ? TaskWarriorColors.kdialogBackGroundColor
-            : TaskWarriorColors.kLightDialogBackGroundColor,
+        color: tColors.dialogBackgroundColor,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,9 +39,7 @@ class PermissionSection extends StatelessWidget {
                   title,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: isDarkMode
-                            ? TaskWarriorColors.kprimaryTextColor
-                            : TaskWarriorColors.kLightPrimaryTextColor,
+                        color: tColors.primaryTextColor,
                       ),
                 ),
               ),
@@ -54,9 +49,7 @@ class PermissionSection extends StatelessWidget {
           Text(
             description,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: isDarkMode
-                      ? TaskWarriorColors.ksecondaryTextColor
-                      : TaskWarriorColors.kLightSecondaryTextColor,
+                  color: tColors.secondaryTextColor,
                 ),
           ),
         ],

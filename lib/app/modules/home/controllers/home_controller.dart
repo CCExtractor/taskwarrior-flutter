@@ -32,6 +32,7 @@ import 'package:taskwarrior/app/utils/taskfunctions/projects.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/query.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/tags.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class HomeController extends GetxController {
@@ -322,19 +323,16 @@ class HomeController extends GetxController {
   Future<void> synchronize(BuildContext context, bool isDialogNeeded) async {
     try {
       final connectivityResult = await Connectivity().checkConnectivity();
+      TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
       if (connectivityResult == ConnectivityResult.none) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
               'You are not connected to the internet. Please check your network connection.',
               style: TextStyle(
-                color: AppSettings.isDarkMode
-                    ? TaskWarriorColors.kprimaryTextColor
-                    : TaskWarriorColors.kLightPrimaryTextColor,
+                color: tColors.primaryTextColor,
               ),
             ),
-            backgroundColor: AppSettings.isDarkMode
-                ? TaskWarriorColors.ksecondaryBackgroundColor
-                : TaskWarriorColors.kLightSecondaryBackgroundColor,
+            backgroundColor: tColors.secondaryBackgroundColor,
             duration: const Duration(seconds: 2)));
       } else {
         if (isDialogNeeded) {
@@ -386,14 +384,10 @@ class HomeController extends GetxController {
             content: Text(
               '${header['code']}: ${header['status']}',
               style: TextStyle(
-                color: AppSettings.isDarkMode
-                    ? TaskWarriorColors.kprimaryTextColor
-                    : TaskWarriorColors.kLightPrimaryTextColor,
+                color: tColors.primaryTextColor,
               ),
             ),
-            backgroundColor: AppSettings.isDarkMode
-                ? TaskWarriorColors.ksecondaryBackgroundColor
-                : TaskWarriorColors.kLightSecondaryBackgroundColor,
+            backgroundColor: tColors.secondaryBackgroundColor,
             duration: const Duration(seconds: 2)));
 
         if (isDialogNeeded) {

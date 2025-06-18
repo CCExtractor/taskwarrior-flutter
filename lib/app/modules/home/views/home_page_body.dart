@@ -1,14 +1,10 @@
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:taskwarrior/app/modules/home/views/show_tasks.dart';
-
 import 'package:taskwarrior/app/modules/home/views/tasks_builder.dart';
-import 'package:taskwarrior/app/utils/constants/palette.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
-import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
-
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import '../controllers/home_controller.dart';
 
 class HomePageBody extends StatelessWidget {
@@ -19,12 +15,11 @@ class HomePageBody extends StatelessWidget {
   Widget build(BuildContext context) {
     controller.initInAppTour();
     controller.showInAppTour(context);
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return DoubleBackToCloseApp(
       snackBar: const SnackBar(content: Text('Tap back again to exit')),
       child: Container(
-        color: AppSettings.isDarkMode
-            ? Palette.kToDark.shade200
-            : TaskWarriorColors.white,
+        color: tColors.dialogBackgroundColor,
         child: Padding(
           padding: const EdgeInsets.only(left: 8.0, right: 8.0),
           child: Obx(
@@ -36,9 +31,9 @@ class HomePageBody extends StatelessWidget {
                         horizontal: 10, vertical: 10),
                     child: SearchBar(
                       backgroundColor: WidgetStateProperty.all<Color>(
-                          (TaskWarriorColors.kLightPrimaryBackgroundColor)),
+                          (tColors.primaryBackgroundColor!)),
                       surfaceTintColor: WidgetStateProperty.all<Color>(
-                          (TaskWarriorColors.kLightPrimaryBackgroundColor)),
+                          (tColors.primaryBackgroundColor!)),
                       controller: controller.searchController,
                       // shape:,
                       onChanged: (value) {
@@ -51,7 +46,7 @@ class HomePageBody extends StatelessWidget {
                             return RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12.0),
                               side: BorderSide(
-                                color: TaskWarriorColors.black,
+                                color: tColors.primaryTextColor!,
                                 width: 2.0,
                               ),
                             );
@@ -59,7 +54,7 @@ class HomePageBody extends StatelessWidget {
                             return RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12.0),
                               side: BorderSide(
-                                color: TaskWarriorColors.black,
+                                color: tColors.primaryTextColor!,
                                 width: 1.5,
                               ),
                             );
