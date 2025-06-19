@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/add_task_dialog_utils.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 class AddTaskDatePickerInput extends StatefulWidget {
   final Function(List<DateTime?>)? onDateChanges;
@@ -45,6 +46,8 @@ class _AddTaskDatePickerInputState extends State<AddTaskDatePickerInput> {
 
   @override
   Widget build(BuildContext context) {
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     bool isNextDateSelected = _selectedDates[getNextIndex()] != null;
     bool isPreviousDateSelected = _selectedDates[getPreviousIndex()] != null;
     String nextDateText = isNextDateSelected
@@ -79,10 +82,10 @@ class _AddTaskDatePickerInputState extends State<AddTaskDatePickerInput> {
                       decorationStyle: TextDecorationStyle.wavy,
                     ),
                   ),
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.arrow_back_ios_rounded,
                     size: 12,
-                    color: Colors.black,
+                    color: tColors.primaryTextColor,
                   ),
                   iconAlignment: IconAlignment.start,
                 ),
@@ -101,10 +104,10 @@ class _AddTaskDatePickerInputState extends State<AddTaskDatePickerInput> {
                       decorationStyle: TextDecorationStyle.wavy,
                     ),
                   ),
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.arrow_forward_ios_rounded,
                     size: 12,
-                    color: Colors.black,
+                    color: tColors.primaryTextColor,
                   ),
                   iconAlignment: IconAlignment.end,
                 ),

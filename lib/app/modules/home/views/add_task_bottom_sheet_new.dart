@@ -16,6 +16,7 @@ import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/add_task_dialog_utils.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/tags.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/taskparser.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 class AddTaskBottomSheet extends StatelessWidget {
   final HomeController homeController;
@@ -72,39 +73,41 @@ class AddTaskBottomSheet extends StatelessWidget {
             ),
             Flexible(
               child: SingleChildScrollView(
-                  child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(padding),
-                    child: TextFormField(
-                      controller: homeController.namecontroller,
-                      validator: (value) =>
-                          value!.isEmpty ? "Description cannot be empty" : null,
-                      decoration: const InputDecoration(
-                        labelText: 'Enter Task Description',
-                        border: OutlineInputBorder(),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(padding),
+                      child: TextFormField(
+                        controller: homeController.namecontroller,
+                        validator: (value) => value!.isEmpty
+                            ? "Description cannot be empty"
+                            : null,
+                        decoration: const InputDecoration(
+                          labelText: 'Enter Task Description',
+                          border: OutlineInputBorder(),
+                        ),
                       ),
                     ),
-                  ),
-                  Padding(
+                    Padding(
+                        padding: const EdgeInsets.all(padding),
+                        child: buildProjectInput(context)),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: padding, right: padding, top: padding),
+                      child: buildDatePicker(context),
+                    ),
+                    Padding(
                       padding: const EdgeInsets.all(padding),
-                      child: buildProjectInput(context)),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: padding, right: padding, top: padding),
-                    child: buildDatePicker(context),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(padding),
-                    child: buildPriority(context),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(padding),
-                    child: buildTagsInput(context),
-                  ),
-                  const Padding(padding: EdgeInsets.all(20)),
-                ],
-              )),
+                      child: buildPriority(context),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(padding),
+                      child: buildTagsInput(context),
+                    ),
+                    const Padding(padding: EdgeInsets.all(20)),
+                  ],
+                ),
+              ),
             ),
           ],
         ),
@@ -112,67 +115,74 @@ class AddTaskBottomSheet extends StatelessWidget {
     );
   }
 
-  Widget buildProjectInput(BuildContext context) => Autocomplete<String>(
-        optionsBuilder: (textEditingValue) async {
-          Iterable<String> projects = getProjects();
-          debugPrint("projects found $projects");
-          return projects.where(
-              (String project) => project.contains(textEditingValue.text));
-        },
-        optionsViewBuilder: (context, onAutoCompleteSelect, options) {
-          return Align(
-            alignment: Alignment.topLeft,
-            child: Material(
-              elevation: 4.0,
-              child: Container(
-                width: MediaQuery.of(context).size.width - 12 * 2,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(4.0),
-                ),
-                child: ListView.separated(
-                  shrinkWrap: true,
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  itemCount: options.length,
-                  separatorBuilder: (context, i) => const Divider(height: 1),
-                  itemBuilder: (BuildContext context, int index) {
-                    return InkWell(
-                      onTap: () {
-                        onAutoCompleteSelect(options.elementAt(index));
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16.0, vertical: 12.0),
-                        child: Text(
-                          options.elementAt(index),
-                          style: const TextStyle(fontSize: 16),
-                        ),
+  Widget buildProjectInput(BuildContext context) {
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    return Autocomplete<String>(
+      optionsBuilder: (textEditingValue) async {
+        Iterable<String> projects = getProjects();
+        return projects.where((String project) =>
+            project
+                .toLowerCase()
+                .contains(textEditingValue.text.toLowerCase()) &&
+            project != '');
+      },
+      optionsViewBuilder: (context, onAutoCompleteSelect, options) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            elevation: 4.0,
+            child: Container(
+              width: MediaQuery.of(context).size.width - 12 * 2,
+              decoration: BoxDecoration(
+                color: tColors.primaryBackgroundColor,
+                borderRadius: BorderRadius.circular(4.0),
+              ),
+              child: ListView.separated(
+                shrinkWrap: true,
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                itemCount: options.length,
+                separatorBuilder: (context, i) =>
+                    Divider(height: 1, color: tColors.secondaryBackgroundColor),
+                itemBuilder: (BuildContext context, int index) {
+                  return InkWell(
+                    onTap: () {
+                      onAutoCompleteSelect(options.elementAt(index));
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 12.0),
+                      child: Text(
+                        options.elementAt(index),
+                        style: const TextStyle(fontSize: 16),
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  );
+                },
               ),
             ),
-          );
-        },
-        fieldViewBuilder:
-            (context, textEditingController, focusNode, onFieldSubmitted) =>
-                TextFormField(
-          controller: textEditingController,
-          decoration: const InputDecoration(
-            labelText: 'Project',
-            border: OutlineInputBorder(),
           ),
-          onChanged: (value) => homeController.projectcontroller.text = value,
-          focusNode: focusNode,
-          validator: (value) {
-            if (value != null && value.contains(" ")) {
-              return "Can not have Whitespace";
-            }
-            return null;
-          },
+        );
+      },
+      fieldViewBuilder:
+          (context, textEditingController, focusNode, onFieldSubmitted) =>
+              TextFormField(
+        controller: textEditingController,
+        decoration: const InputDecoration(
+          labelText: 'Project',
+          border: OutlineInputBorder(),
         ),
-      );
+        onChanged: (value) => homeController.projectcontroller.text = value,
+        focusNode: focusNode,
+        validator: (value) {
+          if (value != null && value.contains(" ")) {
+            return "Can not have Whitespace";
+          }
+          return null;
+        },
+      ),
+    );
+  }
 
   Widget buildTagsInput(BuildContext context) => AddTaskTagsInput(
         suggestions: tagSet(homeController.storage.data.allData()),
