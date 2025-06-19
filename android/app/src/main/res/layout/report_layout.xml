@@ -1,0 +1,47 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="1dp"
+    android:background="#80000000"> <!-- Transparent dark background -->
+
+    <TextView
+        android:id="@+id/widget_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="Daily Report"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/widget_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/widget_header"
+        android:scaleType="fitXY"
+        android:contentDescription="Burndown Chart" />
+	
+	<TextView
+        android:id="@+id/no_image_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="@string/my_widget_description3"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:visibility="visible" />
+
+    <!--scaleType values -->
+    <!--
+    android:scaleType="centerCrop"
+    android:scaleType="centerInside"
+    android:scaleType="fitCenter"
+    android:scaleType="fitEnd"
+    android:scaleType="fitStart"
+    android:scaleType="fitXY"
+    android:scaleType="matrix"
+    -->
+
+</RelativeLayout>

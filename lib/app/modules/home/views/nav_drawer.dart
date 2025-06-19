@@ -8,11 +8,14 @@ import 'package:taskwarrior/app/modules/home/views/home_page_nav_drawer_menu_ite
 import 'package:taskwarrior/app/modules/home/views/theme_clipper.dart';
 import 'package:taskwarrior/app/modules/reports/views/reports_view_taskc.dart';
 import 'package:taskwarrior/app/routes/app_pages.dart';
-import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
+import 'package:taskwarrior/app/utils/constants/constants.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/taskchampion/taskchampion.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
+import 'package:taskwarrior/app/utils/themes/dark_theme.dart';
+import 'package:taskwarrior/app/utils/themes/light_theme.dart';
 
 class NavDrawer extends StatelessWidget {
   final HomeController homeController;
@@ -20,24 +23,17 @@ class NavDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Drawer(
-      backgroundColor: AppSettings.isDarkMode
-          ? TaskWarriorColors.kprimaryBackgroundColor
-          : TaskWarriorColors.kLightPrimaryBackgroundColor,
-      surfaceTintColor: AppSettings.isDarkMode
-          ? TaskWarriorColors.kprimaryBackgroundColor
-          : TaskWarriorColors.kLightPrimaryBackgroundColor,
+      backgroundColor: tColors.dialogBackgroundColor,
+      surfaceTintColor: tColors.dialogBackgroundColor,
       child: Container(
-        color: AppSettings.isDarkMode
-            ? TaskWarriorColors.kprimaryBackgroundColor
-            : TaskWarriorColors.kLightPrimaryBackgroundColor,
+        color: tColors.dialogBackgroundColor,
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
             Container(
-              color: AppSettings.isDarkMode
-                  ? TaskWarriorColors.kprimaryBackgroundColor
-                  : TaskWarriorColors.kLightPrimaryBackgroundColor,
+              color: tColors.dialogBackgroundColor,
               padding: const EdgeInsets.only(top: 50, left: 15, right: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -51,9 +47,7 @@ class NavDrawer extends StatelessWidget {
                     style: TextStyle(
                       fontSize: TaskWarriorFonts.fontSizeExtraLarge,
                       fontWeight: TaskWarriorFonts.bold,
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.white
-                          : TaskWarriorColors.black,
+                      color: tColors.primaryTextColor,
                     ),
                   ),
                   Padding(
@@ -61,18 +55,16 @@ class NavDrawer extends StatelessWidget {
                     child: ThemeSwitcherClipper(
                       isDarkMode: AppSettings.isDarkMode,
                       onTap: (bool newMode) async {
+                        Get.changeThemeMode(newMode ? ThemeMode.dark : ThemeMode.light);
                         AppSettings.isDarkMode = newMode;
                         await SelectedTheme.saveMode(AppSettings.isDarkMode);
                         // Get.back();
                         homeController.initLanguageAndDarkMode();
+                        Get.changeTheme(AppSettings.isDarkMode ? darkTheme : lightTheme);
                       },
                       child: Icon(
-                        AppSettings.isDarkMode
-                            ? Icons.dark_mode
-                            : Icons.light_mode,
-                        color: AppSettings.isDarkMode
-                            ? TaskWarriorColors.white
-                            : TaskWarriorColors.black,
+                        tColors.icons,
+                        color: tColors.primaryTextColor,
                         size: 15,
                       ),
                     ),
@@ -81,9 +73,7 @@ class NavDrawer extends StatelessWidget {
               ),
             ),
             Container(
-              color: AppSettings.isDarkMode
-                  ? TaskWarriorColors.kprimaryBackgroundColor
-                  : TaskWarriorColors.kLightPrimaryBackgroundColor,
+              color: tColors.dialogBackgroundColor,
               height: Get.height * 0.03,
             ),
             Visibility(
@@ -120,9 +110,7 @@ class NavDrawer extends StatelessWidget {
                                   homeController.selectedLanguage.value,
                             ).sentences.deleteTaskConfirmation,
                             style: TextStyle(
-                              color: AppSettings.isDarkMode
-                                  ? TaskWarriorColors.white
-                                  : TaskWarriorColors.black,
+                              color: tColors.primaryTextColor,
                             ),
                           ),
                           content: Text(
@@ -131,9 +119,7 @@ class NavDrawer extends StatelessWidget {
                                   homeController.selectedLanguage.value,
                             ).sentences.deleteTaskWarning,
                             style: TextStyle(
-                              color: AppSettings.isDarkMode
-                                  ? TaskWarriorColors.white
-                                  : TaskWarriorColors.black,
+                              color: tColors.primaryDisabledTextColor,
                             ),
                           ),
                           actions: <Widget>[
@@ -141,9 +127,7 @@ class NavDrawer extends StatelessWidget {
                               child: Text(
                                 'Cancel',
                                 style: TextStyle(
-                                  color: AppSettings.isDarkMode
-                                      ? TaskWarriorColors.white
-                                      : TaskWarriorColors.black,
+                                  color: tColors.primaryTextColor,
                                 ),
                               ),
                               onPressed: () {
@@ -154,9 +138,7 @@ class NavDrawer extends StatelessWidget {
                               child: Text(
                                 'Confirm',
                                 style: TextStyle(
-                                  color: AppSettings.isDarkMode
-                                      ? TaskWarriorColors.white
-                                      : TaskWarriorColors.black,
+                                  color: tColors.primaryTextColor,
                                 ),
                               ),
                               onPressed: () {
@@ -263,6 +245,7 @@ class NavDrawer extends StatelessWidget {
   }
 
   Future<void> _showExitConfirmationDialog(BuildContext context) async {
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return showDialog<void>(
       context: context,
       barrierDismissible:
@@ -275,9 +258,7 @@ class NavDrawer extends StatelessWidget {
                 .sentences
                 .homePageExitApp,
             style: TextStyle(
-              color: AppSettings.isDarkMode
-                  ? TaskWarriorColors.white
-                  : TaskWarriorColors.black,
+              color: tColors.primaryTextColor,
             ),
           ),
           content: Text(
@@ -286,9 +267,7 @@ class NavDrawer extends StatelessWidget {
                 .sentences
                 .homePageAreYouSureYouWantToExit,
             style: TextStyle(
-              color: AppSettings.isDarkMode
-                  ? TaskWarriorColors.white
-                  : TaskWarriorColors.black,
+              color: tColors.primaryTextColor,
             ),
           ),
           actions: <Widget>[
@@ -299,9 +278,7 @@ class NavDrawer extends StatelessWidget {
                     .sentences
                     .homePageCancel,
                 style: TextStyle(
-                  color: AppSettings.isDarkMode
-                      ? TaskWarriorColors.white
-                      : TaskWarriorColors.black,
+                  color: tColors.primaryTextColor,
                 ),
               ),
               onPressed: () {
@@ -315,9 +292,7 @@ class NavDrawer extends StatelessWidget {
                     .sentences
                     .homePageExit,
                 style: TextStyle(
-                  color: AppSettings.isDarkMode
-                      ? TaskWarriorColors.white
-                      : TaskWarriorColors.black,
+                  color: tColors.primaryTextColor,
                 ),
               ),
               onPressed: () {

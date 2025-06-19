@@ -19,6 +19,7 @@ import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:path/path.dart' as path;
 
 import 'package:taskwarrior/app/modules/splash/controllers/splash_controller.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 class SettingsController extends GetxController {
   RxBool isMovingDirectory = false.obs;
@@ -45,6 +46,7 @@ class SettingsController extends GetxController {
   }
 
   void pickDirectory(BuildContext context) {
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     FilePicker.platform.getDirectoryPath().then((value) async {
       if (value != null) {
         isMovingDirectory.value = true;
@@ -73,9 +75,7 @@ class SettingsController extends GetxController {
                     style: GoogleFonts.poppins(
                       fontWeight: FontWeight.bold,
                       fontSize: TaskWarriorFonts.fontSizeMedium,
-                      color: AppSettings.isDarkMode
-                          ? TaskWarriorColors.white
-                          : TaskWarriorColors.black,
+                      color: tColors.primaryTextColor,
                     ),
                   ),
                   content: Text(
@@ -97,9 +97,7 @@ class SettingsController extends GetxController {
                       child: Text(
                         'OK',
                         style: GoogleFonts.poppins(
-                          color: AppSettings.isDarkMode
-                              ? TaskWarriorColors.white
-                              : TaskWarriorColors.black,
+                          color: tColors.primaryTextColor,
                         ),
                       ),
                     )
@@ -181,7 +179,7 @@ class SettingsController extends GetxController {
         prefs.getBool('sync-OnTaskCreate') ?? false;
     delaytask.value = prefs.getBool('delaytask') ?? false;
     change24hr.value = prefs.getBool('24hourformate') ?? false;
-    taskchampion.value = prefs.getBool('taskc') ?? false;
+    taskchampion.value = prefs.getBool('settings_taskc') ?? false;
     initDarkMode();
     baseDirectory.value = await getBaseDirectory();
     super.onInit();

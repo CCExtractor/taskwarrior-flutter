@@ -13,6 +13,7 @@ import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/home_path/home_path.dart' as rc;
 import 'package:taskwarrior/app/utils/taskserver/taskserver.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class ManageTaskServerController extends GetxController {
@@ -75,6 +76,8 @@ class ManageTaskServerController extends GetxController {
 
   /// The [setConfig] function is used to set the configuration of the TaskServer from the clipboard
   void setContent(BuildContext context) async {
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     final clipboardData = await Clipboard.getData(Clipboard.kTextPlain);
     taskrcContentController.text = clipboardData?.text ?? '';
 
@@ -106,14 +109,10 @@ class ManageTaskServerController extends GetxController {
               content: Text(
                 'Success: Server or credentials are verified in taskrc file',
                 style: TextStyle(
-                  color: AppSettings.isDarkMode
-                      ? TaskWarriorColors.white
-                      : TaskWarriorColors.black,
+                  color: tColors.primaryTextColor,
                 ),
               ),
-              backgroundColor: AppSettings.isDarkMode
-                  ? TaskWarriorColors.ksecondaryBackgroundColor
-                  : TaskWarriorColors.kLightSecondaryBackgroundColor,
+              backgroundColor: tColors.secondaryBackgroundColor,
               duration: const Duration(seconds: 2)));
         } else {
           Navigator.pop(context);
@@ -122,14 +121,10 @@ class ManageTaskServerController extends GetxController {
               content: Text(
                 'Error: Server or credentials are missing in taskrc file',
                 style: TextStyle(
-                  color: AppSettings.isDarkMode
-                      ? TaskWarriorColors.white
-                      : TaskWarriorColors.black,
+                  color: tColors.primaryTextColor,
                 ),
               ),
-              backgroundColor: AppSettings.isDarkMode
-                  ? TaskWarriorColors.ksecondaryBackgroundColor
-                  : TaskWarriorColors.kLightSecondaryBackgroundColor,
+              backgroundColor: tColors.secondaryBackgroundColor,
               duration: const Duration(seconds: 2)));
         }
       } else {
@@ -140,9 +135,7 @@ class ManageTaskServerController extends GetxController {
             content: Text(
               'Error: Failed to read taskrc file',
               style: TextStyle(
-                color: AppSettings.isDarkMode
-                    ? TaskWarriorColors.white
-                    : TaskWarriorColors.black,
+                color: tColors.primaryTextColor,
               ),
             ),
             // backgroundColor: AppSettings.isDarkMode

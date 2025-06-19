@@ -12,6 +12,7 @@ import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 class FilterDrawer extends StatelessWidget {
   final Filters filters;
@@ -23,16 +24,13 @@ class FilterDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     homeController.initFilterDrawerTour();
     homeController.showFilterDrawerTour(context);
+    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
     var tileColor = AppSettings.isDarkMode
         ? TaskWarriorColors.ksecondaryBackgroundColor
         : TaskWarriorColors.kLightPrimaryBackgroundColor;
     return Drawer(
-      backgroundColor: AppSettings.isDarkMode
-          ? TaskWarriorColors.kprimaryBackgroundColor
-          : TaskWarriorColors.kLightPrimaryBackgroundColor,
-      surfaceTintColor: AppSettings.isDarkMode
-          ? TaskWarriorColors.kprimaryBackgroundColor
-          : TaskWarriorColors.kLightPrimaryBackgroundColor,
+      backgroundColor: tColors.dialogBackgroundColor,
+      surfaceTintColor: tColors.primaryBackgroundColor,
       child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8),
@@ -63,9 +61,7 @@ class FilterDrawer extends StatelessWidget {
                     style: TextStyle(
                       fontFamily: FontFamily.poppins,
                       fontWeight: TaskWarriorFonts.bold,
-                      color: (AppSettings.isDarkMode
-                          ? TaskWarriorColors.kprimaryTextColor
-                          : TaskWarriorColors.kLightPrimaryTextColor),
+                      color: tColors.primaryTextColor,
                       fontSize: TaskWarriorFonts.fontSizeExtraLarge,
                     ),
                   ),
@@ -97,9 +93,7 @@ class FilterDrawer extends StatelessWidget {
                             style: TextStyle(
                               fontFamily: FontFamily.poppins,
                               fontSize: TaskWarriorFonts.fontSizeMedium,
-                              color: AppSettings.isDarkMode
-                                  ? TaskWarriorColors.white
-                                  : TaskWarriorColors.black,
+                              color: tColors.primaryTextColor,
                             )),
                         TextSpan(
                             text: filters.pendingFilter
@@ -116,17 +110,13 @@ class FilterDrawer extends StatelessWidget {
                             style: TextStyle(
                               fontFamily: FontFamily.poppins,
                               fontSize: TaskWarriorFonts.fontSizeMedium,
-                              color: AppSettings.isDarkMode
-                                  ? TaskWarriorColors.white
-                                  : TaskWarriorColors.black,
+                              color: tColors.primaryTextColor,
                             )),
                       ],
                     ),
                   ),
                   onTap: filters.togglePendingFilter,
-                  textColor: AppSettings.isDarkMode
-                      ? TaskWarriorColors.kprimaryTextColor
-                      : TaskWarriorColors.kLightSecondaryTextColor,
+                  textColor: tColors.primaryTextColor,
                 ),
               ),
               const Divider(
@@ -158,9 +148,7 @@ class FilterDrawer extends StatelessWidget {
                           style: TextStyle(
                             fontFamily: FontFamily.poppins,
                             fontSize: TaskWarriorFonts.fontSizeMedium,
-                            color: AppSettings.isDarkMode
-                                ? TaskWarriorColors.kprimaryTextColor
-                                : TaskWarriorColors.kLightSecondaryTextColor,
+                            color: tColors.primaryTextColor,
                           )),
                       Switch(
                         value: filters.waitingFilter,
@@ -262,9 +250,7 @@ class FilterDrawer extends StatelessWidget {
                           style: TextStyle(
                             fontFamily: FontFamily.poppins,
                             fontSize: TaskWarriorFonts.fontSizeMedium,
-                            color: AppSettings.isDarkMode
-                                ? TaskWarriorColors.kprimaryTextColor
-                                : TaskWarriorColors.kLightSecondaryTextColor,
+                            color: tColors.primaryTextColor,
                           ),
                         ),
                       ),
@@ -321,9 +307,7 @@ class FilterDrawer extends StatelessWidget {
                           style: TextStyle(
                             fontFamily: FontFamily.poppins,
                             fontSize: TaskWarriorFonts.fontSizeMedium,
-                            color: AppSettings.isDarkMode
-                                ? TaskWarriorColors.white
-                                : TaskWarriorColors.black,
+                            color: tColors.primaryTextColor,
                           )),
                     ),
                     const Divider(
@@ -445,9 +429,7 @@ class FilterDrawer extends StatelessWidget {
                             style: TextStyle(
                               fontFamily: FontFamily.poppins,
                               fontSize: TaskWarriorFonts.fontSizeMedium,
-                              color: AppSettings.isDarkMode
-                                  ? TaskWarriorColors.white
-                                  : TaskWarriorColors.black,
+                              color: tColors.primaryTextColor,
                             )),
                       ),
                     ),
