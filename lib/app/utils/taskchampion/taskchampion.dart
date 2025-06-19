@@ -25,14 +25,14 @@ class ManageTaskChampionCreds extends StatelessWidget {
     _encryptionSecretController.text =
         prefs.getString('encryptionSecret') ?? '';
     _clientIdController.text = prefs.getString('clientId') ?? '';
-    _ccsyncBackendUrlController.text = prefs.getString('championApiUrl') ?? '';
+    _ccsyncBackendUrlController.text = prefs.getString('ccsyncBackendUrl') ?? '';
   }
 
   Future<void> _saveCredentials(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('encryptionSecret', _encryptionSecretController.text);
     await prefs.setString('clientId', _clientIdController.text);
-    await prefs.setString('championApiUrl', _ccsyncBackendUrlController.text);
+    await prefs.setString('ccsyncBackendUrl', _ccsyncBackendUrlController.text);
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Credentials saved successfully')),
     );
