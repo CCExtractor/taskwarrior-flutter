@@ -58,18 +58,18 @@ void main() {
 
     test('toJson converts Tasks object to JSON', () {
       final task = Tasks(
-        id: 1,
-        description: 'Task 1',
-        project: 'Project 1',
-        status: 'pending',
-        uuid: '123',
-        urgency: 5.0,
-        priority: 'H',
-        due: '2024-12-31',
-        end: null,
-        entry: '2024-01-01',
-        modified: '2024-11-01',
-      );
+          id: 1,
+          description: 'Task 1',
+          project: 'Project 1',
+          status: 'pending',
+          uuid: '123',
+          urgency: 5.0,
+          priority: 'H',
+          due: '2024-12-31',
+          end: null,
+          entry: '2024-01-01',
+          modified: '2024-11-01',
+          tags: ['t1']);
 
       final json = task.toJson();
 
@@ -118,18 +118,18 @@ void main() {
 
     test('insertTask adds a task to the database', () async {
       final task = Tasks(
-        id: 1,
-        description: 'Task 1',
-        project: 'Project 1',
-        status: 'pending',
-        uuid: '123',
-        urgency: 5.0,
-        priority: 'H',
-        due: '2024-12-31',
-        end: null,
-        entry: '2024-01-01',
-        modified: '2024-11-01',
-      );
+          id: 1,
+          description: 'Task 1',
+          project: 'Project 1',
+          status: 'pending',
+          uuid: '123',
+          urgency: 5.0,
+          priority: 'H',
+          due: '2024-12-31',
+          end: null,
+          entry: '2024-01-01',
+          modified: '2024-11-01',
+          tags: ['t1']);
 
       await taskDatabase.insertTask(task);
 
@@ -141,18 +141,18 @@ void main() {
 
     test('deleteAllTasksInDB removes all tasks', () async {
       final task = Tasks(
-        id: 1,
-        description: 'Task 1',
-        project: 'Project 1',
-        status: 'pending',
-        uuid: '123',
-        urgency: 5.0,
-        priority: 'H',
-        due: '2024-12-31',
-        end: null,
-        entry: '2024-01-01',
-        modified: '2024-11-01',
-      );
+          id: 1,
+          description: 'Task 1',
+          project: 'Project 1',
+          status: 'pending',
+          uuid: '123',
+          urgency: 5.0,
+          priority: 'H',
+          due: '2024-12-31',
+          end: null,
+          entry: '2024-01-01',
+          modified: '2024-11-01',
+          tags: ['t1']);
 
       await taskDatabase.insertTask(task);
       await taskDatabase.deleteAllTasksInDB();
