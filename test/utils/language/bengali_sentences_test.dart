@@ -33,10 +33,9 @@ void main() {
         'নতুন টাস্ক তৈরি করার সময় স্বয়ংক্রিয় সিঙ্কিং সক্ষম করুন');
     expect(bengali.settingsPageEnableSyncOnTaskCreateDescription,
         'নতুন টাস্ক তৈরি করার সময় স্বয়ংক্রিয় সিঙ্কিং সক্ষম করুন');
-    expect(bengali.settingsPageHighlightTaskTitle,
-        'শুধু 1 দিন বাকি থাকলে টাস্ক হাইলাইট করুন');
+    expect(bengali.settingsPageHighlightTaskTitle, 'জরুরি টাস্ক হাইলাইট করুন');
     expect(bengali.settingsPageHighlightTaskDescription,
-        'শুধু 1 দিন বাকি থাকলে টাস্ক হাইলাইট করুন');
+        '1 দিনের মধ্যে বা অতিক্রান্ত সময়ের টাস্ক হাইলাইট করুন');
     expect(bengali.settingsPageEnable24hrFormatTitle,
         '24 ঘণ্টার ফর্ম্যাট সক্রিয় করুন');
     expect(bengali.settingsPageEnable24hrFormatDescription,

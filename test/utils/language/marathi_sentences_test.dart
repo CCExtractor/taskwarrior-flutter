@@ -33,9 +33,9 @@ void main() {
     expect(marathi.settingsPageEnableSyncOnTaskCreateDescription,
         'नवीन कार्य तयार करताना स्वयंसिंकिंग सक्षम करा');
     expect(marathi.settingsPageHighlightTaskTitle,
-        'फक्त 1 दिवस शेष असताना कार्याची सीमा बनवा');
+        'तातडीच्या कार्यांना हायलाईट करा');
     expect(marathi.settingsPageHighlightTaskDescription,
-        'फक्त 1 दिवस शेष असताना कार्याची सीमा बनवा');
+        '1 दिवसाच्या आत देय किंवा मुदत संपलेल्या कार्यांना हायलाईट करा');
     expect(marathi.settingsPageEnable24hrFormatTitle,
         '24 तासाचा स्वरूप सक्षम करा');
     expect(marathi.settingsPageEnable24hrFormatDescription,
