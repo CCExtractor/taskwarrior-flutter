@@ -17,8 +17,7 @@ import 'package:taskwarrior/app/models/storage.dart';
 import 'package:taskwarrior/app/models/storage/client.dart';
 import 'package:taskwarrior/app/models/tag_meta_data.dart';
 import 'package:taskwarrior/app/modules/home/controllers/widget.controller.dart';
-import 'package:taskwarrior/app/modules/home/views/add_task_bottom_sheet.dart';
-import 'package:taskwarrior/app/modules/home/views/add_task_to_taskc_bottom_sheet.dart';
+import 'package:taskwarrior/app/modules/home/views/add_task_bottom_sheet_new.dart';
 import 'package:taskwarrior/app/modules/splash/controllers/splash_controller.dart';
 import 'package:taskwarrior/app/routes/app_pages.dart';
 import 'package:taskwarrior/app/services/tag_filter.dart';
@@ -32,6 +31,7 @@ import 'package:taskwarrior/app/utils/taskfunctions/projects.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/query.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/tags.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:textfield_tags/textfield_tags.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
@@ -46,11 +46,13 @@ class HomeController extends GetxController {
   final RxSet<String> selectedTags = <String>{}.obs;
   final RxList<Task> queriedTasks = <Task>[].obs;
   final RxList<Task> searchedTasks = <Task>[].obs;
+  final RxList<DateTime?> selectedDates = List<DateTime?>.filled(4, null).obs;
   final RxMap<String, TagMetadata> pendingTags = <String, TagMetadata>{}.obs;
   final RxMap<String, ProjectNode> projects = <String, ProjectNode>{}.obs;
   final RxBool sortHeaderVisible = false.obs;
   final RxBool searchVisible = false.obs;
   final TextEditingController searchController = TextEditingController();
+  final StringTagController stringTagController = StringTagController();
   late RxBool serverCertExists;
   final Rx<SupportedLanguage> selectedLanguage = SupportedLanguage.english.obs;
   final ScrollController scrollController = ScrollController();
@@ -323,7 +325,8 @@ class HomeController extends GetxController {
   Future<void> synchronize(BuildContext context, bool isDialogNeeded) async {
     try {
       final connectivityResult = await Connectivity().checkConnectivity();
-      TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+      TaskwarriorColorTheme tColors =
+          Theme.of(context).extension<TaskwarriorColorTheme>()!;
       if (connectivityResult == ConnectivityResult.none) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
@@ -705,9 +708,9 @@ class HomeController extends GetxController {
   }
 
   void showAddDialogAfterWidgetClick() {
-    Widget showDialog = taskchampion.value
-        ? AddTaskToTaskcBottomSheet(homeController: this)
-        : AddTaskBottomSheet(homeController: this);
+    Widget showDialog = Material(
+        child: AddTaskBottomSheet(
+            homeController: this, forTaskC: taskchampion.value));
     Get.dialog(showDialog);
   }
 }

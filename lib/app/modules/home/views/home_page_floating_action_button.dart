@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:taskwarrior/app/modules/home/views/add_task_bottom_sheet.dart';
-import 'package:taskwarrior/app/modules/home/views/add_task_to_taskc_bottom_sheet.dart';
+
+import 'package:taskwarrior/app/modules/home/views/add_task_bottom_sheet_new.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import '../controllers/home_controller.dart';
 
@@ -10,7 +10,8 @@ class HomePageFloatingActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return FloatingActionButton(
         key: controller.addKey,
         heroTag: "btn3",
@@ -23,18 +24,33 @@ class HomePageFloatingActionButton extends StatelessWidget {
           ),
         ),
         onPressed: () => (controller.taskchampion.value)
-            ? (showDialog(
+            ? (showModalBottomSheet(
                 context: context,
-                builder: (context) => AddTaskToTaskcBottomSheet(
+                isScrollControlled: true,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(0),
+                    topRight: Radius.circular(0),
+                  ),
+                ),
+                builder: (context) => AddTaskBottomSheet(
                   homeController: controller,
+                  forTaskC: true,
                 ),
               ).then((value) {
                 if (controller.isSyncNeeded.value && value != "cancel") {
                   controller.isNeededtoSyncOnStart(context);
                 }
               }))
-            : (showDialog(
+            : (showModalBottomSheet(
                 context: context,
+                isScrollControlled: true,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(0),
+                    topRight: Radius.circular(0),
+                  ),
+                ),
                 builder: (context) => AddTaskBottomSheet(
                   homeController: controller,
                 ),
