@@ -49,7 +49,6 @@ void main() {
         home: Scaffold(
           body: TaskListItem(
             normalTask,
-            darkmode: false,
             useDelayTask: true,
             modify: mockModify,
             selectedLanguage: SupportedLanguage.english,
@@ -72,7 +71,6 @@ void main() {
         home: Scaffold(
           body: TaskListItem(
             dueSoonTask,
-            darkmode: false,
             useDelayTask: true,
             modify: mockModify,
             selectedLanguage: SupportedLanguage.english,
@@ -94,7 +92,6 @@ void main() {
         home: Scaffold(
           body: TaskListItem(
             overdueTask,
-            darkmode: false,
             useDelayTask: true,
             modify: mockModify,
             selectedLanguage: SupportedLanguage.english,
@@ -117,7 +114,6 @@ void main() {
         home: Scaffold(
           body: TaskListItem(
             overdueTask,
-            darkmode: false,
             useDelayTask: false,
             modify: mockModify,
             selectedLanguage: SupportedLanguage.english,

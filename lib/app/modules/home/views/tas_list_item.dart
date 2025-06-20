@@ -85,9 +85,7 @@ class TaskListItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(8.0),
           color: (task.due != null && isOverDue(task.due!) && useDelayTask)
               ? Colors.red.withAlpha(50)
-              : AppSettings.isDarkMode
-                  ? TaskWarriorColors.ksecondaryBackgroundColor
-                  : TaskWarriorColors.kLightSecondaryBackgroundColor,
+              : tColors.primaryBackgroundColor,
         ),
         child: ListTile(
           title: Row(
