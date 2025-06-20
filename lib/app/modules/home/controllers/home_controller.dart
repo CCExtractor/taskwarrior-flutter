@@ -17,8 +17,7 @@ import 'package:taskwarrior/app/models/storage.dart';
 import 'package:taskwarrior/app/models/storage/client.dart';
 import 'package:taskwarrior/app/models/tag_meta_data.dart';
 import 'package:taskwarrior/app/modules/home/controllers/widget.controller.dart';
-import 'package:taskwarrior/app/modules/home/views/add_task_bottom_sheet.dart';
-import 'package:taskwarrior/app/modules/home/views/add_task_to_taskc_bottom_sheet.dart';
+import 'package:taskwarrior/app/modules/home/views/add_task_bottom_sheet_new.dart';
 import 'package:taskwarrior/app/modules/splash/controllers/splash_controller.dart';
 import 'package:taskwarrior/app/routes/app_pages.dart';
 import 'package:taskwarrior/app/services/tag_filter.dart';
@@ -709,9 +708,9 @@ class HomeController extends GetxController {
   }
 
   void showAddDialogAfterWidgetClick() {
-    Widget showDialog = taskchampion.value
-        ? AddTaskToTaskcBottomSheet(homeController: this)
-        : AddTaskBottomSheet(homeController: this);
+    Widget showDialog = Material(
+        child: AddTaskBottomSheet(
+            homeController: this, forTaskC: taskchampion.value));
     Get.dialog(showDialog);
   }
 }
