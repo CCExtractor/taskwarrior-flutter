@@ -24,8 +24,9 @@ class TaskViewBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final HomeController taskController = Get.find<HomeController>();
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
-    
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
+
     return Obx(() {
       List<Tasks> tasks = List<Tasks>.from(taskController.tasks);
       // Filter tasks based on the selected project
@@ -187,7 +188,7 @@ class TaskViewBuilder extends StatelessWidget {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: GoogleFonts.poppins(
-                                color: tColors.dialogBackgroundColor,
+                                color: tColors.primaryTextColor,
                               ),
                             ),
                             subtitle: Text(
