@@ -12,7 +12,6 @@ import 'package:taskwarrior/app/utils/constants/constants.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
-import 'package:taskwarrior/app/utils/taskchampion/taskchampion.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:taskwarrior/app/utils/themes/dark_theme.dart';
 import 'package:taskwarrior/app/utils/themes/light_theme.dart';
@@ -23,7 +22,8 @@ class NavDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Drawer(
       backgroundColor: tColors.dialogBackgroundColor,
       surfaceTintColor: tColors.dialogBackgroundColor,
@@ -55,12 +55,14 @@ class NavDrawer extends StatelessWidget {
                     child: ThemeSwitcherClipper(
                       isDarkMode: AppSettings.isDarkMode,
                       onTap: (bool newMode) async {
-                        Get.changeThemeMode(newMode ? ThemeMode.dark : ThemeMode.light);
+                        Get.changeThemeMode(
+                            newMode ? ThemeMode.dark : ThemeMode.light);
                         AppSettings.isDarkMode = newMode;
                         await SelectedTheme.saveMode(AppSettings.isDarkMode);
                         // Get.back();
                         homeController.initLanguageAndDarkMode();
-                        Get.changeTheme(AppSettings.isDarkMode ? darkTheme : lightTheme);
+                        Get.changeTheme(
+                            AppSettings.isDarkMode ? darkTheme : lightTheme);
                       },
                       child: Icon(
                         tColors.icons,
@@ -84,11 +86,7 @@ class NavDrawer extends StatelessWidget {
                   currentLanguage: homeController.selectedLanguage.value,
                 ).sentences.ccsyncCredentials,
                 onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => ManageTaskChampionCreds(),
-                    ),
-                  );
+                  Get.toNamed(Routes.MANAGE_TASK_CHAMPION_CREDS);
                 },
               ),
             ),
@@ -245,7 +243,8 @@ class NavDrawer extends StatelessWidget {
   }
 
   Future<void> _showExitConfirmationDialog(BuildContext context) async {
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return showDialog<void>(
       context: context,
       barrierDismissible:

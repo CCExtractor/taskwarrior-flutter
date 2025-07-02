@@ -8,7 +8,6 @@ import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/taskchampion/credentials_storage.dart';
-import 'package:taskwarrior/app/utils/taskchampion/taskchampion.dart';
 import 'package:taskwarrior/app/utils/taskserver/taskserver.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
@@ -74,11 +73,7 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
                     .homePageSetup,
                 onPressed: () {
                   if (controller.taskchampion.value) {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => ManageTaskChampionCreds(),
-                        )).then((value) {});
+                    Get.toNamed(Routes.MANAGE_TASK_CHAMPION_CREDS);
                   } else {
                     Get.toNamed(Routes.MANAGE_TASK_SERVER);
                   }
