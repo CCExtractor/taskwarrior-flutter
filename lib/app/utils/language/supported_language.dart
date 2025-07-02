@@ -1,12 +1,13 @@
+import 'package:flutter/widgets.dart';
+
 enum SupportedLanguage {
   english,
   hindi,
   marathi,
-  french,  
-  spanish,  
-  bengali,  
+  french,
+  spanish,
+  bengali,
 }
-
 
 extension SupportedLanguageExtension on SupportedLanguage {
   String get languageCode {
@@ -18,11 +19,11 @@ extension SupportedLanguageExtension on SupportedLanguage {
       case SupportedLanguage.marathi:
         return 'mr';
       case SupportedLanguage.french:
-        return 'fr';  
+        return 'fr';
       case SupportedLanguage.spanish:
-        return 'es';  
+        return 'es';
       case SupportedLanguage.bengali:
-        return 'bn';  
+        return 'bn';
       default:
         return '';
     }
@@ -37,13 +38,24 @@ extension SupportedLanguageExtension on SupportedLanguage {
       case 'mr':
         return SupportedLanguage.marathi;
       case 'fr':
-        return SupportedLanguage.french;  
+        return SupportedLanguage.french;
       case 'es':
-        return SupportedLanguage.spanish;  
+        return SupportedLanguage.spanish;
       case 'bn':
-        return SupportedLanguage.bengali;  
+        return SupportedLanguage.bengali;
       default:
         return null;
     }
+  }
+
+  static SupportedLanguage getSystemLanguage() {
+    // Get the current system locale
+    final String systemLocale =
+        WidgetsBinding.instance.window.locale.languageCode;
+    debugPrint('System Locale: $systemLocale');
+
+    final supportedLanguage = fromCode(systemLocale);
+    // Return the supported language or default to English
+    return supportedLanguage ?? SupportedLanguage.english;
   }
 }
