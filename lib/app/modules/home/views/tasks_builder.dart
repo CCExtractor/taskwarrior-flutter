@@ -70,9 +70,7 @@ class TasksBuilder extends StatelessWidget {
       action: SnackBarAction(
         label: 'Undo',
         onPressed: () {
-          undoChanges(
-              context, id, 'pending');
-
+          undoChanges(context, id, 'pending');
         },
       ),
     ));
@@ -170,9 +168,13 @@ class TasksBuilder extends StatelessWidget {
                   primary: false,
                   itemBuilder: (context, index) {
                     var task = taskData[index];
+                    final itemKey = index == 0
+                        ? storageWidget.taskItemKey
+                        : ValueKey(task.uuid);
+
                     return pendingFilter
                         ? Slidable(
-                            key: ValueKey(task.uuid),
+                            key: itemKey,
                             startActionPane: ActionPane(
                               motion: const BehindMotion(),
                               children: [
