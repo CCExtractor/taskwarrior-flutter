@@ -1,47 +1,21 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
-import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
+import 'package:taskwarrior/app/utils/constants/constants.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
-
 import 'package:url_launcher/url_launcher.dart';
+import '../controllers/manage_task_champion_creds_controller.dart';
 
-class ManageTaskChampionCreds extends StatelessWidget {
-  final TextEditingController _encryptionSecretController =
-      TextEditingController();
-  final TextEditingController _clientIdController = TextEditingController();
-  final TextEditingController _ccsyncBackendUrlController =
-      TextEditingController();
-
-  ManageTaskChampionCreds({super.key}) {
-    _loadCredentials();
-  }
-
-  Future<void> _loadCredentials() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    _encryptionSecretController.text =
-        prefs.getString('encryptionSecret') ?? '';
-    _clientIdController.text = prefs.getString('clientId') ?? '';
-    _ccsyncBackendUrlController.text = prefs.getString('ccsyncBackendUrl') ?? '';
-  }
-
-  Future<void> _saveCredentials(BuildContext context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('encryptionSecret', _encryptionSecretController.text);
-    await prefs.setString('clientId', _clientIdController.text);
-    await prefs.setString('ccsyncBackendUrl', _ccsyncBackendUrlController.text);
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Credentials saved successfully')),
-    );
-  }
+class ManageTaskChampionCredsView
+    extends GetView<ManageTaskChampionCredsController> {
+  const ManageTaskChampionCredsView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("Built ManageTaskChampionCredsView");
     TaskwarriorColorTheme tColors =
         Theme.of(context).extension<TaskwarriorColorTheme>()!;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
@@ -72,8 +46,9 @@ class ManageTaskChampionCreds extends StatelessWidget {
             },
           ),
         ],
-        leading: BackButton(
-          color: TaskWarriorColors.white,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: TaskWarriorColors.white),
+          onPressed: () => Get.back(),
         ),
       ),
       backgroundColor: tColors.primaryBackgroundColor,
@@ -87,49 +62,45 @@ class ManageTaskChampionCreds extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextField(
-                    style: TextStyle(
-                      color: tColors.primaryTextColor,
-                    ),
-                    controller: _encryptionSecretController,
+                    style: TextStyle(color: tColors.primaryTextColor),
+                    controller: controller.encryptionSecretController,
                     decoration: InputDecoration(
                       labelText: 'Encryption Secret',
-                      labelStyle: TextStyle(
-                        color: tColors.primaryTextColor,
-                      ),
+                      labelStyle: TextStyle(color: tColors.primaryTextColor),
                       border: const OutlineInputBorder(),
                     ),
                   ),
                   const SizedBox(height: 10),
                   TextField(
-                    style: TextStyle(
-                      color: tColors.primaryTextColor,
-                    ),
-                    controller: _clientIdController,
+                    style: TextStyle(color: tColors.primaryTextColor),
+                    controller: controller.clientIdController,
                     decoration: InputDecoration(
                       labelText: 'Client ID',
-                      labelStyle: TextStyle(
-                        color: tColors.primaryTextColor,
-                      ),
+                      labelStyle: TextStyle(color: tColors.primaryTextColor),
                       border: const OutlineInputBorder(),
                     ),
                   ),
                   const SizedBox(height: 10),
                   TextField(
-                    style: TextStyle(
-                      color: tColors.primaryTextColor,
-                    ),
-                    controller: _ccsyncBackendUrlController,
+                    style: TextStyle(color: tColors.primaryTextColor),
+                    controller: controller.ccsyncBackendUrlController,
                     decoration: InputDecoration(
                       labelText: 'CCSync Backend URL',
-                      labelStyle: TextStyle(
-                        color: tColors.primaryTextColor,
-                      ),
+                      labelStyle: TextStyle(color: tColors.primaryTextColor),
                       border: const OutlineInputBorder(),
                     ),
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
-                    onPressed: () => _saveCredentials(context),
+                    onPressed: () async {
+                      await controller.saveCredentials();
+                      Get.snackbar(
+                        'Success',
+                        'Credentials saved successfully',
+                        snackPosition: SnackPosition.BOTTOM,
+                        duration: Duration(seconds: 2),
+                      );
+                    },
                     child: const Text('Save Credentials'),
                   ),
                   const SizedBox(height: 10),

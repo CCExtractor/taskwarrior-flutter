@@ -1,16 +1,15 @@
-// ignore_for_file: constant_identifier_names
-
 import 'package:get/get.dart';
 
 import '../modules/about/bindings/about_binding.dart';
 import '../modules/about/views/about_view.dart';
-
 import '../modules/detailRoute/bindings/detail_route_binding.dart';
 import '../modules/detailRoute/views/detail_route_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/manageTaskServer/bindings/manage_task_server_binding.dart';
 import '../modules/manageTaskServer/views/manage_task_server_view.dart';
+import '../modules/manage_task_champion_creds/bindings/manage_task_champion_creds_binding.dart';
+import '../modules/manage_task_champion_creds/views/manage_task_champion_creds_view.dart';
 import '../modules/onboarding/bindings/onboarding_binding.dart';
 import '../modules/onboarding/views/onboarding_view.dart';
 import '../modules/permission/bindings/permission_binding.dart';
@@ -23,6 +22,8 @@ import '../modules/settings/bindings/settings_binding.dart';
 import '../modules/settings/views/settings_view.dart';
 import '../modules/splash/bindings/splash_binding.dart';
 import '../modules/splash/views/splash_view.dart';
+
+// ignore_for_file: constant_identifier_names
 
 part 'app_routes.dart';
 
@@ -81,6 +82,11 @@ class AppPages {
       name: _Paths.PERMISSION,
       page: () => const PermissionView(),
       binding: PermissionBinding(),
+    ),
+    GetPage(
+      name: _Paths.MANAGE_TASK_CHAMPION_CREDS,
+      page: () => const ManageTaskChampionCredsView(),
+      binding: ManageTaskChampionCredsBinding(),
     ),
   ];
 }
