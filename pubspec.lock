@@ -1342,6 +1342,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.8"
+  textfield_tags:
+    dependency: "direct main"
+    description:
+      name: textfield_tags
+      sha256: d1f2204114157a1296bb97c20d7f8c8c7fd036212812afb2e19de7bb34acc55b
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.1"
   time:
     dependency: transitive
     description:
