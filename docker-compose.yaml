@@ -1,0 +1,26 @@
+version: "3.9"
+services:
+  flutter_linux:
+    profiles: 
+      - linux
+    build:
+      context: .
+      dockerfile: Dockerfile.linux
+    environment:
+      - DISPLAY=${DISPLAY}
+    volumes:
+      - .:/app
+    network_mode: "host" # Use host networking
+    command: ["bash", "-c", "flutter clean && flutter run -d linux"]
+  flutter_android:
+    profiles: 
+      - android
+    build:
+      context: .
+      dockerfile: Dockerfile.android
+    environment:
+      - DISPLAY=${DISPLAY}
+    volumes:
+      - .:/app
+    network_mode: "host" # Use host networking
+    command: ["bash", "-c", "flutter run -d android"]
