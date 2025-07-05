@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 abstract class Sentences {
   String get helloWorld;
 
@@ -15,6 +17,15 @@ abstract class Sentences {
   String get homePageClickOnTheBottomRightButtonToStartAddingTasks;
   String get homePageSearchNotFound;
   String get homePageFetchingTasks;
+
+  // app bar tooltips
+  String get homePageSearchTooltip;
+  String get homePageCancelSearchTooltip;
+
+  // floating action button & home page texts
+  String get homePageAddTaskTooltip;
+  String get homePageTapBackToExit;
+  String get homePageSearchHint;
 
   String get settingsPageTitle;
   String get settingsPageSubtitle;
@@ -52,6 +63,7 @@ abstract class Sentences {
   String get deleteTaskConfirmation;
   String get deleteTaskWarning;
   String get navDrawerExit;
+  String get navDrawerConfirm;
 
   String get detailPageDescription;
   String get detailPageStatus;
@@ -87,6 +99,7 @@ abstract class Sentences {
   String get filterDrawerUrgency;
   String get filterDrawerResetSort;
   String get filterDrawerStatus;
+  String get filterDrawerNoProjectsAvailable;
 
   String get reportsPageTitle;
   String get reportsPageCompleted;
@@ -158,4 +171,150 @@ abstract class Sentences {
   String get aboutPageGitHubLink;
   String get aboutPageProjectDescription;
   String get aboutPageAppBarTitle;
+
+  // about page
+  String get version;
+  String get package;
+
+  // date time picker
+  String get notSelected;
+  String get cantSetTimeinPast;
+
+  //description widget
+  String get editDescription;
+  String get editProject;
+  String get cancel;
+  String get submit;
+
+  //detail view
+  String get saveChangesConfirmation;
+  String get yes;
+  String get no;
+  String get reviewChanges;
+  String get oldChanges;
+  String get newChanges;
+
+  //tags widget
+  String get tags;
+  String get addedTagsWillAppearHere;
+  String get addTag;
+
+  String get enterProject;
+
+  String get allProjects;
+  String get noProjectsFound;
+  String get project;
+
+  String get select;
+  String get save;
+  String get dontSave;
+  String get unsavedChanges;
+  String get unsavedChangesWarning;
+  String get enterNew;
+  String get edit;
+  String get task;
+
+  // task action strings
+  String get confirmDeleteTask;
+  String get taskUpdated;
+  String get undo;
+  String get taskMarkedAsCompleted;
+  String get taskMarkedAsDeleted;
+  String get refreshToViewChanges;
+  String get clickOnBottomRightButtonToStartAddingTasks;
+  String get complete;
+  String get delete;
+
+  // task server management strings
+  String get taskServerInfo;
+  String get taskServerCredentials;
+  String get notConfigured;
+  String get fetchingStatistics;
+  String get pleaseWait;
+  String get statistics;
+  String get ok;
+  String get pleaseSetupTaskServer;
+
+  // onboarding strings
+  String get onboardingSkip;
+  String get onboardingNext;
+  String get onboardingStart;
+
+  // permission strings
+  String get permissionPageTitle;
+  String get storagePermissionTitle;
+  String get storagePermissionDescription;
+  String get notificationPermissionTitle;
+  String get notificationPermissionDescription;
+  String get privacyStatement;
+  String get grantPermissions;
+  String get managePermissionsLater;
+
+  // Profile page strings
+  String get profileAllProfiles;
+  String get profileSwitchedToProfile;
+  String get profileAddedSuccessfully;
+  String get profileAdditionFailed;
+  String get profileConfigCopied;
+  String get profileConfigCopyFailed;
+  String get profileDeletedSuccessfully;
+  String get profileDeletionFailed;
+  String get profileDeleteConfirmation;
+
+  // Reports strings
+  String get reportsDate;
+  String get reportsPending;
+  String get reportsCompleted;
+  String get reportsMonthYear;
+  String get reportsWeek;
+  String get reportsDay;
+  String get reportsYear;
+  String get reportsError;
+  String get reportsLoading;
+
+  // Settings strings
+  String get settingsResetToDefault;
+  String get settingsAlreadyDefault;
+  String get settingsConfirmReset;
+  String get settingsNoButton;
+  String get settingsYesButton;
+
+  // Splash screen strings
+  String get splashSettingUpApp;
+
+  // Tour strings - reports
+  String get tourReportsDaily;
+  String get tourReportsWeekly;
+  String get tourReportsMonthly;
+
+  // Tour strings - profile
+  String get tourProfileCurrent;
+  String get tourProfileManage;
+  String get tourProfileAddNew;
+
+  // Tour strings - task server
+  String get tourTaskServerTaskRC;
+  String get tourTaskServerCertificate;
+  String get tourTaskServerKey;
+  String get tourTaskServerRootCert;
+
+  // Tour strings - home page
+  String get tourHomeAddTask;
+  String get tourHomeSearch;
+  String get tourHomeRefresh;
+  String get tourHomeFilter;
+  String get tourHomeMenu;
+
+  // Tour strings - filter drawer
+  String get tourFilterStatus;
+  String get tourFilterProjects;
+  String get tourFilterTagUnion;
+  String get tourFilterSort;
+
+  // Tour strings - details page
+  String get tourDetailsDue;
+  String get tourDetailsWait;
+  String get tourDetailsUntil;
+  String get tourDetailsPriority;
+
 }

@@ -7,9 +7,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:loggy/loggy.dart';
 import 'package:taskwarrior/app/models/tag_meta_data.dart';
 import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 
 import 'package:taskwarrior/app/utils/constants/constants.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/validate.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
@@ -128,7 +130,9 @@ class TagsRouteState extends State<TagsRoute> {
       appBar: AppBar(
         backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
         title: Text(
-          'Tags',
+          SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+              .sentences
+              .tags,
           style: GoogleFonts.poppins(color: TaskWarriorColors.white),
         ),
         leading: BackButton(
@@ -159,7 +163,9 @@ class TagsRouteState extends State<TagsRoute> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(15, 18, 0, 10),
                     child: Text(
-                      'Added tags will appear here',
+                      SentenceManager(
+                        currentLanguage: AppSettings.selectedLanguage,
+                      ).sentences.addedTagsWillAppearHere,
                       style: GoogleFonts.poppins(
                           fontStyle: FontStyle.italic,
                           color: tColors.primaryTextColor),
@@ -196,7 +202,9 @@ class TagsRouteState extends State<TagsRoute> {
             builder: (context) => Utils.showAlertDialog(
               scrollable: true,
               title: Text(
-                'Add tag',
+                SentenceManager(
+                  currentLanguage: AppSettings.selectedLanguage,
+                ).sentences.addTag,
                 style: TextStyle(
                   color: tColors.primaryTextColor,
                 ),
@@ -226,7 +234,9 @@ class TagsRouteState extends State<TagsRoute> {
                     Get.back();
                   },
                   child: Text(
-                    'Cancel',
+                    SentenceManager(
+                      currentLanguage: AppSettings.selectedLanguage,
+                    ).sentences.cancel,
                     style: TextStyle(
                       color: tColors.primaryTextColor,
                     ),
@@ -246,7 +256,9 @@ class TagsRouteState extends State<TagsRoute> {
                     }
                   },
                   child: Text(
-                    'Submit',
+                    SentenceManager(
+                      currentLanguage: AppSettings.selectedLanguage,
+                    ).sentences.submit,
                     style: TextStyle(
                       color: tColors.primaryTextColor,
                     ),

@@ -38,7 +38,9 @@ class TaskListItem extends StatelessWidget {
       );
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
-            'Task Updated',
+            SentenceManager(currentLanguage: selectedLanguage)
+                .sentences
+                .taskUpdated,
             style: TextStyle(
               color: tColors.primaryTextColor,
             ),

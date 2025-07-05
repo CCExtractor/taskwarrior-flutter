@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 
 List<TargetFocus> addManageTaskServerPage({
   required GlobalKey configureTaskRC,
@@ -27,7 +29,10 @@ List<TargetFocus> addManageTaskServerPage({
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    "Select the file named taskrc here or paste it's content",
+                    SentenceManager(
+                            currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .tourTaskServerTaskRC,
                     textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
                       color: Colors.white,
@@ -41,7 +46,6 @@ List<TargetFocus> addManageTaskServerPage({
       ],
     ),
   );
-
 
   targets.add(
     TargetFocus(
@@ -60,7 +64,10 @@ List<TargetFocus> addManageTaskServerPage({
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    "Select file similarly named like <Your Email>.com.cert.pem here",
+                    SentenceManager(
+                            currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .tourTaskServerCertificate,
                     textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
                       color: Colors.white,
@@ -92,7 +99,10 @@ List<TargetFocus> addManageTaskServerPage({
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    "Select file similarly named like <Your Email>.key.pem here",
+                    SentenceManager(
+                            currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .tourTaskServerKey,
                     textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
                       color: Colors.white,
@@ -124,7 +134,10 @@ List<TargetFocus> addManageTaskServerPage({
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    "Select file similarly named like letsencrypt_root_cert.pem here",
+                    SentenceManager(
+                            currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .tourTaskServerRootCert,
                     textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
                       color: Colors.white,

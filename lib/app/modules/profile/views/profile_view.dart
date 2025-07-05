@@ -167,7 +167,10 @@ class ProfileView extends GetView<ProfileController> {
                 );
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(
-                      'Profile Config Copied',
+                      SentenceManager(
+                                  currentLanguage: AppSettings.selectedLanguage)
+                              .sentences
+                              .profileConfigCopied,
                       style: TextStyle(
                         color: tColors.primaryTextColor,
                       ),
@@ -177,7 +180,10 @@ class ProfileView extends GetView<ProfileController> {
               } catch (e) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(
-                      'Profile Config Copy Failed',
+                      SentenceManager(
+                                  currentLanguage: AppSettings.selectedLanguage)
+                              .sentences
+                              .profileConfigCopyFailed,
                       style: TextStyle(
                         color: tColors.primaryTextColor,
                       ),

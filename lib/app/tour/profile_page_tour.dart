@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 
 List<TargetFocus> addProfilePage({
   required GlobalKey currentProfileKey,
-
   required GlobalKey addNewProfileKey,
   required GlobalKey manageSelectedProfileKey,
 }) {
@@ -27,7 +28,10 @@ List<TargetFocus> addProfilePage({
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    "See your current profile here",
+                    SentenceManager(
+                            currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .tourProfileCurrent,
                     textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
                       color: Colors.white,
@@ -41,7 +45,6 @@ List<TargetFocus> addProfilePage({
       ],
     ),
   );
-
 
   //manage current profile
   targets.add(
@@ -60,7 +63,10 @@ List<TargetFocus> addProfilePage({
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    "Manage your current profile here",
+                    SentenceManager(
+                            currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .tourProfileManage,
                     textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
                       color: Colors.white,
@@ -91,7 +97,10 @@ List<TargetFocus> addProfilePage({
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    "Add a new profile here",
+                    SentenceManager(
+                            currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .tourProfileAddNew,
                     textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
                       color: Colors.white,

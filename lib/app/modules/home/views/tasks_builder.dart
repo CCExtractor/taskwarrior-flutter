@@ -60,7 +60,9 @@ class TasksBuilder extends StatelessWidget {
     );
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(
-        'Task Updated',
+        SentenceManager(currentLanguage: selectedLanguage)
+            .sentences
+            .taskUpdated,
         style: TextStyle(
           color: tColors.primaryTextColor,
         ),
@@ -68,7 +70,8 @@ class TasksBuilder extends StatelessWidget {
       backgroundColor: tColors.secondaryBackgroundColor,
       duration: const Duration(seconds: 2),
       action: SnackBarAction(
-        label: 'Undo',
+        label:
+            SentenceManager(currentLanguage: selectedLanguage).sentences.undo,
         onPressed: () {
           undoChanges(context, id, 'pending');
         },
@@ -190,7 +193,9 @@ class TasksBuilder extends StatelessWidget {
                                     }
                                   },
                                   icon: Icons.done,
-                                  label: "COMPLETE",
+                                  label: SentenceManager(currentLanguage: selectedLanguage)
+                                      .sentences
+                                      .complete,
                                   backgroundColor: TaskWarriorColors.green,
                                 ),
                               ],
@@ -217,7 +222,9 @@ class TasksBuilder extends StatelessWidget {
                                     }
                                   },
                                   icon: Icons.delete,
-                                  label: "DELETE",
+                                  label: SentenceManager(currentLanguage: selectedLanguage)
+                                      .sentences
+                                      .delete,
                                   backgroundColor: TaskWarriorColors.red,
                                 ),
                               ],

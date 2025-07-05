@@ -4,10 +4,12 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:taskwarrior/api_service.dart';
 import 'package:taskwarrior/app/models/chart.dart';
 import 'package:taskwarrior/app/modules/reports/views/common_chart_indicator.dart';
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 
 class BurnDownMonthlyTaskc extends StatelessWidget {
   BurnDownMonthlyTaskc({super.key});
@@ -31,16 +33,22 @@ class BurnDownMonthlyTaskc extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Month-Year: $monthYear',
+              '${SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                      .sentences
+                      .reportsMonthYear}: $monthYear',
               style: const TextStyle(
                 fontWeight: TaskWarriorFonts.bold,
               ),
             ),
             Text(
-              'Pending: $pendingCount',
+              '${SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                      .sentences
+                      .reportsPending}: $pendingCount',
             ),
             Text(
-              'Completed: $completedCount',
+              '${SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                      .sentences
+                      .reportsCompleted}: $completedCount',
             ),
           ],
         ),
@@ -97,7 +105,11 @@ class BurnDownMonthlyTaskc extends StatelessWidget {
         }
 
         if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
+          return Center(
+              child: Text('${SentenceManager(
+                          currentLanguage: AppSettings.selectedLanguage)
+                      .sentences
+                      .reportsError}: ${snapshot.error}'));
         }
 
         Map<String, Map<String, int>> monthlyInfo = snapshot.data ?? {};

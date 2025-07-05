@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:taskwarrior/app/modules/permission/views/permission_section.dart';
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import '../controllers/permission_controller.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 
 class PermissionView extends GetView<PermissionController> {
   const PermissionView({super.key});
@@ -32,7 +34,9 @@ class PermissionView extends GetView<PermissionController> {
               children: [
                 const SizedBox(height: 24),
                 Text(
-                  'Why We Need Your Permission',
+                  SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                      .sentences
+                      .permissionPageTitle,
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: tColors.primaryTextColor,
@@ -46,24 +50,34 @@ class PermissionView extends GetView<PermissionController> {
                   color: tColors.primaryTextColor,
                 ),
                 const SizedBox(height: 32),
-                const PermissionSection(
-                    icon: Icons.folder_outlined,
-                    title: 'Storage Permission',
-                    description:
-                        'We use storage access to save your tasks, preferences, '
-                        'and app data securely on your device. This ensures that you can '
-                        'pick up where you left off seamlessly, even offline.'),
+                PermissionSection(
+                  icon: Icons.folder_outlined,
+                  title: SentenceManager(
+                          currentLanguage: AppSettings.selectedLanguage)
+                      .sentences
+                      .storagePermissionTitle,
+                  description: SentenceManager(
+                          currentLanguage: AppSettings.selectedLanguage)
+                      .sentences
+                      .storagePermissionDescription,
+                ),
                 const SizedBox(height: 24),
-                const PermissionSection(
-                    icon: Icons.notifications_outlined,
-                    title: 'Notification Permission',
-                    description:
-                        'Notifications keep you updated with important reminders '
-                        'and updates, ensuring you stay on top of your tasks effortlessly.'),
+                PermissionSection(
+                  icon: Icons.notifications_outlined,
+                  title: SentenceManager(
+                          currentLanguage: AppSettings.selectedLanguage)
+                      .sentences
+                      .notificationPermissionTitle,
+                  description: SentenceManager(
+                          currentLanguage: AppSettings.selectedLanguage)
+                      .sentences
+                      .notificationPermissionDescription,
+                ),
                 const SizedBox(height: 24),
                 Text(
-                  'Your privacy is our top priority. We never access or share your '
-                  'personal files or data without your consent.',
+                  SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                      .sentences
+                      .privacyStatement,
                   style: Theme.of(context)
                       .textTheme
                       .bodyMedium
@@ -88,7 +102,11 @@ class PermissionView extends GetView<PermissionController> {
                               color: tColors.primaryBackgroundColor,
                             )
                           : Text(
-                              'Grant Permissions',
+                              SentenceManager(
+                                      currentLanguage:
+                                          AppSettings.selectedLanguage)
+                                  .sentences
+                                  .grantPermissions,
                               style: TextStyle(
                                 color: tColors.primaryTextColor,
                                 fontSize: 16,
@@ -103,7 +121,10 @@ class PermissionView extends GetView<PermissionController> {
                         WidgetStateProperty.all(TaskWarriorColors.grey),
                   ),
                   child: Text(
-                    'You can manage your permissions anytime later in Settings',
+                    SentenceManager(
+                            currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .managePermissionsLater,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: tColors.primaryTextColor,
                         ),
