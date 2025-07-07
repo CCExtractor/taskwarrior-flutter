@@ -34,6 +34,17 @@ class HindiSentences extends Sentences {
   @override
   String get homePageFetchingTasks => 'कार्य लाये जा रहे हैं';
   @override
+  String get homePageSearchTooltip => 'खोजें';
+  @override
+  String get homePageCancelSearchTooltip => 'रद्द करें';
+  @override
+  String get homePageAddTaskTooltip => 'कार्य जोड़ें';
+  @override
+  String get homePageTapBackToExit => 'बाहर निकलने के लिए फिर से वापस दबाएं';
+  @override
+  String get homePageSearchHint => 'खोजें';
+
+  @override
   String get settingsPageTitle => 'सेटिंग्स पेज';
   @override
   String get settingsPageSubtitle => 'अपनी पसंद सेट करें';
@@ -86,6 +97,8 @@ class HindiSentences extends Sentences {
   String get navDrawerSettings => 'सेटिंग्स';
   @override
   String get navDrawerExit => 'बाहर जाओ';
+  @override
+  String get navDrawerConfirm => 'पुष्टि करें';
 
   @override
   String get detailPageDescription => 'विवरण';
@@ -154,6 +167,8 @@ class HindiSentences extends Sentences {
   String get filterDrawerResetSort => 'सॉर्ट रीसेट करें';
   @override
   String get filterDrawerStatus => 'स्थिती';
+  @override
+  String get filterDrawerNoProjectsAvailable => 'कोई परियोजना उपलब्ध नहीं।';
   @override
   String get reportsPageTitle => 'रिपोर्ट्स';
   @override
@@ -320,4 +335,252 @@ class HindiSentences extends Sentences {
       "यह परियोजना Taskwarrior के लिए एक ऐप बनाने का लक्ष्य रखती है। यह आपके सभी प्लेटफार्मों पर कार्य प्रबंधन ऐप है। यह आपको अपने कार्यों को प्रबंधित करने और उन्हें अपनी आवश्यकताओं के अनुसार छानने में मदद करता है।";
   @override
   String get aboutPageAppBarTitle => "के बारे में";
+
+  @override
+  String get version => "संस्करण";
+  @override
+  String get package => "पैकेज";
+
+  @override
+  String get notSelected => "चयनित नहीं";
+  @override
+  String get cantSetTimeinPast => "पिछले समय को सेट नहीं कर सकते";
+
+  @override
+  String get editDescription => "विवरण संपादित करें";
+  @override
+  String get editProject => "परियोजना संपादित करें";
+  @override
+  String get cancel => "रद्द करें";
+  @override
+  String get submit => "जमा करें";
+
+  @override
+  String get saveChangesConfirmation => 'क्या आप परिवर्तन सहेजना चाहते हैं?';
+  @override
+  String get yes => 'हाँ';
+  @override
+  String get no => 'नहीं';
+  @override
+  String get reviewChanges => 'परिवर्तनों की समीक्षा करें';
+  @override
+  String get oldChanges => 'पुराना';
+  @override
+  String get newChanges => 'नया';
+
+  @override
+  String get tags => 'टैग';
+  @override
+  String get addedTagsWillAppearHere => 'जोड़े गए टैग यहाँ दिखाई देंगे';
+  @override
+  String get addTag => 'टैग जोड़ें';
+
+  @override
+  String get enterProject => 'परियोजना दर्ज करें';
+  @override
+  String get allProjects => 'सभी परियोजनाएँ';
+  @override
+  String get noProjectsFound => 'कोई परियोजना नहीं मिली';
+  @override
+  String get project => 'परियोजना';
+
+  @override
+  String get select => 'चुनें';
+  @override
+  String get save => 'सहेजें';
+  @override
+  String get dontSave => 'सहेजें नहीं';
+  @override
+  String get unsavedChanges => 'असहेजित परिवर्तन';
+  @override
+  String get unsavedChangesWarning =>
+      'आपके पास असहेजित परिवर्तन हैं। आप क्या करना चाहेंगे?';
+  @override
+  String get enterNew => 'नया दर्ज करें';
+  @override
+  String get edit => 'संपादित करें';
+  @override
+  String get task => 'कार्य';
+
+  @override
+  String get confirmDeleteTask => 'हटाने की पुष्टि करें';
+  @override
+  String get taskUpdated => 'कार्य अपडेट किया गया';
+  @override
+  String get undo => 'पूर्ववत करें';
+  @override
+  String get taskMarkedAsCompleted =>
+      'कार्य को पूर्ण रूप में चिह्नित किया गया। परिवर्तनों को देखने के लिए रिफ्रेश करें!';
+  @override
+  String get taskMarkedAsDeleted =>
+      'कार्य को हटाए गए रूप में चिह्नित किया गया। परिवर्तनों को देखने के लिए रिफ्रेश करें!';
+  @override
+  String get refreshToViewChanges => 'परिवर्तनों को देखने के लिए रिफ्रेश करें';
+  @override
+  String get clickOnBottomRightButtonToStartAddingTasks =>
+      'कार्य जोड़ने के लिए नीचे दाईं ओर बटन पर क्लिक करें';
+  @override
+  String get complete => 'पूर्ण';
+  @override
+  String get delete => 'हटाएँ';
+
+  @override
+  String get taskServerInfo => 'टास्क सर्वर जानकारी';
+  @override
+  String get taskServerCredentials => 'टास्क सर्वर क्रेडेंशियल';
+  @override
+  String get notConfigured => 'कॉन्फ़िगर नहीं किया गया';
+  @override
+  String get fetchingStatistics => 'सांख्यिकी लाया जा रहा है...';
+  @override
+  String get pleaseWait => 'कृपया प्रतीक्षा करें...';
+  @override
+  String get statistics => 'सांख्यिकी:';
+  @override
+  String get ok => 'ठीक';
+  @override
+  String get pleaseSetupTaskServer => 'कृपया अपना टास्क सर्वर सेट करें।';
+
+  @override
+  String get onboardingSkip => 'छोड़ें';
+  @override
+  String get onboardingNext => 'अगला';
+  @override
+  String get onboardingStart => 'शुरू करें';
+
+  @override
+  String get permissionPageTitle => 'हमें आपकी अनुमति की आवश्यकता क्यों है';
+  @override
+  String get storagePermissionTitle => 'संग्रहण अनुमति';
+  @override
+  String get storagePermissionDescription =>
+      'हम आपके कार्य, प्राथमिकताएँ, और ऐप डेटा सुरक्षित रूप से सहेजने के लिए '
+      'संग्रहण पहुँच का उपयोग करते हैं, जिससे आप किसी भी समय ऑफ़लाइन भी कार्य जारी रख सकते हैं।';
+  @override
+  String get notificationPermissionTitle => 'सूचना अनुमति';
+  @override
+  String get notificationPermissionDescription =>
+      'सूचनाएँ आपको महत्वपूर्ण अनुस्मारक और अपडेट देती हैं, जिससे आप अपने कार्यों को आसानी से प्रबंधित कर सकते हैं।';
+  @override
+  String get privacyStatement =>
+      'आपकी गोपनीयता हमारी प्राथमिकता है। हम आपकी व्यक्तिगत फ़ाइलें या डेटा आपकी सहमति के बिना कभी भी एक्सेस या साझा नहीं करते।';
+  @override
+  String get grantPermissions => 'अनुमतियाँ दें';
+  @override
+  String get managePermissionsLater =>
+      'आप बाद में सेटिंग्स में अपनी अनुमतियाँ प्रबंधित कर सकते हैं';
+
+  @override
+  String get profileAllProfiles => 'सभी प्रोफाइल:';
+  @override
+  String get profileSwitchedToProfile => 'प्रोफ़ाइल पर स्विच किया गया';
+  @override
+  String get profileAddedSuccessfully => 'प्रोफ़ाइल सफलतापूर्वक जोड़ी गई';
+  @override
+  String get profileAdditionFailed => 'प्रोफ़ाइल जोड़ना विफल रहा';
+  @override
+  String get profileConfigCopied => 'प्रोफ़ाइल कॉन्फ़िग कॉपी किया गया';
+  @override
+  String get profileConfigCopyFailed => 'प्रोफ़ाइल कॉन्फ़िग कॉपी विफल';
+  @override
+  String get profileDeletedSuccessfully => 'सफलतापूर्वक हटाया गया';
+  @override
+  String get profileDeletionFailed => 'हटाने में विफल';
+  @override
+  String get profileDeleteConfirmation => 'पुष्टि करें';
+
+  @override
+  String get reportsDate => 'तारीख';
+  @override
+  String get reportsPending => 'लंबित';
+  @override
+  String get reportsCompleted => 'पूर्ण';
+  @override
+  String get reportsMonthYear => 'महीना-वर्ष';
+  @override
+  String get reportsWeek => 'सप्ताह';
+  @override
+  String get reportsDay => 'दिन';
+  @override
+  String get reportsYear => 'वर्ष';
+  @override
+  String get reportsError => 'त्रुटि';
+  @override
+  String get reportsLoading => 'लोड हो रहा है...';
+
+  @override
+  String get settingsResetToDefault => 'डिफ़ॉल्ट पर रीसेट करें';
+  @override
+  String get settingsAlreadyDefault => 'पहले से डिफ़ॉल्ट';
+  @override
+  String get settingsConfirmReset =>
+      'क्या आप वाकई निर्देशिका को डिफ़ॉल्ट पर रीसेट करना चाहते हैं?';
+  @override
+  String get settingsNoButton => 'नहीं';
+  @override
+  String get settingsYesButton => 'हाँ';
+
+  @override
+  String get splashSettingUpApp => "ऐप सेटअप किया जा रहा है...";
+
+  @override
+  String get tourReportsDaily => "यहाँ अपनी दैनिक कार्य रिपोर्ट देखें";
+  @override
+  String get tourReportsWeekly => "यहाँ अपनी साप्ताहिक कार्य रिपोर्ट देखें";
+  @override
+  String get tourReportsMonthly => "यहाँ अपनी मासिक कार्य रिपोर्ट देखें";
+
+  @override
+  String get tourProfileCurrent => "यहाँ अपनी वर्तमान प्रोफ़ाइल देखें";
+  @override
+  String get tourProfileManage => "यहाँ अपनी वर्तमान प्रोफ़ाइल प्रबंधित करें";
+  @override
+  String get tourProfileAddNew => "यहाँ नई प्रोफ़ाइल जोड़ें";
+
+  @override
+  String get tourHomeAddTask => "नया कार्य जोड़ें";
+  @override
+  String get tourHomeSearch => "कार्य खोजें";
+  @override
+  String get tourHomeRefresh => "अपने कार्यों को ताज़ा करें या सिंक करें";
+  @override
+  String get tourHomeFilter => "कार्य और परियोजनाओं को फ़िल्टर करें";
+  @override
+  String get tourHomeMenu => "यहाँ अतिरिक्त सेटिंग्स एक्सेस करें";
+
+  @override
+  String get tourFilterStatus =>
+      "कार्य की पूर्णता स्थिति के आधार पर फ़िल्टर करें";
+  @override
+  String get tourFilterProjects => "परियोजनाओं के आधार पर कार्य फ़िल्टर करें";
+  @override
+  String get tourFilterTagUnion =>
+      "AND और OR टैग यूनियन प्रकारों के बीच टॉगल करें";
+  @override
+  String get tourFilterSort =>
+      "निर्माण समय, तात्कालिकता, नियत तिथि, प्रारंभ तिथि आदि के आधार पर कार्यों को क्रमबद्ध करें।";
+
+  @override
+  String get tourDetailsDue => "यह कार्य की नियत तिथि को दर्शाता है";
+  @override
+  String get tourDetailsWait =>
+      "यह कार्य की प्रतीक्षा तिथि को दर्शाता है \n कार्य इस तिथि के बाद दिखाई देगा";
+  @override
+  String get tourDetailsUntil => "यह कार्य की अंतिम तिथि को दर्शाता है";
+  @override
+  String get tourDetailsPriority =>
+      "यह कार्यों की प्राथमिकता है \n L -> निम्न \n M -> मध्यम \n H -> उच्च";
+
+  @override
+  String get tourTaskServerTaskRC =>
+      "यहां 'taskrc' नामक फ़ाइल चुनें या इसकी सामग्री पेस्ट करें";
+  @override
+  String get tourTaskServerCertificate =>
+      "इसी तरह नामित फ़ाइल चुनें, जैसे <Your Email>.com.cert.pem";
+  @override
+  String get tourTaskServerKey =>
+      "इसी तरह नामित फ़ाइल चुनें, जैसे <Your Email>.key.pem";
+  @override
+  String get tourTaskServerRootCert =>
+      "इसी तरह नामित फ़ाइल चुनें, जैसे letsencrypt_root_cert.pem";
 }

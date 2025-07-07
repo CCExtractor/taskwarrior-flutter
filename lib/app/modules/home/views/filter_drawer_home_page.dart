@@ -205,8 +205,12 @@ class FilterDrawer extends StatelessWidget {
                         ),
                       );
                     } else {
-                      return const Center(
-                          child: Text('No projects available.'));
+                      return Center(
+                          child: Text(SentenceManager(
+                                  currentLanguage:
+                                      homeController.selectedLanguage.value)
+                              .sentences
+                              .filterDrawerNoProjectsAvailable));
                     }
                   },
                 ),

@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:loggy/loggy.dart';
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/constants/constants.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 
 class DescriptionWidget extends StatelessWidget {
   const DescriptionWidget({
@@ -58,7 +60,11 @@ class DescriptionWidget extends StatelessWidget {
                       ),
                     ),
                     TextSpan(
-                      text: value ?? "not selected",
+                      text: value ??
+                          SentenceManager(
+                                  currentLanguage: AppSettings.selectedLanguage)
+                              .sentences
+                              .notSelected,
                       // style: GoogleFonts.poppins(
                       //   fontSize: TaskWarriorFonts.fontSizeMedium,
                       //   color: AppSettings.isDarkMode
@@ -88,7 +94,9 @@ class DescriptionWidget extends StatelessWidget {
             builder: (context) => Utils.showAlertDialog(
               scrollable: true,
               title: Text(
-                'Edit description',
+                SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                    .sentences
+                    .editDescription,
                 style: TextStyle(
                   color: tColors.primaryTextColor,
                 ),
@@ -107,7 +115,10 @@ class DescriptionWidget extends StatelessWidget {
                     Get.back();
                   },
                   child: Text(
-                    'Cancel',
+                    SentenceManager(
+                            currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .cancel,
                     style: TextStyle(
                       color: tColors.primaryTextColor,
                     ),
@@ -123,7 +134,10 @@ class DescriptionWidget extends StatelessWidget {
                     }
                   },
                   child: Text(
-                    'Submit',
+                    SentenceManager(
+                            currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .submit,
                     style: TextStyle(
                       color: tColors.primaryTextColor,
                     ),
@@ -189,7 +203,11 @@ class ProjectWidget extends StatelessWidget {
                       ),
                     ),
                     TextSpan(
-                      text: value ?? "not selected",
+                      text: value ??
+                          SentenceManager(
+                                  currentLanguage: AppSettings.selectedLanguage)
+                              .sentences
+                              .notSelected,
                       // style: GoogleFonts.poppins(
                       //   fontSize: TaskWarriorFonts.fontSizeMedium,
                       //   color: AppSettings.isDarkMode
@@ -219,7 +237,9 @@ class ProjectWidget extends StatelessWidget {
             builder: (context) => Utils.showAlertDialog(
               scrollable: true,
               title: Text(
-                'Edit project',
+                SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                    .sentences
+                    .editProject,
                 style: TextStyle(
                   color: tColors.primaryTextColor,
                 ),
@@ -238,7 +258,10 @@ class ProjectWidget extends StatelessWidget {
                     Get.back();
                   },
                   child: Text(
-                    'Cancel',
+                    SentenceManager(
+                            currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .cancel,
                     style: TextStyle(
                       color: tColors.primaryTextColor,
                     ),
@@ -255,7 +278,10 @@ class ProjectWidget extends StatelessWidget {
                     }
                   },
                   child: Text(
-                    'Submit',
+                    SentenceManager(
+                            currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .submit,
                     style: TextStyle(
                       color: tColors.primaryTextColor,
                     ),

@@ -64,7 +64,10 @@ class SettingsPageSelectDirectoryListTile extends StatelessWidget {
                   if (await controller.getBaseDirectory() == "Default") {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
-                          'Already default',
+                          SentenceManager(
+                                  currentLanguage: AppSettings.selectedLanguage)
+                              .sentences
+                              .settingsAlreadyDefault,
                           style: TextStyle(
                             color: tColors.primaryTextColor,
                           ),
@@ -77,7 +80,11 @@ class SettingsPageSelectDirectoryListTile extends StatelessWidget {
                       builder: (BuildContext context) {
                         return Utils.showAlertDialog(
                           title: Text(
-                            'Reset to default',
+                            SentenceManager(
+                                    currentLanguage:
+                                        AppSettings.selectedLanguage)
+                                .sentences
+                                .settingsResetToDefault,
                             style: GoogleFonts.poppins(
                               fontWeight: FontWeight.bold,
                               fontSize: TaskWarriorFonts.fontSizeMedium,
@@ -85,7 +92,11 @@ class SettingsPageSelectDirectoryListTile extends StatelessWidget {
                             ),
                           ),
                           content: Text(
-                            "Are you sure you want to reset the directory to the default?",
+                            SentenceManager(
+                                    currentLanguage:
+                                        AppSettings.selectedLanguage)
+                                .sentences
+                                .settingsConfirmReset,
                             style: GoogleFonts.poppins(
                               color: TaskWarriorColors.grey,
                               fontSize: TaskWarriorFonts.fontSizeMedium,
@@ -97,7 +108,11 @@ class SettingsPageSelectDirectoryListTile extends StatelessWidget {
                                 Navigator.pop(context);
                               },
                               child: Text(
-                                'No',
+                                SentenceManager(
+                                        currentLanguage:
+                                            AppSettings.selectedLanguage)
+                                    .sentences
+                                    .settingsNoButton,
                                 style: GoogleFonts.poppins(
                                   color: tColors.primaryTextColor,
                                 ),
@@ -130,7 +145,11 @@ class SettingsPageSelectDirectoryListTile extends StatelessWidget {
                                 });
                               },
                               child: Text(
-                                'Yes',
+                                SentenceManager(
+                                        currentLanguage:
+                                            AppSettings.selectedLanguage)
+                                    .sentences
+                                    .settingsYesButton,
                                 style: GoogleFonts.poppins(
                                   color: tColors.primaryTextColor,
                                 ),

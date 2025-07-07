@@ -322,4 +322,288 @@ class BengaliSentences extends Sentences {
       "এই প্রকল্পের লক্ষ্য Taskwarrior-এর জন্য একটি অ্যাপ তৈরি করা। এটি আপনার সকল প্ল্যাটফর্মে একটি টাস্ক ম্যানেজমেন্ট অ্যাপ। এটি আপনাকে আপনার কাজগুলি পরিচালনা করতে এবং আপনার প্রয়োজন অনুসারে সেগুলি ফিল্টার করতে সাহায্য করে।";
   @override
   String get aboutPageAppBarTitle => "সম্পর্কিত";
+
+  @override
+  String get homePageSearchTooltip => 'অনুসন্ধান করুন';
+  @override
+  String get homePageCancelSearchTooltip => 'বাতিল করুন';
+  @override
+  String get homePageAddTaskTooltip => 'টাস্ক যোগ করুন';
+  @override
+  String get homePageTapBackToExit => 'প্রস্থান করতে আবার ব্যাক চাপুন';
+  @override
+  String get homePageSearchHint => 'অনুসন্ধান করুন';
+
+  @override
+  String get navDrawerConfirm => 'নিশ্চিত করুন';
+
+  @override
+  String get filterDrawerNoProjectsAvailable => 'কোনো প্রকল্প উপলব্ধ নেই।';
+
+  @override
+  String get version => "সংস্করণ";
+  @override
+  String get package => "প্যাকেজ";
+
+  @override
+  String get notSelected => "নির্বাচিত নয়";
+  @override
+  String get cantSetTimeinPast => "অতীতে সময় নির্ধারণ করা সম্ভব নয়";
+
+  @override
+  String get editDescription => "বিবরণ সম্পাদনা করুন";
+  @override
+  String get editProject => "প্রকল্প সম্পাদনা করুন";
+  @override
+  String get cancel => "বাতিল করুন";
+  @override
+  String get submit => "জমা দিন";
+
+  @override
+  String get saveChangesConfirmation =>
+      'আপনি কি পরিবর্তনগুলি সংরক্ষণ করতে চান?';
+  @override
+  String get yes => 'হ্যাঁ';
+  @override
+  String get no => 'না';
+  @override
+  String get reviewChanges => 'পরিবর্তন পর্যালোচনা করুন';
+  @override
+  String get oldChanges => 'পুরানো';
+  @override
+  String get newChanges => 'নতুন';
+
+  @override
+  String get tags => 'ট্যাগ';
+  @override
+  String get addedTagsWillAppearHere => 'যোগ করা ট্যাগ এখানে প্রদর্শিত হবে';
+  @override
+  String get addTag => 'ট্যাগ যোগ করুন';
+
+  @override
+  String get enterProject => 'প্রকল্প প্রবেশ করান';
+  @override
+  String get allProjects => 'সমস্ত প্রকল্প';
+  @override
+  String get noProjectsFound => 'কোনো প্রকল্প পাওয়া যায়নি';
+  @override
+  String get project => 'প্রকল্প';
+
+  @override
+  String get select => 'নির্বাচন করুন';
+  @override
+  String get save => 'সংরক্ষণ করুন';
+  @override
+  String get dontSave => 'সংরক্ষণ করবেন না';
+  @override
+  String get unsavedChanges => 'সংরক্ষিত নয় এমন পরিবর্তন';
+  @override
+  String get unsavedChangesWarning =>
+      'আপনার পরিবর্তনগুলি সংরক্ষিত হয়নি। আপনি কি করতে চান?';
+  @override
+  String get enterNew => 'নতুন লিখুন';
+  @override
+  String get edit => 'সম্পাদনা করুন';
+  @override
+  String get task => 'টাস্ক';
+
+// task action strings
+  @override
+  String get confirmDeleteTask => 'মুছে ফেলার নিশ্চয়তা দিন';
+  @override
+  String get taskUpdated => 'টাস্ক আপডেট হয়েছে';
+  @override
+  String get undo => 'পূর্বাবস্থায় ফেরান';
+  @override
+  String get taskMarkedAsCompleted =>
+      'টাস্ক সম্পন্ন হয়েছে। পরিবর্তন দেখতে রিফ্রেশ করুন!';
+  @override
+  String get taskMarkedAsDeleted =>
+      'টাস্ক মুছে ফেলা হয়েছে। পরিবর্তন দেখতে রিফ্রেশ করুন!';
+  @override
+  String get refreshToViewChanges => 'পরিবর্তন দেখতে রিফ্রেশ করুন';
+  @override
+  String get clickOnBottomRightButtonToStartAddingTasks =>
+      'টাস্ক যোগ করতে নিচের ডানদিকের বোতামে ক্লিক করুন';
+  @override
+  String get complete => 'সম্পন্ন';
+  @override
+  String get delete => 'মুছে ফেলুন';
+
+// task server management strings
+  @override
+  String get taskServerInfo => 'TaskD সার্ভারের তথ্য';
+  @override
+  String get taskServerCredentials => 'TaskD সার্ভারের শংসাপত্র';
+  @override
+  String get notConfigured => 'কনফিগার করা হয়নি';
+  @override
+  String get fetchingStatistics => 'পরিসংখ্যান আনা হচ্ছে...';
+  @override
+  String get pleaseWait => 'অনুগ্রহ করে অপেক্ষা করুন...';
+  @override
+  String get statistics => 'পরিসংখ্যান:';
+  @override
+  String get ok => 'ঠিক আছে';
+  @override
+  String get pleaseSetupTaskServer =>
+      'অনুগ্রহ করে আপনার TaskD সার্ভার সেটআপ করুন।';
+
+// onboarding strings
+  @override
+  String get onboardingSkip => 'এড়িয়ে যান';
+  @override
+  String get onboardingNext => 'পরবর্তী';
+  @override
+  String get onboardingStart => 'শুরু করুন';
+
+// permission strings
+  @override
+  String get permissionPageTitle => 'আমাদের আপনার অনুমতি কেন দরকার';
+  @override
+  String get storagePermissionTitle => 'সংগ্রহস্থল অনুমতি';
+  @override
+  String get storagePermissionDescription =>
+      'আপনার ডিভাইসে টাস্ক, পছন্দ এবং অ্যাপের ডেটা নিরাপদে সংরক্ষণ করতে আমরা '
+      'সংগ্রহস্থল অ্যাক্সেস ব্যবহার করি। এটি নিশ্চিত করে যে আপনি অফলাইনে থাকলেও '
+      'আপনার কাজ অব্যাহত রাখতে পারবেন।';
+  @override
+  String get notificationPermissionTitle => 'বিজ্ঞপ্তি অনুমতি';
+  @override
+  String get notificationPermissionDescription =>
+      'বিজ্ঞপ্তি আপনাকে গুরুত্বপূর্ণ অনুস্মারক এবং আপডেটগুলির বিষয়ে অবহিত রাখে, '
+      'যাতে আপনি সহজেই আপনার কাজ পরিচালনা করতে পারেন।';
+  @override
+  String get privacyStatement =>
+      'আপনার গোপনীয়তা আমাদের অগ্রাধিকার। আমরা আপনার ফাইল বা ব্যক্তিগত ডেটা '
+      'আপনার অনুমতি ছাড়া কখনও অ্যাক্সেস বা ভাগ করি না।';
+  @override
+  String get grantPermissions => 'অনুমতি দিন';
+  @override
+  String get managePermissionsLater =>
+      'আপনি পরে সেটিংস থেকে অনুমতিগুলি পরিচালনা করতে পারেন';
+
+// Profile page strings
+  @override
+  String get profileAllProfiles => 'সমস্ত প্রোফাইল:';
+  @override
+  String get profileSwitchedToProfile => 'প্রোফাইল পরিবর্তন করা হয়েছে';
+  @override
+  String get profileAddedSuccessfully => 'প্রোফাইল সফলভাবে যোগ করা হয়েছে';
+  @override
+  String get profileAdditionFailed => 'প্রোফাইল যোগ করা ব্যর্থ হয়েছে';
+  @override
+  String get profileConfigCopied => 'প্রোফাইল কনফিগারেশন কপি করা হয়েছে';
+  @override
+  String get profileConfigCopyFailed => 'প্রোফাইল কনফিগারেশন কপি ব্যর্থ হয়েছে';
+  @override
+  String get profileDeletedSuccessfully => 'প্রোফাইল সফলভাবে মুছে ফেলা হয়েছে';
+  @override
+  String get profileDeletionFailed => 'প্রোফাইল মুছে ফেলা ব্যর্থ হয়েছে';
+  @override
+  String get profileDeleteConfirmation => 'আপনি কি প্রোফাইল মুছে ফেলতে চান?';
+
+// Reports strings
+  @override
+  String get reportsDate => 'তারিখ';
+  @override
+  String get reportsPending => 'অপেক্ষমান';
+  @override
+  String get reportsCompleted => 'সম্পন্ন';
+  @override
+  String get reportsMonthYear => 'মাস-বছর';
+  @override
+  String get reportsWeek => 'সপ্তাহ';
+  @override
+  String get reportsDay => 'দিন';
+  @override
+  String get reportsYear => 'বছর';
+  @override
+  String get reportsError => 'ত্রুটি';
+  @override
+  String get reportsLoading => 'লোড হচ্ছে...';
+
+// Settings strings
+  @override
+  String get settingsResetToDefault => 'ডিফল্টে রিসেট করুন';
+  @override
+  String get settingsAlreadyDefault => 'ইতিমধ্যে ডিফল্ট অবস্থানে রয়েছে';
+  @override
+  String get settingsConfirmReset =>
+      'আপনি কি নিশ্চিত যে আপনি সেটিংস ডিফল্টে রিসেট করতে চান?';
+  @override
+  String get settingsNoButton => 'না';
+  @override
+  String get settingsYesButton => 'হ্যাঁ';
+
+// Splash screen strings
+  @override
+  String get splashSettingUpApp => "অ্যাপ সেটআপ করা হচ্ছে...";
+
+// Tour strings
+  @override
+  String get tourHomeAddTask => "নতুন টাস্ক যোগ করুন";
+  @override
+  String get tourHomeSearch => "টাস্ক অনুসন্ধান করুন";
+  @override
+  String get tourHomeRefresh => "আপনার টাস্ক রিফ্রেশ বা সিঙ্ক করুন";
+  @override
+  String get tourHomeFilter => "টাস্ক ও প্রকল্প ফিল্টার করুন";
+  @override
+  String get tourHomeMenu => "অতিরিক্ত সেটিংস অ্যাক্সেস করুন";
+
+  @override
+  String get tourDetailsDue => "টাস্কের নির্ধারিত সময় দেখুন";
+
+  @override
+  String get tourDetailsPriority => "টাস্কের অগ্রাধিকার নির্ধারণ করুন";
+
+  @override
+  String get tourDetailsUntil => "টাস্কের শেষ তারিখ দেখুন";
+
+  @override
+  String get tourDetailsWait => "টাস্কের অপেক্ষার সময় দেখুন";
+
+  @override
+  String get tourFilterProjects => "আপনার প্রকল্প ফিল্টার করুন";
+
+  @override
+  String get tourFilterSort => "টাস্ক সাজানোর বিকল্প দেখুন";
+
+  @override
+  String get tourFilterStatus => "টাস্কের বর্তমান অবস্থা দেখুন";
+
+  @override
+  String get tourFilterTagUnion => "ট্যাগ ফিল্টার করার নিয়ম সেট করুন";
+
+  @override
+  String get tourProfileAddNew => "একটি নতুন প্রোফাইল যোগ করুন";
+
+  @override
+  String get tourProfileCurrent => "বর্তমান প্রোফাইল দেখুন";
+
+  @override
+  String get tourProfileManage => "আপনার প্রোফাইল পরিচালনা করুন";
+
+  @override
+  String get tourReportsDaily => "দৈনিক প্রতিবেদন দেখুন";
+
+  @override
+  String get tourReportsMonthly => "মাসিক প্রতিবেদন দেখুন";
+
+  @override
+  String get tourReportsWeekly => "সাপ্তাহিক প্রতিবেদন দেখুন";
+
+  @override
+  String get tourTaskServerCertificate =>
+      "আপনার TaskD সার্ভারের সার্টিফিকেট যোগ করুন";
+
+  @override
+  String get tourTaskServerKey => "আপনার TaskD সার্ভারের কী সেট করুন";
+
+  @override
+  String get tourTaskServerRootCert => "Root সার্টিফিকেট কনফিগার করুন";
+
+  @override
+  String get tourTaskServerTaskRC => "আপনার TaskRC ফাইল সেট করুন";
 }

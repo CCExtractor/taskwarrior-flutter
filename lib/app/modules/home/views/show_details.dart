@@ -1,12 +1,15 @@
 // ignore_for_file: deprecated_member_use, use_build_context_synchronously
 
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:taskwarrior/api_service.dart';
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 
 class TaskDetails extends StatefulWidget {
   final Tasks task;
@@ -69,7 +72,7 @@ class _TaskDetailsState extends State<TaskDetails> {
           foregroundColor: TaskWarriorColors.lightGrey,
           backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
           title: Text(
-            'Task: ${widget.task.description}',
+            '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.task}: ${widget.task.description}',
             style: GoogleFonts.poppins(color: TaskWarriorColors.white),
           ),
         ),
@@ -77,43 +80,53 @@ class _TaskDetailsState extends State<TaskDetails> {
           padding: const EdgeInsets.all(16.0),
           child: ListView(
             children: [
-              _buildEditableDetail('Description:', description, (value) {
+              _buildEditableDetail(
+                  '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageDescription}:',
+                  description, (value) {
                 setState(() {
                   description = value;
                   hasChanges = true;
                 });
               }),
-              _buildEditableDetail('Project:', project, (value) {
+              _buildEditableDetail(
+                  '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.project}:',
+                  project, (value) {
                 setState(() {
                   project = value;
                   hasChanges = true;
                 });
               }),
               _buildSelectableDetail(
-                  'Status:', status, ['pending', 'completed'], (value) {
+                  '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageStatus}:',
+                  status,
+                  ['pending', 'completed'], (value) {
                 setState(() {
                   status = value;
                   hasChanges = true;
                 });
               }),
-              _buildSelectableDetail('Priority:', priority, ['H', 'M', 'L'],
-                  (value) {
+              _buildSelectableDetail(
+                  '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPagePriority}:',
+                  priority,
+                  ['H', 'M', 'L'], (value) {
                 setState(() {
                   priority = value;
                   hasChanges = true;
                 });
               }),
-              _buildDatePickerDetail('Due:', due, (value) {
+              _buildDatePickerDetail(
+                  '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.homePageDue}:',
+                  due, (value) {
                 setState(() {
                   due = value;
                   hasChanges = true;
                 });
               }),
               _buildDetail('UUID:', widget.task.uuid!),
-              _buildDetail('Urgency:', widget.task.urgency.toString()),
-              _buildDetail('End:', _buildDate(widget.task.end)),
-              _buildDetail('Entry:', _buildDate(widget.task.entry)),
-              _buildDetail('Modified:', _buildDate(widget.task.modified)),
+              _buildDetail('${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageUrgency}:', widget.task.urgency.toString()),
+              _buildDetail('${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageEnd}:', _buildDate(widget.task.end)),
+              _buildDetail('${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageEntry}:', _buildDate(widget.task.entry)),
+              _buildDetail('${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageModified}:', _buildDate(widget.task.modified)),
             ],
           ),
         ),
@@ -246,7 +259,7 @@ class _TaskDetailsState extends State<TaskDetails> {
       builder: (context) {
         return Utils.showAlertDialog(
           title: Text(
-            'Edit $label',
+            '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.edit} $label',
             style: TextStyle(
                 color: tColors.primaryTextColor
               ),
@@ -257,7 +270,8 @@ class _TaskDetailsState extends State<TaskDetails> {
               ),
             controller: controller,
             decoration: InputDecoration(
-              hintText: 'Enter new $label',
+              hintText:
+                  '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.enterNew} $label',
               hintStyle: TextStyle(
                   color: tColors.primaryTextColor
                     ),
@@ -269,7 +283,9 @@ class _TaskDetailsState extends State<TaskDetails> {
                 Navigator.of(context).pop();
               },
               child: Text(
-                'Cancel',
+                SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                    .sentences
+                    .cancel,
                 style: TextStyle(
                     color: tColors.primaryTextColor
                   ),
@@ -280,7 +296,9 @@ class _TaskDetailsState extends State<TaskDetails> {
                 Navigator.of(context).pop(controller.text);
               },
               child: Text(
-                'Save',
+                SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                    .sentences
+                    .save,
                 style: TextStyle(
                     color: tColors.primaryTextColor
                   ),
@@ -300,7 +318,7 @@ class _TaskDetailsState extends State<TaskDetails> {
       builder: (context) {
         return Utils.showAlertDialog(
           title: Text(
-            'Select $label',
+            '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.select} $label',
             style: TextStyle(
                 color: tColors.primaryTextColor
               ),
@@ -351,12 +369,16 @@ class _TaskDetailsState extends State<TaskDetails> {
       builder: (BuildContext context) {
         return Utils.showAlertDialog(
           title: Text(
-            'Unsaved Changes',
+            SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                .sentences
+                .unsavedChanges,
             style: TextStyle(
                 color: tColors.primaryTextColor),
           ),
           content: Text(
-            'You have unsaved changes. What would you like to do?',
+            SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                .sentences
+                .unsavedChangesWarning,
             style: TextStyle(
                 color: tColors.primaryTextColor
               ),
@@ -366,19 +388,28 @@ class _TaskDetailsState extends State<TaskDetails> {
               onPressed: () {
                 Navigator.of(context).pop(UnsavedChangesAction.cancel);
               },
-              child: const Text('Cancel'),
+              child: Text(
+                  SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                      .sentences
+                      .cancel),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(UnsavedChangesAction.discard);
               },
-              child: const Text('Don\'t Save'),
+              child: Text(
+                  SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                      .sentences
+                      .dontSave),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(UnsavedChangesAction.save);
               },
-              child: const Text('Save'),
+              child: Text(
+                  SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                      .sentences
+                      .save),
             ),
           ],
         );

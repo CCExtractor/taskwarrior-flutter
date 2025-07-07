@@ -321,4 +321,291 @@ class SpanishSentences extends Sentences {
       "Este proyecto tiene como objetivo construir una aplicación para Taskwarrior. Es su aplicación de gestión de tareas en todas las plataformas. Le ayuda a gestionar sus tareas y a filtrarlas según sus necesidades.";
   @override
   String get aboutPageAppBarTitle => "Acerca de";
+
+  @override
+  String get homePageSearchTooltip => 'Buscar';
+  @override
+  String get homePageCancelSearchTooltip => 'Cancelar';
+  @override
+  String get homePageAddTaskTooltip => 'Agregar tarea';
+  @override
+  String get homePageTapBackToExit => 'Toca atrás nuevamente para salir';
+  @override
+  String get homePageSearchHint => 'Buscar';
+
+  @override
+  String get navDrawerConfirm => 'Confirmar';
+
+  @override
+  String get filterDrawerNoProjectsAvailable => 'No hay proyectos disponibles.';
+
+  @override
+  String get version => "Versión";
+  @override
+  String get package => "Paquete";
+
+  @override
+  String get notSelected => "No seleccionado";
+  @override
+  String get cantSetTimeinPast =>
+      "No se pueden establecer horarios en el pasado";
+
+  @override
+  String get editDescription => "Editar descripción";
+  @override
+  String get editProject => "Editar proyecto";
+  @override
+  String get cancel => "Cancelar";
+  @override
+  String get submit => "Enviar";
+
+  @override
+  String get saveChangesConfirmation => '¿Quieres guardar los cambios?';
+  @override
+  String get yes => 'Sí';
+  @override
+  String get no => 'No';
+  @override
+  String get reviewChanges => 'Revisar cambios';
+  @override
+  String get oldChanges => 'Antiguo';
+  @override
+  String get newChanges => 'Nuevo';
+
+  @override
+  String get tags => 'Etiquetas';
+  @override
+  String get addedTagsWillAppearHere =>
+      'Las etiquetas añadidas aparecerán aquí';
+  @override
+  String get addTag => 'Agregar etiqueta';
+
+  @override
+  String get enterProject => 'Ingresar proyecto';
+  @override
+  String get allProjects => 'Todos los proyectos';
+  @override
+  String get noProjectsFound => 'No se encontraron proyectos';
+  @override
+  String get project => 'Proyecto';
+
+  @override
+  String get select => 'Seleccionar';
+  @override
+  String get save => 'Guardar';
+  @override
+  String get dontSave => 'No guardar';
+  @override
+  String get unsavedChanges => 'Cambios no guardados';
+  @override
+  String get unsavedChangesWarning =>
+      'Tienes cambios no guardados. ¿Qué deseas hacer?';
+  @override
+  String get enterNew => 'Ingresar nuevo';
+  @override
+  String get edit => 'Editar';
+  @override
+  String get task => 'Tarea';
+
+// task action strings
+  @override
+  String get confirmDeleteTask => 'Confirmar eliminación';
+  @override
+  String get taskUpdated => 'Tarea actualizada';
+  @override
+  String get undo => 'Deshacer';
+  @override
+  String get taskMarkedAsCompleted =>
+      'Tarea marcada como completada. ¡Actualiza para ver los cambios!';
+  @override
+  String get taskMarkedAsDeleted =>
+      'Tarea marcada como eliminada. ¡Actualiza para ver los cambios!';
+  @override
+  String get refreshToViewChanges => 'Actualizar para ver cambios';
+  @override
+  String get clickOnBottomRightButtonToStartAddingTasks =>
+      'Haz clic en el botón inferior derecho para comenzar a agregar tareas';
+  @override
+  String get complete => 'COMPLETADO';
+  @override
+  String get delete => 'ELIMINAR';
+
+// task server management strings
+  @override
+  String get taskServerInfo => 'Información del servidor TaskD';
+  @override
+  String get taskServerCredentials => 'Credenciales del servidor TaskD';
+  @override
+  String get notConfigured => 'No configurado';
+  @override
+  String get fetchingStatistics => 'Obteniendo estadísticas...';
+  @override
+  String get pleaseWait => 'Por favor, espera...';
+  @override
+  String get statistics => 'Estadísticas:';
+  @override
+  String get ok => 'Ok';
+  @override
+  String get pleaseSetupTaskServer => 'Por favor, configura tu servidor TaskD.';
+
+// onboarding strings
+  @override
+  String get onboardingSkip => 'Omitir';
+  @override
+  String get onboardingNext => 'Siguiente';
+  @override
+  String get onboardingStart => 'Comenzar';
+
+// permission strings
+  @override
+  String get permissionPageTitle => 'Por qué necesitamos tu permiso';
+  @override
+  String get storagePermissionTitle => 'Permiso de almacenamiento';
+  @override
+  String get storagePermissionDescription =>
+      'Utilizamos el acceso al almacenamiento para guardar tus tareas, '
+      'preferencias y datos de la aplicación de forma segura en tu dispositivo. '
+      'Esto garantiza que puedas continuar donde lo dejaste, incluso sin conexión.';
+  @override
+  String get notificationPermissionTitle => 'Permiso de notificaciones';
+  @override
+  String get notificationPermissionDescription =>
+      'Las notificaciones te mantienen al tanto de recordatorios importantes '
+      'y actualizaciones, asegurando que gestiones tus tareas sin esfuerzo.';
+  @override
+  String get privacyStatement =>
+      'Tu privacidad es nuestra máxima prioridad. Nunca accedemos ni compartimos '
+      'tus archivos o datos personales sin tu consentimiento.';
+  @override
+  String get grantPermissions => 'Conceder permisos';
+  @override
+  String get managePermissionsLater =>
+      'Puedes administrar tus permisos más tarde en Configuración';
+
+// Profile page strings
+  @override
+  String get profileAllProfiles => 'Todos los perfiles:';
+  @override
+  String get profileSwitchedToProfile => 'Cambiado al perfil';
+  @override
+  String get profileAddedSuccessfully => 'Perfil agregado con éxito';
+  @override
+  String get profileAdditionFailed => 'Error al agregar perfil';
+  @override
+  String get profileConfigCopied => 'Configuración del perfil copiada';
+  @override
+  String get profileConfigCopyFailed =>
+      'Error al copiar la configuración del perfil';
+  @override
+  String get profileDeletedSuccessfully => 'Eliminado con éxito';
+  @override
+  String get profileDeletionFailed => 'Error al eliminar';
+  @override
+  String get profileDeleteConfirmation => 'Confirmar';
+
+// Reports strings
+  @override
+  String get reportsDate => 'Fecha';
+  @override
+  String get reportsPending => 'Pendiente';
+  @override
+  String get reportsCompleted => 'Completado';
+  @override
+  String get reportsMonthYear => 'Mes-Año';
+  @override
+  String get reportsWeek => 'Semana';
+  @override
+  String get reportsDay => 'Día';
+  @override
+  String get reportsYear => 'Año';
+  @override
+  String get reportsError => 'Error';
+  @override
+  String get reportsLoading => 'Cargando...';
+
+// Settings strings
+  @override
+  String get settingsResetToDefault => 'Restablecer a predeterminado';
+  @override
+  String get settingsAlreadyDefault => 'Ya está predeterminado';
+  @override
+  String get settingsConfirmReset =>
+      '¿Estás seguro de que deseas restablecer el directorio a los valores predeterminados?';
+  @override
+  String get settingsNoButton => 'No';
+  @override
+  String get settingsYesButton => 'Sí';
+
+// Splash screen strings
+  @override
+  String get splashSettingUpApp => "Configurando la aplicación...";
+
+// Tour strings - reports
+  @override
+  String get tourReportsDaily => "Accede a tu informe de tareas diarias aquí";
+  @override
+  String get tourReportsWeekly => "Accede a tus informes semanales aquí";
+  @override
+  String get tourReportsMonthly => "Accede a tus informes mensuales aquí";
+
+// Tour strings - profile
+  @override
+  String get tourProfileCurrent => "Consulta tu perfil actual aquí";
+  @override
+  String get tourProfileManage => "Administra tu perfil actual aquí";
+  @override
+  String get tourProfileAddNew => "Agrega un nuevo perfil aquí";
+
+// Tour strings - task server
+  @override
+  String get tourTaskServerTaskRC =>
+      "Selecciona el archivo llamado taskrc aquí o pega su contenido";
+  @override
+  String get tourTaskServerCertificate =>
+      "Selecciona un archivo con un nombre similar a <Tu Email>.com.cert.pem aquí";
+  @override
+  String get tourTaskServerKey =>
+      "Selecciona un archivo con un nombre similar a <Tu Email>.key.pem aquí";
+  @override
+  String get tourTaskServerRootCert =>
+      "Selecciona un archivo con un nombre similar a letsencrypt_root_cert.pem aquí";
+
+// Tour strings - home page
+  @override
+  String get tourHomeAddTask => "Agregar una nueva tarea";
+  @override
+  String get tourHomeSearch => "Buscar tareas";
+  @override
+  String get tourHomeRefresh => "Actualizar o sincronizar tus tareas";
+  @override
+  String get tourHomeFilter =>
+      "Agregar filtros para ordenar tus tareas y proyectos";
+  @override
+  String get tourHomeMenu => "Acceder a configuraciones adicionales aquí";
+
+// Tour strings - filter drawer
+  @override
+  String get tourFilterStatus =>
+      "Filtrar tareas según su estado de finalización";
+  @override
+  String get tourFilterProjects => "Filtrar tareas según los proyectos";
+  @override
+  String get tourFilterTagUnion =>
+      "Alternar entre los tipos de unión de etiquetas AND y OR";
+  @override
+  String get tourFilterSort =>
+      "Ordenar tareas según el tiempo de creación, urgencia, fecha de vencimiento, fecha de inicio, etc.";
+
+// Tour strings - details page
+  @override
+  String get tourDetailsDue =>
+      "Esto indica la fecha de vencimiento de la tarea";
+  @override
+  String get tourDetailsWait =>
+      "Esto indica la fecha de espera de la tarea\nLa tarea será visible después de esta fecha";
+  @override
+  String get tourDetailsUntil => "Esto muestra la última fecha de la tarea";
+  @override
+  String get tourDetailsPriority =>
+      "Esta es la prioridad de las tareas\nL -> Baja\nM -> Media\nH -> Alta";
 }

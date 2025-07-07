@@ -96,7 +96,10 @@ class ManageTaskServerPageAppBar extends StatelessWidget
               builder: (context) {
                 return Utils.showAlertDialog(
                   title: Text(
-                    'Fetching statistics...',
+                    SentenceManager(
+                            currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .fetchingStatistics,
                     style: TextStyle(
                       color: tColors.primaryTextColor,
                     ),
@@ -107,7 +110,10 @@ class ManageTaskServerPageAppBar extends StatelessWidget
                       const CircularProgressIndicator(),
                       const SizedBox(height: 16),
                       Text(
-                        'Please wait...',
+                        SentenceManager(
+                                currentLanguage: AppSettings.selectedLanguage)
+                            .sentences
+                            .pleaseWait,
                         style: TextStyle(
                           color: tColors.primaryTextColor,
                         ),
@@ -137,9 +143,12 @@ class ManageTaskServerPageAppBar extends StatelessWidget
                 context: context,
                 builder: (context) => Utils.showAlertDialog(
                   scrollable: true,
-                  title: const Text(
-                    'Statistics:',
-                    style: TextStyle(),
+                  title: Text(
+                    SentenceManager(
+                            currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .statistics,
+                    style: const TextStyle(),
                   ),
                   content: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
@@ -173,7 +182,10 @@ class ManageTaskServerPageAppBar extends StatelessWidget
                         Get.back();
                       },
                       child: Text(
-                        'Ok',
+                        SentenceManager(
+                                currentLanguage: AppSettings.selectedLanguage)
+                            .sentences
+                            .ok,
                         style: TextStyle(
                           color: tColors.secondaryBackgroundColor,
                         ),
@@ -191,7 +203,10 @@ class ManageTaskServerPageAppBar extends StatelessWidget
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Text(
                     trace.toString().startsWith("#0")
-                        ? "Please set up your TaskServer."
+                        ? SentenceManager(
+                                currentLanguage: AppSettings.selectedLanguage)
+                            .sentences
+                            .pleaseSetupTaskServer
                         : e.toString(),
                     style: TextStyle(
                       color: tColors.primaryTextColor,

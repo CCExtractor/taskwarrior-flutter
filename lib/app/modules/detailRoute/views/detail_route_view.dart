@@ -40,7 +40,9 @@ class DetailRouteView extends GetView<DetailRouteController> {
             return AlertDialog(
               backgroundColor: tColors.dialogBackgroundColor,
               title: Text(
-                'Do you want to save changes?',
+                SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                    .sentences
+                    .saveChangesConfirmation,
                 style: TextStyle(
                   color: tColors.primaryTextColor,
                 ),
@@ -54,7 +56,10 @@ class DetailRouteView extends GetView<DetailRouteController> {
                     Get.back();
                   },
                   child: Text(
-                    'Yes',
+                    SentenceManager(
+                            currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .yes,
                     style: TextStyle(
                       color: tColors.primaryTextColor,
                     ),
@@ -67,7 +72,10 @@ class DetailRouteView extends GetView<DetailRouteController> {
                     Get.back();
                   },
                   child: Text(
-                    'No',
+                    SentenceManager(
+                            currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .no,
                     style: TextStyle(
                       color: tColors.primaryTextColor,
                     ),
@@ -78,7 +86,10 @@ class DetailRouteView extends GetView<DetailRouteController> {
                     Get.back();
                   },
                   child: Text(
-                    'Cancel',
+                    SentenceManager(
+                            currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .cancel,
                     style: TextStyle(
                       color: tColors.primaryTextColor,
                     ),
@@ -150,7 +161,7 @@ class DetailRouteView extends GetView<DetailRouteController> {
                         return AlertDialog(
                           scrollable: true,
                           title: Text(
-                            'Review changes:',
+                            '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.reviewChanges}:',
                             style: TextStyle(
                               color: tColors.primaryTextColor,
                             ),
@@ -160,8 +171,8 @@ class DetailRouteView extends GetView<DetailRouteController> {
                             child: Text(
                               controller.modify.changes.entries
                                   .map((entry) => '${entry.key}:\n'
-                                      '  old: ${entry.value['old']}\n'
-                                      '  new: ${entry.value['new']}')
+                                      '  ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.oldChanges}: ${entry.value['old']}\n'
+                                      '  ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.newChanges}: ${entry.value['new']}')
                                   .toList()
                                   .join('\n'),
                               style: TextStyle(
@@ -175,7 +186,11 @@ class DetailRouteView extends GetView<DetailRouteController> {
                                 Get.back();
                               },
                               child: Text(
-                                'Cancel',
+                                SentenceManager(
+                                        currentLanguage:
+                                            AppSettings.selectedLanguage)
+                                    .sentences
+                                    .cancel,
                                 style: TextStyle(
                                   color: tColors.primaryTextColor,
                                 ),
@@ -186,7 +201,11 @@ class DetailRouteView extends GetView<DetailRouteController> {
                                 controller.saveChanges();
                               },
                               child: Text(
-                                'Submit',
+                                SentenceManager(
+                                        currentLanguage:
+                                            AppSettings.selectedLanguage)
+                                    .sentences
+                                    .submit,
                                 style: TextStyle(
                                   color: tColors.primaryBackgroundColor,
                                 ),
@@ -326,7 +345,11 @@ class AttributeWidget extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    localValue?.toString() ?? "not selected",
+                    localValue?.toString() ??
+                        SentenceManager(
+                                currentLanguage: AppSettings.selectedLanguage)
+                            .sentences
+                            .notSelected,
                     style: TextStyle(
                       fontFamily: FontFamily.poppins,
                       fontSize: TaskWarriorFonts.fontSizeMedium,

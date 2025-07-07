@@ -3,10 +3,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 
 import 'package:taskwarrior/app/utils/constants/constants.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 
 class DateTimeWidget extends StatelessWidget {
   const DateTimeWidget({
@@ -63,7 +65,10 @@ class DateTimeWidget extends StatelessWidget {
                       ),
                     ),
                     TextSpan(
-                      text: value ?? "not selected",
+                      text: value ??
+                          SentenceManager(
+                                  currentLanguage: AppSettings.selectedLanguage)
+                              .sentences.notSelected,
                       // style: GoogleFonts.poppins(
                       //   fontSize: TaskWarriorFonts.fontSizeMedium,
                       //   color: AppSettings.isDarkMode
@@ -171,7 +176,9 @@ class DateTimeWidget extends StatelessWidget {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      "Can't set times in the past",
+                      SentenceManager(
+                        currentLanguage: AppSettings.selectedLanguage,
+                      ).sentences.cantSetTimeinPast,
                       style: TextStyle(
                         color: tColors.primaryTextColor,
                       ),
@@ -243,7 +250,9 @@ class StartWidget extends StatelessWidget {
                       ),
                     ),
                     TextSpan(
-                      text: value ?? "not selected",
+                      text: value ?? SentenceManager(
+                              currentLanguage: AppSettings.selectedLanguage)
+                          .sentences.notSelected,
                       // style: GoogleFonts.poppins(
                       //   fontSize: TaskWarriorFonts.fontSizeMedium,
                       //   color: AppSettings.isDarkMode

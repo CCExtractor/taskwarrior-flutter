@@ -77,7 +77,11 @@ class AboutPageBody extends StatelessWidget {
                             text: TextSpan(
                               children: <TextSpan>[
                                 TextSpan(
-                                  text: 'Version: ',
+                                  text: SentenceManager(
+                                          currentLanguage: aboutController
+                                              .selectedLanguage.value)
+                                      .sentences
+                                      .version,
                                   style: TextStyle(
                                     fontFamily: FontFamily.poppins,
                                     fontWeight: TaskWarriorFonts.bold,
@@ -104,7 +108,11 @@ class AboutPageBody extends StatelessWidget {
                                 text: TextSpan(
                                   children: <TextSpan>[
                                     TextSpan(
-                                      text: 'Package: ',
+                                      text: SentenceManager(
+                                              currentLanguage: aboutController
+                                                  .selectedLanguage.value)
+                                          .sentences
+                                          .package,
                                       style: TextStyle(
                                         fontFamily: FontFamily.poppins,
                                         fontWeight: TaskWarriorFonts.bold,
