@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:taskwarrior/api_service.dart';
 import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
 import 'package:taskwarrior/app/modules/home/views/show_details.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
@@ -10,6 +9,10 @@ import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
+import 'package:taskwarrior/app/v3/db/task_database.dart';
+import 'package:taskwarrior/app/v3/models/task.dart';
+import 'package:taskwarrior/app/v3/net/complete.dart';
+import 'package:taskwarrior/app/v3/net/delete.dart';
 
 class TaskViewBuilder extends StatelessWidget {
   const TaskViewBuilder({
@@ -30,12 +33,12 @@ class TaskViewBuilder extends StatelessWidget {
         Theme.of(context).extension<TaskwarriorColorTheme>()!;
 
     return Obx(() {
-      List<Tasks> tasks = List<Tasks>.from(taskController.tasks);
+      List<TaskForC> tasks = List<TaskForC>.from(taskController.tasks);
       // Filter tasks based on the selected project
       if (project != 'All Projects') {
         tasks = tasks.where((task) => task.project == project).toList();
       } else {
-        tasks = List<Tasks>.from(tasks);
+        tasks = List<TaskForC>.from(tasks);
       }
 
       // Apply other filters and sorting
@@ -109,7 +112,7 @@ class TaskViewBuilder extends StatelessWidget {
                 ),
                 itemCount: tasks.length,
                 itemBuilder: (context, index) {
-                  Tasks task = tasks[index];
+                  TaskForC task = tasks[index];
                   return Slidable(
                     startActionPane: ActionPane(
                       motion: const BehindMotion(),
@@ -133,8 +136,8 @@ class TaskViewBuilder extends StatelessWidget {
                             );
                           },
                           icon: Icons.done,
-                          label: SentenceManager(currentLanguage: 
-                              AppSettings.selectedLanguage)
+                          label: SentenceManager(
+                                  currentLanguage: AppSettings.selectedLanguage)
                               .sentences
                               .complete,
                           backgroundColor: TaskWarriorColors.green,
@@ -164,7 +167,7 @@ class TaskViewBuilder extends StatelessWidget {
                           },
                           icon: Icons.delete,
                           label: SentenceManager(
-                              currentLanguage: AppSettings.selectedLanguage)
+                                  currentLanguage: AppSettings.selectedLanguage)
                               .sentences
                               .delete,
                           backgroundColor: TaskWarriorColors.red,

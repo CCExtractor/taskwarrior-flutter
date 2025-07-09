@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:taskwarrior/api_service.dart';
 import 'package:taskwarrior/app/models/json/task.dart';
 import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
 import 'package:taskwarrior/app/modules/home/controllers/widget.controller.dart';
@@ -17,6 +16,7 @@ import 'package:taskwarrior/app/utils/taskfunctions/add_task_dialog_utils.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/tags.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/taskparser.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
+import 'package:taskwarrior/app/v3/models/task.dart';
 
 class AddTaskBottomSheet extends StatelessWidget {
   final HomeController homeController;
@@ -282,7 +282,7 @@ class AddTaskBottomSheet extends StatelessWidget {
   void onSaveButtonClickedTaskC(BuildContext context) async {
     if (homeController.formKey.currentState!.validate()) {
       debugPrint("tags ${homeController.tags}");
-      var task = Tasks(
+      var task = TaskForC(
           description: homeController.namecontroller.text,
           status: 'pending',
           priority: homeController.priority.value,

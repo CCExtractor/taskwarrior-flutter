@@ -4,9 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:taskwarrior/api_service.dart';
 import 'package:taskwarrior/app/models/json/task.dart';
 import 'package:taskwarrior/app/models/storage.dart';
 import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
@@ -19,6 +17,8 @@ import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/services.dart';
+import 'package:taskwarrior/app/v3/db/task_database.dart';
+import 'package:taskwarrior/app/v3/models/task.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class ReportsController extends GetxController
@@ -410,7 +410,7 @@ class ReportsController extends GetxController
     });
   }
 
-  Future<List<Tasks>> fetchTasks() async {
+  Future<List<TaskForC>> fetchTasks() async {
     await taskDatabase.open();
     return await taskDatabase.fetchTasksFromDatabase();
   }

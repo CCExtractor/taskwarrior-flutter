@@ -9,7 +9,6 @@ import 'package:get/get.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:loggy/loggy.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:taskwarrior/api_service.dart';
 import 'package:taskwarrior/app/models/filters.dart';
 
 import 'package:taskwarrior/app/models/json/task.dart';
@@ -32,6 +31,10 @@ import 'package:taskwarrior/app/utils/taskfunctions/projects.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/query.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/tags.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/v3/db/task_database.dart';
+import 'package:taskwarrior/app/v3/db/update.dart';
+import 'package:taskwarrior/app/v3/models/task.dart';
+import 'package:taskwarrior/app/v3/net/fetch.dart';
 import 'package:textfield_tags/textfield_tags.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
@@ -59,7 +62,7 @@ class HomeController extends GetxController {
   final ScrollController scrollController = ScrollController();
   final RxBool showbtn = false.obs;
   late TaskDatabase taskdb;
-  var tasks = <Tasks>[].obs;
+  var tasks = <TaskForC>[].obs;
   final RxBool isRefreshing = false.obs;
 
   @override
@@ -116,16 +119,17 @@ class HomeController extends GetxController {
   Future<void> refreshTasks(String clientId, String encryptionSecret) async {
     TaskDatabase taskDatabase = TaskDatabase();
     await taskDatabase.open();
-    List<Tasks> tasksFromServer = await fetchTasks(clientId, encryptionSecret);
+    List<TaskForC> tasksFromServer =
+        await fetchTasks(clientId, encryptionSecret);
     await updateTasksInDatabase(tasksFromServer);
-    List<Tasks> fetchedTasks = await taskDatabase.fetchTasksFromDatabase();
+    List<TaskForC> fetchedTasks = await taskDatabase.fetchTasksFromDatabase();
     tasks.value = fetchedTasks;
   }
 
   Future<void> fetchTasksFromDB() async {
     TaskDatabase taskDatabase = TaskDatabase();
     await taskDatabase.open();
-    List<Tasks> fetchedTasks = await taskDatabase.fetchTasksFromDatabase();
+    List<TaskForC> fetchedTasks = await taskDatabase.fetchTasksFromDatabase();
     tasks.value = fetchedTasks;
   }
 

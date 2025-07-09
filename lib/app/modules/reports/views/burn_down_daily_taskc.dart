@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:taskwarrior/api_service.dart';
 import 'package:taskwarrior/app/models/chart.dart';
 import 'package:taskwarrior/app/modules/reports/views/common_chart_indicator.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
@@ -10,6 +9,8 @@ import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
+import 'package:taskwarrior/app/v3/db/task_database.dart';
+import 'package:taskwarrior/app/v3/models/task.dart';
 
 class BurnDownDailyTaskc extends StatelessWidget {
   BurnDownDailyTaskc({super.key});
@@ -38,8 +39,10 @@ class BurnDownDailyTaskc extends StatelessWidget {
                 fontWeight: TaskWarriorFonts.bold,
               ),
             ),
-            Text('${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.reportsPending}: $pendingCount'),
-            Text('${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.reportsCompleted}: $completedCount'),
+            Text(
+                '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.reportsPending}: $pendingCount'),
+            Text(
+                '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.reportsCompleted}: $completedCount'),
           ],
         ),
       );
@@ -49,11 +52,11 @@ class BurnDownDailyTaskc extends StatelessWidget {
   Future<Map<String, Map<String, int>>> fetchDailyInfo() async {
     TaskDatabase taskDatabase = TaskDatabase();
     await taskDatabase.open();
-    List<Tasks> tasks = await taskDatabase.fetchTasksFromDatabase();
+    List<TaskForC> tasks = await taskDatabase.fetchTasksFromDatabase();
     return _processData(tasks);
   }
 
-  Map<String, Map<String, int>> _processData(List<Tasks> tasks) {
+  Map<String, Map<String, int>> _processData(List<TaskForC> tasks) {
     Map<String, Map<String, int>> dailyInfo = {};
 
     // Sort tasks by entry date in ascending order
@@ -83,7 +86,8 @@ class BurnDownDailyTaskc extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height; // Screen height
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return FutureBuilder<Map<String, Map<String, int>>>(
       future: fetchDailyInfo(),
       builder: (context, snapshot) {
@@ -92,7 +96,9 @@ class BurnDownDailyTaskc extends StatelessWidget {
         }
 
         if (snapshot.hasError) {
-          return Center(child: Text('${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.reportsError}: ${snapshot.error}'));
+          return Center(
+              child: Text(
+                  '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.reportsError}: ${snapshot.error}'));
         }
 
         Map<String, Map<String, int>> dailyInfo = snapshot.data ?? {};
