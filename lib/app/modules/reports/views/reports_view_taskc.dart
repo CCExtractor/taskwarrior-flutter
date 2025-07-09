@@ -8,9 +8,10 @@ import 'package:taskwarrior/app/modules/reports/views/burn_down_weekly_taskc.dar
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
-import 'package:taskwarrior/api_service.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
+import 'package:taskwarrior/app/v3/db/task_database.dart';
+import 'package:taskwarrior/app/v3/models/task.dart';
 
 class ReportsHomeTaskc extends StatelessWidget {
   final ReportsController reportsController = Get.put(ReportsController());
@@ -18,7 +19,7 @@ class ReportsHomeTaskc extends StatelessWidget {
 
   ReportsHomeTaskc({super.key});
 
-  Future<List<Tasks>> fetchTasks() async {
+  Future<List<TaskForC>> fetchTasks() async {
     await taskDatabase.open();
     return await taskDatabase.fetchTasksFromDatabase();
   }
@@ -28,11 +29,12 @@ class ReportsHomeTaskc extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
     reportsController.initReportsTour();
     reportsController.showReportsTour(context);
-    return FutureBuilder<List<Tasks>>(
+    return FutureBuilder<List<TaskForC>>(
       future: fetchTasks(),
       builder: (context, snapshot) {
-        List<Tasks> allTasks = snapshot.data ?? [];
-        TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+        List<TaskForC> allTasks = snapshot.data ?? [];
+        TaskwarriorColorTheme tColors =
+            Theme.of(context).extension<TaskwarriorColorTheme>()!;
         return Scaffold(
           appBar: AppBar(
             backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,

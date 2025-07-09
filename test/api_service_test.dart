@@ -6,8 +6,11 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:http/http.dart' as http;
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:taskwarrior/api_service.dart';
 import 'package:taskwarrior/app/utils/taskchampion/credentials_storage.dart';
+import 'package:taskwarrior/app/v3/db/task_database.dart';
+import 'package:taskwarrior/app/v3/models/task.dart';
+import 'package:taskwarrior/app/v3/net/fetch.dart';
+import 'package:taskwarrior/app/v3/net/origin.dart';
 
 import 'api_service_test.mocks.dart';
 
@@ -42,7 +45,7 @@ void main() {
         'modified': '2024-11-01',
       };
 
-      final task = Tasks.fromJson(json);
+      final task = TaskForC.fromJson(json);
 
       expect(task.id, 1);
       expect(task.description, 'Task 1');
@@ -57,7 +60,7 @@ void main() {
     });
 
     test('toJson converts Tasks object to JSON', () {
-      final task = Tasks(
+      final task = TaskForC(
           id: 1,
           description: 'Task 1',
           project: 'Project 1',
@@ -97,7 +100,7 @@ void main() {
 
       final result = await fetchTasks('123', 'secret');
 
-      expect(result, isA<List<Tasks>>());
+      expect(result, isA<List<TaskForC>>());
     });
 
     test('fetchTasks returns empty array', () async {
@@ -117,7 +120,7 @@ void main() {
     });
 
     test('insertTask adds a task to the database', () async {
-      final task = Tasks(
+      final task = TaskForC(
           id: 1,
           description: 'Task 1',
           project: 'Project 1',
@@ -140,7 +143,7 @@ void main() {
     });
 
     test('deleteAllTasksInDB removes all tasks', () async {
-      final task = Tasks(
+      final task = TaskForC(
           id: 1,
           description: 'Task 1',
           project: 'Project 1',

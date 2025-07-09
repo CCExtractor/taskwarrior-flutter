@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:taskwarrior/api_service.dart';
 import 'package:taskwarrior/app/models/chart.dart';
 import 'package:taskwarrior/app/modules/reports/views/common_chart_indicator.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
@@ -10,6 +9,8 @@ import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
+import 'package:taskwarrior/app/v3/db/task_database.dart';
+import 'package:taskwarrior/app/v3/models/task.dart';
 
 class BurnDownWeeklyTask extends StatelessWidget {
   BurnDownWeeklyTask({super.key});
@@ -39,14 +40,10 @@ class BurnDownWeeklyTask extends StatelessWidget {
               ),
             ),
             Text(
-              '${SentenceManager(currentLanguage: AppSettings.selectedLanguage)
-                      .sentences
-                      .reportsPending}: $pendingCount',
+              '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.reportsPending}: $pendingCount',
             ),
             Text(
-              '${SentenceManager(currentLanguage: AppSettings.selectedLanguage)
-                      .sentences
-                      .reportsCompleted}: $completedCount',
+              '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.reportsCompleted}: $completedCount',
             ),
           ],
         ),
@@ -57,11 +54,11 @@ class BurnDownWeeklyTask extends StatelessWidget {
   Future<Map<String, Map<String, int>>> fetchWeeklyInfo() async {
     TaskDatabase taskDatabase = TaskDatabase();
     await taskDatabase.open();
-    List<Tasks> tasks = await taskDatabase.fetchTasksFromDatabase();
+    List<TaskForC> tasks = await taskDatabase.fetchTasksFromDatabase();
     return sortBurnDownWeekly(tasks);
   }
 
-  Map<String, Map<String, int>> sortBurnDownWeekly(List<Tasks> allData) {
+  Map<String, Map<String, int>> sortBurnDownWeekly(List<TaskForC> allData) {
     // Initialize weeklyInfo map
     Map<String, Map<String, int>> weeklyInfo = {};
 
@@ -101,7 +98,8 @@ class BurnDownWeeklyTask extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     double height = MediaQuery.of(context).size.height; // Screen height
     return FutureBuilder<Map<String, Map<String, int>>>(
         future: fetchWeeklyInfo(),
@@ -112,10 +110,8 @@ class BurnDownWeeklyTask extends StatelessWidget {
 
           if (snapshot.hasError) {
             return Center(
-                child: Text('${SentenceManager(
-                            currentLanguage: AppSettings.selectedLanguage)
-                        .sentences
-                        .reportsError}: ${snapshot.error}'));
+                child: Text(
+                    '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.reportsError}: ${snapshot.error}'));
           }
 
           Map<String, Map<String, int>> weeklyInfo = snapshot.data ?? {};

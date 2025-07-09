@@ -1,18 +1,18 @@
 // ignore_for_file: deprecated_member_use, use_build_context_synchronously
-
-import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:taskwarrior/api_service.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
+import 'package:taskwarrior/app/v3/db/task_database.dart';
+import 'package:taskwarrior/app/v3/models/task.dart';
+import 'package:taskwarrior/app/v3/net/modify.dart';
 
 class TaskDetails extends StatefulWidget {
-  final Tasks task;
+  final TaskForC task;
   const TaskDetails({super.key, required this.task});
 
   @override
@@ -53,7 +53,8 @@ class _TaskDetailsState extends State<TaskDetails> {
 
   @override
   Widget build(BuildContext context) {
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return WillPopScope(
       onWillPop: () async {
         if (hasChanges) {
@@ -123,10 +124,18 @@ class _TaskDetailsState extends State<TaskDetails> {
                 });
               }),
               _buildDetail('UUID:', widget.task.uuid!),
-              _buildDetail('${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageUrgency}:', widget.task.urgency.toString()),
-              _buildDetail('${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageEnd}:', _buildDate(widget.task.end)),
-              _buildDetail('${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageEntry}:', _buildDate(widget.task.entry)),
-              _buildDetail('${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageModified}:', _buildDate(widget.task.modified)),
+              _buildDetail(
+                  '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageUrgency}:',
+                  widget.task.urgency.toString()),
+              _buildDetail(
+                  '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageEnd}:',
+                  _buildDate(widget.task.end)),
+              _buildDetail(
+                  '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageEntry}:',
+                  _buildDate(widget.task.entry)),
+              _buildDetail(
+                  '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageModified}:',
+                  _buildDate(widget.task.modified)),
             ],
           ),
         ),
@@ -206,7 +215,8 @@ class _TaskDetailsState extends State<TaskDetails> {
   }
 
   Widget _buildDetail(String label, String value) {
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -251,7 +261,8 @@ class _TaskDetailsState extends State<TaskDetails> {
 
   Future<String?> _showEditDialog(
       BuildContext context, String label, String initialValue) async {
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     final TextEditingController controller =
         TextEditingController(text: initialValue);
     return await showDialog<String>(
@@ -260,21 +271,15 @@ class _TaskDetailsState extends State<TaskDetails> {
         return Utils.showAlertDialog(
           title: Text(
             '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.edit} $label',
-            style: TextStyle(
-                color: tColors.primaryTextColor
-              ),
+            style: TextStyle(color: tColors.primaryTextColor),
           ),
           content: TextField(
-            style: TextStyle(
-                color: tColors.primaryTextColor
-              ),
+            style: TextStyle(color: tColors.primaryTextColor),
             controller: controller,
             decoration: InputDecoration(
               hintText:
                   '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.enterNew} $label',
-              hintStyle: TextStyle(
-                  color: tColors.primaryTextColor
-                    ),
+              hintStyle: TextStyle(color: tColors.primaryTextColor),
             ),
           ),
           actions: [
@@ -286,9 +291,7 @@ class _TaskDetailsState extends State<TaskDetails> {
                 SentenceManager(currentLanguage: AppSettings.selectedLanguage)
                     .sentences
                     .cancel,
-                style: TextStyle(
-                    color: tColors.primaryTextColor
-                  ),
+                style: TextStyle(color: tColors.primaryTextColor),
               ),
             ),
             TextButton(
@@ -299,9 +302,7 @@ class _TaskDetailsState extends State<TaskDetails> {
                 SentenceManager(currentLanguage: AppSettings.selectedLanguage)
                     .sentences
                     .save,
-                style: TextStyle(
-                    color: tColors.primaryTextColor
-                  ),
+                style: TextStyle(color: tColors.primaryTextColor),
               ),
             ),
           ],
@@ -312,16 +313,15 @@ class _TaskDetailsState extends State<TaskDetails> {
 
   Future<String?> _showSelectDialog(BuildContext context, String label,
       String initialValue, List<String> options) async {
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return await showDialog<String>(
       context: context,
       builder: (context) {
         return Utils.showAlertDialog(
           title: Text(
             '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.select} $label',
-            style: TextStyle(
-                color: tColors.primaryTextColor
-              ),
+            style: TextStyle(color: tColors.primaryTextColor),
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -329,9 +329,7 @@ class _TaskDetailsState extends State<TaskDetails> {
               return RadioListTile<String>(
                 title: Text(
                   option,
-                  style: TextStyle(
-                      color: tColors.primaryTextColor
-                    ),
+                  style: TextStyle(color: tColors.primaryTextColor),
                 ),
                 value: option,
                 groupValue: initialValue,
@@ -362,7 +360,8 @@ class _TaskDetailsState extends State<TaskDetails> {
 
   Future<UnsavedChangesAction?> _showUnsavedChangesDialog(
       BuildContext context) async {
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return showDialog<UnsavedChangesAction>(
       context: context,
       barrierDismissible: false,
@@ -372,16 +371,13 @@ class _TaskDetailsState extends State<TaskDetails> {
             SentenceManager(currentLanguage: AppSettings.selectedLanguage)
                 .sentences
                 .unsavedChanges,
-            style: TextStyle(
-                color: tColors.primaryTextColor),
+            style: TextStyle(color: tColors.primaryTextColor),
           ),
           content: Text(
             SentenceManager(currentLanguage: AppSettings.selectedLanguage)
                 .sentences
                 .unsavedChangesWarning,
-            style: TextStyle(
-                color: tColors.primaryTextColor
-              ),
+            style: TextStyle(color: tColors.primaryTextColor),
           ),
           actions: <Widget>[
             TextButton(
