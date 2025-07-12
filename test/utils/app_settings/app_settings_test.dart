@@ -4,6 +4,10 @@ import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/language/supported_language.dart';
 
 void main() {
+  setUpAll(() {
+    TestWidgetsFlutterBinding.ensureInitialized();
+  });
+
   group('AppSettings', () {
     setUp(() async {
       SharedPreferences.setMockInitialValues({});

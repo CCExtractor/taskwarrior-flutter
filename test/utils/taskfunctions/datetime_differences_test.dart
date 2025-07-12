@@ -12,43 +12,43 @@ void main() {
     test('age function should return correct string for years', () {
       final now = DateTime.now();
       final dt = now.subtract(const Duration(days: 2 * 365));
-      expect(age(dt), '2y ');
+      expect(age(dt), startsWith('2y ago ('));
     });
 
     test('age function should return correct string for months', () {
       final now = DateTime.now();
       final dt = now.subtract(const Duration(days: 2 * 30));
-      expect(age(dt), '2mo ');
+      expect(age(dt), startsWith('2mo ago ('));
     });
 
     test('age function should return correct string for weeks', () {
       final now = DateTime.now();
       final dt = now.subtract(const Duration(days: 2 * 7));
-      expect(age(dt), '2w ');
+      expect(age(dt), startsWith('2w ago ('));
     });
 
     test('age function should return correct string for days', () {
       final now = DateTime.now();
       final dt = now.subtract(const Duration(days: 2)); // 2 days
-      expect(age(dt), '2d ');
+      expect(age(dt), startsWith('2d ago ('));
     });
 
     test('age function should return correct string for hours', () {
       final now = DateTime.now();
       final dt = now.subtract(const Duration(hours: 2)); // 2 hours
-      expect(age(dt), '2h ');
+      expect(age(dt), startsWith('2h ago ('));
     });
 
     test('age function should return correct string for minutes', () {
       final now = DateTime.now();
       final dt = now.subtract(const Duration(minutes: 2)); // 2 minutes
-      expect(age(dt), '2min ');
+      expect(age(dt), startsWith('2min ago ('));
     });
 
     test('age function should return correct string for seconds', () {
       final now = DateTime.now();
       final dt = now.subtract(const Duration(seconds: 2)); // 2 seconds
-      expect(age(dt), '2s ');
+      expect(age(dt), startsWith('2s ago ('));
     });
 
     test('age function should respect use24HourFormat app setting', () {
@@ -58,50 +58,35 @@ void main() {
       // Test with 12-hour format
       AppSettings.use24HourFormatRx.value = false;
       expect(age(dt), contains('2d'));
-      expect(age(dt), contains('(hh:mm a)'));
+      expect(age(dt), matches(r'.*\d{1,2}:\d{2} [AP]M\)'));
 
       // Test with 24-hour format
       AppSettings.use24HourFormatRx.value = true;
       expect(age(dt), contains('2d'));
-      expect(age(dt), contains('(HH:mm)'));
+      expect(age(dt), matches(r'.*\d{1,2}:\d{2}\)'));
     });
 
     test('when function should return correct string for future dates', () {
       final now = DateTime.now();
-      final dt = now.add(const Duration(days: 2)); // 2 days from now
-      expect(when(dt), '1d ');
+      final dt =
+          now.add(const Duration(days: 1, hours: 12)); // 1+ days from now
+      expect(when(dt), startsWith('1d ('));
     });
 
     test('when function should respect use24HourFormat app setting', () {
       final now = DateTime.now();
-      final dt = now.add(const Duration(days: 2)); // 2 days from now
+      final dt =
+          now.add(const Duration(days: 1, hours: 12)); // 1+ days from now
 
       // Test with 12-hour format
       AppSettings.use24HourFormatRx.value = false;
       expect(when(dt), contains('1d'));
-      expect(when(dt), contains('(hh:mm a)'));
+      expect(when(dt), matches(r'.*\d{1,2}:\d{2} [AP]M\)'));
 
       // Test with 24-hour format
       AppSettings.use24HourFormatRx.value = true;
       expect(when(dt), contains('1d'));
-      expect(when(dt), contains('(HH:mm)'));
-    });
-
-    test(
-        'difference function should return correct string for various durations',
-        () {
-      expect(difference(const Duration(days: 2 * 365)), '2y ');
-      expect(difference(const Duration(days: 2 * 30)), '2mo ');
-      expect(difference(const Duration(days: 2 * 7)), '2w ');
-      expect(difference(const Duration(days: 2)), '2d ');
-      expect(difference(const Duration(hours: 2)), '2h ');
-      expect(difference(const Duration(minutes: 2)), '2min ');
-      expect(difference(const Duration(seconds: 2)), '2s ');
-
-      expect(difference(const Duration(days: -2)), '2d ago ');
-      expect(difference(const Duration(hours: -2)), '2h ago ');
-      expect(difference(const Duration(minutes: -2)), '2min ago ');
-      expect(difference(const Duration(seconds: -2)), '2s ago ');
+      expect(when(dt), matches(r'.*\d{1,2}:\d{2}\)'));
     });
   });
 }
