@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:taskwarrior/app/modules/settings/views/settings_page_taskchampion.dart';
+import 'package:taskwarrior/app/routes/app_pages.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
@@ -24,7 +25,8 @@ class SettingsPageBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Obx(() {
       if (controller.isMovingDirectory.value) {
         return Center(
@@ -138,6 +140,16 @@ class SettingsPageBody extends StatelessWidget {
                 controller: controller,
               ),
             ),
+            const Divider(),
+            SettingsPageListTile(
+              title: "Logs ",
+              subTitle: "check all debug logs here",
+              trailing: IconButton(
+                  onPressed: () {
+                    Get.toNamed(Routes.LOGS);
+                  },
+                  icon: const Icon(Icons.login)),
+            )
           ],
         );
       }

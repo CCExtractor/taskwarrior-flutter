@@ -6,6 +6,8 @@ import '../modules/detailRoute/bindings/detail_route_binding.dart';
 import '../modules/detailRoute/views/detail_route_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
+import '../modules/logs/bindings/logs_binding.dart';
+import '../modules/logs/views/logs_view.dart';
 import '../modules/manageTaskServer/bindings/manage_task_server_binding.dart';
 import '../modules/manageTaskServer/views/manage_task_server_view.dart';
 import '../modules/manage_task_champion_creds/bindings/manage_task_champion_creds_binding.dart';
@@ -87,6 +89,11 @@ class AppPages {
       name: _Paths.MANAGE_TASK_CHAMPION_CREDS,
       page: () => const ManageTaskChampionCredsView(),
       binding: ManageTaskChampionCredsBinding(),
+    ),
+    GetPage(
+      name: _Paths.LOGS,
+      page: () => const LogsView(),
+      binding: LogsBinding(),
     ),
   ];
 }
