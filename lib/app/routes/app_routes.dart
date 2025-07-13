@@ -16,6 +16,7 @@ abstract class Routes {
   static const SETTINGS = _Paths.SETTINGS;
   static const PERMISSION = _Paths.PERMISSION;
   static const MANAGE_TASK_CHAMPION_CREDS = _Paths.MANAGE_TASK_CHAMPION_CREDS;
+  static const LOGS = _Paths.LOGS;
 }
 
 abstract class _Paths {
@@ -31,4 +32,5 @@ abstract class _Paths {
   static const SETTINGS = '/settings';
   static const PERMISSION = '/permission';
   static const MANAGE_TASK_CHAMPION_CREDS = '/manage-task-champion-creds';
+  static const LOGS = '/logs';
 }
