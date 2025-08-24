@@ -617,4 +617,54 @@ class FrenchSentences extends Sentences {
   @override
   String get tourFilterTagUnion =>
       "Basculer entre les types d'union de balises ET et OU";
+  @override
+  String get descriprtionCannotBeEmpty =>
+      "La description ne peut pas être vide";
+  @override
+  String get enterTaskDescription => "Entrez la description de la tâche";
+  @override
+  String get canNotHaveWhiteSpace => "Ne peut pas contenir d'espaces blancs";
+  @override
+  String get high => "Élevée";
+  @override
+  String get medium => "Moyenne";
+  @override
+  String get low => "Faible";
+  @override
+  String get priority => "Priorité";
+  @override
+  String get tagAlreadyExists => "Le tag existe déjà";
+  @override
+  String get tagShouldNotContainSpaces =>
+      "Le tag ne doit pas contenir d'espaces";
+  @override
+  String get date => "Date";
+  @override
+  String get add => "Ajouter";
+  @override
+  String get change => "Changer";
+  @override
+  String get dateCanNotBeInPast => "La date ne peut pas être dans le passé";
+  @override
+  String get configureTaskchampion =>
+      "Configurer Taskchampion pour la synchronisation";
+  @override
+  String get encryptionSecret => 'Secret de chiffrement';
+  @override
+  String get ccsyncBackendUrl => 'URL du backend CCSync';
+  @override
+  String get ccsyncClientId => 'ID client';
+  @override
+  String get success => 'Succès';
+  @override
+  String get credentialsSavedSuccessfully =>
+      'Identifiants enregistrés avec succès';
+  @override
+  String get tip =>
+      "Astuce : Cliquez sur l'icône d'information en haut à droite pour obtenir vos identifiants";
+  @override
+  String get logs => 'Journaux';
+  @override
+  String get checkAllDebugLogsHere =>
+      'Vérifiez tous les journaux de débogage ici';
 }

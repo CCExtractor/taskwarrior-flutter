@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/constants/constants.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../controllers/manage_task_champion_creds_controller.dart';
@@ -24,7 +26,9 @@ class ManageTaskChampionCredsView
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Configure TaskChampion",
+              SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                  .sentences
+                  .configureTaskchampion,
               style: GoogleFonts.poppins(
                 color: TaskWarriorColors.white,
                 fontSize: TaskWarriorFonts.fontSizeLarge,
@@ -65,7 +69,10 @@ class ManageTaskChampionCredsView
                     style: TextStyle(color: tColors.primaryTextColor),
                     controller: controller.encryptionSecretController,
                     decoration: InputDecoration(
-                      labelText: 'Encryption Secret',
+                      labelText: SentenceManager(
+                              currentLanguage: AppSettings.selectedLanguage)
+                          .sentences
+                          .encryptionSecret,
                       labelStyle: TextStyle(color: tColors.primaryTextColor),
                       border: const OutlineInputBorder(),
                     ),
@@ -75,7 +82,10 @@ class ManageTaskChampionCredsView
                     style: TextStyle(color: tColors.primaryTextColor),
                     controller: controller.clientIdController,
                     decoration: InputDecoration(
-                      labelText: 'Client ID',
+                      labelText: SentenceManager(
+                              currentLanguage: AppSettings.selectedLanguage)
+                          .sentences
+                          .ccsyncClientId,
                       labelStyle: TextStyle(color: tColors.primaryTextColor),
                       border: const OutlineInputBorder(),
                     ),
@@ -85,7 +95,10 @@ class ManageTaskChampionCredsView
                     style: TextStyle(color: tColors.primaryTextColor),
                     controller: controller.ccsyncBackendUrlController,
                     decoration: InputDecoration(
-                      labelText: 'CCSync Backend URL',
+                      labelText: SentenceManager(
+                              currentLanguage: AppSettings.selectedLanguage)
+                          .sentences
+                          .ccsyncBackendUrl,
                       labelStyle: TextStyle(color: tColors.primaryTextColor),
                       border: const OutlineInputBorder(),
                     ),
@@ -95,8 +108,14 @@ class ManageTaskChampionCredsView
                     onPressed: () async {
                       await controller.saveCredentials();
                       Get.snackbar(
-                        'Success',
-                        'Credentials saved successfully',
+                        SentenceManager(
+                                currentLanguage: AppSettings.selectedLanguage)
+                            .sentences
+                            .success,
+                        SentenceManager(
+                                currentLanguage: AppSettings.selectedLanguage)
+                            .sentences
+                            .credentialsSavedSuccessfully,
                         snackPosition: SnackPosition.BOTTOM,
                         duration: Duration(seconds: 2),
                       );
@@ -105,7 +124,10 @@ class ManageTaskChampionCredsView
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    'Tip: Click on the info icon in the top right corner to get your credentials',
+                    SentenceManager(
+                            currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .tip,
                     style: TextStyle(
                       fontSize: 15,
                       color: tColors.primaryTextColor,

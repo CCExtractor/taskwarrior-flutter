@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/add_task_dialog_utils.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
@@ -51,12 +53,12 @@ class _AddTaskDatePickerInputState extends State<AddTaskDatePickerInput> {
     bool isNextDateSelected = _selectedDates[getNextIndex()] != null;
     bool isPreviousDateSelected = _selectedDates[getPreviousIndex()] != null;
     String nextDateText = isNextDateSelected
-        ? "Change ${dateLabels[getNextIndex()]} Date"
-        : "Add ${dateLabels[getNextIndex()]} Date";
+        ? "${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.change} ${dateLabels[getNextIndex()]} ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.date}"
+        : "${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.add} ${dateLabels[getNextIndex()]} ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.date}";
 
     String prevDateText = isPreviousDateSelected
-        ? "Change ${dateLabels[getPreviousIndex()]} Date"
-        : "Add ${dateLabels[getPreviousIndex()]} Date";
+        ? "${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.change} ${dateLabels[getPreviousIndex()]} ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.date}"
+        : "${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.add} ${dateLabels[getPreviousIndex()]} ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.date}";
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -127,8 +129,10 @@ class _AddTaskDatePickerInputState extends State<AddTaskDatePickerInput> {
     return TextFormField(
       controller: _controllers[forIndex],
       decoration: InputDecoration(
-        labelText: '${dateLabels[forIndex]} Date',
-        hintText: 'Select a ${dateLabels[forIndex]}',
+        labelText:
+            '${dateLabels[forIndex]} ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.date}',
+        hintText:
+            '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.select} ${dateLabels[forIndex]}',
         suffixIcon: const Icon(Icons.calendar_today),
         border: const OutlineInputBorder(),
       ),
@@ -165,7 +169,7 @@ class _AddTaskDatePickerInputState extends State<AddTaskDatePickerInput> {
       DateTime? dt = _selectedDates[i];
       String? label = dateLabels[i];
       if (dt != null && dt.isBefore(DateTime.now())) {
-        return "$label date cannot be in the past";
+        return "$label ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.dateCanNotBeInPast}";
       }
     }
     return null;

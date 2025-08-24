@@ -45,7 +45,11 @@ class AddTaskBottomSheet extends StatelessWidget {
                     onPressed: () {
                       Get.back();
                     },
-                    child: const Text("Cancel"),
+                    child: Text(SentenceManager(
+                            currentLanguage:
+                                homeController.selectedLanguage.value)
+                        .sentences
+                        .cancel),
                   ),
                   Text(
                     SentenceManager(
@@ -66,7 +70,11 @@ class AddTaskBottomSheet extends StatelessWidget {
                         onSaveButtonClicked(context);
                       }
                     },
-                    child: const Text("Save"),
+                    child: Text(SentenceManager(
+                            currentLanguage:
+                                homeController.selectedLanguage.value)
+                        .sentences
+                        .save),
                   ),
                 ],
               ),
@@ -80,10 +88,18 @@ class AddTaskBottomSheet extends StatelessWidget {
                       child: TextFormField(
                         controller: homeController.namecontroller,
                         validator: (value) => value!.isEmpty
-                            ? "Description cannot be empty"
+                            ? SentenceManager(
+                                    currentLanguage:
+                                        homeController.selectedLanguage.value)
+                                .sentences
+                                .descriprtionCannotBeEmpty
                             : null,
-                        decoration: const InputDecoration(
-                          labelText: 'Enter Task Description',
+                        decoration: InputDecoration(
+                          labelText: SentenceManager(
+                                  currentLanguage:
+                                      homeController.selectedLanguage.value)
+                              .sentences
+                              .enterTaskDescription,
                           border: OutlineInputBorder(),
                         ),
                       ),
@@ -168,15 +184,21 @@ class AddTaskBottomSheet extends StatelessWidget {
           (context, textEditingController, focusNode, onFieldSubmitted) =>
               TextFormField(
         controller: textEditingController,
-        decoration: const InputDecoration(
-          labelText: 'Project',
+        decoration: InputDecoration(
+          labelText: SentenceManager(
+                  currentLanguage: homeController.selectedLanguage.value)
+              .sentences
+              .enterProject,
           border: OutlineInputBorder(),
         ),
         onChanged: (value) => homeController.projectcontroller.text = value,
         focusNode: focusNode,
         validator: (value) {
           if (value != null && value.contains(" ")) {
-            return "Can not have Whitespace";
+            return SentenceManager(
+                    currentLanguage: homeController.selectedLanguage.value)
+                .sentences
+                .canNotHaveWhiteSpace;
           }
           return null;
         },
@@ -208,7 +230,10 @@ class AddTaskBottomSheet extends StatelessWidget {
                     .priority.value), // Display the selected priority
               ),
               decoration: InputDecoration(
-                labelText: 'Priority',
+                labelText: SentenceManager(
+                        currentLanguage: homeController.selectedLanguage.value)
+                    .sentences
+                    .priority,
                 border: const OutlineInputBorder(),
                 suffixIcon: Padding(
                   padding: const EdgeInsets.only(right: 8.0),
@@ -304,7 +329,10 @@ class AddTaskBottomSheet extends StatelessWidget {
       homeController.projectcontroller.text = '';
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
-            'Task Added Successfully!',
+            SentenceManager(
+                    currentLanguage: homeController.selectedLanguage.value)
+                .sentences
+                .addTaskTaskAddedSuccessfully,
             style: TextStyle(
               color: AppSettings.isDarkMode
                   ? TaskWarriorColors.kprimaryTextColor
