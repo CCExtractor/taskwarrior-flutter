@@ -583,4 +583,50 @@ class HindiSentences extends Sentences {
   @override
   String get tourTaskServerRootCert =>
       "इसी तरह नामित फ़ाइल चुनें, जैसे letsencrypt_root_cert.pem";
+  @override
+  String get descriprtionCannotBeEmpty => "विवरण खाली नहीं हो सकता";
+  @override
+  String get enterTaskDescription => "कार्य विवरण दर्ज करें";
+  @override
+  String get canNotHaveWhiteSpace => "सफेद स्थान नहीं हो सकता";
+  @override
+  String get high => "उच्च";
+  @override
+  String get medium => "मध्यम";
+  @override
+  String get low => "निम्न";
+  @override
+  String get priority => "प्राथमिकता";
+  @override
+  String get tagAlreadyExists => "टैग पहले से मौजूद है";
+  @override
+  String get tagShouldNotContainSpaces => "टैग में स्पेस नहीं होना चाहिए";
+  @override
+  String get date => "तारीख";
+  @override
+  String get add => "जोड़ें";
+  @override
+  String get change => "बदलें";
+  @override
+  String get dateCanNotBeInPast => "तारीख अतीत में नहीं हो सकती";
+  @override
+  String get configureTaskchampion => "Taskchampion कॉन्फ़िगर करें";
+  @override
+  String get encryptionSecret => 'एन्क्रिप्शन सीक्रेट';
+  @override
+  String get ccsyncBackendUrl => 'CCSync बैकएंड URL';
+  @override
+  String get ccsyncClientId => 'क्लाइंट आईडी';
+  @override
+  String get success => 'सफलता';
+  @override
+  String get credentialsSavedSuccessfully =>
+      'क्रेडेंशियल्स सफलतापूर्वक सहेजे गए';
+  @override
+  String get tip =>
+      "टिप: अपनी क्रेडेंशियल्स प्राप्त करने के लिए ऊपर दाईं ओर स्थित जानकारी आइकन पर क्लिक करें";
+  @override
+  String get logs => 'लॉग्स';
+  @override
+  String get checkAllDebugLogsHere => 'यहाँ सभी डिबग लॉग्स देखें';
 }

@@ -1,4 +1,6 @@
 import 'package:intl/intl.dart';
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 
 String dateToStringForAddTask(DateTime dt) {
   return 'On ${DateFormat('yyyy-MM-dd').format(dt)} at ${DateFormat('hh:mm:ss').format(dt)}';
@@ -7,11 +9,17 @@ String dateToStringForAddTask(DateTime dt) {
 String getPriorityText(String priority) {
   switch (priority) {
     case 'H':
-      return 'High';
+      return SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+          .sentences
+          .high;
     case 'M':
-      return 'Medium';
+      return SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+          .sentences
+          .medium;
     case 'L':
-      return 'Low';
+      return SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+          .sentences
+          .low;
     default:
       return 'None';
   }

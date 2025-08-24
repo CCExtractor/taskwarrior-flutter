@@ -594,4 +594,50 @@ class EnglishSentences extends Sentences {
   @override
   String get tourDetailsPriority =>
       "This is the priority of the Tasks \n L -> Low \n M -> Medium \n H -> Hard";
+  // Dialogue for adding new task
+  @override
+  String get descriprtionCannotBeEmpty => "Description cannot be empty";
+  @override
+  String get enterTaskDescription => "Enter Task Description";
+  @override
+  String get canNotHaveWhiteSpace => "Can not have white space";
+  @override
+  String get high => "High";
+  @override
+  String get medium => "Medium";
+  @override
+  String get low => "Low";
+  @override
+  String get priority => "Priority";
+  @override
+  String get tagAlreadyExists => "Tag already exists";
+  @override
+  String get tagShouldNotContainSpaces => "Tag should not contain spaces";
+  @override
+  String get date => "Date";
+  @override
+  String get add => "Add";
+  @override
+  String get change => "Change";
+  @override
+  String get dateCanNotBeInPast => "Date can not be in past";
+  @override
+  String get configureTaskchampion => 'Configure Taskchampion';
+  @override
+  String get encryptionSecret => 'Encryption Secret';
+  @override
+  String get ccsyncBackendUrl => 'CCSync Backend URL';
+  @override
+  String get ccsyncClientId => 'Client ID';
+  @override
+  String get success => 'Success';
+  @override
+  String get credentialsSavedSuccessfully => 'Credentials saved successfully';
+  @override
+  String get tip =>
+      "Tip: Click on the info icon in the top right corner to get your credentials";
+  @override
+  String get logs => 'Logs';
+  @override
+  String get checkAllDebugLogsHere => 'Check all debug logs here';
 }

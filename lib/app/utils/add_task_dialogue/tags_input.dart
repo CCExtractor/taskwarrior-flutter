@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:textfield_tags/textfield_tags.dart';
 
 class AddTaskTagsInput extends StatefulWidget {
@@ -80,10 +82,22 @@ class _AddTaskTagsInputState extends State<AddTaskTagsInput> {
             if (tags.contains(tag)) {
               stringTagController.onTagRemoved(tag);
               stringTagController.onTagSubmitted(tag);
-              return "Tag already exists";
+              return SentenceManager(
+                      currentLanguage: SentenceManager(
+                              currentLanguage: AppSettings.selectedLanguage)
+                          .currentLanguage)
+                  .sentences
+                  .tagAlreadyExists;
             }
             for (String tag in tags) {
-              if (tag.contains(" ")) return "Tag should not contain spaces";
+              if (tag.contains(" ")) {
+                return SentenceManager(
+                        currentLanguage: SentenceManager(
+                                currentLanguage: AppSettings.selectedLanguage)
+                            .currentLanguage)
+                    .sentences
+                    .tagShouldNotContainSpaces;
+              }
             }
             return null;
           },
@@ -92,7 +106,12 @@ class _AddTaskTagsInputState extends State<AddTaskTagsInput> {
               controller: inputFieldValues.textEditingController,
               focusNode: inputFieldValues.focusNode,
               decoration: InputDecoration(
-                labelText: "Enter tags",
+                labelText: SentenceManager(
+                        currentLanguage: SentenceManager(
+                                currentLanguage: AppSettings.selectedLanguage)
+                            .currentLanguage)
+                    .sentences
+                    .addTaskAddTags,
                 border: const OutlineInputBorder(),
                 prefixIconConstraints: BoxConstraints(
                     maxWidth:

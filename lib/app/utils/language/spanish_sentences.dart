@@ -608,4 +608,51 @@ class SpanishSentences extends Sentences {
   @override
   String get tourDetailsPriority =>
       "Esta es la prioridad de las tareas\nL -> Baja\nM -> Media\nH -> Alta";
+  @override
+  String get descriprtionCannotBeEmpty => "La descripción no puede estar vacía";
+  @override
+  String get enterTaskDescription => "Ingresar descripción de la tarea";
+  @override
+  String get canNotHaveWhiteSpace => "No puede tener espacios en blanco";
+  @override
+  String get high => "Alta";
+  @override
+  String get medium => "Media";
+  @override
+  String get low => "Baja";
+  @override
+  String get priority => "Prioridad";
+  @override
+  String get tagAlreadyExists => "¡La etiqueta ya existe!";
+  @override
+  String get tagShouldNotContainSpaces =>
+      "¡La etiqueta no debe contener espacios!";
+  @override
+  String get date => "Fecha";
+  @override
+  String get add => "Agregar";
+  @override
+  String get change => "Cambiar";
+  @override
+  String get dateCanNotBeInPast => "La fecha no puede estar en el pasado";
+  @override
+  String get configureTaskchampion => "Configurar Taskchampion";
+  @override
+  String get encryptionSecret => 'Secreto de cifrado';
+  @override
+  String get ccsyncBackendUrl => 'URL del backend de CCSync';
+  @override
+  String get ccsyncClientId => 'ID de cliente';
+  @override
+  String get success => 'Éxito';
+  @override
+  String get credentialsSavedSuccessfully => 'Credenciales guardadas con éxito';
+  @override
+  String get tip =>
+      "Consejo: Haz clic en el ícono de información en la esquina superior derecha para obtener tus credenciales";
+  @override
+  String get logs => 'Registros';
+  @override
+  String get checkAllDebugLogsHere =>
+      'Consulta todos los registros de depuración aquí';
 }

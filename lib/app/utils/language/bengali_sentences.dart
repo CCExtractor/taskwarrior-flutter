@@ -606,4 +606,49 @@ class BengaliSentences extends Sentences {
 
   @override
   String get tourTaskServerTaskRC => "আপনার TaskRC ফাইল সেট করুন";
+  @override
+  String get descriprtionCannotBeEmpty => "বর্ণনা খালি হতে পারে না";
+  @override
+  String get enterTaskDescription => "টাস্কের বর্ণনা লিখুন";
+  @override
+  String get canNotHaveWhiteSpace => "সাদা স্থান থাকতে পারে না";
+  @override
+  String get high => "উচ্চ";
+  @override
+  String get medium => "মধ্যম";
+  @override
+  String get low => "নিম্ন";
+  @override
+  String get priority => "অগ্রাধিকার";
+  @override
+  String get tagAlreadyExists => "ট্যাগ ইতিমধ্যে বিদ্যমান";
+  @override
+  String get tagShouldNotContainSpaces => "ট্যাগে স্পেস থাকা উচিত নয়";
+  @override
+  String get date => "তারিখ";
+  @override
+  String get add => "যোগ করুন";
+  @override
+  String get change => "পরিবর্তন করুন";
+  @override
+  String get dateCanNotBeInPast => "তারিখ অতীতে থাকতে পারে না";
+  @override
+  String get configureTaskchampion => 'Taskchampion সিঙ্ক কনফিগার করুন';
+  @override
+  String get encryptionSecret => 'এনক্রিপশন সিক্রেট';
+  @override
+  String get ccsyncBackendUrl => 'CCSync ব্যাকএন্ড URL';
+  @override
+  String get ccsyncClientId => 'ক্লায়েন্ট আইডি';
+  @override
+  String get success => 'সফল হয়েছে';
+  @override
+  String get credentialsSavedSuccessfully => 'শংসাপত্র সফলভাবে সংরক্ষিত হয়েছে';
+  @override
+  String get tip =>
+      "টিপ: আপনার শংসাপত্র পেতে উপরের ডানদিকে তথ্য আইকনে ক্লিক করুন";
+  @override
+  String get logs => 'লগস';
+  @override
+  String get checkAllDebugLogsHere => 'এখানে সমস্ত ডিবাগ লগ পরীক্ষা করুন';
 }

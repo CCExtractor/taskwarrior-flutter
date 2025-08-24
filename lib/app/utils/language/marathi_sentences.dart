@@ -606,4 +606,50 @@ class MarathiSentences extends Sentences {
   @override
   String get tourTaskServerTaskRC =>
       "येथे taskrc नावाची फाईल निवडा किंवा तिची सामग्री पेस्ट करा";
+  @override
+  String get descriprtionCannotBeEmpty => "वर्णन रिक्त असू शकत नाही";
+  @override
+  String get enterTaskDescription => "कार्याचे वर्णन प्रविष्ट करा";
+  @override
+  String get canNotHaveWhiteSpace => "रिक्त जागा असू शकत नाही";
+  @override
+  String get high => "उच्च";
+  @override
+  String get medium => "मध्यम";
+  @override
+  String get low => "कमी";
+  @override
+  String get priority => "प्राधान्य";
+  @override
+  String get tagAlreadyExists => "टॅग आधीच अस्तित्वात आहे";
+  @override
+  String get tagShouldNotContainSpaces => "टॅगमध्ये रिक्त जागा असू शकत नाही";
+  @override
+  String get date => 'तारीख';
+  @override
+  String get add => 'जोडा';
+  @override
+  String get change => 'बदल';
+  @override
+  String get dateCanNotBeInPast => "तारीख भूतकाळात असू शकत नाही";
+  @override
+  String get configureTaskchampion => "Taskchampion कॉन्फिगर करा";
+  @override
+  String get encryptionSecret => 'एन्क्रिप्शन गुपित';
+  @override
+  String get ccsyncBackendUrl => 'CCSync बॅकएंड URL';
+  @override
+  String get ccsyncClientId => 'क्लायंट आयडी';
+  @override
+  String get success => 'यशस्वी';
+  @override
+  String get credentialsSavedSuccessfully =>
+      'क्रेडेन्शियल्स यशस्वीरित्या जतन केले';
+  @override
+  String get tip =>
+      "टीप: तुमची क्रेडेन्शियल्स मिळवण्यासाठी वरच्या उजव्या कोपऱ्यातील माहिती चिन्हावर क्लिक करा";
+  @override
+  String get logs => 'लॉग्ज';
+  @override
+  String get checkAllDebugLogsHere => 'येथे सर्व डीबग लॉग्ज तपासा';
 }

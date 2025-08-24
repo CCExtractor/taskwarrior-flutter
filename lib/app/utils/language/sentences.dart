@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taskwarrior/app/utils/taskchampion/credentials_storage.dart';
 
 abstract class Sentences {
   String get helloWorld;
@@ -278,6 +279,8 @@ abstract class Sentences {
   String get settingsConfirmReset;
   String get settingsNoButton;
   String get settingsYesButton;
+  String get logs;
+  String get checkAllDebugLogsHere;
 
   // Splash screen strings
   String get splashSettingUpApp;
@@ -317,4 +320,26 @@ abstract class Sentences {
   String get tourDetailsUntil;
   String get tourDetailsPriority;
 
+  // Dialogue for adding new task
+  String get descriprtionCannotBeEmpty;
+  String get enterTaskDescription;
+  String get canNotHaveWhiteSpace;
+  String get high;
+  String get medium;
+  String get low;
+  String get priority;
+  String get tagAlreadyExists;
+  String get tagShouldNotContainSpaces;
+  String get date;
+  String get add;
+  String get change;
+  String get dateCanNotBeInPast;
+  // ccsync credentials page
+  String get configureTaskchampion;
+  String get encryptionSecret;
+  String get ccsyncBackendUrl;
+  String get ccsyncClientId;
+  String get success;
+  String get credentialsSavedSuccessfully;
+  String get tip;
 }
