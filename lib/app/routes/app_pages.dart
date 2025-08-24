@@ -24,6 +24,8 @@ import '../modules/settings/bindings/settings_binding.dart';
 import '../modules/settings/views/settings_view.dart';
 import '../modules/splash/bindings/splash_binding.dart';
 import '../modules/splash/views/splash_view.dart';
+import '../modules/taskc_details/bindings/taskc_details_binding.dart';
+import '../modules/taskc_details/views/taskc_details_view.dart';
 
 // ignore_for_file: constant_identifier_names
 
@@ -94,6 +96,11 @@ class AppPages {
       name: _Paths.LOGS,
       page: () => const LogsView(),
       binding: LogsBinding(),
+    ),
+    GetPage(
+      name: _Paths.TASKC_DETAILS,
+      page: () => const TaskcDetailsView(),
+      binding: TaskcDetailsBinding(),
     ),
   ];
 }

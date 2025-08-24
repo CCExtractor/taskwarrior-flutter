@@ -1,12 +1,13 @@
 import 'dart:convert';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 import 'package:flutter/material.dart';
 import 'package:taskwarrior/app/utils/taskchampion/credentials_storage.dart';
 import 'package:taskwarrior/app/v3/db/task_database.dart';
+import 'package:taskwarrior/app/v3/models/task.dart';
 
-Future<void> modifyTaskOnTaskwarrior(String description, String project,
-    String due, String priority, String status, String taskuuid) async {
+Future<void> modifyTaskOnTaskwarrior(TaskForC tskc) async {
   var baseUrl = await CredentialsStorage.getApiUrl();
   var c = await CredentialsStorage.getClientId();
   var e = await CredentialsStorage.getEncryptionSecret();
@@ -22,25 +23,28 @@ Future<void> modifyTaskOnTaskwarrior(String description, String project,
       "email": "e",
       "encryptionSecret": e,
       "UUID": c,
-      "description": description,
-      "priority": priority,
-      "project": project,
-      "due": due,
-      "status": status,
-      "taskuuid": taskuuid,
+      "description": tskc.description,
+      "priority": tskc.priority,
+      "project": tskc.project,
+      "due": tskc.due,
+      "status": tskc.status,
+      "taskuuid": tskc.uuid,
     }),
   );
 
   if (response.statusCode != 200) {
-    ScaffoldMessenger.of(context as BuildContext).showSnackBar(const SnackBar(
-        content: Text(
-      "Failed to update task!",
-      style: TextStyle(color: Colors.red),
-    )));
+    Get.snackbar(
+      'Error',
+      'Failed to modify task: ${response.reasonPhrase}',
+      snackPosition: SnackPosition.BOTTOM,
+    );
   }
 
   var taskDatabase = TaskDatabase();
   await taskDatabase.open();
   await taskDatabase.deleteTask(
-      description: description, due: due, project: project, priority: priority);
+      description: tskc.description,
+      due: tskc.due,
+      project: tskc.project,
+      priority: tskc.priority);
 }

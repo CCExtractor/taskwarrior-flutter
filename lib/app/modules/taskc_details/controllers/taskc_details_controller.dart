@@ -1,0 +1,282 @@
+// ignore_for_file: deprecated_member_use, use_build_context_synchronously
+
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/constants/utilites.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
+import 'package:taskwarrior/app/v3/db/task_database.dart';
+import 'package:taskwarrior/app/v3/models/annotation.dart';
+import 'package:taskwarrior/app/v3/models/task.dart';
+import 'package:taskwarrior/app/v3/net/modify.dart';
+
+enum UnsavedChangesAction { save, discard, cancel }
+
+class TaskcDetailsController extends GetxController {
+  late final TaskForC initialTask;
+  late TaskDatabase taskDatabase;
+
+  final hasChanges = false.obs;
+
+  late RxString description;
+  late RxString project;
+  late RxString status;
+  late RxString priority;
+  late RxString due;
+  late RxString start;
+  late RxString wait;
+  late RxList<String> tags;
+  late RxList<String> depends;
+  late RxString rtype;
+  late RxString recur;
+  late RxList<Annotation> annotations;
+
+  @override
+  void onInit() {
+    super.onInit();
+    initialTask = Get.arguments as TaskForC;
+    _initializeState(initialTask);
+    taskDatabase = TaskDatabase();
+    taskDatabase.open();
+  }
+
+  void _initializeState(TaskForC task) {
+    description = task.description.obs;
+    project = (task.project ?? '-').obs;
+    status = task.status.obs;
+    priority = (task.priority ?? '-').obs;
+    due = formatDate(task.due).obs;
+    start = formatDate(task.start).obs;
+    wait = formatDate(task.wait).obs;
+    tags = (task.tags ?? []).obs;
+    depends = (task.depends ?? []).obs;
+    rtype = (task.rtype ?? '-').obs;
+    recur = (task.recur ?? '-').obs;
+    annotations = (task.annotations ?? []).obs;
+  }
+
+  String formatDate(String? dateString) {
+    if (dateString == null || dateString.isEmpty || dateString == '-') {
+      return '-';
+    }
+    try {
+      DateTime parsedDate = DateTime.parse(dateString);
+      return DateFormat('yyyy-MM-dd HH:mm:ss').format(parsedDate);
+    } catch (e) {
+      debugPrint('Error parsing date: $dateString');
+      return '-';
+    }
+  }
+
+  void updateField<T>(Rx<T> field, T value) {
+    if (field.value != value) {
+      field.value = value;
+      hasChanges.value = true;
+    }
+  }
+
+  void updateListField(RxList<String> field, String value) {
+    final newList = value.split(',').map((e) => e.trim()).toList();
+    if (field.toList().toString() != newList.toString()) {
+      field.assignAll(newList);
+      hasChanges.value = true;
+    }
+  }
+
+  Future<void> saveTask() async {
+    final updatedTask = TaskForC(
+      id: initialTask.id,
+      description: description.value,
+      project: project.value == '-' ? null : project.value,
+      status: status.value,
+      uuid: initialTask.uuid,
+      urgency: initialTask.urgency, // Urgency is typically calculated
+      priority: priority.value == '-' ? null : priority.value,
+      due: due.value == '-' ? null : due.value,
+      start: start.value == '-' ? null : start.value,
+      end: initialTask.end, // 'end' is usually set when completed
+      entry: initialTask.entry, // 'entry' is static
+      wait: wait.value == '-' ? null : wait.value,
+      modified: DateFormat('yyyy-MM-dd HH:mm:ss')
+          .format(DateTime.now()), // Update modified time
+      tags: tags.isEmpty ? null : tags.toList(),
+      depends: depends.isEmpty ? null : depends.toList(),
+      rtype: rtype.value == '-' ? null : rtype.value,
+      recur: recur.value == '-' ? null : recur.value,
+      annotations: annotations.isEmpty ? null : annotations.toList(),
+    );
+    await TaskDatabase().updateTask(updatedTask);
+    hasChanges.value = false;
+    await modifyTaskOnTaskwarrior(updatedTask);
+  }
+
+  Future<bool> handleWillPop() async {
+    if (hasChanges.value) {
+      final action = await _showUnsavedChangesDialog();
+      if (action == UnsavedChangesAction.save) {
+        await saveTask();
+        return true;
+      } else if (action == UnsavedChangesAction.discard) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  Future<void> pickDateTime(RxString field) async {
+    final BuildContext context = Get.context!;
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: field.value != '-'
+          ? DateTime.tryParse(field.value) ?? DateTime.now()
+          : DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+
+    if (pickedDate != null) {
+      final TimeOfDay? pickedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.fromDateTime(field.value != '-'
+            ? DateTime.tryParse(field.value) ?? DateTime.now()
+            : DateTime.now()),
+      );
+
+      DateTime fullDateTime;
+      if (pickedTime != null) {
+        fullDateTime = DateTime(pickedDate.year, pickedDate.month,
+            pickedDate.day, pickedTime.hour, pickedTime.minute);
+      } else {
+        fullDateTime = pickedDate;
+      }
+      updateField(
+          field, DateFormat('yyyy-MM-dd HH:mm:ss').format(fullDateTime));
+    }
+  }
+
+  Future<String?> showEditDialog(String label, String initialValue) async {
+    final BuildContext context = Get.context!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    final TextEditingController textController =
+        TextEditingController(text: initialValue);
+
+    return await Get.dialog<String>(
+      Utils.showAlertDialog(
+        title: Text(
+          '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.edit} $label',
+          style: TextStyle(color: tColors.primaryTextColor),
+        ),
+        content: TextField(
+          style: TextStyle(color: tColors.primaryTextColor),
+          controller: textController,
+          decoration: InputDecoration(
+            hintText:
+                '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.enterNew} $label',
+            hintStyle: TextStyle(color: tColors.primaryTextColor),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text(
+              SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                  .sentences
+                  .cancel,
+              style: TextStyle(color: tColors.primaryTextColor),
+            ),
+          ),
+          TextButton(
+            onPressed: () => Get.back(result: textController.text),
+            child: Text(
+              SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                  .sentences
+                  .save,
+              style: TextStyle(color: tColors.primaryTextColor),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<String?> showSelectDialog(
+      String label, String initialValue, List<String> options) async {
+    final BuildContext context = Get.context!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
+
+    return await Get.dialog<String>(
+      Utils.showAlertDialog(
+        title: Text(
+          '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.select} $label',
+          style: TextStyle(color: tColors.primaryTextColor),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: options.map((option) {
+            return RadioListTile<String>(
+              title: Text(
+                option,
+                style: TextStyle(color: tColors.primaryTextColor),
+              ),
+              value: option,
+              groupValue: initialValue,
+              onChanged: (value) => Get.back(result: value),
+            );
+          }).toList(),
+        ),
+      ),
+    );
+  }
+
+  Future<UnsavedChangesAction?> _showUnsavedChangesDialog() async {
+    final BuildContext context = Get.context!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    return Get.dialog<UnsavedChangesAction>(
+      barrierDismissible: false,
+      Utils.showAlertDialog(
+        title: Text(
+          SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+              .sentences
+              .unsavedChanges,
+          style: TextStyle(color: tColors.primaryTextColor),
+        ),
+        content: Text(
+          SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+              .sentences
+              .unsavedChangesWarning,
+          style: TextStyle(color: tColors.primaryTextColor),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Get.back(result: UnsavedChangesAction.cancel),
+            child: Text(
+                SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                    .sentences
+                    .cancel),
+          ),
+          TextButton(
+            onPressed: () => Get.back(result: UnsavedChangesAction.discard),
+            child: Text(
+                SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                    .sentences
+                    .dontSave),
+          ),
+          TextButton(
+            onPressed: () => Get.back(result: UnsavedChangesAction.save),
+            child: Text(
+                SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                    .sentences
+                    .save),
+          ),
+        ],
+      ),
+    );
+  }
+}

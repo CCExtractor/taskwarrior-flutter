@@ -53,14 +53,7 @@ Future<void> updateTasksInDatabase(List<TaskForC> tasks) async {
         await taskDatabase.updateTask(serverTask);
       } else if (serverTaskModifiedDate.isBefore(localTaskModifiedDate)) {
         // local task is newer, update server
-        await modifyTaskOnTaskwarrior(
-          localTask.description,
-          localTask.project!,
-          localTask.due!,
-          localTask.priority!,
-          localTask.status,
-          localTask.uuid!,
-        );
+        await modifyTaskOnTaskwarrior(localTask);
         if (localTask.status == 'completed') {
           completeTask('email', localTask.uuid!);
         } else if (localTask.status == 'deleted') {
