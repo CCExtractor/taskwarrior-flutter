@@ -32,32 +32,48 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
 
-      # Step 6: Build APK
-      - name: Build APK
-        run: flutter build apk --build-number=${{ github.run_number }} --release
-        # No 'mv' command here yet
+      # Step 5: Decode signing secrets for keystore and properties
+      - name: Decode Signing Secrets
+        env:
+          NIGHTLY_KEYSTORE_B64: ${{ secrets.NIGHTLY_KEYSTORE_B64 }}
+          NIGHTLY_PROPERTIES_B64: ${{ secrets.NIGHTLY_PROPERTIES_B64 }}
+        run: |
+          echo "$NIGHTLY_KEYSTORE_B64" | base64 --decode > android/nightly.jks
+          echo "$NIGHTLY_PROPERTIES_B64" | base64 --decode > android/key_nightly.properties
 
-      # Step 7: Push the APK to the fdroid-repo branch
+      # Step 6: Build the APK with nightly flavor and release mode
+      - name: Build APK
+        run: flutter build apk --flavor nightly --build-number=${{ github.run_number }} --release
+
+      # Step 7: Verify the APK is signed
+      - name: Verify sign
+        run: keytool -printcert -jarfile build/app/outputs/flutter-apk/app-nightly-release.apk
+
+      # Step 8: Configure git and push the APK to fdroid-repo branch
       - name: Configure and push to fdroid-repo
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git fetch origin fdroid-repo:fdroid-repo
           git checkout fdroid-repo
-          
-          mkdir -p repo
-          # Don't remove the old APK!
-          # Copy the new APK with a unique name
-          mv build/app/outputs/flutter-apk/app-release.apk repo/com.ccextractor.taskwarriorflutter_${{ github.run_number }}.apk
-          
+          mv build/app/outputs/flutter-apk/app-nightly-release.apk repo/nightly.${{ github.run_number }}.apk
           git add repo/
-          git commit -m "chore: Add new APK from build ${{ github.run_number }}"
-          # You can push here, or wait until after the fdroid update
-          # git push origin fdroid-repo
+          git commit -m "chore: Add new signed APK from build ${{ github.run_number }}"
 
-      # Step 8: Setup f-droid and run update
-      - name: Setup F-Droid
-        uses: subosito/flutter-action@v1 # A common action, but you'll need to install fdroidserver
+      # Step 9: Prune old APKs, keeping only the 5 most recent
+      - name: Prune Old APKs
+        run: |
+          echo "Checking for old APKs to prune..."
+          if [ $(ls -1 repo/*.apk 2>/dev/null | wc -l) -gt 5 ]; then
+            echo "More than 5 APKs found. Deleting all but the 5 most recent..."
+            ls -1 repo/*.apk | sort -V | head -n -5 | xargs rm -f
+          else
+            echo "5 or fewer APKs found. No cleanup needed."
+          fi
+
+      # Step 10: Setup F-Droid (install fdroidserver) and update the repo
+      - name: Fdroid Install
+        uses: subosito/flutter-action@v1
       - name: Run F-Droid Update
         env:
           FDROID_CONFIG_YML_B64: ${{ secrets.FDROID_CONFIG_YML }}
@@ -74,9 +90,9 @@ jobs:
           # Run the update command, referencing the files
           fdroid update -c
 
-      # Step 9: Push the updated repo files
+      # Step 12: Push the updated repo files with amended commit
       - name: Push F-Droid updates
         run: |
           git add .
-          git commit -m "feat: F-Droid repo update n:${{ github.run_number }}"
-          git push origin fdroid-repo
+          git commit --amend -m "chore: Add new signed APK from build ${{ github.run_number }} and update F-Droid metadata"
+          git push origin fdroid-repo --force
