@@ -32,40 +32,28 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
 
-      # # Step 5: Analyze and test (uncomment if needed)
-      # - name: Analyze code
-      #   run: flutter analyze --no-fatal-warnings --no-fatal-infos
-      # # - name: Run tests
-      # #   run: flutter test
-
       # Step 6: Build APK
       - name: Build APK
-        run: |
-          flutter build apk --build-number=${{ github.run_number }} --release
-          mv build/app/outputs/flutter-apk/app-release.apk /home/runner/work/com.ccextractor.taskwarriorflutter.apk
-        # The `--flavor fdroid` is optional but a good practice for F-Droid builds.
-        # The mv command ensures a unique filename with the build number.
+        run: flutter build apk --build-number=${{ github.run_number }} --release
+        # No 'mv' command here yet
 
       # Step 7: Push the APK to the fdroid-repo branch
       - name: Configure and push to fdroid-repo
         run: |
-          # Configure Git credentials with the GITHUB_TOKEN
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-          # Checkout the fdroid-repo branch
           git fetch origin fdroid-repo:fdroid-repo
           git checkout fdroid-repo
-
-          # Create a directory if it doesn't exist and move the APK
+          
           mkdir -p repo
-          rm -f repo/com.ccextractor.taskwarriorflutter.apk || true
-          mv /home/runner/work/com.ccextractor.taskwarriorflutter.apk repo/
-
-          # Add, commit, and push the new APK file
+          # Don't remove the old APK!
+          # Copy the new APK with a unique name
+          mv build/app/outputs/flutter-apk/app-release.apk repo/com.ccextractor.taskwarriorflutter_${{ github.run_number }}.apk
+          
           git add repo/
           git commit -m "chore: Add new APK from build ${{ github.run_number }}"
-          git push origin fdroid-repo
+          # You can push here, or wait until after the fdroid update
+          # git push origin fdroid-repo
 
       # Step 8: Setup f-droid and run update
       - name: Setup F-Droid
