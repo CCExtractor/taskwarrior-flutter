@@ -37,10 +37,10 @@ jobs:
       # - run: flutter test
 
       # Step 8: Build APK using flutter build apk
-      - run: flutter build apk
+      - run: flutter build apk --release --flavor production
 
       # Step 9: Upload the built APK as an artifact
       - uses: actions/upload-artifact@v4
         with:
           name: release-apk
-          path: build/app/outputs/apk/release/app-release.apk
+          path: build/app/outputs/flutter-apk/app-production-release.apk

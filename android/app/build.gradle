@@ -26,13 +26,17 @@ def keystoreProperties = new Properties()
    def keystorePropertiesFile = rootProject.file('key.properties')
    if (keystorePropertiesFile.exists()) {
        keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-   }
+}
+
+def nightlyKeystoreProperties = new Properties()
+def nightlyKeystorePropertiesFile = rootProject.file('key_nightly.properties')
+if (nightlyKeystorePropertiesFile.exists()) {
+    nightlyKeystoreProperties.load(new FileInputStream(nightlyKeystorePropertiesFile))
+}
+
 android {
 	namespace "com.ccextractor.taskwarriorflutter"
     compileSdkVersion 35
-
-    // compileSdkVersion flutter.compileSdkVersion
-
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -47,29 +51,49 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
 
+    signingConfigs {
+        production {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+            storePassword keystoreProperties['storePassword']
+        }
+        nightly {
+            keyAlias nightlyKeystoreProperties['keyAlias']
+            keyPassword nightlyKeystoreProperties['keyPassword']
+            storeFile nightlyKeystoreProperties['storeFile'] ? file(nightlyKeystoreProperties['storeFile']) : null
+            storePassword nightlyKeystoreProperties['storePassword']
+        }
+    }
+
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.ccextractor.taskwarriorflutter"
-        //minSdkVersion flutter.minSdkVersion
-		minSdkVersion flutter.minSdkVersion
+        minSdkVersion flutter.minSdkVersion
         targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
 
-    signingConfigs {
-       release {
-           keyAlias keystoreProperties['keyAlias']
-           keyPassword keystoreProperties['keyPassword']
-           storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
-           storePassword keystoreProperties['storePassword']
-       }
-   }
-   buildTypes {
-       release {
-           signingConfig signingConfigs.debug
-       }
-   }
+    flavorDimensions "default"
+    productFlavors {
+        production {
+            dimension "default"
+            applicationId "com.ccextractor.taskwarrior"
+            signingConfig keystoreProperties.isEmpty() ? signingConfigs.debug : signingConfigs.production
+        }
+        nightly {
+            dimension "default"
+            applicationId "com.ccextractor.taskwarrior.nightly"
+            versionNameSuffix "-nightly"
+            signingConfig nightlyKeystoreProperties.isEmpty() ? signingConfigs.debug : signingConfigs.nightly
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            shrinkResources false
+        }
+    }
 }
 
 flutter {
@@ -77,5 +101,5 @@ flutter {
 }
 
 dependencies {
-    
 }
+
