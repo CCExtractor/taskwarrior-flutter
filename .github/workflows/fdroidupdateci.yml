@@ -1,0 +1,35 @@
+name: Nightly F-Droid CI
+
+on:
+  push:
+    branches:
+      - fdroid-repo
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Fdroid Install
+        uses: subosito/flutter-action@v1
+      - name: Run F-Droid Update
+        env:
+          FDROID_CONFIG_YML_B64: ${{ secrets.FDROID_CONFIG_YML }}
+          FDROID_KEYSTORE_P12_B64: ${{ secrets.FDROID_KEYSTORE_P12 }}
+        run: |
+          # Decode the secrets into files
+          echo $FDROID_CONFIG_YML_B64 | base64 --decode > config.yml
+          echo $FDROID_KEYSTORE_P12_B64 | base64 --decode > keystore.p12
+
+          # Install fdroidserver
+          sudo apt-get update
+          sudo apt-get install -y fdroidserver
+
+          # Run the update command, referencing the files
+          fdroid update -c
+
+      - name: Push F-Droid updates
+        run: |
+          git add .
+          git commit --amend -m "update: a repo update ${{ github.run_number }}"
+          git push origin fdroid-repo --force
