@@ -17,7 +17,6 @@ dependencies:
   crypto: ^3.0.1
   cupertino_icons: ^1.0.5
   date_format: ^2.0.6
-  double_back_to_close_app: ^2.1.0
   file_picker: ^9.0.2
   file_picker_writable:
     git:
