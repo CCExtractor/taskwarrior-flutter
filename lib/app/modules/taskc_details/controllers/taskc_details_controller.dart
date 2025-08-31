@@ -48,13 +48,13 @@ class TaskcDetailsController extends GetxController {
     status = task.status.obs;
     priority = (task.priority ?? '-').obs;
     due = formatDate(task.due).obs;
-    start = formatDate(task.start).obs;
-    wait = formatDate(task.wait).obs;
-    tags = (task.tags ?? []).obs;
-    depends = (task.depends ?? []).obs;
-    rtype = (task.rtype ?? '-').obs;
-    recur = (task.recur ?? '-').obs;
-    annotations = (task.annotations ?? []).obs;
+    start = "".obs;
+    wait = "".obs;
+    tags = "".split(",").obs;
+    depends = "".split(",").obs;
+    rtype = "".obs;
+    recur = "".obs;
+    annotations = <Annotation>[].obs;
   }
 
   String formatDate(String? dateString) {
@@ -86,30 +86,30 @@ class TaskcDetailsController extends GetxController {
   }
 
   Future<void> saveTask() async {
-    final updatedTask = TaskForC(
-      id: initialTask.id,
-      description: description.value,
-      project: project.value == '-' ? null : project.value,
-      status: status.value,
-      uuid: initialTask.uuid,
-      urgency: initialTask.urgency, // Urgency is typically calculated
-      priority: priority.value == '-' ? null : priority.value,
-      due: due.value == '-' ? null : due.value,
-      start: start.value == '-' ? null : start.value,
-      end: initialTask.end, // 'end' is usually set when completed
-      entry: initialTask.entry, // 'entry' is static
-      wait: wait.value == '-' ? null : wait.value,
-      modified: DateFormat('yyyy-MM-dd HH:mm:ss')
-          .format(DateTime.now()), // Update modified time
-      tags: tags.isEmpty ? null : tags.toList(),
-      depends: depends.isEmpty ? null : depends.toList(),
-      rtype: rtype.value == '-' ? null : rtype.value,
-      recur: recur.value == '-' ? null : recur.value,
-      annotations: annotations.isEmpty ? null : annotations.toList(),
+    if (tags.length == 1 && tags[0] == "") {
+      tags.clear();
+    }
+    await taskDatabase.saveEditedTaskInDB(
+      initialTask.uuid!,
+      description.string,
+      project.string,
+      status.string,
+      priority.string,
+      due.string,
+      tags.toList(),
     );
-    await TaskDatabase().updateTask(updatedTask);
     hasChanges.value = false;
-    await modifyTaskOnTaskwarrior(updatedTask);
+    debugPrint('Task saved in local DB ${description.string}');
+    await modifyTaskOnTaskwarrior(
+      description.string,
+      project.string,
+      due.string,
+      priority.string,
+      status.string,
+      initialTask.uuid!,
+      initialTask.id.toString(),
+      tags.toList(),
+    );
   }
 
   Future<bool> handleWillPop() async {

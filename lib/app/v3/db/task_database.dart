@@ -10,35 +10,49 @@ class TaskDatabase {
     var databasesPath = await getDatabasesPath();
     String path = join(databasesPath, 'tasks.db');
 
-    _database = await openDatabase(path,
-        version: 1,
-        onOpen: (db) async => await addTagsColumnIfNeeded(db),
+    _database = await openDatabase(path, version: 3,
         onCreate: (Database db, version) async {
-          await db.execute('''
-        CREATE TABLE Tasks (
-          uuid TEXT PRIMARY KEY,
-          id INTEGER,
-          description TEXT,
-          project TEXT,
-          status TEXT,
-          urgency REAL,
-          priority TEXT,
-          due TEXT,
-          end TEXT,
-          entry TEXT,
-          modified TEXT
-        )
-      ''');
-        });
-  }
-
-  Future<void> addTagsColumnIfNeeded(Database db) async {
-    try {
-      await db.rawQuery("SELECT tags FROM Tasks LIMIT 0");
-    } catch (e) {
-      await db.execute("ALTER TABLE Tasks ADD COLUMN tags TEXT");
-      debugPrint("Added Column tags");
-    }
+      await db.execute('''
+            CREATE TABLE Tasks (
+              uuid TEXT PRIMARY KEY,
+              id INTEGER,
+              description TEXT,
+              project TEXT,
+              status TEXT,
+              urgency REAL,
+              priority TEXT,
+              due TEXT,
+              end TEXT,
+              entry TEXT,
+              modified TEXT
+            )
+          ''');
+      await db.execute('''
+            CREATE TABLE Tags (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              name TEXT NOT NULL,
+              task_uuid TEXT NOT NULL,
+              task_id INTEGER NOT NULL,
+              FOREIGN KEY (task_uuid, task_id) 
+                REFERENCES Tasks (uuid, id) 
+                ON DELETE CASCADE
+                ON UPDATE CASCADE 
+            )
+          ''');
+      await db.execute('''
+            CREATE TABLE Annotations (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              entry TEXT NOT NULL,
+              description TEXT NOT NULL,
+              task_uuid TEXT NOT NULL,
+              task_id INTEGER NOT NULL,
+              FOREIGN KEY (task_uuid, task_id) 
+                REFERENCES Tasks (uuid, id) 
+                ON DELETE CASCADE
+                ON UPDATE CASCADE 
+            )
+          ''');
+    });
   }
 
   Future<void> ensureDatabaseIsOpen() async {
@@ -51,34 +65,23 @@ class TaskDatabase {
     await ensureDatabaseIsOpen();
 
     final List<Map<String, dynamic>> maps = await _database!.query('Tasks');
+    List<TaskForC> a = await Future.wait(
+      maps.map((mapItem) => getObjectForTask(mapItem)).toList(),
+    );
     debugPrint("Database fetch ${maps.last}");
-    var a = List.generate(maps.length, (i) {
-      return TaskForC(
-          id: maps[i]['id'],
-          description: maps[i]['description'],
-          project: maps[i]['project'],
-          status: maps[i]['status'],
-          uuid: maps[i]['uuid'],
-          urgency: maps[i]['urgency'],
-          priority: maps[i]['priority'],
-          due: maps[i]['due'],
-          end: maps[i]['end'],
-          entry: maps[i]['entry'],
-          modified: maps[i]['modified'],
-          tags: maps[i]['tags'] != null ? maps[i]['tags'].split(' ') : []);
-    });
-    // debugPrint('Tasks from db');
-    // debugPrint(a.toString());
+    for (int i = 0; i < maps.length; i++) {
+      debugPrint("Database fetch ${maps[i]}");
+    }
+    debugPrint('Tasks from db');
+    debugPrint(a.toString());
     return a;
   }
 
   Future<void> deleteAllTasksInDB() async {
     await ensureDatabaseIsOpen();
-
-    await _database!.delete('Tasks');
-    debugPrint('Deleted all tasks');
-    await open();
-    debugPrint('Created new task table');
+    await _database!.delete(
+      'Tasks',
+    );
   }
 
   Future<void> printDatabaseContents() async {
@@ -95,23 +98,34 @@ class TaskDatabase {
   Future<void> insertTask(TaskForC task) async {
     await ensureDatabaseIsOpen();
     debugPrint("Database Insert");
+    List<String> taskTags = task.tags?.map((e) => e.toString()).toList() ?? [];
+    debugPrint("Database Insert $taskTags");
+    var map = task.toJson();
+    map.remove("tags");
     var dbi = await _database!.insert(
       'Tasks',
-      task.toDbJson(),
+      map,
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
-    debugPrint("Database Insert ${task.toDbJson()} $dbi");
+    if (taskTags.isNotEmpty) {
+      await setTagsForTask(task.uuid ?? '', dbi, taskTags.toList());
+    }
   }
 
   Future<void> updateTask(TaskForC task) async {
     await ensureDatabaseIsOpen();
-
+    List<String> taskTags = task.tags?.map((e) => e.toString()).toList() ?? [];
+    var map = task.toJson();
+    map.remove("tags");
     await _database!.update(
       'Tasks',
-      task.toDbJson(),
+      map,
       where: 'uuid = ?',
       whereArgs: [task.uuid],
     );
+    if (taskTags.isNotEmpty) {
+      await setTagsForTask(task.uuid ?? "", task.id, taskTags.toList());
+    }
   }
 
   Future<TaskForC?> getTaskByUuid(String uuid) async {
@@ -124,7 +138,7 @@ class TaskDatabase {
     );
 
     if (maps.isNotEmpty) {
-      return TaskForC.fromDbJson(maps.first);
+      return getObjectForTask(maps.first);
     } else {
       return null;
     }
@@ -162,10 +176,11 @@ class TaskDatabase {
     String newStatus,
     String newPriority,
     String newDue,
+    List<String> newTags,
   ) async {
     await ensureDatabaseIsOpen();
 
-    debugPrint('task${uuid}deleted');
+    debugPrint('task in saveEditedTaskInDB: $uuid');
     await _database!.update(
       'Tasks',
       {
@@ -174,6 +189,7 @@ class TaskDatabase {
         'status': newStatus,
         'priority': newPriority,
         'due': newDue,
+        'modified': DateTime.now().toIso8601String(),
       },
       where: 'uuid = ?',
       whereArgs: [uuid],
@@ -190,9 +206,9 @@ class TaskDatabase {
       whereArgs: [''],
     );
 
-    return List.generate(maps.length, (i) {
-      return TaskForC.fromDbJson(maps[i]);
-    });
+    return await Future.wait(
+      maps.map((mapItem) => getObjectForTask(mapItem)).toList(),
+    );
   }
 
   Future<List<TaskForC>> getTasksByProject(String project) async {
@@ -237,9 +253,9 @@ class TaskDatabase {
       where: 'description LIKE ? OR project LIKE ?',
       whereArgs: ['%$query%', '%$query%'],
     );
-    return List.generate(maps.length, (i) {
-      return TaskForC.fromDbJson(maps[i]);
-    });
+    return await Future.wait(
+      maps.map((mapItem) => getObjectForTask(mapItem)).toList(),
+    );
   }
 
   Future<void> close() async {
@@ -252,5 +268,62 @@ class TaskDatabase {
       where: 'description = ? AND due = ? AND project = ? AND priority = ?',
       whereArgs: [description, due, project, priority],
     );
+  }
+
+// Get tags using a composite key
+  Future<List<String>> getTagsForTask(String uuid, int id) async {
+    ensureDatabaseIsOpen();
+    final db = _database;
+    if (db == null) {
+      return <String>[];
+    }
+    final List<Map<String, dynamic>> maps = await db.query(
+      'Tags',
+      columns: ['name'],
+      where: 'task_uuid = ? AND task_id = ?',
+      whereArgs: [uuid, id],
+    );
+    return List.generate(maps.length, (i) {
+      return maps[i]['name'] as String;
+    });
+  }
+
+  // Set tags using a composite key
+  Future<void> setTagsForTask(String uuid, int id, List<String> tags) async {
+    try {
+      ensureDatabaseIsOpen();
+      final db = _database;
+      if (db == null) {
+        return;
+      }
+      await db.transaction((txn) async {
+        // Delete existing tags for the task
+        await txn.delete(
+          'Tags',
+          where: 'task_uuid = ? AND task_id = ?',
+          whereArgs: [uuid, id],
+        );
+        // Insert new tags
+        for (String tag in tags) {
+          if (tag.trim().isNotEmpty) {
+            await txn.insert(
+              'Tags',
+              {'name': tag, 'task_uuid': uuid, 'task_id': id},
+            );
+          }
+        }
+      });
+    } catch (e) {
+      debugPrint('Error setting tags for task $uuid: $e');
+    }
+  }
+
+  // Assemble TaskForC object
+  Future<TaskForC> getObjectForTask(Map<String, dynamic> map) async {
+    final mutableMap = Map<String, dynamic>.from(map);
+    mutableMap['tags'] =
+        await getTagsForTask(mutableMap['uuid'], mutableMap['id']);
+    TaskForC task = TaskForC.fromJson(mutableMap);
+    return task;
   }
 }

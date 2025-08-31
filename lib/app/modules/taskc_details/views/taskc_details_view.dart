@@ -86,13 +86,6 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
                 ),
                 _buildEditableDetail(
                   context,
-                  'Depends:',
-                  controller.depends.join(', '),
-                  (value) =>
-                      controller.updateListField(controller.depends, value),
-                ),
-                _buildEditableDetail(
-                  context,
                   'Rtype:',
                   controller.rtype.value,
                   (value) => controller.updateField(controller.rtype, value),
@@ -124,15 +117,6 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
                   context,
                   '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageModified}:',
                   controller.formatDate(controller.initialTask.modified),
-                ),
-                _buildDetail(
-                  context,
-                  '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences}:',
-                  controller.annotations.isNotEmpty
-                      ? controller.annotations
-                          .map((e) => e.description)
-                          .join('\n')
-                      : '-',
                 ),
               ],
             ),

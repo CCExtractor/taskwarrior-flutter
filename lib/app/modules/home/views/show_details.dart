@@ -432,6 +432,7 @@ class _TaskDetailsState extends State<TaskDetails> {
       priority,
       status,
       widget.task.uuid!,
+      widget.task.id.toString(),
     );
   }
 }
