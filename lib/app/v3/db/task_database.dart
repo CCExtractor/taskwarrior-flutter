@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:taskwarrior/app/v3/models/annotation.dart';
 import 'package:taskwarrior/app/v3/models/task.dart';
 
 class TaskDatabase {
@@ -10,7 +11,7 @@ class TaskDatabase {
     var databasesPath = await getDatabasesPath();
     String path = join(databasesPath, 'tasks.db');
 
-    _database = await openDatabase(path, version: 3,
+    _database = await openDatabase(path, version: 2,
         onCreate: (Database db, version) async {
       await db.execute('''
             CREATE TABLE Tasks (
@@ -24,7 +25,11 @@ class TaskDatabase {
               due TEXT,
               end TEXT,
               entry TEXT,
-              modified TEXT
+              modified TEXT,
+              start TEXT,
+              wait TEXT,
+              rtype TEXT,
+              recur TEXT
             )
           ''');
       await db.execute('''
@@ -52,7 +57,20 @@ class TaskDatabase {
                 ON UPDATE CASCADE 
             )
           ''');
+      await db.execute('''
+            CREATE TABLE Depends (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              d_uuid TEXT NOT NULL,
+              task_uuid TEXT NOT NULL,
+              task_id INTEGER NOT NULL,
+              FOREIGN KEY (task_uuid, task_id) 
+                REFERENCES Tasks (uuid, id) 
+                ON DELETE CASCADE
+                ON UPDATE CASCADE 
+            )
+          ''');
     });
+    debugPrint("Database opened at $path");
   }
 
   Future<void> ensureDatabaseIsOpen() async {
@@ -100,8 +118,18 @@ class TaskDatabase {
     debugPrint("Database Insert");
     List<String> taskTags = task.tags?.map((e) => e.toString()).toList() ?? [];
     debugPrint("Database Insert $taskTags");
+    List<String> taskDepends =
+        task.tags?.map((e) => e.toString()).toList() ?? [];
+    debugPrint("Database Insert $taskDepends");
+    List<Map<String, String?>> taskAnnotations = task.annotations != null
+        ? task.annotations!
+            .map((a) => {"entry": a.entry, "description": a.description})
+            .toList()
+        : [];
     var map = task.toJson();
     map.remove("tags");
+    map.remove("depends");
+    map.remove("annotations");
     var dbi = await _database!.insert(
       'Tasks',
       map,
@@ -110,13 +138,32 @@ class TaskDatabase {
     if (taskTags.isNotEmpty) {
       await setTagsForTask(task.uuid ?? '', dbi, taskTags.toList());
     }
+    if (taskDepends.isNotEmpty) {
+      await setDependsForTask(task.uuid ?? '', dbi, taskDepends.toList());
+    }
+    if (taskAnnotations.isNotEmpty) {
+      await setAnnotationsForTask(
+          task.uuid ?? '', dbi, taskAnnotations.toList());
+    }
   }
 
   Future<void> updateTask(TaskForC task) async {
     await ensureDatabaseIsOpen();
+    debugPrint("Database Insert");
     List<String> taskTags = task.tags?.map((e) => e.toString()).toList() ?? [];
+    debugPrint("Database Insert $taskTags");
+    List<String> taskDepends =
+        task.tags?.map((e) => e.toString()).toList() ?? [];
+    debugPrint("Database Insert $taskDepends");
+    List<Map<String, String?>> taskAnnotations = task.annotations != null
+        ? task.annotations!
+            .map((a) => {"entry": a.entry, "description": a.description})
+            .toList()
+        : [];
     var map = task.toJson();
     map.remove("tags");
+    map.remove("depends");
+    map.remove("annotations");
     await _database!.update(
       'Tasks',
       map,
@@ -124,7 +171,14 @@ class TaskDatabase {
       whereArgs: [task.uuid],
     );
     if (taskTags.isNotEmpty) {
-      await setTagsForTask(task.uuid ?? "", task.id, taskTags.toList());
+      await setTagsForTask(task.uuid ?? '', task.id, taskTags.toList());
+    }
+    if (taskDepends.isNotEmpty) {
+      await setDependsForTask(task.uuid ?? '', task.id, taskDepends.toList());
+    }
+    if (taskAnnotations.isNotEmpty) {
+      await setAnnotationsForTask(
+          task.uuid ?? '', task.id, taskAnnotations.toList());
     }
   }
 
@@ -218,21 +272,9 @@ class TaskDatabase {
       whereArgs: [project],
     );
     debugPrint("DB Stored for $maps");
-    return List.generate(maps.length, (i) {
-      return TaskForC(
-          uuid: maps[i]['uuid'],
-          id: maps[i]['id'],
-          description: maps[i]['description'],
-          project: maps[i]['project'],
-          status: maps[i]['status'],
-          urgency: maps[i]['urgency'],
-          priority: maps[i]['priority'],
-          due: maps[i]['due'],
-          end: maps[i]['end'],
-          entry: maps[i]['entry'],
-          modified: maps[i]['modified'],
-          tags: maps[i]['tags'].toString().split(' '));
-    });
+    return await Future.wait(
+      maps.map((mapItem) => getObjectForTask(mapItem)).toList(),
+    );
   }
 
   Future<List<String>> fetchUniqueProjects() async {
@@ -318,11 +360,117 @@ class TaskDatabase {
     }
   }
 
+  // depends methods
+  Future<List<String>> getDependsForTask(String uuid, int id) async {
+    ensureDatabaseIsOpen();
+    final db = _database;
+    if (db == null) {
+      return <String>[];
+    }
+    final List<Map<String, dynamic>> maps = await db.query(
+      'Depends',
+      columns: ['d_uuid'],
+      where: 'task_uuid = ? AND task_id = ?',
+      whereArgs: [uuid, id],
+    );
+    return List.generate(maps.length, (i) {
+      return maps[i]['d_uuid'] as String;
+    });
+  }
+
+  Future<void> setDependsForTask(
+      String uuid, int id, List<String> depends) async {
+    try {
+      ensureDatabaseIsOpen();
+      final db = _database;
+      if (db == null) {
+        return;
+      }
+      await db.transaction((txn) async {
+        await txn.delete(
+          'Depends',
+          where: 'task_uuid = ? AND task_id = ?',
+          whereArgs: [uuid, id],
+        );
+        for (String dUuid in depends) {
+          if (dUuid.trim().isNotEmpty) {
+            await txn.insert(
+              'Depends',
+              {'d_uuid': dUuid, 'task_uuid': uuid, 'task_id': id},
+            );
+          }
+        }
+      });
+    } catch (e) {
+      debugPrint('Error setting depends for task $uuid: $e');
+    }
+  }
+
+  // annotations methods
+  Future<List<Map<String, String>>> getAnnotationsForTask(
+      String uuid, int id) async {
+    ensureDatabaseIsOpen();
+    final db = _database;
+    if (db == null) {
+      return <Map<String, String>>[];
+    }
+    final List<Map<String, dynamic>> maps = await db.query(
+      'Annotations',
+      columns: ['entry', 'description'],
+      where: 'task_uuid = ? AND task_id = ?',
+      whereArgs: [uuid, id],
+    );
+    return List.generate(maps.length, (i) {
+      return {
+        'entry': maps[i]['entry'] as String,
+        'description': maps[i]['description'] as String,
+      };
+    });
+  }
+
+  Future<void> setAnnotationsForTask(
+      String uuid, int id, List<Map<String, String?>> annotations) async {
+    try {
+      ensureDatabaseIsOpen();
+      final db = _database;
+      if (db == null) {
+        return;
+      }
+      await db.transaction((txn) async {
+        await txn.delete(
+          'Annotations',
+          where: 'task_uuid = ? AND task_id = ?',
+          whereArgs: [uuid, id],
+        );
+        for (Map<String, String?> annotation in annotations) {
+          if (annotation['entry'] != null &&
+              annotation['description'] != null) {
+            await txn.insert(
+              'Annotations',
+              {
+                'entry': annotation['entry'],
+                'description': annotation['description'],
+                'task_uuid': uuid,
+                'task_id': id
+              },
+            );
+          }
+        }
+      });
+    } catch (e) {
+      debugPrint('Error setting annotations for task $uuid: $e');
+    }
+  }
+
   // Assemble TaskForC object
   Future<TaskForC> getObjectForTask(Map<String, dynamic> map) async {
     final mutableMap = Map<String, dynamic>.from(map);
     mutableMap['tags'] =
         await getTagsForTask(mutableMap['uuid'], mutableMap['id']);
+    mutableMap['depends'] =
+        await getDependsForTask(mutableMap['uuid'], mutableMap['id']);
+    mutableMap['annotations'] =
+        await getAnnotationsForTask(mutableMap['uuid'], mutableMap['id']);
     TaskForC task = TaskForC.fromJson(mutableMap);
     return task;
   }

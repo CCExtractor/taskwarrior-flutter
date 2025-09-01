@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import "./annotation.dart";
 
 class TaskForC {
   final int id;
@@ -13,6 +14,13 @@ class TaskForC {
   final String entry;
   final String? modified;
   final List<dynamic>? tags;
+  // newer feilds in CCSync Model
+  final String? start;
+  final String? wait;
+  final String? rtype;
+  final String? recur;
+  final List<String>? depends;
+  final List<Annotation>? annotations;
 
   TaskForC({
     required this.id,
@@ -27,23 +35,35 @@ class TaskForC {
     required this.entry,
     required this.modified,
     required this.tags,
+    required this.start,
+    required this.wait,
+    required this.rtype,
+    required this.recur,
+    required this.depends,
+    required this.annotations,
   });
 
   factory TaskForC.fromJson(Map<String, dynamic> json) {
+    debugPrint("Annotation fromJson: ${json['annotations'] == null}");
     return TaskForC(
-      id: json['id'],
-      description: json['description'],
-      project: json['project'],
-      status: json['status'],
-      uuid: json['uuid'],
-      urgency: json['urgency'].toDouble(),
-      priority: json['priority'],
-      due: json['due'],
-      end: json['end'],
-      entry: json['entry'],
-      modified: json['modified'],
-      tags: json['tags'],
-    );
+        id: json['id'],
+        description: json['description'],
+        project: json['project'],
+        status: json['status'],
+        uuid: json['uuid'],
+        urgency: json['urgency'].toDouble(),
+        priority: json['priority'],
+        due: json['due'],
+        end: json['end'],
+        entry: json['entry'],
+        modified: json['modified'],
+        tags: json['tags'],
+        start: json['start'],
+        wait: json['wait'],
+        rtype: json['rtype'],
+        recur: json['recur'],
+        depends: json['depends'],
+        annotations: <Annotation>[]);
   }
 
   Map<String, dynamic> toJson() {
@@ -61,6 +81,14 @@ class TaskForC {
       'entry': entry,
       'modified': modified,
       'tags': tags,
+      'start': start,
+      'wait': wait,
+      'rtype': rtype,
+      'recur': recur,
+      'depends': depends,
+      'annotations': annotations != null
+          ? annotations?.map((a) => a.toJson()).toList()
+          : <Map<String, dynamic>>[],
     };
   }
 }

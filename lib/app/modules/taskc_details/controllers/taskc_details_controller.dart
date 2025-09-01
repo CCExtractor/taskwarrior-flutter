@@ -32,6 +32,7 @@ class TaskcDetailsController extends GetxController {
   late RxString rtype;
   late RxString recur;
   late RxList<Annotation> annotations;
+  late RxList<String> previousTags = <String>[].obs;
 
   @override
   void onInit() {
@@ -50,7 +51,10 @@ class TaskcDetailsController extends GetxController {
     due = formatDate(task.due).obs;
     start = "".obs;
     wait = "".obs;
-    tags = "".split(",").obs;
+    tags = initialTask.tags != null
+        ? initialTask.tags!.map((e) => e.toString()).toList().obs
+        : <String>[].obs;
+    previousTags = tags.toList().obs;
     depends = "".split(",").obs;
     rtype = "".obs;
     recur = "".obs;
@@ -85,6 +89,12 @@ class TaskcDetailsController extends GetxController {
     }
   }
 
+  void processTagsLists() {
+    final itemsToMove = previousTags.toSet().difference(tags.toSet());
+    tags.addAll(itemsToMove.map((item) => '-$item'));
+    previousTags.removeWhere((item) => itemsToMove.contains(item));
+  }
+
   Future<void> saveTask() async {
     if (tags.length == 1 && tags[0] == "") {
       tags.clear();
@@ -100,6 +110,7 @@ class TaskcDetailsController extends GetxController {
     );
     hasChanges.value = false;
     debugPrint('Task saved in local DB ${description.string}');
+    processTagsLists();
     await modifyTaskOnTaskwarrior(
       description.string,
       project.string,

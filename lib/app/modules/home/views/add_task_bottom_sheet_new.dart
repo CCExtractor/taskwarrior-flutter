@@ -321,7 +321,13 @@ class AddTaskBottomSheet extends StatelessWidget {
           due: getDueDate(homeController.selectedDates).toString(),
           end: '',
           modified: 'r',
-          tags: homeController.tags);
+          tags: homeController.tags,
+          start: '',
+          wait: '',
+          rtype: '',
+          recur: '',
+          depends: [],
+          annotations: []);
       await homeController.taskdb.insertTask(task);
       homeController.namecontroller.text = '';
       homeController.due.value = null;

@@ -66,17 +66,15 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
                   controller.due.value,
                   () => controller.pickDateTime(controller.due),
                 ),
-                _buildDatePickerDetail(
+                _buildDetail(
                   context,
                   '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageStart}:',
                   controller.start.value,
-                  () => controller.pickDateTime(controller.start),
                 ),
-                _buildDatePickerDetail(
+                _buildDetail(
                   context,
                   '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageWait}:',
                   controller.wait.value,
-                  () => controller.pickDateTime(controller.wait),
                 ),
                 _buildEditableDetail(
                   context,
@@ -84,17 +82,15 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
                   controller.tags.join(', '),
                   (value) => controller.updateListField(controller.tags, value),
                 ),
-                _buildEditableDetail(
+                _buildDetail(
                   context,
                   'Rtype:',
                   controller.rtype.value,
-                  (value) => controller.updateField(controller.rtype, value),
                 ),
-                _buildEditableDetail(
+                _buildDetail(
                   context,
                   'Recur:',
                   controller.recur.value,
-                  (value) => controller.updateField(controller.recur, value),
                 ),
                 _buildDetail(
                     context, 'UUID:', controller.initialTask.uuid ?? '-'),
