@@ -72,7 +72,13 @@ void main() {
           end: null,
           entry: '2024-01-01',
           modified: '2024-11-01',
-          tags: ['t1']);
+          tags: ['t1'],
+          start: '',
+          wait: '',
+          rtype: '',
+          recur: '',
+          depends: [],
+          annotations: []);
 
       final json = task.toJson();
 
@@ -129,10 +135,16 @@ void main() {
           urgency: 5.0,
           priority: 'H',
           due: '2024-12-31',
-          end: null,
+          end: '',
           entry: '2024-01-01',
           modified: '2024-11-01',
-          tags: ['t1']);
+          tags: ['t1'],
+          start: '',
+          wait: '',
+          rtype: '',
+          recur: '',
+          depends: [],
+          annotations: []);
 
       await taskDatabase.insertTask(task);
 
@@ -155,7 +167,13 @@ void main() {
           end: null,
           entry: '2024-01-01',
           modified: '2024-11-01',
-          tags: ['t1']);
+          tags: ['t1'],
+          start: '',
+          wait: '',
+          rtype: '',
+          recur: '',
+          depends: [],
+          annotations: []);
 
       await taskDatabase.insertTask(task);
       await taskDatabase.deleteAllTasksInDB();
