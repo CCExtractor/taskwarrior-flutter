@@ -15,6 +15,8 @@ Future<List<TaskForC>> fetchTasks(String uuid, String encryptionSecret) async {
     var response = await http.get(Uri.parse(url), headers: {
       "Content-Type": "application/json",
     }).timeout(const Duration(seconds: 10000));
+    debugPrint("Fetch tasks response: ${response.statusCode}");
+    debugPrint("Fetch tasks body: ${response.body}");
     if (response.statusCode == 200) {
       List<dynamic> allTasks = jsonDecode(response.body);
       debugPrint(allTasks.toString());
@@ -22,8 +24,9 @@ Future<List<TaskForC>> fetchTasks(String uuid, String encryptionSecret) async {
     } else {
       throw Exception('Failed to load tasks');
     }
-  } catch (e) {
-    debugPrint('Error fetching tasks: $e');
+  } catch (e, s) {
+    debugPrint('Error fetching tasks: $e\n $s');
+
     return [];
   }
 }

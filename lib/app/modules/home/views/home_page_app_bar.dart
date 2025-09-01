@@ -157,6 +157,7 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
                                       .homePageFetchingTasks,
                                   false);
                             } catch (e) {
+                              debugPrint('Error refreshing tasks: $e');
                               ScaffoldMessenger.of(context)
                                   .hideCurrentSnackBar();
                               _showResultSnackBar(

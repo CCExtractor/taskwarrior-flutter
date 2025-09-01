@@ -5,15 +5,38 @@ import 'package:path/path.dart';
 import 'package:flutter/material.dart';
 import 'package:taskwarrior/app/utils/taskchampion/credentials_storage.dart';
 import 'package:taskwarrior/app/v3/db/task_database.dart';
-import 'package:taskwarrior/app/v3/models/task.dart';
 
-Future<void> modifyTaskOnTaskwarrior(TaskForC tskc) async {
+Future<void> modifyTaskOnTaskwarrior(
+    String description,
+    String project,
+    String due,
+    String priority,
+    String status,
+    String taskuuid,
+    String id,
+    List<String> newTags) async {
   var baseUrl = await CredentialsStorage.getApiUrl();
   var c = await CredentialsStorage.getClientId();
   var e = await CredentialsStorage.getEncryptionSecret();
   String apiUrl = '$baseUrl/modify-task';
   debugPrint(c);
   debugPrint(e);
+  debugPrint("modifyTaskOnTaskwarrior called");
+  debugPrint("description: $description project: $project due: $due "
+      "priority: $priority status: $status taskuuid: $taskuuid id: $id tags: $newTags"
+      "body: ${jsonEncode({
+        "email": "e",
+        "encryptionSecret": e,
+        "UUID": c,
+        "description": description,
+        "priority": priority,
+        "project": project,
+        "due": due,
+        "status": status,
+        "taskuuid": taskuuid,
+        "taskId": id,
+        "tags": newTags.isNotEmpty ? newTags : null
+      })}");
   final response = await http.post(
     Uri.parse(apiUrl),
     headers: {
@@ -23,28 +46,28 @@ Future<void> modifyTaskOnTaskwarrior(TaskForC tskc) async {
       "email": "e",
       "encryptionSecret": e,
       "UUID": c,
-      "description": tskc.description,
-      "priority": tskc.priority,
-      "project": tskc.project,
-      "due": tskc.due,
-      "status": tskc.status,
-      "taskuuid": tskc.uuid,
+      "description": description,
+      "priority": priority,
+      "project": project,
+      "due": due,
+      "status": status,
+      "taskuuid": taskuuid,
+      "taskId": id,
+      "tags": newTags.isNotEmpty ? newTags : null
     }),
   );
-
-  if (response.statusCode != 200) {
-    Get.snackbar(
-      'Error',
-      'Failed to modify task: ${response.reasonPhrase}',
-      snackPosition: SnackPosition.BOTTOM,
-    );
+  debugPrint('Modify task response body: ${response.body}');
+  if (response.statusCode < 200 || response.statusCode >= 300) {
+    Get.showSnackbar(GetSnackBar(
+      title: 'Error',
+      message:
+          'Failed to modify task on Taskwarrior server. ${response.statusCode}',
+      duration: Duration(seconds: 3),
+    ));
   }
 
   var taskDatabase = TaskDatabase();
   await taskDatabase.open();
   await taskDatabase.deleteTask(
-      description: tskc.description,
-      due: tskc.due,
-      project: tskc.project,
-      priority: tskc.priority);
+      description: description, due: due, project: project, priority: priority);
 }
