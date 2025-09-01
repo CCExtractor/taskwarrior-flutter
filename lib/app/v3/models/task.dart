@@ -13,7 +13,7 @@ class TaskForC {
   final String? end;
   final String entry;
   final String? modified;
-  final List<dynamic>? tags;
+  final List<String>? tags;
   // newer feilds in CCSync Model
   final String? start;
   final String? wait;
@@ -57,12 +57,13 @@ class TaskForC {
         end: json['end'],
         entry: json['entry'],
         modified: json['modified'],
-        tags: json['tags'],
+        tags: json['tags']?.map<String>((tag) => tag.toString()).toList() ?? [],
         start: json['start'],
         wait: json['wait'],
         rtype: json['rtype'],
         recur: json['recur'],
-        depends: json['depends'],
+        depends:
+            json['depends']?.map<String>((d) => d.toString()).toList() ?? [],
         annotations: <Annotation>[]);
   }
 

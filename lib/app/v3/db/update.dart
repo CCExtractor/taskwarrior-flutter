@@ -8,6 +8,8 @@ import 'package:taskwarrior/app/v3/net/modify.dart';
 import 'package:timezone/timezone.dart';
 
 Future<void> updateTasksInDatabase(List<TaskForC> tasks) async {
+  debugPrint(
+      "Updating tasks in database... Total tasks from server: ${tasks.length}");
   var taskDatabase = TaskDatabase();
   await taskDatabase.open();
   // find tasks without UUID
@@ -49,6 +51,8 @@ Future<void> updateTasksInDatabase(List<TaskForC> tasks) async {
 
     if (localTask == null) {
       // Task doesn't exist in the local database, insert it
+      debugPrint(
+          'Inserting new task from server: ${serverTask.description}, modified: ${serverTask.modified}');
       await taskDatabase.insertTask(serverTask);
     } else {
       var serverTaskModifiedDate = DateTime.parse(serverTask.modified!);

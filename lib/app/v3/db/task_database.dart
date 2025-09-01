@@ -115,35 +115,34 @@ class TaskDatabase {
 
   Future<void> insertTask(TaskForC task) async {
     await ensureDatabaseIsOpen();
-    debugPrint("Database Insert");
-    List<String> taskTags = task.tags?.map((e) => e.toString()).toList() ?? [];
-    debugPrint("Database Insert $taskTags");
-    List<String> taskDepends =
-        task.tags?.map((e) => e.toString()).toList() ?? [];
-    debugPrint("Database Insert $taskDepends");
+    List<String> taskTags = task.tags ?? [];
+    List<String> taskDepends = task.depends ?? [];
     List<Map<String, String?>> taskAnnotations = task.annotations != null
         ? task.annotations!
             .map((a) => {"entry": a.entry, "description": a.description})
             .toList()
         : [];
+    debugPrint(
+        "Database insert ${task.description} for task tags are $taskTags");
     var map = task.toJson();
     map.remove("tags");
     map.remove("depends");
     map.remove("annotations");
-    var dbi = await _database!.insert(
+    await _database!.insert(
       'Tasks',
       map,
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
     if (taskTags.isNotEmpty) {
-      await setTagsForTask(task.uuid ?? '', dbi, taskTags.toList());
+      // Use the ID from the task object itself for consistency
+      await setTagsForTask(task.uuid ?? '', task.id, taskTags.toList());
     }
     if (taskDepends.isNotEmpty) {
-      await setDependsForTask(task.uuid ?? '', dbi, taskDepends.toList());
+      await setDependsForTask(task.uuid ?? '', task.id, taskDepends.toList());
     }
     if (taskAnnotations.isNotEmpty) {
       await setAnnotationsForTask(
-          task.uuid ?? '', dbi, taskAnnotations.toList());
+          task.uuid ?? '', task.id, taskAnnotations.toList());
     }
   }
 
