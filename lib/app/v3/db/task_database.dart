@@ -233,7 +233,7 @@ class TaskDatabase {
   ) async {
     await ensureDatabaseIsOpen();
 
-    debugPrint('task in saveEditedTaskInDB: $uuid');
+    debugPrint('task in saveEditedTaskInDB: $uuid with due $newDue');
     await _database!.update(
       'Tasks',
       {

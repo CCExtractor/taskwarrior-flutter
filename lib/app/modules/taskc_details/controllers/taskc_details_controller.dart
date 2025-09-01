@@ -105,7 +105,7 @@ class TaskcDetailsController extends GetxController {
       project.string,
       status.string,
       priority.string,
-      due.string,
+      DateTime.parse(due.string).toIso8601String(),
       tags.toList(),
     );
     hasChanges.value = false;
@@ -114,7 +114,7 @@ class TaskcDetailsController extends GetxController {
     await modifyTaskOnTaskwarrior(
       description.string,
       project.string,
-      due.string,
+      DateTime.parse(due.string).toIso8601String(),
       priority.string,
       status.string,
       initialTask.uuid!,

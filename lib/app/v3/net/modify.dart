@@ -18,7 +18,7 @@ Future<void> modifyTaskOnTaskwarrior(
   var baseUrl = await CredentialsStorage.getApiUrl();
   var c = await CredentialsStorage.getClientId();
   var e = await CredentialsStorage.getEncryptionSecret();
-  String apiUrl = '$baseUrl/edit-task';
+  String apiUrl = '$baseUrl/modify-task';
   debugPrint(c);
   debugPrint(e);
   debugPrint("modifyTaskOnTaskwarrior called");
