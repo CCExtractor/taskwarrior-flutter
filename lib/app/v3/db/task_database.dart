@@ -149,12 +149,12 @@ class TaskDatabase {
 
   Future<void> updateTask(TaskForC task) async {
     await ensureDatabaseIsOpen();
-    debugPrint("Database Insert");
+    debugPrint("Database update");
     List<String> taskTags = task.tags?.map((e) => e.toString()).toList() ?? [];
-    debugPrint("Database Insert $taskTags");
+    debugPrint("Database update $taskTags");
     List<String> taskDepends =
         task.tags?.map((e) => e.toString()).toList() ?? [];
-    debugPrint("Database Insert $taskDepends");
+    debugPrint("Database update $taskDepends");
     List<Map<String, String?>> taskAnnotations = task.annotations != null
         ? task.annotations!
             .map((a) => {"entry": a.entry, "description": a.description})
@@ -192,7 +192,7 @@ class TaskDatabase {
     );
 
     if (maps.isNotEmpty) {
-      return getObjectForTask(maps.first);
+      return await getObjectForTask(maps.first);
     } else {
       return null;
     }
@@ -249,6 +249,10 @@ class TaskDatabase {
       whereArgs: [uuid],
     );
     debugPrint('task${uuid}edited');
+    if (newTags.isNotEmpty) {
+      TaskForC? task = await getTaskByUuid(uuid);
+      await setTagsForTask(uuid, task?.id ?? 0, newTags.toList());
+    }
   }
 
   Future<List<TaskForC>> findTasksWithoutUUIDs() async {
@@ -332,6 +336,7 @@ class TaskDatabase {
 
   // Set tags using a composite key
   Future<void> setTagsForTask(String uuid, int id, List<String> tags) async {
+    debugPrint('Setting tags for task $uuid: $tags');
     try {
       ensureDatabaseIsOpen();
       final db = _database;
