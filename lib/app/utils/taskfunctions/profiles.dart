@@ -109,6 +109,47 @@ class Profiles {
     return result;
   }
 
+  void setModeTo(String profile, String mode) {
+    File('${base.path}/profiles/$profile/mode').writeAsStringSync(mode);
+  }
+
+  String? getMode(String profile) {
+    String? result;
+    if (File('${base.path}/profiles/$profile/mode').existsSync()) {
+      var contents =
+          File('${base.path}/profiles/$profile/mode').readAsStringSync();
+      result = (contents.isEmpty) ? null : contents;
+    }
+    return result;
+  }
+
+  void setTaskcCreds(String profile, String clientId, String clientSecret) {
+    File('${base.path}/profiles/$profile/taskc_client_id')
+        .writeAsStringSync(clientId);
+    File('${base.path}/profiles/$profile/taskc_client_secret')
+        .writeAsStringSync(clientSecret);
+  }
+
+  Map<String, String?> getTaskcCreds(String profile) {
+    var result = <String, String?>{};
+    if (File('${base.path}/profiles/$profile/taskc_client_id').existsSync()) {
+      var contents = File('${base.path}/profiles/$profile/taskc_client_id')
+          .readAsStringSync();
+      result['client_id'] = (contents.isEmpty) ? null : contents;
+    } else {
+      result['client_id'] = null;
+    }
+    if (File('${base.path}/profiles/$profile/taskc_client_secret')
+        .existsSync()) {
+      var contents = File('${base.path}/profiles/$profile/taskc_client_secret')
+          .readAsStringSync();
+      result['client_secret'] = (contents.isEmpty) ? null : contents;
+    } else {
+      result['client_secret'] = null;
+    }
+    return result;
+  }
+
   void setCurrentProfile(String? profile) {
     File('${base.path}/current-profile').writeAsStringSync(profile ?? '');
   }

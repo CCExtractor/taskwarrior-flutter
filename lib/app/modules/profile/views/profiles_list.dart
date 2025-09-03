@@ -128,6 +128,20 @@ class ProfilesList extends StatelessWidget {
                       copy(profileId);
                     },
                   ),
+                  ListTile(
+                    leading: Icon(Icons.delete,
+                        color: AppSettings.isDarkMode
+                            ? TaskWarriorColors.kprimaryTextColor
+                            : TaskWarriorColors.kLightPrimaryTextColor),
+                    title: Text('Delete Profile',
+                        style: TextStyle(
+                            color: AppSettings.isDarkMode
+                                ? TaskWarriorColors.kprimaryTextColor
+                                : TaskWarriorColors.kLightPrimaryTextColor)),
+                    onTap: () {
+                      delete(profileId);
+                    },
+                  ),
                 ],
               ),
             );

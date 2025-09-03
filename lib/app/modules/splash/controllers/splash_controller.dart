@@ -85,6 +85,24 @@ class SplashController extends GetxController {
     currentProfile.value = _profiles.getCurrentProfile()!;
   }
 
+  void getMode(String profile) {
+    _profiles.getMode(profile);
+    profilesMap.value = _profiles.profilesMap();
+  }
+
+  void changeModeTo(String profile, String mode) {
+    _profiles.setModeTo(profile, mode);
+    profilesMap.value = _profiles.profilesMap();
+  }
+
+  Map<String, String?> getTaskcCreds(String profile) {
+    return _profiles.getTaskcCreds(profile);
+  }
+
+  void setTaskcCreds(String profile, String clientId, String clientSecret) {
+    _profiles.setTaskcCreds(profile, clientId, clientSecret);
+  }
+
   Storage getStorage(String profile) {
     return _profiles.getStorage(profile);
   }
