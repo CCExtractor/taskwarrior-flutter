@@ -60,6 +60,7 @@ abstract class Sentences {
   String get deleteTaskTitle;
   String get deleteTaskConfirmation;
   String get deleteTaskWarning;
+  String get deleteAllTasksWillBeMarkedAsDeleted;
   String get navDrawerExit;
   String get navDrawerConfirm;
 

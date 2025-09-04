@@ -226,6 +226,10 @@ class HindiSentences extends Sentences {
       'यह क्रिया अपरिवर्तनीय है और यह सभी स्थानीय रूप से संग्रहीत कार्यों को हटा देगी।';
 
   @override
+  String get deleteAllTasksWillBeMarkedAsDeleted =>
+      'यह सभी कार्यों को हटाए गए के रूप में चिह्नित कर देगा और वे ऐप में दिखाई नहीं देंगे।';
+
+  @override
   String get profilePageProfile => 'प्रोफ़ाइल';
   @override
   String get profilePageProfiles => 'प्रोफ़ाइल्स';

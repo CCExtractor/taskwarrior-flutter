@@ -208,6 +208,9 @@ class BengaliSentences extends Sentences {
   @override
   String get deleteTaskWarning =>
       'এই পদক্ষেপটি অপরিবর্তনীয় এবং সমস্ত স্থানীয়ভাবে সংরক্ষিত টাস্ক মুছে ফেলবে।';
+  @override
+  String get deleteAllTasksWillBeMarkedAsDeleted =>
+      '\u099f\u09be\u09b8\u09cd\u0995\u09b0 \u09ac\u09a7\u09be \u09b8\u09be\u09b0\u09cd\u099a\u09c7 \u09a8\u09be\u09b9\u09c0\u0995\u09c7 \u0995\u09b0\u09c1\u09a8\u099f\u09be\u09b8\u09cd\u0995 \u0995\u09be\u09b0\u09cd\u092f\u09cb\u09b0 \u09b9\u09be\u09b7\u09c7 \u0995\u09b0\u09be\u09b8\u09cd\u09a4\u09c7 \u099f\u09be\u09b8\u09cd\u0995 \u0995\u09b0\u09c7\u0964';
 
   @override
   String get profilePageProfile => 'প্রোফাইল';

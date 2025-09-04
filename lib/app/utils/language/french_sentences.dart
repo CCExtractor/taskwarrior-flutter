@@ -213,6 +213,10 @@ class FrenchSentences extends Sentences {
       'Cette action est irréversible et supprimera toutes les tâches stockées localement.';
 
   @override
+  String get deleteAllTasksWillBeMarkedAsDeleted =>
+      'Cela marquera toutes les tâches comme supprimées et elles ne seront pas affichées dans l\'application.';
+
+  @override
   String get profilePageProfile => 'Profil';
   @override
   String get profilePageProfiles => 'Profils';

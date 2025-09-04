@@ -209,6 +209,9 @@ class MarathiSentences extends Sentences {
   @override
   String get deleteTaskWarning =>
       'ही क्रिया अपरिवर्तनीय आहे आणि हे सर्व स्थानिक पातळीवर संग्रहित केलेले कार्य हटवेल.';
+  @override
+  String get deleteAllTasksWillBeMarkedAsDeleted =>
+      'हे सर्व कार्य हटवले म्हणून चिन्हांकित केले जातील आणि अ‍ॅपमध्ये दिसणार नाहीत.';
 
   @override
   String get profilePageProfile => 'प्रोफाइल';

@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taskwarrior/app/routes/app_pages.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
+import 'package:taskwarrior/app/utils/constants/utilites.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import '../controllers/settings_controller.dart';
@@ -22,6 +24,11 @@ class SettingsPageBody extends StatelessWidget {
   final SettingsController controller;
 
   const SettingsPageBody({required this.controller, super.key});
+
+  Future<bool> _getFlag() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool("settings_taskc") ?? false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -141,6 +148,91 @@ class SettingsPageBody extends StatelessWidget {
                     Get.toNamed(Routes.LOGS);
                   },
                   icon: const Icon(Icons.login)),
+            ),
+            const Divider(),
+            FutureBuilder<bool>(
+              future: _getFlag(), // method to fetch SharedPreference value
+              builder: (context, snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.waiting:
+                    return const SizedBox
+                        .shrink(); // show nothing while loading
+                  case ConnectionState.done:
+                    final show = snapshot.data ?? false;
+                    if (!show) return const SizedBox.shrink(); // hide if false
+                    return SettingsPageListTile(
+                      title: SentenceManager(
+                        currentLanguage: AppSettings.selectedLanguage,
+                      ).sentences.deleteTaskTitle,
+                      subTitle: SentenceManager(
+                        currentLanguage: AppSettings.selectedLanguage,
+                      ).sentences.deleteAllTasksWillBeMarkedAsDeleted,
+                      trailing: IconButton(
+                        onPressed: () {
+                          showDialog<void>(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Utils.showAlertDialog(
+                                title: Text(
+                                  SentenceManager(
+                                    currentLanguage:
+                                        AppSettings.selectedLanguage,
+                                  ).sentences.deleteTaskConfirmation,
+                                  style: TextStyle(
+                                    color: tColors.primaryTextColor,
+                                  ),
+                                ),
+                                content: Text(
+                                  SentenceManager(
+                                    currentLanguage:
+                                        AppSettings.selectedLanguage,
+                                  ).sentences.deleteTaskWarning,
+                                  style: TextStyle(
+                                    color: tColors.primaryDisabledTextColor,
+                                  ),
+                                ),
+                                actions: <Widget>[
+                                  TextButton(
+                                    child: Text(
+                                      SentenceManager(
+                                        currentLanguage:
+                                            AppSettings.selectedLanguage,
+                                      ).sentences.homePageCancel,
+                                      style: TextStyle(
+                                        color: tColors.primaryTextColor,
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                  TextButton(
+                                    child: Text(
+                                      SentenceManager(
+                                        currentLanguage:
+                                            AppSettings.selectedLanguage,
+                                      ).sentences.navDrawerConfirm,
+                                      style: TextStyle(
+                                        color: tColors.primaryTextColor,
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      controller.deleteAllTasksInDB();
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        icon: const Icon(Icons.delete),
+                      ),
+                    );
+                  default:
+                    return const SizedBox.shrink();
+                }
+              },
             )
           ],
         );

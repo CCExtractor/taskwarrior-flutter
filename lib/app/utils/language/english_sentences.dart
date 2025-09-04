@@ -224,6 +224,10 @@ class EnglishSentences extends Sentences {
       'The action is irreversible and will delete all the tasks that are stored locally.';
 
   @override
+  String get deleteAllTasksWillBeMarkedAsDeleted =>
+      'This will mark all tasks as deleted and will not be shown in app';
+
+  @override
   String get profilePageProfile => 'Profile';
   @override
   String get profilePageProfiles => 'Profiles';

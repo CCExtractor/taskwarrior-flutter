@@ -212,6 +212,10 @@ class SpanishSentences extends Sentences {
       'Esta acción es irreversible y eliminará todas las tareas almacenadas localmente.';
 
   @override
+  String get deleteAllTasksWillBeMarkedAsDeleted =>
+      'Esto marcará todas las tareas como eliminadas y no aparecerán en la aplicación.';
+
+  @override
   String get profilePageProfile => 'Perfil';
   @override
   String get profilePageProfiles => 'Perfiles';
