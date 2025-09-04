@@ -8,8 +8,11 @@ import 'package:in_app_update/in_app_update.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taskwarrior/app/models/storage.dart';
+import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
 import 'package:taskwarrior/app/routes/app_pages.dart';
+import 'package:taskwarrior/app/utils/taskchampion/credentials_storage.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/profiles.dart';
+import 'package:taskwarrior/app/v3/models/task.dart';
 
 class SplashController extends GetxController {
   late Rx<Directory> baseDirectory = Directory('').obs;
@@ -63,13 +66,13 @@ class SplashController extends GetxController {
     profilesMap.value = _profiles.profilesMap();
   }
 
-  void copyConfigToNewProfile(String profile) {
-    _profiles.copyConfigToNewProfile(profile);
+  Future<void> copyConfigToNewProfile(String profile) async {
+    await _profiles.copyConfigToNewProfile(profile);
     profilesMap.value = _profiles.profilesMap();
   }
 
-  void deleteProfile(String profile) {
-    _profiles.deleteProfile(profile);
+  Future<void> deleteProfile(String profile) async {
+    await _profiles.deleteProfile(profile);
     _checkProfiles();
     profilesMap.value = _profiles.profilesMap();
     currentProfile.value = _profiles.getCurrentProfile()!;
@@ -80,18 +83,22 @@ class SplashController extends GetxController {
     profilesMap.value = _profiles.profilesMap();
   }
 
-  void selectProfile(String profile) {
+  void selectProfile(String profile) async {
     _profiles.setCurrentProfile(profile);
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('settings_taskc', getMode(profile) == 'TW3');
+    Get.find<HomeController>().taskchampion.value = getMode(profile) == 'TW3';
+    Get.find<HomeController>().tasks.value = <TaskForC>[].obs;
     currentProfile.value = _profiles.getCurrentProfile()!;
   }
 
-  void getMode(String profile) {
-    _profiles.getMode(profile);
-    profilesMap.value = _profiles.profilesMap();
+  String getMode(String profile) {
+    return _profiles.getMode(profile) ?? 'TW2';
   }
 
   void changeModeTo(String profile, String mode) {
     _profiles.setModeTo(profile, mode);
+    selectProfile(currentProfile.value);
     profilesMap.value = _profiles.profilesMap();
   }
 
@@ -99,8 +106,9 @@ class SplashController extends GetxController {
     return _profiles.getTaskcCreds(profile);
   }
 
-  void setTaskcCreds(String profile, String clientId, String clientSecret) {
-    _profiles.setTaskcCreds(profile, clientId, clientSecret);
+  void setTaskcCreds(
+      String profile, String clientId, String clientSecret, String apiUrl) {
+    _profiles.setTaskcCreds(profile, clientId, clientSecret, apiUrl);
   }
 
   Storage getStorage(String profile) {

@@ -67,12 +67,12 @@ class ManageTaskChampionCredsView
                 children: [
                   TextField(
                     style: TextStyle(color: tColors.primaryTextColor),
-                    controller: controller.encryptionSecretController,
+                    controller: controller.clientIdController,
                     decoration: InputDecoration(
                       labelText: SentenceManager(
                               currentLanguage: AppSettings.selectedLanguage)
                           .sentences
-                          .encryptionSecret,
+                          .ccsyncClientId,
                       labelStyle: TextStyle(color: tColors.primaryTextColor),
                       border: const OutlineInputBorder(),
                     ),
@@ -80,12 +80,12 @@ class ManageTaskChampionCredsView
                   const SizedBox(height: 10),
                   TextField(
                     style: TextStyle(color: tColors.primaryTextColor),
-                    controller: controller.clientIdController,
+                    controller: controller.encryptionSecretController,
                     decoration: InputDecoration(
                       labelText: SentenceManager(
                               currentLanguage: AppSettings.selectedLanguage)
                           .sentences
-                          .ccsyncClientId,
+                          .encryptionSecret,
                       labelStyle: TextStyle(color: tColors.primaryTextColor),
                       border: const OutlineInputBorder(),
                     ),
@@ -104,24 +104,54 @@ class ManageTaskChampionCredsView
                     ),
                   ),
                   const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () async {
-                      await controller.saveCredentials();
-                      Get.snackbar(
-                        SentenceManager(
-                                currentLanguage: AppSettings.selectedLanguage)
-                            .sentences
-                            .success,
-                        SentenceManager(
-                                currentLanguage: AppSettings.selectedLanguage)
-                            .sentences
-                            .credentialsSavedSuccessfully,
-                        snackPosition: SnackPosition.BOTTOM,
-                        duration: Duration(seconds: 2),
-                      );
-                    },
-                    child: const Text('Save Credentials'),
-                  ),
+                  Obx(() => Center(
+                          child: ElevatedButton(
+                        onPressed: controller.isCheckingCreds.value
+                            ? null
+                            : () async {
+                                int status = await controller.saveCredentials();
+                                if (status == 0) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content: Text(
+                                            SentenceManager(
+                                                    currentLanguage: AppSettings
+                                                        .selectedLanguage)
+                                                .sentences
+                                                .credentialsSavedSuccessfully,
+                                            style: TextStyle(
+                                              color: tColors.primaryTextColor,
+                                            ),
+                                          ),
+                                          backgroundColor:
+                                              tColors.secondaryBackgroundColor,
+                                          duration:
+                                              const Duration(seconds: 2)));
+                                  return;
+                                }
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text(
+                                          "Unable to fetch tasks with it ! Check creds",
+                                          style: TextStyle(
+                                            color: tColors.primaryTextColor,
+                                          ),
+                                        ),
+                                        backgroundColor:
+                                            tColors.secondaryBackgroundColor,
+                                        duration: const Duration(seconds: 2)));
+                              },
+                        child: controller.isCheckingCreds.value
+                            ? const SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                  color: Color.fromARGB(255, 83, 83, 83),
+                                  strokeWidth: 2.0,
+                                ),
+                              )
+                            : const Text('Save Credentials'),
+                      ))),
                   const SizedBox(height: 10),
                   Text(
                     SentenceManager(

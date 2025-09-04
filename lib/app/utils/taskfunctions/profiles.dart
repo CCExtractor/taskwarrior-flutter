@@ -3,8 +3,10 @@
 import 'dart:collection';
 import 'dart:io';
 
+import 'package:sqflite/sqflite.dart';
 import 'package:taskwarrior/app/models/storage.dart';
 import 'package:uuid/uuid.dart';
+import 'package:path/path.dart' as Path;
 
 class Profiles {
   Profiles(this.base);
@@ -23,7 +25,7 @@ class Profiles {
     return uuid;
   }
 
-  void copyConfigToNewProfile(String profile) {
+  String _copyConfigToNewProfile(String profile) {
     var newProfile = addProfile();
     Directory('${base.path}/profiles/$newProfile/.task')
         .createSync(recursive: true);
@@ -36,10 +38,26 @@ class Profiles {
       'taskd.ca',
       'taskd.certificate',
       'taskd.key',
+      'taskc_client_id',
+      'taskc_client_secret',
+      'mode',
     ]) {
       if (File('${base.path}/profiles/$profile/$file').existsSync()) {
         File('${base.path}/profiles/$profile/$file').copySync(
           '${base.path}/profiles/$newProfile/$file',
+        );
+      }
+    }
+    return newProfile;
+  }
+
+  Future<void> copyConfigToNewProfile(String profile) async {
+    String dbPath = await getDatabasesPath();
+    String newProfile = _copyConfigToNewProfile(profile);
+    if (getMode(profile) == 'TW3') {
+      if (File(Path.join(dbPath, '$profile.db')).existsSync()) {
+        File(Path.join(dbPath, '$profile.db')).copySync(
+          Path.join(dbPath, '$newProfile.db'),
         );
       }
     }
@@ -86,10 +104,20 @@ class Profiles {
     }, comparator);
   }
 
-  void deleteProfile(String profile) {
+  Future<void> deleteProfile(String profile) async {
     Directory('${base.path}/profiles/$profile').deleteSync(recursive: true);
     if (File('${base.path}/current-profile').existsSync()) {
       if (profile == File('${base.path}/current-profile').readAsStringSync()) {
+        File('${base.path}/current-profile').deleteSync();
+      }
+    }
+    await deleteDatabase(profile);
+  }
+
+  Future<void> deleteDatabase(String profile) async {
+    String dbPath = await getDatabasesPath();
+    if (getMode(profile) == 'TW3') {
+      if (File(Path.join(dbPath, '$profile.db')).existsSync()) {
         File('${base.path}/current-profile').deleteSync();
       }
     }
@@ -123,11 +151,14 @@ class Profiles {
     return result;
   }
 
-  void setTaskcCreds(String profile, String clientId, String clientSecret) {
+  void setTaskcCreds(
+      String profile, String clientId, String clientSecret, String backendUrl) {
     File('${base.path}/profiles/$profile/taskc_client_id')
         .writeAsStringSync(clientId);
     File('${base.path}/profiles/$profile/taskc_client_secret')
         .writeAsStringSync(clientSecret);
+    File('${base.path}/profiles/$profile/backend_url_tc')
+        .writeAsStringSync(backendUrl);
   }
 
   Map<String, String?> getTaskcCreds(String profile) {
@@ -150,7 +181,7 @@ class Profiles {
     return result;
   }
 
-  void setCurrentProfile(String? profile) {
+  void setCurrentProfile(String? profile) async {
     File('${base.path}/current-profile').writeAsStringSync(profile ?? '');
   }
 

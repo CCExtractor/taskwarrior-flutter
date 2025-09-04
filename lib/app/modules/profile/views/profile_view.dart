@@ -13,6 +13,7 @@ import 'package:taskwarrior/app/utils/constants/utilites.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
+import 'package:taskwarrior/app/v3/db/task_database.dart';
 
 import '../controllers/profile_controller.dart';
 
@@ -91,10 +92,25 @@ class ProfileView extends GetView<ProfileController> {
                 ),
               ),
             ),
-            () => Get.toNamed(Routes.MANAGE_TASK_SERVER),
-            (profile) {
-              var tasks =
-                  controller.profilesWidget.getStorage(profile).data.export();
+            () {
+              if (controller.profilesWidget
+                      .getMode(controller.currentProfile.value) ==
+                  'TW3') {
+                Get.toNamed(Routes.MANAGE_TASK_CHAMPION_CREDS);
+                return;
+              }
+              Get.toNamed(Routes.MANAGE_TASK_SERVER);
+            },
+            (profile) async {
+              String tasks;
+              if (controller.profilesWidget.getMode(profile) == "TW2") {
+                tasks =
+                    controller.profilesWidget.getStorage(profile).data.export();
+              } else {
+                TaskDatabase db = TaskDatabase();
+                await db.openForProfile(profile);
+                tasks = await db.exportAllTasks();
+              }
               var now = DateTime.now()
                   .toIso8601String()
                   .replaceAll(RegExp(r'[-:]'), '')
@@ -160,17 +176,17 @@ class ProfileView extends GetView<ProfileController> {
                 },
               );
             },
-            (profile) {
+            (profile) async {
               try {
-                controller.profilesWidget.copyConfigToNewProfile(
+                await controller.profilesWidget.copyConfigToNewProfile(
                   profile,
                 );
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(
                       SentenceManager(
-                                  currentLanguage: AppSettings.selectedLanguage)
-                              .sentences
-                              .profileConfigCopied,
+                              currentLanguage: AppSettings.selectedLanguage)
+                          .sentences
+                          .profileConfigCopied,
                       style: TextStyle(
                         color: tColors.primaryTextColor,
                       ),
@@ -181,9 +197,9 @@ class ProfileView extends GetView<ProfileController> {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(
                       SentenceManager(
-                                  currentLanguage: AppSettings.selectedLanguage)
-                              .sentences
-                              .profileConfigCopyFailed,
+                              currentLanguage: AppSettings.selectedLanguage)
+                          .sentences
+                          .profileConfigCopyFailed,
                       style: TextStyle(
                         color: tColors.primaryTextColor,
                       ),
@@ -203,6 +219,58 @@ class ProfileView extends GetView<ProfileController> {
                   profiles: controller.profilesMap,
                   profileName: profileName,
                 ),
+              );
+            },
+            (profile) {
+              String currentMode = controller.profilesWidget.getMode(profile);
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return Utils.showAlertDialog(
+                    title: Text(
+                      "Change TW Mode",
+                    ),
+                    content: Text("Change mode to"),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: currentMode != "TW3"
+                            ? () {
+                                // Navigator.of(context).pop();
+                                Get.back();
+                                controller.profilesWidget.changeModeTo(
+                                  profile,
+                                  'TW3',
+                                );
+                              }
+                            : null,
+                        child: Text(
+                          "TW3",
+                          style: TextStyle(
+                            color: tColors.primaryTextColor,
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: currentMode != "TW2"
+                            ? () {
+                                // Navigator.of(context).pop();
+                                Get.back();
+                                controller.profilesWidget.changeModeTo(
+                                  profile,
+                                  'TW2',
+                                );
+                              }
+                            : null,
+                        child: Text(
+                          "TW2",
+                          style: TextStyle(
+                            color: tColors.primaryTextColor,
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
               );
             },
           )),

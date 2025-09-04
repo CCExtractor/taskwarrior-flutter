@@ -81,18 +81,6 @@ class NavDrawer extends StatelessWidget {
             Visibility(
               visible: homeController.taskchampion.value,
               child: NavDrawerMenuItem(
-                icon: Icons.task_alt,
-                text: SentenceManager(
-                  currentLanguage: homeController.selectedLanguage.value,
-                ).sentences.ccsyncCredentials,
-                onTap: () {
-                  Get.toNamed(Routes.MANAGE_TASK_CHAMPION_CREDS);
-                },
-              ),
-            ),
-            Visibility(
-              visible: homeController.taskchampion.value,
-              child: NavDrawerMenuItem(
                   icon: Icons.delete,
                   text: SentenceManager(
                     currentLanguage: homeController.selectedLanguage.value,
@@ -156,18 +144,15 @@ class NavDrawer extends StatelessWidget {
                     );
                   }),
             ),
-            Visibility(
-              visible: !homeController.taskchampion.value,
-              child: Obx(
-                () => NavDrawerMenuItem(
-                  icon: Icons.person_rounded,
-                  text: SentenceManager(
-                    currentLanguage: homeController.selectedLanguage.value,
-                  ).sentences.navDrawerProfile,
-                  onTap: () {
-                    Get.toNamed(Routes.PROFILE);
-                  },
-                ),
+            Obx(
+              () => NavDrawerMenuItem(
+                icon: Icons.person_rounded,
+                text: SentenceManager(
+                  currentLanguage: homeController.selectedLanguage.value,
+                ).sentences.navDrawerProfile,
+                onTap: () {
+                  Get.toNamed(Routes.PROFILE);
+                },
               ),
             ),
             Visibility(
