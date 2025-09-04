@@ -30,7 +30,7 @@ void main() {
     test('All routes should be defined correctly', () {
       final routes = AppPages.routes;
 
-      expect(routes.length, 10);
+      expect(routes.length, 11);
 
       expect(
         routes.any((route) =>
