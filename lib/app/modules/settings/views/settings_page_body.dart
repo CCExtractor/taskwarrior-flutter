@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:taskwarrior/app/routes/app_pages.dart';
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
@@ -127,8 +128,14 @@ class SettingsPageBody extends StatelessWidget {
             ),
             const Divider(),
             SettingsPageListTile(
-              title: "Logs ",
-              subTitle: "check all debug logs here",
+              title:
+                  SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                      .sentences
+                      .logs,
+              subTitle:
+                  SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                      .sentences
+                      .checkAllDebugLogsHere,
               trailing: IconButton(
                   onPressed: () {
                     Get.toNamed(Routes.LOGS);
