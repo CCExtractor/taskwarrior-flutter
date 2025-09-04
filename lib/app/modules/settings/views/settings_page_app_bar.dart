@@ -63,6 +63,7 @@ class SettingsPageAppBar extends StatelessWidget
         child: Icon(
           Icons.chevron_left,
           color: TaskWarriorColors.white,
+          size: 35,
         ),
       ),
     );

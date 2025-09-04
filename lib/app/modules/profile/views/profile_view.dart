@@ -50,7 +50,7 @@ class ProfileView extends GetView<ProfileController> {
           icon: Icon(
             Icons.chevron_left,
             color: TaskWarriorColors.white,
-            size: 30,
+            size: 35,
           ),
         ),
         actions: [
