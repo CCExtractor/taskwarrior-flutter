@@ -646,6 +646,8 @@ class MarathiSentences extends Sentences {
   String get credentialsSavedSuccessfully =>
       'क्रेडेन्शियल्स यशस्वीरित्या जतन केले';
   @override
+  String get saveCredentials => 'क्रेडेन्शियल्स जतन करा';
+  @override
   String get tip =>
       "टीप: तुमची क्रेडेन्शियल्स मिळवण्यासाठी वरच्या उजव्या कोपऱ्यातील माहिती चिन्हावर क्लिक करा";
   @override

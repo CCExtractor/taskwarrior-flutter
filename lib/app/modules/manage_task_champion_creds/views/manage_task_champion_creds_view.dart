@@ -150,7 +150,11 @@ class ManageTaskChampionCredsView
                                   strokeWidth: 2.0,
                                 ),
                               )
-                            : const Text('Save Credentials'),
+                            : Text(SentenceManager(
+                                    currentLanguage:
+                                        AppSettings.selectedLanguage)
+                                .sentences
+                                .saveCredentials),
                       ))),
                   const SizedBox(height: 10),
                   Text(

@@ -1,6 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:taskwarrior/app/utils/taskchampion/credentials_storage.dart';
-
 abstract class Sentences {
   String get helloWorld;
 
@@ -342,4 +339,5 @@ abstract class Sentences {
   String get success;
   String get credentialsSavedSuccessfully;
   String get tip;
+  String get saveCredentials;
 }

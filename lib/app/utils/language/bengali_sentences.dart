@@ -645,6 +645,8 @@ class BengaliSentences extends Sentences {
   @override
   String get credentialsSavedSuccessfully => 'শংসাপত্র সফলভাবে সংরক্ষিত হয়েছে';
   @override
+  String get saveCredentials => 'ক্রেডেনশিয়ালস সংরক্ষণ করুন';
+  @override
   String get tip =>
       "টিপ: আপনার শংসাপত্র পেতে উপরের ডানদিকে তথ্য আইকনে ক্লিক করুন";
   @override

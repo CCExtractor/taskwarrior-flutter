@@ -648,6 +648,8 @@ class SpanishSentences extends Sentences {
   @override
   String get credentialsSavedSuccessfully => 'Credenciales guardadas con éxito';
   @override
+  String get saveCredentials => 'guardar credenciales';
+  @override
   String get tip =>
       "Consejo: Haz clic en el ícono de información en la esquina superior derecha para obtener tus credenciales";
   @override

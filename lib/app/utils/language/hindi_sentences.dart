@@ -623,6 +623,8 @@ class HindiSentences extends Sentences {
   String get credentialsSavedSuccessfully =>
       'क्रेडेंशियल्स सफलतापूर्वक सहेजे गए';
   @override
+  String get saveCredentials => 'क्रेडेंशियल्स सहेजें';
+  @override
   String get tip =>
       "टिप: अपनी क्रेडेंशियल्स प्राप्त करने के लिए ऊपर दाईं ओर स्थित जानकारी आइकन पर क्लिक करें";
   @override

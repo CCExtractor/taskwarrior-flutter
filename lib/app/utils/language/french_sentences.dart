@@ -660,6 +660,8 @@ class FrenchSentences extends Sentences {
   String get credentialsSavedSuccessfully =>
       'Identifiants enregistrés avec succès';
   @override
+  String get saveCredentials => 'enregistrer les identifiants';
+  @override
   String get tip =>
       "Astuce : Cliquez sur l'icône d'information en haut à droite pour obtenir vos identifiants";
   @override
