@@ -340,4 +340,7 @@ abstract class Sentences {
   String get credentialsSavedSuccessfully;
   String get tip;
   String get saveCredentials;
+  // profile page new
+  String get profilePageChangeProfileMode;
+  String get profilePageSelectProfileMode;
 }

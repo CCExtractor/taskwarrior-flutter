@@ -226,6 +226,12 @@ class BengaliSentences extends Sentences {
   @override
   String get profilePageExportTasks => 'টাস্ক রপ্তানী করুন';
   @override
+  String get profilePageChangeProfileMode =>
+      '\u09aa\u09cd\u09b0\u09cb\u09ab\u09be\u0987\u09b2 \u09ae\u09c1\u09a1\u09cd\u09a7 \u09aa\u09b0\u09bf\u09ac\u09b0\u09cd\u09a4\u09bf \u0995\u09b0\u09be';
+  @override
+  String get profilePageSelectProfileMode =>
+      '\u09aa\u09cd\u09b0\u09cb\u09ab\u09be\u0981\u09b2 \u09ae\u09c1\u09a1\u09cd\u09a7 \u09a8\u09bf\u09b0\u09cd\u09ac\u09be\u099a\u09a8 \u0995\u09b0\u09c1\u09a8';
+  @override
   String get profilePageCopyConfigToNewProfile =>
       'নতুন প্রোফাইলে কনফিগারেশন কপি করুন';
   @override

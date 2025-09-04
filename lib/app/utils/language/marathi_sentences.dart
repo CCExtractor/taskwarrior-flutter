@@ -227,6 +227,10 @@ class MarathiSentences extends Sentences {
   @override
   String get profilePageExportTasks => 'टास्क निर्यात करा';
   @override
+  String get profilePageChangeProfileMode => 'प्रोफाइल मोड बदला';
+  @override
+  String get profilePageSelectProfileMode => 'प्रोफाइल मोड निवडा';
+  @override
   String get profilePageCopyConfigToNewProfile =>
       'नवीन प्रोफाइलवर कॉन्फिगरेशन कॉपी करा';
   @override

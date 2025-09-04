@@ -229,6 +229,10 @@ class FrenchSentences extends Sentences {
   @override
   String get profilePageExportTasks => 'Exporter les tâches';
   @override
+  String get profilePageChangeProfileMode => 'Modifier le mode de profil';
+  @override
+  String get profilePageSelectProfileMode => 'Sélectionner le mode de profil';
+  @override
   String get profilePageCopyConfigToNewProfile =>
       'Copier la configuration vers un nouveau profil';
   @override

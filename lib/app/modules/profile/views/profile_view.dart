@@ -66,7 +66,12 @@ class ProfileView extends GetView<ProfileController> {
                 const SizedBox(
                   width: 10,
                 ),
-                Text('Add Profile', style: TextStyle(color: Colors.white)),
+                Text(
+                    SentenceManager(
+                            currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .profilePageAddNewProfile,
+                    style: TextStyle(color: Colors.white)),
               ],
             ),
           ),
@@ -228,9 +233,15 @@ class ProfileView extends GetView<ProfileController> {
                 builder: (BuildContext context) {
                   return Utils.showAlertDialog(
                     title: Text(
-                      "Change TW Mode",
+                      SentenceManager(
+                              currentLanguage: AppSettings.selectedLanguage)
+                          .sentences
+                          .profilePageChangeProfileMode,
                     ),
-                    content: Text("Change mode to"),
+                    content: Text(SentenceManager(
+                            currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .profilePageSelectProfileMode),
                     actions: <Widget>[
                       TextButton(
                         onPressed: currentMode != "TW3"
@@ -244,7 +255,7 @@ class ProfileView extends GetView<ProfileController> {
                               }
                             : null,
                         child: Text(
-                          "TW3",
+                          "Taskchampion",
                           style: TextStyle(
                             color: tColors.primaryTextColor,
                           ),
@@ -262,7 +273,7 @@ class ProfileView extends GetView<ProfileController> {
                               }
                             : null,
                         child: Text(
-                          "TW2",
+                          "TaskServer",
                           style: TextStyle(
                             color: tColors.primaryTextColor,
                           ),

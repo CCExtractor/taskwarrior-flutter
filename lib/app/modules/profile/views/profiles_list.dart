@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 
 class ProfilesList extends StatelessWidget {
   const ProfilesList(
@@ -107,7 +108,11 @@ class ProfilesList extends StatelessWidget {
                         color: AppSettings.isDarkMode
                             ? TaskWarriorColors.kprimaryTextColor
                             : TaskWarriorColors.kLightPrimaryTextColor),
-                    title: Text('Export Tasks',
+                    title: Text(
+                        SentenceManager(
+                                currentLanguage: AppSettings.selectedLanguage)
+                            .sentences
+                            .profilePageExportTasks,
                         style: TextStyle(
                             color: AppSettings.isDarkMode
                                 ? TaskWarriorColors.kprimaryTextColor
@@ -121,7 +126,11 @@ class ProfilesList extends StatelessWidget {
                         color: AppSettings.isDarkMode
                             ? TaskWarriorColors.kprimaryTextColor
                             : TaskWarriorColors.kLightPrimaryTextColor),
-                    title: Text('Copy to new Profile',
+                    title: Text(
+                        SentenceManager(
+                                currentLanguage: AppSettings.selectedLanguage)
+                            .sentences
+                            .profilePageCopyConfigToNewProfile,
                         style: TextStyle(
                             color: AppSettings.isDarkMode
                                 ? TaskWarriorColors.kprimaryTextColor
@@ -135,7 +144,11 @@ class ProfilesList extends StatelessWidget {
                         color: AppSettings.isDarkMode
                             ? TaskWarriorColors.kprimaryTextColor
                             : TaskWarriorColors.kLightPrimaryTextColor),
-                    title: Text('Change Profile Mode',
+                    title: Text(
+                        SentenceManager(
+                                currentLanguage: AppSettings.selectedLanguage)
+                            .sentences
+                            .profilePageChangeProfileMode,
                         style: TextStyle(
                             color: AppSettings.isDarkMode
                                 ? TaskWarriorColors.kprimaryTextColor
@@ -149,7 +162,11 @@ class ProfilesList extends StatelessWidget {
                         color: AppSettings.isDarkMode
                             ? TaskWarriorColors.kprimaryTextColor
                             : TaskWarriorColors.kLightPrimaryTextColor),
-                    title: Text('Delete Profile',
+                    title: Text(
+                        SentenceManager(
+                                currentLanguage: AppSettings.selectedLanguage)
+                            .sentences
+                            .profilePageDeleteProfile,
                         style: TextStyle(
                             color: AppSettings.isDarkMode
                                 ? TaskWarriorColors.kprimaryTextColor

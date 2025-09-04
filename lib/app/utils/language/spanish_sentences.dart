@@ -228,6 +228,10 @@ class SpanishSentences extends Sentences {
   @override
   String get profilePageExportTasks => 'Exportar tareas';
   @override
+  String get profilePageChangeProfileMode => 'Cambiar modo de perfil';
+  @override
+  String get profilePageSelectProfileMode => 'Seleccionar modo de perfil';
+  @override
   String get profilePageCopyConfigToNewProfile =>
       'Copiar configuración a un nuevo perfil';
   @override

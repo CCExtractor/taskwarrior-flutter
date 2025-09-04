@@ -242,6 +242,10 @@ class HindiSentences extends Sentences {
   @override
   String get profilePageExportTasks => 'कार्य निर्यात करें';
   @override
+  String get profilePageChangeProfileMode => 'प्रोफ़ाइल मोड बदलें';
+  @override
+  String get profilePageSelectProfileMode => 'प्रोफ़ाइल मोड चुनें';
+  @override
   String get profilePageCopyConfigToNewProfile =>
       'नई प्रोफ़ाइल पर कॉन्फ़िगरेशन कॉपी करें';
   @override
