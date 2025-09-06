@@ -12,10 +12,11 @@ class TaskDatabase {
 
   Future<void> open() async {
     String path = await getDatabasePathForCurrentProfile();
-    _open(path);
+    await _open(path);
   }
 
   Future<void> _open(path) async {
+    debugPrint("called _open with $path");
     _database = await openDatabase(path, version: 2,
         onCreate: (Database db, version) async {
       await db.execute('''
@@ -79,7 +80,7 @@ class TaskDatabase {
   }
 
   Future<void> openForProfile(String profile) async {
-    String path = await getDatabasePathForCurrentProfile();
+    String path = await getDatabasePathForProfile(profile);
     _open(path);
   }
 
@@ -274,7 +275,7 @@ class TaskDatabase {
       where: 'uuid IS NULL OR uuid = ?',
       whereArgs: [''],
     );
-
+    debugPrint("Tasks without uuid are $maps");
     return await Future.wait(
       maps.map((mapItem) => getObjectForTask(mapItem)).toList(),
     );
