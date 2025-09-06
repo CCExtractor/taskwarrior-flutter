@@ -228,6 +228,7 @@ class ProfileView extends GetView<ProfileController> {
             },
             (profile) {
               String currentMode = controller.profilesWidget.getMode(profile);
+              String? selectedMode = currentMode;
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -238,46 +239,86 @@ class ProfileView extends GetView<ProfileController> {
                           .sentences
                           .profilePageChangeProfileMode,
                     ),
-                    content: Text(SentenceManager(
-                            currentLanguage: AppSettings.selectedLanguage)
-                        .sentences
-                        .profilePageSelectProfileMode),
+                    // Use StatefulBuilder to manage the state of the radio buttons inside the dialog
+                    content: StatefulBuilder(
+                      builder: (BuildContext context, StateSetter setState) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min, // Use minimum space
+                          children: <Widget>[
+                            RadioListTile<String>(
+                              title: const Text('CCSync'),
+                              value: 'TW3',
+                              groupValue: selectedMode,
+                              onChanged: (String? value) {
+                                setState(() {
+                                  selectedMode = value;
+                                });
+                              },
+                            ),
+                            RadioListTile<String>(
+                              title: const Text('TaskServer'),
+                              value: 'TW2',
+                              groupValue: selectedMode,
+                              onChanged: (String? value) {
+                                setState(() {
+                                  selectedMode = value;
+                                });
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    ),
                     actions: <Widget>[
+                      // A button to cancel the operation
                       TextButton(
-                        onPressed: currentMode != "TW3"
-                            ? () {
-                                // Navigator.of(context).pop();
-                                Get.back();
-                                controller.profilesWidget.changeModeTo(
-                                  profile,
-                                  'TW3',
-                                );
-                              }
-                            : null,
                         child: Text(
-                          "Taskchampion",
-                          style: TextStyle(
-                            color: tColors.primaryTextColor,
-                          ),
+                          SentenceManager(
+                                  currentLanguage: AppSettings.selectedLanguage)
+                              .sentences
+                              .cancel, // Assuming you have a 'cancel' string
+                          style: TextStyle(color: tColors.primaryTextColor),
                         ),
+                        onPressed: () {
+                          Get.back(); // Dismiss the dialog
+                        },
                       ),
+                      // A button to submit the change
                       TextButton(
-                        onPressed: currentMode != "TW2"
-                            ? () {
-                                // Navigator.of(context).pop();
-                                Get.back();
-                                controller.profilesWidget.changeModeTo(
-                                  profile,
-                                  'TW2',
-                                );
-                              }
-                            : null,
                         child: Text(
-                          "TaskServer",
-                          style: TextStyle(
-                            color: tColors.primaryTextColor,
-                          ),
+                          SentenceManager(
+                                  currentLanguage: AppSettings.selectedLanguage)
+                              .sentences
+                              .submit, // Or use a translated string
+                          style: TextStyle(color: tColors.primaryTextColor),
                         ),
+                        onPressed: () {
+                          Get.back();
+                          if (selectedMode != null &&
+                              selectedMode != currentMode) {
+                            controller.profilesWidget.changeModeTo(
+                              profile,
+                              selectedMode!,
+                            );
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text(
+                                  SentenceManager(
+                                              currentLanguage:
+                                                  AppSettings.selectedLanguage)
+                                          .sentences
+                                          .profilePageSuccessfullyChangedProfileModeTo +
+                                      ((selectedMode ?? "") == "TW3"
+                                          ? "CCSync"
+                                          : "Taskserver"),
+                                  style: TextStyle(
+                                    color: tColors.primaryTextColor,
+                                  ),
+                                ),
+                                backgroundColor:
+                                    tColors.secondaryBackgroundColor,
+                                duration: const Duration(seconds: 2)));
+                          }
+                        },
                       ),
                     ],
                   );

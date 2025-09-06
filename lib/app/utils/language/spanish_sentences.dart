@@ -232,9 +232,10 @@ class SpanishSentences extends Sentences {
   @override
   String get profilePageExportTasks => 'Exportar tareas';
   @override
-  String get profilePageChangeProfileMode => 'Cambiar modo de perfil';
+  String get profilePageChangeProfileMode =>
+      'Cambiar servidor de sincronización';
   @override
-  String get profilePageSelectProfileMode => 'Seleccionar modo de perfil';
+  String get profilePageSelectProfileMode => 'Selecciona un servidor';
   @override
   String get profilePageCopyConfigToNewProfile =>
       'Copiar configuración a un nuevo perfil';
@@ -249,6 +250,9 @@ class SpanishSentences extends Sentences {
   String get profilePageRenameAliasDialogueBoxNewAlias => 'Nuevo alias';
   @override
   String get profilePageRenameAliasDialogueBoxCancel => 'Cancelar';
+  @override
+  String get profilePageSuccessfullyChangedProfileModeTo =>
+      'Modo de perfil cambiado correctamente a: ';
   @override
   String get profilePageRenameAliasDialogueBoxSubmit => 'Enviar';
 

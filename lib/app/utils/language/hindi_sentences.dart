@@ -246,9 +246,9 @@ class HindiSentences extends Sentences {
   @override
   String get profilePageExportTasks => 'कार्य निर्यात करें';
   @override
-  String get profilePageChangeProfileMode => 'प्रोफ़ाइल मोड बदलें';
+  String get profilePageChangeProfileMode => 'सिंक सर्वर बदलें';
   @override
-  String get profilePageSelectProfileMode => 'प्रोफ़ाइल मोड चुनें';
+  String get profilePageSelectProfileMode => 'एक सर्वर चुनें';
   @override
   String get profilePageCopyConfigToNewProfile =>
       'नई प्रोफ़ाइल पर कॉन्फ़िगरेशन कॉपी करें';
@@ -261,6 +261,9 @@ class HindiSentences extends Sentences {
   String get profilePageRenameAliasDialogueBoxTitle => 'उपनाम बदलें';
   @override
   String get profilePageRenameAliasDialogueBoxNewAlias => 'नया उपनाम';
+  @override
+  String get profilePageSuccessfullyChangedProfileModeTo =>
+      'प्रोफ़ाइल मोड सफलतापूर्वक बदल दिया गया: ';
   @override
   String get profilePageRenameAliasDialogueBoxCancel => 'रद्द करें';
   @override

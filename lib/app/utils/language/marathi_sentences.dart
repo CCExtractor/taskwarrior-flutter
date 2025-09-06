@@ -230,9 +230,9 @@ class MarathiSentences extends Sentences {
   @override
   String get profilePageExportTasks => 'टास्क निर्यात करा';
   @override
-  String get profilePageChangeProfileMode => 'प्रोफाइल मोड बदला';
+  String get profilePageChangeProfileMode => 'सिंक सर्व्हर बदला';
   @override
-  String get profilePageSelectProfileMode => 'प्रोफाइल मोड निवडा';
+  String get profilePageSelectProfileMode => 'एक सर्व्हर निवडा';
   @override
   String get profilePageCopyConfigToNewProfile =>
       'नवीन प्रोफाइलवर कॉन्फिगरेशन कॉपी करा';
@@ -245,6 +245,9 @@ class MarathiSentences extends Sentences {
   String get profilePageRenameAliasDialogueBoxTitle => 'उपनाम पुनर्नामित करा';
   @override
   String get profilePageRenameAliasDialogueBoxNewAlias => 'नवा उपनाम';
+  @override
+  String get profilePageSuccessfullyChangedProfileModeTo =>
+      'प्रोफाइल मोड यशस्वीरीत्या बदलला: ';
   @override
   String get profilePageRenameAliasDialogueBoxCancel => 'रद्द करा';
   @override

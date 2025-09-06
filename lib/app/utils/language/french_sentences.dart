@@ -233,9 +233,10 @@ class FrenchSentences extends Sentences {
   @override
   String get profilePageExportTasks => 'Exporter les tâches';
   @override
-  String get profilePageChangeProfileMode => 'Modifier le mode de profil';
+  String get profilePageChangeProfileMode =>
+      'Changer le serveur de synchronisation';
   @override
-  String get profilePageSelectProfileMode => 'Sélectionner le mode de profil';
+  String get profilePageSelectProfileMode => 'Sélectionnez un serveur';
   @override
   String get profilePageCopyConfigToNewProfile =>
       'Copier la configuration vers un nouveau profil';
@@ -248,6 +249,9 @@ class FrenchSentences extends Sentences {
   String get profilePageRenameAliasDialogueBoxTitle => 'Renommer l\'alias';
   @override
   String get profilePageRenameAliasDialogueBoxNewAlias => 'Nouvel alias';
+  @override
+  String get profilePageSuccessfullyChangedProfileModeTo =>
+      'Mode de profil changé avec succès en : ';
   @override
   String get profilePageRenameAliasDialogueBoxCancel => 'Annuler';
   @override

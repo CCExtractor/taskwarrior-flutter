@@ -243,9 +243,12 @@ class EnglishSentences extends Sentences {
   @override
   String get profilePageExportTasks => 'Export Tasks';
   @override
-  String get profilePageChangeProfileMode => 'Change Profile Mode';
+  String get profilePageChangeProfileMode => 'Change Sync Server';
   @override
-  String get profilePageSelectProfileMode => 'Select Profile Mode';
+  String get profilePageSelectProfileMode => 'Select One Server';
+  @override
+  String get profilePageSuccessfullyChangedProfileModeTo =>
+      'Successfully changed profile mode to';
   @override
   String get profilePageCopyConfigToNewProfile => 'Copy Config To New Profile';
   @override

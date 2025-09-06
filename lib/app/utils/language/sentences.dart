@@ -344,4 +344,5 @@ abstract class Sentences {
   // profile page new
   String get profilePageChangeProfileMode;
   String get profilePageSelectProfileMode;
+  String get profilePageSuccessfullyChangedProfileModeTo;
 }

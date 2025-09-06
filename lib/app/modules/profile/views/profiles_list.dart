@@ -60,29 +60,57 @@ class ProfilesList extends StatelessWidget {
                 child: const Icon(Icons.delete, color: Colors.white),
               ),
               child: ExpansionTile(
-                // Use ExpansionTile here
-                title: Text(
-                  item,
-                  style: TextStyle(
-                    color: AppSettings.isDarkMode
-                        ? TaskWarriorColors.kprimaryTextColor
-                        : TaskWarriorColors.kLightPrimaryTextColor,
-                  ),
-                ),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
+                // The title is now a Row to hold the text and the icon buttons
+                title: Row(
                   children: [
-                    IconButton(
-                      icon: Icon(Icons.edit,
-                          color: AppSettings.isDarkMode
-                              ? TaskWarriorColors.kprimaryTextColor
-                              : TaskWarriorColors.kLightPrimaryTextColor),
-                      onPressed: () => rename(profileId),
+                    Expanded(
+                      child: Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment
+                              .start, // Aligns text to the left
+                          children: [
+                            Text(
+                              item,
+                              style: TextStyle(
+                                decoration: profileId == currentProfile
+                                    ? TextDecoration.underline
+                                    : TextDecoration.none,
+                                fontSize: 16.0, // Standard list tile title size
+                                color: AppSettings.isDarkMode
+                                    ? TaskWarriorColors.kprimaryTextColor
+                                    : TaskWarriorColors.kLightPrimaryTextColor,
+                              ),
+                            ),
+                            const SizedBox(
+                                height:
+                                    2.0), // Adds a small space between the texts
+                            Text(
+                              profileId,
+                              style: TextStyle(
+                                fontSize:
+                                    10.0, // Smaller font size for the subtitle
+                                color: AppSettings.isDarkMode
+                                    ? Colors.grey[400]
+                                    : Colors.grey[700],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                    // The settings icon will now trigger the ExpansionTile's expansion/collapse
-                    // No need for a separate IconButton for settings if ExpansionTile handles it
-                    currentProfile != profileId
-                        ? IconButton(
+                    // This Row holds the action buttons, keeping them separate from the tile's default trailing arrow
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.edit,
+                              color: AppSettings.isDarkMode
+                                  ? TaskWarriorColors.kprimaryTextColor
+                                  : TaskWarriorColors.kLightPrimaryTextColor),
+                          onPressed: () => rename(profileId),
+                        ),
+                        if (currentProfile != profileId)
+                          IconButton(
                             onPressed: () {
                               selectProfile(profileId);
                             },
@@ -91,18 +119,34 @@ class ProfilesList extends StatelessWidget {
                                     ? TaskWarriorColors.kprimaryTextColor
                                     : TaskWarriorColors.kLightPrimaryTextColor),
                           )
-                        : IconButton(
-                            onPressed: () {
-                              configure();
-                            },
-                            icon: Icon(Icons.key,
-                                color: AppSettings.isDarkMode
-                                    ? TaskWarriorColors.kprimaryTextColor
-                                    : TaskWarriorColors.kLightPrimaryTextColor),
-                          ),
+                      ],
+                    ),
                   ],
                 ),
+                // By not specifying a 'trailing' widget, ExpansionTile uses its default arrow
                 children: <Widget>[
+                  // The 'configure' option is now the first item inside the expandable list
+                  if (currentProfile == profileId)
+                    ListTile(
+                      leading: Icon(Icons.key,
+                          color: AppSettings.isDarkMode
+                              ? TaskWarriorColors.kprimaryTextColor
+                              : TaskWarriorColors.kLightPrimaryTextColor),
+                      title: Text(
+                        SentenceManager(
+                                currentLanguage: AppSettings.selectedLanguage)
+                            .sentences
+                            .profilePageConfigureTaskserver, // New descriptive text
+                        style: TextStyle(
+                          color: AppSettings.isDarkMode
+                              ? TaskWarriorColors.kprimaryTextColor
+                              : TaskWarriorColors.kLightPrimaryTextColor,
+                        ),
+                      ),
+                      onTap: () {
+                        configure();
+                      },
+                    ),
                   ListTile(
                     leading: Icon(Icons.file_copy,
                         color: AppSettings.isDarkMode
