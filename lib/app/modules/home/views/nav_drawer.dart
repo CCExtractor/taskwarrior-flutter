@@ -38,18 +38,18 @@ class NavDrawer extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    SentenceManager(
-                            currentLanguage:
-                                homeController.selectedLanguage.value)
-                        .sentences
-                        .homePageMenu,
-                    style: TextStyle(
-                      fontSize: TaskWarriorFonts.fontSizeExtraLarge,
-                      fontWeight: TaskWarriorFonts.bold,
-                      color: tColors.primaryTextColor,
-                    ),
-                  ),
+                  Obx(() => Text(
+                        SentenceManager(
+                                currentLanguage:
+                                    homeController.selectedLanguage.value)
+                            .sentences
+                            .homePageMenu,
+                        style: TextStyle(
+                          fontSize: TaskWarriorFonts.fontSizeExtraLarge,
+                          fontWeight: TaskWarriorFonts.bold,
+                          color: tColors.primaryTextColor,
+                        ),
+                      )),
                   Padding(
                     padding: const EdgeInsets.only(right: 10),
                     child: ThemeSwitcherClipper(
@@ -78,96 +78,15 @@ class NavDrawer extends StatelessWidget {
               color: tColors.dialogBackgroundColor,
               height: Get.height * 0.03,
             ),
-            Visibility(
-              visible: homeController.taskchampion.value,
-              child: NavDrawerMenuItem(
-                icon: Icons.task_alt,
+            Obx(
+              () => NavDrawerMenuItem(
+                icon: Icons.person_rounded,
                 text: SentenceManager(
                   currentLanguage: homeController.selectedLanguage.value,
-                ).sentences.ccsyncCredentials,
+                ).sentences.navDrawerProfile,
                 onTap: () {
-                  Get.toNamed(Routes.MANAGE_TASK_CHAMPION_CREDS);
+                  Get.toNamed(Routes.PROFILE);
                 },
-              ),
-            ),
-            Visibility(
-              visible: homeController.taskchampion.value,
-              child: NavDrawerMenuItem(
-                  icon: Icons.delete,
-                  text: SentenceManager(
-                    currentLanguage: homeController.selectedLanguage.value,
-                  ).sentences.deleteTaskTitle,
-                  onTap: () {
-                    showDialog<void>(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return Utils.showAlertDialog(
-                          title: Text(
-                            SentenceManager(
-                              currentLanguage:
-                                  homeController.selectedLanguage.value,
-                            ).sentences.deleteTaskConfirmation,
-                            style: TextStyle(
-                              color: tColors.primaryTextColor,
-                            ),
-                          ),
-                          content: Text(
-                            SentenceManager(
-                              currentLanguage:
-                                  homeController.selectedLanguage.value,
-                            ).sentences.deleteTaskWarning,
-                            style: TextStyle(
-                              color: tColors.primaryDisabledTextColor,
-                            ),
-                          ),
-                          actions: <Widget>[
-                            TextButton(
-                              child: Text(
-                                SentenceManager(
-                                  currentLanguage:
-                                      homeController.selectedLanguage.value,
-                                ).sentences.homePageCancel,
-                                style: TextStyle(
-                                  color: tColors.primaryTextColor,
-                                ),
-                              ),
-                              onPressed: () {
-                                Navigator.of(context).pop(); // Close the dialog
-                              },
-                            ),
-                            TextButton(
-                              child: Text(
-                                SentenceManager(
-                                  currentLanguage:
-                                      homeController.selectedLanguage.value,
-                                ).sentences.navDrawerConfirm,
-                                style: TextStyle(
-                                  color: tColors.primaryTextColor,
-                                ),
-                              ),
-                              onPressed: () {
-                                homeController.deleteAllTasksInDB();
-                                Navigator.of(context).pop(); // Close the dialog
-                              },
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  }),
-            ),
-            Visibility(
-              visible: !homeController.taskchampion.value,
-              child: Obx(
-                () => NavDrawerMenuItem(
-                  icon: Icons.person_rounded,
-                  text: SentenceManager(
-                    currentLanguage: homeController.selectedLanguage.value,
-                  ).sentences.navDrawerProfile,
-                  onTap: () {
-                    Get.toNamed(Routes.PROFILE);
-                  },
-                ),
               ),
             ),
             Visibility(

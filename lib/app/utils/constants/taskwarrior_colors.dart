@@ -41,29 +41,27 @@ class TaskWarriorColors {
   static Color kLightPrimaryDisabledTextColor = const Color(0xffACACAB);
   static Color kLightDialogBackGroundColor = Colors.white;
   static TaskwarriorColorTheme darkTheme = TaskwarriorColorTheme(
-    dialogBackgroundColor: kdialogBackGroundColor, 
-    primaryBackgroundColor: kprimaryBackgroundColor, 
-    primaryDisabledTextColor: kprimaryDisabledTextColor, 
-    primaryTextColor: kprimaryTextColor, 
-    secondaryBackgroundColor: ksecondaryBackgroundColor, 
-    secondaryTextColor: ksecondaryTextColor,
-    dividerColor: const Color.fromARGB(255, 192, 192, 192),
-    purpleShade: deepPurpleAccent,
-    greyShade: grey,
-    icons: Icons.dark_mode,
-    dimCol: const Color.fromARGB(137, 248, 248, 248)
-  );
+      dialogBackgroundColor: Color.fromARGB(255, 25, 25, 25),
+      primaryBackgroundColor: kprimaryBackgroundColor,
+      primaryDisabledTextColor: kprimaryDisabledTextColor,
+      primaryTextColor: kprimaryTextColor,
+      secondaryBackgroundColor: ksecondaryBackgroundColor,
+      secondaryTextColor: ksecondaryTextColor,
+      dividerColor: const Color.fromARGB(255, 192, 192, 192),
+      purpleShade: deepPurpleAccent,
+      greyShade: grey,
+      icons: Icons.dark_mode,
+      dimCol: const Color.fromARGB(137, 248, 248, 248));
   static TaskwarriorColorTheme lightTheme = TaskwarriorColorTheme(
-    dialogBackgroundColor: kLightDialogBackGroundColor, 
-    primaryBackgroundColor: kLightPrimaryBackgroundColor, 
-    primaryDisabledTextColor: kLightPrimaryDisabledTextColor, 
-    primaryTextColor: kLightPrimaryTextColor, 
-    secondaryBackgroundColor: kLightSecondaryBackgroundColor, 
-    secondaryTextColor: kLightSecondaryTextColor,
-    dividerColor: kprimaryBackgroundColor,
-    purpleShade: deepPurple,
-    greyShade: lightGrey,
-    icons: Icons.light_mode,
-    dimCol: const Color.fromARGB(136, 17, 17, 17)
-  );
+      dialogBackgroundColor: kLightDialogBackGroundColor,
+      primaryBackgroundColor: kLightPrimaryBackgroundColor,
+      primaryDisabledTextColor: kLightPrimaryDisabledTextColor,
+      primaryTextColor: kLightPrimaryTextColor,
+      secondaryBackgroundColor: kLightSecondaryBackgroundColor,
+      secondaryTextColor: kLightSecondaryTextColor,
+      dividerColor: kprimaryBackgroundColor,
+      purpleShade: deepPurple,
+      greyShade: lightGrey,
+      icons: Icons.light_mode,
+      dimCol: const Color.fromARGB(136, 17, 17, 17));
 }

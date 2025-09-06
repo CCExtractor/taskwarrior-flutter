@@ -29,6 +29,7 @@ class HomePageFloatingActionButton extends StatelessWidget {
         ),
         onPressed: () => (controller.taskchampion.value)
             ? (showModalBottomSheet(
+                backgroundColor: tColors.dialogBackgroundColor,
                 context: context,
                 isScrollControlled: true,
                 shape: const RoundedRectangleBorder(
@@ -47,6 +48,7 @@ class HomePageFloatingActionButton extends StatelessWidget {
                 }
               }))
             : (showModalBottomSheet(
+                backgroundColor: tColors.dialogBackgroundColor,
                 context: context,
                 isScrollControlled: true,
                 shape: const RoundedRectangleBorder(

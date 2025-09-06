@@ -13,6 +13,7 @@ import 'package:taskwarrior/app/utils/constants/utilites.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
+import 'package:taskwarrior/app/v3/db/task_database.dart';
 
 import '../controllers/profile_controller.dart';
 
@@ -49,7 +50,7 @@ class ProfileView extends GetView<ProfileController> {
           icon: Icon(
             Icons.chevron_left,
             color: TaskWarriorColors.white,
-            size: 30,
+            size: 35,
           ),
         ),
         actions: [
@@ -65,7 +66,12 @@ class ProfileView extends GetView<ProfileController> {
                 const SizedBox(
                   width: 10,
                 ),
-                Text('Add Profile', style: TextStyle(color: Colors.white)),
+                Text(
+                    SentenceManager(
+                            currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .profilePageAddNewProfile,
+                    style: TextStyle(color: Colors.white)),
               ],
             ),
           ),
@@ -91,10 +97,25 @@ class ProfileView extends GetView<ProfileController> {
                 ),
               ),
             ),
-            () => Get.toNamed(Routes.MANAGE_TASK_SERVER),
-            (profile) {
-              var tasks =
-                  controller.profilesWidget.getStorage(profile).data.export();
+            () {
+              if (controller.profilesWidget
+                      .getMode(controller.currentProfile.value) ==
+                  'TW3') {
+                Get.toNamed(Routes.MANAGE_TASK_CHAMPION_CREDS);
+                return;
+              }
+              Get.toNamed(Routes.MANAGE_TASK_SERVER);
+            },
+            (profile) async {
+              String tasks;
+              if (controller.profilesWidget.getMode(profile) == "TW2") {
+                tasks =
+                    controller.profilesWidget.getStorage(profile).data.export();
+              } else {
+                TaskDatabase db = TaskDatabase();
+                await db.openForProfile(profile);
+                tasks = await db.exportAllTasks();
+              }
               var now = DateTime.now()
                   .toIso8601String()
                   .replaceAll(RegExp(r'[-:]'), '')
@@ -160,17 +181,17 @@ class ProfileView extends GetView<ProfileController> {
                 },
               );
             },
-            (profile) {
+            (profile) async {
               try {
-                controller.profilesWidget.copyConfigToNewProfile(
+                await controller.profilesWidget.copyConfigToNewProfile(
                   profile,
                 );
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(
                       SentenceManager(
-                                  currentLanguage: AppSettings.selectedLanguage)
-                              .sentences
-                              .profileConfigCopied,
+                              currentLanguage: AppSettings.selectedLanguage)
+                          .sentences
+                          .profileConfigCopied,
                       style: TextStyle(
                         color: tColors.primaryTextColor,
                       ),
@@ -181,9 +202,9 @@ class ProfileView extends GetView<ProfileController> {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(
                       SentenceManager(
-                                  currentLanguage: AppSettings.selectedLanguage)
-                              .sentences
-                              .profileConfigCopyFailed,
+                              currentLanguage: AppSettings.selectedLanguage)
+                          .sentences
+                          .profileConfigCopyFailed,
                       style: TextStyle(
                         color: tColors.primaryTextColor,
                       ),
@@ -203,6 +224,105 @@ class ProfileView extends GetView<ProfileController> {
                   profiles: controller.profilesMap,
                   profileName: profileName,
                 ),
+              );
+            },
+            (profile) {
+              String currentMode = controller.profilesWidget.getMode(profile);
+              String? selectedMode = currentMode;
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return Utils.showAlertDialog(
+                    title: Text(
+                      SentenceManager(
+                              currentLanguage: AppSettings.selectedLanguage)
+                          .sentences
+                          .profilePageChangeProfileMode,
+                    ),
+                    // Use StatefulBuilder to manage the state of the radio buttons inside the dialog
+                    content: StatefulBuilder(
+                      builder: (BuildContext context, StateSetter setState) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min, // Use minimum space
+                          children: <Widget>[
+                            RadioListTile<String>(
+                              title: const Text('CCSync'),
+                              value: 'TW3',
+                              groupValue: selectedMode,
+                              onChanged: (String? value) {
+                                setState(() {
+                                  selectedMode = value;
+                                });
+                              },
+                            ),
+                            RadioListTile<String>(
+                              title: const Text('TaskServer'),
+                              value: 'TW2',
+                              groupValue: selectedMode,
+                              onChanged: (String? value) {
+                                setState(() {
+                                  selectedMode = value;
+                                });
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                    actions: <Widget>[
+                      // A button to cancel the operation
+                      TextButton(
+                        child: Text(
+                          SentenceManager(
+                                  currentLanguage: AppSettings.selectedLanguage)
+                              .sentences
+                              .cancel, // Assuming you have a 'cancel' string
+                          style: TextStyle(color: tColors.primaryTextColor),
+                        ),
+                        onPressed: () {
+                          Get.back(); // Dismiss the dialog
+                        },
+                      ),
+                      // A button to submit the change
+                      TextButton(
+                        child: Text(
+                          SentenceManager(
+                                  currentLanguage: AppSettings.selectedLanguage)
+                              .sentences
+                              .submit, // Or use a translated string
+                          style: TextStyle(color: tColors.primaryTextColor),
+                        ),
+                        onPressed: () {
+                          Get.back();
+                          if (selectedMode != null &&
+                              selectedMode != currentMode) {
+                            controller.profilesWidget.changeModeTo(
+                              profile,
+                              selectedMode!,
+                            );
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text(
+                                  SentenceManager(
+                                              currentLanguage:
+                                                  AppSettings.selectedLanguage)
+                                          .sentences
+                                          .profilePageSuccessfullyChangedProfileModeTo +
+                                      ((selectedMode ?? "") == "TW3"
+                                          ? "CCSync"
+                                          : "Taskserver"),
+                                  style: TextStyle(
+                                    color: tColors.primaryTextColor,
+                                  ),
+                                ),
+                                backgroundColor:
+                                    tColors.secondaryBackgroundColor,
+                                duration: const Duration(seconds: 2)));
+                          }
+                        },
+                      ),
+                    ],
+                  );
+                },
               );
             },
           )),

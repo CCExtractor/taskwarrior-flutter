@@ -22,7 +22,8 @@ class DeleteProfileDialog extends StatelessWidget {
   final String? profileName;
   @override
   Widget build(BuildContext context) {
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Center(
       child: SingleChildScrollView(
         child: Center(
@@ -54,11 +55,17 @@ class DeleteProfileDialog extends StatelessWidget {
                 ),
               ),
               TextButton(
-                onPressed: () {
+                onPressed: () async {
                   try {
-                    Get.find<SplashController>().deleteProfile(profile);
+                    var splashController = Get.find<SplashController>();
+                    await splashController.deleteProfile(profile);
                     // Navigator.of(context).pop();
-                    Get.find<HomeController>().refreshTaskWithNewProfile();
+                    if (splashController
+                            .getMode(splashController.currentProfile.value) !=
+                        "TW3") {
+                      Get.find<HomeController>().refreshTaskWithNewProfile();
+                    }
+
                     Get.back();
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(

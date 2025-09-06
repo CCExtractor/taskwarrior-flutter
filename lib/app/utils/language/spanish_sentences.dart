@@ -212,6 +212,10 @@ class SpanishSentences extends Sentences {
       'Esta acción es irreversible y eliminará todas las tareas almacenadas localmente.';
 
   @override
+  String get deleteAllTasksWillBeMarkedAsDeleted =>
+      'Esto marcará todas las tareas como eliminadas y no aparecerán en la aplicación.';
+
+  @override
   String get profilePageProfile => 'Perfil';
   @override
   String get profilePageProfiles => 'Perfiles';
@@ -228,6 +232,11 @@ class SpanishSentences extends Sentences {
   @override
   String get profilePageExportTasks => 'Exportar tareas';
   @override
+  String get profilePageChangeProfileMode =>
+      'Cambiar servidor de sincronización';
+  @override
+  String get profilePageSelectProfileMode => 'Selecciona un servidor';
+  @override
   String get profilePageCopyConfigToNewProfile =>
       'Copiar configuración a un nuevo perfil';
   @override
@@ -241,6 +250,9 @@ class SpanishSentences extends Sentences {
   String get profilePageRenameAliasDialogueBoxNewAlias => 'Nuevo alias';
   @override
   String get profilePageRenameAliasDialogueBoxCancel => 'Cancelar';
+  @override
+  String get profilePageSuccessfullyChangedProfileModeTo =>
+      'Modo de perfil cambiado correctamente a: ';
   @override
   String get profilePageRenameAliasDialogueBoxSubmit => 'Enviar';
 
@@ -647,6 +659,8 @@ class SpanishSentences extends Sentences {
   String get success => 'Éxito';
   @override
   String get credentialsSavedSuccessfully => 'Credenciales guardadas con éxito';
+  @override
+  String get saveCredentials => 'guardar credenciales';
   @override
   String get tip =>
       "Consejo: Haz clic en el ícono de información en la esquina superior derecha para obtener tus credenciales";

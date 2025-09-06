@@ -15,7 +15,8 @@ class SettingsPageSelectTheLanguageTrailing extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Obx(
       () => DropdownButton<SupportedLanguage>(
         value: controller.selectedLanguage.value,
@@ -46,15 +47,15 @@ class SettingsPageSelectTheLanguageTrailing extends StatelessWidget {
       case SupportedLanguage.english:
         return 'English';
       case SupportedLanguage.hindi:
-        return 'Hindi';
+        return 'हिन्दी';
       case SupportedLanguage.marathi:
-        return 'Marathi';
+        return 'मराठी';
       case SupportedLanguage.french:
-        return 'Français'; 
+        return 'Français';
       case SupportedLanguage.spanish:
-        return 'Español'; 
+        return 'Español';
       case SupportedLanguage.bengali:
-        return 'বাংলা'; 
+        return 'বাংলা';
       default:
         return '';
     }

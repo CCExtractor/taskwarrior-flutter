@@ -21,7 +21,8 @@ class ReportsView extends GetView<ReportsController> {
     controller.initReportsTour();
     controller.showReportsTour(context);
     double height = MediaQuery.of(context).size.height;
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
@@ -38,6 +39,7 @@ class ReportsView extends GetView<ReportsController> {
           child: Icon(
             Icons.chevron_left,
             color: TaskWarriorColors.white,
+            size: 35,
           ),
         ),
         bottom: PreferredSize(
@@ -45,9 +47,8 @@ class ReportsView extends GetView<ReportsController> {
           child: TabBar(
             controller: controller.tabController,
             unselectedLabelStyle: GoogleFonts.poppins(
-              fontWeight: TaskWarriorFonts.light,
-              color: TaskWarriorColors.appBarUnSelectedIconsColorForReports
-            ),
+                fontWeight: TaskWarriorFonts.light,
+                color: TaskWarriorColors.appBarUnSelectedIconsColorForReports),
             indicatorColor: tColors.purpleShade,
             labelColor: TaskWarriorColors.white,
             onTap: (value) {

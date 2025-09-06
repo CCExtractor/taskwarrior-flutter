@@ -6,7 +6,7 @@ import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 
 class AboutPageAppBar extends StatelessWidget implements PreferredSizeWidget {
   final AboutController aboutController;
-  const AboutPageAppBar({required this.aboutController,super.key});
+  const AboutPageAppBar({required this.aboutController, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,10 +14,9 @@ class AboutPageAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
       title: Text(
-        SentenceManager(
-                      currentLanguage: aboutController.selectedLanguage.value)
-                  .sentences
-                  .aboutPageAppBarTitle,
+        SentenceManager(currentLanguage: aboutController.selectedLanguage.value)
+            .sentences
+            .aboutPageAppBarTitle,
         // style: GoogleFonts.poppins(color: TaskWarriorColors.white),
         style: TextStyle(
           fontFamily: FontFamily.poppins,
@@ -31,6 +30,7 @@ class AboutPageAppBar extends StatelessWidget implements PreferredSizeWidget {
         child: Icon(
           Icons.chevron_left,
           color: TaskWarriorColors.white,
+          size: 35,
         ),
       ),
     );

@@ -101,6 +101,17 @@ class HomeController extends GetxController {
         widgetController.update();
       }
     });
+    ever(splashController.currentProfile, (_) {
+      if (splashController.getMode(splashController.currentProfile.value) !=
+          "TW3") {
+        refreshTaskWithNewProfile();
+      }
+      if (Platform.isAndroid) {
+        WidgetController widgetController = Get.put(WidgetController());
+        widgetController.fetchAllData();
+        widgetController.updateWidget();
+      }
+    });
   }
 
   Future<List<String>> getUniqueProjects() async {

@@ -208,6 +208,9 @@ class BengaliSentences extends Sentences {
   @override
   String get deleteTaskWarning =>
       'এই পদক্ষেপটি অপরিবর্তনীয় এবং সমস্ত স্থানীয়ভাবে সংরক্ষিত টাস্ক মুছে ফেলবে।';
+  @override
+  String get deleteAllTasksWillBeMarkedAsDeleted =>
+      '\u099f\u09be\u09b8\u09cd\u0995\u09b0 \u09ac\u09a7\u09be \u09b8\u09be\u09b0\u09cd\u099a\u09c7 \u09a8\u09be\u09b9\u09c0\u0995\u09c7 \u0995\u09b0\u09c1\u09a8\u099f\u09be\u09b8\u09cd\u0995 \u0995\u09be\u09b0\u09cd\u092f\u09cb\u09b0 \u09b9\u09be\u09b7\u09c7 \u0995\u09b0\u09be\u09b8\u09cd\u09a4\u09c7 \u099f\u09be\u09b8\u09cd\u0995 \u0995\u09b0\u09c7\u0964';
 
   @override
   String get profilePageProfile => 'প্রোফাইল';
@@ -226,6 +229,10 @@ class BengaliSentences extends Sentences {
   @override
   String get profilePageExportTasks => 'টাস্ক রপ্তানী করুন';
   @override
+  String get profilePageChangeProfileMode => 'সিঙ্ক সার্ভার পরিবর্তন করুন';
+  @override
+  String get profilePageSelectProfileMode => 'একটি সার্ভার নির্বাচন করুন';
+  @override
   String get profilePageCopyConfigToNewProfile =>
       'নতুন প্রোফাইলে কনফিগারেশন কপি করুন';
   @override
@@ -242,6 +249,10 @@ class BengaliSentences extends Sentences {
   String get profilePageRenameAliasDialogueBoxCancel => 'বাতিল করুন';
   @override
   String get profilePageRenameAliasDialogueBoxSubmit => 'জমা দিন';
+
+  @override
+  String get profilePageSuccessfullyChangedProfileModeTo =>
+      'সফলভাবে প্রোফাইল মোড পরিবর্তিত হয়েছে: ';
 
   @override
   String get profilePageExportTasksDialogueTitle => 'রপ্তানি ফরম্যাট';
@@ -644,6 +655,8 @@ class BengaliSentences extends Sentences {
   String get success => 'সফল হয়েছে';
   @override
   String get credentialsSavedSuccessfully => 'শংসাপত্র সফলভাবে সংরক্ষিত হয়েছে';
+  @override
+  String get saveCredentials => 'ক্রেডেনশিয়ালস সংরক্ষণ করুন';
   @override
   String get tip =>
       "টিপ: আপনার শংসাপত্র পেতে উপরের ডানদিকে তথ্য আইকনে ক্লিক করুন";
