@@ -24,7 +24,7 @@ abstract class _Paths {
   _Paths._();
   static const HOME = '/home';
   static const ONBOARDING = '/onboarding';
-  static const SPLASH = '/splash';
+  static const SPLASH = '/';
   static const MANAGE_TASK_SERVER = '/manage-task-server';
   static const DETAIL_ROUTE = '/detail-route';
   static const PROFILE = '/profile';
