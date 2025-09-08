@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:loggy/loggy.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taskwarrior/app/models/filters.dart';
 
@@ -35,6 +36,7 @@ import 'package:taskwarrior/app/v3/db/task_database.dart';
 import 'package:taskwarrior/app/v3/db/update.dart';
 import 'package:taskwarrior/app/v3/models/task.dart';
 import 'package:taskwarrior/app/v3/net/fetch.dart';
+import 'package:taskwarrior/rust_bridge/api.dart';
 import 'package:textfield_tags/textfield_tags.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
@@ -112,6 +114,19 @@ class HomeController extends GetxController {
         widgetController.updateWidget();
       }
     });
+    tryRust();
+  }
+
+  Future<void> tryRust() async {
+    Directory? someDir = await getDownloadsDirectory();
+
+    addTask(taskdbDirPath: someDir != null ? someDir.path : "", map: {
+      'description': "some task from bridge 2",
+      "uuid": "270750a0-1801-4a24-8b29-a7aaf62fc74d"
+    });
+
+    debugPrint(await getAllTasksJson(
+        taskdbDirPath: someDir != null ? someDir.path : ""));
   }
 
   Future<List<String>> getUniqueProjects() async {
