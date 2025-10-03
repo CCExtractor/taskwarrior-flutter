@@ -16,13 +16,18 @@ import 'package:taskwarrior/app/utils/taskfunctions/add_task_dialog_utils.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/tags.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/taskparser.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
+import 'package:taskwarrior/app/v3/champion/Replica.dart';
 import 'package:taskwarrior/app/v3/models/task.dart';
 
 class AddTaskBottomSheet extends StatelessWidget {
   final HomeController homeController;
   final bool forTaskC;
+  final bool forReplica;
   const AddTaskBottomSheet(
-      {required this.homeController, super.key, this.forTaskC = false});
+      {required this.homeController,
+      super.key,
+      this.forTaskC = false,
+      this.forReplica = false});
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +71,8 @@ class AddTaskBottomSheet extends StatelessWidget {
                     onPressed: () {
                       if (forTaskC) {
                         onSaveButtonClickedTaskC(context);
+                      } else if (forReplica) {
+                        onSaveButtonClickedForReplica(context);
                       } else {
                         onSaveButtonClicked(context);
                       }
@@ -354,7 +361,6 @@ class AddTaskBottomSheet extends StatelessWidget {
   }
 
   void onSaveButtonClicked(BuildContext context) async {
-    // print(homeController.formKey.currentState);
     if (homeController.formKey.currentState!.validate()) {
       try {
         var task = taskParser(homeController.namecontroller.text)
@@ -373,6 +379,85 @@ class AddTaskBottomSheet extends StatelessWidget {
           task = task.rebuild((t) => t..tags.replace(homeController.tags));
         }
         Get.find<HomeController>().mergeTask(task);
+        homeController.namecontroller.text = '';
+        homeController.projectcontroller.text = '';
+        homeController.dueString.value = "";
+        homeController.priority.value = 'X';
+        homeController.tagcontroller.text = '';
+        homeController.tags.value = [];
+        homeController.update();
+        Get.back();
+        if (Platform.isAndroid) {
+          WidgetController widgetController = Get.put(WidgetController());
+          widgetController.fetchAllData();
+          widgetController.update();
+        }
+
+        homeController.update();
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+              SentenceManager(
+                      currentLanguage: homeController.selectedLanguage.value)
+                  .sentences
+                  .addTaskTaskAddedSuccessfully,
+              style: TextStyle(
+                color: AppSettings.isDarkMode
+                    ? TaskWarriorColors.kprimaryTextColor
+                    : TaskWarriorColors.kLightPrimaryTextColor,
+              ),
+            ),
+            backgroundColor: AppSettings.isDarkMode
+                ? TaskWarriorColors.ksecondaryBackgroundColor
+                : TaskWarriorColors.kLightSecondaryBackgroundColor,
+            duration: const Duration(seconds: 2)));
+
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        bool? value;
+        value = prefs.getBool('sync-OnTaskCreate') ?? false;
+        // late InheritedStorage storageWidget;
+        // storageWidget = StorageWidget.of(context);
+        var storageWidget = Get.find<HomeController>();
+        if (value) {
+          storageWidget.synchronize(context, true);
+        }
+      } on FormatException catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+              e.message,
+              style: TextStyle(
+                color: AppSettings.isDarkMode
+                    ? TaskWarriorColors.kprimaryTextColor
+                    : TaskWarriorColors.kLightPrimaryTextColor,
+              ),
+            ),
+            backgroundColor: AppSettings.isDarkMode
+                ? TaskWarriorColors.ksecondaryBackgroundColor
+                : TaskWarriorColors.kLightSecondaryBackgroundColor,
+            duration: const Duration(seconds: 2)));
+      }
+    }
+  }
+
+  void onSaveButtonClickedForReplica(BuildContext context) async {
+    if (homeController.formKey.currentState!.validate()) {
+      try {
+        var task = taskParser(homeController.namecontroller.text)
+            .rebuild((b) =>
+                b..due = getDueDate(homeController.selectedDates)?.toUtc())
+            .rebuild((p) => p..priority = homeController.priority.value)
+            .rebuild((t) => t..project = homeController.projectcontroller.text)
+            .rebuild((t) =>
+                t..wait = getWaitDate(homeController.selectedDates)?.toUtc())
+            .rebuild((t) =>
+                t..until = getUntilDate(homeController.selectedDates)?.toUtc())
+            .rebuild((t) => t
+              ..scheduled =
+                  getSchedDate(homeController.selectedDates)?.toUtc());
+        if (homeController.tags.isNotEmpty) {
+          task = task.rebuild((t) => t..tags.replace(homeController.tags));
+        }
+        await Replica.addTaskToReplica(task);
         homeController.namecontroller.text = '';
         homeController.projectcontroller.text = '';
         homeController.dueString.value = "";
