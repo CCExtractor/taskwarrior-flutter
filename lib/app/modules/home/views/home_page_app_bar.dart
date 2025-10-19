@@ -72,7 +72,8 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
                     .sentences
                     .homePageSetup,
                 onPressed: () {
-                  if (controller.taskchampion.value) {
+                  if (controller.taskchampion.value ||
+                      controller.taskReplica.value) {
                     Get.toNamed(Routes.MANAGE_TASK_CHAMPION_CREDS);
                   } else {
                     Get.toNamed(Routes.MANAGE_TASK_SERVER);
@@ -124,10 +125,32 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
         Builder(
           builder: (context) => Obx(() => IconButton(
                 key: controller.refreshKey,
-                icon: Icon(Icons.refresh, color: TaskWarriorColors.white),
+                icon: !controller.isRefreshing.value
+                    ? Icon(Icons.refresh, color: TaskWarriorColors.white)
+                    : Icon(Icons.autorenew, color: TaskWarriorColors.white),
                 onPressed: controller.isRefreshing.value
                     ? null
                     : () async {
+                        if (controller.taskReplica.value) {
+                          var c = await CredentialsStorage.getClientId();
+                          var e =
+                              await CredentialsStorage.getEncryptionSecret();
+                          if (c == null || e == null) {
+                            _showResultSnackBar(
+                                context,
+                                SentenceManager(
+                                        currentLanguage:
+                                            controller.selectedLanguage.value)
+                                    .sentences
+                                    .homePageTaskWarriorNotConfigured,
+                                true);
+                            return;
+                          }
+                          controller.isRefreshing.value = true;
+                          await controller.refreshReplicaTasks();
+                          controller.isRefreshing.value = false;
+                        }
+
                         if (controller.taskchampion.value) {
                           var c = await CredentialsStorage.getClientId();
                           var e =

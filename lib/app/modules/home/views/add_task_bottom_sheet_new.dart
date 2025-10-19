@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -72,6 +73,7 @@ class AddTaskBottomSheet extends StatelessWidget {
                       if (forTaskC) {
                         onSaveButtonClickedTaskC(context);
                       } else if (forReplica) {
+                        debugPrint("Saving to Replica");
                         onSaveButtonClickedForReplica(context);
                       } else {
                         onSaveButtonClicked(context);
@@ -442,22 +444,16 @@ class AddTaskBottomSheet extends StatelessWidget {
   void onSaveButtonClickedForReplica(BuildContext context) async {
     if (homeController.formKey.currentState!.validate()) {
       try {
-        var task = taskParser(homeController.namecontroller.text)
-            .rebuild((b) =>
-                b..due = getDueDate(homeController.selectedDates)?.toUtc())
-            .rebuild((p) => p..priority = homeController.priority.value)
-            .rebuild((t) => t..project = homeController.projectcontroller.text)
-            .rebuild((t) =>
-                t..wait = getWaitDate(homeController.selectedDates)?.toUtc())
-            .rebuild((t) =>
-                t..until = getUntilDate(homeController.selectedDates)?.toUtc())
-            .rebuild((t) => t
-              ..scheduled =
-                  getSchedDate(homeController.selectedDates)?.toUtc());
-        if (homeController.tags.isNotEmpty) {
-          task = task.rebuild((t) => t..tags.replace(homeController.tags));
-        }
-        await Replica.addTaskToReplica(task);
+        await Replica.addTaskToReplica(HashMap<String, dynamic>.from({
+          "description": homeController.namecontroller.text,
+          "due": getDueDate(homeController.selectedDates)?.toUtc(),
+          "priority": homeController.priority.value,
+          "project": homeController.projectcontroller.text != ""
+              ? homeController.projectcontroller.text
+              : null,
+          "wait": getWaitDate(homeController.selectedDates)?.toUtc(),
+          "tags": homeController.tags,
+        }));
         homeController.namecontroller.text = '';
         homeController.projectcontroller.text = '';
         homeController.dueString.value = "";
@@ -473,7 +469,6 @@ class AddTaskBottomSheet extends StatelessWidget {
         }
 
         homeController.update();
-
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
               SentenceManager(
@@ -500,6 +495,7 @@ class AddTaskBottomSheet extends StatelessWidget {
         if (value) {
           storageWidget.synchronize(context, true);
         }
+        await storageWidget.refreshReplicaTasks();
       } on FormatException catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(

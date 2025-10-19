@@ -92,27 +92,38 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
                   'Recur:',
                   controller.recur.value,
                 ),
-                _buildDetail(
-                    context, 'UUID:', controller.initialTask.uuid ?? '-'),
-                _buildDetail(
-                  context,
-                  '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageUrgency}:',
-                  controller.initialTask.urgency?.toStringAsFixed(2) ?? '-',
-                ),
-                _buildDetail(
-                  context,
-                  '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageEnd}:',
-                  controller.formatDate(controller.initialTask.end),
-                ),
-                _buildDetail(
-                  context,
-                  '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageEntry}:',
-                  controller.formatDate(controller.initialTask.entry),
-                ),
+                // Conditionally show fields that are only present on local tasks
+                if (controller.isLocalTask) ...[
+                  _buildDetail(
+                    context,
+                    'UUID:',
+                    controller.initialTaskUuidDisplay(),
+                  ),
+                  _buildDetail(
+                    context,
+                    '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageUrgency}:',
+                    controller.initialTaskUrgencyDisplay(),
+                  ),
+                  _buildDetail(
+                    context,
+                    '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageEnd}:',
+                    controller
+                        .formatDate(controller.initialTaskEndForFormatting()),
+                  ),
+                  _buildDetail(
+                    context,
+                    '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageEntry}:',
+                    controller
+                        .formatDate(controller.initialTaskEntryForFormatting()),
+                  ),
+                ],
+
+                // Modified is available for both; show it for both types
                 _buildDetail(
                   context,
                   '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageModified}:',
-                  controller.formatDate(controller.initialTask.modified),
+                  controller.formatDate(
+                      controller.initialTaskModifiedForFormatting()),
                 ),
               ],
             ),

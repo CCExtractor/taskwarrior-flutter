@@ -246,7 +246,7 @@ class ProfileView extends GetView<ProfileController> {
                           mainAxisSize: MainAxisSize.min, // Use minimum space
                           children: <Widget>[
                             RadioListTile<String>(
-                              title: const Text('CCSync'),
+                              title: const Text('CCSync (v3)'),
                               value: 'TW3',
                               groupValue: selectedMode,
                               onChanged: (String? value) {
@@ -258,6 +258,16 @@ class ProfileView extends GetView<ProfileController> {
                             RadioListTile<String>(
                               title: const Text('TaskServer'),
                               value: 'TW2',
+                              groupValue: selectedMode,
+                              onChanged: (String? value) {
+                                setState(() {
+                                  selectedMode = value;
+                                });
+                              },
+                            ),
+                            RadioListTile<String>(
+                              title: const Text('Taskchampion (v3)'),
+                              value: 'TW3C',
                               groupValue: selectedMode,
                               onChanged: (String? value) {
                                 setState(() {

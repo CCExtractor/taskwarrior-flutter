@@ -43,7 +43,9 @@ class ManageTaskChampionCredsView
               color: TaskWarriorColors.white,
             ),
             onPressed: () async {
-              String url = "https://github.com/its-me-abhishek/ccsync";
+              String url = !controller.taskReplica.value
+                  ? "https://github.com/its-me-abhishek/ccsync"
+                  : "https://github.com/GothenburgBitFactory/taskchampion";
               if (!await launchUrl(Uri.parse(url))) {
                 throw Exception('Could not launch $url');
               }

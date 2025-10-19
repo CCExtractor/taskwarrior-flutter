@@ -32,6 +32,8 @@ import 'package:taskwarrior/app/utils/taskfunctions/projects.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/query.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/tags.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/v3/champion/Replica.dart';
+import 'package:taskwarrior/app/v3/champion/models/task_for_replica.dart';
 import 'package:taskwarrior/app/v3/db/task_database.dart';
 import 'package:taskwarrior/app/v3/db/update.dart';
 import 'package:taskwarrior/app/v3/models/task.dart';
@@ -65,6 +67,7 @@ class HomeController extends GetxController {
   final RxBool showbtn = false.obs;
   late TaskDatabase taskdb;
   var tasks = <TaskForC>[].obs;
+  var tasksFromReplica = <TaskForReplica>[].obs;
   final RxBool isRefreshing = false.obs;
 
   @override
@@ -114,19 +117,6 @@ class HomeController extends GetxController {
         widgetController.updateWidget();
       }
     });
-    tryRust();
-  }
-
-  Future<void> tryRust() async {
-    Directory? someDir = await getDownloadsDirectory();
-
-    addTask(taskdbDirPath: someDir != null ? someDir.path : "", map: {
-      'description': "some task from bridge 2",
-      "uuid": "270750a0-1801-4a24-8b29-a7aaf62fc74d"
-    });
-
-    debugPrint(await getAllTasksJson(
-        taskdbDirPath: someDir != null ? someDir.path : ""));
   }
 
   Future<List<String>> getUniqueProjects() async {
@@ -153,6 +143,16 @@ class HomeController extends GetxController {
   }
 
   Future<void> fetchTasksFromDB() async {
+    debugPrint("Fetching tasks from DB ${taskReplica.value}");
+    await _loadTaskChampion();
+    if (taskReplica.value) {
+      tasksFromReplica.value = await Replica.getAllTasksFromReplica();
+      debugPrint("Tasks from Replica: ${tasks.length}");
+      return;
+    }
+    if (taskchampion.value == false) {
+      return;
+    }
     TaskDatabase taskDatabase = TaskDatabase();
     await taskDatabase.open();
     List<TaskForC> fetchedTasks = await taskDatabase.fetchTasksFromDatabase();
@@ -162,6 +162,13 @@ class HomeController extends GetxController {
   Future<void> _loadTaskChampion() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     taskchampion.value = prefs.getBool('settings_taskc') ?? false;
+    taskReplica.value = prefs.getBool('settings_taskr_repl') ?? false;
+  }
+
+  Future<void> refreshReplicaTasks() async {
+    if (!taskReplica.value) return;
+    tasksFromReplica.value = await Replica.getAllTasksFromReplica();
+    debugPrint("Tasks from Replica: ${tasks.length}");
   }
 
   void addListenerToScrollController() {
@@ -353,6 +360,10 @@ class HomeController extends GetxController {
     _refreshTasks();
   }
 
+  Future<void> syncReplica() async {
+    await Replica.sync();
+  }
+
   Future<void> synchronize(BuildContext context, bool isDialogNeeded) async {
     try {
       final connectivityResult = await Connectivity().checkConnectivity();
@@ -529,6 +540,7 @@ class HomeController extends GetxController {
   RxBool delaytask = false.obs;
   RxBool change24hr = false.obs;
   RxBool taskchampion = false.obs;
+  RxBool taskReplica = false.obs;
 
   // dialogue box
   final formKey = GlobalKey<FormState>();

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taskwarrior/app/modules/splash/controllers/splash_controller.dart';
 import 'package:taskwarrior/app/utils/taskchampion/credentials_storage.dart';
 import 'package:taskwarrior/app/v3/net/origin.dart';
@@ -13,6 +14,7 @@ class ManageTaskChampionCredsController extends GetxController {
   final ccsyncBackendUrlController = TextEditingController();
   var profilesWidget = Get.find<SplashController>();
   RxBool isCheckingCreds = false.obs;
+  RxBool taskReplica = false.obs;
   @override
   void onInit() {
     super.onInit();
@@ -25,9 +27,19 @@ class ManageTaskChampionCredsController extends GetxController {
     clientIdController.text = await CredentialsStorage.getClientId() ?? '';
     ccsyncBackendUrlController.text =
         await CredentialsStorage.getApiUrl() ?? '';
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    taskReplica.value = prefs.getBool('settings_taskr_repl') ?? false;
   }
 
   Future<int> saveCredentials() async {
+    if (taskReplica.value) {
+      profilesWidget.setTaskcCreds(
+          profilesWidget.currentProfile.value,
+          clientIdController.text,
+          encryptionSecretController.text,
+          ccsyncBackendUrlController.text);
+      return 0;
+    }
     isCheckingCreds.value = true;
     String baseUrl = ccsyncBackendUrlController.text;
     String uuid = clientIdController.text;

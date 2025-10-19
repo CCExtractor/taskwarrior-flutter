@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
@@ -10,12 +11,14 @@ import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/v3/db/task_database.dart';
 import 'package:taskwarrior/app/v3/models/annotation.dart';
 import 'package:taskwarrior/app/v3/models/task.dart';
+import 'package:taskwarrior/app/v3/champion/Replica.dart';
+import 'package:taskwarrior/app/v3/champion/models/task_for_replica.dart';
 import 'package:taskwarrior/app/v3/net/modify.dart';
 
 enum UnsavedChangesAction { save, discard, cancel }
 
 class TaskcDetailsController extends GetxController {
-  late final TaskForC initialTask;
+  late final dynamic initialTask;
   late TaskDatabase taskDatabase;
 
   final hasChanges = false.obs;
@@ -37,34 +40,82 @@ class TaskcDetailsController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    initialTask = Get.arguments as TaskForC;
+    initialTask = Get.arguments;
     _initializeState(initialTask);
     taskDatabase = TaskDatabase();
     taskDatabase.open();
   }
 
-  void _initializeState(TaskForC task) {
-    description = task.description.obs;
-    project = (task.project ?? '-').obs;
-    status = task.status.obs;
-    priority = (task.priority ?? '-').obs;
-    due = formatDate(task.due).obs;
-    start = "".obs;
-    wait = "".obs;
-    tags = initialTask.tags != null
-        ? initialTask.tags!.map((e) => e.toString()).toList().obs
-        : <String>[].obs;
-    previousTags = tags.toList().obs;
-    depends = "".split(",").obs;
-    rtype = "".obs;
-    recur = "".obs;
-    annotations = <Annotation>[].obs;
+  void _initializeState(dynamic task) {
+    // Support both TaskForC (local tasks) and TaskForReplica (replica tasks)
+    if (task is TaskForC) {
+      description = task.description.obs;
+      project = (task.project ?? '-').obs;
+      status = task.status.obs;
+      priority = (task.priority ?? '-').obs;
+      due = formatDate(task.due).obs;
+      start = "".obs;
+      wait = "".obs;
+      tags = task.tags != null
+          ? task.tags!.map((e) => e.toString()).toList().obs
+          : <String>[].obs;
+      previousTags = tags.toList().obs;
+      depends = "".split(",").obs;
+      rtype = "".obs;
+      recur = "".obs;
+      annotations = <Annotation>[].obs;
+    } else if (task is TaskForReplica) {
+      description = (task.description ?? '').obs;
+      project = (task.project ?? '-').obs;
+      status = (task.status ?? '').obs;
+      priority = (task.priority ?? '-').obs;
+      // TaskForReplica stores epoch seconds; convert to ISO string for formatting
+      debugPrint('Replica task due: ${task.due}');
+      due = formatDate(task.due).obs;
+      start = "".obs;
+      wait = "".obs;
+      tags = task.tags != null
+          ? task.tags!.map((e) => e.toString()).toList().obs
+          : <String>[].obs;
+      previousTags = tags.toList().obs;
+      depends = "".split(",").obs;
+      rtype = "".obs;
+      recur = "".obs;
+      annotations = <Annotation>[].obs;
+    } else {
+      // Fallback
+      description = ''.obs;
+      project = '-'.obs;
+      status = ''.obs;
+      priority = '-'.obs;
+      due = '-'.obs;
+      start = "".obs;
+      wait = "".obs;
+      tags = <String>[].obs;
+      previousTags = <String>[].obs;
+      depends = "".split(",").obs;
+      rtype = "".obs;
+      recur = "".obs;
+      annotations = <Annotation>[].obs;
+    }
   }
 
-  String formatDate(String? dateString) {
-    if (dateString == null || dateString.isEmpty || dateString == '-') {
-      return '-';
+  String formatDate(dynamic date) {
+    if (date == null) return '-';
+    // If date is epoch seconds as int
+    if (date is int) {
+      try {
+        final dt = DateTime.fromMillisecondsSinceEpoch(date * 1000);
+        return DateFormat('yyyy-MM-dd HH:mm:ss').format(dt);
+      } catch (e) {
+        return '-';
+      }
     }
+    if (date is DateTime) {
+      return DateFormat('yyyy-MM-dd HH:mm:ss').format(date);
+    }
+    final dateString = date?.toString() ?? '';
+    if (dateString.isEmpty || dateString == '-') return '-';
     try {
       DateTime parsedDate = DateTime.parse(dateString);
       return DateFormat('yyyy-MM-dd HH:mm:ss').format(parsedDate);
@@ -89,6 +140,68 @@ class TaskcDetailsController extends GetxController {
     }
   }
 
+  // Safe accessors for fields on the initial task so views don't attempt to
+  // read properties that don't exist on TaskForReplica (which is a different
+  // model shape than TaskForC).
+  String initialTaskUuidDisplay() {
+    try {
+      if (initialTask == null) return '-';
+      if (initialTask is TaskForC)
+        return (initialTask.uuid ?? '-')?.toString() ?? '-';
+      if (initialTask is TaskForReplica) return initialTask.uuid ?? '-';
+      return '-';
+    } catch (_) {
+      return '-';
+    }
+  }
+
+  String initialTaskUrgencyDisplay() {
+    try {
+      if (initialTask is TaskForC) {
+        final u = initialTask.urgency as double?;
+        return (u != null) ? u.toStringAsFixed(2) : '-';
+      }
+      // TaskForReplica doesn't have urgency
+      return '-';
+    } catch (_) {
+      return '-';
+    }
+  }
+
+  // Provide values suitable for controller.formatDate(...) without accessing
+  // missing properties directly from the view.
+  dynamic initialTaskEntryForFormatting() {
+    try {
+      if (initialTask is TaskForC) return initialTask.entry;
+      return null;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  dynamic initialTaskEndForFormatting() {
+    try {
+      if (initialTask is TaskForC) return initialTask.end;
+      return null;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  dynamic initialTaskModifiedForFormatting() {
+    try {
+      if (initialTask is TaskForC) return initialTask.modified;
+      if (initialTask is TaskForReplica) return initialTask.modified;
+      return null;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  // Shorthand helpers for view logic
+  bool get isReplicaTask => initialTask is TaskForReplica;
+  bool get isLocalTask => initialTask is TaskForC;
+
   void processTagsLists() {
     final itemsToMove = previousTags.toSet().difference(tags.toSet());
     tags.addAll(itemsToMove.map((item) => '-$item'));
@@ -99,28 +212,52 @@ class TaskcDetailsController extends GetxController {
     if (tags.length == 1 && tags[0] == "") {
       tags.clear();
     }
-    await taskDatabase.saveEditedTaskInDB(
-      initialTask.uuid!,
-      description.string,
-      project.string,
-      status.string,
-      priority.string,
-      DateTime.parse(due.string).toIso8601String(),
-      tags.toList(),
-    );
-    hasChanges.value = false;
-    debugPrint('Task saved in local DB ${description.string}');
-    processTagsLists();
-    await modifyTaskOnTaskwarrior(
-      description.string,
-      project.string,
-      DateTime.parse(due.string).toIso8601String(),
-      priority.string,
-      status.string,
-      initialTask.uuid!,
-      initialTask.id.toString(),
-      tags.toList(),
-    );
+    if (initialTask is TaskForC) {
+      await taskDatabase.saveEditedTaskInDB(
+        initialTask.uuid!,
+        description.string,
+        project.string,
+        status.string,
+        priority.string,
+        DateTime.parse(due.string).toIso8601String(),
+        tags.toList(),
+      );
+      hasChanges.value = false;
+      debugPrint('Task saved in local DB ${description.string}');
+      processTagsLists();
+      await modifyTaskOnTaskwarrior(
+        description.string,
+        project.string,
+        DateTime.parse(due.string).toIso8601String(),
+        priority.string,
+        status.string,
+        initialTask.uuid!,
+        initialTask.id.toString(),
+        tags.toList(),
+      );
+    } else if (initialTask is TaskForReplica) {
+      final int nowEpoch = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+      final modifiedTask = TaskForReplica(
+        modified: nowEpoch,
+        due: due.string == '-' || due.string.isEmpty ? null : due.string,
+        status: status.string.isNotEmpty ? status.string : null,
+        description: description.string.isNotEmpty ? description.string : null,
+        tags: tags.isNotEmpty ? tags.toList() : null,
+        uuid: initialTask.uuid ?? '',
+        priority: priority.string.isNotEmpty ? priority.string : null,
+        project: project.string != '-' ? project.string : null,
+      );
+      debugPrint('Modified replica task: $modifiedTask');
+      hasChanges.value = false;
+      processTagsLists();
+      await Replica.modifyTaskInReplica(modifiedTask);
+      try {
+        final HomeController homeController = Get.find<HomeController>();
+        await homeController.refreshReplicaTasks();
+      } catch (e) {
+        debugPrint('Could not find HomeController to refresh tasks: $e');
+      }
+    }
   }
 
   Future<bool> handleWillPop() async {

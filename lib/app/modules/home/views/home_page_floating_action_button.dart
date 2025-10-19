@@ -27,44 +27,27 @@ class HomePageFloatingActionButton extends StatelessWidget {
             color: tColors.secondaryBackgroundColor,
           ),
         ),
-        onPressed: () => (controller.taskchampion.value)
-            ? (showModalBottomSheet(
-                backgroundColor: tColors.dialogBackgroundColor,
-                context: context,
-                isScrollControlled: true,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(0),
-                    topRight: Radius.circular(0),
-                  ),
+        onPressed: () => (showModalBottomSheet(
+              backgroundColor: tColors.dialogBackgroundColor,
+              context: context,
+              isScrollControlled: true,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(0),
+                  topRight: Radius.circular(0),
                 ),
-                builder: (context) => AddTaskBottomSheet(
-                  homeController: controller,
-                  forTaskC: true,
-                ),
-              ).then((value) {
-                if (controller.isSyncNeeded.value && value != "cancel") {
-                  controller.isNeededtoSyncOnStart(context);
-                }
-              }))
-            : (showModalBottomSheet(
-                backgroundColor: tColors.dialogBackgroundColor,
-                context: context,
-                isScrollControlled: true,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(0),
-                    topRight: Radius.circular(0),
-                  ),
-                ),
-                builder: (context) => AddTaskBottomSheet(
-                  homeController: controller,
-                ),
-              ).then((value) {
-                if (controller.isSyncNeeded.value && value != "cancel") {
-                  controller.isNeededtoSyncOnStart(context);
-                }
-              }))
+              ),
+              builder: (context) => AddTaskBottomSheet(
+                homeController: controller,
+                forTaskC: controller.taskchampion.value,
+                forReplica: controller.taskReplica.value,
+              ),
+            ).then((value) {
+              if (controller.isSyncNeeded.value && value != "cancel") {
+                controller.isNeededtoSyncOnStart(context);
+              }
+            }))
+
         // .then((value) {
         //   // print(value);
 
