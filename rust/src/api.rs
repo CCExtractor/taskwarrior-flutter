@@ -42,7 +42,8 @@ fn get_all_tasks(taskdb_dir_path: String) -> Vec<HashMap<String, String>> {
         for (k, v) in value.get_taskmap() {
             if k.contains("tag_") {
                 if let Some(stripped) = k.strip_prefix("tag_") {
-                    tags.push_str(stripped);
+					tags.push_str(stripped);
+					tags.push(' ');
                 }
             } else {
                 map.insert(k.into(), v.into());
@@ -116,13 +117,36 @@ pub fn update_task(
                     let _ = t.set_priority(value, &mut ops);
                 }
                 "tags" => {
-                    for part in value.split_whitespace() {
+					let existing_tags: Vec<String> = t
+						.get_taskmap()
+						.iter()
+						.filter_map(|(k, _)| k.strip_prefix("tag_").map(|s| s.to_string()))
+						.collect();
+					for tag_name in existing_tags {
+						println!("removing tag at rust side {}", tag_name);
+						let mut tag = Tag::from_str(&tag_name).unwrap();
+						let _ = t.remove_tag(&mut tag, &mut ops);
+					}
+                    
+					for part in value.split_whitespace() {
+                        println!("tag at rust side {}", part);
                         let mut tag = Tag::from_str(part).unwrap();
                         let _ = t.add_tag(&mut tag, &mut ops);
                     }
                 }
                 "project" => {
                     let _ = t.set_user_defined_attribute("project", value, &mut ops);
+                }
+                "status" => {
+                    let status = match value.as_str() {
+                        "pending" => taskchampion::Status::Pending,
+                        "completed" => taskchampion::Status::Completed,
+                        "deleted" => taskchampion::Status::Deleted,
+                        _ => taskchampion::Status::Pending,
+                    };
+                    // print!("status at rust side {}", value);
+                    println!("status at rust side {}", value);
+                    let _ = t.set_status(status, &mut ops);
                 }
                 _ => {}
             }
@@ -212,4 +236,37 @@ pub async fn sync(
     let mut server = config.into_server().unwrap();
     replica.sync(&mut server, false).unwrap();
     0
+}
+
+#[test]
+fn test_add_task_with_tags() {
+    use std::{collections::HashMap, env, fs};
+    // create unique temporary directory for taskdb
+    let tmp = env::temp_dir().join(format!("taskdb_test_{}", Uuid::new_v4()));
+    let taskdb_path = tmp.to_string_lossy().into_owned();
+    fs::create_dir_all(&tmp).expect("create temp taskdb dir");
+
+    // prepare task map with tags
+    let mut map: HashMap<String, String> = HashMap::new();
+    let uuid = Uuid::new_v4().to_string();
+    map.insert("uuid".to_string(), uuid.clone());
+    map.insert("description".to_string(), "test task".to_string());
+    map.insert("tags".to_string(), "tag1 tag2".to_string());
+
+    // add task
+    let res = add_task(taskdb_path.clone(), map);
+    assert_eq!(res, 0);
+
+    // read tasks as json and verify tags are present
+    let json = get_all_tasks_json(taskdb_path.clone()).expect("get_all_tasks_json");
+    let tasks: Vec<HashMap<String, String>> = serde_json::from_str(&json).expect("parse json");
+    let found = tasks.into_iter().find(|m| m.get("uuid").map(|s| s == &uuid).unwrap_or(false));
+    assert!(found.is_some(), "task with uuid not found");
+    let task = found.unwrap();
+    let tags = task.get("tags").map(|s| s.as_str()).unwrap_or("");
+    assert!(tags.contains("tag1"), "tag1 missing in tags: {}", tags);
+    assert!(tags.contains("tag2"), "tag2 missing in tags: {}", tags);
+
+    // cleanup
+    fs::remove_dir_all(&tmp).ok();
 }

@@ -74,6 +74,8 @@ class TaskcDetailsController extends GetxController {
       due = formatDate(task.due).obs;
       start = "".obs;
       wait = "".obs;
+      debugPrint(
+          'Replica task tags while init: ${task.tags ?? task.tags?.join(", ")}');
       tags = task.tags != null
           ? task.tags!.map((e) => e.toString()).toList().obs
           : <String>[].obs;
@@ -236,6 +238,8 @@ class TaskcDetailsController extends GetxController {
         tags.toList(),
       );
     } else if (initialTask is TaskForReplica) {
+      debugPrint(
+          'Saving replica task changes... status ${status.string} ${tags.join(", ")}');
       final int nowEpoch = DateTime.now().millisecondsSinceEpoch ~/ 1000;
       final modifiedTask = TaskForReplica(
         modified: nowEpoch,

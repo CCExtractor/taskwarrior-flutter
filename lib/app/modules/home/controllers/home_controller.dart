@@ -117,6 +117,20 @@ class HomeController extends GetxController {
         widgetController.updateWidget();
       }
     });
+    tryRust();
+  }
+
+  Future<void> tryRust() async {
+    Directory? someDir = await getDownloadsDirectory();
+
+    addTask(taskdbDirPath: someDir != null ? someDir.path : "", map: {
+      'description': "some task from bridge 2",
+      "uuid": "270750a0-1801-4a24-8b29-a7aaf62fc74d",
+      "tags": "t1 t2 t3"
+    });
+
+    debugPrint(
+        "tryRustHere: ${await getAllTasksJson(taskdbDirPath: someDir != null ? someDir.path : "")}");
   }
 
   Future<List<String>> getUniqueProjects() async {

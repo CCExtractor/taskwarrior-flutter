@@ -19,7 +19,8 @@ class Replica {
     "start",
     "wait",
     "priority",
-    "project"
+    "project",
+    "status"
   ];
   static Future<String> addTaskToReplica(
       HashMap<String, dynamic> newTask) async {
@@ -41,7 +42,6 @@ class Replica {
       }
     }
     map['uuid'] = UuidV4().generate();
-    debugPrint("Adding to Replica: $map");
     try {
       await addTask(taskdbDirPath: taskdbDirPath, map: map);
       await getAllTasksFromReplica(); //to update the db
@@ -62,13 +62,14 @@ class Replica {
     String tags = "";
     if (newTask.tags != null) {
       tags = newTask.tags!.join(" ");
+      debugPrint("Modifying Replica Task Tags: $tags");
       map["tags"] = tags;
     }
     var json = newTask.toJson();
     for (String attr in attrs) {
       if (json[attr] != null) map[attr] = json[attr].toString();
     }
-    debugPrint("Modifying Replica Task: $map");
+    debugPrint("Modifying Replica Task JSON the map: $map");
     try {
       await updateTask(
           uuidSt: newTask.uuid, taskdbDirPath: taskdbDirPath, map: map);
@@ -102,7 +103,6 @@ class Replica {
       debugPrint("Parsed from Replica: $tasks");
     } catch (e) {
       debugPrint("Error fetching from Replica $e");
-
       return [];
     }
     return tasks;

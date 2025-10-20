@@ -38,7 +38,9 @@ class TaskForReplica {
       description: json['description']?.toString(),
       tags: (json['tags'] is List)
           ? (json['tags'] as List).map((e) => e.toString()).toList()
-          : null,
+          : (json['tags'] is String)
+              ? json['tags'].toString().split(' ')
+              : null,
       uuid: json['uuid']?.toString() ?? '',
       priority: json['priority']?.toString(),
       project: json['project']?.toString(),
