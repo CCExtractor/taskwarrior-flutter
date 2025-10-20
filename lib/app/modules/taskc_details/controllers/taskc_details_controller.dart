@@ -239,7 +239,22 @@ class TaskcDetailsController extends GetxController {
       final int nowEpoch = DateTime.now().millisecondsSinceEpoch ~/ 1000;
       final modifiedTask = TaskForReplica(
         modified: nowEpoch,
-        due: due.string == '-' || due.string.isEmpty ? null : due.string,
+        due: () {
+          if (due.string == '-' || due.string.isEmpty) return null;
+          try {
+            final parsed = DateFormat('yyyy-MM-dd HH:mm:ss').parse(due.string);
+            return parsed.toUtc().toIso8601String();
+          } catch (e) {
+            try {
+              final parsed2 = DateTime.parse(due.string);
+              return parsed2.toUtc().toIso8601String();
+            } catch (_) {
+              debugPrint(
+                  'Could not parse due string for replica: ${due.string}');
+              return null;
+            }
+          }
+        }(),
         status: status.string.isNotEmpty ? status.string : null,
         description: description.string.isNotEmpty ? description.string : null,
         tags: tags.isNotEmpty ? tags.toList() : null,
