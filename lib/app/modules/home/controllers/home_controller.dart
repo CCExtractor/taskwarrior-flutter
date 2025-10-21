@@ -117,23 +117,16 @@ class HomeController extends GetxController {
         widgetController.updateWidget();
       }
     });
-    tryRust();
-  }
-
-  Future<void> tryRust() async {
-    Directory? someDir = await getDownloadsDirectory();
-
-    addTask(taskdbDirPath: someDir != null ? someDir.path : "", map: {
-      'description': "some task from bridge 2",
-      "uuid": "270750a0-1801-4a24-8b29-a7aaf62fc74d",
-      "tags": "t1 t2 t3"
-    });
-
-    debugPrint(
-        "tryRustHere: ${await getAllTasksJson(taskdbDirPath: someDir != null ? someDir.path : "")}");
   }
 
   Future<List<String>> getUniqueProjects() async {
+    if (taskReplica.value) {
+      return tasksFromReplica
+          .where((task) => task.project != null)
+          .map((task) => task.project!)
+          .toSet()
+          .toList();
+    }
     var taskDatabase = TaskDatabase();
     List<String> uniqueProjects = await taskDatabase.fetchUniqueProjects();
     debugPrint('Unique projects: $uniqueProjects');
@@ -144,6 +137,12 @@ class HomeController extends GetxController {
     var taskDatabase = TaskDatabase();
     await taskDatabase.deleteAllTasksInDB();
     debugPrint('Deleted all tasks from db');
+  }
+
+  Future<void> refreshReplicaTaskList() async {
+    if (!taskReplica.value) return;
+    tasksFromReplica.value = await Replica.getAllTasksFromReplica();
+    debugPrint("Tasks from Replica: ${tasks.length}");
   }
 
   Future<void> refreshTasks(String clientId, String encryptionSecret) async {
@@ -181,6 +180,7 @@ class HomeController extends GetxController {
 
   Future<void> refreshReplicaTasks() async {
     if (!taskReplica.value) return;
+    await Replica.sync();
     tasksFromReplica.value = await Replica.getAllTasksFromReplica();
     debugPrint("Tasks from Replica: ${tasks.length}");
   }

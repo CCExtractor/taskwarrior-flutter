@@ -72,8 +72,9 @@ class TaskcDetailsController extends GetxController {
       // TaskForReplica stores epoch seconds; convert to ISO string for formatting
       debugPrint('Replica task due: ${task.due}');
       due = formatDate(task.due).obs;
-      start = "".obs;
-      wait = "".obs;
+      // Initialize start/wait from replica model (may be ISO or epoch)
+      start = formatDate(task.start).obs;
+      wait = formatDate(task.wait).obs;
       debugPrint(
           'Replica task tags while init: ${task.tags ?? task.tags?.join(", ")}');
       tags = task.tags != null
@@ -255,6 +256,39 @@ class TaskcDetailsController extends GetxController {
             } catch (_) {
               debugPrint(
                   'Could not parse due string for replica: ${due.string}');
+              return null;
+            }
+          }
+        }(),
+        start: () {
+          if (start.string == '-' || start.string.isEmpty) return null;
+          try {
+            final parsed =
+                DateFormat('yyyy-MM-dd HH:mm:ss').parse(start.string);
+            return parsed.toUtc().toIso8601String();
+          } catch (e) {
+            try {
+              final parsed2 = DateTime.parse(start.string);
+              return parsed2.toUtc().toIso8601String();
+            } catch (_) {
+              debugPrint(
+                  'Could not parse start string for replica: ${start.string}');
+              return null;
+            }
+          }
+        }(),
+        wait: () {
+          if (wait.string == '-' || wait.string.isEmpty) return null;
+          try {
+            final parsed = DateFormat('yyyy-MM-dd HH:mm:ss').parse(wait.string);
+            return parsed.toUtc().toIso8601String();
+          } catch (e) {
+            try {
+              final parsed2 = DateTime.parse(wait.string);
+              return parsed2.toUtc().toIso8601String();
+            } catch (_) {
+              debugPrint(
+                  'Could not parse wait string for replica: ${wait.string}');
               return null;
             }
           }

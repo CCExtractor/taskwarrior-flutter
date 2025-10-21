@@ -224,7 +224,7 @@ class AddTaskBottomSheet extends StatelessWidget {
         onDateChanges: (List<DateTime?> p0) {
           homeController.selectedDates.value = p0;
         },
-        onlyDueDate: forTaskC,
+        onlyDueDate: forTaskC || forReplica,
       );
 
   Widget buildPriority(BuildContext context) => Column(

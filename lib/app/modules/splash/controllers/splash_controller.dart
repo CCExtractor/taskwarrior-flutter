@@ -89,6 +89,7 @@ class SplashController extends GetxController {
     await prefs.setBool('settings_taskc', getMode(profile) == 'TW3');
     await prefs.setBool('settings_taskr_repl', getMode(profile) == 'TW3C');
     Get.find<HomeController>().taskchampion.value = getMode(profile) == 'TW3';
+    Get.find<HomeController>().taskReplica.value = getMode(profile) == 'TW3C';
     Get.find<HomeController>().tasks.value = <TaskForC>[].obs;
     currentProfile.value = _profiles.getCurrentProfile()!;
   }

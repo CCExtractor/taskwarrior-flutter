@@ -66,32 +66,50 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
                   controller.due.value,
                   () => controller.pickDateTime(controller.due),
                 ),
-                _buildDetail(
-                  context,
-                  '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageStart}:',
-                  controller.start.value,
-                ),
-                _buildDetail(
-                  context,
-                  '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageWait}:',
-                  controller.wait.value,
-                ),
+                // Start / Wait: editable date pickers for replica tasks, read-only otherwise
+                if (controller.isReplicaTask) ...[
+                  _buildDatePickerDetail(
+                    context,
+                    '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageStart}:',
+                    controller.start.value,
+                    () => controller.pickDateTime(controller.start),
+                  ),
+                  _buildDatePickerDetail(
+                    context,
+                    '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageWait}:',
+                    controller.wait.value,
+                    () => controller.pickDateTime(controller.wait),
+                  ),
+                ] else ...[
+                  _buildDetail(
+                    context,
+                    '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageStart}:',
+                    controller.start.value,
+                  ),
+                  _buildDetail(
+                    context,
+                    '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageWait}:',
+                    controller.wait.value,
+                  ),
+                ],
                 _buildEditableDetail(
                   context,
                   '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageTags}:',
                   controller.tags.join(', '),
                   (value) => controller.updateListField(controller.tags, value),
                 ),
-                _buildDetail(
-                  context,
-                  'Rtype:',
-                  controller.rtype.value,
-                ),
-                _buildDetail(
-                  context,
-                  'Recur:',
-                  controller.recur.value,
-                ),
+                if (controller.isLocalTask) ...[
+                  _buildDetail(
+                    context,
+                    'Rtype:',
+                    controller.rtype.value,
+                  ),
+                  _buildDetail(
+                    context,
+                    'Recur:',
+                    controller.recur.value,
+                  ),
+                ],
                 // Conditionally show fields that are only present on local tasks
                 if (controller.isLocalTask) ...[
                   _buildDetail(

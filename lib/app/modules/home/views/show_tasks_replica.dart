@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/routes/app_pages.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
-import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
+import 'package:taskwarrior/app/v3/champion/Replica.dart';
 import 'package:taskwarrior/app/v3/champion/models/task_for_replica.dart';
 
-/// A lightweight view builder for TaskForReplica objects.
-/// This mirrors `TaskViewBuilder` but only uses fields available on the
-/// `TaskForReplica` model (modified, due, status, description, tags, uuid, priority).
 class TaskReplicaViewBuilder extends StatelessWidget {
   const TaskReplicaViewBuilder({
     super.key,
@@ -32,22 +32,15 @@ class TaskReplicaViewBuilder extends StatelessWidget {
         Theme.of(context).extension<TaskwarriorColorTheme>()!;
 
     return Obx(() {
-      // We receive the tasks list from the caller so we copy it here.
       List<TaskForReplica> tasks = List<TaskForReplica>.from(replicaTasks);
-
-      // Project filtering is not meaningful for TaskForReplica if project is not set
       if (project != null && project != 'All Projects') {
-        // TaskForReplica doesn't have a `project` field by default, so skip filtering.
+        tasks = tasks.where((task) => task.project == project).toList();
       }
-
-      // Default sort: by modified desc if available
       tasks.sort((a, b) {
         final am = a.modified ?? 0;
         final bm = b.modified ?? 0;
         return bm.compareTo(am);
       });
-
-      // Apply pending/completed filter
       tasks = tasks.where((task) {
         if (pendingFilter) {
           return task.status == 'pending';
@@ -56,7 +49,6 @@ class TaskReplicaViewBuilder extends StatelessWidget {
         }
       }).toList();
 
-      // Only allow sorting by fields that exist on TaskForReplica
       tasks.sort((a, b) {
         switch (selectedSort) {
           case 'Modified+':
@@ -106,7 +98,26 @@ class TaskReplicaViewBuilder extends StatelessWidget {
                 itemCount: tasks.length,
                 itemBuilder: (context, index) {
                   final task = tasks[index];
-                  return Card(
+                  // Determine if due is within 24 hours or already past (only for pending filter)
+                  final bool isDueSoon = (() {
+                    if (!pendingFilter) return false;
+                    // Only apply due-soon highlighting when delay-task setting is enabled
+                    try {
+                      final HomeController hc = Get.find<HomeController>();
+                      if (!hc.useDelayTask.value) return false;
+                    } catch (_) {
+                      return false;
+                    }
+                    final dueStr = task.due;
+                    if (dueStr == null || dueStr.isEmpty) return false;
+                    final parsed = DateTime.tryParse(dueStr);
+                    if (parsed == null) return false;
+                    final now = DateTime.now().toUtc();
+                    final threshold = now.add(const Duration(hours: 24));
+                    return parsed.toUtc().isBefore(threshold);
+                  })();
+
+                  final card = Card(
                     color: tColors.secondaryBackgroundColor,
                     child: InkWell(
                       splashColor: tColors.primaryBackgroundColor,
@@ -115,7 +126,9 @@ class TaskReplicaViewBuilder extends StatelessWidget {
                       child: Container(
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: tColors.primaryTextColor!,
+                            color: isDueSoon
+                                ? Colors.red
+                                : tColors.primaryTextColor!,
                           ),
                           color: tColors.primaryBackgroundColor,
                           borderRadius: BorderRadius.circular(8.0),
@@ -144,6 +157,49 @@ class TaskReplicaViewBuilder extends StatelessWidget {
                       ),
                     ),
                   );
+
+                  // Only enable swipe actions (complete/delete) when pendingFilter is true
+                  if (pendingFilter) {
+                    return Slidable(
+                      startActionPane: ActionPane(
+                        motion: const BehindMotion(),
+                        children: [
+                          SlidableAction(
+                            onPressed: (ctx) {
+                              completeTask(task);
+                            },
+                            icon: Icons.done,
+                            label: SentenceManager(
+                                    currentLanguage:
+                                        AppSettings.selectedLanguage)
+                                .sentences
+                                .complete,
+                            backgroundColor: TaskWarriorColors.green,
+                          ),
+                        ],
+                      ),
+                      endActionPane: ActionPane(
+                        motion: const DrawerMotion(),
+                        children: [
+                          SlidableAction(
+                            onPressed: (ctx) {
+                              deleteTask(task);
+                            },
+                            icon: Icons.delete,
+                            label: SentenceManager(
+                                    currentLanguage:
+                                        AppSettings.selectedLanguage)
+                                .sentences
+                                .delete,
+                            backgroundColor: TaskWarriorColors.red,
+                          ),
+                        ],
+                      ),
+                      child: card,
+                    );
+                  }
+
+                  return card;
                 },
               ),
       );
@@ -161,5 +217,15 @@ class TaskReplicaViewBuilder extends StatelessWidget {
       default:
         return Colors.grey;
     }
+  }
+
+  void completeTask(TaskForReplica task) async {
+    await Replica.modifyTaskInReplica(task.copyWith(status: 'completed'));
+    Get.find<HomeController>().refreshReplicaTaskList();
+  }
+
+  void deleteTask(TaskForReplica task) async {
+    await Replica.deleteTaskFromReplica(task.uuid);
+    Get.find<HomeController>().refreshReplicaTaskList();
   }
 }

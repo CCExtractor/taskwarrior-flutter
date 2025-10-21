@@ -24,7 +24,8 @@ class FilterDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     homeController.initFilterDrawerTour();
     homeController.showFilterDrawerTour(context);
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     var tileColor = AppSettings.isDarkMode
         ? TaskWarriorColors.ksecondaryBackgroundColor
         : TaskWarriorColors.kLightPrimaryBackgroundColor;
@@ -122,39 +123,42 @@ class FilterDrawer extends StatelessWidget {
               const Divider(
                 color: Color.fromARGB(0, 48, 46, 46),
               ),
-              Container(
-                decoration: BoxDecoration(
-                  color: tileColor,
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: TaskWarriorColors.borderColor),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                          !filters.waitingFilter
-                              ? SentenceManager(
-                                      currentLanguage:
-                                          homeController.selectedLanguage.value)
-                                  .sentences
-                                  .filterDrawerShowWaiting
-                              : SentenceManager(
-                                      currentLanguage:
-                                          homeController.selectedLanguage.value)
-                                  .sentences
-                                  .filterDrawerHideWaiting,
-                          style: TextStyle(
-                            fontFamily: FontFamily.poppins,
-                            fontSize: TaskWarriorFonts.fontSizeMedium,
-                            color: tColors.primaryTextColor,
-                          )),
-                      Switch(
-                        value: filters.waitingFilter,
-                        onChanged: (_) => filters.toggleWaitingFilter(),
-                      )
-                    ],
+              Visibility(
+                visible: !homeController.taskReplica.value,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: tileColor,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: TaskWarriorColors.borderColor),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                            !filters.waitingFilter
+                                ? SentenceManager(
+                                        currentLanguage: homeController
+                                            .selectedLanguage.value)
+                                    .sentences
+                                    .filterDrawerShowWaiting
+                                : SentenceManager(
+                                        currentLanguage: homeController
+                                            .selectedLanguage.value)
+                                    .sentences
+                                    .filterDrawerHideWaiting,
+                            style: TextStyle(
+                              fontFamily: FontFamily.poppins,
+                              fontSize: TaskWarriorFonts.fontSizeMedium,
+                              color: tColors.primaryTextColor,
+                            )),
+                        Switch(
+                          value: filters.waitingFilter,
+                          onChanged: (_) => filters.toggleWaitingFilter(),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -162,7 +166,8 @@ class FilterDrawer extends StatelessWidget {
                 color: Color.fromARGB(0, 48, 46, 46),
               ),
               Visibility(
-                visible: !homeController.taskchampion.value,
+                visible: !homeController.taskchampion.value &&
+                    !homeController.taskReplica.value,
                 child: Container(
                   key: homeController.projectsKey,
                   width: MediaQuery.of(context).size.width * 1,
@@ -182,7 +187,8 @@ class FilterDrawer extends StatelessWidget {
                 ),
               ),
               Visibility(
-                visible: homeController.taskchampion.value,
+                visible: homeController.taskchampion.value ||
+                    homeController.taskReplica.value,
                 child: FutureBuilder<List<String>>(
                   future: homeController.getUniqueProjects(),
                   builder: (BuildContext context,
@@ -219,7 +225,8 @@ class FilterDrawer extends StatelessWidget {
                 color: Color.fromARGB(0, 48, 46, 46),
               ),
               Visibility(
-                visible: !homeController.taskchampion.value,
+                visible: !homeController.taskchampion.value &&
+                    !homeController.taskReplica.value,
                 child: Container(
                   key: homeController.filterTagKey,
                   width: MediaQuery.of(context).size.width * 1,
@@ -273,7 +280,8 @@ class FilterDrawer extends StatelessWidget {
                 ),
               ),
               Visibility(
-                visible: !homeController.taskchampion.value,
+                visible: !homeController.taskchampion.value &&
+                    !homeController.taskReplica.value,
                 child: const Divider(
                   color: Color.fromARGB(0, 48, 46, 46),
                 ),

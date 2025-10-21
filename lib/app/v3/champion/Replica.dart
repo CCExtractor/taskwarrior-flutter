@@ -114,6 +114,8 @@ class Replica {
       var url = await CredentialsStorage.getApiUrl();
       var clientId = await CredentialsStorage.getClientId();
       var encryptionSecret = await CredentialsStorage.getEncryptionSecret();
+      debugPrint(
+          "Syncing Replica with url=$url clientId=$clientId encryptionSecret=$encryptionSecret");
       await sync_(
           taskdbDirPath: taskdbDirPath,
           url: url ?? "",

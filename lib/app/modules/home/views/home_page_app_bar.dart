@@ -131,10 +131,13 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
                 onPressed: controller.isRefreshing.value
                     ? null
                     : () async {
+                        debugPrint("Refresh button pressed");
                         if (controller.taskReplica.value) {
                           var c = await CredentialsStorage.getClientId();
                           var e =
                               await CredentialsStorage.getEncryptionSecret();
+                          debugPrint(
+                              "controller.taskReplica.value ${controller.taskReplica.value} Replica Credentials: c=$c e=$e");
                           if (c == null || e == null) {
                             _showResultSnackBar(
                                 context,
@@ -146,9 +149,11 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
                                 true);
                             return;
                           }
+                          debugPrint("Refreshing Replica tasks");
                           controller.isRefreshing.value = true;
                           await controller.refreshReplicaTasks();
                           controller.isRefreshing.value = false;
+                          return;
                         }
 
                         if (controller.taskchampion.value) {

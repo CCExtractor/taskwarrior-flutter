@@ -99,8 +99,11 @@ class ProfileView extends GetView<ProfileController> {
             ),
             () {
               if (controller.profilesWidget
-                      .getMode(controller.currentProfile.value) ==
-                  'TW3') {
+                          .getMode(controller.currentProfile.value) ==
+                      'TW3' ||
+                  controller.profilesWidget
+                          .getMode(controller.currentProfile.value) ==
+                      'TW3C') {
                 Get.toNamed(Routes.MANAGE_TASK_CHAMPION_CREDS);
                 return;
               }
