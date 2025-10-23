@@ -493,9 +493,9 @@ class AddTaskBottomSheet extends StatelessWidget {
         // storageWidget = StorageWidget.of(context);
         var storageWidget = Get.find<HomeController>();
         if (value) {
-          storageWidget.synchronize(context, true);
+          storageWidget.refreshReplicaTasks();
         }
-        await storageWidget.refreshReplicaTasks();
+        await storageWidget.refreshReplicaTaskList();
       } on FormatException catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
