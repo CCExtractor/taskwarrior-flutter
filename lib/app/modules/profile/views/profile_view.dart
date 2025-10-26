@@ -13,6 +13,7 @@ import 'package:taskwarrior/app/utils/constants/utilites.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
+import 'package:taskwarrior/app/v3/champion/Replica.dart';
 import 'package:taskwarrior/app/v3/db/task_database.dart';
 
 import '../controllers/profile_controller.dart';
@@ -114,10 +115,15 @@ class ProfileView extends GetView<ProfileController> {
               if (controller.profilesWidget.getMode(profile) == "TW2") {
                 tasks =
                     controller.profilesWidget.getStorage(profile).data.export();
-              } else {
+              } else if (controller.profilesWidget.getMode(profile) == "TW3") {
                 TaskDatabase db = TaskDatabase();
                 await db.openForProfile(profile);
                 tasks = await db.exportAllTasks();
+              } else {
+                tasks = await Replica.getAllTasksFromReplica().then(
+                    (taskList) =>
+                        taskList.map((e) => e.toJson()).toList().toString());
+                debugPrint("Exported Tasks from Replica: $tasks");
               }
               var now = DateTime.now()
                   .toIso8601String()
