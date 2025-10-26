@@ -91,6 +91,9 @@ class HomeController extends GetxController {
       handleHomeWidgetClicked();
     }
     fetchTasksFromDB();
+    ever(taskReplica, (_) {
+      if (taskReplica.value) refreshReplicaTaskList();
+    });
     everAll([
       pendingFilter,
       waitingFilter,
