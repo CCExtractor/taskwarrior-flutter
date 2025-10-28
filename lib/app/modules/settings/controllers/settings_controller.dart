@@ -203,7 +203,6 @@ class SettingsController extends GetxController {
   RxBool isSyncOnStartActivel = false.obs;
   RxBool isSyncOnTaskCreateActivel = false.obs;
   RxBool delaytask = false.obs;
-  RxBool change24hr = false.obs;
   RxBool taskchampion = false.obs;
   RxBool isDarkModeOn = false.obs;
 
@@ -218,7 +217,6 @@ class SettingsController extends GetxController {
     isSyncOnTaskCreateActivel.value =
         prefs.getBool('sync-OnTaskCreate') ?? false;
     delaytask.value = prefs.getBool('delaytask') ?? false;
-    change24hr.value = prefs.getBool('24hourformate') ?? false;
     taskchampion.value = prefs.getBool('settings_taskc') ?? false;
     initDarkMode();
     baseDirectory.value = await getBaseDirectory();
