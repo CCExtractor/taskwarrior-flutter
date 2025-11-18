@@ -1,18 +1,20 @@
 part of 'app_settings.dart';
 
 class SelectedLanguage {
-  static SharedPreferences? _preferences;
+  static late SharedPreferences _prefs;
+  static const _keyLanguage = 'selectedLanguage';
 
   static Future init() async {
-    _preferences = await SharedPreferences.getInstance();
-  }
-
-  static Future saveSelectedLanguage(SupportedLanguage language) async {
-    await _preferences?.setString('_selectedLanguage', language.languageCode);
+    _prefs = await SharedPreferences.getInstance();
   }
 
   static SupportedLanguage? getSelectedLanguage() {
-    String? languageCode = _preferences?.getString('_selectedLanguage');
-    return SupportedLanguageExtension.fromCode(languageCode);
+    final langString = _prefs.getString(_keyLanguage);
+    if (langString == null) return null;
+    return SupportedLanguageExtension.fromString(langString);
+  }
+
+  static Future saveSelectedLanguage(SupportedLanguage lang) async {
+    await _prefs.setString(_keyLanguage, lang.toShortString());
   }
 }

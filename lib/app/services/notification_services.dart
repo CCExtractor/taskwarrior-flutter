@@ -1,129 +1,121 @@
-// ignore_for_file: depend_on_referenced_packages
-
+// lib/app/services/notification_service.dart
 import 'dart:convert';
+import 'dart:math';
 
-import 'package:crypto/crypto.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/data/latest.dart' as tzdata;
 import 'package:timezone/timezone.dart' as tz;
 
+/// Singleton notification service that wraps flutter_local_notifications
 class NotificationService {
-  final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
-  final AndroidInitializationSettings _androidInitializationSettings =
-      const AndroidInitializationSettings('taskwarrior');
-  DarwinInitializationSettings iosSettings = const DarwinInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestCriticalPermission: true,
-      requestSoundPermission: true);
+  NotificationService._privateConstructor();
 
-  DarwinInitializationSettings macSettings = const DarwinInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestCriticalPermission: true,
-      requestSoundPermission: true);
-  void initiliazeNotification() async {
-    InitializationSettings initializationSettings = InitializationSettings(
-      android: _androidInitializationSettings,
-      iOS: iosSettings,
-      macOS: macSettings,
+  static final NotificationService _instance =
+  NotificationService._privateConstructor();
+
+  factory NotificationService() => _instance;
+
+  final FlutterLocalNotificationsPlugin _plugin =
+  FlutterLocalNotificationsPlugin();
+
+  bool _initialized = false;
+
+  Future<void> init() async {
+    if (_initialized) return;
+
+    // Initialize timezone database
+    tzdata.initializeTimeZones();
+
+    const AndroidInitializationSettings androidInit =
+    AndroidInitializationSettings('@mipmap/ic_launcher');
+
+    final InitializationSettings initSettings =
+    InitializationSettings(android: androidInit);
+
+    await _plugin.initialize(
+      initSettings,
+      // you can add onSelectNotification callback here if needed
+      // onSelectNotification: (payload) async { ... },
     );
 
-    await _flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    _initialized = true;
   }
 
-  // Function to create a unique notification ID
-  int calculateNotificationId(DateTime scheduledTime, String taskname,
-      bool isWait, DateTime entryTime) {
-    String combinedString =
-        '${entryTime.toIso8601String().substring(0, 19)}$taskname';
-
-    // Calculate SHA-256 hash
-    var sha2561 = sha256.convert(utf8.encode(combinedString));
-
-    // Convert the first 8 characters of the hash to an integer
-    int notificationId =
-        int.parse(sha2561.toString().substring(0, 8), radix: 16) % 2147483647;
-    if (isWait) {
-      notificationId = (notificationId + 2) % 2147483647;
+  /// Create a stable integer id for a task from its uuid (string).
+  /// Ensures same id is produced for same uuid (to cancel/reschedule).
+  int _idFromUuid(String? uuid) {
+    if (uuid == null || uuid.isEmpty) {
+      // fallback random but stable using time
+      return DateTime.now().millisecondsSinceEpoch.remainder(1 << 31);
     }
-
-    return notificationId;
+    // simple stable hash (non cryptographic) -> within int range
+    var bytes = utf8.encode(uuid);
+    int h = 0;
+    for (var b in bytes) {
+      h = (h * 31 + b) & 0x7fffffff;
+    }
+    return h;
   }
 
-  void sendNotification(
-      DateTime dtb, String taskname, bool isWait, DateTime entryTime) async {
-    DateTime dateTime = DateTime.now();
-    tz.initializeTimeZones();
-    if (kDebugMode) {
-      print("date and time are:-$dateTime");
-      print("date and time are:-$dtb");
+  /// Schedule a reminder for a task.
+  /// dueDate must be in device-local DateTime (not UTC) or converted to tz.local
+  Future<void> scheduleTaskReminder({
+    required String uuid,
+    required String title,
+    required DateTime dueDate,
+    Duration before = const Duration(minutes: 15),
+    String? body,
+  }) async {
+    await init();
+
+    final reminderTime = dueDate.subtract(before);
+
+    if (reminderTime.isBefore(DateTime.now())) {
+      // too late to schedule
+      return;
     }
-    final tz.TZDateTime scheduledAt =
-        tz.TZDateTime.from(dtb.add(const Duration(minutes: 0)), tz.local);
 
-    AndroidNotificationDetails androidNotificationDetails =
-        const AndroidNotificationDetails('channelId', 'TaskReminder',
-            icon: "taskwarrior",
-            importance: Importance.max,
-            priority: Priority.max);
+    final tz.TZDateTime scheduled =
+    tz.TZDateTime.from(reminderTime, tz.local);
 
-    // iOS and macOS Notification Details
-    DarwinNotificationDetails iOSNotificationDetails =
-        const DarwinNotificationDetails(
-      presentAlert: true,
-      presentBadge: true,
-      presentSound: true,
+    final id = _idFromUuid(uuid);
+
+    final androidDetails = AndroidNotificationDetails(
+      'task_reminder_channel',
+      'Task reminders',
+      channelDescription: 'Reminders scheduled before task due time',
+      importance: Importance.defaultImportance,
+      priority: Priority.defaultPriority,
+      playSound: false, // silent by default
+      enableVibration: false,
+      // set additional channel settings if needed
     );
 
-    DarwinNotificationDetails macOsNotificationDetails =
-        const DarwinNotificationDetails(
-      presentAlert: true,
-      presentBadge: true,
-      presentSound: true,
+    final notificationDetails = NotificationDetails(android: androidDetails);
+
+    await _plugin.zonedSchedule(
+      id,
+      title.isNotEmpty ? title : 'Upcoming task',
+      body ?? 'A task is due at ${dueDate.toLocal()}',
+      scheduled,
+      notificationDetails,
+      androidAllowWhileIdle: true,
+      uiLocalNotificationDateInterpretation:
+      UILocalNotificationDateInterpretation.absoluteTime,
+      matchDateTimeComponents: null,
     );
-
-    NotificationDetails notificationDetails = NotificationDetails(
-      android: androidNotificationDetails,
-      iOS: iOSNotificationDetails,
-      macOS: macOsNotificationDetails,
-    );
-
-    // Generate a unique notification ID based on the scheduled time and task name
-    int notificationId =
-        calculateNotificationId(dtb, taskname, isWait, entryTime);
-
-    await _flutterLocalNotificationsPlugin
-        .zonedSchedule(
-            notificationId,
-            'Taskwarrior Reminder',
-            isWait
-                ? "Hey! Don't forget your task of $taskname"
-                : 'Hey! Your task of $taskname is still pending',
-            scheduledAt,
-            notificationDetails,
-            uiLocalNotificationDateInterpretation:
-                UILocalNotificationDateInterpretation.absoluteTime,
-            androidScheduleMode: AndroidScheduleMode.alarmClock)
-        .then((value) {
-      if (kDebugMode) {
-        print('Notification scheduled successfully');
-      }
-    }).catchError((error) {
-      if (kDebugMode) {
-        print('Error scheduling notification: $error');
-      }
-    });
-
-    if (kDebugMode) {
-      print(scheduledAt.day * 100 + scheduledAt.hour * 10 + scheduledAt.minute);
-    }
   }
 
-  // Delete previously scheduled notification with a specific ID
-  void cancelNotification(int notificationId) async {
-    await _flutterLocalNotificationsPlugin.cancel(notificationId);
+  /// Cancel reminder for a task identified by uuid
+  Future<void> cancelReminder(String uuid) async {
+    await init();
+    final id = _idFromUuid(uuid);
+    await _plugin.cancel(id);
+  }
+
+  /// Cancel all reminders
+  Future<void> cancelAllReminders() async {
+    await init();
+    await _plugin.cancelAll();
   }
 }

@@ -1,17 +1,18 @@
 part of 'app_settings.dart';
 
 class SelectedTheme {
-  static SharedPreferences? _preferences;
+  static late SharedPreferences _prefs;
+  static const _keyTheme = 'isDarkMode';
 
   static Future init() async {
-    _preferences = await SharedPreferences.getInstance();
-  }
-
-  static Future saveMode(bool mode) async {
-    await _preferences?.setBool('_isDark', mode);
+    _prefs = await SharedPreferences.getInstance();
   }
 
   static bool? getMode() {
-    return _preferences?.getBool('_isDark');
+    return _prefs.getBool(_keyTheme);
+  }
+
+  static Future saveMode(bool isDark) async {
+    await _prefs.setBool(_keyTheme, isDark);
   }
 }

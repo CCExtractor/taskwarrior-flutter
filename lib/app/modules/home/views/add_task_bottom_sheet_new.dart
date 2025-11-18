@@ -1,3 +1,4 @@
+// copy/paste over your existing AddTaskBottomSheet file
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ import 'package:taskwarrior/app/utils/taskfunctions/tags.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/taskparser.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:taskwarrior/app/v3/models/task.dart';
+import 'package:taskwarrior/app/services/notification_service.dart';
 
 class AddTaskBottomSheet extends StatelessWidget {
   final HomeController homeController;
@@ -46,15 +48,15 @@ class AddTaskBottomSheet extends StatelessWidget {
                       Get.back();
                     },
                     child: Text(SentenceManager(
-                            currentLanguage:
-                                homeController.selectedLanguage.value)
+                        currentLanguage:
+                        homeController.selectedLanguage.value)
                         .sentences
                         .cancel),
                   ),
                   Text(
                     SentenceManager(
-                            currentLanguage:
-                                homeController.selectedLanguage.value)
+                        currentLanguage:
+                        homeController.selectedLanguage.value)
                         .sentences
                         .addTaskTitle,
                     style: const TextStyle(
@@ -71,8 +73,8 @@ class AddTaskBottomSheet extends StatelessWidget {
                       }
                     },
                     child: Text(SentenceManager(
-                            currentLanguage:
-                                homeController.selectedLanguage.value)
+                        currentLanguage:
+                        homeController.selectedLanguage.value)
                         .sentences
                         .save),
                   ),
@@ -89,15 +91,15 @@ class AddTaskBottomSheet extends StatelessWidget {
                         controller: homeController.namecontroller,
                         validator: (value) => value!.isEmpty
                             ? SentenceManager(
-                                    currentLanguage:
-                                        homeController.selectedLanguage.value)
-                                .sentences
-                                .descriprtionCannotBeEmpty
+                            currentLanguage:
+                            homeController.selectedLanguage.value)
+                            .sentences
+                            .descriprtionCannotBeEmpty
                             : null,
                         decoration: InputDecoration(
                           labelText: SentenceManager(
-                                  currentLanguage:
-                                      homeController.selectedLanguage.value)
+                              currentLanguage:
+                              homeController.selectedLanguage.value)
                               .sentences
                               .enterTaskDescription,
                           border: OutlineInputBorder(),
@@ -132,15 +134,16 @@ class AddTaskBottomSheet extends StatelessWidget {
   }
 
   Widget buildProjectInput(BuildContext context) {
+    // unchanged
     TaskwarriorColorTheme tColors =
-        Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Autocomplete<String>(
       optionsBuilder: (textEditingValue) async {
         Iterable<String> projects = getProjects();
         return projects.where((String project) =>
-            project
-                .toLowerCase()
-                .contains(textEditingValue.text.toLowerCase()) &&
+        project
+            .toLowerCase()
+            .contains(textEditingValue.text.toLowerCase()) &&
             project != '');
       },
       optionsViewBuilder: (context, onAutoCompleteSelect, options) {
@@ -182,126 +185,137 @@ class AddTaskBottomSheet extends StatelessWidget {
       },
       fieldViewBuilder:
           (context, textEditingController, focusNode, onFieldSubmitted) =>
-              TextFormField(
-        controller: textEditingController,
-        decoration: InputDecoration(
-          labelText: SentenceManager(
+          TextFormField(
+            controller: textEditingController,
+            decoration: InputDecoration(
+              labelText: SentenceManager(
                   currentLanguage: homeController.selectedLanguage.value)
-              .sentences
-              .enterProject,
-          border: OutlineInputBorder(),
-        ),
-        onChanged: (value) => homeController.projectcontroller.text = value,
-        focusNode: focusNode,
-        validator: (value) {
-          if (value != null && value.contains(" ")) {
-            return SentenceManager(
+                  .sentences
+                  .enterProject,
+              border: OutlineInputBorder(),
+            ),
+            onChanged: (value) => homeController.projectcontroller.text = value,
+            focusNode: focusNode,
+            validator: (value) {
+              if (value != null && value.contains(" ")) {
+                return SentenceManager(
                     currentLanguage: homeController.selectedLanguage.value)
-                .sentences
-                .canNotHaveWhiteSpace;
-          }
-          return null;
-        },
-      ),
+                    .sentences
+                    .canNotHaveWhiteSpace;
+              }
+              return null;
+            },
+          ),
     );
   }
 
   Widget buildTagsInput(BuildContext context) => AddTaskTagsInput(
-        suggestions: tagSet(homeController.storage.data.allData()),
-        onTagsChanges: (p0) => homeController.tags.value = p0,
-      );
+    suggestions: tagSet(homeController.storage.data.allData()),
+    onTagsChanges: (p0) => homeController.tags.value = p0,
+  );
 
   Widget buildDatePicker(BuildContext context) => AddTaskDatePickerInput(
-        onDateChanges: (List<DateTime?> p0) {
-          homeController.selectedDates.value = p0;
-        },
-        onlyDueDate: forTaskC,
-      );
+    onDateChanges: (List<DateTime?> p0) {
+      homeController.selectedDates.value = p0;
+    },
+    onlyDueDate: forTaskC,
+  );
 
   Widget buildPriority(BuildContext context) => Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Obx(
+    mainAxisAlignment: MainAxisAlignment.center,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Obx(
             () => TextField(
-              readOnly: true, // Make the field read-only
-              controller: TextEditingController(
-                text: getPriorityText(homeController
-                    .priority.value), // Display the selected priority
-              ),
-              decoration: InputDecoration(
-                labelText: SentenceManager(
-                        currentLanguage: homeController.selectedLanguage.value)
-                    .sentences
-                    .priority,
-                border: const OutlineInputBorder(),
-                suffixIcon: Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      debugPrint("Open priority selection.");
-                    },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        for (int i = 0;
-                            i < homeController.priorityList.length;
-                            i++)
-                          GestureDetector(
-                            onTap: () {
-                              homeController.priority.value =
-                                  homeController.priorityList[i];
-                              debugPrint(homeController.priority.value);
-                            },
-                            child: AnimatedContainer(
-                              margin: const EdgeInsets.only(right: 5),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 5),
-                              duration: const Duration(milliseconds: 200),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(
-                                  color: homeController.priority.value ==
-                                          homeController.priorityList[i]
-                                      ? AppSettings.isDarkMode
-                                          ? TaskWarriorColors
-                                              .kLightPrimaryBackgroundColor
-                                          : TaskWarriorColors
-                                              .kprimaryBackgroundColor
-                                      : AppSettings.isDarkMode
-                                          ? TaskWarriorColors
-                                              .kprimaryBackgroundColor
-                                          : TaskWarriorColors
-                                              .kLightPrimaryBackgroundColor,
-                                ),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  homeController.priorityList[i],
-                                  style: GoogleFonts.poppins(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                    color: homeController.priorityColors[i],
-                                  ),
-                                ),
+          readOnly: true, // Make the field read-only
+          controller: TextEditingController(
+            text: getPriorityText(homeController
+                .priority.value), // Display the selected priority
+          ),
+          decoration: InputDecoration(
+            labelText: SentenceManager(
+                currentLanguage: homeController.selectedLanguage.value)
+                .sentences
+                .priority,
+            border: const OutlineInputBorder(),
+            suffixIcon: Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: GestureDetector(
+                onTap: () {
+                  debugPrint("Open priority selection.");
+                },
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    for (int i = 0;
+                    i < homeController.priorityList.length;
+                    i++)
+                      GestureDetector(
+                        onTap: () {
+                          homeController.priority.value =
+                          homeController.priorityList[i];
+                          debugPrint(homeController.priority.value);
+                        },
+                        child: AnimatedContainer(
+                          margin: const EdgeInsets.only(right: 5),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 5),
+                          duration: const Duration(milliseconds: 200),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: homeController.priority.value ==
+                                  homeController.priorityList[i]
+                                  ? AppSettings.isDarkMode
+                                  ? TaskWarriorColors
+                                  .kLightPrimaryBackgroundColor
+                                  : TaskWarriorColors
+                                  .kprimaryBackgroundColor
+                                  : AppSettings.isDarkMode
+                                  ? TaskWarriorColors
+                                  .kprimaryBackgroundColor
+                                  : TaskWarriorColors
+                                  .kLightPrimaryBackgroundColor,
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              homeController.priorityList[i],
+                              style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                color: homeController.priorityColors[i],
                               ),
                             ),
                           ),
-                      ],
-                    ),
-                  ),
+                        ),
+                      ),
+                  ],
                 ),
               ),
             ),
-          )
-        ],
-      );
+          ),
+        ),
+      )
+    ],
+  );
 
   Set<String> getProjects() {
     Iterable<Task> tasks = homeController.storage.data.allData();
     return tasks
         .where((task) => task.project != null)
         .fold(<String>{}, (aggregate, task) => aggregate..add(task.project!));
+  }
+
+  // Helper: parse ISO string if needed, or accept DateTime
+  DateTime? _parseDue(dynamic dueValue) {
+    if (dueValue == null) return null;
+    if (dueValue is DateTime) return dueValue.toLocal();
+    try {
+      return DateTime.parse(dueValue.toString()).toLocal();
+    } catch (_) {
+      return null;
+    }
   }
 
   void onSaveButtonClickedTaskC(BuildContext context) async {
@@ -316,11 +330,11 @@ class AddTaskBottomSheet extends StatelessWidget {
           project: homeController.projectcontroller.text != ""
               ? homeController.projectcontroller.text
               : null,
-          uuid: '',
+          uuid: UniqueKey().toString(),
           urgency: 0,
           due: getDueDate(homeController.selectedDates).toString(),
           end: '',
-          modified: 'r',
+          modified: DateTime.now().toIso8601String(),
           tags: homeController.tags,
           start: '',
           wait: '',
@@ -329,6 +343,23 @@ class AddTaskBottomSheet extends StatelessWidget {
           depends: [],
           annotations: []);
       await homeController.taskdb.insertTask(task);
+
+      // schedule reminder if enabled
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final notify = prefs.getBool('notify_before_due') ?? true;
+      if (notify) {
+        final dueDt = _parseDue(task.due);
+        if (dueDt != null) {
+          await NotificationService().scheduleTaskReminder(
+            uuid: task.uuid ?? task.entry,
+            title: task.description ?? 'Upcoming task',
+            dueDate: dueDt,
+            before: const Duration(minutes: 15),
+            body: 'Your task is due at ${dueDt.toLocal()}',
+          );
+        }
+      }
+
       homeController.namecontroller.text = '';
       homeController.due.value = null;
       homeController.priority.value = 'M';
@@ -336,7 +367,7 @@ class AddTaskBottomSheet extends StatelessWidget {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
             SentenceManager(
-                    currentLanguage: homeController.selectedLanguage.value)
+                currentLanguage: homeController.selectedLanguage.value)
                 .sentences
                 .addTaskTaskAddedSuccessfully,
             style: TextStyle(
@@ -354,25 +385,61 @@ class AddTaskBottomSheet extends StatelessWidget {
   }
 
   void onSaveButtonClicked(BuildContext context) async {
-    // print(homeController.formKey.currentState);
     if (homeController.formKey.currentState!.validate()) {
       try {
         var task = taskParser(homeController.namecontroller.text)
             .rebuild((b) =>
-                b..due = getDueDate(homeController.selectedDates)?.toUtc())
+        b..due = getDueDate(homeController.selectedDates)?.toUtc())
             .rebuild((p) => p..priority = homeController.priority.value)
             .rebuild((t) => t..project = homeController.projectcontroller.text)
             .rebuild((t) =>
-                t..wait = getWaitDate(homeController.selectedDates)?.toUtc())
+        t..wait = getWaitDate(homeController.selectedDates)?.toUtc())
             .rebuild((t) =>
-                t..until = getUntilDate(homeController.selectedDates)?.toUtc())
+        t..until = getUntilDate(homeController.selectedDates)?.toUtc())
             .rebuild((t) => t
-              ..scheduled =
-                  getSchedDate(homeController.selectedDates)?.toUtc());
+          ..scheduled =
+          getSchedDate(homeController.selectedDates)?.toUtc());
         if (homeController.tags.isNotEmpty) {
           task = task.rebuild((t) => t..tags.replace(homeController.tags));
         }
         Get.find<HomeController>().mergeTask(task);
+
+        // schedule reminder if enabled (for built task)
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        final notify = prefs.getBool('notify_before_due') ?? true;
+        if (notify) {
+          // task.due may be DateTime? or something else; parse defensively
+          final dueValue = task.due;
+          DateTime? dueDt;
+          if (dueValue is DateTime) {
+            dueDt = dueValue.toLocal();
+          } else if (dueValue != null) {
+            try {
+              dueDt = DateTime.parse(dueValue.toString()).toLocal();
+            } catch (_) {
+              dueDt = null;
+            }
+          }
+          if (dueDt != null) {
+            // derive uuid: built task likely has id/uuid properties; try common fields
+            String uuidCandidate = '';
+            try {
+              // if your built Task type exposes uuid
+              uuidCandidate = (task as dynamic).uuid ?? (task as dynamic).entry ?? '';
+            } catch (_) {
+              uuidCandidate = DateTime.now().toIso8601String();
+            }
+            await NotificationService().scheduleTaskReminder(
+              uuid: uuidCandidate,
+              title:
+              (task as dynamic).description ?? 'Upcoming task', // dynamic access
+              dueDate: dueDt,
+              before: const Duration(minutes: 15),
+              body: 'Your task is due at ${dueDt.toLocal()}',
+            );
+          }
+        }
+
         homeController.namecontroller.text = '';
         homeController.projectcontroller.text = '';
         homeController.dueString.value = "";
@@ -392,7 +459,7 @@ class AddTaskBottomSheet extends StatelessWidget {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
               SentenceManager(
-                      currentLanguage: homeController.selectedLanguage.value)
+                  currentLanguage: homeController.selectedLanguage.value)
                   .sentences
                   .addTaskTaskAddedSuccessfully,
               style: TextStyle(
@@ -409,8 +476,6 @@ class AddTaskBottomSheet extends StatelessWidget {
         final SharedPreferences prefs = await SharedPreferences.getInstance();
         bool? value;
         value = prefs.getBool('sync-OnTaskCreate') ?? false;
-        // late InheritedStorage storageWidget;
-        // storageWidget = StorageWidget.of(context);
         var storageWidget = Get.find<HomeController>();
         if (value) {
           storageWidget.synchronize(context, true);

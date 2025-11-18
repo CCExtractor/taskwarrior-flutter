@@ -9,29 +9,37 @@ class AppSettings {
   static bool isDarkMode = true;
   static SupportedLanguage selectedLanguage = SupportedLanguage.english;
 
+  /// Initialize all settings
   static Future init() async {
     await SelectedTheme.init();
     await SelectedLanguage.init();
     await SaveTourStatus.init();
 
+    /// Theme
     isDarkMode = SelectedTheme.getMode() ?? true;
 
+    /// Language
     SupportedLanguage? userPreferredLanguage =
-        SelectedLanguage.getSelectedLanguage();
+    SelectedLanguage.getSelectedLanguage();
 
     if (userPreferredLanguage != null) {
       selectedLanguage = userPreferredLanguage;
     } else {
-      // If no explicit preference, use the system language (if supported)
+      /// Get system language fallback
       selectedLanguage = SupportedLanguageExtension.getSystemLanguage();
-      // Save the system language as the user's preference
+
+      /// Save system language for next launch
       await SelectedLanguage.saveSelectedLanguage(selectedLanguage);
     }
   }
 
+  /// Save user settings
   static Future saveSettings(
-      bool isDarkMode, SupportedLanguage language) async {
-    await SelectedTheme.saveMode(isDarkMode);
+      bool darkMode, SupportedLanguage language) async {
+    await SelectedTheme.saveMode(darkMode);
     await SelectedLanguage.saveSelectedLanguage(language);
+
+    isDarkMode = darkMode;
+    selectedLanguage = language;
   }
 }

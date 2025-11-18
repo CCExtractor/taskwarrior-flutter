@@ -71,6 +71,7 @@ class TasksBuilder extends StatelessWidget {
       backgroundColor: tColors.secondaryBackgroundColor,
       duration: const Duration(seconds: 2),
       action: SnackBarAction(
+        textColor: tColors.purpleShade,
         label:
             SentenceManager(currentLanguage: selectedLanguage).sentences.undo,
         onPressed: () {
