@@ -60,12 +60,17 @@ class DetailRouteController extends GetxController {
     var now = DateTime.now().toUtc();
     modify.save(modified: () => now);
     onEdit.value = false;
-    Get.back();
+
+    // Show snackbar
     Get.snackbar(
       'Task Updated',
       '',
       snackPosition: SnackPosition.BOTTOM,
+      duration: const Duration(seconds: 2),
     );
+
+    // Navigate back immediately after showing snackbar
+    Get.back();
   }
 
   //  'description': controller.modify.draft.description,

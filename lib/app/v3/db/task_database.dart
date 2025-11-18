@@ -97,9 +97,13 @@ class TaskDatabase {
     List<TaskForC> a = await Future.wait(
       maps.map((mapItem) => getObjectForTask(mapItem)).toList(),
     );
-    debugPrint("Database fetch ${maps.last}");
-    for (int i = 0; i < maps.length; i++) {
-      debugPrint("Database fetch ${maps[i]}");
+    if (maps.isNotEmpty) {
+      debugPrint("Database fetch ${maps.last}");
+      for (int i = 0; i < maps.length; i++) {
+        debugPrint("Database fetch ${maps[i]}");
+      }
+    } else {
+      debugPrint("Database fetch: No tasks found");
     }
     debugPrint('Tasks from db');
     debugPrint(a.toString());

@@ -5,8 +5,6 @@ import 'package:taskwarrior/app/models/models.dart';
 
 import 'package:uuid/uuid.dart';
 
-
-
 class Tag {
   const Tag(this.tag);
 
@@ -67,10 +65,8 @@ Parser descriptionWordPrimitive() => wordPrimitive();
 
 final add = (epsilon() & endOfInput()) |
     (tagPrimitive() | attributePrimitive() | descriptionWordPrimitive())
-        .separatedBy(
-      char(' '),
-      includeSeparators: false,
-    );
+        .starSeparated(char(' '))
+        .map((result) => result.elements);
 
 Task taskParser(String task) {
   var now = DateTime.now().toUtc();
