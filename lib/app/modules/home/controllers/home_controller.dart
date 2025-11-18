@@ -32,7 +32,7 @@ import 'package:taskwarrior/app/utils/taskfunctions/projects.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/query.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/tags.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
-import 'package:taskwarrior/app/v3/champion/Replica.dart';
+import 'package:taskwarrior/app/v3/champion/replica.dart';
 import 'package:taskwarrior/app/v3/champion/models/task_for_replica.dart';
 import 'package:taskwarrior/app/v3/db/task_database.dart';
 import 'package:taskwarrior/app/v3/db/update.dart';

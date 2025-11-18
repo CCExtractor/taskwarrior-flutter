@@ -11,7 +11,7 @@ import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/v3/db/task_database.dart';
 import 'package:taskwarrior/app/v3/models/annotation.dart';
 import 'package:taskwarrior/app/v3/models/task.dart';
-import 'package:taskwarrior/app/v3/champion/Replica.dart';
+import 'package:taskwarrior/app/v3/champion/replica.dart';
 import 'package:taskwarrior/app/v3/champion/models/task_for_replica.dart';
 import 'package:taskwarrior/app/v3/net/modify.dart';
 

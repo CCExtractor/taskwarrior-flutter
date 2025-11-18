@@ -17,7 +17,7 @@ import 'package:taskwarrior/app/utils/taskfunctions/add_task_dialog_utils.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/tags.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/taskparser.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
-import 'package:taskwarrior/app/v3/champion/Replica.dart';
+import 'package:taskwarrior/app/v3/champion/replica.dart';
 import 'package:taskwarrior/app/v3/models/task.dart';
 
 class AddTaskBottomSheet extends StatelessWidget {
