@@ -38,7 +38,7 @@
 			  </intent-filter>
         </activity>
 		
-		<receiver android:name="TaskWarriorWidgetProvider"
+		<receiver android:name=".TaskWarriorWidgetProvider"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
