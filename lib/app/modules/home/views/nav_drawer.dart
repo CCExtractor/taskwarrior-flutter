@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:taskwarrior/app/modules/reports/views/reports_view_replica.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
 import 'package:taskwarrior/app/modules/home/views/home_page_nav_drawer_menu_item.dart';
@@ -89,11 +90,11 @@ class NavDrawer extends StatelessWidget {
                 },
               ),
             ),
-            Visibility(
-              visible: !homeController.taskchampion.value &&
-                  !homeController.taskReplica.value,
-              child: Obx(
-                () => NavDrawerMenuItem(
+            Obx(
+              () => Visibility(
+                visible: !homeController.taskchampion.value &&
+                    !homeController.taskReplica.value,
+                child: NavDrawerMenuItem(
                   icon: Icons.summarize,
                   text: SentenceManager(
                     currentLanguage: homeController.selectedLanguage.value,
@@ -104,16 +105,32 @@ class NavDrawer extends StatelessWidget {
                 ),
               ),
             ),
-            Visibility(
-              visible: homeController.taskchampion.value,
-              child: Obx(
-                () => NavDrawerMenuItem(
+            Obx(
+              () => Visibility(
+                visible: homeController.taskchampion.value &&
+                    !homeController.taskReplica.value,
+                child: NavDrawerMenuItem(
                   icon: Icons.summarize,
                   text: SentenceManager(
                     currentLanguage: homeController.selectedLanguage.value,
                   ).sentences.navDrawerReports,
                   onTap: () {
                     Get.to(() => ReportsHomeTaskc());
+                  },
+                ),
+              ),
+            ),
+            Obx(
+              () => Visibility(
+                visible: !homeController.taskchampion.value &&
+                    homeController.taskReplica.value,
+                child: NavDrawerMenuItem(
+                  icon: Icons.summarize,
+                  text: SentenceManager(
+                    currentLanguage: homeController.selectedLanguage.value,
+                  ).sentences.navDrawerReports,
+                  onTap: () {
+                    Get.to(() => ReportsHomeReplica());
                   },
                 ),
               ),
