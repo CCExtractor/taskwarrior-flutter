@@ -2,6 +2,7 @@ import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:taskwarrior/app/modules/home/views/show_tasks.dart';
+import 'package:taskwarrior/app/modules/home/views/show_tasks_replica.dart';
 import 'package:taskwarrior/app/modules/home/views/tasks_builder.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
@@ -16,7 +17,8 @@ class HomePageBody extends StatelessWidget {
   Widget build(BuildContext context) {
     controller.initInAppTour();
     controller.showInAppTour(context);
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return DoubleBackToCloseApp(
       snackBar: SnackBar(
           content: Text(SentenceManager(
@@ -93,7 +95,8 @@ class HomePageBody extends StatelessWidget {
                     ),
                   ),
                 Visibility(
-                  visible: !controller.taskchampion.value,
+                  visible: !controller.taskchampion.value &&
+                      !controller.taskReplica.value,
                   child: Expanded(
                     child: Scrollbar(
                       child: Obx(
@@ -117,6 +120,17 @@ class HomePageBody extends StatelessWidget {
                     child: Expanded(
                         child: Scrollbar(
                       child: TaskViewBuilder(
+                        pendingFilter: controller.pendingFilter.value,
+                        selectedSort: controller.selectedSort.value,
+                        project: controller.projectFilter.value,
+                      ),
+                    ))),
+                Visibility(
+                    visible: controller.taskReplica.value,
+                    child: Expanded(
+                        child: Scrollbar(
+                      child: TaskReplicaViewBuilder(
+                        replicaTasks: controller.tasksFromReplica,
                         pendingFilter: controller.pendingFilter.value,
                         selectedSort: controller.selectedSort.value,
                         project: controller.projectFilter.value,

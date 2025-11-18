@@ -20,6 +20,7 @@ import 'package:path/path.dart' as path;
 
 import 'package:taskwarrior/app/modules/splash/controllers/splash_controller.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
+import 'package:taskwarrior/app/v3/db/task_database.dart';
 
 class SettingsController extends GetxController {
   RxBool isMovingDirectory = false.obs;
@@ -46,7 +47,8 @@ class SettingsController extends GetxController {
   }
 
   void pickDirectory(BuildContext context) {
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     FilePicker.platform.getDirectoryPath().then((value) async {
       if (value != null) {
         isMovingDirectory.value = true;
@@ -54,63 +56,63 @@ class SettingsController extends GetxController {
         // InheritedProfiles profilesWidget = ProfilesWidget.of(context);
         var profilesWidget = Get.find<SplashController>();
         Directory source = profilesWidget.baseDirectory();
-  Directory destination = Directory(value);
+        Directory destination = Directory(value);
         moveDirectory(source.path, destination.path).then((value) async {
           isMovingDirectory.value = false;
           update();
           if (value == "same") {
             return;
-            } else if (value == "success") {
+          } else if (value == "success") {
             profilesWidget.setBaseDirectory(destination);
             SharedPreferences prefs = await SharedPreferences.getInstance();
             prefs.setString('baseDirectory', destination.path);
             baseDirectory.value = destination.path;
-              Get.snackbar(
-                'Success',
-                'Base directory moved successfully',
-                snackPosition: SnackPosition.BOTTOM,
-                duration: const Duration(seconds: 2),
-              );
-            } else {
-              Get.dialog(
-                Utils.showAlertDialog(
-                  title: Text(
-                    'Error',
-                    style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.bold,
-                      fontSize: TaskWarriorFonts.fontSizeMedium,
-                      color: tColors.primaryTextColor,
-                    ),
+            Get.snackbar(
+              'Success',
+              'Base directory moved successfully',
+              snackPosition: SnackPosition.BOTTOM,
+              duration: const Duration(seconds: 2),
+            );
+          } else {
+            Get.dialog(
+              Utils.showAlertDialog(
+                title: Text(
+                  'Error',
+                  style: GoogleFonts.poppins(
+                    fontWeight: FontWeight.bold,
+                    fontSize: TaskWarriorFonts.fontSizeMedium,
+                    color: tColors.primaryTextColor,
                   ),
-                  content: Text(
-                    value == "nested"
-                        ? "Cannot move to a nested directory"
-                        : value == "not-empty"
-                            ? "Destination directory is not empty"
-                            : value == "not-permitted"
-                                ? "Selected folder can't be written to (Android SAF). Please choose a different folder."
-                                : "An error occurred",
-                    style: GoogleFonts.poppins(
-                      color: TaskWarriorColors.grey,
-                      fontSize: TaskWarriorFonts.fontSizeSmall,
-                    ),
-                  ),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Get.back();
-                      },
-                      child: Text(
-                        'OK',
-                        style: GoogleFonts.poppins(
-                          color: tColors.primaryTextColor,
-                        ),
-                      ),
-                    )
-                  ],
                 ),
-              );
-            }
+                content: Text(
+                  value == "nested"
+                      ? "Cannot move to a nested directory"
+                      : value == "not-empty"
+                          ? "Destination directory is not empty"
+                          : value == "not-permitted"
+                              ? "Selected folder can't be written to (Android SAF). Please choose a different folder."
+                              : "An error occurred",
+                  style: GoogleFonts.poppins(
+                    color: TaskWarriorColors.grey,
+                    fontSize: TaskWarriorFonts.fontSizeSmall,
+                  ),
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Get.back();
+                    },
+                    child: Text(
+                      'OK',
+                      style: GoogleFonts.poppins(
+                        color: tColors.primaryTextColor,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            );
+          }
         });
       }
     });
@@ -125,9 +127,9 @@ class SettingsController extends GetxController {
       return "nested";
     }
 
-  Directory toDir = Directory(toDirectory);
-  // Ensure destination exists before checking contents
-  await toDir.create(recursive: true);
+    Directory toDir = Directory(toDirectory);
+    // Ensure destination exists before checking contents
+    await toDir.create(recursive: true);
     final length = await toDir.list().length;
     if (length > 0) {
       return "not-empty";
@@ -143,7 +145,10 @@ class SettingsController extends GetxController {
     } on FileSystemException catch (e) {
       // Map common permission error to a friendly status
       if (e.osError?.errorCode == 1 ||
-          (e.osError?.message.toLowerCase().contains("operation not permitted") ?? false)) {
+          (e.osError?.message
+                  .toLowerCase()
+                  .contains("operation not permitted") ??
+              false)) {
         return "not-permitted";
       }
       return "error";
@@ -156,7 +161,10 @@ class SettingsController extends GetxController {
       return "success";
     } on FileSystemException catch (e) {
       if (e.osError?.errorCode == 1 ||
-          (e.osError?.message.toLowerCase().contains("operation not permitted") ?? false)) {
+          (e.osError?.message
+                  .toLowerCase()
+                  .contains("operation not permitted") ??
+              false)) {
         return "not-permitted";
       }
       return "error";
@@ -198,6 +206,12 @@ class SettingsController extends GetxController {
         await dir.delete();
       }
     }
+  }
+
+  Future<void> deleteAllTasksInDB() async {
+    var taskDatabase = TaskDatabase();
+    await taskDatabase.deleteAllTasksInDB();
+    debugPrint('Deleted all tasks from db');
   }
 
   RxBool isSyncOnStartActivel = false.obs;

@@ -78,12 +78,12 @@ android {
     productFlavors {
         production {
             dimension "default"
-            applicationId "com.ccextractor.taskwarrior"
+            applicationId "com.ccextractor.taskwarriorflutter"
             signingConfig keystoreProperties.isEmpty() ? signingConfigs.debug : signingConfigs.production
         }
         nightly {
             dimension "default"
-            applicationId "com.ccextractor.taskwarrior.nightly"
+            applicationId "com.ccextractor.taskwarriorflutter.nightly"
             versionNameSuffix "-nightly"
             signingConfig nightlyKeystoreProperties.isEmpty() ? signingConfigs.debug : signingConfigs.nightly
         }

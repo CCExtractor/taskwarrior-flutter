@@ -224,6 +224,10 @@ class EnglishSentences extends Sentences {
       'The action is irreversible and will delete all the tasks that are stored locally.';
 
   @override
+  String get deleteAllTasksWillBeMarkedAsDeleted =>
+      'This will mark all tasks as deleted and will not be shown in app';
+
+  @override
   String get profilePageProfile => 'Profile';
   @override
   String get profilePageProfiles => 'Profiles';
@@ -238,6 +242,13 @@ class EnglishSentences extends Sentences {
   String get profilePageConfigureTaskserver => 'Configure Taskserver';
   @override
   String get profilePageExportTasks => 'Export Tasks';
+  @override
+  String get profilePageChangeProfileMode => 'Change Sync Server';
+  @override
+  String get profilePageSelectProfileMode => 'Select One Server';
+  @override
+  String get profilePageSuccessfullyChangedProfileModeTo =>
+      'Successfully changed profile mode to';
   @override
   String get profilePageCopyConfigToNewProfile => 'Copy Config To New Profile';
   @override
@@ -633,6 +644,8 @@ class EnglishSentences extends Sentences {
   String get success => 'Success';
   @override
   String get credentialsSavedSuccessfully => 'Credentials saved successfully';
+  @override
+  String get saveCredentials => 'save credentials';
   @override
   String get tip =>
       "Tip: Click on the info icon in the top right corner to get your credentials";

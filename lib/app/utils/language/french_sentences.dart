@@ -213,6 +213,10 @@ class FrenchSentences extends Sentences {
       'Cette action est irréversible et supprimera toutes les tâches stockées localement.';
 
   @override
+  String get deleteAllTasksWillBeMarkedAsDeleted =>
+      'Cela marquera toutes les tâches comme supprimées et elles ne seront pas affichées dans l\'application.';
+
+  @override
   String get profilePageProfile => 'Profil';
   @override
   String get profilePageProfiles => 'Profils';
@@ -229,6 +233,11 @@ class FrenchSentences extends Sentences {
   @override
   String get profilePageExportTasks => 'Exporter les tâches';
   @override
+  String get profilePageChangeProfileMode =>
+      'Changer le serveur de synchronisation';
+  @override
+  String get profilePageSelectProfileMode => 'Sélectionnez un serveur';
+  @override
   String get profilePageCopyConfigToNewProfile =>
       'Copier la configuration vers un nouveau profil';
   @override
@@ -240,6 +249,9 @@ class FrenchSentences extends Sentences {
   String get profilePageRenameAliasDialogueBoxTitle => 'Renommer l\'alias';
   @override
   String get profilePageRenameAliasDialogueBoxNewAlias => 'Nouvel alias';
+  @override
+  String get profilePageSuccessfullyChangedProfileModeTo =>
+      'Mode de profil changé avec succès en : ';
   @override
   String get profilePageRenameAliasDialogueBoxCancel => 'Annuler';
   @override
@@ -659,6 +671,8 @@ class FrenchSentences extends Sentences {
   @override
   String get credentialsSavedSuccessfully =>
       'Identifiants enregistrés avec succès';
+  @override
+  String get saveCredentials => 'enregistrer les identifiants';
   @override
   String get tip =>
       "Astuce : Cliquez sur l'icône d'information en haut à droite pour obtenir vos identifiants";

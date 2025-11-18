@@ -64,7 +64,14 @@ class BurnDownMonthlyTaskc extends StatelessWidget {
     allData.sort((a, b) => a.entry.compareTo(b.entry));
 
     for (int i = 0; i < allData.length; i++) {
-      final DateTime entryDate = DateTime.parse(allData[i].entry);
+      final DateTime entryDate;
+      try {
+        entryDate = DateTime.parse(allData[i].entry);
+      } catch (e) {
+        debugPrint(
+            'Error parsing date for task ID ${allData[i].id}: ${e.toString()}');
+        continue; // Skip this task if date parsing fails
+      }
       final String monthYear =
           '${Utils.getMonthName(entryDate.month)} ${entryDate.year}';
 

@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:loggy/loggy.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taskwarrior/app/models/filters.dart';
 
@@ -31,10 +32,13 @@ import 'package:taskwarrior/app/utils/taskfunctions/projects.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/query.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/tags.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/v3/champion/replica.dart';
+import 'package:taskwarrior/app/v3/champion/models/task_for_replica.dart';
 import 'package:taskwarrior/app/v3/db/task_database.dart';
 import 'package:taskwarrior/app/v3/db/update.dart';
 import 'package:taskwarrior/app/v3/models/task.dart';
 import 'package:taskwarrior/app/v3/net/fetch.dart';
+import 'package:taskwarrior/rust_bridge/api.dart';
 import 'package:textfield_tags/textfield_tags.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
@@ -63,6 +67,7 @@ class HomeController extends GetxController {
   final RxBool showbtn = false.obs;
   late TaskDatabase taskdb;
   var tasks = <TaskForC>[].obs;
+  var tasksFromReplica = <TaskForReplica>[].obs;
   final RxBool isRefreshing = false.obs;
 
   @override
@@ -86,6 +91,9 @@ class HomeController extends GetxController {
       handleHomeWidgetClicked();
     }
     fetchTasksFromDB();
+    ever(taskReplica, (_) {
+      if (taskReplica.value) refreshReplicaTaskList();
+    });
     everAll([
       pendingFilter,
       waitingFilter,
@@ -93,6 +101,8 @@ class HomeController extends GetxController {
       tagUnion,
       selectedSort,
       selectedTags,
+      tasks,
+      tasksFromReplica
     ], (_) {
       if (Platform.isAndroid) {
         WidgetController widgetController = Get.put(WidgetController());
@@ -101,9 +111,27 @@ class HomeController extends GetxController {
         widgetController.update();
       }
     });
+    ever(splashController.currentProfile, (_) {
+      if (splashController.getMode(splashController.currentProfile.value) !=
+          "TW3") {
+        refreshTaskWithNewProfile();
+      }
+      if (Platform.isAndroid) {
+        WidgetController widgetController = Get.put(WidgetController());
+        widgetController.fetchAllData();
+        widgetController.updateWidget();
+      }
+    });
   }
 
   Future<List<String>> getUniqueProjects() async {
+    if (taskReplica.value) {
+      return tasksFromReplica
+          .where((task) => task.project != null)
+          .map((task) => task.project!)
+          .toSet()
+          .toList();
+    }
     var taskDatabase = TaskDatabase();
     List<String> uniqueProjects = await taskDatabase.fetchUniqueProjects();
     debugPrint('Unique projects: $uniqueProjects');
@@ -114,6 +142,12 @@ class HomeController extends GetxController {
     var taskDatabase = TaskDatabase();
     await taskDatabase.deleteAllTasksInDB();
     debugPrint('Deleted all tasks from db');
+  }
+
+  Future<void> refreshReplicaTaskList() async {
+    if (!taskReplica.value) return;
+    tasksFromReplica.value = await Replica.getAllTasksFromReplica();
+    debugPrint("Tasks from Replica: ${tasks.length}");
   }
 
   Future<void> refreshTasks(String clientId, String encryptionSecret) async {
@@ -127,6 +161,16 @@ class HomeController extends GetxController {
   }
 
   Future<void> fetchTasksFromDB() async {
+    debugPrint("Fetching tasks from DB ${taskReplica.value}");
+    await _loadTaskChampion();
+    if (taskReplica.value) {
+      tasksFromReplica.value = await Replica.getAllTasksFromReplica();
+      debugPrint("Tasks from Replica: ${tasks.length}");
+      return;
+    }
+    if (taskchampion.value == false) {
+      return;
+    }
     TaskDatabase taskDatabase = TaskDatabase();
     await taskDatabase.open();
     List<TaskForC> fetchedTasks = await taskDatabase.fetchTasksFromDatabase();
@@ -136,6 +180,14 @@ class HomeController extends GetxController {
   Future<void> _loadTaskChampion() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     taskchampion.value = prefs.getBool('settings_taskc') ?? false;
+    taskReplica.value = prefs.getBool('settings_taskr_repl') ?? false;
+  }
+
+  Future<void> refreshReplicaTasks() async {
+    if (!taskReplica.value) return;
+    await Replica.sync();
+    tasksFromReplica.value = await Replica.getAllTasksFromReplica();
+    debugPrint("Tasks from Replica: ${tasks.length}");
   }
 
   void addListenerToScrollController() {
@@ -327,6 +379,10 @@ class HomeController extends GetxController {
     _refreshTasks();
   }
 
+  Future<void> syncReplica() async {
+    await Replica.sync();
+  }
+
   Future<void> synchronize(BuildContext context, bool isDialogNeeded) async {
     try {
       final connectivityResult = await Connectivity().checkConnectivity();
@@ -503,6 +559,7 @@ class HomeController extends GetxController {
   RxBool delaytask = false.obs;
   RxBool change24hr = false.obs;
   RxBool taskchampion = false.obs;
+  RxBool taskReplica = false.obs;
 
   // dialogue box
   final formKey = GlobalKey<FormState>();
@@ -713,7 +770,9 @@ class HomeController extends GetxController {
     Uri? uri = await HomeWidget.initiallyLaunchedFromHomeWidget();
     if (uri != null) {
       if (uri.host == "cardclicked") {
-        if (uri.queryParameters["uuid"] != null) {
+        if (uri.queryParameters["uuid"] != null &&
+            !taskchampion.value &&
+            !taskReplica.value) {
           uuid.value = uri.queryParameters["uuid"] as String;
           isHomeWidgetTaskTapped.value = true;
           Future.delayed(Duration.zero, () {
@@ -727,12 +786,15 @@ class HomeController extends GetxController {
     HomeWidget.widgetClicked.listen((uri) async {
       if (uri != null) {
         if (uri.host == "cardclicked") {
-          if (uri.queryParameters["uuid"] != null) {
+          if (uri.queryParameters["uuid"] != null &&
+              !taskchampion.value &&
+              !taskReplica.value) {
             uuid.value = uri.queryParameters["uuid"] as String;
             isHomeWidgetTaskTapped.value = true;
+
+            debugPrint('uuid is $uuid');
+            Get.toNamed(Routes.DETAIL_ROUTE, arguments: ["uuid", uuid.value]);
           }
-          debugPrint('uuid is $uuid');
-          Get.toNamed(Routes.DETAIL_ROUTE, arguments: ["uuid", uuid.value]);
         } else if (uri.host == "addclicked") {
           showAddDialogAfterWidgetClick();
         }

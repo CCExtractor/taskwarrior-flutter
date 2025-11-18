@@ -209,6 +209,9 @@ class MarathiSentences extends Sentences {
   @override
   String get deleteTaskWarning =>
       'ही क्रिया अपरिवर्तनीय आहे आणि हे सर्व स्थानिक पातळीवर संग्रहित केलेले कार्य हटवेल.';
+  @override
+  String get deleteAllTasksWillBeMarkedAsDeleted =>
+      'हे सर्व कार्य हटवले म्हणून चिन्हांकित केले जातील आणि अ‍ॅपमध्ये दिसणार नाहीत.';
 
   @override
   String get profilePageProfile => 'प्रोफाइल';
@@ -227,6 +230,10 @@ class MarathiSentences extends Sentences {
   @override
   String get profilePageExportTasks => 'टास्क निर्यात करा';
   @override
+  String get profilePageChangeProfileMode => 'सिंक सर्व्हर बदला';
+  @override
+  String get profilePageSelectProfileMode => 'एक सर्व्हर निवडा';
+  @override
   String get profilePageCopyConfigToNewProfile =>
       'नवीन प्रोफाइलवर कॉन्फिगरेशन कॉपी करा';
   @override
@@ -238,6 +245,9 @@ class MarathiSentences extends Sentences {
   String get profilePageRenameAliasDialogueBoxTitle => 'उपनाम पुनर्नामित करा';
   @override
   String get profilePageRenameAliasDialogueBoxNewAlias => 'नवा उपनाम';
+  @override
+  String get profilePageSuccessfullyChangedProfileModeTo =>
+      'प्रोफाइल मोड यशस्वीरीत्या बदलला: ';
   @override
   String get profilePageRenameAliasDialogueBoxCancel => 'रद्द करा';
   @override
@@ -645,6 +655,8 @@ class MarathiSentences extends Sentences {
   @override
   String get credentialsSavedSuccessfully =>
       'क्रेडेन्शियल्स यशस्वीरित्या जतन केले';
+  @override
+  String get saveCredentials => 'क्रेडेन्शियल्स जतन करा';
   @override
   String get tip =>
       "टीप: तुमची क्रेडेन्शियल्स मिळवण्यासाठी वरच्या उजव्या कोपऱ्यातील माहिती चिन्हावर क्लिक करा";
