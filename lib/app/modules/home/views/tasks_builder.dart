@@ -53,7 +53,8 @@ class TasksBuilder extends StatelessWidget {
 
   void saveChanges(
       BuildContext context, Modify modify, String id, String newValue) async {
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     var now = DateTime.now().toUtc();
     modify.save(
       modified: () => now,
@@ -110,32 +111,37 @@ class TasksBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // print(taskData);
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     var storageWidget = Get.find<HomeController>();
     return Scaffold(
         floatingActionButtonLocation:
             FloatingActionButtonLocation.miniStartFloat,
-        floatingActionButton: showbtn ? AnimatedOpacity(
-          duration: const Duration(milliseconds: 100), //show/hide animation
-          opacity: showbtn ? 1.0 : 0.0, //set obacity to 1 on visible, or hide
-          child: FloatingActionButton(
-            heroTag: "btn2",
-            onPressed: () {
-              scrollController.animateTo(
-                  //go to top of scroll
-                  0, //scroll offset to go
-                  duration:
-                      const Duration(milliseconds: 500), //duration of scroll
-                  curve: Curves.fastLinearToSlowEaseIn //scroll type
-                  );
-            },
-            backgroundColor: tColors.primaryTextColor,
-            child: Icon(
-              Icons.arrow_upward,
-              color: tColors.secondaryBackgroundColor,
-            ),
-          ),
-        ) : null,
+        floatingActionButton: showbtn
+            ? AnimatedOpacity(
+                duration:
+                    const Duration(milliseconds: 100), //show/hide animation
+                opacity:
+                    showbtn ? 1.0 : 0.0, //set obacity to 1 on visible, or hide
+                child: FloatingActionButton(
+                  heroTag: "btn2",
+                  onPressed: () {
+                    scrollController.animateTo(
+                        //go to top of scroll
+                        0, //scroll offset to go
+                        duration: const Duration(
+                            milliseconds: 500), //duration of scroll
+                        curve: Curves.fastLinearToSlowEaseIn //scroll type
+                        );
+                  },
+                  backgroundColor: tColors.primaryTextColor,
+                  child: Icon(
+                    Icons.arrow_upward,
+                    color: tColors.secondaryBackgroundColor,
+                  ),
+                ),
+              )
+            : null,
         backgroundColor: Colors.transparent,
         body: Obx(
           () => taskData.isEmpty
@@ -152,8 +158,7 @@ class TasksBuilder extends StatelessWidget {
                       style: TextStyle(
                           fontFamily: FontFamily.poppins,
                           fontSize: TaskWarriorFonts.fontSizeLarge,
-                          color: tColors.primaryTextColor
-                      ),
+                          color: tColors.primaryTextColor),
                       // style: GoogleFonts.poppins(
                       //   fontSize: TaskWarriorFonts.fontSizeLarge,
                       //   color: AppSettings.isDarkMode
@@ -193,7 +198,8 @@ class TasksBuilder extends StatelessWidget {
                                     }
                                   },
                                   icon: Icons.done,
-                                  label: SentenceManager(currentLanguage: selectedLanguage)
+                                  label: SentenceManager(
+                                          currentLanguage: selectedLanguage)
                                       .sentences
                                       .complete,
                                   backgroundColor: TaskWarriorColors.green,
@@ -222,7 +228,8 @@ class TasksBuilder extends StatelessWidget {
                                     }
                                   },
                                   icon: Icons.delete,
-                                  label: SentenceManager(currentLanguage: selectedLanguage)
+                                  label: SentenceManager(
+                                          currentLanguage: selectedLanguage)
                                       .sentences
                                       .delete,
                                   backgroundColor: TaskWarriorColors.red,

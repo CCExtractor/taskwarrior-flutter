@@ -28,11 +28,15 @@ class DetailRouteView extends GetView<DetailRouteController> {
     return WillPopScope(
       onWillPop: () async {
         if (!controller.onEdit.value) {
+          debugPrint(
+              'DetailRouteView: No edits made, navigating back without prompt.');
           // Get.offAll(() => const HomeView());
-          Get.back();
+          Navigator.of(context).pop();
           // Get.toNamed(Routes.HOME);
           return false;
         }
+        debugPrint(
+            'DetailRouteView: Unsaved edits detected, prompting user for action.');
 
         bool? save = await showDialog(
           context: context,
@@ -50,10 +54,14 @@ class DetailRouteView extends GetView<DetailRouteController> {
               actions: [
                 TextButton(
                   onPressed: () {
-                    controller.saveChanges();
-                    // Get.offAll(() => const HomeView());
+                    // Get.back(); // Close the dialog first
+                    // // Wait for dialog to fully close before showing snackbar
+                    // Future.delayed(const Duration(milliseconds: 100), () {
+                    //   controller.saveChanges();
+                    // });
 
-                    Get.back();
+                    controller.saveChanges();
+                    Navigator.of(context).pop(true);
                   },
                   child: Text(
                     SentenceManager(
@@ -69,7 +77,7 @@ class DetailRouteView extends GetView<DetailRouteController> {
                   onPressed: () {
                     // Get.offAll(() => const HomeView());
 
-                    Get.back();
+                    Navigator.of(context).pop();
                   },
                   child: Text(
                     SentenceManager(
@@ -83,7 +91,7 @@ class DetailRouteView extends GetView<DetailRouteController> {
                 ),
                 TextButton(
                   onPressed: () {
-                    Get.back();
+                    Navigator.of(context).pop(false);
                   },
                   child: Text(
                     SentenceManager(
@@ -251,7 +259,7 @@ class AttributeWidget extends StatelessWidget {
         Theme.of(context).extension<TaskwarriorColorTheme>()!;
     // Get the controller to check if the task is read-only
     final DetailRouteController controller = Get.find<DetailRouteController>();
-    
+
     // Always allow status to be edited, but respect read-only for other attributes
     final bool isEditable = !controller.isReadOnly.value || name == 'status';
 
@@ -323,9 +331,10 @@ class AttributeWidget extends StatelessWidget {
           isEditable: isEditable,
         );
       default:
-        final Color? textColor = (isEditable && !['entry', 'modified', 'urgency'].contains(name))
-            ? tColors.primaryTextColor
-            : tColors.primaryDisabledTextColor;
+        final Color? textColor =
+            (isEditable && !['entry', 'modified', 'urgency'].contains(name))
+                ? tColors.primaryTextColor
+                : tColors.primaryDisabledTextColor;
 
         return Card(
           color: tColors.secondaryBackgroundColor,
