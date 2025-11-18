@@ -67,8 +67,14 @@ class BurnDownWeeklyTask extends StatelessWidget {
 
     ///loop through allData and get the week number
     for (int i = 0; i < allData.length; i++) {
-      final int weekNumber =
-          Utils.getWeekNumbertoInt(DateTime.parse(allData[i].entry));
+      final int weekNumber;
+      try {
+        weekNumber = Utils.getWeekNumbertoInt(DateTime.parse(allData[i].entry));
+      } catch (e) {
+        debugPrint(
+            'Error parsing date for task ID ${allData[i].id}: ${e.toString()}');
+        continue; // Skip this task if date parsing fails
+      }
 
       ///check if weeklyInfo contains the week number
       if (weeklyInfo.containsKey(weekNumber.toString())) {

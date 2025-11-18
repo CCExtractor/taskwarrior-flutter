@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:taskwarrior/app/models/chart.dart';
 import 'package:taskwarrior/app/modules/reports/views/common_chart_indicator.dart';
@@ -57,14 +58,21 @@ class BurnDownDailyTaskc extends StatelessWidget {
   }
 
   Map<String, Map<String, int>> _processData(List<TaskForC> tasks) {
+    debugPrint('Processing ${tasks.length} tasks for daily burndown chart.');
     Map<String, Map<String, int>> dailyInfo = {};
 
     // Sort tasks by entry date in ascending order
     tasks.sort((a, b) => a.entry.compareTo(b.entry));
 
     for (var task in tasks) {
-      final String date = Utils.formatDate(DateTime.parse(task.entry), 'MM-dd');
-
+      final String date;
+      try {
+        date = Utils.formatDate(DateTime.parse(task.entry), 'MM-dd');
+      } catch (e) {
+        debugPrint(
+            'Error parsing date for task ID ${task.id}: ${e.toString()}');
+        continue; // Skip this task if date parsing fails
+      }
       if (dailyInfo.containsKey(date)) {
         if (task.status == 'pending') {
           dailyInfo[date]!['pending'] = (dailyInfo[date]!['pending'] ?? 0) + 1;
@@ -98,7 +106,7 @@ class BurnDownDailyTaskc extends StatelessWidget {
         if (snapshot.hasError) {
           return Center(
               child: Text(
-                  '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.reportsError}: ${snapshot.error}'));
+                  '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.reportsError} ERR at 101: ${snapshot.error}'));
         }
 
         Map<String, Map<String, int>> dailyInfo = snapshot.data ?? {};
