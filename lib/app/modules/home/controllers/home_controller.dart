@@ -101,6 +101,8 @@ class HomeController extends GetxController {
       tagUnion,
       selectedSort,
       selectedTags,
+      tasks,
+      tasksFromReplica
     ], (_) {
       if (Platform.isAndroid) {
         WidgetController widgetController = Get.put(WidgetController());
@@ -768,7 +770,9 @@ class HomeController extends GetxController {
     Uri? uri = await HomeWidget.initiallyLaunchedFromHomeWidget();
     if (uri != null) {
       if (uri.host == "cardclicked") {
-        if (uri.queryParameters["uuid"] != null) {
+        if (uri.queryParameters["uuid"] != null &&
+            !taskchampion.value &&
+            !taskReplica.value) {
           uuid.value = uri.queryParameters["uuid"] as String;
           isHomeWidgetTaskTapped.value = true;
           Future.delayed(Duration.zero, () {
@@ -782,12 +786,15 @@ class HomeController extends GetxController {
     HomeWidget.widgetClicked.listen((uri) async {
       if (uri != null) {
         if (uri.host == "cardclicked") {
-          if (uri.queryParameters["uuid"] != null) {
+          if (uri.queryParameters["uuid"] != null &&
+              !taskchampion.value &&
+              !taskReplica.value) {
             uuid.value = uri.queryParameters["uuid"] as String;
             isHomeWidgetTaskTapped.value = true;
+
+            debugPrint('uuid is $uuid');
+            Get.toNamed(Routes.DETAIL_ROUTE, arguments: ["uuid", uuid.value]);
           }
-          debugPrint('uuid is $uuid');
-          Get.toNamed(Routes.DETAIL_ROUTE, arguments: ["uuid", uuid.value]);
         } else if (uri.host == "addclicked") {
           showAddDialogAfterWidgetClick();
         }

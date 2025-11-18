@@ -90,7 +90,8 @@ class NavDrawer extends StatelessWidget {
               ),
             ),
             Visibility(
-              visible: !homeController.taskchampion.value,
+              visible: !homeController.taskchampion.value &&
+                  !homeController.taskReplica.value,
               child: Obx(
                 () => NavDrawerMenuItem(
                   icon: Icons.summarize,
