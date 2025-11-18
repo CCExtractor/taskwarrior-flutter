@@ -17,9 +17,9 @@ jobs:
           fetch-depth: 0
 
       # Step 2: Setup Java with version 17.x
-      - name: Setup Java
-        uses: actions/setup-java@v1
+      - uses: actions/setup-java@v4
         with:
+          distribution: "temurin"
           java-version: "17.x"
 
       # Step 3: Setup Flutter with version 3.29.2
