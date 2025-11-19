@@ -6,15 +6,29 @@ on:
       - main
 
 jobs:
-  build:
+  build-and-deploy:
+    name: Build and Deploy Nightly APK to F-Droid
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the main branch
-      - name: Checkout Main Branch
-        uses: actions/checkout@v2
+      # Step 0: Free up disk space (CRITICAL FIX)
+      # This removes unused tools (Dotnet, Haskell, Docker) to prevent "No space left" errors.
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
         with:
-          fetch-depth: 0
+          tool-cache: false
+          android: false # Keep Android SDKs for Flutter
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
+
+      # Step 1: Checkout the main branch (Shallow clone)
+      - name: Checkout Main Branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1 # Changed from 0 to 1 to save disk space
 
       # Step 2: Setup Java with version 17.x
       - uses: actions/setup-java@v4
@@ -24,7 +38,7 @@ jobs:
 
       # Step 3: Setup Flutter with version 3.29.2
       - name: Setup Flutter
-        uses: subosito/flutter-action@v1
+        uses: subosito/flutter-action@v2
         with:
           flutter-version: "3.29.2"
 
@@ -54,6 +68,7 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          # Fetch only the specific branch needed (works even with shallow checkout)
           git fetch origin fdroid-repo:fdroid-repo
           git stash || echo "No changes to stash"
           git checkout fdroid-repo
@@ -72,9 +87,7 @@ jobs:
             echo "5 or fewer APKs found. No cleanup needed."
           fi
 
-      # Step 10: Setup F-Droid (install fdroidserver) and update the repo
-      - name: Fdroid Install
-        uses: subosito/flutter-action@v1
+      # Step 10: Setup F-Droid and update the repo
       - name: Run F-Droid Update
         env:
           FDROID_CONFIG_YML_B64: ${{ secrets.FDROID_CONFIG_YML }}
@@ -88,10 +101,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y fdroidserver
 
-          # Run the update command, referencing the files
+          # Run the update command
           fdroid update -c
 
-      # Step 12: Push the updated repo files with amended commit
+      # Step 11: Push the updated repo files with amended commit
       - name: Push F-Droid updates
         run: |
           git add .
