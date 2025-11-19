@@ -55,6 +55,7 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git fetch origin fdroid-repo:fdroid-repo
+          git stash || echo "No changes to stash"
           git checkout fdroid-repo
           mv build/app/outputs/flutter-apk/app-nightly-release.apk repo/nightly.${{ github.run_number }}.apk
           git add repo/
