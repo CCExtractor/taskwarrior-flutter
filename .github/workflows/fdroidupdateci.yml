@@ -6,12 +6,22 @@ on:
       - fdroid-repo
 
 jobs:
-  build:
+  deploy-changes:
+    name: Deploy Changes
     runs-on: ubuntu-latest
 
     steps:
-      - name: Fdroid Install
-        uses: subosito/flutter-action@v1
+      # Step 1: Checkout is REQUIRED to access the APKs and repo files
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Step 2: Java is REQUIRED for keystore operations and apksigner
+      - uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "17.x"
+
+      # Step 3: Run F-Droid Update
       - name: Run F-Droid Update
         env:
           FDROID_CONFIG_YML_B64: ${{ secrets.FDROID_CONFIG_YML }}
@@ -25,11 +35,25 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y fdroidserver
 
-          # Run the update command, referencing the files
+          # Run the update command (updates index.xml based on current APKs)
           fdroid update -c
 
+      # Step 4: Push with Zero Bloat (Orphan Branch Strategy)
       - name: Push F-Droid updates
         run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          # 1. Create a temporary orphan branch (fresh start, no history)
+          # This keeps the current files (APKs + updated index) but removes the commit history links
+          git checkout --orphan temp_update_branch
+
+          # 2. Add all files currently on disk
           git add .
-          git commit --amend -m "update: a repo update ${{ github.run_number }}"
-          git push origin fdroid-repo --force
+
+          # 3. Create a new 'Initial Commit'
+          git commit -m "chore: Update F-Droid index ${{ github.run_number }}"
+
+          # 4. Force push this new state to overwrite fdroid-repo
+          # The branch will now have exactly 1 commit total.
+          git push origin temp_update_branch:fdroid-repo --force
