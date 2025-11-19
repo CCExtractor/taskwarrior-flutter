@@ -71,7 +71,8 @@ jobs:
 
           # Fetch the target branch to get existing APKs (if branch exists)
           git fetch origin fdroid-repo:fdroid-repo || echo "Branch not found, proceeding..."
-
+          # stash changes if any
+          git stash || echo "No changes to stash"
           # Switch to that branch or create if it doesn't exist (to setup folder structure)
           git checkout fdroid-repo || git checkout --orphan fdroid-repo
 
