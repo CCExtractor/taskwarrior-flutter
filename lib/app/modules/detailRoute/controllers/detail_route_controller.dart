@@ -106,7 +106,7 @@ class DetailRouteController extends GetxController {
     statusValue.value = modify.draft.status;
     entryValue.value = modify.draft.entry;
     modifiedValue.value = modify.draft.modified;
-    startValue.value ??= null;
+    startValue.value = modify.draft.start; //start date saves
     endValue.value = modify.draft.end;
     dueValue.value = modify.draft.due;
     waitValue.value = modify.draft.wait;
