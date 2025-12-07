@@ -22,6 +22,7 @@ class Modify {
 
   Task get draft => _draft.draft;
   int get id => _draft.original.id!;
+  Task get original => _draft.original;
 
   Map<dynamic, Map> get changes {
     var result = <dynamic, Map>{};
