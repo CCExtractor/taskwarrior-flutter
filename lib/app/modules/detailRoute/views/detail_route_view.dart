@@ -52,6 +52,7 @@ class DetailRouteView extends GetView<DetailRouteController> {
                 ),
               ),
               actions: [
+                // YES → save and pop
                 TextButton(
                   onPressed: () {
                     // Get.back(); // Close the dialog first
@@ -73,11 +74,12 @@ class DetailRouteView extends GetView<DetailRouteController> {
                     ),
                   ),
                 ),
+
+                // NO → discard and pop
                 TextButton(
                   onPressed: () {
                     // Get.offAll(() => const HomeView());
-
-                    Navigator.of(context).pop();
+                    Navigator.of(context).pop(false);
                   },
                   child: Text(
                     SentenceManager(
@@ -89,9 +91,11 @@ class DetailRouteView extends GetView<DetailRouteController> {
                     ),
                   ),
                 ),
+
+                // CANCEL → stay on page
                 TextButton(
                   onPressed: () {
-                    Navigator.of(context).pop(false);
+                    Navigator.of(context).pop(null);
                   },
                   child: Text(
                     SentenceManager(
@@ -107,7 +111,12 @@ class DetailRouteView extends GetView<DetailRouteController> {
             );
           },
         );
-        return save == true;
+        if (save == null) {
+          // Cancel → stay
+          return false;
+        }
+        // Yes (true) or No (false) → both allow popping the screen
+        return true;
       },
       child: Scaffold(
           backgroundColor: tColors.primaryBackgroundColor,
