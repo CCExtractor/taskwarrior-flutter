@@ -86,64 +86,12 @@ class DescriptionWidget extends StatelessWidget {
           ),
         ),
         onTap: () {
-          var controller = TextEditingController(
-            text: value,
-          );
           showDialog(
             context: context,
-            builder: (context) => Utils.showAlertDialog(
-              scrollable: true,
-              title: Text(
-                SentenceManager(currentLanguage: AppSettings.selectedLanguage)
-                    .sentences
-                    .editDescription,
-                style: TextStyle(
-                  color: tColors.primaryTextColor,
-                ),
-              ),
-              content: TextField(
-                style: TextStyle(
-                  color: tColors.primaryTextColor,
-                ),
-                autofocus: true,
-                maxLines: null,
-                controller: controller,
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Get.back();
-                  },
-                  child: Text(
-                    SentenceManager(
-                            currentLanguage: AppSettings.selectedLanguage)
-                        .sentences
-                        .cancel,
-                    style: TextStyle(
-                      color: tColors.primaryTextColor,
-                    ),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    try {
-                      callback(controller.text);
-                      Get.back();
-                    } on FormatException catch (e, trace) {
-                      logError(e, trace);
-                    }
-                  },
-                  child: Text(
-                    SentenceManager(
-                            currentLanguage: AppSettings.selectedLanguage)
-                        .sentences
-                        .submit,
-                    style: TextStyle(
-                      color: tColors.primaryTextColor,
-                    ),
-                  ),
-                ),
-              ],
+            builder: (context) => _DescriptionEditDialog(
+              value: value,
+              callback: callback,
+              tColors: tColors,
             ),
           );
         },
@@ -292,6 +240,113 @@ class ProjectWidget extends StatelessWidget {
           );
         },
       ),
+    );
+  }
+}
+
+class _DescriptionEditDialog extends StatefulWidget {
+  const _DescriptionEditDialog({
+    required this.value,
+    required this.callback,
+    required this.tColors,
+  });
+
+  final dynamic value;
+  final void Function(dynamic) callback;
+  final TaskwarriorColorTheme tColors;
+
+  @override
+  State<_DescriptionEditDialog> createState() => _DescriptionEditDialogState();
+}
+
+class _DescriptionEditDialogState extends State<_DescriptionEditDialog> {
+  late TextEditingController controller;
+  final _formKey = GlobalKey<FormState>();
+  String? errorText;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = TextEditingController(text: widget.value);
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Utils.showAlertDialog(
+      scrollable: true,
+      title: Text(
+        SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+            .sentences
+            .editDescription,
+        style: TextStyle(
+          color: widget.tColors.primaryTextColor,
+        ),
+      ),
+      content: Form(
+        key: _formKey,
+        child: TextFormField(
+          style: TextStyle(
+            color: widget.tColors.primaryTextColor,
+          ),
+          decoration: InputDecoration(
+            errorText: errorText,
+            errorStyle: TextStyle(
+              color: Colors.red,
+            ),
+          ),
+          autofocus: true,
+          maxLines: null,
+          controller: controller,
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Get.back();
+          },
+          child: Text(
+            SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                .sentences
+                .cancel,
+            style: TextStyle(
+              color: widget.tColors.primaryTextColor,
+            ),
+          ),
+        ),
+        TextButton(
+          onPressed: () {
+            try {
+              if (controller.text.trim().isEmpty) {
+                setState(() {
+                  errorText = SentenceManager(
+                          currentLanguage: AppSettings.selectedLanguage)
+                      .sentences
+                      .descriprtionCannotBeEmpty;
+                });
+                return;
+              }
+              widget.callback(controller.text);
+              Get.back();
+            } on FormatException catch (e, trace) {
+              logError(e, trace);
+            }
+          },
+          child: Text(
+            SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                .sentences
+                .submit,
+            style: TextStyle(
+              color: widget.tColors.primaryTextColor,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
