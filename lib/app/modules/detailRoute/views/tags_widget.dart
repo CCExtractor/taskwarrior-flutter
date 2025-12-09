@@ -234,10 +234,17 @@ class TagsRouteState extends State<TagsRoute> {
                     color: tColors.primaryTextColor,
                   ),
                   validator: (value) {
-                    if (value != null) {
-                      if (value.isNotEmpty && value.contains(" ")) {
-                        return "Tags cannot contain spaces";
-                      }
+                    if (value == null || value.trim().isEmpty) {
+                      return "Please enter a tag";
+                    }
+                    final tag = value.trim();
+                    if (tag.contains(" ")) {
+                      return "Tags cannot contain spaces";
+                    }
+                    final currentTags =
+                        draftTags?.build().toList() ?? <String>[];
+                    if (currentTags.contains(tag)) {
+                      return "Tag already exists";
                     }
                     return null;
                   },
