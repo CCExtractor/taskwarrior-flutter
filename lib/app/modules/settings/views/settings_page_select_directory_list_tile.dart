@@ -25,7 +25,8 @@ class SettingsPageSelectDirectoryListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return ListTile(
       title: Text(
         SentenceManager(currentLanguage: AppSettings.selectedLanguage)
@@ -51,148 +52,165 @@ class SettingsPageSelectDirectoryListTile extends StatelessWidget {
           const SizedBox(
             height: 10,
           ),
-          Row(
-            children: [
-              //Reset to default
-              TextButton(
-                style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all<Color>(
-                    tColors.secondaryBackgroundColor!,
-                  ),
-                ),
-                onPressed: () async {
-                  if (await controller.getBaseDirectory() == "Default") {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(
-                          SentenceManager(
-                                  currentLanguage: AppSettings.selectedLanguage)
-                              .sentences
-                              .settingsAlreadyDefault,
-                          style: TextStyle(
-                            color: tColors.primaryTextColor,
-                          ),
-                        ),
-                        backgroundColor: tColors.secondaryBackgroundColor,
-                        duration: const Duration(seconds: 2)));
-                  } else {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return Utils.showAlertDialog(
-                          title: Text(
-                            SentenceManager(
-                                    currentLanguage:
-                                        AppSettings.selectedLanguage)
-                                .sentences
-                                .settingsResetToDefault,
-                            style: GoogleFonts.poppins(
-                              fontWeight: FontWeight.bold,
-                              fontSize: TaskWarriorFonts.fontSizeMedium,
-                              color: tColors.primaryTextColor,
+          IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Reset to Default Button
+                Expanded(
+                  child: TextButton(
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStateProperty.all<Color>(
+                        tColors.secondaryBackgroundColor!,
+                      ),
+                    ),
+                    onPressed: () async {
+                      if (await controller.getBaseDirectory() == "Default") {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(
+                              SentenceManager(
+                                      currentLanguage:
+                                          AppSettings.selectedLanguage)
+                                  .sentences
+                                  .settingsAlreadyDefault,
+                              style: TextStyle(
+                                color: tColors.primaryTextColor,
+                              ),
                             ),
-                          ),
-                          content: Text(
-                            SentenceManager(
-                                    currentLanguage:
-                                        AppSettings.selectedLanguage)
-                                .sentences
-                                .settingsConfirmReset,
-                            style: GoogleFonts.poppins(
-                              color: TaskWarriorColors.grey,
-                              fontSize: TaskWarriorFonts.fontSizeMedium,
-                            ),
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text(
+                            backgroundColor: tColors.secondaryBackgroundColor,
+                            duration: const Duration(seconds: 2)));
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Utils.showAlertDialog(
+                              title: Text(
                                 SentenceManager(
                                         currentLanguage:
                                             AppSettings.selectedLanguage)
                                     .sentences
-                                    .settingsNoButton,
+                                    .settingsResetToDefault,
                                 style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: TaskWarriorFonts.fontSizeMedium,
                                   color: tColors.primaryTextColor,
                                 ),
                               ),
-                            ),
-                            TextButton(
-                              onPressed: () async {
-                                Navigator.pop(context);
-                                controller.isMovingDirectory.value = true;
-
-                                // InheritedProfiles profilesWidget =
-                                //     ProfilesWidget.of(context);
-                                var profilesWidget =
-                                    Get.find<SplashController>();
-
-                                Directory source =
-                                    profilesWidget.baseDirectory();
-                                Directory destination =
-                                    await profilesWidget.getDefaultDirectory();
-                                controller
-                                    .moveDirectory(
-                                        source.path, destination.path)
-                                    .then((value) async {
-                                  profilesWidget.setBaseDirectory(destination);
-                                  SharedPreferences prefs =
-                                      await SharedPreferences.getInstance();
-                                  await prefs.remove('baseDirectory');
-                                  controller.isMovingDirectory.value = false;
-                                  controller.baseDirectory.value = "Default";
-                                });
-                              },
-                              child: Text(
+                              content: Text(
                                 SentenceManager(
                                         currentLanguage:
                                             AppSettings.selectedLanguage)
                                     .sentences
-                                    .settingsYesButton,
+                                    .settingsConfirmReset,
                                 style: GoogleFonts.poppins(
-                                  color: tColors.primaryTextColor,
+                                  color: TaskWarriorColors.grey,
+                                  fontSize: TaskWarriorFonts.fontSizeMedium,
                                 ),
                               ),
-                            ),
-                          ],
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text(
+                                    SentenceManager(
+                                            currentLanguage:
+                                                AppSettings.selectedLanguage)
+                                        .sentences
+                                        .settingsNoButton,
+                                    style: GoogleFonts.poppins(
+                                      color: tColors.primaryTextColor,
+                                    ),
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () async {
+                                    Navigator.pop(context);
+                                    controller.isMovingDirectory.value = true;
+
+                                    // InheritedProfiles profilesWidget =
+                                    //     ProfilesWidget.of(context);
+                                    var profilesWidget =
+                                        Get.find<SplashController>();
+
+                                    Directory source =
+                                        profilesWidget.baseDirectory();
+                                    Directory destination = await profilesWidget
+                                        .getDefaultDirectory();
+                                    controller
+                                        .moveDirectory(
+                                            source.path, destination.path)
+                                        .then((value) async {
+                                      profilesWidget
+                                          .setBaseDirectory(destination);
+                                      SharedPreferences prefs =
+                                          await SharedPreferences.getInstance();
+                                      await prefs.remove('baseDirectory');
+                                      controller.isMovingDirectory.value =
+                                          false;
+                                      controller.baseDirectory.value =
+                                          "Default";
+                                    });
+                                  },
+                                  child: Text(
+                                    SentenceManager(
+                                            currentLanguage:
+                                                AppSettings.selectedLanguage)
+                                        .sentences
+                                        .settingsYesButton,
+                                    style: GoogleFonts.poppins(
+                                      color: tColors.primaryTextColor,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
                         );
-                      },
-                    );
-                  }
-                },
-                child: Text(
-                  SentenceManager(
-                          currentLanguage: controller.selectedLanguage.value)
-                      .sentences
-                      .settingsPageSetToDefault,
-                  style: TextStyle(
-                    color: tColors.purpleShade,
+                      }
+                    },
+                    child: Text(
+                      SentenceManager(
+                              currentLanguage:
+                                  controller.selectedLanguage.value)
+                          .sentences
+                          .settingsPageSetToDefault,
+                      textAlign: TextAlign.center,
+                      softWrap: true,
+                      maxLines: 2,
+                      style: TextStyle(
+                        color: tColors.purpleShade,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-              const Spacer(),
-              //Change directory
-              TextButton(
-                style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all<Color>(
-                    tColors.secondaryBackgroundColor!,
+                const SizedBox(width: 10),
+
+                // Change Directory Button
+                Expanded(
+                  child: TextButton(
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStateProperty.all<Color>(
+                        tColors.secondaryBackgroundColor!,
+                      ),
+                    ),
+                    onPressed: () => controller.pickDirectory(context),
+                    child: Text(
+                      SentenceManager(
+                              currentLanguage:
+                                  controller.selectedLanguage.value)
+                          .sentences
+                          .settingsPageChangeDirectory,
+                      textAlign: TextAlign.center,
+                      softWrap: true,
+                      maxLines: 2,
+                      overflow: TextOverflow.visible,
+                      style: TextStyle(color: tColors.purpleShade),
+                    ),
                   ),
                 ),
-                onPressed: () {
-                  controller.pickDirectory(context);
-                },
-                child: Text(
-                  SentenceManager(
-                          currentLanguage: controller.selectedLanguage.value)
-                      .sentences
-                      .settingsPageChangeDirectory,
-                  style: TextStyle(
-                    color: tColors.purpleShade,
-                  ),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
