@@ -1,0 +1,104 @@
+#!/bin/bash
+
+# --- Configuration ---
+CRATE_NAME="tc_helper"
+RUST_DIR="rust"
+IOS_DIR="ios"
+FRAMEWORK_NAME="tc_helper.framework"
+XCFRAMEWORK_NAME="tc_helper.xcframework"
+BUNDLE_ID="com.ccextractor.taskwarriorflutter.tc-helper"
+# !!! CRITICAL FIX !!!
+# We force the build to target iOS 13.0. 
+# This fixes the "___chkstk_darwin" and "version mismatch" errors.
+export IPHONEOS_DEPLOYMENT_TARGET=13.0
+
+echo "🚀 Starting Build for $CRATE_NAME..."
+
+cd $RUST_DIR
+
+# 1. Build for Device (iPhone - arm64)
+echo "🛠️  Building for iPhone (arm64)..."
+# We pass the CFLAG to ensure C dependencies (like aws-lc-sys) respect the target
+CFLAGS="-miphoneos-version-min=13.0" \
+cargo build --release --target aarch64-apple-ios
+
+# 2. Build for Simulator (Apple Silicon - arm64)
+echo "🛠️  Building for Simulator (arm64)..."
+CFLAGS="-miphoneos-version-min=13.0" \
+cargo build --release --target aarch64-apple-ios-sim
+
+# 3. Build for Simulator (Intel - x86_64)
+echo "🛠️  Building for Simulator (x86_64)..."
+CFLAGS="-miphoneos-version-min=13.0" \
+cargo build --release --target x86_64-apple-ios
+
+cd ..
+
+# --- Package Creation ---
+echo "📦 Packaging..."
+
+# Create a temporary directory for the Simulator "Fat" library
+mkdir -p build/ios_sim
+SIM_LIB="build/ios_sim/lib$CRATE_NAME.dylib"
+
+# Combine the two Simulator architectures (Intel + M1) into one file
+lipo -create \
+    "$RUST_DIR/target/x86_64-apple-ios/release/lib$CRATE_NAME.dylib" \
+    "$RUST_DIR/target/aarch64-apple-ios-sim/release/lib$CRATE_NAME.dylib" \
+    -output "$SIM_LIB"
+
+# Define function to create a .framework structure
+create_framework() {
+    local LIB_PATH=$1
+    local TARGET_DIR=$2
+    
+    mkdir -p "$TARGET_DIR/$FRAMEWORK_NAME"
+    
+    # Copy and rename binary (libtc_helper.dylib -> tc_helper)
+    cp "$LIB_PATH" "$TARGET_DIR/$FRAMEWORK_NAME/$CRATE_NAME"
+    
+    # Create Info.plist
+    cat <<EOF > "$TARGET_DIR/$FRAMEWORK_NAME/Info.plist"
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleExecutable</key>
+    <string>$CRATE_NAME</string>
+    <key>CFBundleIdentifier</key>
+    <string>$BUNDLE_ID</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+    <key>CFBundlePackageType</key>
+    <string>FMWK</string>
+    <key>CFBundleSignature</key>
+    <string>????</string>
+    <key>CFBundleVersion</key>
+    <string>1.0</string>
+    <key>MinimumOSVersion</key>
+    <string>13.0</string>
+</dict>
+</plist>
+EOF
+}
+
+# Create framework structure for Simulator
+create_framework "$SIM_LIB" "build/ios_sim"
+
+# Create framework structure for Device
+mkdir -p build/ios_device
+create_framework "$RUST_DIR/target/aarch64-apple-ios/release/lib$CRATE_NAME.dylib" "build/ios_device"
+
+# --- Create XCFramework ---
+echo "🔗 Creating XCFramework..."
+rm -rf "$IOS_DIR/$XCFRAMEWORK_NAME"
+
+xcodebuild -create-xcframework \
+    -framework "build/ios_device/$FRAMEWORK_NAME" \
+    -framework "build/ios_sim/$FRAMEWORK_NAME" \
+    -output "$IOS_DIR/$XCFRAMEWORK_NAME"
+
+# Clean up temp build folder
+rm -rf build/ios_sim build/ios_device
+
+echo "✅ Success! Created $IOS_DIR/$XCFRAMEWORK_NAME"
