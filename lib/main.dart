@@ -1,5 +1,5 @@
 import 'dart:ffi';
-
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,9 +12,17 @@ import 'app/routes/app_pages.dart';
 
 LogDatabaseHelper _logDatabaseHelper = LogDatabaseHelper();
 
-const buildOfTcHelperForAndroid = "libtc_helper.so";
-final dyLibOfTcHelperForAndroid =
-    DynamicLibrary.open(buildOfTcHelperForAndroid);
+DynamicLibrary loadNativeLibrary() {
+  if (Platform.isIOS) {
+    return DynamicLibrary.open('Frameworks/tc_helper.framework/tc_helper');
+  } else if (Platform.isAndroid) {
+    return DynamicLibrary.open('libtc_helper.so');
+  } else if (Platform.isMacOS) {
+    return DynamicLibrary.open('tc_helper.framework/tc_helper');
+  }
+  throw UnsupportedError(
+      'Platform ${Platform.operatingSystem} is not supported');
+}
 
 void main() async {
   debugPrint = (String? message, {int? wrapWidth}) {
@@ -23,7 +31,7 @@ void main() async {
       _logDatabaseHelper.insertLog(message);
     }
   };
-
+  loadNativeLibrary();
   await RustLib.init();
 
   WidgetsFlutterBinding.ensureInitialized();
