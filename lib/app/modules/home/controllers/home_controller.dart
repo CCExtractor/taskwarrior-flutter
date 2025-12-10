@@ -104,7 +104,7 @@ class HomeController extends GetxController {
       tasks,
       tasksFromReplica
     ], (_) {
-      if (Platform.isAndroid) {
+      if (Platform.isAndroid|| Platform.isIOS) {
         WidgetController widgetController = Get.put(WidgetController());
         widgetController.fetchAllData();
 
@@ -640,7 +640,9 @@ class HomeController extends GetxController {
     selectedLanguage.value = AppSettings.selectedLanguage;
     HomeWidget.saveWidgetData(
         "themeMode", AppSettings.isDarkMode ? "dark" : "light");
-    HomeWidget.updateWidget(androidName: "TaskWarriorWidgetProvider");
+    HomeWidget.updateWidget(
+        androidName: "TaskWarriorWidgetProvider",
+        iOSName: "TaskWarriorWidgets");
     // print("called and value is${isDarkModeOn.value}");
   }
 

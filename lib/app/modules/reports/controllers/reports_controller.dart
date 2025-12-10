@@ -88,7 +88,7 @@ class ReportsController extends GetxController
       await Future.delayed(const Duration(milliseconds: 500));
 
       // Send a broadcast to update the widget
-      const platform = MethodChannel('com.example.taskwarrior/widget');
+      const platform = MethodChannel('com.ccextractor.taskwarriorflutter/widget');
       try {
         await platform.invokeMethod('updateWidget');
       } on PlatformException catch (e) {
