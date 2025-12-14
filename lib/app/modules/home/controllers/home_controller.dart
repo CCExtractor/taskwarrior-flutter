@@ -87,7 +87,7 @@ class HomeController extends GetxController {
     taskdb.open();
     getUniqueProjects();
     _loadTaskChampion();
-    if (Platform.isAndroid) {
+    if (Platform.isAndroid || Platform.isIOS) {
       handleHomeWidgetClicked();
     }
     fetchTasksFromDB();
@@ -102,9 +102,9 @@ class HomeController extends GetxController {
       selectedSort,
       selectedTags,
       tasks,
-      tasksFromReplica
+      tasksFromReplica,
     ], (_) {
-      if (Platform.isAndroid|| Platform.isIOS) {
+      if (Platform.isAndroid || Platform.isIOS) {
         WidgetController widgetController = Get.put(WidgetController());
         widgetController.fetchAllData();
 
@@ -116,7 +116,7 @@ class HomeController extends GetxController {
           "TW3") {
         refreshTaskWithNewProfile();
       }
-      if (Platform.isAndroid) {
+      if (Platform.isAndroid || Platform.isIOS) {
         WidgetController widgetController = Get.put(WidgetController());
         widgetController.fetchAllData();
         widgetController.updateWidget();
