@@ -76,8 +76,8 @@ struct TaskProvider: AppIntentTimelineProvider {
 struct TaskWidgetEntryView: View {
     var entry: TaskProvider.Entry
     @Environment(\.widgetFamily) var family
-
-    // Parse tasks from JSON
+    
+    // 1. DATA PARSING
     var parsedTasks: [Task] {
         guard let data = entry.tasks.data(using: .utf8) else { return [] }
         do {
@@ -97,7 +97,6 @@ struct TaskWidgetEntryView: View {
         return []
     }
     
-    // Sort tasks by priority: H > M > L > None
     var sortedTasks: [Task] {
         return parsedTasks.sorted { task1, task2 in
             let priorityOrder = ["H": 0, "M": 1, "L": 2, "N": 3]
@@ -111,92 +110,116 @@ struct TaskWidgetEntryView: View {
         entry.themeMode == "dark"
     }
     
+    // 2. MAIN BODY LAYOUT
     var body: some View {
         ZStack {
+            // Background Layer
             (isDarkMode ? Color.black : Color(white: 0.95))
                 .ignoresSafeArea()
             
-            VStack(alignment: .leading, spacing: 8) {
-                headerView
+            // Content Layer
+            VStack(spacing: 0) {
                 
+                // --- TOP BAR (Pinned) ---
+                headerView
+                    .padding(.top, 12)
+                    .padding(.horizontal, 16)
+                    .padding(.bottom, 8) // Slightly tighter to fit content
+                
+                // --- LIST AREA ---
                 if parsedTasks.isEmpty {
                     emptyStateView
                 } else {
-                    switch family {
-                    case .systemSmall:
-                        smallTaskList
-                    case .systemMedium:
-                        mediumTaskList
-                    case .systemLarge:
-                        largeTaskList
-                    default:
-                        mediumTaskList
+                    VStack(alignment: .leading, spacing: 0) {
+                        switch family {
+                        case .systemMedium:
+                            mediumTaskList
+                        case .systemLarge:
+                            largeTaskList
+                        default:
+                            mediumTaskList
+                        }
                     }
+                    .padding(.horizontal, 12)
                 }
+                
+                // --- BOTTOM SPACER ---
+                Spacer()
             }
-            .padding(family == .systemLarge ? 12 : 10)
         }
         .colorScheme(isDarkMode ? .dark : .light)
     }
     
+    // 3. SUBVIEWS
+    
     var headerView: some View {
         HStack {
-            HStack(spacing: 4) {
-                Image(systemName: "checkmark.circle.fill")
-                    .foregroundColor(.blue)
-                    .imageScale(family == .systemSmall ? .small : .medium)
-                Text("Taskwarrior")
-                    .font(family == .systemSmall ? .caption.bold() : .headline)
+            HStack(spacing: 6) {
+                Image("taskwarrior")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 30, height: 30)
+                
+
             }
             Spacer()
-            Image(systemName: "plus.circle.fill")
-                .foregroundColor(.blue)
-                .imageScale(family == .systemSmall ? .medium : .large)
-                .widgetURL(URL(string: "taskwarrior://addClicked"))
+            Text("Taskwarrior")
+                .font(.headline)
+            Spacer()
+            
+            // Add Button
+            Link(destination: URL(string: "taskwarrior://addclicked")!) {
+                Image(systemName: "plus.circle.fill")
+                    .foregroundColor(.blue)
+                    .font(.system(size: 26))
+            }
         }
-        .padding(.bottom, 8)
     }
     
     var emptyStateView: some View {
-        VStack(spacing: 4) {
+        VStack(spacing: 6) {
+            Spacer()
             Image(systemName: "checkmark.circle")
-                .font(.title2)
-                .foregroundColor(.secondary)
-            Text("No tasks available")
+                .font(.largeTitle)
+                .foregroundColor(.secondary.opacity(0.5))
+            Text("No tasks pending")
                 .font(.caption)
                 .foregroundColor(.secondary)
-                .multilineTextAlignment(.center)
+            Spacer()
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
-    // Small widget list with deeplinks (shows 3 tasks)
-    var smallTaskList: some View {
-        VStack(spacing: 4) {
-            ForEach(Array(sortedTasks.prefix(3))) { task in
-                smallTaskRow(task: task)
-                    .widgetURL(URL(string: "taskwarrior://cardClicked?uuid=\(task.uuid)"))
+    // -- List Variations --
+    
+    // MEDIUM: With urgency text removed, we can fit 3 items comfortably
+    var mediumTaskList: some View {
+        VStack(spacing: 4) { // Compact spacing
+            ForEach(Array(sortedTasks.prefix(2))) { task in
+                taskRow(task: task)
+                    .widgetURL(URL(string: "taskwarrior://cardclicked?uuid=\(task.uuid)"))
             }
-            if sortedTasks.count > 3 {
-                Text("+\(sortedTasks.count - 3) more")
+            
+            if sortedTasks.count > 2 {
+                Text("+\(sortedTasks.count - 2) more")
                     .font(.caption2)
                     .foregroundColor(.secondary)
                     .frame(maxWidth: .infinity, alignment: .center)
+                    .padding(.trailing, 4)
             }
         }
     }
     
-    // Medium widget
-    var mediumTaskList: some View {
-        VStack(spacing: 4) {
-            ForEach(Array(sortedTasks.prefix(3))) { task in
-                mediumTaskRow(task: task)
-                    .widgetURL(URL(string: "taskwarrior://cardClicked?uuid=\(task.uuid)"))
+    // LARGE: With urgency text removed, we can fit 6 items
+    var largeTaskList: some View {
+        VStack(spacing: 7) {
+            ForEach(Array(sortedTasks.prefix(6))) { task in
+                taskRow(task: task)
+                    .widgetURL(URL(string: "taskwarrior://cardclicked?uuid=\(task.uuid)"))
             }
             
-            if sortedTasks.count > 3 {
-                Text("+\(sortedTasks.count - 3) more tasks")
-                    .font(.caption2)
+            if sortedTasks.count > 6 {
+                Text("+\(sortedTasks.count - 6) more tasks")
+                    .font(.caption)
                     .foregroundColor(.secondary)
                     .frame(maxWidth: .infinity, alignment: .center)
                     .padding(.top, 2)
@@ -204,86 +227,33 @@ struct TaskWidgetEntryView: View {
         }
     }
     
-    // Large widget
-    var largeTaskList: some View {
-        VStack(spacing: 6) {
-            // Display only top 4 tasks by priority
-            ForEach(Array(sortedTasks.prefix(4))) { task in
-                largeTaskRow(task: task)
-                    .widgetURL(URL(string: "taskwarrior://cardClicked?uuid=\(task.uuid)"))
-            }
-            
-            if sortedTasks.count > 4 {
-                Text("+\(sortedTasks.count - 4) more tasks")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .padding(.top, 4)
-            }
-        }
-    }
+    // -- Row Designs --
     
-    func smallTaskRow(task: Task) -> some View {
-        HStack(spacing: 6) {
-            Circle()
-                .fill(task.priorityColor)
-                .frame(width: 8, height: 8)
-            Text(task.description)
-                .font(.caption2)
-                .lineLimit(1)
-                .truncationMode(.tail)
-            Spacer()
-        }
-        .padding(.vertical, 4)
-        .padding(.horizontal, 6)
-        .background(
-            RoundedRectangle(cornerRadius: 4)
-                .fill(Color(UIColor.secondarySystemBackground))
-        )
-    }
-    
-    func mediumTaskRow(task: Task) -> some View {
-        HStack(spacing: 8) {
-            Circle()
-                .fill(task.priorityColor)
-                .frame(width: 8, height: 8)
-            Text(task.description)
-                .font(.caption)
-                .lineLimit(1)
-                .truncationMode(.tail)
-            Spacer()
-        }
-        .padding(.vertical, 5)
-        .padding(.horizontal, 8)
-        .background(
-            RoundedRectangle(cornerRadius: 6)
-                .fill(Color(UIColor.secondarySystemBackground))
-        )
-    }
-    
-    func largeTaskRow(task: Task) -> some View {
+    // Unified Row Design (Clean, Single Line)
+    func taskRow(task: Task) -> some View {
         HStack(spacing: 10) {
-            Circle()
+            // Colored Bar
+            Capsule()
                 .fill(task.priorityColor)
-                .frame(width: 10, height: 10)
-            VStack(alignment: .leading, spacing: 2) {
-                Text(task.description)
-                    .font(.subheadline)
-                    .lineLimit(1)
-                    .truncationMode(.tail)
-                Text(task.urgency)
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-            }
+                .frame(width: 10, height: 10) // Smaller height since text is single line
+            
+            // Description (Single line, centered vertically)
+            Text(task.description)
+                .font(.subheadline)
+                .fontWeight(.medium)
+                .lineLimit(1)
+                .foregroundColor(.primary)
+            
             Spacer()
         }
-        .padding(.vertical, 6)
-        .padding(.horizontal, 8)
+        // Compact Padding to fit more items
+        .padding(.vertical, 8)
+        .padding(.horizontal, 12)
         .background(
-            RoundedRectangle(cornerRadius: 8)
+            RoundedRectangle(cornerRadius: 12)
                 .fill(Color(UIColor.secondarySystemBackground))
         )
-        .widgetURL(URL(string: "taskwarrior://cardClicked?uuid=\(task.uuid)"))
+        .fixedSize(horizontal: false, vertical: true)
     }
 }
 
@@ -296,7 +266,7 @@ struct TasksWidget: Widget {
         }
         .configurationDisplayName("Tasks")
         .description("Shows your pending tasks")
-        .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
+        .supportedFamilies([.systemMedium, .systemLarge])
         .contentMarginsDisabled()
     }
 }
@@ -308,12 +278,6 @@ struct TasksWidget: Widget {
         date: .now,
         tasks: "[{\"description\":\"High priority task\",\"urgency\":\"urgency: 5.8\",\"uuid\":\"123\",\"priority\":\"H\"}, {\"description\":\"Medium task\",\"urgency\":\"urgency: 3.2\",\"uuid\":\"456\",\"priority\":\"M\"}, {\"description\":\"Low priority task\",\"urgency\":\"urgency: 1.5\",\"uuid\":\"789\",\"priority\":\"L\"}, {\"description\":\"Another high priority\",\"urgency\":\"urgency: 5.9\",\"uuid\":\"124\",\"priority\":\"H\"}, {\"description\":\"Second medium task\",\"urgency\":\"urgency: 3.1\",\"uuid\":\"457\",\"priority\":\"M\"}, {\"description\":\"No priority task\",\"urgency\":\"urgency: 1.0\",\"uuid\":\"790\",\"priority\":\"N\"}]",
         themeMode: "light",
-        configuration: ConfigurationAppIntent()
-    )
-    TaskWidgetEntry(
-        date: .now,
-        tasks: "[{\"description\":\"Critical bug fix\",\"urgency\":\"urgency: 6.5\",\"uuid\":\"abc\",\"priority\":\"H\"}, {\"description\":\"Update docs\",\"urgency\":\"urgency: 2.8\",\"uuid\":\"def\",\"priority\":\"M\"}, {\"description\":\"Review PR\",\"urgency\":\"urgency: 4.5\",\"uuid\":\"ghi\",\"priority\":\"H\"}, {\"description\":\"Fix typos\",\"urgency\":\"urgency: 1.2\",\"uuid\":\"jkl\",\"priority\":\"L\"}, {\"description\":\"Add tests\",\"urgency\":\"urgency: 3.8\",\"uuid\":\"mno\",\"priority\":\"M\"}, {\"description\":\"Refactor code\",\"urgency\":\"urgency: 2.5\",\"uuid\":\"pqr\",\"priority\":\"N\"}]",
-        themeMode: "dark",
         configuration: ConfigurationAppIntent()
     )
 }
