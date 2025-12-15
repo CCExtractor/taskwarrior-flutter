@@ -3,6 +3,10 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+// 1. Add this import
+import 'package:app_links/app_links.dart';
+import 'package:taskwarrior/app/services/deep_link_service.dart';
+
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/debug_logger/log_databse_helper.dart';
 import 'package:taskwarrior/app/utils/themes/dark_theme.dart';
@@ -31,12 +35,14 @@ void main() async {
       _logDatabaseHelper.insertLog(message);
     }
   };
+
   loadNativeLibrary();
   await RustLib.init();
 
   WidgetsFlutterBinding.ensureInitialized();
   await AppSettings.init();
 
+  Get.put<DeepLinkService>(DeepLinkService(), permanent: true);
   runApp(
     GetMaterialApp(
       darkTheme: darkTheme,

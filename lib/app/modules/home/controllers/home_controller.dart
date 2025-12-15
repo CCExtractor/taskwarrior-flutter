@@ -20,6 +20,7 @@ import 'package:taskwarrior/app/modules/home/controllers/widget.controller.dart'
 import 'package:taskwarrior/app/modules/home/views/add_task_bottom_sheet_new.dart';
 import 'package:taskwarrior/app/modules/splash/controllers/splash_controller.dart';
 import 'package:taskwarrior/app/routes/app_pages.dart';
+import 'package:taskwarrior/app/services/deep_link_service.dart';
 import 'package:taskwarrior/app/services/tag_filter.dart';
 import 'package:taskwarrior/app/tour/filter_drawer_tour.dart';
 import 'package:taskwarrior/app/tour/home_page_tour.dart';
@@ -87,9 +88,6 @@ class HomeController extends GetxController {
     taskdb.open();
     getUniqueProjects();
     _loadTaskChampion();
-    if (Platform.isAndroid || Platform.isIOS) {
-      handleHomeWidgetClicked();
-    }
     fetchTasksFromDB();
     ever(taskReplica, (_) {
       if (taskReplica.value) refreshReplicaTaskList();
@@ -107,7 +105,6 @@ class HomeController extends GetxController {
       if (Platform.isAndroid || Platform.isIOS) {
         WidgetController widgetController = Get.put(WidgetController());
         widgetController.fetchAllData();
-
         widgetController.update();
       }
     });
@@ -122,6 +119,14 @@ class HomeController extends GetxController {
         widgetController.updateWidget();
       }
     });
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
+    if (Get.isRegistered<DeepLinkService>()) {
+      Get.find<DeepLinkService>().consumePendingActions(this);
+    }
   }
 
   Future<List<String>> getUniqueProjects() async {
@@ -807,7 +812,9 @@ class HomeController extends GetxController {
   void showAddDialogAfterWidgetClick() {
     Widget showDialog = Material(
         child: AddTaskBottomSheet(
-            homeController: this, forTaskC: taskchampion.value));
+            homeController: this,
+            forTaskC: taskchampion.value,
+            forReplica: taskReplica.value));
     Get.dialog(showDialog);
   }
 }
