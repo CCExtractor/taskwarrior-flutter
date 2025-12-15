@@ -631,6 +631,16 @@ class HomeController extends GetxController {
     _refreshTasks();
   }
 
+  void changeInDirectory() {
+    print("directory change to ${splashController.baseDirectory.value.path}");
+    storage = Storage(
+      Directory(
+        '${splashController.baseDirectory.value.path}/profiles/${splashController.currentProfile.value}',
+      ),
+    );
+    _refreshTasks();
+  }
+
   RxBool useDelayTask = false.obs;
 
   Future<void> loadDelayTask() async {

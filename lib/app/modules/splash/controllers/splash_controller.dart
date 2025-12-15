@@ -59,6 +59,7 @@ class SplashController extends GetxController {
   void setBaseDirectory(Directory newBaseDirectory) {
     baseDirectory.value = newBaseDirectory;
     profilesMap.value = _profiles.profilesMap();
+    Get.find<HomeController>().changeInDirectory();
   }
 
   void addProfile() {
