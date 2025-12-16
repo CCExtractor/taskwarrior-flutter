@@ -196,7 +196,6 @@ struct TaskWidgetEntryView: View {
         VStack(spacing: 4) { // Compact spacing
             ForEach(Array(sortedTasks.prefix(2))) { task in
                 taskRow(task: task)
-                    .widgetURL(URL(string: "taskwarrior://cardclicked?uuid=\(task.uuid)"))
             }
             
             if sortedTasks.count > 2 {
@@ -214,7 +213,7 @@ struct TaskWidgetEntryView: View {
         VStack(spacing: 7) {
             ForEach(Array(sortedTasks.prefix(6))) { task in
                 taskRow(task: task)
-                    .widgetURL(URL(string: "taskwarrior://cardclicked?uuid=\(task.uuid)"))
+                    
             }
             
             if sortedTasks.count > 6 {
@@ -227,32 +226,42 @@ struct TaskWidgetEntryView: View {
         }
     }
     
-    // -- Row Designs --
-    
-    // Unified Row Design (Clean, Single Line)
-    func taskRow(task: Task) -> some View {
-        HStack(spacing: 10) {
-            // Colored Bar
-            Capsule()
-                .fill(task.priorityColor)
-                .frame(width: 10, height: 10) // Smaller height since text is single line
-            
-            // Description (Single line, centered vertically)
-            Text(task.description)
-                .font(.subheadline)
-                .fontWeight(.medium)
-                .lineLimit(1)
-                .foregroundColor(.primary)
-            
-            Spacer()
+	func taskRow(task: Task) -> some View {
+        let isRealTask = task.uuid != "NO_TASK"
+
+        return Link(destination: URL(string: "taskwarrior://cardclicked?uuid=\(task.uuid)")!) {
+            HStack(spacing: 10) {
+                
+                // 1. Center alignment for status messages
+                if !isRealTask {
+                    Spacer()
+                }
+
+                // 2. Priority Dot (Real tasks only)
+                if isRealTask {
+                    Capsule()
+                        .fill(task.priorityColor)
+                        .frame(width: 10, height: 10)
+                }
+                
+                // 3. Task Description
+                Text(task.description)
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                    .lineLimit(1)
+                    .foregroundColor(isRealTask ? .primary : .secondary)
+                
+                // 4. Trailing Spacer
+                Spacer()
+            }
+            .padding(.vertical, 8)
+            .padding(.horizontal, 12)
+            .background(
+                RoundedRectangle(cornerRadius: 12)
+                    // 5. Hide background if it's not a real task
+                    .fill(isRealTask ? Color(UIColor.secondarySystemBackground) : Color.clear)
+            )
         }
-        // Compact Padding to fit more items
-        .padding(.vertical, 8)
-        .padding(.horizontal, 12)
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color(UIColor.secondarySystemBackground))
-        )
         .fixedSize(horizontal: false, vertical: true)
     }
 }
