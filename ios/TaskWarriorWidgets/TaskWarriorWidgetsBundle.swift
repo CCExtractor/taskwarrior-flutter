@@ -9,6 +9,5 @@ let appGroupIdentifier = "group.taskwarrior"
 struct TaskWarriorWidgetsBundle: WidgetBundle {
     var body: some Widget {
         TasksWidget()
-        ChartWidget()
     }
 }
