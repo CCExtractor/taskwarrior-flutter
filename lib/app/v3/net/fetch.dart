@@ -14,7 +14,7 @@ Future<List<TaskForC>> fetchTasks(String uuid, String encryptionSecret) async {
 
     var response = await http.get(Uri.parse(url), headers: {
       "Content-Type": "application/json",
-    }).timeout(const Duration(seconds: 10000));
+    }).timeout(const Duration(milliseconds: 10000));
     debugPrint("Fetch tasks response: ${response.statusCode}");
     debugPrint("Fetch tasks body: ${response.body}");
     if (response.statusCode == 200) {
