@@ -23,24 +23,33 @@ import android.os.Build
 class TaskWarriorWidgetProvider : AppWidgetProvider() {
 
 	override fun onReceive(context: Context, intent: Intent) {
-		// val myaction = intent.action
-		if (intent.action == "TASK_ACTION") {
-				val extras = intent.extras
-				if(extras!=null){
-					val uuid = extras.getString("uuid")?:""
-					val add_task = extras.getString("launchedFor")
-					val host = if(add_task == "ADD_TASK"){context.getString(R.string.app_widget_add_clicked_uri)}else{context.getString(R.string.app_widget_card_clicked_uri)}
-					val launchIntent = Intent(context, MainActivity::class.java).apply {
-						action = context.getString(R.string.app_widget_launch_action)
-						data = Uri.parse("$host?uuid=$uuid")
-						flags = Intent.	FLAG_ACTIVITY_NEW_TASK
-                		context?.startActivity(this)
-					}
-					// HomeWidgetLaunchIntent.getActivity(context, MainActivity::class.java, Uri.parse("TaskWarrior://taskView?taskId=$uuid"))
-				}
-		}
-		super.onReceive(context, intent)
-	}
+        // Handle the custom action from your Widget buttons/list
+        if (intent.action == "TASK_ACTION") {
+            val uuid = intent.getStringExtra("uuid") ?: ""
+            val launchedFor = intent.getStringExtra("launchedFor")
+
+            // 1. Construct the URI exactly as Flutter expects it
+            // Scheme: taskwarrior://
+            // Host: cardclicked OR addclicked
+            val deepLinkUri = if (launchedFor == "ADD_TASK") {
+                Uri.parse("taskwarrior://addclicked")
+            } else {
+                // For list items, we attach the UUID
+                Uri.parse("taskwarrior://cardclicked?uuid=$uuid")
+            }
+
+            // 2. Create the Intent to open MainActivity
+            val launchIntent = Intent(context, MainActivity::class.java).apply {
+                action = Intent.ACTION_VIEW
+                data = deepLinkUri
+                // These flags ensure the app opens correctly whether running or not
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            }
+            
+            context.startActivity(launchIntent)
+        }
+        super.onReceive(context, intent)
+    }
 	fun getLayoutId(context: Context) : Int{
 		val sharedPrefs = HomeWidgetPlugin.getData(context)
 		val theme = sharedPrefs.getString("themeMode", "")

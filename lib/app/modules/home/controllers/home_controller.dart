@@ -783,48 +783,48 @@ class HomeController extends GetxController {
   late RxString uuid = "".obs;
   late RxBool isHomeWidgetTaskTapped = false.obs;
 
-  void handleHomeWidgetClicked() async {
-    Uri? uri = await HomeWidget.initiallyLaunchedFromHomeWidget();
-    if (uri != null) {
-      if (uri.host == "cardclicked") {
-        if (uri.queryParameters["uuid"] != null &&
-            !taskchampion.value &&
-            !taskReplica.value) {
-          uuid.value = uri.queryParameters["uuid"] as String;
-          isHomeWidgetTaskTapped.value = true;
-          Future.delayed(Duration.zero, () {
-            Get.toNamed(Routes.DETAIL_ROUTE, arguments: ["uuid", uuid.value]);
-          });
-        }
-      } else if (uri.host == "addclicked") {
-        showAddDialogAfterWidgetClick();
-      }
-    }
-    HomeWidget.widgetClicked.listen((uri) async {
-      if (uri != null) {
-        if (uri.host == "cardclicked") {
-          if (uri.queryParameters["uuid"] != null &&
-              !taskchampion.value &&
-              !taskReplica.value) {
-            uuid.value = uri.queryParameters["uuid"] as String;
-            isHomeWidgetTaskTapped.value = true;
+  // void handleHomeWidgetClicked() async {
+  //   Uri? uri = await HomeWidget.initiallyLaunchedFromHomeWidget();
+  //   if (uri != null) {
+  //     if (uri.host == "cardclicked") {
+  //       if (uri.queryParameters["uuid"] != null &&
+  //           !taskchampion.value &&
+  //           !taskReplica.value) {
+  //         uuid.value = uri.queryParameters["uuid"] as String;
+  //         isHomeWidgetTaskTapped.value = true;
+  //         Future.delayed(Duration.zero, () {
+  //           Get.toNamed(Routes.DETAIL_ROUTE, arguments: ["uuid", uuid.value]);
+  //         });
+  //       }
+  //     } else if (uri.host == "addclicked") {
+  //       showAddDialogAfterWidgetClick();
+  //     }
+  //   }
+  //   HomeWidget.widgetClicked.listen((uri) async {
+  //     if (uri != null) {
+  //       if (uri.host == "cardclicked") {
+  //         if (uri.queryParameters["uuid"] != null &&
+  //             !taskchampion.value &&
+  //             !taskReplica.value) {
+  //           uuid.value = uri.queryParameters["uuid"] as String;
+  //           isHomeWidgetTaskTapped.value = true;
 
-            debugPrint('uuid is $uuid');
-            Get.toNamed(Routes.DETAIL_ROUTE, arguments: ["uuid", uuid.value]);
-          }
-        } else if (uri.host == "addclicked") {
-          showAddDialogAfterWidgetClick();
-        }
-      }
-    });
-  }
+  //           debugPrint('uuid is $uuid');
+  //           Get.toNamed(Routes.DETAIL_ROUTE, arguments: ["uuid", uuid.value]);
+  //         }
+  //       } else if (uri.host == "addclicked") {
+  //         showAddDialogAfterWidgetClick();
+  //       }
+  //     }
+  //   });
+  // }
 
-  void showAddDialogAfterWidgetClick() {
-    Widget showDialog = Material(
-        child: AddTaskBottomSheet(
-            homeController: this,
-            forTaskC: taskchampion.value,
-            forReplica: taskReplica.value));
-    Get.dialog(showDialog);
-  }
+  // void showAddDialogAfterWidgetClick() {
+  //   Widget showDialog = Material(
+  //       child: AddTaskBottomSheet(
+  //           homeController: this,
+  //           forTaskC: taskchampion.value,
+  //           forReplica: taskReplica.value));
+  //   Get.dialog(showDialog);
+  // }
 }
