@@ -363,12 +363,6 @@ class AddTaskBottomSheet extends StatelessWidget {
   }
 
   void onSaveButtonClicked(BuildContext context) async {
-    if (Platform.isAndroid || Platform.isIOS) {
-      WidgetController widgetController = Get.put(WidgetController());
-      widgetController.fetchAllData();
-
-      widgetController.update();
-    }
     if (homeController.formKey.currentState!.validate()) {
       try {
         var task = taskParser(homeController.namecontroller.text)
@@ -428,6 +422,12 @@ class AddTaskBottomSheet extends StatelessWidget {
         var storageWidget = Get.find<HomeController>();
         if (value) {
           storageWidget.synchronize(context, true);
+        }
+        if (Platform.isAndroid || Platform.isIOS) {
+          WidgetController widgetController = Get.put(WidgetController());
+          widgetController.fetchAllData();
+
+          widgetController.update();
         }
       } on FormatException catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
