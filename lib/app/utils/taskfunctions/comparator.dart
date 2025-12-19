@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:taskwarrior/app/models/json/task.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/urgency.dart';
 
-
 int Function(Task, Task) compareTasks(String column) {
   return (a, b) {
     int? result;
@@ -48,6 +47,18 @@ int Function(Task, Task) compareTasks(String column) {
         var compare = {'H': 2, 'M': 1, 'L': 0};
         result =
             (compare[a.priority] ?? -1).compareTo(compare[b.priority] ?? -1);
+        // If priorities are equal, sort by due date
+        if (result == 0) {
+          if (a.due == null && b.due == null) {
+            result = 0;
+          } else if (a.due == null) {
+            result = 1;
+          } else if (b.due == null) {
+            result = -1;
+          } else {
+            result = a.due!.compareTo(b.due!);
+          }
+        }
         break;
       case 'Project':
         result = (a.project ?? '').compareTo(b.project ?? '');
