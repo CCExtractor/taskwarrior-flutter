@@ -60,9 +60,17 @@ class TaskReplicaViewBuilder extends StatelessWidget {
           case 'Due till-':
             return (b.due ?? '').compareTo(a.due ?? '');
           case 'Priority+':
-            return (a.priority ?? '').compareTo(b.priority ?? '');
+            final priorityCompare =
+                (a.priority ?? '').compareTo(b.priority ?? '');
+            if (priorityCompare != 0) return priorityCompare;
+            // If priorities are equal, sort by due date
+            return (a.due ?? '').compareTo(b.due ?? '');
           case 'Priority-':
-            return (b.priority ?? '').compareTo(a.priority ?? '');
+            final priorityCompare =
+                (b.priority ?? '').compareTo(a.priority ?? '');
+            if (priorityCompare != 0) return priorityCompare;
+            // If priorities are equal, sort by due date
+            return (a.due ?? '').compareTo(b.due ?? '');
           default:
             return 0;
         }
