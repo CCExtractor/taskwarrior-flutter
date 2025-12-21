@@ -62,4 +62,12 @@ class SaveTourStatus {
   static Future<bool> getTaskSwipeTutorialStatus() async {
     return _preferences?.getBool('task_swipe_tutorial_completed') ?? false;
   }
+
+  static Future saveTutorialPromptShown(bool status) async {
+    await _preferences?.setBool('tutorial_prompt_shown', status);
+  }
+
+  static Future<bool> getTutorialPromptShown() async {
+    return _preferences?.getBool('tutorial_prompt_shown') ?? false;
+  }
 }
