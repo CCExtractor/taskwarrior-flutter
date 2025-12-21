@@ -70,4 +70,14 @@ class SaveTourStatus {
   static Future<bool> getTutorialPromptShown() async {
     return _preferences?.getBool('tutorial_prompt_shown') ?? false;
   }
+
+  static Future disableAllTutorials() async {
+    await saveReportsTourStatus(true);
+    await saveInAppTourStatus(true);
+    await saveFilterTourStatus(true);
+    await saveProfileTourStatus(true);
+    await saveDetailsTourStatus(true);
+    await saveManageTaskServerTourStatus(true);
+    await saveTaskSwipeTutorialStatus(true);
+  }
 }

@@ -36,7 +36,7 @@ class HomePageBody extends StatelessWidget {
                 },
                 onNo: () async {
                   await SaveTourStatus.saveTutorialPromptShown(true);
-                  await SaveTourStatus.saveInAppTourStatus(true);
+                  await SaveTourStatus.disableAllTutorials();
                   if (dialogContext.mounted) {
                     Navigator.of(dialogContext).pop();
                   }
