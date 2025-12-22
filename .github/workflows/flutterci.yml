@@ -20,10 +20,10 @@ jobs:
           distribution: "temurin"
           java-version: "17.x"
 
-      # Step 3: Setup Flutter with version 3.7.11
+      # Step 3: Setup Flutter with version 3.38.5
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: "3.29.2"
+          flutter-version: "3.38.5"
 
       # Step 4: Get dependencies using pub get
       - run: flutter pub get
