@@ -115,7 +115,11 @@ flutter doctor
 5. Run the app:
 
 ```bash
-flutter run
+flutter run --flavor production
+```
+Also Check if it's working with nightly with
+```bash
+flutter run --flavor nightly
 ```
 
 ## Contributing
