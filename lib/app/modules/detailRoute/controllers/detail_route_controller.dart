@@ -45,7 +45,9 @@ class DetailRouteController extends GetxController {
     }
 
     modify.set(name, newValue);
-    onEdit.value = true;
+
+// onEdit must reflect REAL changes only
+    onEdit.value = modify.changes.isNotEmpty;
 
     // If status is being changed, update read-only state
     if (name == 'status') {
@@ -68,7 +70,7 @@ class DetailRouteController extends GetxController {
     }
     var now = DateTime.now().toUtc();
     modify.save(modified: () => now);
-    onEdit.value = false;
+    onEdit.value = modify.changes.isNotEmpty;
 
     // Show snackbar
     Get.snackbar(

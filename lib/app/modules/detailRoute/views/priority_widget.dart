@@ -21,10 +21,15 @@ class PriorityWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     final Color? textColor = isEditable
         ? tColors.primaryTextColor
         : tColors.primaryDisabledTextColor;
+
+    // Normalize value: null → X
+    final String priority =
+        (value == null || value == '') ? 'X' : value.toString();
 
     return Card(
       key: globalKey,
@@ -48,7 +53,7 @@ class PriorityWidget extends StatelessWidget {
                       ),
                     ),
                     TextSpan(
-                      text: value ?? "not selected",
+                      text: priority, // Always show X / H / M / L
                       style: GoogleFonts.poppins(
                         fontSize: TaskWarriorFonts.fontSizeMedium,
                         color: textColor,
@@ -60,18 +65,24 @@ class PriorityWidget extends StatelessWidget {
             ],
           ),
         ),
-        onTap: () {
-          switch (value) {
-            case 'H':
-              return callback('M');
-            case 'M':
-              return callback('L');
-            case 'L':
-              return callback(null);
-            default:
-              return callback('H');
-          }
-        },
+        onTap: isEditable
+            ? () {
+                switch (priority) {
+                  case 'X':
+                    callback('H');
+                    break;
+                  case 'H':
+                    callback('M');
+                    break;
+                  case 'M':
+                    callback('L');
+                    break;
+                  case 'L':
+                    callback('X');
+                    break;
+                }
+              }
+            : null,
       ),
     );
   }
