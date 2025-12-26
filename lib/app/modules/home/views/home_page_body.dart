@@ -37,6 +37,7 @@ class HomePageBody extends StatelessWidget {
                     margin: const EdgeInsets.symmetric(
                         horizontal: 10, vertical: 10),
                     child: SearchBar(
+                      focusNode: controller.searchFocusNode,
                       backgroundColor: WidgetStateProperty.all<Color>(
                           (tColors.primaryBackgroundColor!)),
                       surfaceTintColor: WidgetStateProperty.all<Color>(
