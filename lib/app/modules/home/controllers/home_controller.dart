@@ -61,6 +61,7 @@ class HomeController extends GetxController {
   final RxBool sortHeaderVisible = false.obs;
   final RxBool searchVisible = false.obs;
   final TextEditingController searchController = TextEditingController();
+  final FocusNode searchFocusNode = FocusNode();
   final StringTagController stringTagController = StringTagController();
   late RxBool serverCertExists;
   final Rx<SupportedLanguage> selectedLanguage = SupportedLanguage.english.obs;
@@ -481,6 +482,12 @@ class HomeController extends GetxController {
     if (!searchVisible.value) {
       searchedTasks.assignAll(queriedTasks);
       searchController.text = '';
+      searchFocusNode.unfocus(); // Unfocus when hiding
+    } else {
+      // Request focus after the frame is built to ensure widget exists in tree
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        searchFocusNode.requestFocus();
+      });
     }
   }
 
@@ -827,4 +834,11 @@ class HomeController extends GetxController {
   //           forReplica: taskReplica.value));
   //   Get.dialog(showDialog);
   // }
+
+  @override
+  void onClose() {
+    searchFocusNode.dispose();
+    searchController.dispose();
+    super.onClose();
+  }
 }
