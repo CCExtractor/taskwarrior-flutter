@@ -282,6 +282,10 @@ abstract class Sentences {
 
   // Splash screen strings
   String get splashSettingUpApp;
+  String get syncSetting;
+  String get displaySettings;
+  String get storageAndData;
+  String get advanced;
 
   // Tour strings - reports
   String get tourReportsDaily;
