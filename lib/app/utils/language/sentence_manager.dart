@@ -19,11 +19,11 @@ class SentenceManager {
       case SupportedLanguage.marathi:
         return MarathiSentences();
       case SupportedLanguage.french:
-        return FrenchSentences(); 
+        return FrenchSentences();
       case SupportedLanguage.spanish:
-        return SpanishSentences(); 
+        return SpanishSentences();
       case SupportedLanguage.bengali:
-        return BengaliSentences(); 
+        return BengaliSentences();
       case SupportedLanguage.english:
       default:
         return EnglishSentences();

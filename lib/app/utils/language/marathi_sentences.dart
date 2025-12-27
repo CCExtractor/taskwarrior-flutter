@@ -664,4 +664,14 @@ class MarathiSentences extends Sentences {
   String get logs => 'लॉग्ज';
   @override
   String get checkAllDebugLogsHere => 'येथे सर्व डीबग लॉग्ज तपासा';
+
+  // शेटिंग
+  @override
+  String get syncSetting => 'सिंक शेटिंग';
+  @override
+  String get displaySettings => 'डिस्प्ले शेटिंग्स';
+  @override
+  String get storageAndData => 'स्टोरेज आणि डेटा';
+  @override
+  String get advanced => 'अड्वांस्ड';
 }
