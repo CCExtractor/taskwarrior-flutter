@@ -33,108 +33,128 @@ class AddTaskBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const padding = 12.0;
-    return Padding(
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom,
+    final screenHeight = MediaQuery.of(context).size.height;
+    final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+
+    // Calculate the max height for the bottom sheet
+    // When keyboard is closed: 80% of screen height
+    // When keyboard is open: remaining space with minimum height
+    final maxHeight = keyboardHeight > 0
+        ? screenHeight -
+            keyboardHeight *
+                0.5 // Keep 50% of keyboard from top when keyboard is open
+        : screenHeight * 0.8; // 80% of screen when keyboard is closed
+
+    return Container(
+      constraints: BoxConstraints(
+        maxHeight: maxHeight,
       ),
-      child: Form(
-        key: homeController.formKey,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(padding),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      Get.back();
-                    },
-                    child: Text(SentenceManager(
-                            currentLanguage:
-                                homeController.selectedLanguage.value)
-                        .sentences
-                        .cancel),
-                  ),
-                  Text(
-                    SentenceManager(
-                            currentLanguage:
-                                homeController.selectedLanguage.value)
-                        .sentences
-                        .addTaskTitle,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      if (forTaskC) {
-                        onSaveButtonClickedTaskC(context);
-                      } else if (forReplica) {
-                        debugPrint("Saving to Replica");
-                        onSaveButtonClickedForReplica(context);
-                      } else {
-                        onSaveButtonClicked(context);
-                      }
-                    },
-                    child: Text(SentenceManager(
-                            currentLanguage:
-                                homeController.selectedLanguage.value)
-                        .sentences
-                        .save),
-                  ),
-                ],
-              ),
-            ),
-            Flexible(
-              child: SingleChildScrollView(
-                child: Column(
+      child: Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: Form(
+          key: homeController.formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Fixed header
+              Padding(
+                padding: const EdgeInsets.all(padding),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(padding),
-                      child: TextFormField(
-                        controller: homeController.namecontroller,
-                        validator: (value) => value!.isEmpty
-                            ? SentenceManager(
-                                    currentLanguage:
-                                        homeController.selectedLanguage.value)
-                                .sentences
-                                .descriprtionCannotBeEmpty
-                            : null,
-                        decoration: InputDecoration(
-                          labelText: SentenceManager(
-                                  currentLanguage:
-                                      homeController.selectedLanguage.value)
-                              .sentences
-                              .enterTaskDescription,
-                          border: OutlineInputBorder(),
-                        ),
+                    TextButton(
+                      onPressed: () {
+                        Get.back();
+                      },
+                      child: Text(SentenceManager(
+                              currentLanguage:
+                                  homeController.selectedLanguage.value)
+                          .sentences
+                          .cancel),
+                    ),
+                    Text(
+                      SentenceManager(
+                              currentLanguage:
+                                  homeController.selectedLanguage.value)
+                          .sentences
+                          .addTaskTitle,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Padding(
-                        padding: const EdgeInsets.all(padding),
-                        child: buildProjectInput(context)),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: padding, right: padding, top: padding),
-                      child: buildDatePicker(context),
+                    TextButton(
+                      onPressed: () {
+                        if (forTaskC) {
+                          onSaveButtonClickedTaskC(context);
+                        } else if (forReplica) {
+                          debugPrint("Saving to Replica");
+                          onSaveButtonClickedForReplica(context);
+                        } else {
+                          onSaveButtonClicked(context);
+                        }
+                      },
+                      child: Text(SentenceManager(
+                              currentLanguage:
+                                  homeController.selectedLanguage.value)
+                          .sentences
+                          .save),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(padding),
-                      child: buildPriority(context),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(padding),
-                      child: buildTagsInput(context),
-                    ),
-                    const Padding(padding: EdgeInsets.all(20)),
                   ],
                 ),
               ),
-            ),
-          ],
+              // Scrollable content
+              Flexible(
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(padding),
+                        child: TextFormField(
+                          controller: homeController.namecontroller,
+                          validator: (value) => value!.isEmpty
+                              ? SentenceManager(
+                                      currentLanguage:
+                                          homeController.selectedLanguage.value)
+                                  .sentences
+                                  .descriprtionCannotBeEmpty
+                              : null,
+                          decoration: InputDecoration(
+                            labelText: SentenceManager(
+                                    currentLanguage:
+                                        homeController.selectedLanguage.value)
+                                .sentences
+                                .enterTaskDescription,
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                          padding: const EdgeInsets.all(padding),
+                          child: buildProjectInput(context)),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: padding, right: padding, top: padding),
+                        child: buildDatePicker(context),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(padding),
+                        child: buildPriority(context),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(padding),
+                        child: buildTagsInput(context),
+                      ),
+                      const Padding(padding: EdgeInsets.all(20)),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
