@@ -11,6 +11,7 @@ import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 
 import 'package:taskwarrior/app/utils/constants/constants.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
+import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/validate.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
@@ -47,10 +48,27 @@ class TagsWidget extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
-              Text(
-                '${'$name:'.padRight(13)}${(value as ListBuilder?)?.build()}',
-                style: TextStyle(
-                  color: textColor,
+              RichText(
+                text: TextSpan(
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: '$name:'.padRight(13),
+                      style: TextStyle(
+                        fontFamily: FontFamily.poppins,
+                        fontWeight: TaskWarriorFonts.bold,
+                        fontSize: TaskWarriorFonts.fontSizeMedium,
+                        color: textColor,
+                      ),
+                    ),
+                    TextSpan(
+                      text: '${(value as ListBuilder?)?.build()}',
+                      style: TextStyle(
+                        fontFamily: FontFamily.poppins,
+                        fontSize: TaskWarriorFonts.fontSizeMedium,
+                        color: textColor,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],

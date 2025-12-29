@@ -21,6 +21,8 @@ class DetailRouteController extends GetxController {
   // Description Edit State
   final descriptionController = TextEditingController();
   var descriptionErrorText = Rxn<String>();
+  // Track whether user explicitly selected a start date
+  bool startEdited = false;
 
   @override
   void onInit() {
@@ -55,7 +57,7 @@ class DetailRouteController extends GetxController {
     }
 
     if (name == 'start') {
-      debugPrint('Start Value Changed to $newValue');
+      startEdited = true; // MARK AS USER-SELECTED
       startValue.value = newValue;
     }
     initValues();
@@ -80,6 +82,12 @@ class DetailRouteController extends GetxController {
   }
 
   Future<void> saveChanges() async {
+    // If start was never edited AND backend auto-generated it (start == entry)
+    if (!startEdited &&
+        modify.original.start != null &&
+        modify.original.start!.isAtSameMomentAs(modify.original.entry)) {
+      modify.set('start', null); // remove auto start
+    }
     var now = DateTime.now().toUtc();
     modify.save(modified: () => now);
     onEdit.value = false;
@@ -129,7 +137,20 @@ class DetailRouteController extends GetxController {
     statusValue.value = modify.draft.status;
     entryValue.value = modify.draft.entry;
     modifiedValue.value = modify.draft.modified;
-    startValue.value ??= null;
+    final originalStart = modify.original.start;
+    final originalEntry = modify.original.entry;
+
+    final backendAutoStart = (originalStart != null &&
+        originalStart.isAtSameMomentAs(originalEntry));
+
+    // START DATE LOGIC (THE FIX)
+    if (startEdited) {
+      startValue.value = modify.draft.start;
+    } else if (backendAutoStart) {
+      startValue.value = null; // Do not show backend auto start
+    } else {
+      startValue.value = modify.draft.start; // Existing meaningful start
+    }
     endValue.value = modify.draft.end;
     dueValue.value = modify.draft.due;
     waitValue.value = modify.draft.wait;
@@ -171,15 +192,7 @@ class DetailRouteController extends GetxController {
       const Duration(milliseconds: 500),
       () {
         SaveTourStatus.getDetailsTourStatus().then((value) => {
-              if (value == false)
-                {
-                  tutorialCoachMark.show(context: context),
-                }
-              else
-                {
-                  // ignore: avoid_print
-                  print('User has seen this page'),
-                }
+              if (!value) {tutorialCoachMark.show(context: context)}
             });
       },
     );

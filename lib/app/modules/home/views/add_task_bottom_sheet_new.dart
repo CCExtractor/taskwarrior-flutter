@@ -423,6 +423,12 @@ class AddTaskBottomSheet extends StatelessWidget {
         if (value) {
           storageWidget.synchronize(context, true);
         }
+        if (Platform.isAndroid || Platform.isIOS) {
+          WidgetController widgetController = Get.put(WidgetController());
+          widgetController.fetchAllData();
+
+          widgetController.update();
+        }
       } on FormatException catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(

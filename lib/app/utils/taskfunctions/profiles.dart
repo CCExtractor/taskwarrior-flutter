@@ -3,6 +3,7 @@
 import 'dart:collection';
 import 'dart:io';
 
+import 'package:flutter/widgets.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:taskwarrior/app/models/storage.dart';
 import 'package:uuid/uuid.dart';
@@ -71,6 +72,7 @@ class Profiles {
             entity.uri.pathSegments.lastWhere((segment) => segment.isNotEmpty))
         .toList()
       ..sort(comparator);
+    debugPrint('Profiles found: $dirs');
     return dirs;
   }
 
