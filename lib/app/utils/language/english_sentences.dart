@@ -5,7 +5,7 @@ class EnglishSentences extends Sentences {
   String get helloWorld => 'Hello, World!';
 
   @override
-  String get homePageTitle => 'Home Page';
+  String get homePageTitle => '👋 Welcome';
   @override
   String get homePageLastModified => 'Last Modified';
   @override
@@ -29,7 +29,7 @@ class EnglishSentences extends Sentences {
   String get homePageCancel => 'Cancel';
   @override
   String get homePageClickOnTheBottomRightButtonToStartAddingTasks =>
-      'Click on the bottom right button to start adding tasks';
+    'Click on the bottom right button to start adding tasks';
   @override
   String get homePageSearchNotFound => 'Search Not Found';
   @override

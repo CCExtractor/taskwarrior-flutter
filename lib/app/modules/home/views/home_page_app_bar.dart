@@ -91,8 +91,9 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
       surfaceTintColor: TaskWarriorColors.kprimaryBackgroundColor,
-      title: Center(
-        child: Obx(
+      centerTitle: false,
+      titleSpacing: 0,
+      title: Obx(
           () => Text(
             SentenceManager(currentLanguage: controller.selectedLanguage.value)
                 .sentences
@@ -100,7 +101,6 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
             style: TextStyle(
                 fontFamily: FontFamily.poppins, color: TaskWarriorColors.white),
           ),
-        ),
       ),
       actions: [
         Obx(

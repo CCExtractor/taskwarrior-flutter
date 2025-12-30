@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
+
 import 'package:taskwarrior/app/models/models.dart';
 import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
 import 'package:taskwarrior/app/modules/home/controllers/widget.controller.dart';
@@ -40,256 +41,267 @@ class TasksBuilder extends StatelessWidget {
   final SupportedLanguage selectedLanguage;
   final ScrollController scrollController;
   final bool showbtn;
+
+  
   void setStatus(BuildContext context, String newValue, String id) {
-    var storageWidget = Get.find<HomeController>();
-    Modify modify = Modify(
-      getTask: storageWidget.getTask,
-      mergeTask: storageWidget.mergeTask,
+    final storage = Get.find<HomeController>();
+
+    final modify = Modify(
+      getTask: storage.getTask,
+      mergeTask: storage.mergeTask,
       uuid: id,
     );
+
     modify.set('status', newValue);
-    saveChanges(context, modify, id, newValue);
+    _saveChanges(context, modify, id);
   }
 
-  void saveChanges(
-      BuildContext context, Modify modify, String id, String newValue) async {
-    TaskwarriorColorTheme tColors =
+  void _saveChanges(BuildContext context, Modify modify, String id) {
+    final tColors =
         Theme.of(context).extension<TaskwarriorColorTheme>()!;
-    var now = DateTime.now().toUtc();
-    modify.save(
-      modified: () => now,
-    );
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(
-        SentenceManager(currentLanguage: selectedLanguage)
-            .sentences
-            .taskUpdated,
-        style: TextStyle(
-          color: tColors.primaryTextColor,
+
+    modify.save(modified: () => DateTime.now().toUtc());
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: tColors.secondaryBackgroundColor,
+        content: Text(
+          SentenceManager(currentLanguage: selectedLanguage)
+              .sentences
+              .taskUpdated,
+          style: TextStyle(color: tColors.primaryTextColor),
+        ),
+        action: SnackBarAction(
+          label: SentenceManager(currentLanguage: selectedLanguage)
+              .sentences
+              .undo,
+          textColor: tColors.purpleShade,
+          onPressed: () => _undoChanges(context, id),
         ),
       ),
-      backgroundColor: tColors.secondaryBackgroundColor,
-      duration: const Duration(seconds: 2),
-      action: SnackBarAction(
-        textColor: tColors.purpleShade,
-        label:
-            SentenceManager(currentLanguage: selectedLanguage).sentences.undo,
-        onPressed: () {
-          undoChanges(context, id, 'pending');
-        },
-      ),
-    ));
+    );
   }
 
-  void undoChanges(BuildContext context, String id, String originalValue) {
-    var storageWidget = Get.find<HomeController>();
-    Modify modify = Modify(
-      getTask: storageWidget.getTask,
-      mergeTask: storageWidget.mergeTask,
+  void _undoChanges(BuildContext context, String id) {
+    final storage = Get.find<HomeController>();
+
+    final modify = Modify(
+      getTask: storage.getTask,
+      mergeTask: storage.mergeTask,
       uuid: id,
     );
-    modify.set('status', originalValue);
-    modify.save(
-      modified: () => DateTime.now().toUtc(),
-    );
-    storageWidget.update();
+
+    modify.set('status', 'pending');
+    modify.save(modified: () => DateTime.now().toUtc());
+
+    storage.update();
   }
 
-  void cancelNotification(Task task) {
-    NotificationService notificationService = NotificationService();
+  void _cancelNotification(Task task) {
+    final service = NotificationService();
 
-    int notificationId = notificationService.calculateNotificationId(
-        task.due!, task.description, false, task.entry);
-    notificationService.cancelNotification(notificationId);
+    final id = service.calculateNotificationId(
+      task.due!,
+      task.description,
+      false,
+      task.entry,
+    );
+
+    service.cancelNotification(id);
 
     if (task.wait != null) {
-      notificationId = notificationService.calculateNotificationId(
-          task.wait!, task.description, true, task.entry);
-      notificationService.cancelNotification(notificationId);
+      final waitId = service.calculateNotificationId(
+        task.wait!,
+        task.description,
+        true,
+        task.entry,
+      );
+      service.cancelNotification(waitId);
     }
   }
 
+ 
+  Widget _buildEmptyState(
+      BuildContext context, TaskwarriorColorTheme tColors) {
+    return Center(
+      child: Card(
+        elevation: 0,
+        margin: const EdgeInsets.symmetric(horizontal: 20),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        color: tColors.secondaryBackgroundColor,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 24,
+            vertical: 32,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                height: 110,
+                width: 110,
+                decoration: BoxDecoration(
+                  color: tColors.primaryBackgroundColor,
+                  borderRadius: BorderRadius.circular(18),
+                ),
+                child: Icon(
+                  Icons.checklist_rounded,
+                  size: 60,
+                  color: tColors.purpleShade,
+                ),
+              ),
+              const SizedBox(height: 24),
+              Text(
+                "No tasks yet",
+                style: TextStyle(
+                  fontFamily: FontFamily.poppins,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: tColors.primaryTextColor,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                SentenceManager(
+                  currentLanguage: selectedLanguage,
+                ).sentences
+                    .homePageClickOnTheBottomRightButtonToStartAddingTasks,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: FontFamily.poppins,
+                  fontSize: 14,
+                  color: tColors.secondaryTextColor,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+ 
   @override
   Widget build(BuildContext context) {
-    // print(taskData);
-    TaskwarriorColorTheme tColors =
+    final tColors =
         Theme.of(context).extension<TaskwarriorColorTheme>()!;
-    var storageWidget = Get.find<HomeController>();
+    final storage = Get.find<HomeController>();
+
     return Scaffold(
-        floatingActionButtonLocation:
-            FloatingActionButtonLocation.miniStartFloat,
-        floatingActionButton: showbtn
-            ? AnimatedOpacity(
-                duration:
-                    const Duration(milliseconds: 100), //show/hide animation
-                opacity:
-                    showbtn ? 1.0 : 0.0, //set obacity to 1 on visible, or hide
-                child: FloatingActionButton(
-                  heroTag: "btn2",
-                  onPressed: () {
-                    scrollController.animateTo(
-                        //go to top of scroll
-                        0, //scroll offset to go
-                        duration: const Duration(
-                            milliseconds: 500), //duration of scroll
-                        curve: Curves.fastLinearToSlowEaseIn //scroll type
-                        );
-                  },
-                  backgroundColor: tColors.primaryTextColor,
-                  child: Icon(
-                    Icons.arrow_upward,
+      backgroundColor: Colors.transparent,
+
+      /* -------- Scroll To Top FAB -------- */
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.miniStartFloat,
+      floatingActionButton: showbtn
+          ? FloatingActionButton(
+              heroTag: "scrollTopBtn",
+              backgroundColor: tColors.primaryTextColor,
+              onPressed: () {
+                scrollController.animateTo(
+                  0,
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.easeOut,
+                );
+              },
+              child: Icon(
+                Icons.arrow_upward,
+                color: tColors.secondaryBackgroundColor,
+              ),
+            )
+          : null,
+
+      
+      body: Obx(
+        () => taskData.isEmpty
+            ? _buildEmptyState(context, tColors)
+            : ListView.builder(
+                controller: scrollController,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                itemCount: taskData.length,
+                itemBuilder: (context, index) {
+                  final task = taskData[index];
+                  final key = index == 0
+                      ? storage.taskItemKey
+                      : ValueKey(task.uuid);
+
+                  final card = Card(
                     color: tColors.secondaryBackgroundColor,
-                  ),
-                ),
-              )
-            : null,
-        backgroundColor: Colors.transparent,
-        body: Obx(
-          () => taskData.isEmpty
-              ? Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Center(
-                    child: Text(
-                      (searchVisible)
-                          ? '${SentenceManager(currentLanguage: selectedLanguage).sentences.homePageSearchNotFound} :('
-                          : SentenceManager(currentLanguage: selectedLanguage)
-                              .sentences
-                              .homePageClickOnTheBottomRightButtonToStartAddingTasks,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontFamily: FontFamily.poppins,
-                          fontSize: TaskWarriorFonts.fontSizeLarge,
-                          color: tColors.primaryTextColor),
-                      // style: GoogleFonts.poppins(
-                      //   fontSize: TaskWarriorFonts.fontSizeLarge,
-                      //   color: AppSettings.isDarkMode
-                      //       ? TaskWarriorColors.kLightPrimaryBackgroundColor
-                      //       : TaskWarriorColors.kprimaryBackgroundColor,
-                      // ),
+                    child: InkWell(
+                      onTap: () => Get.toNamed(
+                        Routes.DETAIL_ROUTE,
+                        arguments: ["uuid", task.uuid],
+                      ),
+                      child: TaskListItem(
+                        task,
+                        pendingFilter: pendingFilter,
+                        useDelayTask: useDelayTask,
+                        modify: Modify(
+                          getTask: storage.getTask,
+                          mergeTask: storage.mergeTask,
+                          uuid: task.uuid,
+                        ),
+                        selectedLanguage: selectedLanguage,
+                      ),
                     ),
-                  ),
-                )
-              : ListView.builder(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
-                  itemCount: taskData.length,
-                  controller: scrollController,
-                  primary: false,
-                  itemBuilder: (context, index) {
-                    var task = taskData[index];
-                    final itemKey = index == 0
-                        ? storageWidget.taskItemKey
-                        : ValueKey(task.uuid);
+                  );
 
-                    return pendingFilter
-                        ? Slidable(
-                            key: itemKey,
-                            startActionPane: ActionPane(
-                              motion: const BehindMotion(),
-                              children: [
-                                SlidableAction(
-                                  onPressed: (context) {
-                                    // Complete task without confirmation
-                                    setStatus(context, 'completed', task.uuid);
-                                    if (task.due != null) {
-                                      DateTime? dtb = task.due;
-                                      dtb =
-                                          dtb!.add(const Duration(minutes: 1));
-                                      cancelNotification(task);
-                                    }
-                                  },
-                                  icon: Icons.done,
-                                  label: SentenceManager(
-                                          currentLanguage: selectedLanguage)
-                                      .sentences
-                                      .complete,
-                                  backgroundColor: TaskWarriorColors.green,
-                                ),
-                              ],
-                            ),
-                            endActionPane: ActionPane(
-                              motion: const DrawerMotion(),
-                              children: [
-                                SlidableAction(
-                                  onPressed: (context) {
-                                    // Delete task without confirmation
-                                    setStatus(context, 'deleted', task.uuid);
-                                    if (task.due != null) {
-                                      DateTime? dtb = task.due;
-                                      dtb =
-                                          dtb!.add(const Duration(minutes: 1));
-                                      cancelNotification(task);
-                                    }
-                                    if (Platform.isAndroid||Platform.isIOS) {
-                                      WidgetController widgetController =
-                                          Get.put(WidgetController());
-                                      widgetController.fetchAllData();
+                  if (!pendingFilter) return card;
 
-                                      widgetController.update();
-                                    }
-                                  },
-                                  icon: Icons.delete,
-                                  label: SentenceManager(
-                                          currentLanguage: selectedLanguage)
-                                      .sentences
-                                      .delete,
-                                  backgroundColor: TaskWarriorColors.red,
-                                ),
-                              ],
-                            ),
-                            child: Card(
-                              color: tColors.secondaryBackgroundColor,
-                              child: InkWell(
-                                splashColor: tColors.secondaryBackgroundColor,
-                                onTap: () {
-                                  Get.toNamed(Routes.DETAIL_ROUTE,
-                                      arguments: ["uuid", task.uuid]);
-                                },
-                                // child: Text(task.entry.toString()),
-                                // onTap: () => Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(
-                                //     builder: (context) => DetailRouteView(task.uuid),
-                                //   ),
-                                // ),
-                                child: TaskListItem(
-                                  task,
-                                  pendingFilter: pendingFilter,
-                                  useDelayTask: useDelayTask,
-                                  modify: Modify(
-                                    getTask: storageWidget.getTask,
-                                    mergeTask: storageWidget.mergeTask,
-                                    uuid: task.uuid,
-                                  ),
-                                  selectedLanguage: selectedLanguage,
-                                ),
-                              ),
-                            ),
-                          )
-                        : Card(
-                            color: tColors.secondaryBackgroundColor,
-                            child: InkWell(
-                              splashColor: tColors.secondaryBackgroundColor,
-                              onTap: () {
-                                Get.toNamed(Routes.DETAIL_ROUTE,
-                                    arguments: ["uuid", task.uuid]);
-                              },
-                              // child: Text(task.entry.toString()),
-                              child: TaskListItem(
-                                task,
-                                pendingFilter: pendingFilter,
-                                useDelayTask: useDelayTask,
-                                modify: Modify(
-                                  getTask: storageWidget.getTask,
-                                  mergeTask: storageWidget.mergeTask,
-                                  uuid: task.uuid,
-                                ),
-                                selectedLanguage: selectedLanguage,
-                              ),
-                            ),
-                          );
-                  },
-                ),
-        ));
+                  return Slidable(
+                    key: key,
+                    startActionPane: ActionPane(
+                      motion: const BehindMotion(),
+                      children: [
+                        SlidableAction(
+                          backgroundColor: TaskWarriorColors.green,
+                          icon: Icons.done,
+                          label: SentenceManager(
+                            currentLanguage: selectedLanguage,
+                          ).sentences.complete,
+                          onPressed: (_) {
+                            setStatus(
+                                context, 'completed', task.uuid);
+                            if (task.due != null) {
+                              _cancelNotification(task);
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                    endActionPane: ActionPane(
+                      motion: const DrawerMotion(),
+                      children: [
+                        SlidableAction(
+                          backgroundColor: TaskWarriorColors.red,
+                          icon: Icons.delete,
+                          label: SentenceManager(
+                            currentLanguage: selectedLanguage,
+                          ).sentences.delete,
+                          onPressed: (_) {
+                            setStatus(context, 'deleted', task.uuid);
+                            if (task.due != null) {
+                              _cancelNotification(task);
+                            }
+                            if (Platform.isAndroid ||
+                                Platform.isIOS) {
+                              final widgetController =
+                                  Get.put(WidgetController());
+                              widgetController.fetchAllData();
+                              widgetController.update();
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                    child: card,
+                  );
+                },
+              ),
+      ),
+    );
   }
 }

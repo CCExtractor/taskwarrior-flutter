@@ -1,56 +1,87 @@
 import 'dart:ffi';
 import 'dart:io';
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-// 1. Add this import
-import 'package:app_links/app_links.dart';
-import 'package:taskwarrior/app/services/deep_link_service.dart';
+import 'package:flutter/foundation.dart';
 
-import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
-import 'package:taskwarrior/app/utils/debug_logger/log_databse_helper.dart';
-import 'package:taskwarrior/app/utils/themes/dark_theme.dart';
-import 'package:taskwarrior/app/utils/themes/light_theme.dart';
-import 'package:taskwarrior/rust_bridge/frb_generated.dart';
 import 'app/routes/app_pages.dart';
+import 'app/utils/app_settings/app_settings.dart';
+import 'app/utils/themes/dark_theme.dart';
+import 'app/utils/themes/light_theme.dart';
 
-LogDatabaseHelper _logDatabaseHelper = LogDatabaseHelper();
+// Controllers
+import 'app/modules/splash/controllers/splash_controller.dart';
 
-DynamicLibrary loadNativeLibrary() {
-  if (Platform.isIOS) {
-    return DynamicLibrary.open('Frameworks/tc_helper.framework/tc_helper');
-  } else if (Platform.isAndroid) {
-    return DynamicLibrary.open('libtc_helper.so');
-  } else if (Platform.isMacOS) {
-    return DynamicLibrary.open('tc_helper.framework/tc_helper');
+// Rust bridge (safe init)
+import 'rust_bridge/frb_generated.dart';
+
+
+DynamicLibrary? loadNativeLibrarySafe() {
+  try {
+    if (Platform.isAndroid) {
+      return DynamicLibrary.open('libtc_helper.so');
+    } else if (Platform.isIOS) {
+      return DynamicLibrary.open(
+          'Frameworks/tc_helper.framework/tc_helper');
+    } else if (Platform.isMacOS) {
+      return DynamicLibrary.open(
+          'tc_helper.framework/tc_helper');
+    } else {
+      debugPrint('⚠ Native Taskwarrior disabled (desktop / UI-only)');
+      return null;
+    }
+  } catch (e) {
+    debugPrint('⚠ Native Taskwarrior not available: $e');
+    return null;
   }
-  throw UnsupportedError(
-      'Platform ${Platform.operatingSystem} is not supported');
 }
 
-void main() async {
-  debugPrint = (String? message, {int? wrapWidth}) {
-    if (message != null) {
-      debugPrintSynchronously(message, wrapWidth: wrapWidth);
-      _logDatabaseHelper.insertLog(message);
-    }
-  };
-
-  loadNativeLibrary();
-  await RustLib.init();
-
+Future<void> main() async {
+  /// Required before any plugin or GetX usage
   WidgetsFlutterBinding.ensureInitialized();
+
+  /// Init app settings (theme, prefs)
   await AppSettings.init();
 
-  Get.put<DeepLinkService>(DeepLinkService(), permanent: true);
-  runApp(
-    GetMaterialApp(
-      darkTheme: darkTheme,
-      theme: lightTheme,
-      title: "Application",
+  /// Load native lib (optional)
+  loadNativeLibrarySafe();
+
+  /// Init Rust (safe)
+  try {
+    await RustLib.init();
+  } catch (_) {
+    debugPrint('⚠ Rust backend disabled (UI-only mode)');
+  }
+
+
+  /// Register SplashController BEFORE runApp
+  Get.put<SplashController>(
+    SplashController(),
+    permanent: true,
+  );
+
+  runApp(const TaskwarriorApp());
+}
+
+class TaskwarriorApp extends StatelessWidget {
+  const TaskwarriorApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GetMaterialApp(
+      title: 'Taskwarrior',
+      debugShowCheckedModeBanner: false,
+
+      /// Routes
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
-      themeMode: AppSettings.isDarkMode ? ThemeMode.dark : ThemeMode.light,
-    ),
-  );
+
+      /// Themes
+      theme: lightTheme,
+      darkTheme: darkTheme,
+      themeMode:
+          AppSettings.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+    );
+  }
 }

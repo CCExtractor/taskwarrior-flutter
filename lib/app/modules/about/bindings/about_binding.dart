@@ -10,3 +10,4 @@ class AboutBinding extends Bindings {
     );
   }
 }
+
