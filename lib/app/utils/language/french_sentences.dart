@@ -691,4 +691,6 @@ class FrenchSentences extends Sentences {
   String get storageAndData => 'Stockage et données';
   @override
   String get advanced => 'Avancé';
+  @override
+  String get taskchampionBackendUrl => 'URL de Taskchampion';
 }
