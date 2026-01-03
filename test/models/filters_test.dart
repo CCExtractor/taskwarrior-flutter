@@ -33,9 +33,6 @@ void main() {
         toggleWaitingFilter: () {
           waitingFilter = !waitingFilter;
         },
-        toggleDeletedFilter: () {
-          deletedFilter = !deletedFilter;
-        },
         tagFilters: TagFilters(
           tagUnion: tagUnion,
           toggleTagUnion: () {

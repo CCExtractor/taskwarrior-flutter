@@ -60,17 +60,11 @@ class Query {
     return json.decode(_waitingFilter.readAsStringSync());
   }
 
-  void togggleDeletedFilter() {
-    _deletedFilter.writeAsStringSync(
-      json.encode(!getDeletedFilter()),
-    );
-  }
-
   bool getDeletedFilter() {
     if (!_deletedFilter.existsSync()) {
       _deletedFilter
         ..createSync(recursive: true)
-        ..writeAsStringSync('true');
+        ..writeAsStringSync('false');
     }
     return json.decode(_deletedFilter.readAsStringSync());
   }

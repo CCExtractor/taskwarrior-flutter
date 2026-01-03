@@ -213,21 +213,21 @@ class HomeController extends GetxController {
   }
 
   void _profileSet() {
-    pendingFilter.value = Query(storage.tabs.tab()).getPendingFilter();
-    if (!Query(storage.tabs.tab()).getWaitingFilter()) {
-      waitingFilter.value = Query(storage.tabs.tab()).getWaitingFilter();
-    } else {
-      Query(storage.tabs.tab()).toggleWaitingFilter();
-      waitingFilter.value = Query(storage.tabs.tab()).getWaitingFilter();
-    }
+    final bool isPending = Query(storage.tabs.tab()).getPendingFilter();
+
+    pendingFilter.value = isPending;
+    deletedFilter.value = false;
+    waitingFilter.value = Query(storage.tabs.tab()).getWaitingFilter();
+
     projectFilter.value = Query(storage.tabs.tab()).projectFilter();
     tagUnion.value = Query(storage.tabs.tab()).tagUnion();
     selectedSort.value = Query(storage.tabs.tab()).getSelectedSort();
-    selectedTags.addAll(Query(storage.tabs.tab()).getSelectedTags());
+    selectedTags.assignAll(Query(storage.tabs.tab()).getSelectedTags());
 
     _refreshTasks();
     pendingTags.value = _pendingTags();
     projects.value = _projects();
+
     if (searchVisible.value) {
       toggleSearch();
     }
@@ -235,12 +235,12 @@ class HomeController extends GetxController {
 
   void _refreshTasks() {
     if (pendingFilter.value) {
-    queriedTasks.value = storage.data.pendingData();
-  } else if (deletedFilter.value) {
-    queriedTasks.value = storage.data.deletedData();
-  } else {
-    queriedTasks.value = storage.data.completedData();
-  }
+      queriedTasks.value = storage.data.pendingData();
+    } else if (deletedFilter.value) {
+      queriedTasks.value = storage.data.deletedData();
+    } else {
+      queriedTasks.value = storage.data.completedData();
+    }
 
     if (waitingFilter.value) {
       var currentTime = DateTime.now();
@@ -343,12 +343,6 @@ class HomeController extends GetxController {
     _refreshTasks();
   }
 
-  void toggleDeletedFilter() {
-    Query(storage.tabs.tab()).togggleDeletedFilter();
-    deletedFilter.value = Query(storage.tabs.tab()).getDeletedFilter();
-    _refreshTasks();
-  }
-
   void toggleProjectFilter(String project) {
     Query(storage.tabs.tab()).toggleProjectFilter(project);
     projectFilter.value = Query(storage.tabs.tab()).projectFilter();
@@ -379,6 +373,23 @@ class HomeController extends GetxController {
     }
     Query(storage.tabs.tab()).toggleTagFilter(tag);
     selectedTags.addAll(Query(storage.tabs.tab()).getSelectedTags());
+    _refreshTasks();
+  }
+
+  void toggleStatusFilter() {
+    if (pendingFilter.value) {
+      // Pending → Completed
+      pendingFilter.value = false;
+      deletedFilter.value = false;
+    } else if (!pendingFilter.value && !deletedFilter.value) {
+      // Completed → Deleted
+      deletedFilter.value = true;
+    } else {
+      // Deleted → Pending
+      pendingFilter.value = true;
+      deletedFilter.value = false;
+    }
+
     _refreshTasks();
   }
 
@@ -622,7 +633,6 @@ class HomeController extends GetxController {
       deletedFilter: deletedFilter.value,
       togglePendingFilter: togglePendingFilter,
       toggleWaitingFilter: toggleWaitingFilter,
-      toggleDeletedFilter: toggleDeletedFilter,
       projects: projects,
       projectFilter: projectFilter.value,
       toggleProjectFilter: toggleProjectFilter,
