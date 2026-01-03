@@ -127,6 +127,8 @@ class BengaliSentences extends Sentences {
   @override
   String get filterDrawerCompleted => 'সম্পন্ন';
   @override
+  String get filterDrawerDeleted => 'মুছে ফেলা হয়েছে';
+  @override
   String get filterDrawerFilterTagBy => 'ট্যাগ দ্বারা ফিল্টার করুন';
   @override
   String get filterDrawerAND => 'এবং';

@@ -79,46 +79,102 @@ class FilterDrawer extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(color: TaskWarriorColors.borderColor),
                 ),
-                child: ListTile(
-                  contentPadding: const EdgeInsets.only(
-                    left: 8,
-                  ),
-                  title: RichText(
-                    key: homeController.statusKey,
-                    maxLines: 2,
-                    text: TextSpan(
-                      children: <TextSpan>[
-                        TextSpan(
-                            text:
-                                '${SentenceManager(currentLanguage: homeController.selectedLanguage.value).sentences.filterDrawerStatus} : ',
-                            style: TextStyle(
-                              fontFamily: FontFamily.poppins,
-                              fontSize: TaskWarriorFonts.fontSizeMedium,
-                              color: tColors.primaryTextColor,
-                            )),
-                        TextSpan(
-                            text: filters.pendingFilter
-                                ? SentenceManager(
-                                        currentLanguage: homeController
-                                            .selectedLanguage.value)
-                                    .sentences
-                                    .filterDrawerPending
-                                : SentenceManager(
-                                        currentLanguage: homeController
-                                            .selectedLanguage.value)
-                                    .sentences
-                                    .filterDrawerCompleted,
-                            style: TextStyle(
-                              fontFamily: FontFamily.poppins,
-                              fontSize: TaskWarriorFonts.fontSizeMedium,
-                              color: tColors.primaryTextColor,
-                            )),
-                      ],
-                    ),
-                  ),
-                  onTap: filters.togglePendingFilter,
-                  textColor: tColors.primaryTextColor,
-                ),
+                child: Column(children: [
+                   SwitchListTile(
+        key: homeController.statusKey,
+        title: Text(
+          SentenceManager(
+            currentLanguage: homeController.selectedLanguage.value,
+          ).sentences.filterDrawerPending,
+          style: TextStyle(
+            fontFamily: FontFamily.poppins,
+            fontSize: TaskWarriorFonts.fontSizeMedium,
+            color: tColors.primaryTextColor,
+          ),
+        ),
+        value: filters.pendingFilter,
+        onChanged: (_) => filters.togglePendingFilter(),
+      ),
+
+      // Completed
+      SwitchListTile(
+        title: Text(
+          SentenceManager(
+            currentLanguage: homeController.selectedLanguage.value,
+          ).sentences.filterDrawerCompleted,
+          style: TextStyle(
+            fontFamily: FontFamily.poppins,
+            fontSize: TaskWarriorFonts.fontSizeMedium,
+            color: tColors.primaryTextColor,
+          ),
+        ),
+        value: !filters.pendingFilter && !filters.deletedFilter,
+        onChanged: (_) {
+          if (filters.deletedFilter) {
+            filters.toggleDeletedFilter();
+          }
+          if (filters.pendingFilter) {
+            filters.togglePendingFilter();
+          }
+        },
+      ),
+
+      // 🆕 Deleted
+      SwitchListTile(
+        title: Text(
+          SentenceManager(
+            currentLanguage: homeController.selectedLanguage.value,
+          ).sentences.filterDrawerDeleted,
+          style: TextStyle(
+            fontFamily: FontFamily.poppins,
+            fontSize: TaskWarriorFonts.fontSizeMedium,
+            color: tColors.primaryTextColor,
+          ),
+        ),
+        value: filters.deletedFilter,
+        onChanged: (_) => filters.toggleDeletedFilter(),
+        ),
+                ],)
+                // child: ListTile(
+                //   contentPadding: const EdgeInsets.only(
+                //     left: 8,
+                //   ),
+                //   title: RichText(
+                //     key: homeController.statusKey,
+                //     maxLines: 2,
+                //     text: TextSpan(
+                //       children: <TextSpan>[
+                //         TextSpan(
+                //             text:
+                //                 '${SentenceManager(currentLanguage: homeController.selectedLanguage.value).sentences.filterDrawerStatus} : ',
+                //             style: TextStyle(
+                //               fontFamily: FontFamily.poppins,
+                //               fontSize: TaskWarriorFonts.fontSizeMedium,
+                //               color: tColors.primaryTextColor,
+                //             )),
+                //         TextSpan(
+                //             text: filters.pendingFilter
+                //                 ? SentenceManager(
+                //                         currentLanguage: homeController
+                //                             .selectedLanguage.value)
+                //                     .sentences
+                //                     .filterDrawerPending
+                //                 : SentenceManager(
+                //                         currentLanguage: homeController
+                //                             .selectedLanguage.value)
+                //                     .sentences
+                //                     .filterDrawerCompleted,
+                //             style: TextStyle(
+                //               fontFamily: FontFamily.poppins,
+                //               fontSize: TaskWarriorFonts.fontSizeMedium,
+                //               color: tColors.primaryTextColor,
+                //             )),
+                //       ],
+                //     ),
+                //   ),
+                //   onTap: filters.togglePendingFilter,
+                //   textColor: tColors.primaryTextColor,
+                // ),
               ),
               const Divider(
                 color: Color.fromARGB(0, 48, 46, 46),

@@ -72,6 +72,7 @@ void main() {
     expect(bengali.filterDrawerShowWaiting, 'অপেক্ষা প্রদর্শন করুন');
     expect(bengali.filterDrawerPending, 'মুলতুবি');
     expect(bengali.filterDrawerCompleted, 'সম্পন্ন');
+    expect(bengali.filterDrawerDeleted, 'মুছে ফেলা হয়েছে');
     expect(bengali.filterDrawerFilterTagBy, 'ট্যাগ দ্বারা ফিল্টার করুন');
     expect(bengali.filterDrawerAND, 'এবং');
     expect(bengali.filterDrawerOR, 'অথবা');

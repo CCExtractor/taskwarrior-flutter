@@ -71,6 +71,7 @@ void main() {
     expect(english.filterDrawerShowWaiting, 'Show Waiting');
     expect(english.filterDrawerPending, 'Pending');
     expect(english.filterDrawerCompleted, 'Completed');
+    expect(english.filterDrawerDeleted, 'Deleted');
     expect(english.filterDrawerFilterTagBy, 'Filter Tag By');
     expect(english.filterDrawerAND, 'AND');
     expect(english.filterDrawerOR, 'OR');

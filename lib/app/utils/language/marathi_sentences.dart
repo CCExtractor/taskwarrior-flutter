@@ -127,6 +127,8 @@ class MarathiSentences extends Sentences {
   @override
   String get filterDrawerCompleted => 'पूर्ण';
   @override
+  String get filterDrawerDeleted => 'काढून टाकलेले';
+  @override
   String get filterDrawerFilterTagBy => 'टॅगवर फिल्टर करा';
   @override
   String get filterDrawerAND => 'आणि';

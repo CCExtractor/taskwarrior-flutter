@@ -7,6 +7,7 @@ void main() {
     late Filters filters;
     late bool pendingFilter;
     late bool waitingFilter;
+    late bool deletedFilter;
     late String projectFilter;
     late bool tagUnion;
     late Map<String, TagFilterMetadata> tags;
@@ -14,6 +15,7 @@ void main() {
     setUp(() {
       pendingFilter = false;
       waitingFilter = false;
+      deletedFilter = false;
       projectFilter = 'TestProject';
       tagUnion = false;
       tags = {
@@ -24,11 +26,15 @@ void main() {
       filters = Filters(
         pendingFilter: pendingFilter,
         waitingFilter: waitingFilter,
+        deletedFilter: deletedFilter,
         togglePendingFilter: () {
           pendingFilter = !pendingFilter;
         },
         toggleWaitingFilter: () {
           waitingFilter = !waitingFilter;
+        },
+        toggleDeletedFilter: () {
+          deletedFilter = !deletedFilter;
         },
         tagFilters: TagFilters(
           tagUnion: tagUnion,

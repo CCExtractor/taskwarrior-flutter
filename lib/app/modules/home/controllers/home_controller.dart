@@ -49,6 +49,8 @@ class HomeController extends GetxController {
   late Storage storage;
   final RxBool pendingFilter = false.obs;
   final RxBool waitingFilter = false.obs;
+  final RxBool deletedFilter = false.obs;
+
   final RxString projectFilter = ''.obs;
   final RxBool tagUnion = false.obs;
   final RxString selectedSort = ''.obs;
@@ -95,6 +97,7 @@ class HomeController extends GetxController {
     everAll([
       pendingFilter,
       waitingFilter,
+      deletedFilter,
       projectFilter,
       tagUnion,
       selectedSort,
@@ -232,13 +235,12 @@ class HomeController extends GetxController {
 
   void _refreshTasks() {
     if (pendingFilter.value) {
-      queriedTasks.value = storage.data
-          .pendingData()
-          .where((task) => task.status == 'pending')
-          .toList();
-    } else {
-      queriedTasks.value = storage.data.completedData();
-    }
+    queriedTasks.value = storage.data.pendingData();
+  } else if (deletedFilter.value) {
+    queriedTasks.value = storage.data.deletedData();
+  } else {
+    queriedTasks.value = storage.data.completedData();
+  }
 
     if (waitingFilter.value) {
       var currentTime = DateTime.now();
@@ -338,6 +340,12 @@ class HomeController extends GetxController {
   void toggleWaitingFilter() {
     Query(storage.tabs.tab()).toggleWaitingFilter();
     waitingFilter.value = Query(storage.tabs.tab()).getWaitingFilter();
+    _refreshTasks();
+  }
+
+  void toggleDeletedFilter() {
+    Query(storage.tabs.tab()).togggleDeletedFilter();
+    deletedFilter.value = Query(storage.tabs.tab()).getDeletedFilter();
     _refreshTasks();
   }
 
@@ -611,8 +619,10 @@ class HomeController extends GetxController {
     var filters = Filters(
       pendingFilter: pendingFilter.value,
       waitingFilter: waitingFilter.value,
+      deletedFilter: deletedFilter.value,
       togglePendingFilter: togglePendingFilter,
       toggleWaitingFilter: toggleWaitingFilter,
+      toggleDeletedFilter: toggleDeletedFilter,
       projects: projects,
       projectFilter: projectFilter.value,
       toggleProjectFilter: toggleProjectFilter,
