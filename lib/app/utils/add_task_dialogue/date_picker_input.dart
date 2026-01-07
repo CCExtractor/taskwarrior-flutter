@@ -49,13 +49,13 @@ class _AddTaskDatePickerInputState extends State<AddTaskDatePickerInput> {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(dateLabels[index]),
                         if (hasDate)
                           const Padding(
-                            padding: EdgeInsets.only(left: 4),
+                            padding: EdgeInsets.only(right: 4),
                             child: Icon(Icons.check_circle,
-                                size: 14, color: Colors.green),
+                                size: 14, color: Colors.white),
                           ),
+                        Text(dateLabels[index]),
                       ],
                     ),
                   );
