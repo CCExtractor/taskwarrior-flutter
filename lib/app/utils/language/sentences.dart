@@ -340,6 +340,7 @@ abstract class Sentences {
   String get configureTaskchampion;
   String get encryptionSecret;
   String get ccsyncBackendUrl;
+  String get taskchampionBackendUrl;
   String get ccsyncClientId;
   String get success;
   String get credentialsSavedSuccessfully;

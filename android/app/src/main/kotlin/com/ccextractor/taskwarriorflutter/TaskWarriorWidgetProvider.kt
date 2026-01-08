@@ -60,58 +60,74 @@ class TaskWarriorWidgetProvider : AppWidgetProvider() {
 		}
 		return layoutId
 	}
-    @TargetApi(Build.VERSION_CODES.DONUT)
-    override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
-		appWidgetIds.forEach { widgetId ->
-			val sharedPrefs = HomeWidgetPlugin.getData(context)
-			val tasks = sharedPrefs.getString("tasks", "")
-			val intent = Intent(context, ListViewRemoteViewsService::class.java).apply {
-				putExtra("tasksJsonString", tasks)
-				data = Uri.parse(toUri(Intent.URI_INTENT_SCHEME))
-			}
-			val views = RemoteViews(context.packageName, getLayoutId(context)).apply {
-				val pendingIntent: PendingIntent = HomeWidgetLaunchIntent.getActivity(
-					context,
-					MainActivity::class.java
-				)
-				setOnClickPendingIntent(R.id.logo, pendingIntent)
-				val intent_for_add = Intent(context, TaskWarriorWidgetProvider::class.java).apply {
-					setAction("TASK_ACTION")
-					data=Uri.parse(toUri(Intent.URI_INTENT_SCHEME))
-					putExtra("launchedFor", "ADD_TASK")
-				}
-				val pendingIntentAdd: PendingIntent = PendingIntent.getBroadcast(
-					context,
-					0, // requestCode, can be any unique integer
-					intent_for_add,
-					PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT or Intent.FILL_IN_COMPONENT // Use appropriate flags
-				)
-				setOnClickPendingIntent(R.id.add_btn, pendingIntentAdd)
-				setRemoteAdapter(R.id.list_view, intent)
-			}
+@TargetApi(Build.VERSION_CODES.DONUT)
+override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
+    appWidgetIds.forEach { widgetId ->
+        // 1. Get the latest data from HomeWidget/SharedPrefs
+        val sharedPrefs = HomeWidgetPlugin.getData(context)
+        val tasks = sharedPrefs.getString("tasks", "")
 
-			val clickPendingIntent: PendingIntent = Intent(
-				context,
-				TaskWarriorWidgetProvider::class.java
-			).run {
-				setAction("TASK_ACTION")
-				setIdentifier("uuid")
-				data = Uri.parse(toUri(Intent.URI_INTENT_SCHEME))
-
-				PendingIntent.getBroadcast(
-					context,
-					0,
-					this,
-					PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT or Intent.FILL_IN_COMPONENT
-				)
-			}
-
-			views.setPendingIntentTemplate(R.id.list_view, clickPendingIntent)
-			appWidgetManager.updateAppWidget(widgetId, views)
-		}
-		super.onUpdate(context, appWidgetManager, appWidgetIds)
+        // 2. Create the Intent for the ListView service
+        // We add the widgetId to the data URI to make it unique, preventing caching issues
+        val intent = Intent(context, ListViewRemoteViewsService::class.java).apply {
+            putExtra("tasksJsonString", tasks)
+            data = Uri.parse(toUri(Intent.URI_INTENT_SCHEME) + widgetId)
         }
+
+        // 3. Initialize RemoteViews with the THEMED layout (getLayoutId handles dark/light logic)
+        val views = RemoteViews(context.packageName, getLayoutId(context)).apply {
+            
+            // Set up the Logo click (Open App)
+            val pendingIntent: PendingIntent = HomeWidgetLaunchIntent.getActivity(
+                context,
+                MainActivity::class.java
+            )
+            setOnClickPendingIntent(R.id.logo, pendingIntent)
+
+            // Set up the Add Button click (Custom Action)
+            val intent_for_add = Intent(context, TaskWarriorWidgetProvider::class.java).apply {
+                action = "TASK_ACTION"
+                putExtra("launchedFor", "ADD_TASK")
+                // Unique data to ensure the broadcast is fresh
+                data = Uri.parse("taskwarrior://addtask/$widgetId")
+            }
+            
+            val pendingIntentAdd: PendingIntent = PendingIntent.getBroadcast(
+                context,
+                widgetId, 
+                intent_for_add,
+                PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            )
+            setOnClickPendingIntent(R.id.add_btn, pendingIntentAdd)
+
+            // Attach the adapter to the ListView
+            setRemoteAdapter(R.id.list_view, intent)
+        }
+
+        // 4. Set up the Click Template for List Items (Deep Linking)
+        val clickPendingIntent: PendingIntent = Intent(
+            context,
+            TaskWarriorWidgetProvider::class.java
+        ).run {
+            action = "TASK_ACTION"
+            // Important: Use widgetId as requestCode to keep it unique
+            PendingIntent.getBroadcast(
+                context,
+                widgetId,
+                this,
+                PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            )
+        }
+        views.setPendingIntentTemplate(R.id.list_view, clickPendingIntent)
+
+        // 5. THE THEME FIX: Notify the manager that the list data/layout needs a refresh
+        appWidgetManager.notifyAppWidgetViewDataChanged(widgetId, R.id.list_view)
+        
+        // 6. Push the update to the widget
+        appWidgetManager.updateAppWidget(widgetId, views)
     }
+    super.onUpdate(context, appWidgetManager, appWidgetIds)
+}    }
 class ListViewRemoteViewsFactory(
     private val context: Context,
     private val tasksJsonString: String? 
@@ -121,18 +137,22 @@ class ListViewRemoteViewsFactory(
 
     override fun onCreate() {}
 
-    override fun onDataSetChanged() {
-        if (tasksJsonString != null) {
-            try {
-                val jsonArray = OrgJSONArray(tasksJsonString as String)
-                for (i in 0 until jsonArray.length()) {
-                    tasks.add(Task.fromJson(jsonArray.getJSONObject(i)))
-                }
-            } catch (e: JSONException) {
-                e.printStackTrace()
-            }
-        }
-    }
+	override fun onDataSetChanged() {
+		tasks.clear() // Add this!
+		val sharedPrefs = HomeWidgetPlugin.getData(context)
+		val latestTasksJson = sharedPrefs.getString("tasks", "") 
+		
+		if (!latestTasksJson.isNullOrEmpty()) {
+			try {
+				val jsonArray = OrgJSONArray(latestTasksJson)
+				for (i in 0 until jsonArray.length()) {
+					tasks.add(Task.fromJson(jsonArray.getJSONObject(i)))
+				}
+			} catch (e: JSONException) {
+				e.printStackTrace()
+			}
+		}
+	}
 
     override fun onDestroy() {}
 
@@ -193,7 +213,7 @@ class ListViewRemoteViewsFactory(
     }
     override fun getLoadingView(): RemoteViews? = null
 
-    override fun getViewTypeCount(): Int = 1
+	override fun getViewTypeCount(): Int = 2 
 
     override fun getItemId(position: Int): Long = position.toLong()
 

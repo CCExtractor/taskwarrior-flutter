@@ -674,4 +674,6 @@ class MarathiSentences extends Sentences {
   String get storageAndData => 'स्टोरेज आणि डेटा';
   @override
   String get advanced => 'अड्वांस्ड';
+  @override
+  String get taskchampionBackendUrl => 'Taskchampion URL';
 }

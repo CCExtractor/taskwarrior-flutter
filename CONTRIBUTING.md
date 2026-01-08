@@ -4,8 +4,8 @@
 
 # Getting Started
 
-In order to use the mobile app, you would need the flood backend running on your local machine. There are several ways
-you can do that and all these approaches can be found at [Taskwarrior-Flutter](https://github.com/CCExtractor/taskwarrior-flutter/wiki)
+You can setup taskserver to sync your tasks across clients.
+You can find the steps to setup one [here](https://github.com/CCExtractor/taskwarrior-flutter?tab=readme-ov-file#taskserver-setup)
 
 
 ## Steps
