@@ -833,4 +833,9 @@ class HomeController extends GetxController {
   //           forReplica: taskReplica.value));
   //   Get.dialog(showDialog);
   // }
+  @override
+  void onClose() {
+    searchFocusNode.dispose();
+    super.onClose();
+  }
 }
