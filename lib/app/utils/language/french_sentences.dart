@@ -691,4 +691,15 @@ class FrenchSentences extends Sentences {
   String get tutorialModalKeepTutorials => 'Conserver les tutoriels';
   @override
   String get tutorialModalSkipAllTutorials => 'Ignorer tous les tutoriels';
+  // Paramètres
+  @override
+  String get syncSetting => 'Paramètres de Synchronisation';
+  @override
+  String get displaySettings => "Paramètres d'affichage";
+  @override
+  String get storageAndData => 'Stockage et données';
+  @override
+  String get advanced => 'Avancé';
+  @override
+  String get taskchampionBackendUrl => 'URL de Taskchampion';
 }

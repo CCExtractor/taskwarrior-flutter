@@ -674,4 +674,15 @@ class MarathiSentences extends Sentences {
   String get tutorialModalKeepTutorials => 'ट्यूटोरियल ठेवा';
   @override
   String get tutorialModalSkipAllTutorials => 'सर्व ट्यूटोरियल सोडा';
+  // शेटिंग
+  @override
+  String get syncSetting => 'सिंक शेटिंग';
+  @override
+  String get displaySettings => 'डिस्प्ले शेटिंग्स';
+  @override
+  String get storageAndData => 'स्टोरेज आणि डेटा';
+  @override
+  String get advanced => 'अड्वांस्ड';
+  @override
+  String get taskchampionBackendUrl => 'Taskchampion URL';
 }

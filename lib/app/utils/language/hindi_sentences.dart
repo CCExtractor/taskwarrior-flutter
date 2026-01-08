@@ -652,4 +652,15 @@ class HindiSentences extends Sentences {
   String get tutorialModalKeepTutorials => 'ट्यूटोरियल रखें';
   @override
   String get tutorialModalSkipAllTutorials => 'सभी ट्यूटोरियल छोड़ें';
+  // सेटिंग
+  @override
+  String get syncSetting => 'सिंक सेटिंग';
+  @override
+  String get displaySettings => 'डिस्प्ले सेटिंग्स';
+  @override
+  String get storageAndData => 'स्टोरेज और डेटा';
+  @override
+  String get advanced => 'अड्वांस्ड';
+  @override
+  String get taskchampionBackendUrl => 'Taskchampion URL';
 }

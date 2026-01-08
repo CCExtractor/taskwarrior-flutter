@@ -282,6 +282,10 @@ abstract class Sentences {
 
   // Splash screen strings
   String get splashSettingUpApp;
+  String get syncSetting;
+  String get displaySettings;
+  String get storageAndData;
+  String get advanced;
 
   // Tour strings - reports
   String get tourReportsDaily;
@@ -336,6 +340,7 @@ abstract class Sentences {
   String get configureTaskchampion;
   String get encryptionSecret;
   String get ccsyncBackendUrl;
+  String get taskchampionBackendUrl;
   String get ccsyncClientId;
   String get success;
   String get credentialsSavedSuccessfully;

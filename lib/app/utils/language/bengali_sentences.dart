@@ -674,4 +674,15 @@ class BengaliSentences extends Sentences {
   String get tutorialModalKeepTutorials => 'টিউটোরিয়াল রাখুন';
   @override
   String get tutorialModalSkipAllTutorials => 'সমস্ত টিউটোরিয়াল এড়িয়ে যান';
+  // সেটিংস
+  @override
+  String get syncSetting => 'সিঙ্ক সেটিংস';
+  @override
+  String get displaySettings => 'প্রদর্শন সেটিংস';
+  @override
+  String get storageAndData => 'স্টোরেজ এবং ডাটা';
+  @override
+  String get advanced => 'উন্নত';
+  @override
+  String get taskchampionBackendUrl => 'Taskchampion ব্যাকএন্ড URL';
 }

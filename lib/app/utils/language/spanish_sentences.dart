@@ -679,4 +679,15 @@ class SpanishSentences extends Sentences {
   String get tutorialModalKeepTutorials => 'Mantener tutoriales';
   @override
   String get tutorialModalSkipAllTutorials => 'Omitir todos los tutoriales';
+  //
+  @override
+  String get syncSetting => 'Configuración de sincronización';
+  @override
+  String get displaySettings => 'Configuración de visualización';
+  @override
+  String get storageAndData => 'Almacenamiento y datos';
+  @override
+  String get advanced => 'Avanzado';
+  @override
+  String get taskchampionBackendUrl => 'Taskchampion URL';
 }

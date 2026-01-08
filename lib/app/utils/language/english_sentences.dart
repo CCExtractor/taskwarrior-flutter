@@ -663,4 +663,15 @@ class EnglishSentences extends Sentences {
   String get tutorialModalKeepTutorials => 'Keep Tutorials';
   @override
   String get tutorialModalSkipAllTutorials => 'Skip all Tutorials';
+  // Settings
+  @override
+  String get syncSetting => 'Sync Settings';
+  @override
+  String get displaySettings => 'Display Settings';
+  @override
+  String get storageAndData => 'Storage and Data';
+  @override
+  String get advanced => 'Advanced';
+  @override
+  String get taskchampionBackendUrl => 'Taskchampion URL';
 }

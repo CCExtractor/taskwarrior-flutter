@@ -8,6 +8,7 @@ import 'package:taskwarrior/app/utils/constants/utilites.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
+import 'package:taskwarrior/app/modules/detailRoute/controllers/detail_route_controller.dart';
 
 class DescriptionWidget extends StatelessWidget {
   const DescriptionWidget({
@@ -25,6 +26,7 @@ class DescriptionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<DetailRouteController>();
     TaskwarriorColorTheme tColors =
         Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Card(
@@ -86,64 +88,66 @@ class DescriptionWidget extends StatelessWidget {
           ),
         ),
         onTap: () {
-          var controller = TextEditingController(
-            text: value,
-          );
+          controller.prepareDescriptionEdit(value ?? '');
           showDialog(
             context: context,
-            builder: (context) => Utils.showAlertDialog(
-              scrollable: true,
-              title: Text(
-                SentenceManager(currentLanguage: AppSettings.selectedLanguage)
-                    .sentences
-                    .editDescription,
-                style: TextStyle(
-                  color: tColors.primaryTextColor,
-                ),
-              ),
-              content: TextField(
-                style: TextStyle(
-                  color: tColors.primaryTextColor,
-                ),
-                autofocus: true,
-                maxLines: null,
-                controller: controller,
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Get.back();
-                  },
-                  child: Text(
-                    SentenceManager(
-                            currentLanguage: AppSettings.selectedLanguage)
-                        .sentences
-                        .cancel,
-                    style: TextStyle(
-                      color: tColors.primaryTextColor,
-                    ),
+            builder: (context) => Obx(
+              () => Utils.showAlertDialog(
+                scrollable: true,
+                title: Text(
+                  SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                      .sentences
+                      .editDescription,
+                  style: TextStyle(
+                    color: tColors.primaryTextColor,
                   ),
                 ),
-                TextButton(
-                  onPressed: () {
-                    try {
-                      callback(controller.text);
-                      Get.back();
-                    } on FormatException catch (e, trace) {
-                      logError(e, trace);
-                    }
-                  },
-                  child: Text(
-                    SentenceManager(
-                            currentLanguage: AppSettings.selectedLanguage)
-                        .sentences
-                        .submit,
-                    style: TextStyle(
-                      color: tColors.primaryTextColor,
+                content: TextField(
+                  style: TextStyle(
+                    color: tColors.primaryTextColor,
+                  ),
+                  decoration: InputDecoration(
+                    errorText: controller.descriptionErrorText.value,
+                    errorStyle: const TextStyle(
+                      color: Colors.red,
                     ),
                   ),
+                  autofocus: true,
+                  maxLines: null,
+                  controller: controller.descriptionController,
                 ),
-              ],
+                actions: [
+                  TextButton(
+                    onPressed: () => Get.back(),
+                    child: Text(
+                      SentenceManager(
+                              currentLanguage: AppSettings.selectedLanguage)
+                          .sentences
+                          .cancel,
+                      style: TextStyle(
+                        color: tColors.primaryTextColor,
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      if (controller.validateDescription()) {
+                        callback(controller.descriptionController.text);
+                        Get.back();
+                      }
+                    },
+                    child: Text(
+                      SentenceManager(
+                              currentLanguage: AppSettings.selectedLanguage)
+                          .sentences
+                          .submit,
+                      style: TextStyle(
+                        color: tColors.primaryTextColor,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         },
