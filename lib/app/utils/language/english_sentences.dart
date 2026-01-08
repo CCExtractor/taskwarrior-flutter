@@ -653,4 +653,14 @@ class EnglishSentences extends Sentences {
   String get logs => 'Logs';
   @override
   String get checkAllDebugLogsHere => 'Check all debug logs here';
+
+  @override
+  String get tutorialModalWelcome => 'Welcome!';
+  @override
+  String get tutorialModalMessage =>
+      'Would you like to see a quick tutorial to learn how to use this app?';
+  @override
+  String get tutorialModalKeepTutorials => 'Keep Tutorials';
+  @override
+  String get tutorialModalSkipAllTutorials => 'Skip all Tutorials';
 }

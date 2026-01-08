@@ -664,4 +664,14 @@ class BengaliSentences extends Sentences {
   String get logs => 'লগস';
   @override
   String get checkAllDebugLogsHere => 'এখানে সমস্ত ডিবাগ লগ পরীক্ষা করুন';
+
+  @override
+  String get tutorialModalWelcome => 'স্বাগতম!';
+  @override
+  String get tutorialModalMessage =>
+      'আপনি কি এই অ্যাপটি কীভাবে ব্যবহার করতে হয় তা শেখার জন্য একটি দ্রুত টিউটোরিয়াল দেখতে চান?';
+  @override
+  String get tutorialModalKeepTutorials => 'টিউটোরিয়াল রাখুন';
+  @override
+  String get tutorialModalSkipAllTutorials => 'সমস্ত টিউটোরিয়াল এড়িয়ে যান';
 }

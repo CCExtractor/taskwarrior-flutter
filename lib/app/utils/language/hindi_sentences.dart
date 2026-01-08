@@ -642,4 +642,14 @@ class HindiSentences extends Sentences {
   String get logs => 'लॉग्स';
   @override
   String get checkAllDebugLogsHere => 'यहाँ सभी डिबग लॉग्स देखें';
+
+  @override
+  String get tutorialModalWelcome => 'स्वागत है!';
+  @override
+  String get tutorialModalMessage =>
+      'क्या आप इस ऐप का उपयोग करना सीखने के लिए एक त्वरित ट्यूटोरियल देखना चाहेंगे?';
+  @override
+  String get tutorialModalKeepTutorials => 'ट्यूटोरियल रखें';
+  @override
+  String get tutorialModalSkipAllTutorials => 'सभी ट्यूटोरियल छोड़ें';
 }

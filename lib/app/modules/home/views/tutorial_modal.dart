@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 class TutorialModal extends StatelessWidget {
@@ -16,6 +18,9 @@ class TutorialModal extends StatelessWidget {
   Widget build(BuildContext context) {
     TaskwarriorColorTheme tColors =
         Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    final sentences =
+        SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+            .sentences;
 
     return Dialog(
       shape: RoundedRectangleBorder(
@@ -45,7 +50,7 @@ class TutorialModal extends StatelessWidget {
 
             // Title
             Text(
-              'Welcome!',
+              sentences.tutorialModalWelcome,
               style: GoogleFonts.poppins(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -56,7 +61,7 @@ class TutorialModal extends StatelessWidget {
 
             // Message
             Text(
-              'Would you like to see a quick tutorial to learn how to use this app?',
+              sentences.tutorialModalMessage,
               textAlign: TextAlign.center,
               style: GoogleFonts.poppins(
                 fontSize: 16,
@@ -66,50 +71,55 @@ class TutorialModal extends StatelessWidget {
             ),
             const SizedBox(height: 28),
 
-            // Buttons
-            Row(
+            // Buttons - Vertical Layout
+            Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: onNo,
-                    style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      side: BorderSide(
-                        color: tColors.primaryTextColor!.withValues(alpha: 0.3),
-                        width: 1.5,
-                      ),
+                // Primary Action: Keep Tutorials (with outline and filled background)
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: onYes,
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      backgroundColor: tColors.primaryBackgroundColor,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
+                        side: BorderSide(
+                          color: tColors.primaryBackgroundColor ?? Colors.blue,
+                          width: 2,
+                        ),
                       ),
+                      elevation: 2,
                     ),
                     child: Text(
-                      'No, thanks',
+                      sentences.tutorialModalKeepTutorials,
                       style: GoogleFonts.poppins(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
                         color: tColors.primaryTextColor,
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: onYes,
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      backgroundColor: tColors.primaryBackgroundColor,
+                const SizedBox(height: 12),
+                // Secondary Action: Skip all Tutorials (text button, no outline, smaller font)
+                SizedBox(
+                  width: double.infinity,
+                  child: TextButton(
+                    onPressed: onNo,
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 12),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      elevation: 2,
                     ),
                     child: Text(
-                      'Show Tutorial',
+                      sentences.tutorialModalSkipAllTutorials,
                       style: GoogleFonts.poppins(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                        color: tColors.primaryTextColor,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: tColors.primaryTextColor?.withValues(alpha: 0.7),
                       ),
                     ),
                   ),

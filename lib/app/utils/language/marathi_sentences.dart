@@ -664,4 +664,14 @@ class MarathiSentences extends Sentences {
   String get logs => 'लॉग्ज';
   @override
   String get checkAllDebugLogsHere => 'येथे सर्व डीबग लॉग्ज तपासा';
+
+  @override
+  String get tutorialModalWelcome => 'स्वागत आहे!';
+  @override
+  String get tutorialModalMessage =>
+      'तुम्हाला हे अॅप वापरण्याचे शिकण्यासाठी एक जलद ट्यूटोरियल पहायचा आहे का?';
+  @override
+  String get tutorialModalKeepTutorials => 'ट्यूटोरियल ठेवा';
+  @override
+  String get tutorialModalSkipAllTutorials => 'सर्व ट्यूटोरियल सोडा';
 }

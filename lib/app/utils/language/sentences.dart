@@ -345,4 +345,10 @@ abstract class Sentences {
   String get profilePageChangeProfileMode;
   String get profilePageSelectProfileMode;
   String get profilePageSuccessfullyChangedProfileModeTo;
+
+  // Tutorial modal strings
+  String get tutorialModalWelcome;
+  String get tutorialModalMessage;
+  String get tutorialModalKeepTutorials;
+  String get tutorialModalSkipAllTutorials;
 }
