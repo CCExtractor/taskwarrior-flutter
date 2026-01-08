@@ -65,6 +65,7 @@ class HomeController extends GetxController {
   late RxBool serverCertExists;
   final Rx<SupportedLanguage> selectedLanguage = SupportedLanguage.english.obs;
   final ScrollController scrollController = ScrollController();
+  final FocusNode searchFocusNode = FocusNode();
   final RxBool showbtn = false.obs;
   late TaskDatabase taskdb;
   var tasks = <TaskForC>[].obs;
@@ -478,6 +479,11 @@ class HomeController extends GetxController {
 
   void toggleSearch() {
     searchVisible.value = !searchVisible.value;
+    if (searchVisible.value) {
+      Future.delayed(const Duration(milliseconds: 300), () {
+        searchFocusNode.requestFocus();
+      });
+    }
     if (!searchVisible.value) {
       searchedTasks.assignAll(queriedTasks);
       searchController.text = '';
