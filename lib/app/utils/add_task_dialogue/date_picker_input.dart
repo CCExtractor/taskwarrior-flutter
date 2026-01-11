@@ -42,20 +42,22 @@ class _AddTaskDatePickerInputState extends State<AddTaskDatePickerInput> {
             child: DropdownButtonHideUnderline(
               child: DropdownButton<int>(
                 value: currentIndex,
+                itemHeight: null,
                 items: List.generate(length, (index) {
                   bool hasDate = _selectedDates[index] != null;
                   return DropdownMenuItem<int>(
                     value: index,
                     child: Row(
-                      mainAxisSize: MainAxisSize.min,
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        Text(dateLabels[index]),
                         if (hasDate)
                           const Padding(
-                            padding: EdgeInsets.only(right: 4),
+                            padding: EdgeInsets.only(left: 12),
                             child: Icon(Icons.check_circle,
                                 size: 14, color: Colors.white),
                           ),
-                        Text(dateLabels[index]),
                       ],
                     ),
                   );
