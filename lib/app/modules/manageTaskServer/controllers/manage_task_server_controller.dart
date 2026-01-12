@@ -224,18 +224,19 @@ class ManageTaskServerController extends GetxController {
     Future.delayed(
       const Duration(milliseconds: 500),
       () {
-        SaveTourStatus.getManageTaskServerTourStatus().then((value) => {
-              if (value == false)
-                {
-                  isManageServerTourActive.value = true,
-                  tutorialCoachMark.show(context: context),
-                }
-              else
-                {
-                  // ignore: avoid_print
-                  print('User has seen this page'),
-                }
-            });
+        SaveTourStatus.getManageTaskServerTourStatus().then((value) {
+          if (value == false) {
+            tutorialCoachMark.targets.removeWhere(
+                (target) => target.keyTarget?.currentContext == null);
+            if (tutorialCoachMark.targets.isNotEmpty) {
+              isManageServerTourActive.value = true;
+              tutorialCoachMark.show(context: context);
+            }
+          } else {
+            // ignore: avoid_print
+            print('User has seen this page');
+          }
+        });
       },
     );
   }

@@ -91,18 +91,19 @@ class ReportsController extends GetxController
     Future.delayed(
       const Duration(milliseconds: 500),
       () {
-        SaveTourStatus.getReportsTourStatus().then((value) => {
-              if (value == false)
-                {
-                  isReportsTourActive.value = true,
-                  tutorialCoachMark.show(context: context),
-                }
-              else
-                {
-                  // ignore: avoid_print
-                  print('User has seen this page'),
-                }
-            });
+        SaveTourStatus.getReportsTourStatus().then((value) {
+          if (value == false) {
+            tutorialCoachMark.targets.removeWhere(
+                (target) => target.keyTarget?.currentContext == null);
+            if (tutorialCoachMark.targets.isNotEmpty) {
+              isReportsTourActive.value = true;
+              tutorialCoachMark.show(context: context);
+            }
+          } else {
+            // ignore: avoid_print
+            print('User has seen this page');
+          }
+        });
       },
     );
   }

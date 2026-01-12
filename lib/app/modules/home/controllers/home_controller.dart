@@ -695,19 +695,19 @@ class HomeController extends GetxController {
     Future.delayed(
       const Duration(milliseconds: 500),
       () {
-        SaveTourStatus.getInAppTourStatus().then((value) => {
-              if (value == false)
-                {
-                  isHomeTourActive.value = true,
-                  tutorialCoachMark.show(context: context),
-                }
-              else
-                {
-                  // ignore: avoid_print
-                  debugPrint('User has seen this page'),
-                  // User has seen this page
-                }
-            });
+        SaveTourStatus.getInAppTourStatus().then((value) {
+          if (value == false) {
+            tutorialCoachMark.targets.removeWhere(
+                (target) => target.keyTarget?.currentContext == null);
+            if (tutorialCoachMark.targets.isNotEmpty) {
+              isHomeTourActive.value = true;
+              tutorialCoachMark.show(context: context);
+            }
+          } else {
+            // ignore: avoid_print
+            debugPrint('User has seen this page');
+          }
+        });
       },
     );
   }
@@ -742,18 +742,19 @@ class HomeController extends GetxController {
     Future.delayed(
       const Duration(milliseconds: 500),
       () {
-        SaveTourStatus.getFilterTourStatus().then((value) => {
-              if (value == false)
-                {
-                  isFilterTourActive.value = true,
-                  tutorialCoachMark.show(context: context),
-                }
-              else
-                {
-                  // ignore: avoid_print
-                  print('User has seen this page'),
-                }
-            });
+        SaveTourStatus.getFilterTourStatus().then((value) {
+          if (value == false) {
+            tutorialCoachMark.targets.removeWhere(
+                (target) => target.keyTarget?.currentContext == null);
+            if (tutorialCoachMark.targets.isNotEmpty) {
+              isFilterTourActive.value = true;
+              tutorialCoachMark.show(context: context);
+            }
+          } else {
+            // ignore: avoid_print
+            print('User has seen this page');
+          }
+        });
       },
     );
   }
@@ -779,7 +780,11 @@ class HomeController extends GetxController {
       print("tasks is ${tasks.isNotEmpty}");
       if (value == false) {
         initTaskSwipeTutorial();
-        tutorialCoachMark.show(context: context);
+        tutorialCoachMark.targets
+            .removeWhere((target) => target.keyTarget?.currentContext == null);
+        if (tutorialCoachMark.targets.isNotEmpty) {
+          tutorialCoachMark.show(context: context);
+        }
       } else {
         debugPrint('User has already seen the task swipe tutorial');
       }

@@ -62,4 +62,14 @@ class SaveTourStatus {
   static Future<bool> getTaskSwipeTutorialStatus() async {
     return _preferences?.getBool('task_swipe_tutorial_completed') ?? false;
   }
+
+  static Future resetTourStatus() async {
+    await _preferences?.remove('reports_tour');
+    await _preferences?.remove('tour');
+    await _preferences?.remove('filter_tour');
+    await _preferences?.remove('profile_tour');
+    await _preferences?.remove('details_tour');
+    await _preferences?.remove('manage_task_server_tour');
+    await _preferences?.remove('task_swipe_tutorial_completed');
+  }
 }

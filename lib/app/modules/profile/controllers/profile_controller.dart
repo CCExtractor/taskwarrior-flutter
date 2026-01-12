@@ -30,7 +30,6 @@ class ProfileController extends GetxController {
     tutorialCoachMark = TutorialCoachMark(
       targets: addProfilePage(
         currentProfileKey: currentProfileKey,
-
         addNewProfileKey: addNewProfileKey,
         manageSelectedProfileKey: manageSelectedProfileKey,
       ),
@@ -49,18 +48,19 @@ class ProfileController extends GetxController {
     Future.delayed(
       const Duration(milliseconds: 500),
       () {
-        SaveTourStatus.getProfileTourStatus().then((value) => {
-              if (value == false)
-                {
-                  isProfileTourActive.value = true,
-                  tutorialCoachMark.show(context: context),
-                }
-              else
-                {
-                  // ignore: avoid_print
-                  print('User has seen this page'),
-                }
-            });
+        SaveTourStatus.getProfileTourStatus().then((value) {
+          if (value == false) {
+            tutorialCoachMark.targets.removeWhere(
+                (target) => target.keyTarget?.currentContext == null);
+            if (tutorialCoachMark.targets.isNotEmpty) {
+              isProfileTourActive.value = true;
+              tutorialCoachMark.show(context: context);
+            }
+          } else {
+            // ignore: avoid_print
+            print('User has seen this page');
+          }
+        });
       },
     );
   }
