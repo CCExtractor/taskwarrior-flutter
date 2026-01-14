@@ -93,7 +93,8 @@ class SettingsPageBody extends StatelessWidget {
                 ),
                 Divider(
                     height: 1,
-                    color: tColors.primaryDisabledTextColor?.withOpacity(0.1)),
+                    color: tColors.primaryDisabledTextColor
+                        ?.withValues(alpha: 0.1)),
                 Obx(
                   () => SettingsPageListTile(
                     title: SentenceManager(
@@ -140,7 +141,8 @@ class SettingsPageBody extends StatelessWidget {
                 ),
                 Divider(
                     height: 1,
-                    color: tColors.primaryDisabledTextColor?.withOpacity(0.1)),
+                    color: tColors.primaryDisabledTextColor
+                        ?.withValues(alpha: 0.1)),
                 SettingsPageListTile(
                   title: SentenceManager(
                           currentLanguage: controller.selectedLanguage.value)
@@ -156,7 +158,8 @@ class SettingsPageBody extends StatelessWidget {
                 ),
                 Divider(
                     height: 1,
-                    color: tColors.primaryDisabledTextColor?.withOpacity(0.1)),
+                    color: tColors.primaryDisabledTextColor
+                        ?.withValues(alpha: 0.1)),
                 SettingsPageListTile(
                   title: SentenceManager(
                           currentLanguage: controller.selectedLanguage.value)
@@ -233,7 +236,7 @@ class SettingsPageBody extends StatelessWidget {
                             Divider(
                                 height: 1,
                                 color: tColors.primaryDisabledTextColor
-                                    ?.withOpacity(0.1)),
+                                    ?.withValues(alpha: 0.1)),
                             SettingsPageListTile(
                               title: SentenceManager(
                                 currentLanguage: AppSettings.selectedLanguage,
@@ -333,7 +336,7 @@ class SettingsPageBody extends StatelessWidget {
           Icon(
             icon,
             size: 20,
-            color: tColors.primaryTextColor?.withOpacity(0.7),
+            color: tColors.primaryTextColor?.withValues(alpha: 0.7),
           ),
           const SizedBox(width: 8),
           Text(
@@ -341,7 +344,7 @@ class SettingsPageBody extends StatelessWidget {
             style: GoogleFonts.poppins(
               fontSize: 13,
               fontWeight: FontWeight.w600,
-              color: tColors.primaryTextColor?.withOpacity(0.7),
+              color: tColors.primaryTextColor?.withValues(alpha: 0.7),
               letterSpacing: 0.5,
             ),
           ),
@@ -361,13 +364,13 @@ class SettingsPageBody extends StatelessWidget {
         color: tColors.primaryBackgroundColor,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: tColors.primaryDisabledTextColor?.withOpacity(0.1) ??
-              Colors.grey.withOpacity(0.1),
+          color: tColors.primaryDisabledTextColor?.withValues(alpha: 0.1) ??
+              Colors.grey.withValues(alpha: 0.1),
           width: 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.02),
+            color: Colors.black.withValues(alpha: 0.02),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),

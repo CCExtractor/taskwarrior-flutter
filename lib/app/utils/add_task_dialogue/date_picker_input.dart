@@ -10,10 +10,10 @@ class AddTaskDatePickerInput extends StatefulWidget {
       {super.key, this.onDateChanges, this.onlyDueDate = false});
 
   @override
-  _AddTaskDatePickerInputState createState() => _AddTaskDatePickerInputState();
+  AddTaskDatePickerInputState createState() => AddTaskDatePickerInputState();
 }
 
-class _AddTaskDatePickerInputState extends State<AddTaskDatePickerInput> {
+class AddTaskDatePickerInputState extends State<AddTaskDatePickerInput> {
   final List<DateTime?> _selectedDates = List<DateTime?>.filled(4, null);
   final List<String> dateLabels = ['Due', 'Wait', 'Sched', 'Until'];
   final List<TextEditingController> _controllers =
