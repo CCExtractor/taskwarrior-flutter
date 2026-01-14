@@ -628,7 +628,8 @@ class HomeController extends GetxController {
   }
 
   void changeInDirectory() {
-    print("directory change to ${splashController.baseDirectory.value.path}");
+    debugPrint(
+        "directory change to ${splashController.baseDirectory.value.path}");
     storage = Storage(
       Directory(
         '${splashController.baseDirectory.value.path}/profiles/${splashController.currentProfile.value}',
@@ -654,7 +655,7 @@ class HomeController extends GetxController {
     HomeWidget.updateWidget(
         androidName: "TaskWarriorWidgetProvider",
         iOSName: "TaskWarriorWidgets");
-    // print("called and value is${isDarkModeOn.value}");
+    // debugPrint("called and value is${isDarkModeOn.value}");
   }
 
   final addKey = GlobalKey();
@@ -741,7 +742,7 @@ class HomeController extends GetxController {
               else
                 {
                   // ignore: avoid_print
-                  print('User has seen this page'),
+                  debugPrint('User has seen this page'),
                 }
             });
       },
@@ -765,8 +766,8 @@ class HomeController extends GetxController {
 
   void showTaskSwipeTutorial(BuildContext context) {
     SaveTourStatus.getTaskSwipeTutorialStatus().then((value) {
-      print("value is $value");
-      print("tasks is ${tasks.isNotEmpty}");
+      debugPrint("value is $value");
+      debugPrint("tasks is ${tasks.isNotEmpty}");
       if (value == false) {
         initTaskSwipeTutorial();
         tutorialCoachMark.show(context: context);

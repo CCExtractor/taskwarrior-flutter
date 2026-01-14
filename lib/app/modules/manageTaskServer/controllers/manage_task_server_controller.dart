@@ -230,7 +230,7 @@ class ManageTaskServerController extends GetxController {
               else
                 {
                   // ignore: avoid_print
-                  print('User has seen this page'),
+                  debugPrint('User has seen this page'),
                 }
             });
       },

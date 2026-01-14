@@ -8,7 +8,6 @@ import 'package:taskwarrior/app/utils/constants/constants.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 
-
 class StatusWidget extends StatelessWidget {
   const StatusWidget(
       {required this.name,
@@ -22,7 +21,8 @@ class StatusWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Card(
       color: tColors.secondaryBackgroundColor,
       child: ListTile(
@@ -43,7 +43,11 @@ class StatusWidget extends StatelessWidget {
                       ),
                     ),
                     TextSpan(
-                      text: value ?? SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.notSelected,
+                      text: value ??
+                          SentenceManager(
+                                  currentLanguage: AppSettings.selectedLanguage)
+                              .sentences
+                              .notSelected,
                       style: GoogleFonts.poppins(
                         fontSize: TaskWarriorFonts.fontSizeMedium,
                         color: tColors.primaryTextColor,
@@ -57,7 +61,7 @@ class StatusWidget extends StatelessWidget {
         ),
         onTap: () {
           if (kDebugMode) {
-            print(value);
+            debugPrint(value);
           }
           switch (value) {
             case 'pending':
