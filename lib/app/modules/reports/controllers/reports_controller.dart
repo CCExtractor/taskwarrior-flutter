@@ -31,42 +31,6 @@ class ReportsController extends GetxController
   late Storage storage;
   var storageWidget;
 
-  // void _initReportsTour() {
-  //   tutorialCoachMark = TutorialCoachMark(
-  //     targets: reportsDrawer(
-  //       daily: daily,
-  //       weekly: weekly,
-  //       monthly: monthly,
-  //     ),
-  //     colorShadow: TaskWarriorColors.black,
-  //     paddingFocus: 10,
-  //     opacityShadow: 0.8,
-  //     hideSkip: true,
-  //     onFinish: () {
-  //       SaveReportsTour().saveReportsTourStatus();
-  //     },
-  //   );
-  // }
-
-  // void showReportsTour() {
-  //   Future.delayed(
-  //     const Duration(seconds: 2),
-  //     () {
-  //       SaveReportsTour().getReportsTourStatus().then((value) => {
-  //             if (value == false)
-  //               {
-  //                 tutorialCoachMark.show(context: Get.context!),
-  //               }
-  //             else
-  //               {
-  //                 // ignore: avoid_print
-  //                 print('User has seen this page'),
-  //               }
-  //           });
-  //     },
-  //   );
-  // }
-
   void initReportsTour() {
     tutorialCoachMark = TutorialCoachMark(
       targets: reportsDrawer(
@@ -96,7 +60,7 @@ class ReportsController extends GetxController
               else
                 {
                   // ignore: avoid_print
-                  print('User has seen this page'),
+                  debugPrint('User has seen this page'),
                 }
             });
       },

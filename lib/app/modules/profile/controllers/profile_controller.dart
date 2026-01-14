@@ -28,7 +28,6 @@ class ProfileController extends GetxController {
     tutorialCoachMark = TutorialCoachMark(
       targets: addProfilePage(
         currentProfileKey: currentProfileKey,
-
         addNewProfileKey: addNewProfileKey,
         manageSelectedProfileKey: manageSelectedProfileKey,
       ),
@@ -54,7 +53,7 @@ class ProfileController extends GetxController {
               else
                 {
                   // ignore: avoid_print
-                  print('User has seen this page'),
+                  debugPrint('User has seen this page'),
                 }
             });
       },

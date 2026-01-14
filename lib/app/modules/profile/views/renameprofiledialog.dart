@@ -44,7 +44,6 @@ class RenameProfileDialog extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () {
-                // Navigator.of(context).pop();
                 Get.back();
               },
               child: Text(
@@ -62,7 +61,6 @@ class RenameProfileDialog extends StatelessWidget {
                   profile: profile,
                   alias: controller.text,
                 );
-                // Navigator.of(context).pop();
                 Get.back();
               },
               child: Text(

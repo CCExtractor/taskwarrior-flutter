@@ -111,7 +111,6 @@ class TasksBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // print(taskData);
     TaskwarriorColorTheme tColors =
         Theme.of(context).extension<TaskwarriorColorTheme>()!;
     var storageWidget = Get.find<HomeController>();
@@ -220,7 +219,7 @@ class TasksBuilder extends StatelessWidget {
                                           dtb!.add(const Duration(minutes: 1));
                                       cancelNotification(task);
                                     }
-                                    if (Platform.isAndroid||Platform.isIOS) {
+                                    if (Platform.isAndroid || Platform.isIOS) {
                                       WidgetController widgetController =
                                           Get.put(WidgetController());
                                       widgetController.fetchAllData();

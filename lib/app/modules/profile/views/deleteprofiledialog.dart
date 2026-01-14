@@ -59,7 +59,6 @@ class DeleteProfileDialog extends StatelessWidget {
                   try {
                     var splashController = Get.find<SplashController>();
                     await splashController.deleteProfile(profile);
-                    // Navigator.of(context).pop();
                     if (splashController
                             .getMode(splashController.currentProfile.value) !=
                         "TW3") {

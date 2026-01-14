@@ -54,11 +54,6 @@ Task _patch(Task task, String key, dynamic value) {
                   (value as ListBuilder).build().toList().cast<String>())
               .toBuilder();
           break;
-        // case 'annotations':
-        //   b.annotations = BuiltList<Annotation>(
-        //           (value as ListBuilder).build().toList().cast<Annotation>())
-        //       .toBuilder();
-        //   break;
       }
     },
   );

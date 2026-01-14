@@ -29,7 +29,8 @@ class PemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     String fingerprint(String pemContents) {
       var firstCertificateBlock = decodePemBlocks(
         PemLabel.certificate,
@@ -74,40 +75,9 @@ class PemWidget extends StatelessWidget {
             onTap: () {
               onTapCallBack(pem, storage);
             },
-            // onTap: () {
-            //   manageTaskServerController.onTapPEMWidget(pem, storage);
-            // },
-            // onTap: (pem == 'server.cert')
-            //     ? () {
-            //         widget.storage.guiPemFiles.removeServerCert();
-            //         ProfilesWidget.of(context).setState(
-            //           () {},
-            //         );
-            //         setState(
-            //           () {},
-            //         );
-            //       }
-            //     : () async {
-            //         await setConfig(
-            //           storage: widget.storage,
-            //           key: widget.pem,
-            //         );
-            //         setState(
-            //           () {},
-            //         );
-            //       },
-            // onLongPress: () {
-            //   manageTaskServerController.onLongPressPEMWidget(pem, name);
-            // },
             onLongPress: () {
               onLongPressCallBack(pem, name);
             },
-            // onLongPress: (widget.pem != 'server.cert' && name != null)
-            //     ? () {
-            //         widget.storage.guiPemFiles.removePemFile(widget.pem);
-            //         setState(() {});
-            //       }
-            //     : null,
             child: Container(
               width: MediaQuery.of(context).size.width * 1,
               padding: const EdgeInsets.all(12),

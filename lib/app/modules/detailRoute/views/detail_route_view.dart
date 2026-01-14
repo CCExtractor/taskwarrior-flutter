@@ -30,9 +30,7 @@ class DetailRouteView extends GetView<DetailRouteController> {
         if (!controller.onEdit.value) {
           debugPrint(
               'DetailRouteView: No edits made, navigating back without prompt.');
-          // Get.offAll(() => const HomeView());
           Navigator.of(context).pop();
-          // Get.toNamed(Routes.HOME);
           return false;
         }
         debugPrint(

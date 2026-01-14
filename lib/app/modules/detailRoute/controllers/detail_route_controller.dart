@@ -29,7 +29,6 @@ class DetailRouteController extends GetxController {
     super.onInit();
     var arguments = Get.arguments;
     uuid = arguments[1] as String;
-    // uuid = Get.arguments['uuid'];
     var storageWidget = Get.find<HomeController>();
     modify = Modify(
       getTask: storageWidget.getTask,

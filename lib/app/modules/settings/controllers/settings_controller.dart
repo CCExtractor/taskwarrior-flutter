@@ -53,7 +53,6 @@ class SettingsController extends GetxController {
       if (value != null) {
         isMovingDirectory.value = true;
         update();
-        // InheritedProfiles profilesWidget = ProfilesWidget.of(context);
         var profilesWidget = Get.find<SplashController>();
         Directory source = profilesWidget.baseDirectory();
         Directory destination = Directory(value);

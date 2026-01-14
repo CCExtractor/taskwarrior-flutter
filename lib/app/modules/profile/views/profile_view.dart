@@ -177,7 +177,6 @@ class ProfileView extends GetView<ProfileController> {
                           ),
                         ),
                         onPressed: () {
-                          // Navigator.of(context).pop();
                           Get.back();
                           exportTasks(
                             contents: tasks,
