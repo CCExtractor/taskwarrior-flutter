@@ -46,6 +46,6 @@ class HomePageFloatingActionButton extends StatelessWidget {
               if (controller.isSyncNeeded.value && value != "cancel") {
                 controller.isNeededtoSyncOnStart(context);
               }
-            }));
+            })));
   }
 }
