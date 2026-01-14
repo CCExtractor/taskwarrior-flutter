@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/add_task_dialog_utils.dart';
-import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 class AddTaskDatePickerInput extends StatefulWidget {
   final Function(List<DateTime?>)? onDateChanges;
