@@ -130,6 +130,7 @@ class ProfileView extends GetView<ProfileController> {
                   .replaceAll(RegExp(r'[-:]'), '')
                   .replaceAll(RegExp(r'\..*'), '');
 
+              if (!context.mounted) return;
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -194,6 +195,7 @@ class ProfileView extends GetView<ProfileController> {
                 await controller.profilesWidget.copyConfigToNewProfile(
                   profile,
                 );
+                if (!context.mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(
                       SentenceManager(
@@ -207,6 +209,7 @@ class ProfileView extends GetView<ProfileController> {
                     backgroundColor: tColors.secondaryBackgroundColor,
                     duration: const Duration(seconds: 2)));
               } catch (e) {
+                if (!context.mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(
                       SentenceManager(

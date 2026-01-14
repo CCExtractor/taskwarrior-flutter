@@ -191,7 +191,8 @@ class DetailRouteController extends GetxController {
       const Duration(milliseconds: 500),
       () {
         SaveTourStatus.getDetailsTourStatus().then((value) => {
-              if (!value) {tutorialCoachMark.show(context: context)}
+              if (!value && context.mounted)
+                {tutorialCoachMark.show(context: context)}
             });
       },
     );

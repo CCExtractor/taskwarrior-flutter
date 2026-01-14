@@ -342,6 +342,7 @@ class AddTaskBottomSheet extends StatelessWidget {
       homeController.due.value = null;
       homeController.priority.value = 'M';
       homeController.projectcontroller.text = '';
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
             SentenceManager(
@@ -396,7 +397,7 @@ class AddTaskBottomSheet extends StatelessWidget {
         }
 
         homeController.update();
-
+        if (!context.mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
               SentenceManager(
@@ -420,7 +421,7 @@ class AddTaskBottomSheet extends StatelessWidget {
         // late InheritedStorage storageWidget;
         // storageWidget = StorageWidget.of(context);
         var storageWidget = Get.find<HomeController>();
-        if (value) {
+        if (value && context.mounted) {
           storageWidget.synchronize(context, true);
         }
         if (Platform.isAndroid || Platform.isIOS) {
@@ -430,6 +431,7 @@ class AddTaskBottomSheet extends StatelessWidget {
           widgetController.update();
         }
       } on FormatException catch (e) {
+        if (!context.mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
               e.message,
@@ -475,6 +477,7 @@ class AddTaskBottomSheet extends StatelessWidget {
         }
 
         homeController.update();
+        if (!context.mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
               SentenceManager(
@@ -503,6 +506,7 @@ class AddTaskBottomSheet extends StatelessWidget {
         }
         await storageWidget.refreshReplicaTaskList();
       } on FormatException catch (e) {
+        if (!context.mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
               e.message,

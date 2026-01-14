@@ -46,7 +46,7 @@ class ProfileController extends GetxController {
       const Duration(milliseconds: 500),
       () {
         SaveTourStatus.getProfileTourStatus().then((value) => {
-              if (value == false)
+              if (value == false && context.mounted)
                 {
                   tutorialCoachMark.show(context: context),
                 }

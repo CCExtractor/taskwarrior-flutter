@@ -105,6 +105,7 @@ class AddTaskDatePickerInputState extends State<AddTaskDatePickerInput> {
           firstDate: DateTime.now(),
           lastDate: DateTime(2101),
         );
+        if (!context.mounted) return;
         final TimeOfDay? time = await showTimePicker(
           context: context,
           initialTime: TimeOfDay.now(),

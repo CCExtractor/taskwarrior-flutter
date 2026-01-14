@@ -121,6 +121,7 @@ class ManageTaskChampionCredsView
                             : () async {
                                 int status = await controller.saveCredentials();
                                 if (status == 0) {
+                                  if (!context.mounted) return;
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                           content: Text(
@@ -139,6 +140,7 @@ class ManageTaskChampionCredsView
                                               const Duration(seconds: 2)));
                                   return;
                                 }
+                                if (!context.mounted) return;
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                         content: Text(

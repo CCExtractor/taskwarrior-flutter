@@ -66,6 +66,7 @@ class DeleteProfileDialog extends StatelessWidget {
                     }
 
                     Get.back();
+                    if (!context.mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
                           '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.profilePageProfile}: ${profile.characters} ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.profileDeletedSuccessfully}',
@@ -76,6 +77,7 @@ class DeleteProfileDialog extends StatelessWidget {
                         backgroundColor: tColors.secondaryBackgroundColor,
                         duration: const Duration(seconds: 2)));
                   } catch (e) {
+                    if (!context.mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
                           '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.profilePageProfile}: ${profile.characters} ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.profileDeletionFailed}',

@@ -53,7 +53,7 @@ class ReportsController extends GetxController
       const Duration(milliseconds: 500),
       () {
         SaveTourStatus.getReportsTourStatus().then((value) => {
-              if (value == false)
+              if (value == false && context.mounted)
                 {
                   tutorialCoachMark.show(context: context),
                 }

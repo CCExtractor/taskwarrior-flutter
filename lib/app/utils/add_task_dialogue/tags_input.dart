@@ -12,10 +12,10 @@ class AddTaskTagsInput extends StatefulWidget {
       this.onTagsChanges});
 
   @override
-  _AddTaskTagsInputState createState() => _AddTaskTagsInputState();
+  AddTaskTagsInputState createState() => AddTaskTagsInputState();
 }
 
-class _AddTaskTagsInputState extends State<AddTaskTagsInput> {
+class AddTaskTagsInputState extends State<AddTaskTagsInput> {
   late final StringTagController stringTagController;
 
   @override
