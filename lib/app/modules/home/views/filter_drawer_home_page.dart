@@ -295,13 +295,10 @@ class FilterDrawer extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(color: TaskWarriorColors.borderColor),
                 ),
-                //height: 30,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const Divider(
-                      color: Color.fromARGB(0, 48, 46, 46),
-                    ),
+                    const SizedBox(height: 8),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 0.0),
                       child: Text(
@@ -310,144 +307,235 @@ class FilterDrawer extends StatelessWidget {
                                       homeController.selectedLanguage.value)
                               .sentences
                               .filterDrawerSortBy,
-                          // style: GoogleFonts.poppins(
-                          //     color: (AppSettings.isDarkMode
-                          //         ? TaskWarriorColors.kprimaryTextColor
-                          //         : TaskWarriorColors.kLightPrimaryTextColor),
-                          //     fontSize: TaskWarriorFonts.fontSizeLarge),
-                          // textAlign: TextAlign.right,
                           style: TextStyle(
                             fontFamily: FontFamily.poppins,
                             fontSize: TaskWarriorFonts.fontSizeMedium,
                             color: tColors.primaryTextColor,
                           )),
                     ),
-                    const Divider(
-                      color: Color.fromARGB(0, 48, 46, 46),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Wrap(
-                        spacing: 8,
-                        runSpacing: 4,
+                    const SizedBox(height: 12),
+                    // Dropdown and order buttons row
+                    Obx(() {
+                      final sortOptions = [
+                        SentenceManager(
+                                currentLanguage:
+                                    homeController.selectedLanguage.value)
+                            .sentences
+                            .filterDrawerCreated,
+                        SentenceManager(
+                                currentLanguage:
+                                    homeController.selectedLanguage.value)
+                            .sentences
+                            .filterDrawerModified,
+                        SentenceManager(
+                                currentLanguage:
+                                    homeController.selectedLanguage.value)
+                            .sentences
+                            .filterDrawerStartTime,
+                        SentenceManager(
+                                currentLanguage:
+                                    homeController.selectedLanguage.value)
+                            .sentences
+                            .filterDrawerDueTill,
+                        SentenceManager(
+                                currentLanguage:
+                                    homeController.selectedLanguage.value)
+                            .sentences
+                            .filterDrawerPriority,
+                        SentenceManager(
+                                currentLanguage:
+                                    homeController.selectedLanguage.value)
+                            .sentences
+                            .filterDrawerProject,
+                        SentenceManager(
+                                currentLanguage:
+                                    homeController.selectedLanguage.value)
+                            .sentences
+                            .filterDrawerTags,
+                        SentenceManager(
+                                currentLanguage:
+                                    homeController.selectedLanguage.value)
+                            .sentences
+                            .filterDrawerUrgency,
+                      ];
+
+                      // Extract current sort category and order from selectedSort
+                      String currentSort = homeController.selectedSort.value;
+                      String? selectedCategory;
+                      bool isAscending = false;
+                      bool isDescending = false;
+
+                      if (currentSort.isNotEmpty) {
+                        if (currentSort.endsWith('+')) {
+                          selectedCategory =
+                              currentSort.substring(0, currentSort.length - 1);
+                          isAscending = true;
+                        } else if (currentSort.endsWith('-')) {
+                          selectedCategory =
+                              currentSort.substring(0, currentSort.length - 1);
+                          isDescending = true;
+                        } else {
+                          selectedCategory = currentSort;
+                        }
+                      }
+
+                      // Validate selectedCategory is in sortOptions
+                      if (selectedCategory != null &&
+                          !sortOptions.contains(selectedCategory)) {
+                        selectedCategory = null;
+                      }
+
+                      return Column(
                         children: [
-                          for (var sort in [
-                            SentenceManager(
-                                    currentLanguage:
-                                        homeController.selectedLanguage.value)
-                                .sentences
-                                .filterDrawerCreated,
-                            SentenceManager(
-                                    currentLanguage:
-                                        homeController.selectedLanguage.value)
-                                .sentences
-                                .filterDrawerModified,
-                            SentenceManager(
-                                    currentLanguage:
-                                        homeController.selectedLanguage.value)
-                                .sentences
-                                .filterDrawerStartTime,
-                            SentenceManager(
-                                    currentLanguage:
-                                        homeController.selectedLanguage.value)
-                                .sentences
-                                .filterDrawerDueTill,
-                            SentenceManager(
-                                    currentLanguage:
-                                        homeController.selectedLanguage.value)
-                                .sentences
-                                .filterDrawerPriority,
-                            SentenceManager(
-                                    currentLanguage:
-                                        homeController.selectedLanguage.value)
-                                .sentences
-                                .filterDrawerProject,
-                            SentenceManager(
-                                    currentLanguage:
-                                        homeController.selectedLanguage.value)
-                                .sentences
-                                .filterDrawerTags,
-                            SentenceManager(
-                                    currentLanguage:
-                                        homeController.selectedLanguage.value)
-                                .sentences
-                                .filterDrawerUrgency,
-                          ])
-                            Obx(
-                              () => ChoiceChip(
-                                label: (homeController.selectedSort.value
-                                        .startsWith(sort))
-                                    ? Text(
-                                        homeController.selectedSort.value,
-                                      )
-                                    : Text(sort),
-                                selected: false,
-                                onSelected: (_) {
-                                  if (homeController.selectedSort == '$sort+') {
-                                    homeController.selectSort('$sort-');
-                                  } else if (homeController.selectedSort ==
-                                      '$sort-') {
-                                    homeController.selectSort(sort);
-                                  } else {
-                                    homeController.selectSort('$sort+');
+                          // Dropdown
+                          Container(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 12.0),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                  color: TaskWarriorColors.borderColor),
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                isExpanded: true,
+                                value: selectedCategory,
+                                hint: Text(
+                                  SentenceManager(
+                                          currentLanguage: homeController
+                                              .selectedLanguage.value)
+                                      .sentences
+                                      .filterDrawerSortBy,
+                                  style: TextStyle(
+                                    fontFamily: FontFamily.poppins,
+                                    fontSize: TaskWarriorFonts.fontSizeSmall,
+                                    color: tColors.primaryTextColor,
+                                  ),
+                                ),
+                                dropdownColor: tileColor,
+                                style: TextStyle(
+                                  fontFamily: FontFamily.poppins,
+                                  fontSize: TaskWarriorFonts.fontSizeSmall,
+                                  color: tColors.primaryTextColor,
+                                ),
+                                items: sortOptions.map((String option) {
+                                  return DropdownMenuItem<String>(
+                                    value: option,
+                                    child: Text(option),
+                                  );
+                                }).toList(),
+                                onChanged: (String? newValue) {
+                                  if (newValue != null) {
+                                    // Default to ascending when selecting a new category
+                                    homeController.selectSort('$newValue+');
                                   }
                                 },
-                                // labelStyle: GoogleFonts.poppins(
-                                //     color: AppSettings.isDarkMode
-                                //         ? TaskWarriorColors.black
-                                //         : TaskWarriorColors.white),
-                                // backgroundColor: AppSettings.isDarkMode
-                                //     ? TaskWarriorColors
-                                //         .kLightSecondaryBackgroundColor
-                                //     : TaskWarriorColors.ksecondaryBackgroundColor,
                               ),
-                            )
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          // Order buttons row
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              // Ascending button (+)
+                              Expanded(
+                                child: ElevatedButton(
+                                  onPressed: selectedCategory != null
+                                      ? () {
+                                          homeController
+                                              .selectSort('$selectedCategory+');
+                                        }
+                                      : null,
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: isAscending
+                                        ? tColors.primaryTextColor
+                                        : tileColor,
+                                    foregroundColor: isAscending
+                                        ? tileColor
+                                        : tColors.primaryTextColor,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                      side: BorderSide(
+                                          color: TaskWarriorColors.borderColor),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 12),
+                                  ),
+                                  child: Text(
+                                    '+',
+                                    style: TextStyle(
+                                      fontFamily: FontFamily.poppins,
+                                      fontSize: TaskWarriorFonts.fontSizeLarge,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              // Descending button (-)
+                              Expanded(
+                                child: ElevatedButton(
+                                  onPressed: selectedCategory != null
+                                      ? () {
+                                          homeController
+                                              .selectSort('$selectedCategory-');
+                                        }
+                                      : null,
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: isDescending
+                                        ? tColors.primaryTextColor
+                                        : tileColor,
+                                    foregroundColor: isDescending
+                                        ? tileColor
+                                        : tColors.primaryTextColor,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                      side: BorderSide(
+                                          color: TaskWarriorColors.borderColor),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 12),
+                                  ),
+                                  child: Text(
+                                    '-',
+                                    style: TextStyle(
+                                      fontFamily: FontFamily.poppins,
+                                      fontSize: TaskWarriorFonts.fontSizeLarge,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ],
+                      );
+                    }),
+                    const SizedBox(height: 12),
+                    // Clear sort button
+                    TextButton.icon(
+                      onPressed: () {
+                        homeController.selectSort('urgency+');
+                      },
+                      icon: Icon(
+                        Icons.clear,
+                        size: 18,
+                        color: tColors.primaryTextColor,
                       ),
+                      label: Text(
+                          SentenceManager(
+                                  currentLanguage:
+                                      homeController.selectedLanguage.value)
+                              .sentences
+                              .filterDrawerResetSort,
+                          style: TextStyle(
+                            fontFamily: FontFamily.poppins,
+                            fontSize: TaskWarriorFonts.fontSizeMedium,
+                            color: tColors.primaryTextColor,
+                          )),
                     ),
-                    const Divider(
-                      color: Color.fromARGB(0, 48, 46, 46),
-                    ),
-                    Container(
-                      width: 200,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        // color: AppSettings.isDarkMode
-                        //     ? TaskWarriorColors.kLightSecondaryBackgroundColor
-                        //     : TaskWarriorColors.ksecondaryBackgroundColor,
-                      ),
-                      child: TextButton(
-                        onPressed: () {
-                          if (homeController.selectedSort.value.endsWith('+') ||
-                              homeController.selectedSort.value.endsWith('-')) {
-                            homeController.selectSort(
-                                homeController.selectedSort.value.substring(
-                                    0,
-                                    homeController.selectedSort.value.length -
-                                        1));
-                          }
-                        },
-                        child: Text(
-                            SentenceManager(
-                                    currentLanguage:
-                                        homeController.selectedLanguage.value)
-                                .sentences
-                                .filterDrawerResetSort,
-                            // style: GoogleFonts.poppins(
-                            //     fontSize: TaskWarriorFonts.fontSizeMedium,
-                            //     color: AppSettings.isDarkMode
-                            //         ? TaskWarriorColors.kLightSecondaryTextColor
-                            //         : TaskWarriorColors.ksecondaryTextColor),
-                            style: TextStyle(
-                              fontFamily: FontFamily.poppins,
-                              fontSize: TaskWarriorFonts.fontSizeMedium,
-                              color: tColors.primaryTextColor,
-                            )),
-                      ),
-                    ),
-                    const Divider(
-                      color: Color.fromARGB(0, 48, 46, 46),
-                    ),
+                    const SizedBox(height: 8),
                   ],
                 ),
               )
