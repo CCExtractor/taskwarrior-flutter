@@ -368,6 +368,9 @@ class EnglishSentences extends Sentences {
   @override
   String get no => 'No';
   @override
+  String get taskUpdatedSuccessfully => 'Task updated Successfully';
+  
+  @override
   String get reviewChanges => 'Review Changes';
   @override
   String get oldChanges => 'Old';

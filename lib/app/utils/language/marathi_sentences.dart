@@ -383,7 +383,9 @@ class MarathiSentences extends Sentences {
   String get oldChanges => 'जुने';
   @override
   String get newChanges => 'नवीन';
-
+  @override
+  String get taskUpdatedSuccessfully => 'कार्य यशस्वीपणे अद्ययावत झाले आहे';
+  
   @override
   String get tags => 'टॅग्स';
   @override

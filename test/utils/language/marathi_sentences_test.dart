@@ -10,6 +10,7 @@ void main() {
     expect(marathi.homePageLastModified, 'शेवटचा बदल');
     expect(marathi.homePageDue, 'द्यावे');
     expect(marathi.homePageTaskWarriorNotConfigured, 'TaskServer संरचीत नाही');
+    expect(marathi.taskUpdatedSuccessfully, 'कार्य यशस्वीपणे अद्ययावत झाले आहे');
     expect(marathi.homePageSetup, 'सेटअप');
     expect(marathi.homePageFilter, 'फिल्टर');
     expect(marathi.homePageMenu, 'मेनू');

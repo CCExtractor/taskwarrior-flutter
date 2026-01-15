@@ -383,7 +383,9 @@ class SpanishSentences extends Sentences {
   String get oldChanges => 'Antiguo';
   @override
   String get newChanges => 'Nuevo';
-
+  @override
+  String get taskUpdatedSuccessfully => 'La tarea se actualizó correctamente';
+  
   @override
   String get tags => 'Etiquetas';
   @override

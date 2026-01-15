@@ -24,6 +24,7 @@ void main() {
         expect(sentences.homePageLastModified, isA<String>());
         expect(sentences.homePageDue, isA<String>());
         expect(sentences.homePageTaskWarriorNotConfigured, isA<String>());
+        expect(sentences.taskUpdatedSuccessfully, isA<String>());
         expect(sentences.homePageSetup, isA<String>());
         expect(sentences.homePageFilter, isA<String>());
         expect(sentences.homePageMenu, isA<String>());

@@ -11,6 +11,7 @@ void main() {
     expect(bengali.homePageDue, 'জরুরি');
     expect(bengali.homePageTaskWarriorNotConfigured,
         'TaskServer কনফিগার করা হয়নি');
+    expect(bengali.taskUpdatedSuccessfully, 'কাজটি সফলভাবে আপডেট হয়েছে');
     expect(bengali.homePageSetup, 'সেটআপ');
     expect(bengali.homePageFilter, 'ফিল্টার');
     expect(bengali.homePageMenu, 'মেনু');

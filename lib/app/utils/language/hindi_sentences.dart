@@ -378,6 +378,8 @@ class HindiSentences extends Sentences {
   String get oldChanges => 'पुराना';
   @override
   String get newChanges => 'नया';
+  @override
+  String get taskUpdatedSuccessfully => 'कार्य सफलतापूर्वक अपडेट हो गया है';
 
   @override
   String get tags => 'टैग';

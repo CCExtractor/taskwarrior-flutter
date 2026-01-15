@@ -189,6 +189,7 @@ abstract class Sentences {
   String get saveChangesConfirmation;
   String get yes;
   String get no;
+  String get taskUpdatedSuccessfully;
   String get reviewChanges;
   String get oldChanges;
   String get newChanges;

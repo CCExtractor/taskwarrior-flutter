@@ -11,6 +11,8 @@ void main() {
     expect(hindi.homePageDue, 'देय');
     expect(
         hindi.homePageTaskWarriorNotConfigured, 'TaskServer कॉन्फ़िगर नहीं है');
+    expect(
+        hindi.taskUpdatedSuccessfully, 'कार्य सफलतापूर्वक अपडेट हो गया है');
     expect(hindi.homePageSetup, 'सेटअप');
     expect(hindi.homePageFilter, 'फ़िल्टर');
     expect(hindi.homePageMenu, 'मेन्यू');

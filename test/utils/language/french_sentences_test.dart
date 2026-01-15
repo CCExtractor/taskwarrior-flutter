@@ -10,6 +10,7 @@ void main() {
     expect(french.homePageLastModified, 'Dernière modification');
     expect(french.homePageDue, 'Échéance');
     expect(french.homePageTaskWarriorNotConfigured, 'TaskServer non configuré');
+    expect(french.taskUpdatedSuccessfully, 'La tâche a été mise à jour avec succès');
     expect(french.homePageSetup, 'Configuration');
     expect(french.homePageFilter, 'Filtre');
     expect(french.homePageMenu, 'Menu');

@@ -383,7 +383,9 @@ class BengaliSentences extends Sentences {
   String get oldChanges => 'পুরানো';
   @override
   String get newChanges => 'নতুন';
-
+  @override
+  String get taskUpdatedSuccessfully => 'কাজটি সফলভাবে আপডেট হয়েছে';
+  
   @override
   String get tags => 'ট্যাগ';
   @override

@@ -28,12 +28,12 @@ class DetailRouteView extends GetView<DetailRouteController> {
     return WillPopScope(
       onWillPop: () async {
         if (!controller.onEdit.value) {
-          debugPrint(
-              'DetailRouteView: No edits made, navigating back without prompt.');
+          // debugPrint(
+          // 'DetailRouteView: No edits made, navigating back without prompt.');
           // Get.offAll(() => const HomeView());
-          Navigator.of(context).pop();
+          // Navigator.of(context).pop();
           // Get.toNamed(Routes.HOME);
-          return false;
+          return true;
         }
         debugPrint(
             'DetailRouteView: Unsaved edits detected, prompting user for action.');
@@ -54,16 +54,15 @@ class DetailRouteView extends GetView<DetailRouteController> {
               actions: [
                 // YES → save and pop
                 TextButton(
-                  onPressed: () {
-                    // Get.back(); // Close the dialog first
-                    // // Wait for dialog to fully close before showing snackbar
-                    // Future.delayed(const Duration(milliseconds: 100), () {
-                    //   controller.saveChanges();
-                    // });
+                  onPressed: () =>
+                      // Get.back(); // Close the dialog first
+                      // // Wait for dialog to fully close before showing snackbar
+                      // Future.delayed(const Duration(milliseconds: 100), () {
+                      //   controller.saveChanges();
+                      // });
 
-                    controller.saveChanges();
-                    Navigator.of(context).pop(true);
-                  },
+                      // controller.saveChanges();
+                      Navigator.pop(context, true),
                   child: Text(
                     SentenceManager(
                             currentLanguage: AppSettings.selectedLanguage)
@@ -77,10 +76,9 @@ class DetailRouteView extends GetView<DetailRouteController> {
 
                 // NO → discard and pop
                 TextButton(
-                  onPressed: () {
-                    // Get.offAll(() => const HomeView());
-                    Navigator.of(context).pop(false);
-                  },
+                  onPressed: () =>
+                      // Get.offAll(() => const HomeView());
+                      Navigator.pop(context, false),
                   child: Text(
                     SentenceManager(
                             currentLanguage: AppSettings.selectedLanguage)
@@ -94,9 +92,7 @@ class DetailRouteView extends GetView<DetailRouteController> {
 
                 // CANCEL → stay on page
                 TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(null);
-                  },
+                  onPressed: () => Navigator.pop(context, null),
                   child: Text(
                     SentenceManager(
                             currentLanguage: AppSettings.selectedLanguage)
@@ -114,6 +110,27 @@ class DetailRouteView extends GetView<DetailRouteController> {
         if (save == null) {
           // Cancel → stay
           return false;
+        }
+        if (save == true) {
+          controller.saveChanges();
+          controller.onEdit.value = false;
+
+          Future.microtask(() {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: tColors.secondaryBackgroundColor,
+                content: Text(
+                   SentenceManager(
+                    currentLanguage: 
+                    AppSettings.selectedLanguage,
+                   ).sentences
+                    .taskUpdatedSuccessfully,
+                    style: TextStyle(
+                      color: tColors.primaryTextColor,
+                    )),
+              ),
+            );
+          });
         }
         // Yes (true) or No (false) → both allow popping the screen
         return true;

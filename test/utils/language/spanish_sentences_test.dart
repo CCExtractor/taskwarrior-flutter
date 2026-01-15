@@ -11,6 +11,7 @@ void main() {
     expect(spanish.homePageDue, 'Vencimiento');
     expect(
         spanish.homePageTaskWarriorNotConfigured, 'TaskServer no configurado');
+    expect(spanish.taskUpdatedSuccessfully, 'La tarea se actualizó correctamente');
     expect(spanish.homePageSetup, 'Configuración');
     expect(spanish.homePageFilter, 'Filtro');
     expect(spanish.homePageMenu, 'Menú');

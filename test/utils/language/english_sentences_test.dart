@@ -11,6 +11,8 @@ void main() {
     expect(english.homePageDue, 'Due');
     expect(english.homePageTaskWarriorNotConfigured,
         'TaskServer is not configured');
+    expect(english.taskUpdatedSuccessfully,
+        'TaskServer is not configured');
     expect(english.homePageSetup, 'Setup');
     expect(english.homePageFilter, 'Filter');
     expect(english.homePageMenu, 'Menu');

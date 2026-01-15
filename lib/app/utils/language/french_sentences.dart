@@ -385,7 +385,9 @@ class FrenchSentences extends Sentences {
   String get oldChanges => 'Ancien';
   @override
   String get newChanges => 'Nouveau';
-
+  @override 
+  String get taskUpdatedSuccessfully => 'La tâche a été mise à jour avec succès';
+  
   @override
   String get tags => 'Tags';
   @override
