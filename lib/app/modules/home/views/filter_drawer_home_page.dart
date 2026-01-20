@@ -53,12 +53,6 @@ class FilterDrawer extends StatelessWidget {
                                 homeController.selectedLanguage.value)
                         .sentences
                         .filterDrawerApplyFilters,
-                    // style: GoogleFonts.poppins(
-                    //     fontWeight: TaskWarriorFonts.bold,
-                    //     color: (AppSettings.isDarkMode
-                    //         ? TaskWarriorColors.kprimaryTextColor
-                    //         : TaskWarriorColors.kLightPrimaryTextColor),
-                    //     fontSize: TaskWarriorFonts.fontSizeExtraLarge),
                     style: TextStyle(
                       fontFamily: FontFamily.poppins,
                       fontWeight: TaskWarriorFonts.bold,
@@ -72,8 +66,6 @@ class FilterDrawer extends StatelessWidget {
                 color: Color.fromARGB(0, 48, 46, 46),
               ),
               Container(
-                // width: MediaQuery.of(context).size.width * 1,
-                // padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: tileColor,
                   borderRadius: BorderRadius.circular(8),
@@ -251,13 +243,6 @@ class FilterDrawer extends StatelessWidget {
                                       homeController.selectedLanguage.value)
                               .sentences
                               .filterDrawerFilterTagBy,
-                          // style: GoogleFonts.poppins(
-                          //     color: (AppSettings.isDarkMode
-                          //         ? TaskWarriorColors.kprimaryTextColor
-                          //         : TaskWarriorColors.kLightSecondaryTextColor),
-                          //     //
-                          //     fontSize: TaskWarriorFonts.fontSizeLarge),
-                          //textAlign: TextAlign.right,
                           style: TextStyle(
                             fontFamily: FontFamily.poppins,
                             fontSize: TaskWarriorFonts.fontSizeMedium,
@@ -314,7 +299,7 @@ class FilterDrawer extends StatelessWidget {
                           )),
                     ),
                     const SizedBox(height: 12),
-                    // Dropdown and order buttons row
+                    // Dropdown and toggle switch row
                     Obx(() {
                       final sortOptions = [
                         SentenceManager(
@@ -363,7 +348,6 @@ class FilterDrawer extends StatelessWidget {
                       String currentSort = homeController.selectedSort.value;
                       String? selectedCategory;
                       bool isAscending = false;
-                      bool isDescending = false;
 
                       if (currentSort.isNotEmpty) {
                         if (currentSort.endsWith('+')) {
@@ -373,7 +357,7 @@ class FilterDrawer extends StatelessWidget {
                         } else if (currentSort.endsWith('-')) {
                           selectedCategory =
                               currentSort.substring(0, currentSort.length - 1);
-                          isDescending = true;
+                          isAscending = false;
                         } else {
                           selectedCategory = currentSort;
                         }
@@ -385,126 +369,92 @@ class FilterDrawer extends StatelessWidget {
                         selectedCategory = null;
                       }
 
-                      return Column(
+                      return Row(
                         children: [
                           // Dropdown
-                          Container(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 12.0),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(
-                                  color: TaskWarriorColors.borderColor),
-                            ),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
-                                isExpanded: true,
-                                value: selectedCategory,
-                                hint: Text(
-                                  SentenceManager(
-                                          currentLanguage: homeController
-                                              .selectedLanguage.value)
-                                      .sentences
-                                      .filterDrawerSortBy,
+                          Expanded(
+                            child: Container(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12.0),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                    color: TaskWarriorColors.borderColor),
+                              ),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<String>(
+                                  isExpanded: true,
+                                  value: selectedCategory,
+                                  hint: Text(
+                                    SentenceManager(
+                                            currentLanguage: homeController
+                                                .selectedLanguage.value)
+                                        .sentences
+                                        .filterDrawerSortBy,
+                                    style: TextStyle(
+                                      fontFamily: FontFamily.poppins,
+                                      fontSize: TaskWarriorFonts.fontSizeSmall,
+                                      color: tColors.primaryTextColor,
+                                    ),
+                                  ),
+                                  dropdownColor: tileColor,
                                   style: TextStyle(
                                     fontFamily: FontFamily.poppins,
                                     fontSize: TaskWarriorFonts.fontSizeSmall,
                                     color: tColors.primaryTextColor,
                                   ),
+                                  items: sortOptions.map((String option) {
+                                    return DropdownMenuItem<String>(
+                                      value: option,
+                                      child: Text(option),
+                                    );
+                                  }).toList(),
+                                  onChanged: (String? newValue) {
+                                    if (newValue != null) {
+                                      // Default to ascending when selecting a new category
+                                      homeController.selectSort('$newValue+');
+                                    }
+                                  },
                                 ),
-                                dropdownColor: tileColor,
-                                style: TextStyle(
-                                  fontFamily: FontFamily.poppins,
-                                  fontSize: TaskWarriorFonts.fontSizeSmall,
-                                  color: tColors.primaryTextColor,
-                                ),
-                                items: sortOptions.map((String option) {
-                                  return DropdownMenuItem<String>(
-                                    value: option,
-                                    child: Text(option),
-                                  );
-                                }).toList(),
-                                onChanged: (String? newValue) {
-                                  if (newValue != null) {
-                                    // Default to ascending when selecting a new category
-                                    homeController.selectSort('$newValue+');
-                                  }
-                                },
                               ),
                             ),
                           ),
-                          const SizedBox(height: 12),
-                          // Order buttons row
+                          const SizedBox(width: 12),
+                          // Toggle switch with + and - labels
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              // Ascending button (+)
-                              Expanded(
-                                child: ElevatedButton(
-                                  onPressed: selectedCategory != null
-                                      ? () {
+                              Text(
+                                '+',
+                                style: TextStyle(
+                                  fontFamily: FontFamily.poppins,
+                                  fontSize: TaskWarriorFonts.fontSizeMedium,
+                                  fontWeight: FontWeight.bold,
+                                  color: tColors.primaryTextColor,
+                                ),
+                              ),
+                              Switch(
+                                value: !isAscending,
+                                onChanged: selectedCategory != null
+                                    ? (bool value) {
+                                        if (value) {
+                                          // Switch to descending (-)
+                                          homeController
+                                              .selectSort('$selectedCategory-');
+                                        } else {
+                                          // Switch to ascending (+)
                                           homeController
                                               .selectSort('$selectedCategory+');
                                         }
-                                      : null,
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: isAscending
-                                        ? tColors.primaryTextColor
-                                        : tileColor,
-                                    foregroundColor: isAscending
-                                        ? tileColor
-                                        : tColors.primaryTextColor,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                      side: BorderSide(
-                                          color: TaskWarriorColors.borderColor),
-                                    ),
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 12),
-                                  ),
-                                  child: Text(
-                                    '+',
-                                    style: TextStyle(
-                                      fontFamily: FontFamily.poppins,
-                                      fontSize: TaskWarriorFonts.fontSizeLarge,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
+                                      }
+                                    : null,
                               ),
-                              const SizedBox(width: 12),
-                              // Descending button (-)
-                              Expanded(
-                                child: ElevatedButton(
-                                  onPressed: selectedCategory != null
-                                      ? () {
-                                          homeController
-                                              .selectSort('$selectedCategory-');
-                                        }
-                                      : null,
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: isDescending
-                                        ? tColors.primaryTextColor
-                                        : tileColor,
-                                    foregroundColor: isDescending
-                                        ? tileColor
-                                        : tColors.primaryTextColor,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                      side: BorderSide(
-                                          color: TaskWarriorColors.borderColor),
-                                    ),
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 12),
-                                  ),
-                                  child: Text(
-                                    '-',
-                                    style: TextStyle(
-                                      fontFamily: FontFamily.poppins,
-                                      fontSize: TaskWarriorFonts.fontSizeLarge,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
+                              Text(
+                                '-',
+                                style: TextStyle(
+                                  fontFamily: FontFamily.poppins,
+                                  fontSize: TaskWarriorFonts.fontSizeMedium,
+                                  fontWeight: FontWeight.bold,
+                                  color: tColors.primaryTextColor,
                                 ),
                               ),
                             ],
