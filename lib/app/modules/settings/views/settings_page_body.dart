@@ -76,39 +76,79 @@ class SettingsPageBody extends StatelessWidget {
               context,
               tColors,
               [
-                Obx(
-                  () => SettingsPageListTile(
-                    title: SentenceManager(
-                            currentLanguage: controller.selectedLanguage.value)
-                        .sentences
-                        .settingsPageSyncOnStartTitle,
-                    subTitle: SentenceManager(
-                            currentLanguage: controller.selectedLanguage.value)
-                        .sentences
-                        .settingsPageSyncOnStartDescription,
-                    trailing: SettingsPageOnTaskStartListTileTrailing(
-                      controller: controller,
+                Obx(() {
+                  // 1. Check if TaskServer is configured
+                  final bool isEnabled = controller.taskchampion.value;
+                  // 2. Wrap in GestureDetector to handle clicks on disabled state
+                  return GestureDetector(
+                    onTap: !isEnabled
+                        ? () => ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content: Text('Please configure a TaskServer first'),
+                                  backgroundColor: tColors.secondaryBackgroundColor),
+                            )
+                        : null,
+                    child: Opacity(
+                      // 3. Dim the UI if disabled
+                      opacity: isEnabled ? 1.0 : 0.5,
+                      child: AbsorbPointer(
+                        // 4. Block interaction if disabled
+                        absorbing: !isEnabled,
+                        child: SettingsPageListTile(
+                          title: SentenceManager(
+                                  currentLanguage:
+                                      controller.selectedLanguage.value)
+                              .sentences
+                              .settingsPageSyncOnStartTitle,
+                          subTitle: SentenceManager(
+                                  currentLanguage:
+                                      controller.selectedLanguage.value)
+                              .sentences
+                              .settingsPageSyncOnStartDescription,
+                          trailing: SettingsPageOnTaskStartListTileTrailing(
+                            controller: controller,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                }),
                 Divider(
                     height: 1,
                     color: tColors.primaryDisabledTextColor?.withOpacity(0.1)),
-                Obx(
-                  () => SettingsPageListTile(
-                    title: SentenceManager(
-                            currentLanguage: controller.selectedLanguage.value)
-                        .sentences
-                        .settingsPageEnableSyncOnTaskCreateTitle,
-                    subTitle: SentenceManager(
-                            currentLanguage: controller.selectedLanguage.value)
-                        .sentences
-                        .settingsPageEnableSyncOnTaskCreateDescription,
-                    trailing: SettingsPageOnTaskCreateListTileTrailing(
-                      controller: controller,
+                Obx(() {
+                  final bool isEnabled = controller.taskchampion.value;
+                  return GestureDetector(
+                    onTap: !isEnabled
+                        ? () => ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content: Text('Please configure a TaskServer first'),
+                                  backgroundColor: tColors.secondaryBackgroundColor),
+                            )
+                        : null,
+                    child: Opacity(
+                      opacity: isEnabled ? 1.0 : 0.5,
+                      child: AbsorbPointer(
+                        absorbing: !isEnabled,
+                        child: SettingsPageListTile(
+                          title: SentenceManager(
+                                  currentLanguage:
+                                      controller.selectedLanguage.value)
+                              .sentences
+                              .settingsPageEnableSyncOnTaskCreateTitle,
+                          subTitle: SentenceManager(
+                                  currentLanguage:
+                                      controller.selectedLanguage.value)
+                              .sentences
+                              .settingsPageEnableSyncOnTaskCreateDescription,
+                          trailing: SettingsPageOnTaskCreateListTileTrailing(
+                            controller: controller,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                }),
               ],
             ),
             const SizedBox(height: 16),

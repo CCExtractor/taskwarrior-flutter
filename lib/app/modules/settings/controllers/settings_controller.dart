@@ -24,6 +24,9 @@ import 'package:taskwarrior/app/v3/db/task_database.dart';
 
 class SettingsController extends GetxController {
   RxBool isMovingDirectory = false.obs;
+  RxBool taskchampion = false.obs;
+  RxBool taskReplica = false.obs;
+  RxBool serverCertExists = false.obs;
 
   Rx<SupportedLanguage> selectedLanguage = AppSettings.selectedLanguage.obs;
   RxString baseDirectory = "".obs;
@@ -218,7 +221,6 @@ class SettingsController extends GetxController {
   RxBool isSyncOnTaskCreateActivel = false.obs;
   RxBool delaytask = false.obs;
   RxBool change24hr = false.obs;
-  RxBool taskchampion = false.obs;
   RxBool isDarkModeOn = false.obs;
 
   void initDarkMode() {
@@ -227,15 +229,38 @@ class SettingsController extends GetxController {
 
   @override
   void onInit() async {
+    super.onInit();
+    baseDirectory.value = await getBaseDirectory();
+    initDarkMode();
+    // 1. Check status immediately
+    await updateSyncStatus();
+    // 2. Re-check status whenever the Profile changes
+    ever(Get.find<SplashController>().currentProfile, (_) async {
+      await updateSyncStatus();
+    });
+  }
+
+  Future<void> updateSyncStatus() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+    // Load Sync Settings
     isSyncOnStartActivel.value = prefs.getBool('sync-onStart') ?? false;
     isSyncOnTaskCreateActivel.value =
         prefs.getBool('sync-OnTaskCreate') ?? false;
     delaytask.value = prefs.getBool('delaytask') ?? false;
     change24hr.value = prefs.getBool('24hourformate') ?? false;
+    // Load Profile Modes
     taskchampion.value = prefs.getBool('settings_taskc') ?? false;
-    initDarkMode();
-    baseDirectory.value = await getBaseDirectory();
-    super.onInit();
+    taskReplica.value = prefs.getBool('settings_taskr_repl') ?? false;
+    // Load Legacy Certs status safely
+    if (Get.isRegistered<HomeController>()) {
+      try {
+        serverCertExists.value =
+            Get.find<HomeController>().serverCertExists.value;
+      } catch (e) {
+        serverCertExists.value = false;
+      }
+    } else {
+      serverCertExists.value = false;
+    }
   }
 }
