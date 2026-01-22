@@ -27,10 +27,6 @@ class ReportsHomeReplica extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    // You might want to call initReportsTour and showReportsTour only once
-    // or manage a separate tour for the Replica section if needed.
-    // reportsController.initReportsTour();
-    // reportsController.showReportsTour(context);
 
     return FutureBuilder<List<TaskForReplica>>(
       future: fetchTasks(),

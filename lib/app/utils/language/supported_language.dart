@@ -24,8 +24,6 @@ extension SupportedLanguageExtension on SupportedLanguage {
         return 'es';
       case SupportedLanguage.bengali:
         return 'bn';
-      default:
-        return '';
     }
   }
 

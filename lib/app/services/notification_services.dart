@@ -58,8 +58,8 @@ class NotificationService {
     DateTime dateTime = DateTime.now();
     tz.initializeTimeZones();
     if (kDebugMode) {
-      print("date and time are:-$dateTime");
-      print("date and time are:-$dtb");
+      debugPrint("date and time are:-$dateTime");
+      debugPrint("date and time are:-$dtb");
     }
     final tz.TZDateTime scheduledAt =
         tz.TZDateTime.from(dtb.add(const Duration(minutes: 0)), tz.local);
@@ -109,16 +109,17 @@ class NotificationService {
             androidScheduleMode: AndroidScheduleMode.alarmClock)
         .then((value) {
       if (kDebugMode) {
-        print('Notification scheduled successfully');
+        debugPrint('Notification scheduled successfully');
       }
     }).catchError((error) {
       if (kDebugMode) {
-        print('Error scheduling notification: $error');
+        debugPrint('Error scheduling notification: $error');
       }
     });
 
     if (kDebugMode) {
-      print(scheduledAt.day * 100 + scheduledAt.hour * 10 + scheduledAt.minute);
+      debugPrint(
+          '${scheduledAt.day * 100 + scheduledAt.hour * 10 + scheduledAt.minute}');
     }
   }
 

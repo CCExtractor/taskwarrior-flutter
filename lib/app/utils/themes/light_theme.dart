@@ -3,7 +3,6 @@ import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 
 ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
-  dialogBackgroundColor: TaskWarriorColors.kLightDialogBackGroundColor,
   colorScheme:  ColorScheme(
       brightness: Brightness.light,
       primary: TaskWarriorColors.black,
@@ -20,5 +19,5 @@ ThemeData lightTheme = ThemeData(
   ),
   extensions: [
     TaskWarriorColors.lightTheme
-  ]
+  ], dialogTheme: DialogThemeData(backgroundColor: TaskWarriorColors.kLightDialogBackGroundColor)
 );

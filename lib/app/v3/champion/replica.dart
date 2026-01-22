@@ -1,14 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:collection';
-
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:taskwarrior/app/models/models.dart';
 import 'package:taskwarrior/app/utils/taskchampion/credentials_storage.dart';
 import 'package:taskwarrior/app/v3/champion/models/task_for_replica.dart';
-import 'package:taskwarrior/app/v3/models/task.dart';
 import 'package:taskwarrior/rust_bridge/api.dart';
 import 'package:uuid/v4.dart';
 

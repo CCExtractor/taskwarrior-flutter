@@ -29,7 +29,8 @@ class ManageTaskServerPageAppBar extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return AppBar(
       backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
       titleSpacing: 0,
@@ -178,7 +179,6 @@ class ManageTaskServerPageAppBar extends StatelessWidget
                         ),
                       ),
                       onPressed: () {
-                        // Navigator.of(context).pop();
                         Get.back();
                       },
                       child: Text(
@@ -196,7 +196,6 @@ class ManageTaskServerPageAppBar extends StatelessWidget
               );
             } on Exception catch (e, trace) {
               // Dismiss the loading dialog
-              // Navigator.of(context).pop();
               Get.back();
 
               //Displaying Error message.

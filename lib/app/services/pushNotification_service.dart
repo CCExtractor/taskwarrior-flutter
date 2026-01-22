@@ -8,11 +8,6 @@ import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
 
-//import 'package:flutter_dotenv/flutter_dotenv.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
-
-//var serverUrl = dotenv.env['SERVER_URL'];
-
 Future<PushNotificationResponse> createPushNotification(
     String id, String token) async {
   String uuid = UniqueKey().toString();
@@ -31,7 +26,7 @@ Future<PushNotificationResponse> createPushNotification(
   );
 
   if (response.statusCode == 200) {
-    print(response.body);
+    debugPrint(response.body);
     return PushNotificationResponse.fromJson(jsonDecode(response.body));
   } else if (response.statusCode == 422) {
     throw ('Unable to push notification');

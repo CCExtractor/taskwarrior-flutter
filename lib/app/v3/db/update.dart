@@ -5,7 +5,6 @@ import 'package:taskwarrior/app/v3/net/add_task.dart';
 import 'package:taskwarrior/app/v3/net/complete.dart';
 import 'package:taskwarrior/app/v3/net/delete.dart';
 import 'package:taskwarrior/app/v3/net/modify.dart';
-import 'package:timezone/timezone.dart';
 
 Future<void> updateTasksInDatabase(List<TaskForC> tasks) async {
   debugPrint(

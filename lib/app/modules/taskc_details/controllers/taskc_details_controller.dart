@@ -149,8 +149,9 @@ class TaskcDetailsController extends GetxController {
   String initialTaskUuidDisplay() {
     try {
       if (initialTask == null) return '-';
-      if (initialTask is TaskForC)
+      if (initialTask is TaskForC) {
         return (initialTask.uuid ?? '-')?.toString() ?? '-';
+      }
       if (initialTask is TaskForReplica) return initialTask.uuid ?? '-';
       return '-';
     } catch (_) {

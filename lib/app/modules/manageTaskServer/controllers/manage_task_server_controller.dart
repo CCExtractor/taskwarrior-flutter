@@ -161,7 +161,6 @@ class ManageTaskServerController extends GetxController {
           '${credentials!.org}/${credentials!.user}/$key';
 
       if (credentialsString!.value.isNotEmpty && server.toString().isNotEmpty) {
-        //print(credentialsString.value);
         taskrcContentController.text =
             "taskd.server=$server\ntaskd.credentials=${credentials!.org}/${credentials!.user}/$key";
 
@@ -230,7 +229,7 @@ class ManageTaskServerController extends GetxController {
               else
                 {
                   // ignore: avoid_print
-                  print('User has seen this page'),
+                  debugPrint('User has seen this page'),
                 }
             });
       },

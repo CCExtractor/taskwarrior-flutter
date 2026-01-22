@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/add_task_dialog_utils.dart';
-import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 class AddTaskDatePickerInput extends StatefulWidget {
   final Function(List<DateTime?>)? onDateChanges;
@@ -11,10 +10,10 @@ class AddTaskDatePickerInput extends StatefulWidget {
       {super.key, this.onDateChanges, this.onlyDueDate = false});
 
   @override
-  _AddTaskDatePickerInputState createState() => _AddTaskDatePickerInputState();
+  AddTaskDatePickerInputState createState() => AddTaskDatePickerInputState();
 }
 
-class _AddTaskDatePickerInputState extends State<AddTaskDatePickerInput> {
+class AddTaskDatePickerInputState extends State<AddTaskDatePickerInput> {
   final List<DateTime?> _selectedDates = List<DateTime?>.filled(4, null);
   final List<String> dateLabels = ['Due', 'Wait', 'Sched', 'Until'];
   final List<TextEditingController> _controllers =
@@ -106,6 +105,7 @@ class _AddTaskDatePickerInputState extends State<AddTaskDatePickerInput> {
           firstDate: DateTime.now(),
           lastDate: DateTime(2101),
         );
+        if (!context.mounted) return;
         final TimeOfDay? time = await showTimePicker(
           context: context,
           initialTime: TimeOfDay.now(),

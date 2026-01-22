@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:taskwarrior/app/models/chart.dart';
 import 'package:taskwarrior/app/modules/reports/views/common_chart_indicator.dart';

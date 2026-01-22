@@ -29,7 +29,6 @@ class DetailRouteController extends GetxController {
     super.onInit();
     var arguments = Get.arguments;
     uuid = arguments[1] as String;
-    // uuid = Get.arguments['uuid'];
     var storageWidget = Get.find<HomeController>();
     modify = Modify(
       getTask: storageWidget.getTask,
@@ -192,7 +191,8 @@ class DetailRouteController extends GetxController {
       const Duration(milliseconds: 500),
       () {
         SaveTourStatus.getDetailsTourStatus().then((value) => {
-              if (!value) {tutorialCoachMark.show(context: context)}
+              if (!value && context.mounted)
+                {tutorialCoachMark.show(context: context)}
             });
       },
     );

@@ -28,7 +28,6 @@ class ProfileController extends GetxController {
     tutorialCoachMark = TutorialCoachMark(
       targets: addProfilePage(
         currentProfileKey: currentProfileKey,
-
         addNewProfileKey: addNewProfileKey,
         manageSelectedProfileKey: manageSelectedProfileKey,
       ),
@@ -47,14 +46,14 @@ class ProfileController extends GetxController {
       const Duration(milliseconds: 500),
       () {
         SaveTourStatus.getProfileTourStatus().then((value) => {
-              if (value == false)
+              if (value == false && context.mounted)
                 {
                   tutorialCoachMark.show(context: context),
                 }
               else
                 {
                   // ignore: avoid_print
-                  print('User has seen this page'),
+                  debugPrint('User has seen this page'),
                 }
             });
       },

@@ -14,7 +14,6 @@ import 'package:taskwarrior/app/models/storage.dart';
 import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
 import 'package:taskwarrior/app/modules/splash/controllers/splash_controller.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/urgency.dart';
-// import 'package:taskwarrior/widgets/taskfunctions/datetime_differences.dart';
 
 class WidgetController extends GetxController {
   final HomeController storageWidget = Get.find<HomeController>();
@@ -27,8 +26,6 @@ class WidgetController extends GetxController {
 
   void fetchAllData() async {
     if (Platform.isAndroid || Platform.isIOS) {
-      // storageWidget = StorageWidget.of(context!); // Use Get.context from GetX
-      // var currentProfile = ProfilesWidget.of(context!).currentProfile;
       var currentProfile = Get.find<SplashController>().currentProfile.value;
       baseDirectory = Get.find<SplashController>().baseDirectory();
       storage =

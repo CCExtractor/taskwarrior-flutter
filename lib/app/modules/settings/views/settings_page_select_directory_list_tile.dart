@@ -128,8 +128,6 @@ class SettingsPageSelectDirectoryListTile extends StatelessWidget {
                                     Navigator.pop(context);
                                     controller.isMovingDirectory.value = true;
 
-                                    // InheritedProfiles profilesWidget =
-                                    //     ProfilesWidget.of(context);
                                     var profilesWidget =
                                         Get.find<SplashController>();
 
