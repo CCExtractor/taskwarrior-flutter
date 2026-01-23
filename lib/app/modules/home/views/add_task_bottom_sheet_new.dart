@@ -96,7 +96,7 @@ class AddTaskBottomSheet extends StatelessWidget {
                       padding: const EdgeInsets.all(padding),
                       child: TextFormField(
                         controller: homeController.namecontroller,
-                        validator: (value) => value!.isEmpty
+                        validator: (value) => value!.trim().isEmpty
                             ? SentenceManager(
                                     currentLanguage:
                                         homeController.selectedLanguage.value)
@@ -317,7 +317,7 @@ class AddTaskBottomSheet extends StatelessWidget {
     if (homeController.formKey.currentState!.validate()) {
       debugPrint("tags ${homeController.tags}");
       var task = TaskForC(
-          description: homeController.namecontroller.text,
+          description: homeController.namecontroller.text.trim(),
           status: 'pending',
           priority: homeController.priority.value,
           entry: DateTime.now().toIso8601String(),
@@ -365,7 +365,7 @@ class AddTaskBottomSheet extends StatelessWidget {
   void onSaveButtonClicked(BuildContext context) async {
     if (homeController.formKey.currentState!.validate()) {
       try {
-        var task = taskParser(homeController.namecontroller.text)
+        var task = taskParser(homeController.namecontroller.text.trim())
             .rebuild((b) =>
                 b..due = getDueDate(homeController.selectedDates)?.toUtc())
             .rebuild((p) => p..priority = homeController.priority.value)
@@ -451,7 +451,7 @@ class AddTaskBottomSheet extends StatelessWidget {
     if (homeController.formKey.currentState!.validate()) {
       try {
         await Replica.addTaskToReplica(HashMap<String, dynamic>.from({
-          "description": homeController.namecontroller.text,
+          "description": homeController.namecontroller.text.trim(),
           "due": getDueDate(homeController.selectedDates)?.toUtc(),
           "priority": homeController.priority.value,
           "project": homeController.projectcontroller.text != ""
