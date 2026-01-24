@@ -109,18 +109,18 @@ class TaskcDetailsController extends GetxController {
     if (date is int) {
       try {
         final dt = DateTime.fromMillisecondsSinceEpoch(date * 1000);
-        return DateFormat('yyyy-MM-dd HH:mm:ss').format(dt);
+        return DateFormat('yyyy-MM-dd HH:mm:ss').format(dt.toLocal());
       } catch (e) {
         return '-';
       }
     }
     if (date is DateTime) {
-      return DateFormat('yyyy-MM-dd HH:mm:ss').format(date);
+      return DateFormat('yyyy-MM-dd HH:mm:ss').format(date.toLocal());
     }
     final dateString = date?.toString() ?? '';
     if (dateString.isEmpty || dateString == '-') return '-';
     try {
-      DateTime parsedDate = DateTime.parse(dateString);
+      DateTime parsedDate = DateTime.parse(dateString).toLocal();
       return DateFormat('yyyy-MM-dd HH:mm:ss').format(parsedDate);
     } catch (e) {
       debugPrint('Error parsing date: $dateString');
