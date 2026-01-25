@@ -43,7 +43,9 @@ class ManageTaskChampionCredsView
               color: TaskWarriorColors.white,
             ),
             onPressed: () async {
-              String url = "https://github.com/its-me-abhishek/ccsync";
+              String url = !controller.taskReplica.value
+                  ? "https://github.com/its-me-abhishek/ccsync"
+                  : "https://github.com/GothenburgBitFactory/taskchampion";
               if (!await launchUrl(Uri.parse(url))) {
                 throw Exception('Could not launch $url');
               }
@@ -67,19 +69,6 @@ class ManageTaskChampionCredsView
                 children: [
                   TextField(
                     style: TextStyle(color: tColors.primaryTextColor),
-                    controller: controller.encryptionSecretController,
-                    decoration: InputDecoration(
-                      labelText: SentenceManager(
-                              currentLanguage: AppSettings.selectedLanguage)
-                          .sentences
-                          .encryptionSecret,
-                      labelStyle: TextStyle(color: tColors.primaryTextColor),
-                      border: const OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  TextField(
-                    style: TextStyle(color: tColors.primaryTextColor),
                     controller: controller.clientIdController,
                     decoration: InputDecoration(
                       labelText: SentenceManager(
@@ -93,35 +82,90 @@ class ManageTaskChampionCredsView
                   const SizedBox(height: 10),
                   TextField(
                     style: TextStyle(color: tColors.primaryTextColor),
-                    controller: controller.ccsyncBackendUrlController,
+                    controller: controller.encryptionSecretController,
                     decoration: InputDecoration(
                       labelText: SentenceManager(
                               currentLanguage: AppSettings.selectedLanguage)
                           .sentences
-                          .ccsyncBackendUrl,
+                          .encryptionSecret,
                       labelStyle: TextStyle(color: tColors.primaryTextColor),
                       border: const OutlineInputBorder(),
                     ),
                   ),
+                  const SizedBox(height: 10),
+                  Obx(() => TextField(
+                        style: TextStyle(color: tColors.primaryTextColor),
+                        controller: controller.ccsyncBackendUrlController,
+                        decoration: InputDecoration(
+                          labelText: controller.taskReplica.value
+                              ? SentenceManager(
+                                      currentLanguage:
+                                          AppSettings.selectedLanguage)
+                                  .sentences
+                                  .taskchampionBackendUrl
+                              : SentenceManager(
+                                      currentLanguage:
+                                          AppSettings.selectedLanguage)
+                                  .sentences
+                                  .ccsyncBackendUrl,
+                          labelStyle:
+                              TextStyle(color: tColors.primaryTextColor),
+                          border: const OutlineInputBorder(),
+                        ),
+                      )),
                   const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () async {
-                      await controller.saveCredentials();
-                      Get.snackbar(
-                        SentenceManager(
-                                currentLanguage: AppSettings.selectedLanguage)
-                            .sentences
-                            .success,
-                        SentenceManager(
-                                currentLanguage: AppSettings.selectedLanguage)
-                            .sentences
-                            .credentialsSavedSuccessfully,
-                        snackPosition: SnackPosition.BOTTOM,
-                        duration: Duration(seconds: 2),
-                      );
-                    },
-                    child: const Text('Save Credentials'),
-                  ),
+                  Obx(() => Center(
+                          child: ElevatedButton(
+                        onPressed: controller.isCheckingCreds.value
+                            ? null
+                            : () async {
+                                int status = await controller.saveCredentials();
+                                if (status == 0) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content: Text(
+                                            SentenceManager(
+                                                    currentLanguage: AppSettings
+                                                        .selectedLanguage)
+                                                .sentences
+                                                .credentialsSavedSuccessfully,
+                                            style: TextStyle(
+                                              color: tColors.primaryTextColor,
+                                            ),
+                                          ),
+                                          backgroundColor:
+                                              tColors.secondaryBackgroundColor,
+                                          duration:
+                                              const Duration(seconds: 2)));
+                                  return;
+                                }
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text(
+                                          "Unable to fetch tasks with it ! Check creds",
+                                          style: TextStyle(
+                                            color: tColors.primaryTextColor,
+                                          ),
+                                        ),
+                                        backgroundColor:
+                                            tColors.secondaryBackgroundColor,
+                                        duration: const Duration(seconds: 2)));
+                              },
+                        child: controller.isCheckingCreds.value
+                            ? const SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                  color: Color.fromARGB(255, 83, 83, 83),
+                                  strokeWidth: 2.0,
+                                ),
+                              )
+                            : Text(SentenceManager(
+                                    currentLanguage:
+                                        AppSettings.selectedLanguage)
+                                .sentences
+                                .saveCredentials),
+                      ))),
                   const SizedBox(height: 10),
                   Text(
                     SentenceManager(

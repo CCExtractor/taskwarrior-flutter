@@ -120,8 +120,7 @@ class TaskViewBuilder extends StatelessWidget {
                         SlidableAction(
                           onPressed: (context) {
                             _markTaskAsCompleted(task.uuid!);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 content: Text(
                                   SentenceManager(
                                           currentLanguage:
@@ -132,8 +131,9 @@ class TaskViewBuilder extends StatelessWidget {
                                     color: tColors.primaryTextColor,
                                   ),
                                 ),
-                              ),
-                            );
+                                backgroundColor:
+                                    tColors.secondaryBackgroundColor,
+                                duration: const Duration(seconds: 2)));
                           },
                           icon: Icons.done,
                           label: SentenceManager(
@@ -150,8 +150,7 @@ class TaskViewBuilder extends StatelessWidget {
                         SlidableAction(
                           onPressed: (context) {
                             _markTaskAsDeleted(task.uuid!);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 content: Text(
                                   SentenceManager(
                                           currentLanguage:
@@ -162,8 +161,9 @@ class TaskViewBuilder extends StatelessWidget {
                                     color: tColors.primaryTextColor,
                                   ),
                                 ),
-                              ),
-                            );
+                                backgroundColor:
+                                    tColors.secondaryBackgroundColor,
+                                duration: const Duration(seconds: 2)));
                           },
                           icon: Icons.delete,
                           label: SentenceManager(

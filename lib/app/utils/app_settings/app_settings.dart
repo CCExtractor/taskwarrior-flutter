@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:home_widget/home_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taskwarrior/app/utils/language/supported_language.dart';
 
@@ -13,6 +14,7 @@ class AppSettings {
   static final RxBool use24HourFormatRx = false.obs;
 
   static Future init() async {
+    await HomeWidget.setAppGroupId("group.taskwarrior");
     await SelectedTheme.init();
     await SelectedLanguage.init();
     await SaveTourStatus.init();

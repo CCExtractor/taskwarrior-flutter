@@ -1,16 +1,22 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'package:taskwarrior/app/v3/models/annotation.dart';
 import 'package:taskwarrior/app/v3/models/task.dart';
 
 class TaskDatabase {
   Database? _database;
 
   Future<void> open() async {
-    var databasesPath = await getDatabasesPath();
-    String path = join(databasesPath, 'tasks.db');
+    String path = await getDatabasePathForCurrentProfile();
+    await _open(path);
+  }
 
+  Future<void> _open(path) async {
+    debugPrint("called _open with $path");
     _database = await openDatabase(path, version: 2,
         onCreate: (Database db, version) async {
       await db.execute('''
@@ -73,6 +79,11 @@ class TaskDatabase {
     debugPrint("Database opened at $path");
   }
 
+  Future<void> openForProfile(String profile) async {
+    String path = await getDatabasePathForProfile(profile);
+    _open(path);
+  }
+
   Future<void> ensureDatabaseIsOpen() async {
     if (_database == null) {
       await open();
@@ -86,9 +97,13 @@ class TaskDatabase {
     List<TaskForC> a = await Future.wait(
       maps.map((mapItem) => getObjectForTask(mapItem)).toList(),
     );
-    debugPrint("Database fetch ${maps.last}");
-    for (int i = 0; i < maps.length; i++) {
-      debugPrint("Database fetch ${maps[i]}");
+    if (maps.isNotEmpty) {
+      debugPrint("Database fetch ${maps.last}");
+      for (int i = 0; i < maps.length; i++) {
+        debugPrint("Database fetch ${maps[i]}");
+      }
+    } else {
+      debugPrint("Database fetch: No tasks found");
     }
     debugPrint('Tasks from db');
     debugPrint(a.toString());
@@ -97,8 +112,10 @@ class TaskDatabase {
 
   Future<void> deleteAllTasksInDB() async {
     await ensureDatabaseIsOpen();
-    await _database!.delete(
+    debugPrint("Delete All Tasks !");
+    await _database!.update(
       'Tasks',
+      {'status': 'deleted'},
     );
   }
 
@@ -262,7 +279,7 @@ class TaskDatabase {
       where: 'uuid IS NULL OR uuid = ?',
       whereArgs: [''],
     );
-
+    debugPrint("Tasks without uuid are $maps");
     return await Future.wait(
       maps.map((mapItem) => getObjectForTask(mapItem)).toList(),
     );
@@ -285,9 +302,10 @@ class TaskDatabase {
     await taskDatabase.open();
     await taskDatabase.ensureDatabaseIsOpen();
 
-    final List<Map<String, dynamic>> result = await taskDatabase._database!
-        .rawQuery(
-            'SELECT DISTINCT project FROM Tasks WHERE project IS NOT NULL');
+    final List<
+        Map<String,
+            dynamic>> result = await taskDatabase._database!.rawQuery(
+        'SELECT DISTINCT project FROM Tasks WHERE project IS NOT NULL AND status IS NOT "deleted"');
 
     return result.map((row) => row['project'] as String).toList();
   }
@@ -477,5 +495,49 @@ class TaskDatabase {
         await getAnnotationsForTask(mutableMap['uuid'], mutableMap['id']);
     TaskForC task = TaskForC.fromJson(mutableMap);
     return task;
+  }
+
+  Future<String> exportAllTasks() async {
+    await ensureDatabaseIsOpen();
+    final List<Map<String, dynamic>> maps = await _database!.query('Tasks');
+    List<Map<String, dynamic>> tasksJson = [];
+    for (var map in maps) {
+      TaskForC task = await getObjectForTask(map);
+      tasksJson.add(task.toJson());
+    }
+    debugPrint("TASK$tasksJson");
+    return tasksJson.toString();
+  }
+
+  Future<String> getDatabasePathForCurrentProfile() async {
+    var databasesPath = await getDatabasesPath();
+    String profile = await getCurrentProfile() ?? 'default';
+    return join(databasesPath, '$profile.db');
+  }
+
+  Future<String> getDatabasePathForProfile(String profile) async {
+    var databasesPath = await getDatabasesPath();
+    return join(databasesPath, '$profile.db');
+  }
+
+  Future<String?> getCurrentProfile() async {
+    Directory base = await getBaseDire();
+    if (File('${base.path}/current-profile').existsSync()) {
+      return File('${base.path}/current-profile').readAsStringSync();
+    }
+    return null;
+  }
+
+  Future<Directory> getBaseDire() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? directory = prefs.getString('baseDirectory');
+    Directory dir = (directory != null)
+        ? Directory(directory)
+        : await getDefaultDirectory();
+    return dir;
+  }
+
+  Future<Directory> getDefaultDirectory() async {
+    return await getApplicationDocumentsDirectory();
   }
 }

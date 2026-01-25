@@ -15,8 +15,9 @@ jobs:
       - uses: actions/checkout@v2
 
       # Step 2: Setup Java with version 12.x
-      - uses: actions/setup-java@v1
+      - uses: actions/setup-java@v4
         with:
+          distribution: "temurin"
           java-version: "17.x"
 
       # Step 3: Setup Flutter with version 3.7.11

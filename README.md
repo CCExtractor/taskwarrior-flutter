@@ -115,9 +115,13 @@ flutter doctor
 5. Run the app:
 
 ```bash
-flutter run
+flutter run --flavor production 
 ```
+OR
 
+```bash
+flutter run --flavor nightly 
+```
 ## Contributing
 
 Help is always appreciated, whether it comes in the form of feature requests or suggestions, code improvements, refactoring, or performance enhancements. The more is done, the better it gets. If you find any bug(s), consider opening an [issue](https://github.com/NishantSinghal19/taskwarrior-gsoc/issues/new).

@@ -1,6 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:taskwarrior/app/utils/taskchampion/credentials_storage.dart';
-
 abstract class Sentences {
   String get helloWorld;
 
@@ -63,6 +60,7 @@ abstract class Sentences {
   String get deleteTaskTitle;
   String get deleteTaskConfirmation;
   String get deleteTaskWarning;
+  String get deleteAllTasksWillBeMarkedAsDeleted;
   String get navDrawerExit;
   String get navDrawerConfirm;
 
@@ -284,6 +282,10 @@ abstract class Sentences {
 
   // Splash screen strings
   String get splashSettingUpApp;
+  String get syncSetting;
+  String get displaySettings;
+  String get storageAndData;
+  String get advanced;
 
   // Tour strings - reports
   String get tourReportsDaily;
@@ -338,8 +340,14 @@ abstract class Sentences {
   String get configureTaskchampion;
   String get encryptionSecret;
   String get ccsyncBackendUrl;
+  String get taskchampionBackendUrl;
   String get ccsyncClientId;
   String get success;
   String get credentialsSavedSuccessfully;
   String get tip;
+  String get saveCredentials;
+  // profile page new
+  String get profilePageChangeProfileMode;
+  String get profilePageSelectProfileMode;
+  String get profilePageSuccessfullyChangedProfileModeTo;
 }

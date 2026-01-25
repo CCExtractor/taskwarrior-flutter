@@ -43,8 +43,7 @@ class WidgetController extends GetxController {
     await updateWidget();
   }
 
-  Future<void> sendData() async {
-    final HomeController taskController = Get.find<HomeController>();
+  List<Map<String, dynamic>> getTW2Tasks(HomeController taskController) {
     int lengthBeforeFilters = allData.length;
     List<Task> tasks = allData;
     debugPrint(
@@ -140,13 +139,50 @@ class WidgetController extends GetxController {
         "uuid": "NO_TASK"
       });
     }
+    return l;
+  }
+
+  Future<void> sendData() async {
+    final HomeController taskController = Get.find<HomeController>();
+    List<Map<String, dynamic>> l;
+    if (!taskController.taskchampion.value &&
+        !taskController.taskReplica.value) {
+      l = getTW2Tasks(taskController);
+    } else if (taskController.taskchampion.value) {
+      var tasks = taskController.tasks;
+      l = [];
+      if (tasks.isNotEmpty) {
+        for (var task in tasks) {
+          if (task.status == 'deleted') continue;
+          l.add({
+            "description": task.description,
+            "urgency": 'urgencyLevel : 0',
+            "uuid": task.uuid,
+            "priority": task.priority ?? "N"
+          });
+        }
+      }
+    } else {
+      l = [];
+      var tasks = taskController.tasksFromReplica;
+      if (tasks.isNotEmpty) {
+        for (var task in tasks) {
+          l.add({
+            "description": task.description,
+            "urgency": 'urgencyLevel : 0',
+            "uuid": task.uuid,
+            "priority": task.priority ?? "N"
+          });
+        }
+      }
+    }
     await HomeWidget.saveWidgetData("tasks", jsonEncode(l));
   }
 
   Future updateWidget() async {
     try {
       return HomeWidget.updateWidget(
-          name: 'TaskWarriorWidgetProvider', iOSName: 'HomeWidgetExample');
+          name: 'TaskWarriorWidgetProvider', iOSName: 'TaskWarriorWidgets');
     } on PlatformException catch (exception) {
       debugPrint('Error Updating Widget. $exception');
     }

@@ -212,6 +212,10 @@ class SpanishSentences extends Sentences {
       'Esta acción es irreversible y eliminará todas las tareas almacenadas localmente.';
 
   @override
+  String get deleteAllTasksWillBeMarkedAsDeleted =>
+      'Esto marcará todas las tareas como eliminadas y no aparecerán en la aplicación.';
+
+  @override
   String get profilePageProfile => 'Perfil';
   @override
   String get profilePageProfiles => 'Perfiles';
@@ -228,6 +232,11 @@ class SpanishSentences extends Sentences {
   @override
   String get profilePageExportTasks => 'Exportar tareas';
   @override
+  String get profilePageChangeProfileMode =>
+      'Cambiar servidor de sincronización';
+  @override
+  String get profilePageSelectProfileMode => 'Selecciona un servidor';
+  @override
   String get profilePageCopyConfigToNewProfile =>
       'Copiar configuración a un nuevo perfil';
   @override
@@ -241,6 +250,9 @@ class SpanishSentences extends Sentences {
   String get profilePageRenameAliasDialogueBoxNewAlias => 'Nuevo alias';
   @override
   String get profilePageRenameAliasDialogueBoxCancel => 'Cancelar';
+  @override
+  String get profilePageSuccessfullyChangedProfileModeTo =>
+      'Modo de perfil cambiado correctamente a: ';
   @override
   String get profilePageRenameAliasDialogueBoxSubmit => 'Enviar';
 
@@ -648,6 +660,8 @@ class SpanishSentences extends Sentences {
   @override
   String get credentialsSavedSuccessfully => 'Credenciales guardadas con éxito';
   @override
+  String get saveCredentials => 'guardar credenciales';
+  @override
   String get tip =>
       "Consejo: Haz clic en el ícono de información en la esquina superior derecha para obtener tus credenciales";
   @override
@@ -655,4 +669,16 @@ class SpanishSentences extends Sentences {
   @override
   String get checkAllDebugLogsHere =>
       'Consulta todos los registros de depuración aquí';
+
+  //
+  @override
+  String get syncSetting => 'Configuración de sincronización';
+  @override
+  String get displaySettings => 'Configuración de visualización';
+  @override
+  String get storageAndData => 'Almacenamiento y datos';
+  @override
+  String get advanced => 'Avanzado';
+  @override
+  String get taskchampionBackendUrl => 'Taskchampion URL';
 }

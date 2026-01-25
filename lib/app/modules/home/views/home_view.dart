@@ -44,6 +44,10 @@ class HomeView extends GetView<HomeController> {
             ? TaskWarriorColors.kprimaryBackgroundColor
             : TaskWarriorColors.kLightPrimaryBackgroundColor,
         drawer: NavDrawer(homeController: controller),
+
+        drawerEnableOpenDragGesture: true,
+        drawerEdgeDragWidth: 80,
+        
         body: HomePageBody(
           controller: controller,
         ),

@@ -226,6 +226,10 @@ class HindiSentences extends Sentences {
       'यह क्रिया अपरिवर्तनीय है और यह सभी स्थानीय रूप से संग्रहीत कार्यों को हटा देगी।';
 
   @override
+  String get deleteAllTasksWillBeMarkedAsDeleted =>
+      'यह सभी कार्यों को हटाए गए के रूप में चिह्नित कर देगा और वे ऐप में दिखाई नहीं देंगे।';
+
+  @override
   String get profilePageProfile => 'प्रोफ़ाइल';
   @override
   String get profilePageProfiles => 'प्रोफ़ाइल्स';
@@ -242,6 +246,10 @@ class HindiSentences extends Sentences {
   @override
   String get profilePageExportTasks => 'कार्य निर्यात करें';
   @override
+  String get profilePageChangeProfileMode => 'सिंक सर्वर बदलें';
+  @override
+  String get profilePageSelectProfileMode => 'एक सर्वर चुनें';
+  @override
   String get profilePageCopyConfigToNewProfile =>
       'नई प्रोफ़ाइल पर कॉन्फ़िगरेशन कॉपी करें';
   @override
@@ -253,6 +261,9 @@ class HindiSentences extends Sentences {
   String get profilePageRenameAliasDialogueBoxTitle => 'उपनाम बदलें';
   @override
   String get profilePageRenameAliasDialogueBoxNewAlias => 'नया उपनाम';
+  @override
+  String get profilePageSuccessfullyChangedProfileModeTo =>
+      'प्रोफ़ाइल मोड सफलतापूर्वक बदल दिया गया: ';
   @override
   String get profilePageRenameAliasDialogueBoxCancel => 'रद्द करें';
   @override
@@ -623,10 +634,23 @@ class HindiSentences extends Sentences {
   String get credentialsSavedSuccessfully =>
       'क्रेडेंशियल्स सफलतापूर्वक सहेजे गए';
   @override
+  String get saveCredentials => 'क्रेडेंशियल्स सहेजें';
+  @override
   String get tip =>
       "टिप: अपनी क्रेडेंशियल्स प्राप्त करने के लिए ऊपर दाईं ओर स्थित जानकारी आइकन पर क्लिक करें";
   @override
   String get logs => 'लॉग्स';
   @override
   String get checkAllDebugLogsHere => 'यहाँ सभी डिबग लॉग्स देखें';
+  // सेटिंग
+  @override
+  String get syncSetting => 'सिंक सेटिंग';
+  @override
+  String get displaySettings => 'डिस्प्ले सेटिंग्स';
+  @override
+  String get storageAndData => 'स्टोरेज और डेटा';
+  @override
+  String get advanced => 'अड्वांस्ड';
+  @override
+  String get taskchampionBackendUrl => 'Taskchampion URL';
 }

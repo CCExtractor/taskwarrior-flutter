@@ -92,4 +92,9 @@ class TaskForC {
           : <Map<String, dynamic>>[],
     };
   }
+
+  @override
+  String toString() {
+    return "TaskForC(${toJson().toString()})";
+  }
 }
