@@ -161,8 +161,6 @@ class NavDrawer extends StatelessWidget {
                       prefs.getBool('sync-OnTaskCreate') ?? false;
                   homeController.delaytask.value =
                       prefs.getBool('delaytask') ?? false;
-                  homeController.change24hr.value =
-                      prefs.getBool('24hourformate') ?? false;
 
                   Get.toNamed(Routes.SETTINGS);
                 },

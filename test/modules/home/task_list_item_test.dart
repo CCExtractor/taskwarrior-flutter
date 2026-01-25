@@ -5,10 +5,33 @@ import 'package:taskwarrior/app/models/json/task.dart';
 import 'package:taskwarrior/app/modules/home/views/tas_list_item.dart';
 import 'package:taskwarrior/app/utils/language/supported_language.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/modify.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
+import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 
 class MockModify extends Mock implements Modify {}
 
 void main() {
+  // Helper function to create a theme with TaskwarriorColorTheme extension
+  ThemeData createTestTheme() {
+    return ThemeData(
+      extensions: [
+        TaskwarriorColorTheme(
+          dialogBackgroundColor: Colors.white,
+          primaryBackgroundColor: Colors.blue,
+          primaryDisabledTextColor: Colors.grey,
+          primaryTextColor: Colors.black,
+          secondaryBackgroundColor: Colors.grey[200],
+          secondaryTextColor: Colors.black54,
+          dividerColor: Colors.grey,
+          purpleShade: Colors.purple,
+          greyShade: Colors.grey,
+          icons: Icons.star,
+          dimCol: Colors.grey,
+        ),
+      ],
+    );
+  }
+
   group('TaskListItem', () {
     late Task normalTask;
     late Task dueSoonTask;
@@ -46,6 +69,7 @@ void main() {
     testWidgets('renders normal task without highlight',
         (WidgetTester tester) async {
       await tester.pumpWidget(MaterialApp(
+        theme: createTestTheme(),
         home: Scaffold(
           body: TaskListItem(
             normalTask,
@@ -68,6 +92,7 @@ void main() {
     testWidgets('renders due soon task with red border',
         (WidgetTester tester) async {
       await tester.pumpWidget(MaterialApp(
+        theme: createTestTheme(),
         home: Scaffold(
           body: TaskListItem(
             dueSoonTask,
@@ -89,6 +114,7 @@ void main() {
     testWidgets('renders overdue task with red background',
         (WidgetTester tester) async {
       await tester.pumpWidget(MaterialApp(
+        theme: createTestTheme(),
         home: Scaffold(
           body: TaskListItem(
             overdueTask,
@@ -111,6 +137,7 @@ void main() {
     testWidgets('does not highlight tasks when useDelayTask is false',
         (WidgetTester tester) async {
       await tester.pumpWidget(MaterialApp(
+        theme: createTestTheme(),
         home: Scaffold(
           body: TaskListItem(
             overdueTask,

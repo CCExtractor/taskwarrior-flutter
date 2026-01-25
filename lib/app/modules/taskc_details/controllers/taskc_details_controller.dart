@@ -106,24 +106,40 @@ class TaskcDetailsController extends GetxController {
   String formatDate(dynamic date) {
     if (date == null) return '-';
     // If date is epoch seconds as int
+    bool is24hrFormat = AppSettings.use24HourFormatRx.value;
+    final pattern = is24hrFormat
+        ? 'EEE, yyyy-MM-dd HH:mm:ss'
+        : 'EEE, yyyy-MM-dd hh:mm:ss a';
+
+    if (date == null) return '-';
+
     if (date is int) {
       try {
         final dt = DateTime.fromMillisecondsSinceEpoch(date * 1000);
-        return DateFormat('yyyy-MM-dd HH:mm:ss').format(dt.toLocal());
+        return DateFormat(pattern).format(dt.toLocal());
       } catch (e) {
+        debugPrint('Error formatting epoch date: $e');
         return '-';
       }
     }
+
     if (date is DateTime) {
-      return DateFormat('yyyy-MM-dd HH:mm:ss').format(date.toLocal());
+      try {
+        return DateFormat(pattern).format(date.toLocal());
+      } catch (e) {
+        debugPrint('Error formatting DateTime: $e');
+        return '-';
+      }
     }
+
     final dateString = date?.toString() ?? '';
     if (dateString.isEmpty || dateString == '-') return '-';
+
     try {
-      DateTime parsedDate = DateTime.parse(dateString).toLocal();
-      return DateFormat('yyyy-MM-dd HH:mm:ss').format(parsedDate);
+      final parsedDate = DateTime.parse(dateString).toLocal();
+      return DateFormat(pattern).format(parsedDate);
     } catch (e) {
-      debugPrint('Error parsing date: $dateString');
+      debugPrint('Error parsing date: $dateString $e');
       return '-';
     }
   }
@@ -212,6 +228,11 @@ class TaskcDetailsController extends GetxController {
   }
 
   Future<void> saveTask() async {
+    bool is24hrFormat = AppSettings.use24HourFormatRx.value;
+    final datePattern = is24hrFormat
+        ? 'EEE, yyyy-MM-dd HH:mm:ss'
+        : 'EEE, yyyy-MM-dd hh:mm:ss a';
+
     if (tags.length == 1 && tags[0] == "") {
       tags.clear();
     }
@@ -247,7 +268,7 @@ class TaskcDetailsController extends GetxController {
         due: () {
           if (due.string == '-' || due.string.isEmpty) return null;
           try {
-            final parsed = DateFormat('yyyy-MM-dd HH:mm:ss').parse(due.string);
+            final parsed = DateFormat(datePattern).parse(due.string);
             return parsed.toUtc().toIso8601String();
           } catch (e) {
             try {
@@ -263,8 +284,7 @@ class TaskcDetailsController extends GetxController {
         start: () {
           if (start.string == '-' || start.string.isEmpty) return null;
           try {
-            final parsed =
-                DateFormat('yyyy-MM-dd HH:mm:ss').parse(start.string);
+            final parsed = DateFormat(datePattern).parse(start.string);
             return parsed.toUtc().toIso8601String();
           } catch (e) {
             try {
@@ -280,7 +300,7 @@ class TaskcDetailsController extends GetxController {
         wait: () {
           if (wait.string == '-' || wait.string.isEmpty) return null;
           try {
-            final parsed = DateFormat('yyyy-MM-dd HH:mm:ss').parse(wait.string);
+            final parsed = DateFormat(datePattern).parse(wait.string);
             return parsed.toUtc().toIso8601String();
           } catch (e) {
             try {

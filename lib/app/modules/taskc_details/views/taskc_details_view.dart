@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
@@ -76,14 +75,14 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
                           controller.start.value,
                           () => controller.updateField(
                             controller.start,
-                            DateFormat('yyyy-MM-dd HH:mm:ss')
-                                .format(DateTime.now()),
+                            controller.formatDate(DateTime.now()),
                           ),
                         )
                       : _buildDetail(
                           context,
                           '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageStart}:',
-                          controller.formatDate(controller.start.value)),
+                          controller.start.value,
+                          disabled: true),
                   _buildDatePickerDetail(
                     context,
                     '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageWait}:',
@@ -148,11 +147,11 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
 
                 // Modified is available for both; show it for both types
                 _buildDetail(
-                  context,
-                  '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageModified}:',
-                  controller.formatDate(
-                      controller.initialTaskModifiedForFormatting()),
-                ),
+                    context,
+                    '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageModified}:',
+                    controller.formatDate(
+                        controller.initialTaskModifiedForFormatting()),
+                    disabled: true),
               ],
             ),
           ),
@@ -203,7 +202,8 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
     );
   }
 
-  Widget _buildDetail(BuildContext context, String label, String value) {
+  Widget _buildDetail(BuildContext context, String label, String value,
+      {bool disabled = false}) {
     TaskwarriorColorTheme tColors =
         Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Container(
@@ -230,7 +230,9 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 18,
-              color: tColors.primaryTextColor,
+              color: disabled
+                  ? tColors.primaryDisabledTextColor
+                  : tColors.primaryTextColor,
             ),
           ),
           const SizedBox(width: 8),
