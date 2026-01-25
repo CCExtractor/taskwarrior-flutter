@@ -241,7 +241,9 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
               value,
               style: TextStyle(
                 fontSize: 18,
-                color: tColors.primaryTextColor,
+                color: disabled
+                    ? tColors.primaryDisabledTextColor
+                    : tColors.primaryTextColor,
               ),
             ),
           ),
