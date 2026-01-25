@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
@@ -68,12 +69,21 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
                 ),
                 // Start / Wait: editable date pickers for replica tasks, read-only otherwise
                 if (controller.isReplicaTask) ...[
-                  _buildDatePickerDetail(
-                    context,
-                    '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageStart}:',
-                    controller.start.value,
-                    () => controller.pickDateTime(controller.start),
-                  ),
+                  controller.start.value == '-'
+                      ? _buildDatePickerDetail(
+                          context,
+                          '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageStart}:',
+                          controller.start.value,
+                          () => controller.updateField(
+                            controller.start,
+                            DateFormat('yyyy-MM-dd HH:mm:ss')
+                                .format(DateTime.now()),
+                          ),
+                        )
+                      : _buildDetail(
+                          context,
+                          '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageStart}:',
+                          controller.formatDate(controller.start.value)),
                   _buildDatePickerDetail(
                     context,
                     '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageWait}:',
