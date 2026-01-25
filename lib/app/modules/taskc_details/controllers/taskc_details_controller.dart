@@ -106,22 +106,37 @@ class TaskcDetailsController extends GetxController {
   String formatDate(dynamic date) {
     if (date == null) return '-';
     // If date is epoch seconds as int
+    bool is24hrFormat = AppSettings.use24HourFormatRx.value;
+    final pattern =
+        is24hrFormat ? 'yyyy-MM-dd HH:mm:ss' : 'yyyy-MM-dd hh:mm:ss a';
+
+    if (date == null) return '-';
+
     if (date is int) {
       try {
         final dt = DateTime.fromMillisecondsSinceEpoch(date * 1000);
-        return DateFormat('yyyy-MM-dd HH:mm:ss').format(dt);
+        return DateFormat(pattern).format(dt.toLocal());
       } catch (e) {
+        debugPrint('Error formatting epoch date: $e');
         return '-';
       }
     }
+
     if (date is DateTime) {
-      return DateFormat('yyyy-MM-dd HH:mm:ss').format(date);
+      try {
+        return DateFormat(pattern).format(date.toLocal());
+      } catch (e) {
+        debugPrint('Error formatting DateTime: $e');
+        return '-';
+      }
     }
+
     final dateString = date?.toString() ?? '';
     if (dateString.isEmpty || dateString == '-') return '-';
+
     try {
-      DateTime parsedDate = DateTime.parse(dateString);
-      return DateFormat('yyyy-MM-dd HH:mm:ss').format(parsedDate);
+      final parsedDate = DateTime.parse(dateString).toLocal();
+      return DateFormat(pattern).format(parsedDate);
     } catch (e) {
       debugPrint('Error parsing date: $dateString');
       return '-';
