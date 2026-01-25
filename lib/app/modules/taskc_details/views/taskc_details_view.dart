@@ -68,12 +68,21 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
                 ),
                 // Start / Wait: editable date pickers for replica tasks, read-only otherwise
                 if (controller.isReplicaTask) ...[
-                  _buildDatePickerDetail(
-                    context,
-                    '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageStart}:',
-                    controller.start.value,
-                    () => controller.pickDateTime(controller.start),
-                  ),
+                  controller.start.value == '-'
+                      ? _buildDatePickerDetail(
+                          context,
+                          '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageStart}:',
+                          controller.start.value,
+                          () => controller.updateField(
+                            controller.start,
+                            controller.formatDate(DateTime.now()),
+                          ),
+                        )
+                      : _buildDetail(
+                          context,
+                          '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageStart}:',
+                          controller.start.value,
+                          disabled: true),
                   _buildDatePickerDetail(
                     context,
                     '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageWait}:',
@@ -138,11 +147,11 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
 
                 // Modified is available for both; show it for both types
                 _buildDetail(
-                  context,
-                  '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageModified}:',
-                  controller.formatDate(
-                      controller.initialTaskModifiedForFormatting()),
-                ),
+                    context,
+                    '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageModified}:',
+                    controller.formatDate(
+                        controller.initialTaskModifiedForFormatting()),
+                    disabled: true),
               ],
             ),
           ),
@@ -193,7 +202,8 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
     );
   }
 
-  Widget _buildDetail(BuildContext context, String label, String value) {
+  Widget _buildDetail(BuildContext context, String label, String value,
+      {bool disabled = false}) {
     TaskwarriorColorTheme tColors =
         Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Container(
@@ -220,7 +230,9 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 18,
-              color: tColors.primaryTextColor,
+              color: disabled
+                  ? tColors.primaryDisabledTextColor
+                  : tColors.primaryTextColor,
             ),
           ),
           const SizedBox(width: 8),
