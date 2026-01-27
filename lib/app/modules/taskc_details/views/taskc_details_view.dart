@@ -76,13 +76,13 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
                         ? "None"
                         : controller.start.value,
                     () => controller.start.value == "stop" ||
-                            controller.start.value == "-" ||
+                            controller.start.value == "None" ||
                             controller.start.value.isEmpty
                         ? controller.updateField(
                             controller.start,
                             controller.formatDate(DateTime.now()),
                           )
-                        : controller.start.value = "stop",
+                        : controller.updateField(controller.start, "stop"),
                   ),
                   _buildDatePickerDetail(
                     context,
