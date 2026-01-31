@@ -50,6 +50,8 @@ class HomeController extends GetxController {
   final RxBool pendingFilter = false.obs;
   final RxBool waitingFilter = false.obs;
   final RxString projectFilter = ''.obs;
+  final RxBool completedFilter = false.obs;
+  final RxBool deletedFilter = false.obs;
   final RxBool tagUnion = false.obs;
   final RxString selectedSort = ''.obs;
   final RxSet<String> selectedTags = <String>{}.obs;
@@ -101,6 +103,8 @@ class HomeController extends GetxController {
     everAll([
       pendingFilter,
       waitingFilter,
+      completedFilter,   
+      deletedFilter,     
       projectFilter,
       tagUnion,
       selectedSort,
@@ -237,15 +241,35 @@ class HomeController extends GetxController {
   }
 
   void _refreshTasks() {
-    if (pendingFilter.value) {
+    
+    if (deletedFilter.value) {
+      // Show ONLY deleted tasks
+      queriedTasks.value = storage.data
+          .completedData()
+          .where((task) => task.status == 'deleted')
+          .toList();
+    } 
+    else if (completedFilter.value) {
+      // Show completed tasks (EXCLUDE deleted)
+      queriedTasks.value = storage.data
+          .completedData()
+          .where((task) => task.status == 'completed')
+          .toList();
+    } 
+    else if (pendingFilter.value) {
+      // Show pending tasks (default behaviour)
       queriedTasks.value = storage.data
           .pendingData()
           .where((task) => task.status == 'pending')
           .toList();
-    } else {
-      queriedTasks.value = storage.data.completedData();
+    } 
+    else {
+      // Fallback: pending tasks
+      queriedTasks.value = storage.data.pendingData();
     }
 
+
+    // Rest of the method stays the same...
     if (waitingFilter.value) {
       var currentTime = DateTime.now();
       queriedTasks.value = queriedTasks
@@ -344,6 +368,22 @@ class HomeController extends GetxController {
   void toggleWaitingFilter() {
     Query(storage.tabs.tab()).toggleWaitingFilter();
     waitingFilter.value = Query(storage.tabs.tab()).getWaitingFilter();
+    _refreshTasks();
+  }
+
+  void toggleCompletedFilter() {
+    completedFilter.toggle();
+    if (completedFilter.value) {
+      deletedFilter.value = false;
+    }
+    _refreshTasks();
+  }
+
+  void toggleDeletedFilter() {
+    deletedFilter.toggle();
+    if (deletedFilter.value) {
+      completedFilter.value = false;
+    }
     _refreshTasks();
   }
 
@@ -613,11 +653,17 @@ class HomeController extends GetxController {
       tags: tags,
       toggleTagFilter: toggleTagFilter,
     );
+    
+    // REPLACE this entire Filters() instantiation:
     var filters = Filters(
       pendingFilter: pendingFilter.value,
       waitingFilter: waitingFilter.value,
+      completedFilter: completedFilter.value,        // NEW - Add this line
+      deletedFilter: deletedFilter.value,            // NEW - Add this line
       togglePendingFilter: togglePendingFilter,
       toggleWaitingFilter: toggleWaitingFilter,
+      toggleCompletedFilter: toggleCompletedFilter,  // NEW - Add this line
+      toggleDeletedFilter: toggleDeletedFilter,      // NEW - Add this line
       projects: projects,
       projectFilter: projectFilter.value,
       toggleProjectFilter: toggleProjectFilter,
