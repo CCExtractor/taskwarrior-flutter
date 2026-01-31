@@ -115,6 +115,26 @@ class DetailRouteView extends GetView<DetailRouteController> {
           // Cancel → stay
           return false;
         }
+	if (save == true) {
+          controller.saveChanges();
+          controller.onEdit.value = false;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: tColors.secondaryBackgroundColor,
+              content: Text(
+                SentenceManager(
+                  currentLanguage: AppSettings.selectedLanguage,
+                ).sentences
+                 .taskUpdated,
+                 style: TextStyle(
+                  color: tColors.primaryTextColor,
+                 ),
+              ),
+            ),
+          );
+        });
+      }
         // Yes (true) or No (false) → both allow popping the screen
         return true;
       },
