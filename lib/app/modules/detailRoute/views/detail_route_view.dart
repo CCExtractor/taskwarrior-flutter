@@ -262,7 +262,10 @@ class AttributeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var localValue = (value is DateTime)
-        ? DateFormat.yMEd().add_jms().format(value.toLocal())
+        ? DateFormat(AppSettings.use24HourFormatRx.value
+                ? 'EEE, yyyy-MM-dd HH:mm:ss'
+                : 'EEE, yyyy-MM-dd hh:mm:ss a')
+            .format(value.toLocal())
         : ((value is BuiltList) ? (value).toBuilder() : value);
     TaskwarriorColorTheme tColors =
         Theme.of(context).extension<TaskwarriorColorTheme>()!;

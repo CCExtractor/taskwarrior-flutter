@@ -91,6 +91,12 @@ class HomeController extends GetxController {
     getUniqueProjects();
     _loadTaskChampion();
     fetchTasksFromDB();
+
+    ever(AppSettings.use24HourFormatRx, (_) {
+      _refreshTasks();
+      update();
+    });
+
     ever(taskReplica, (_) {
       if (taskReplica.value) refreshReplicaTaskList();
     });
@@ -588,7 +594,6 @@ class HomeController extends GetxController {
   RxBool syncOnStart = false.obs;
   RxBool syncOnTaskCreate = false.obs;
   RxBool delaytask = false.obs;
-  RxBool change24hr = false.obs;
   RxBool taskchampion = false.obs;
   RxBool taskReplica = false.obs;
 

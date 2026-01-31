@@ -653,4 +653,6 @@ class HindiSentences extends Sentences {
   String get storageAndData => 'स्टोरेज और डेटा';
   @override
   String get advanced => 'अड्वांस्ड';
+  @override
+  String get taskchampionBackendUrl => 'Taskchampion URL';
 }

@@ -22,22 +22,6 @@ class _AddTaskDatePickerInputState extends State<AddTaskDatePickerInput> {
   final int length = 4;
   int currentIndex = 0;
 
-  int getNextIndex() => (currentIndex + 1) % length;
-
-  int getPreviousIndex() => (currentIndex - 1) % length;
-
-  void _showNextItem() {
-    setState(() {
-      currentIndex = getNextIndex();
-    });
-  }
-
-  void _showPreviousItem() {
-    setState(() {
-      currentIndex = getPreviousIndex();
-    });
-  }
-
   @override
   void dispose() {
     for (var controller in _controllers) {
@@ -48,75 +32,50 @@ class _AddTaskDatePickerInputState extends State<AddTaskDatePickerInput> {
 
   @override
   Widget build(BuildContext context) {
-    TaskwarriorColorTheme tColors =
-        Theme.of(context).extension<TaskwarriorColorTheme>()!;
-    bool isNextDateSelected = _selectedDates[getNextIndex()] != null;
-    bool isPreviousDateSelected = _selectedDates[getPreviousIndex()] != null;
-    String nextDateText = isNextDateSelected
-        ? "${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.change} ${dateLabels[getNextIndex()]} ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.date}"
-        : "${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.add} ${dateLabels[getNextIndex()]} ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.date}";
-
-    String prevDateText = isPreviousDateSelected
-        ? "${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.change} ${dateLabels[getPreviousIndex()]} ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.date}"
-        : "${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.add} ${dateLabels[getPreviousIndex()]} ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.date}";
-    return Column(
-      mainAxisSize: MainAxisSize.min,
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Display the current input field
-        Flexible(
+        // Dropdown for date type selection
+        if (!widget.onlyDueDate)
+          Container(
+            margin: const EdgeInsets.only(right: 8),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<int>(
+                value: currentIndex,
+                itemHeight: null,
+                items: List.generate(length, (index) {
+                  bool hasDate = _selectedDates[index] != null;
+                  return DropdownMenuItem<int>(
+                    value: index,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(dateLabels[index]),
+                        if (hasDate)
+                          const Padding(
+                            padding: EdgeInsets.only(left: 12),
+                            child: Icon(Icons.check_circle,
+                                size: 14, color: Colors.white),
+                          ),
+                      ],
+                    ),
+                  );
+                }),
+                onChanged: (value) {
+                  if (value != null) {
+                    setState(() {
+                      currentIndex = value;
+                    });
+                  }
+                },
+              ),
+            ),
+          ),
+        // Date picker field
+        Expanded(
           child: buildDatePicker(context, currentIndex),
         ),
-        // Navigation buttons
-        Visibility(
-          visible: !widget.onlyDueDate,
-          child: Row(
-            children: [
-              Expanded(
-                child: TextButton.icon(
-                  onPressed: _showPreviousItem,
-                  label: Text(
-                    prevDateText,
-                    style: TextStyle(
-                      fontSize: 12,
-                      decoration: isPreviousDateSelected
-                          ? TextDecoration.none
-                          : TextDecoration.underline,
-                      decorationStyle: TextDecorationStyle.wavy,
-                    ),
-                  ),
-                  icon: Icon(
-                    Icons.arrow_back_ios_rounded,
-                    size: 12,
-                    color: tColors.primaryTextColor,
-                  ),
-                  iconAlignment: IconAlignment.start,
-                ),
-              ),
-              const SizedBox(width: 8), // Space between buttons
-              Expanded(
-                child: TextButton.icon(
-                  onPressed: _showNextItem,
-                  label: Text(
-                    nextDateText,
-                    style: TextStyle(
-                      fontSize: 12,
-                      decoration: isNextDateSelected
-                          ? TextDecoration.none
-                          : TextDecoration.underline,
-                      decorationStyle: TextDecorationStyle.wavy,
-                    ),
-                  ),
-                  icon: Icon(
-                    Icons.arrow_forward_ios_rounded,
-                    size: 12,
-                    color: tColors.primaryTextColor,
-                  ),
-                  iconAlignment: IconAlignment.end,
-                ),
-              ),
-            ],
-          ),
-        )
       ],
     );
   }
@@ -130,9 +89,11 @@ class _AddTaskDatePickerInputState extends State<AddTaskDatePickerInput> {
       controller: _controllers[forIndex],
       decoration: InputDecoration(
         labelText:
-            '${dateLabels[forIndex]} ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.date}',
+            SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                .sentences
+                .date,
         hintText:
-            '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.select} ${dateLabels[forIndex]}',
+            '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.select} ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.date}',
         suffixIcon: const Icon(Icons.calendar_today),
         border: const OutlineInputBorder(),
       ),
@@ -145,11 +106,36 @@ class _AddTaskDatePickerInputState extends State<AddTaskDatePickerInput> {
           firstDate: DateTime.now(),
           lastDate: DateTime(2101),
         );
+        
+        // FIX: Check if date was selected before showing time picker
+        if (picked == null) {
+          return; // User canceled date picker, exit early
+        }
+        
+        // Only show time picker if date was selected
         final TimeOfDay? time = await showTimePicker(
           context: context,
           initialTime: TimeOfDay.now(),
         );
-        if (picked == null || time == null) return;
+        
+        // If user cancels time picker, still set the date with default time
+        if (time == null) {
+          setState(() {
+            // Set date with end-of-day time (23:59)
+            _selectedDates[forIndex] = picked.add(
+              const Duration(hours: 23, minutes: 59),
+            );
+            // Update the controller text
+            _controllers[forIndex].text =
+                dateToStringForAddTask(_selectedDates[forIndex]!);
+          });
+          if (widget.onDateChanges != null) {
+            widget.onDateChanges!(_selectedDates);
+          }
+          return;
+        }
+        
+        // Both date and time selected
         setState(() {
           _selectedDates[forIndex] =
               picked.add(Duration(hours: time.hour, minutes: time.minute));
