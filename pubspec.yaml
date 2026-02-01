@@ -50,7 +50,7 @@ dependencies:
   package_info_plus: ^8.3.0
   pem: ^2.0.1
   permission_handler: ^11.4.0
-  shared_preferences: ^2.5.2
+  shared_preferences: ^2.5.3
   shared_preferences_web: ^2.0.3
   sizer: ^3.0.5
   sqflite: ^2.3.3+1

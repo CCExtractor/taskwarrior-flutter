@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/add_task_dialog_utils.dart';
-import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 class AddTaskDatePickerInput extends StatefulWidget {
   final Function(List<DateTime?>)? onDateChanges;
   final bool onlyDueDate;
+  final List<int> allowedIndexes;
   const AddTaskDatePickerInput(
-      {super.key, this.onDateChanges, this.onlyDueDate = false});
+      {super.key,
+      this.onDateChanges,
+      this.onlyDueDate = false,
+      this.allowedIndexes = const [0, 1, 2, 3]});
 
   @override
   _AddTaskDatePickerInputState createState() => _AddTaskDatePickerInputState();
@@ -42,32 +45,23 @@ class _AddTaskDatePickerInputState extends State<AddTaskDatePickerInput> {
             child: DropdownButtonHideUnderline(
               child: DropdownButton<int>(
                 value: currentIndex,
-                itemHeight: null,
-                items: List.generate(length, (index) {
-                  bool hasDate = _selectedDates[index] != null;
-                  return DropdownMenuItem<int>(
-                    value: index,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(dateLabels[index]),
-                        if (hasDate)
-                          const Padding(
-                            padding: EdgeInsets.only(left: 12),
-                            child: Icon(Icons.check_circle,
-                                size: 14, color: Colors.white),
-                          ),
-                      ],
-                    ),
-                  );
-                }),
+                items: [
+                  for (int index = 0; index < length; index++)
+                    if (widget.allowedIndexes
+                        .contains(index)) // Only add if allowed
+                      DropdownMenuItem<int>(
+                        value: index,
+                        child: Row(
+                          children: [
+                            Text(dateLabels[index]),
+                            if (_selectedDates[index] != null)
+                              const Icon(Icons.check_circle, size: 14),
+                          ],
+                        ),
+                      ),
+                ],
                 onChanged: (value) {
-                  if (value != null) {
-                    setState(() {
-                      currentIndex = value;
-                    });
-                  }
+                  if (value != null) setState(() => currentIndex = value);
                 },
               ),
             ),
@@ -106,11 +100,36 @@ class _AddTaskDatePickerInputState extends State<AddTaskDatePickerInput> {
           firstDate: DateTime.now(),
           lastDate: DateTime(2101),
         );
+
+        // FIX: Check if date was selected before showing time picker
+        if (picked == null) {
+          return; // User canceled date picker, exit early
+        }
+
+        // Only show time picker if date was selected
         final TimeOfDay? time = await showTimePicker(
           context: context,
           initialTime: TimeOfDay.now(),
         );
-        if (picked == null || time == null) return;
+
+        // If user cancels time picker, still set the date with default time
+        if (time == null) {
+          setState(() {
+            // Set date with end-of-day time (23:59)
+            _selectedDates[forIndex] = picked.add(
+              const Duration(hours: 23, minutes: 59),
+            );
+            // Update the controller text
+            _controllers[forIndex].text =
+                dateToStringForAddTask(_selectedDates[forIndex]!);
+          });
+          if (widget.onDateChanges != null) {
+            widget.onDateChanges!(_selectedDates);
+          }
+          return;
+        }
+
+        // Both date and time selected
         setState(() {
           _selectedDates[forIndex] =
               picked.add(Duration(hours: time.hour, minutes: time.minute));

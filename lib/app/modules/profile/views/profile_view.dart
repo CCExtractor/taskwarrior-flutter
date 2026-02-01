@@ -179,21 +179,26 @@ class ProfileView extends GetView<ProfileController> {
                               "JSON",
                               style: TextStyle(color: tColors.primaryTextColor),
                             ),
-                            onPressed: () {
-                              // Navigator.of(context).pop();
-                              Get.back();
-                              exportTasks(
-                                contents: tasks,
-                                suggestedName: 'tasks-$now.json',
-                              );
-                            },
-                          ),
-                          TextButton(
-                            child: Text(
-                              "TXT",
-                              style: TextStyle(
-                                color: tColors.primaryTextColor,
-                              ),
+                            // CCSync v3 is deprecated, so hiding it for now
+                            // RadioListTile<String>(
+                            //   title: const Text('CCSync (v3)'),
+                            //   value: 'TW3',
+                            //   groupValue: selectedMode,
+                            //   onChanged: (String? value) {
+                            //     setState(() {
+                            //       selectedMode = value;
+                            //     });
+                            //   },
+                            // ),
+                            RadioListTile<String>(
+                              title: const Text('TaskServer'),
+                              value: 'TW2',
+                              groupValue: selectedMode,
+                              onChanged: (String? value) {
+                                setState(() {
+                                  selectedMode = value;
+                                });
+                              },
                             ),
                             onPressed: () {
                               // Navigator.of(context).pop();
