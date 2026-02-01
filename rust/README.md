@@ -12,7 +12,7 @@ flutter_rust_bridge_codegen generate \
 ### Compile Rust library for Android
 
 ```bash
-cargo ndk -t arm64-v8a -t armeabi-v7a -o ../android/main/app/src/main/jniLibs build --release
+cargo ndk -t arm64-v8a -t armeabi-v7a -o ../android/app/src/main/jniLibs build --release
 ```
 
 - [ ] these targets are not added yet
