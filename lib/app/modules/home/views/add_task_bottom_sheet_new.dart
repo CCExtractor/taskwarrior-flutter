@@ -14,7 +14,6 @@ import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/constants/constants.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/add_task_dialog_utils.dart';
-import 'package:taskwarrior/app/utils/taskfunctions/tags.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/taskparser.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:taskwarrior/app/v3/champion/replica.dart';
@@ -216,7 +215,7 @@ class AddTaskBottomSheet extends StatelessWidget {
   }
 
   Widget buildTagsInput(BuildContext context) => AddTaskTagsInput(
-        suggestions: tagSet(homeController.storage.data.allData()),
+        suggestions: homeController.allTagsInCurrentTasks,
         onTagsChanges: (p0) => homeController.tags.value = p0,
       );
 
