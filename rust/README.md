@@ -1,18 +1,34 @@
-`For dart file generation`  
-`flutter_rust_bridge_codegen generate \`  
-  `--rust-input crate::api \`  
-  `--rust-root rust \`  
-  `--dart-output lib/bridge/bridge_generated.dart`
+## Rust ⇄ Flutter: Commands
 
-`For Compiling RustLib to android`  
-`cargo ndk -t arm64-v8a -t armeabi-v7a -t x86 -t x86_64 -o ../android/main/app/src/main/jniLibs build`
+### Generate Dart bindings
 
-- [ ] `these targets are not added yet`
+```bash
+flutter_rust_bridge_codegen generate \
+  --rust-input crate::api \
+  --rust-root rust \
+  --dart-output lib/bridge/bridge_generated.dart
+```
 
-`For running application`  
-`[fvm] flutter run –flavor {production/nightly}`
+### Compile Rust library for Android
 
-`For Compiling/Building apk`  
-`[fvm] flutter build apk –-flavor production`
+```bash
+cargo ndk -t arm64-v8a -t armeabi-v7a -o ../android/main/app/src/main/jniLibs build --release
+```
 
-* `Nightly is only for CI`
+- [ ] these targets are not added yet
+
+### Run the app
+
+```bash
+# using fvm
+fvm flutter run --flavor {production|nightly}
+```
+
+### Build APK
+
+```bash
+# using fvm
+fvm flutter build apk --flavor production
+```
+
+Note: Nightly is only for CI.
