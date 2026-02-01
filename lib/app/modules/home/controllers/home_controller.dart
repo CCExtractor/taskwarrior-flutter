@@ -242,7 +242,7 @@ class HomeController extends GetxController {
       toggleSearch();
     }
   }
-
+  
   void _refreshTasks() {
     List<Task> baseTasks;
     if (taskchampion.value || taskReplica.value) {
@@ -265,68 +265,69 @@ class HomeController extends GetxController {
     }
     queriedTasks.assignAll(baseTasks);
     if (waitingFilter.value) {
-      var currentTime = DateTime.now();
-      queriedTasks.value = queriedTasks
-      .where((task) =>
-         task.wait != null && task.wait!.isAfter(currentTime))
-         .toList();
+      final now = DateTime.now();
+      queriedTasks.value = queriedTasks.where((task) {
+        return task.wait != null && task.wait!.isAfter(now);
+      }).toList();
     }
 
     if (projectFilter.value.isNotEmpty) {
       queriedTasks.value = queriedTasks.where((task) {
-        if(task.project == null) {
-          return false;
-        } else {
-        return task.project!.startsWith(projectFilter.value);
-        }
+        return task.project?.startsWith(projectFilter.value) ?? false;
       }).toList();
     }
 
     queriedTasks.value = queriedTasks.where((task) {
-      var tags = task.tags?.toSet() ?? {};
-      if(tagUnion.value) {
-      if (selectedTags.isEmpty){
-        return true;
-      }
-        return selectedTags.any((tag) => (tag.startsWith('+'))
-              ? tags.contains(tag.substring(1))
-              : !tags.contains(tag.substring(1)));
-      }
-      else {
-        return selectedTags.every((tag) => (tag.startsWith('+'))
-              ? tags.contains(tag.substring(1))
-              : !tags.contains(tag.substring(1)));
+      final tags = task.tags?.toSet() ?? <String>{};
+
+      if (selectedTags.isEmpty) return true;
+
+      if (tagUnion.value) {
+        return selectedTags.any((tag) {
+          final clean = tag.substring(1);
+          return tag.startsWith('+')
+              ? tags.contains(clean)
+              : !tags.contains(clean);
+        });
+      } else {
+        return selectedTags.every((tag) {
+          final clean = tag.substring(1);
+          return tag.startsWith('+')
+              ? tags.contains(clean)
+              : !tags.contains(clean);
+        });
       }
     }).toList();
 
-      var sortcolumn =
+    if (selectedSort.value.isNotEmpty) {
+      final column =
           selectedSort.value.substring(0, selectedSort.value.length - 1);
-      var ascending = selectedSort.value.endsWith('+');
+      final ascending = selectedSort.value.endsWith('+');
+
       queriedTasks.sort((a, b) {
-        int result;
-        if (sortcolumn == 'id') {
-          result = a.id!.compareTo(b.id!);
-        } else {
-          result = compareTasks(sortcolumn)(a, b);
-        }
+        final result = column == 'id'
+            ? a.id!.compareTo(b.id!)
+            : compareTasks(column)(a, b);
         return ascending ? result : -result;
       });
-
+    }
 
     searchedTasks.assignAll(queriedTasks);
-    var searchterm = searchController.text;
-    if (searchVisible.value) {
-      searchedTasks.value = searchedTasks
-      .where((task) =>
-          task.description.contains(searchterm) ||
+    if (searchVisible.value && searchController.text.isNotEmpty) {
+      final term = searchController.text.toLowerCase();
+      searchedTasks.value = searchedTasks.where((task) {
+        return task.description.toLowerCase().contains(term) ||
             (task.annotations?.asList() ?? []).any(
-              (a) => a.description.contains(searchterm),
-            )).toList();
+              (a) => a.description.toLowerCase().contains(term),
+            );
+      }).toList();
     }
+
     pendingTags.value = _pendingTags();
     projects.value = _projects();
   }
 
+  
   Task _mapReplicaToTask(TaskForReplica t) {
     return Task((b) => b
       ..description = t.description
@@ -427,7 +428,7 @@ class HomeController extends GetxController {
   }
 
   void toggleStatusFilter() {
-    // for TaskChampion and Replica, only Pending and Completed statuses are relevant
+    // for taskchampion and replica mode, only toggle between pending and completed
     if (taskchampion.value || taskReplica.value) {
       pendingFilter.value = !pendingFilter.value;
       deletedFilter.value = false;
