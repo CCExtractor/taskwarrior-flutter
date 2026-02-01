@@ -195,6 +195,10 @@ class HomeController extends GetxController {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     taskchampion.value = prefs.getBool('settings_taskc') ?? false;
     taskReplica.value = prefs.getBool('settings_taskr_repl') ?? false;
+
+    if (taskchampion.value || taskReplica.value) {
+      deletedFilter.value = false;
+    }
   }
 
   Future<void> refreshReplicaTasks() async {
@@ -241,78 +245,111 @@ class HomeController extends GetxController {
 
   void _refreshTasks() {
     List<Task> baseTasks;
+    if (taskchampion.value || taskReplica.value) {
+      final source = _dedupeReplicaTasks(tasksFromReplica);
 
-    if (pendingFilter.value) {
-      baseTasks = storage.data.pendingData();
-    } else if (deletedFilter.value) {
-      baseTasks = storage.data.deletedData();
+      if (pendingFilter.value) {
+        baseTasks = source.where((t) => t.status == 'pending').map(_mapReplicaToTask).toList();
+      } else {
+        baseTasks = source
+            .where((t) => t.status == 'completed').map(_mapReplicaToTask).toList();
+      }
     } else {
-      baseTasks = storage.data.completedData();
+      if (pendingFilter.value) {
+        baseTasks = storage.data.pendingData();
+      } else if (deletedFilter.value) {
+        baseTasks = storage.data.deletedData();
+      } else {
+        baseTasks = storage.data.completedData();
+      }
     }
-
     queriedTasks.assignAll(baseTasks);
-
     if (waitingFilter.value) {
-      final now = DateTime.now();
-      queriedTasks.value = queriedTasks.where((task) {
-        return task.wait != null && task.wait!.isAfter(now);
-      }).toList();
+      var currentTime = DateTime.now();
+      queriedTasks.value = queriedTasks
+      .where((task) =>
+         task.wait != null && task.wait!.isAfter(currentTime))
+         .toList();
     }
 
     if (projectFilter.value.isNotEmpty) {
       queriedTasks.value = queriedTasks.where((task) {
-        return task.project?.startsWith(projectFilter.value) ?? false;
+        if(task.project == null) {
+          return false;
+        } else {
+        return task.project!.startsWith(projectFilter.value);
+        }
       }).toList();
     }
 
     queriedTasks.value = queriedTasks.where((task) {
-      final tags = task.tags?.toSet() ?? <String>{};
-
-      if (selectedTags.isEmpty) return true;
-
-      if (tagUnion.value) {
-        return selectedTags.any((tag) {
-          final clean = tag.substring(1);
-          return tag.startsWith('+')
-              ? tags.contains(clean)
-              : !tags.contains(clean);
-        });
-      } else {
-        return selectedTags.every((tag) {
-          final clean = tag.substring(1);
-          return tag.startsWith('+')
-              ? tags.contains(clean)
-              : !tags.contains(clean);
-        });
+      var tags = task.tags?.toSet() ?? {};
+      if(tagUnion.value) {
+      if (selectedTags.isEmpty){
+        return true;
+      }
+        return selectedTags.any((tag) => (tag.startsWith('+'))
+              ? tags.contains(tag.substring(1))
+              : !tags.contains(tag.substring(1)));
+      }
+      else {
+        return selectedTags.every((tag) => (tag.startsWith('+'))
+              ? tags.contains(tag.substring(1))
+              : !tags.contains(tag.substring(1)));
       }
     }).toList();
 
-    if (selectedSort.value.isNotEmpty) {
-      final column =
+      var sortcolumn =
           selectedSort.value.substring(0, selectedSort.value.length - 1);
-      final ascending = selectedSort.value.endsWith('+');
-
+      var ascending = selectedSort.value.endsWith('+');
       queriedTasks.sort((a, b) {
-        final result = column == 'id'
-            ? a.id!.compareTo(b.id!)
-            : compareTasks(column)(a, b);
+        int result;
+        if (sortcolumn == 'id') {
+          result = a.id!.compareTo(b.id!);
+        } else {
+          result = compareTasks(sortcolumn)(a, b);
+        }
         return ascending ? result : -result;
       });
-    }
+
 
     searchedTasks.assignAll(queriedTasks);
-    if (searchVisible.value && searchController.text.isNotEmpty) {
-      final term = searchController.text.toLowerCase();
-      searchedTasks.value = searchedTasks.where((task) {
-        return task.description.toLowerCase().contains(term) ||
+    var searchterm = searchController.text;
+    if (searchVisible.value) {
+      searchedTasks.value = searchedTasks
+      .where((task) =>
+          task.description.contains(searchterm) ||
             (task.annotations?.asList() ?? []).any(
-              (a) => a.description.toLowerCase().contains(term),
-            );
-      }).toList();
+              (a) => a.description.contains(searchterm),
+            )).toList();
     }
-
     pendingTags.value = _pendingTags();
     projects.value = _projects();
+  }
+
+  Task _mapReplicaToTask(TaskForReplica t) {
+    return Task((b) => b
+      ..description = t.description
+      ..project = t.project
+      ..priority = t.priority
+      ..status = t.status
+      ..tags.replace(t.tags ?? []));
+  }
+
+  List<TaskForReplica> _dedupeReplicaTasks(
+    List<TaskForReplica> source,
+  ) {
+    final Map<String, TaskForReplica> latest = {};
+
+    for (final task in source) {
+      final existing = latest[task.uuid];
+
+      if (existing == null || (task.modified ?? 0) > (existing.modified ?? 0)) {
+        latest[task.uuid] = task;
+      }
+    }
+
+    return latest.values.toList();
   }
 
   Map<String, TagMetadata> _pendingTags() {
@@ -390,6 +427,13 @@ class HomeController extends GetxController {
   }
 
   void toggleStatusFilter() {
+    // for TaskChampion and Replica, only Pending and Completed statuses are relevant
+    if (taskchampion.value || taskReplica.value) {
+      pendingFilter.value = !pendingFilter.value;
+      deletedFilter.value = false;
+      _refreshTasks();
+      return;
+    }
     if (pendingFilter.value) {
       // Pending → Completed
       pendingFilter.value = false;
