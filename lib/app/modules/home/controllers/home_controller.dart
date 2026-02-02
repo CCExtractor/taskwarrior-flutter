@@ -330,10 +330,13 @@ class HomeController extends GetxController {
   
   Task _mapReplicaToTask(TaskForReplica t) {
     return Task((b) => b
+      ..uuid = t.uuid
       ..description = t.description
       ..project = t.project
       ..priority = t.priority
       ..status = t.status
+      ..entry = DateTime.now()
+      ..modified = DateTime.now()
       ..tags.replace(t.tags ?? []));
   }
 
@@ -354,10 +357,14 @@ class HomeController extends GetxController {
   }
 
   Map<String, TagMetadata> _pendingTags() {
-    var frequency = tagFrequencies(storage.data.pendingData());
-    var modified = tagsLastModified(storage.data.pendingData());
-    var setOfTags = tagSet(storage.data.pendingData());
 
+    final tasksSource = (taskchampion.value || taskReplica.value)
+      ? queriedTasks
+      : storage.data.pendingData(); 
+  
+    var frequency = tagFrequencies(tasksSource);
+    var modified = tagsLastModified(tasksSource);
+    var setOfTags = tagSet(tasksSource);
     return SplayTreeMap.of({
       for (var tag in setOfTags)
         tag: TagMetadata(
