@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously, unrelated_type_equality_checks
 
+import 'package:taskwarrior/app/utils/language/sentences.dart';
+
 import 'dart:collection';
 import 'dart:io';
 
@@ -47,6 +49,7 @@ import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 class HomeController extends GetxController {
   final SplashController splashController = Get.find<SplashController>();
   late Storage storage;
+  final RxBool taskServerBannerShown = false.obs;
   final RxBool pendingFilter = false.obs;
   final RxBool waitingFilter = false.obs;
   final RxString projectFilter = ''.obs;
@@ -572,6 +575,44 @@ class HomeController extends GetxController {
     _refreshTasks();
   }
 
+  void showTaskServerNotConfiguredBanner(BuildContext context) {
+    if (taskServerBannerShown.value) return;
+    
+    taskServerBannerShown.value = true;
+    final messenger = ScaffoldMessenger.of(context);
+    
+    messenger.clearMaterialBanners();
+    
+    messenger.showMaterialBanner(
+      MaterialBanner(
+        content: Text(sentences.homePageTaskWarriorNotConfigured),
+        actions: [
+          TextButton(
+            onPressed: () {
+              messenger.hideCurrentMaterialBanner();
+              taskServerBannerShown.value = false;  // ✅ RESET flag
+              Get.toNamed(Routes.TASKSERVER_SETUP);
+            },
+            child: Text(sentences.homePageSetup),
+          ),
+          TextButton(
+            onPressed: () {
+              messenger.hideCurrentMaterialBanner();
+              taskServerBannerShown.value = false;  // ✅ RESET flag
+            },
+            child: const Text('Dismiss'),
+          ),
+        ],
+      ),
+    );
+    
+    Future.delayed(const Duration(seconds: 5), () {
+      messenger.hideCurrentMaterialBanner();
+      taskServerBannerShown.value = false;  // ✅ RESET flag
+    });
+  }
+
+
   void renameTab({
     required String tab,
     required String name,
@@ -600,9 +641,14 @@ class HomeController extends GetxController {
     clientId = await CredentialsStorage.getClientId();
     encryptionSecret = await CredentialsStorage.getEncryptionSecret();
     if (value) {
+      if (clientId == null || encryptionSecret == null) {
+        showTaskServerNotConfiguredBanner(context);
+        return;
+      }
+
       synchronize(context, false);
-      refreshTasks(clientId!, encryptionSecret!);
-    } else {}
+      refreshTasks(clientId, encryptionSecret);
+    }
   }
 
   RxBool syncOnStart = false.obs;
