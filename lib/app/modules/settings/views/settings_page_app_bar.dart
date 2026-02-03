@@ -58,7 +58,10 @@ class SettingsPageAppBar extends StatelessWidget
         onTap: () {
           //   Get.toNamed(Routes.b)
           // ;
-          Get.back();
+          if (Get.isSnackbarOpen == true) {
+            Get.closeCurrentSnackbar();
+          }
+          Navigator.of(context).pop();
         },
         child: Icon(
           Icons.chevron_left,
