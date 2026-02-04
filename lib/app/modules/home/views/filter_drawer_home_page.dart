@@ -420,44 +420,45 @@ class FilterDrawer extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(width: 12),
-                          // Toggle switch with + and - labels
-                          Row(
-                            children: [
-                              Text(
-                                '+',
-                                style: TextStyle(
-                                  fontFamily: FontFamily.poppins,
-                                  fontSize: TaskWarriorFonts.fontSizeMedium,
-                                  fontWeight: FontWeight.bold,
-                                  color: tColors.primaryTextColor,
-                                ),
-                              ),
-                              Switch(
-                                value: !isAscending,
-                                onChanged: selectedCategory != null
-                                    ? (bool value) {
-                                        if (value) {
-                                          // Switch to descending (-)
-                                          homeController
-                                              .selectSort('$selectedCategory-');
-                                        } else {
-                                          // Switch to ascending (+)
-                                          homeController
-                                              .selectSort('$selectedCategory+');
-                                        }
+                          // Toggle button with + and - text
+                          SizedBox(
+                            width: 48,
+                            height: 48,
+                            child: ElevatedButton(
+                              onPressed: selectedCategory != null
+                                  ? () {
+                                      if (isAscending) {
+                                        // Switch to descending (-)
+                                        homeController
+                                            .selectSort('$selectedCategory-');
+                                      } else {
+                                        // Switch to ascending (+)
+                                        homeController
+                                            .selectSort('$selectedCategory+');
                                       }
-                                    : null,
+                                    }
+                                  : null,
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.zero,
+                                backgroundColor: tColors.primaryBackgroundColor,
+                                foregroundColor: tColors.primaryTextColor,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  side: BorderSide(
+                                    color: TaskWarriorColors.borderColor,
+                                  ),
+                                ),
                               ),
-                              Text(
-                                '-',
+                              child: Text(
+                                isAscending ? '+' : '-',
                                 style: TextStyle(
                                   fontFamily: FontFamily.poppins,
-                                  fontSize: TaskWarriorFonts.fontSizeMedium,
+                                  fontSize: TaskWarriorFonts.fontSizeExtraLarge,
                                   fontWeight: FontWeight.bold,
                                   color: tColors.primaryTextColor,
                                 ),
                               ),
-                            ],
+                            ),
                           ),
                         ],
                       );
