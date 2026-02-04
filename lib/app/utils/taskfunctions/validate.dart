@@ -1,7 +1,7 @@
 void validateTaskDescription(String description) {
-  if (description.isEmpty) {
+  if (description.trim().isEmpty) {
     throw FormatException(
-      'Empty description will provoke a server error.',
+      'Description cannot be empty or contain only spaces.',
       description,
       0,
     );

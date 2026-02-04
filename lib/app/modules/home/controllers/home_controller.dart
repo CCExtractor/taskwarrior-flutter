@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:loggy/loggy.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taskwarrior/app/models/filters.dart';
 
@@ -19,9 +18,7 @@ import 'package:taskwarrior/app/models/storage.dart';
 import 'package:taskwarrior/app/models/storage/client.dart';
 import 'package:taskwarrior/app/models/tag_meta_data.dart';
 import 'package:taskwarrior/app/modules/home/controllers/widget.controller.dart';
-import 'package:taskwarrior/app/modules/home/views/add_task_bottom_sheet_new.dart';
 import 'package:taskwarrior/app/modules/splash/controllers/splash_controller.dart';
-import 'package:taskwarrior/app/routes/app_pages.dart';
 import 'package:taskwarrior/app/services/deep_link_service.dart';
 import 'package:taskwarrior/app/services/tag_filter.dart';
 import 'package:taskwarrior/app/tour/filter_drawer_tour.dart';
@@ -41,7 +38,6 @@ import 'package:taskwarrior/app/v3/db/task_database.dart';
 import 'package:taskwarrior/app/v3/db/update.dart';
 import 'package:taskwarrior/app/v3/models/task.dart';
 import 'package:taskwarrior/app/v3/net/fetch.dart';
-import 'package:taskwarrior/rust_bridge/api.dart';
 import 'package:textfield_tags/textfield_tags.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
@@ -877,8 +873,22 @@ class HomeController extends GetxController {
     });
   }
 
-  late RxString uuid = "".obs;
-  late RxBool isHomeWidgetTaskTapped = false.obs;
+  Iterable<String> get allTagsInCurrentTasks {
+    if (taskReplica.value) {
+      var tagSet = <String>{};
+      for (var task in tasksFromReplica) {
+        if (task.tags != null) {
+          tagSet.addAll(task.tags!);
+        }
+      }
+      var sortedTags = tagSet.toList()..sort();
+      return sortedTags;
+    }
+    return tagSet(storage.data.allData());
+  }
+
+  RxString uuid = "".obs;
+  RxBool isHomeWidgetTaskTapped = false.obs;
 
   // void handleHomeWidgetClicked() async {
   //   Uri? uri = await HomeWidget.initiallyLaunchedFromHomeWidget();
