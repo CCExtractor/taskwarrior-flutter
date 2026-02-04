@@ -64,8 +64,6 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
       SnackBar(
         duration: const Duration(seconds: 4),
         backgroundColor: tColors.secondaryBackgroundColor,
-        behavior: SnackBarBehavior.floating,
-        dismissDirection: DismissDirection.horizontal,
         content: Text(
           message,
           style: TextStyle(
