@@ -5,7 +5,7 @@ import 'package:taskwarrior/app/utils/language/sentences.dart';
 import 'dart:collection';
 import 'dart:io';
 
-import 'package:taskwarrior/app/routes/app_routes.dart';
+import 'package:taskwarrior/app/routes/app_pages.dart';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
@@ -45,10 +45,13 @@ import 'package:textfield_tags/textfield_tags.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
+
+
 class HomeController extends GetxController {
   final SplashController splashController = Get.find<SplashController>();
   late Storage storage;
   final RxBool taskServerBannerShown = false.obs;
+  final Sentences sentences = Sentences();
   final RxBool pendingFilter = false.obs;
   final RxBool waitingFilter = false.obs;
   final RxString projectFilter = ''.obs;
@@ -584,7 +587,7 @@ class HomeController extends GetxController {
     
     messenger.showMaterialBanner(
       MaterialBanner(
-        content: Text(Sentences.homePageTaskWarriorNotConfigured),
+        content: Text(sentences.homePageTaskWarriorNotConfigured),
         actions: [
           TextButton(
             onPressed: () {
@@ -592,7 +595,7 @@ class HomeController extends GetxController {
               taskServerBannerShown.value = false;  // ✅ RESET flag
               Get.toNamed(Routes.TASKSERVER_SETUP),
             },
-            child: Text(Sentences.homePageSetup),
+            child: Text(sentences.homePageSetup),
           ),
           TextButton(
             onPressed: () {
