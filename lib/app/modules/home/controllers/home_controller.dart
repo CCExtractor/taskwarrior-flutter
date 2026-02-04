@@ -5,6 +5,8 @@ import 'package:taskwarrior/app/utils/language/sentences.dart';
 import 'dart:collection';
 import 'dart:io';
 
+import 'package:taskwarrior/app/routes/app_routes.dart';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,7 +22,8 @@ import 'package:taskwarrior/app/models/tag_meta_data.dart';
 import 'package:taskwarrior/app/modules/home/controllers/widget.controller.dart';
 import 'package:taskwarrior/app/modules/splash/controllers/splash_controller.dart';
 import 'package:taskwarrior/app/services/deep_link_service.dart';
-import 'package:taskwarrior/app/services/tag_filter.dart';
+import 'package:taskwarrior/app/models/tag_filters.dart';
+
 import 'package:taskwarrior/app/tour/filter_drawer_tour.dart';
 import 'package:taskwarrior/app/tour/home_page_tour.dart';
 import 'package:taskwarrior/app/tour/task_swipe_tour.dart';
@@ -581,15 +584,15 @@ class HomeController extends GetxController {
     
     messenger.showMaterialBanner(
       MaterialBanner(
-        content: Text(sentences.homePageTaskWarriorNotConfigured),
+        content: Text(Sentences.homePageTaskWarriorNotConfigured),
         actions: [
           TextButton(
             onPressed: () {
               messenger.hideCurrentMaterialBanner();
               taskServerBannerShown.value = false;  // ✅ RESET flag
-              Get.toNamed(Routes.TASKSERVER_SETUP);
+              Get.toNamed(Routes.TASKSERVER_SETUP),
             },
-            child: Text(sentences.homePageSetup),
+            child: Text(Sentences.homePageSetup),
           ),
           TextButton(
             onPressed: () {

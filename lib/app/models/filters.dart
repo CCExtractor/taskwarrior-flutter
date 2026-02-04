@@ -1,28 +1,7 @@
 // lib/app/models/filters.dart
 
-class TagFilterMetadata {
-  final String display;
-  final bool selected;
+import 'package:taskwarrior/app/models/tag_filters.dart';
 
-  TagFilterMetadata({
-    required this.display,
-    required this.selected,
-  });
-}
-
-class TagFilters {
-  final bool tagUnion;
-  final void Function() toggleTagUnion;
-  final Map<String, TagFilterMetadata> tags;
-  final void Function(String) toggleTagFilter;
-
-  TagFilters({
-    required this.tagUnion,
-    required this.toggleTagUnion,
-    required this.tags,
-    required this.toggleTagFilter,
-  });
-}
 
 class Filters {
   const Filters({
