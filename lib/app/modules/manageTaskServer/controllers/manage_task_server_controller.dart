@@ -27,6 +27,7 @@ class ManageTaskServerController extends GetxController {
   final TextEditingController taskrcContentController = TextEditingController();
   RxBool isTaskDServerActive = true.obs;
   RxBool hideKey = true.obs;
+  final RxBool isManageServerTourActive = false.obs;
 
   @override
   void onInit() {
@@ -213,6 +214,7 @@ class ManageTaskServerController extends GetxController {
       opacityShadow: 1.00,
       hideSkip: true,
       onFinish: () {
+        isManageServerTourActive.value = false;
         SaveTourStatus.saveManageTaskServerTourStatus(true);
       },
     );
@@ -222,17 +224,19 @@ class ManageTaskServerController extends GetxController {
     Future.delayed(
       const Duration(milliseconds: 500),
       () {
-        SaveTourStatus.getManageTaskServerTourStatus().then((value) => {
-              if (value == false)
-                {
-                  tutorialCoachMark.show(context: context),
-                }
-              else
-                {
-                  // ignore: avoid_print
-                  print('User has seen this page'),
-                }
-            });
+        SaveTourStatus.getManageTaskServerTourStatus().then((value) {
+          if (value == false) {
+            tutorialCoachMark.targets.removeWhere(
+                (target) => target.keyTarget?.currentContext == null);
+            if (tutorialCoachMark.targets.isNotEmpty) {
+              isManageServerTourActive.value = true;
+              tutorialCoachMark.show(context: context);
+            }
+          } else {
+            // ignore: avoid_print
+            print('User has seen this page');
+          }
+        });
       },
     );
   }

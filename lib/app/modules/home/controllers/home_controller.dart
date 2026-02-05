@@ -66,6 +66,8 @@ class HomeController extends GetxController {
   var tasks = <TaskForC>[].obs;
   var tasksFromReplica = <TaskForReplica>[].obs;
   final RxBool isRefreshing = false.obs;
+  final RxBool isFilterTourActive = false.obs;
+  final RxBool isHomeTourActive = false.obs;
 
   @override
   void onInit() {
@@ -685,6 +687,7 @@ class HomeController extends GetxController {
         opacityShadow: 0.8,
         hideSkip: true,
         onFinish: () {
+          isHomeTourActive.value = false;
           SaveTourStatus.saveInAppTourStatus(true);
         });
   }
@@ -693,18 +696,19 @@ class HomeController extends GetxController {
     Future.delayed(
       const Duration(milliseconds: 500),
       () {
-        SaveTourStatus.getInAppTourStatus().then((value) => {
-              if (value == false)
-                {
-                  tutorialCoachMark.show(context: context),
-                }
-              else
-                {
-                  // ignore: avoid_print
-                  debugPrint('User has seen this page'),
-                  // User has seen this page
-                }
-            });
+        SaveTourStatus.getInAppTourStatus().then((value) {
+          if (value == false) {
+            tutorialCoachMark.targets.removeWhere(
+                (target) => target.keyTarget?.currentContext == null);
+            if (tutorialCoachMark.targets.isNotEmpty) {
+              isHomeTourActive.value = true;
+              tutorialCoachMark.show(context: context);
+            }
+          } else {
+            // ignore: avoid_print
+            debugPrint('User has seen this page');
+          }
+        });
       },
     );
   }
@@ -729,6 +733,7 @@ class HomeController extends GetxController {
       opacityShadow: 1.00,
       hideSkip: true,
       onFinish: () {
+        isFilterTourActive.value = false;
         SaveTourStatus.saveFilterTourStatus(true);
       },
     );
@@ -738,17 +743,19 @@ class HomeController extends GetxController {
     Future.delayed(
       const Duration(milliseconds: 500),
       () {
-        SaveTourStatus.getFilterTourStatus().then((value) => {
-              if (value == false)
-                {
-                  tutorialCoachMark.show(context: context),
-                }
-              else
-                {
-                  // ignore: avoid_print
-                  print('User has seen this page'),
-                }
-            });
+        SaveTourStatus.getFilterTourStatus().then((value) {
+          if (value == false) {
+            tutorialCoachMark.targets.removeWhere(
+                (target) => target.keyTarget?.currentContext == null);
+            if (tutorialCoachMark.targets.isNotEmpty) {
+              isFilterTourActive.value = true;
+              tutorialCoachMark.show(context: context);
+            }
+          } else {
+            // ignore: avoid_print
+            print('User has seen this page');
+          }
+        });
       },
     );
   }
@@ -774,7 +781,11 @@ class HomeController extends GetxController {
       print("tasks is ${tasks.isNotEmpty}");
       if (value == false) {
         initTaskSwipeTutorial();
-        tutorialCoachMark.show(context: context);
+        tutorialCoachMark.targets
+            .removeWhere((target) => target.keyTarget?.currentContext == null);
+        if (tutorialCoachMark.targets.isNotEmpty) {
+          tutorialCoachMark.show(context: context);
+        }
       } else {
         debugPrint('User has already seen the task swipe tutorial');
       }

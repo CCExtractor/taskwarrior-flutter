@@ -35,130 +35,144 @@ class ReportsHomeTaskc extends StatelessWidget {
         List<TaskForC> allTasks = snapshot.data ?? [];
         TaskwarriorColorTheme tColors =
             Theme.of(context).extension<TaskwarriorColorTheme>()!;
-        return Scaffold(
-          appBar: AppBar(
-            backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
-            title: Text(
-              SentenceManager(currentLanguage: AppSettings.selectedLanguage)
-                  .sentences
-                  .reportsPageTitle,
-              style: GoogleFonts.poppins(color: TaskWarriorColors.white),
-            ),
-            leading: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Icon(
-                Icons.chevron_left,
-                color: TaskWarriorColors.white,
-              ),
-            ),
-            bottom: PreferredSize(
-              preferredSize: Size.fromHeight(height * 0.1),
-              child: TabBar(
-                controller: reportsController.tabController,
-                labelColor: TaskWarriorColors.white,
-                labelStyle: GoogleFonts.poppins(
-                  fontWeight: TaskWarriorFonts.medium,
-                  fontSize: TaskWarriorFonts.fontSizeSmall,
+
+        return Obx(() => PopScope(
+            canPop: !reportsController.isReportsTourActive.value,
+            onPopInvokedWithResult: (didPop, result) async {
+              if (reportsController.isReportsTourActive.value) {
+                Get.closeAllSnackbars();
+                Get.snackbar(
+                  'Tour Active',
+                  'Please complete the tour before navigating back.',
+                  snackPosition: SnackPosition.BOTTOM,
+                );
+                return;
+              }
+            },
+            child: Scaffold(
+              appBar: AppBar(
+                backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
+                title: Text(
+                  SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                      .sentences
+                      .reportsPageTitle,
+                  style: GoogleFonts.poppins(color: TaskWarriorColors.white),
                 ),
-                unselectedLabelStyle: GoogleFonts.poppins(
-                  fontWeight: TaskWarriorFonts.light,
+                leading: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Icon(
+                    Icons.chevron_left,
+                    color: TaskWarriorColors.white,
+                  ),
                 ),
-                onTap: (value) {
-                  reportsController.selectedIndex.value = value;
-                },
-                tabs: <Widget>[
-                  Tab(
-                    key: reportsController.daily,
-                    icon: const Icon(Icons.schedule),
-                    text: SentenceManager(
-                            currentLanguage: AppSettings.selectedLanguage)
-                        .sentences
-                        .reportsPageDaily,
-                    iconMargin: const EdgeInsets.only(bottom: 0.0),
-                  ),
-                  Tab(
-                    key: reportsController.weekly,
-                    icon: const Icon(Icons.today),
-                    text: SentenceManager(
-                            currentLanguage: AppSettings.selectedLanguage)
-                        .sentences
-                        .reportsPageWeekly,
-                    iconMargin: const EdgeInsets.only(bottom: 0.0),
-                  ),
-                  Tab(
-                    key: reportsController.monthly,
-                    icon: const Icon(Icons.date_range),
-                    text: SentenceManager(
-                            currentLanguage: AppSettings.selectedLanguage)
-                        .sentences
-                        .reportsPageMonthly,
-                    iconMargin: const EdgeInsets.only(bottom: 0.0),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          backgroundColor: tColors.primaryBackgroundColor,
-          body: snapshot.connectionState == ConnectionState.waiting
-              ? const Center(child: CircularProgressIndicator())
-              : allTasks.isEmpty
-                  ? Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.heart_broken,
-                          color: tColors.primaryTextColor,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              SentenceManager(
-                                      currentLanguage:
-                                          AppSettings.selectedLanguage)
-                                  .sentences
-                                  .reportsPageNoTasksFound,
-                              style: GoogleFonts.poppins(
-                                fontWeight: TaskWarriorFonts.medium,
-                                fontSize: TaskWarriorFonts.fontSizeSmall,
-                                color: tColors.primaryTextColor,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              SentenceManager(
-                                      currentLanguage:
-                                          AppSettings.selectedLanguage)
-                                  .sentences
-                                  .reportsPageAddTasksToSeeReports,
-                              style: GoogleFonts.poppins(
-                                fontWeight: TaskWarriorFonts.light,
-                                fontSize: TaskWarriorFonts.fontSizeSmall,
-                                color: tColors.primaryTextColor,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    )
-                  : Obx(
-                      () => IndexedStack(
-                        index: reportsController.selectedIndex.value,
-                        children: [
-                          BurnDownDailyTaskc(),
-                          BurnDownWeeklyTask(),
-                          BurnDownMonthlyTaskc(),
-                        ],
-                      ),
+                bottom: PreferredSize(
+                  preferredSize: Size.fromHeight(height * 0.1),
+                  child: TabBar(
+                    controller: reportsController.tabController,
+                    labelColor: TaskWarriorColors.white,
+                    labelStyle: GoogleFonts.poppins(
+                      fontWeight: TaskWarriorFonts.medium,
+                      fontSize: TaskWarriorFonts.fontSizeSmall,
                     ),
-        );
+                    unselectedLabelStyle: GoogleFonts.poppins(
+                      fontWeight: TaskWarriorFonts.light,
+                    ),
+                    onTap: (value) {
+                      reportsController.selectedIndex.value = value;
+                    },
+                    tabs: <Widget>[
+                      Tab(
+                        key: reportsController.daily,
+                        icon: const Icon(Icons.schedule),
+                        text: SentenceManager(
+                                currentLanguage: AppSettings.selectedLanguage)
+                            .sentences
+                            .reportsPageDaily,
+                        iconMargin: const EdgeInsets.only(bottom: 0.0),
+                      ),
+                      Tab(
+                        key: reportsController.weekly,
+                        icon: const Icon(Icons.today),
+                        text: SentenceManager(
+                                currentLanguage: AppSettings.selectedLanguage)
+                            .sentences
+                            .reportsPageWeekly,
+                        iconMargin: const EdgeInsets.only(bottom: 0.0),
+                      ),
+                      Tab(
+                        key: reportsController.monthly,
+                        icon: const Icon(Icons.date_range),
+                        text: SentenceManager(
+                                currentLanguage: AppSettings.selectedLanguage)
+                            .sentences
+                            .reportsPageMonthly,
+                        iconMargin: const EdgeInsets.only(bottom: 0.0),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              backgroundColor: tColors.primaryBackgroundColor,
+              body: snapshot.connectionState == ConnectionState.waiting
+                  ? const Center(child: CircularProgressIndicator())
+                  : allTasks.isEmpty
+                      ? Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.heart_broken,
+                              color: tColors.primaryTextColor,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  SentenceManager(
+                                          currentLanguage:
+                                              AppSettings.selectedLanguage)
+                                      .sentences
+                                      .reportsPageNoTasksFound,
+                                  style: GoogleFonts.poppins(
+                                    fontWeight: TaskWarriorFonts.medium,
+                                    fontSize: TaskWarriorFonts.fontSizeSmall,
+                                    color: tColors.primaryTextColor,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  SentenceManager(
+                                          currentLanguage:
+                                              AppSettings.selectedLanguage)
+                                      .sentences
+                                      .reportsPageAddTasksToSeeReports,
+                                  style: GoogleFonts.poppins(
+                                    fontWeight: TaskWarriorFonts.light,
+                                    fontSize: TaskWarriorFonts.fontSizeSmall,
+                                    color: tColors.primaryTextColor,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        )
+                      : Obx(
+                          () => IndexedStack(
+                            index: reportsController.selectedIndex.value,
+                            children: [
+                              BurnDownDailyTaskc(),
+                              BurnDownWeeklyTask(),
+                              BurnDownMonthlyTaskc(),
+                            ],
+                          ),
+                        ),
+            )));
       },
     );
   }

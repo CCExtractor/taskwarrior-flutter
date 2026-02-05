@@ -25,98 +25,95 @@ class DetailRouteView extends GetView<DetailRouteController> {
     controller.showDetailsPageTour(context);
     TaskwarriorColorTheme tColors =
         Theme.of(context).extension<TaskwarriorColorTheme>()!;
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) async {
+        if (didPop) return;
+
+        if (controller.isTourActive.value) {
+          return;
+        }
+
         if (!controller.onEdit.value) {
           debugPrint(
               'DetailRouteView: No edits made, navigating back without prompt.');
           // Get.offAll(() => const HomeView());
           Navigator.of(context).pop();
-          // Get.toNamed(Routes.HOME);
-          return false;
+          return;
         }
         debugPrint(
             'DetailRouteView: Unsaved edits detected, prompting user for action.');
 
-        bool? save = await showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              backgroundColor: tColors.dialogBackgroundColor,
-              title: Text(
-                SentenceManager(currentLanguage: AppSettings.selectedLanguage)
-                    .sentences
-                    .saveChangesConfirmation,
-                style: TextStyle(
-                  color: tColors.primaryTextColor,
+        bool? done = await Get.dialog(
+          AlertDialog(
+            backgroundColor: tColors.dialogBackgroundColor,
+            title: Text(
+              SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                  .sentences
+                  .saveChangesConfirmation,
+              style: TextStyle(
+                color: tColors.primaryTextColor,
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  controller.saveChanges();
+                  Navigator.of(context).pop(false);
+                },
+                child: Text(
+                  SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                      .sentences
+                      .yes,
+                  style: TextStyle(
+                    color: tColors.primaryTextColor,
+                  ),
                 ),
               ),
-              actions: [
-                // YES → save and pop
-                TextButton(
-                  onPressed: () {
-                    // Get.back(); // Close the dialog first
-                    // // Wait for dialog to fully close before showing snackbar
-                    // Future.delayed(const Duration(milliseconds: 100), () {
-                    //   controller.saveChanges();
-                    // });
-
-                    controller.saveChanges();
-                    Navigator.of(context).pop(true);
-                  },
-                  child: Text(
-                    SentenceManager(
-                            currentLanguage: AppSettings.selectedLanguage)
-                        .sentences
-                        .yes,
-                    style: TextStyle(
-                      color: tColors.primaryTextColor,
-                    ),
+              TextButton(
+                onPressed: () {
+                  Get.back(result: true);
+                  controller.onEdit.value = false;
+                },
+                child: Text(
+                  SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                      .sentences
+                      .no,
+                  style: TextStyle(
+                    color: tColors.primaryTextColor,
                   ),
                 ),
-
-                // NO → discard and pop
-                TextButton(
-                  onPressed: () {
-                    // Get.offAll(() => const HomeView());
-                    Navigator.of(context).pop(false);
-                  },
-                  child: Text(
-                    SentenceManager(
-                            currentLanguage: AppSettings.selectedLanguage)
-                        .sentences
-                        .no,
-                    style: TextStyle(
-                      color: tColors.primaryTextColor,
-                    ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Get.back(result: false);
+                },
+                child: Text(
+                  SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                      .sentences
+                      .cancel,
+                  style: TextStyle(
+                    color: tColors.primaryTextColor,
                   ),
                 ),
-
-                // CANCEL → stay on page
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(null);
-                  },
-                  child: Text(
-                    SentenceManager(
-                            currentLanguage: AppSettings.selectedLanguage)
-                        .sentences
-                        .cancel,
-                    style: TextStyle(
-                      color: tColors.primaryTextColor,
-                    ),
-                  ),
-                ),
-              ],
-            );
-          },
+              ),
+            ],
+          ),
+          barrierDismissible: false,
         );
-        if (save == null) {
-          // Cancel → stay
-          return false;
+        //runs when 'yes' or 'no' is clicked
+        if (done == true) {
+          Get.back();
+          // only runs when 'yes' is clicked
+          if (controller.onEdit.value == true) {
+            controller.onEdit.value = false;
+            Get.snackbar(
+              'Task Updated',
+              '',
+              snackPosition: SnackPosition.BOTTOM,
+            );
+          }
         }
-        // Yes (true) or No (false) → both allow popping the screen
-        return true;
       },
       child: Scaffold(
           backgroundColor: tColors.primaryBackgroundColor,
@@ -172,65 +169,62 @@ class DetailRouteView extends GetView<DetailRouteController> {
                   splashColor: tColors.primaryTextColor,
                   heroTag: "btn1",
                   onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          scrollable: true,
-                          title: Text(
-                            '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.reviewChanges}:',
+                    Get.dialog(
+                      AlertDialog(
+                        scrollable: true,
+                        title: Text(
+                          '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.reviewChanges}:',
+                          style: TextStyle(
+                            color: tColors.primaryTextColor,
+                          ),
+                        ),
+                        content: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Text(
+                            controller.modify.changes.entries
+                                .map((entry) => '${entry.key}:\n'
+                                    '  ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.oldChanges}: ${entry.value['old']}\n'
+                                    '  ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.newChanges}: ${entry.value['new']}')
+                                .toList()
+                                .join('\n'),
                             style: TextStyle(
                               color: tColors.primaryTextColor,
                             ),
                           ),
-                          content: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Get.back();
+                            },
                             child: Text(
-                              controller.modify.changes.entries
-                                  .map((entry) => '${entry.key}:\n'
-                                      '  ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.oldChanges}: ${entry.value['old']}\n'
-                                      '  ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.newChanges}: ${entry.value['new']}')
-                                  .toList()
-                                  .join('\n'),
+                              SentenceManager(
+                                      currentLanguage:
+                                          AppSettings.selectedLanguage)
+                                  .sentences
+                                  .cancel,
                               style: TextStyle(
                                 color: tColors.primaryTextColor,
                               ),
                             ),
                           ),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Get.back();
-                              },
-                              child: Text(
-                                SentenceManager(
-                                        currentLanguage:
-                                            AppSettings.selectedLanguage)
-                                    .sentences
-                                    .cancel,
-                                style: TextStyle(
-                                  color: tColors.primaryTextColor,
-                                ),
+                          ElevatedButton(
+                            onPressed: () {
+                              controller.saveChanges();
+                            },
+                            child: Text(
+                              SentenceManager(
+                                      currentLanguage:
+                                          AppSettings.selectedLanguage)
+                                  .sentences
+                                  .submit,
+                              style: TextStyle(
+                                color: tColors.primaryBackgroundColor,
                               ),
                             ),
-                            TextButton(
-                              onPressed: () {
-                                controller.saveChanges();
-                              },
-                              child: Text(
-                                SentenceManager(
-                                        currentLanguage:
-                                            AppSettings.selectedLanguage)
-                                    .sentences
-                                    .submit,
-                                style: TextStyle(
-                                  color: tColors.primaryBackgroundColor,
-                                ),
-                              ),
-                            ),
-                          ],
-                        );
-                      },
+                          ),
+                        ],
+                      ),
                     );
                   },
                   child: const Icon(Icons.save),

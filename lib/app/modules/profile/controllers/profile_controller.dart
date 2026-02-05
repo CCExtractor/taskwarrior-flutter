@@ -10,6 +10,8 @@ class ProfileController extends GetxController {
   var profilesWidget = Get.find<SplashController>();
   late RxMap<String, String?> profilesMap;
   late RxString currentProfile;
+  final RxBool isProfileTourActive = false.obs;
+
   @override
   void onInit() {
     profilesMap = profilesWidget.profilesMap;
@@ -28,7 +30,6 @@ class ProfileController extends GetxController {
     tutorialCoachMark = TutorialCoachMark(
       targets: addProfilePage(
         currentProfileKey: currentProfileKey,
-
         addNewProfileKey: addNewProfileKey,
         manageSelectedProfileKey: manageSelectedProfileKey,
       ),
@@ -37,6 +38,7 @@ class ProfileController extends GetxController {
       opacityShadow: 1.00,
       hideSkip: true,
       onFinish: () {
+        isProfileTourActive.value = false;
         SaveTourStatus.saveProfileTourStatus(true);
       },
     );
@@ -46,17 +48,19 @@ class ProfileController extends GetxController {
     Future.delayed(
       const Duration(milliseconds: 500),
       () {
-        SaveTourStatus.getProfileTourStatus().then((value) => {
-              if (value == false)
-                {
-                  tutorialCoachMark.show(context: context),
-                }
-              else
-                {
-                  // ignore: avoid_print
-                  print('User has seen this page'),
-                }
-            });
+        SaveTourStatus.getProfileTourStatus().then((value) {
+          if (value == false) {
+            tutorialCoachMark.targets.removeWhere(
+                (target) => target.keyTarget?.currentContext == null);
+            if (tutorialCoachMark.targets.isNotEmpty) {
+              isProfileTourActive.value = true;
+              tutorialCoachMark.show(context: context);
+            }
+          } else {
+            // ignore: avoid_print
+            print('User has seen this page');
+          }
+        });
       },
     );
   }
