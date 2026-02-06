@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:taskwarrior/app/modules/home/views/show_tasks.dart';
 import 'package:taskwarrior/app/modules/home/views/show_tasks_replica.dart';
 import 'package:taskwarrior/app/modules/home/views/tasks_builder.dart';
+import 'package:taskwarrior/app/modules/home/views/tutorial_modal.dart';
+import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
@@ -13,10 +15,44 @@ class HomePageBody extends StatelessWidget {
   final HomeController controller;
   const HomePageBody({required this.controller, super.key});
 
+  void _showTutorialModal(BuildContext context) {
+    Future.delayed(
+      const Duration(milliseconds: 500),
+      () async {
+        bool promptShown = await SaveTourStatus.getTutorialPromptShown();
+        if (!promptShown && context.mounted) {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext dialogContext) {
+              return TutorialModal(
+                onYes: () async {
+                  await SaveTourStatus.saveTutorialPromptShown(true);
+                  if (dialogContext.mounted) {
+                    Navigator.of(dialogContext).pop();
+                    controller.initInAppTour();
+                    controller.tutorialCoachMark.show(context: context);
+                  }
+                },
+                onNo: () async {
+                  await SaveTourStatus.saveTutorialPromptShown(true);
+                  await SaveTourStatus.disableAllTutorials();
+                  if (dialogContext.mounted) {
+                    Navigator.of(dialogContext).pop();
+                  }
+                },
+              );
+            },
+          );
+        }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     controller.initInAppTour();
-    controller.showInAppTour(context);
+    _showTutorialModal(context);
     TaskwarriorColorTheme tColors =
         Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return DoubleBackToCloseApp(

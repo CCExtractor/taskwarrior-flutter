@@ -682,6 +682,15 @@ class FrenchSentences extends Sentences {
   String get checkAllDebugLogsHere =>
       'Vérifiez tous les journaux de débogage ici';
 
+  @override
+  String get tutorialModalWelcome => 'Bienvenue!';
+  @override
+  String get tutorialModalMessage =>
+      'Souhaitez-vous voir un tutoriel rapide pour apprendre à utiliser cette application?';
+  @override
+  String get tutorialModalKeepTutorials => 'Conserver les tutoriels';
+  @override
+  String get tutorialModalSkipAllTutorials => 'Ignorer tous les tutoriels';
   // Paramètres
   @override
   String get syncSetting => 'Paramètres de Synchronisation';

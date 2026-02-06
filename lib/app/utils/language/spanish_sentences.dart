@@ -670,6 +670,15 @@ class SpanishSentences extends Sentences {
   String get checkAllDebugLogsHere =>
       'Consulta todos los registros de depuración aquí';
 
+  @override
+  String get tutorialModalWelcome => '¡Bienvenido!';
+  @override
+  String get tutorialModalMessage =>
+      '¿Te gustaría ver un tutorial rápido para aprender a usar esta aplicación?';
+  @override
+  String get tutorialModalKeepTutorials => 'Mantener tutoriales';
+  @override
+  String get tutorialModalSkipAllTutorials => 'Omitir todos los tutoriales';
   //
   @override
   String get syncSetting => 'Configuración de sincronización';
