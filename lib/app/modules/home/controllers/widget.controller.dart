@@ -100,9 +100,21 @@ class WidgetController extends GetxController {
         case 'Due till-':
           return b.due!.compareTo(a.due!);
         case 'Priority-':
-          return a.priority!.compareTo(b.priority!);
+          final priorityCompare = a.priority!.compareTo(b.priority!);
+          if (priorityCompare != 0) return priorityCompare;
+          // If priorities are equal, sort by due date
+          if (a.due == null && b.due == null) return 0;
+          if (a.due == null) return 1;
+          if (b.due == null) return -1;
+          return a.due!.compareTo(b.due!);
         case 'Priority+':
-          return b.priority!.compareTo(a.priority!);
+          final priorityCompare = b.priority!.compareTo(a.priority!);
+          if (priorityCompare != 0) return priorityCompare;
+          // If priorities are equal, sort by due date
+          if (a.due == null && b.due == null) return 0;
+          if (a.due == null) return 1;
+          if (b.due == null) return -1;
+          return a.due!.compareTo(b.due!);
         case 'Project+':
           return a.project!.compareTo(b.project!);
         case 'Project-':
