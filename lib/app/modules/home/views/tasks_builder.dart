@@ -220,7 +220,7 @@ class TasksBuilder extends StatelessWidget {
                                           dtb!.add(const Duration(minutes: 1));
                                       cancelNotification(task);
                                     }
-                                    if (Platform.isAndroid||Platform.isIOS) {
+                                    if (Platform.isAndroid) {
                                       WidgetController widgetController =
                                           Get.put(WidgetController());
                                       widgetController.fetchAllData();

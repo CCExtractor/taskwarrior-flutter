@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
-import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import '../controllers/taskc_details_controller.dart';
@@ -58,7 +57,7 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
                   context,
                   '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPagePriority}:',
                   controller.priority.value,
-                  ['H', 'M', 'L', 'None'],
+                  ['H', 'M', 'L', '-'],
                   (value) => controller.updateField(controller.priority, value),
                 ),
                 _buildDatePickerDetail(
@@ -72,17 +71,8 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
                   _buildDatePickerDetail(
                     context,
                     '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageStart}:',
-                    controller.start.value == "stop"
-                        ? "None"
-                        : controller.start.value,
-                    () => controller.start.value == "stop" ||
-                            controller.start.value == "None" ||
-                            controller.start.value.isEmpty
-                        ? controller.updateField(
-                            controller.start,
-                            controller.formatDate(DateTime.now()),
-                          )
-                        : controller.updateField(controller.start, "stop"),
+                    controller.start.value,
+                    () => controller.pickDateTime(controller.start),
                   ),
                   _buildDatePickerDetail(
                     context,
@@ -148,11 +138,11 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
 
                 // Modified is available for both; show it for both types
                 _buildDetail(
-                    context,
-                    '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageModified}:',
-                    controller.formatDate(
-                        controller.initialTaskModifiedForFormatting()),
-                    disabled: true),
+                  context,
+                  '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageModified}:',
+                  controller.formatDate(
+                      controller.initialTaskModifiedForFormatting()),
+                ),
               ],
             ),
           ),
@@ -203,13 +193,9 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
     );
   }
 
-  Widget _buildDetail(BuildContext context, String label, String value,
-      {bool disabled = false}) {
+  Widget _buildDetail(BuildContext context, String label, String value) {
     TaskwarriorColorTheme tColors =
         Theme.of(context).extension<TaskwarriorColorTheme>()!;
-    final Color? textColor =
-        disabled ? tColors.primaryDisabledTextColor : tColors.primaryTextColor;
-
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -231,20 +217,19 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
         children: [
           Text(
             label,
-            style: GoogleFonts.poppins(
-              fontWeight: TaskWarriorFonts.bold,
-              fontSize: TaskWarriorFonts.fontSizeMedium,
-              color: textColor,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+              color: tColors.primaryTextColor,
             ),
           ),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
               value,
-              style: GoogleFonts.poppins(
-                fontWeight: FontWeight.normal,
-                fontSize: TaskWarriorFonts.fontSizeMedium,
-                color: textColor,
+              style: TextStyle(
+                fontSize: 18,
+                color: tColors.primaryTextColor,
               ),
             ),
           ),

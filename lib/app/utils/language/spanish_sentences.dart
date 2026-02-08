@@ -669,16 +669,4 @@ class SpanishSentences extends Sentences {
   @override
   String get checkAllDebugLogsHere =>
       'Consulta todos los registros de depuración aquí';
-
-  //
-  @override
-  String get syncSetting => 'Configuración de sincronización';
-  @override
-  String get displaySettings => 'Configuración de visualización';
-  @override
-  String get storageAndData => 'Almacenamiento y datos';
-  @override
-  String get advanced => 'Avanzado';
-  @override
-  String get taskchampionBackendUrl => 'Taskchampion URL';
 }

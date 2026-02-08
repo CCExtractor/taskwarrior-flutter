@@ -10,7 +10,7 @@ void main() {
     test('should return package name and version', () async {
       PackageInfo.setMockInitialValues(
         appName: 'App',
-        packageName: 'com.ccextractor.app',
+        packageName: 'com.example.app',
         version: '1.0.0',
         buildNumber: '1',
         buildSignature: '',
@@ -18,7 +18,7 @@ void main() {
 
       final result = await client();
 
-      expect(result, 'com.ccextractor.app 1.0.0');
+      expect(result, 'com.example.app 1.0.0');
     });
   });
 }

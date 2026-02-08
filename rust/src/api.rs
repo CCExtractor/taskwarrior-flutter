@@ -108,11 +108,7 @@ pub fn update_task(
                     let _ = t.set_due(parse_datetime(&value), &mut ops);
                 }
                 "start" => {
-                    if value == "stop" {
-                        let _ = t.stop(&mut ops);
-                    } else {
-                        let _ = t.start(&mut ops);
-                    }
+                    let _ = t.start(&mut ops);
                 }
                 "wait" => {
                     let _ = t.set_wait(parse_datetime(&value), &mut ops);
@@ -139,7 +135,7 @@ pub fn update_task(
                     }
                 }
                 "project" => {
-                    let _ = t.set_value("project", Some(value), &mut ops);
+                    let _ = t.set_user_defined_attribute("project", value, &mut ops);
                 }
                 "status" => {
                     let status = match value.as_str() {

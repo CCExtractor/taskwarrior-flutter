@@ -653,15 +653,4 @@ class EnglishSentences extends Sentences {
   String get logs => 'Logs';
   @override
   String get checkAllDebugLogsHere => 'Check all debug logs here';
-  // Settings
-  @override
-  String get syncSetting => 'Sync Settings';
-  @override
-  String get displaySettings => 'Display Settings';
-  @override
-  String get storageAndData => 'Storage and Data';
-  @override
-  String get advanced => 'Advanced';
-  @override
-  String get taskchampionBackendUrl => 'Taskchampion URL';
 }

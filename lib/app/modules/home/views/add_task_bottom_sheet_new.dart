@@ -14,6 +14,7 @@ import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/constants/constants.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/add_task_dialog_utils.dart';
+import 'package:taskwarrior/app/utils/taskfunctions/tags.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/taskparser.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:taskwarrior/app/v3/champion/replica.dart';
@@ -31,8 +32,6 @@ class AddTaskBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint(
-        "Building Add Task Bottom Sheet for ${forTaskC ? "TaskC" : forReplica ? "Replica" : "Normal Task"}");
     const padding = 12.0;
     return Padding(
       padding: EdgeInsets.only(
@@ -97,7 +96,7 @@ class AddTaskBottomSheet extends StatelessWidget {
                       padding: const EdgeInsets.all(padding),
                       child: TextFormField(
                         controller: homeController.namecontroller,
-                        validator: (value) => value!.trim().isEmpty
+                        validator: (value) => value!.isEmpty
                             ? SentenceManager(
                                     currentLanguage:
                                         homeController.selectedLanguage.value)
@@ -217,7 +216,7 @@ class AddTaskBottomSheet extends StatelessWidget {
   }
 
   Widget buildTagsInput(BuildContext context) => AddTaskTagsInput(
-        suggestions: homeController.allTagsInCurrentTasks,
+        suggestions: tagSet(homeController.storage.data.allData()),
         onTagsChanges: (p0) => homeController.tags.value = p0,
       );
 
@@ -225,8 +224,7 @@ class AddTaskBottomSheet extends StatelessWidget {
         onDateChanges: (List<DateTime?> p0) {
           homeController.selectedDates.value = p0;
         },
-        allowedIndexes: forReplica ? [0, 1] : [0, 1, 2, 3],
-        onlyDueDate: forTaskC,
+        onlyDueDate: forTaskC || forReplica,
       );
 
   Widget buildPriority(BuildContext context) => Column(
@@ -309,11 +307,6 @@ class AddTaskBottomSheet extends StatelessWidget {
       );
 
   Set<String> getProjects() {
-    if (homeController.taskReplica.value) {
-      return homeController.tasksFromReplica
-          .map((task) => task.project ?? '')
-          .toSet();
-    }
     Iterable<Task> tasks = homeController.storage.data.allData();
     return tasks
         .where((task) => task.project != null)
@@ -324,7 +317,7 @@ class AddTaskBottomSheet extends StatelessWidget {
     if (homeController.formKey.currentState!.validate()) {
       debugPrint("tags ${homeController.tags}");
       var task = TaskForC(
-          description: homeController.namecontroller.text.trim(),
+          description: homeController.namecontroller.text,
           status: 'pending',
           priority: homeController.priority.value,
           entry: DateTime.now().toIso8601String(),
@@ -372,7 +365,7 @@ class AddTaskBottomSheet extends StatelessWidget {
   void onSaveButtonClicked(BuildContext context) async {
     if (homeController.formKey.currentState!.validate()) {
       try {
-        var task = taskParser(homeController.namecontroller.text.trim())
+        var task = taskParser(homeController.namecontroller.text)
             .rebuild((b) =>
                 b..due = getDueDate(homeController.selectedDates)?.toUtc())
             .rebuild((p) => p..priority = homeController.priority.value)
@@ -430,12 +423,6 @@ class AddTaskBottomSheet extends StatelessWidget {
         if (value) {
           storageWidget.synchronize(context, true);
         }
-        if (Platform.isAndroid || Platform.isIOS) {
-          WidgetController widgetController = Get.put(WidgetController());
-          widgetController.fetchAllData();
-
-          widgetController.update();
-        }
       } on FormatException catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
@@ -458,7 +445,7 @@ class AddTaskBottomSheet extends StatelessWidget {
     if (homeController.formKey.currentState!.validate()) {
       try {
         await Replica.addTaskToReplica(HashMap<String, dynamic>.from({
-          "description": homeController.namecontroller.text.trim(),
+          "description": homeController.namecontroller.text,
           "due": getDueDate(homeController.selectedDates)?.toUtc(),
           "priority": homeController.priority.value,
           "project": homeController.projectcontroller.text != ""

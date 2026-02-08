@@ -7,8 +7,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
-import 'package:intl/intl.dart';
-import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 
 class NotificationService {
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
@@ -55,21 +53,13 @@ class NotificationService {
     return notificationId;
   }
 
-  // Helper method to format date time based on user preferences
-  String getFormattedDateTime(DateTime dateTime) {
-    String timeFormat = AppSettings.use24HourFormatRx.value
-        ? 'yyyy-MM-dd HH:mm:ss'
-        : 'yyyy-MM-dd hh:mm:ss a';
-    return DateFormat(timeFormat).format(dateTime);
-  }
-
   void sendNotification(
       DateTime dtb, String taskname, bool isWait, DateTime entryTime) async {
     DateTime dateTime = DateTime.now();
     tz.initializeTimeZones();
     if (kDebugMode) {
       print("date and time are:-$dateTime");
-      print("date and time are:-${getFormattedDateTime(dtb)}");
+      print("date and time are:-$dtb");
     }
     final tz.TZDateTime scheduledAt =
         tz.TZDateTime.from(dtb.add(const Duration(minutes: 0)), tz.local);

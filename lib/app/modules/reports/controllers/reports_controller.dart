@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:home_widget/home_widget.dart';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -13,6 +15,8 @@ import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:flutter/services.dart';
 import 'package:taskwarrior/app/v3/db/task_database.dart';
 import 'package:taskwarrior/app/v3/models/task.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
@@ -31,6 +35,69 @@ class ReportsController extends GetxController
   var allData = <Task>[].obs;
   late Storage storage;
   var storageWidget;
+
+  final GlobalKey _chartKey = GlobalKey();
+
+  GlobalKey get chartKey => _chartKey;
+
+  Future<void> captureChart() async {
+    try {
+      if (chartKey.currentContext == null) {
+        print('Error: chartKey.currentContext is null');
+        return;
+      }
+
+      RenderRepaintBoundary? boundary =
+          chartKey.currentContext!.findRenderObject() as RenderRepaintBoundary?;
+
+      if (boundary == null) {
+        print('Error: boundary is null');
+        return;
+      }
+
+      final image = await boundary.toImage();
+      final byteData = await image.toByteData(format: ImageByteFormat.png);
+
+      if (byteData == null) {
+        print('Error: byteData is null');
+        return;
+      }
+
+      final pngBytes = byteData.buffer.asUint8List();
+
+      // Get the documents directory
+      final directory = await getApplicationDocumentsDirectory();
+      final imagePath = '${directory.path}/daily_burndown_chart.png';
+
+      // Save the image to the documents directory
+      File imgFile = File(imagePath);
+      await imgFile.writeAsBytes(pngBytes);
+      print('Image saved to: $imagePath');
+
+      // Save the image path to HomeWidget
+      await HomeWidget.saveWidgetData<String>('chart_image', imagePath);
+
+      // Verify that the file exists
+      if (await imgFile.exists()) {
+        print('Image file exists!');
+      } else {
+        print('Image file does not exist!');
+      }
+
+      // Add a delay before sending the broadcast
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      // Send a broadcast to update the widget
+      const platform = MethodChannel('com.example.taskwarrior/widget');
+      try {
+        await platform.invokeMethod('updateWidget');
+      } on PlatformException catch (e) {
+        print("Failed to Invoke: '${e.message}'.");
+      }
+    } catch (e) {
+      print('Error capturing chart: $e');
+    }
+  }
 
   // void _initReportsTour() {
   //   tutorialCoachMark = TutorialCoachMark(

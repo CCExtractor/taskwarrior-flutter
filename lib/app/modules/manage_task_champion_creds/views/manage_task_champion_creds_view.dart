@@ -93,26 +93,18 @@ class ManageTaskChampionCredsView
                     ),
                   ),
                   const SizedBox(height: 10),
-                  Obx(() => TextField(
-                        style: TextStyle(color: tColors.primaryTextColor),
-                        controller: controller.ccsyncBackendUrlController,
-                        decoration: InputDecoration(
-                          labelText: controller.taskReplica.value
-                              ? SentenceManager(
-                                      currentLanguage:
-                                          AppSettings.selectedLanguage)
-                                  .sentences
-                                  .taskchampionBackendUrl
-                              : SentenceManager(
-                                      currentLanguage:
-                                          AppSettings.selectedLanguage)
-                                  .sentences
-                                  .ccsyncBackendUrl,
-                          labelStyle:
-                              TextStyle(color: tColors.primaryTextColor),
-                          border: const OutlineInputBorder(),
-                        ),
-                      )),
+                  TextField(
+                    style: TextStyle(color: tColors.primaryTextColor),
+                    controller: controller.ccsyncBackendUrlController,
+                    decoration: InputDecoration(
+                      labelText: SentenceManager(
+                              currentLanguage: AppSettings.selectedLanguage)
+                          .sentences
+                          .ccsyncBackendUrl,
+                      labelStyle: TextStyle(color: tColors.primaryTextColor),
+                      border: const OutlineInputBorder(),
+                    ),
+                  ),
                   const SizedBox(height: 20),
                   Obx(() => Center(
                           child: ElevatedButton(

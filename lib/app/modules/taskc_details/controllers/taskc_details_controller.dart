@@ -50,9 +50,9 @@ class TaskcDetailsController extends GetxController {
     // Support both TaskForC (local tasks) and TaskForReplica (replica tasks)
     if (task is TaskForC) {
       description = task.description.obs;
-      project = (task.project ?? 'None').obs;
+      project = (task.project ?? '-').obs;
       status = task.status.obs;
-      priority = (task.priority ?? 'None').obs;
+      priority = (task.priority ?? '-').obs;
       due = formatDate(task.due).obs;
       start = "".obs;
       wait = "".obs;
@@ -66,9 +66,9 @@ class TaskcDetailsController extends GetxController {
       annotations = <Annotation>[].obs;
     } else if (task is TaskForReplica) {
       description = (task.description ?? '').obs;
-      project = (task.project ?? 'None').obs;
+      project = (task.project ?? '-').obs;
       status = (task.status ?? '').obs;
-      priority = (task.priority ?? 'None').obs;
+      priority = (task.priority ?? '-').obs;
       // TaskForReplica stores epoch seconds; convert to ISO string for formatting
       debugPrint('Replica task due: ${task.due}');
       due = formatDate(task.due).obs;
@@ -88,10 +88,10 @@ class TaskcDetailsController extends GetxController {
     } else {
       // Fallback
       description = ''.obs;
-      project = 'None'.obs;
+      project = '-'.obs;
       status = ''.obs;
-      priority = 'None'.obs;
-      due = 'None'.obs;
+      priority = '-'.obs;
+      due = '-'.obs;
       start = "".obs;
       wait = "".obs;
       tags = <String>[].obs;
@@ -104,43 +104,27 @@ class TaskcDetailsController extends GetxController {
   }
 
   String formatDate(dynamic date) {
-    if (date == null) return 'None';
+    if (date == null) return '-';
     // If date is epoch seconds as int
-    bool is24hrFormat = AppSettings.use24HourFormatRx.value;
-    final pattern = is24hrFormat
-        ? 'EEE, yyyy-MM-dd HH:mm:ss'
-        : 'EEE, yyyy-MM-dd hh:mm:ss a';
-
-    if (date == null) return 'None';
-
     if (date is int) {
       try {
         final dt = DateTime.fromMillisecondsSinceEpoch(date * 1000);
-        return DateFormat(pattern).format(dt.toLocal());
+        return DateFormat('yyyy-MM-dd HH:mm:ss').format(dt);
       } catch (e) {
-        debugPrint('Error formatting epoch date: $e');
-        return 'None';
+        return '-';
       }
     }
-
     if (date is DateTime) {
-      try {
-        return DateFormat(pattern).format(date.toLocal());
-      } catch (e) {
-        debugPrint('Error formatting DateTime: $e');
-        return 'None';
-      }
+      return DateFormat('yyyy-MM-dd HH:mm:ss').format(date);
     }
-
     final dateString = date?.toString() ?? '';
-    if (dateString.isEmpty || dateString == 'None') return 'None';
-
+    if (dateString.isEmpty || dateString == '-') return '-';
     try {
-      final parsedDate = DateTime.parse(dateString).toLocal();
-      return DateFormat(pattern).format(parsedDate);
+      DateTime parsedDate = DateTime.parse(dateString);
+      return DateFormat('yyyy-MM-dd HH:mm:ss').format(parsedDate);
     } catch (e) {
-      debugPrint('Error parsing date: $dateString $e');
-      return 'None';
+      debugPrint('Error parsing date: $dateString');
+      return '-';
     }
   }
 
@@ -164,13 +148,13 @@ class TaskcDetailsController extends GetxController {
   // model shape than TaskForC).
   String initialTaskUuidDisplay() {
     try {
-      if (initialTask == null) return 'None';
+      if (initialTask == null) return '-';
       if (initialTask is TaskForC)
-        return (initialTask.uuid ?? 'None')?.toString() ?? 'None';
-      if (initialTask is TaskForReplica) return initialTask.uuid ?? 'None';
-      return 'None';
+        return (initialTask.uuid ?? '-')?.toString() ?? '-';
+      if (initialTask is TaskForReplica) return initialTask.uuid ?? '-';
+      return '-';
     } catch (_) {
-      return 'None';
+      return '-';
     }
   }
 
@@ -178,12 +162,12 @@ class TaskcDetailsController extends GetxController {
     try {
       if (initialTask is TaskForC) {
         final u = initialTask.urgency as double?;
-        return (u != null) ? u.toStringAsFixed(2) : 'None';
+        return (u != null) ? u.toStringAsFixed(2) : '-';
       }
       // TaskForReplica doesn't have urgency
-      return 'None';
+      return '-';
     } catch (_) {
-      return 'None';
+      return '-';
     }
   }
 
@@ -228,11 +212,6 @@ class TaskcDetailsController extends GetxController {
   }
 
   Future<void> saveTask() async {
-    bool is24hrFormat = AppSettings.use24HourFormatRx.value;
-    final datePattern = is24hrFormat
-        ? 'EEE, yyyy-MM-dd HH:mm:ss'
-        : 'EEE, yyyy-MM-dd hh:mm:ss a';
-
     if (tags.length == 1 && tags[0] == "") {
       tags.clear();
     }
@@ -266,9 +245,9 @@ class TaskcDetailsController extends GetxController {
       final modifiedTask = TaskForReplica(
         modified: nowEpoch,
         due: () {
-          if (due.string == 'None' || due.string.isEmpty) return null;
+          if (due.string == '-' || due.string.isEmpty) return null;
           try {
-            final parsed = DateFormat(datePattern).parse(due.string);
+            final parsed = DateFormat('yyyy-MM-dd HH:mm:ss').parse(due.string);
             return parsed.toUtc().toIso8601String();
           } catch (e) {
             try {
@@ -282,10 +261,10 @@ class TaskcDetailsController extends GetxController {
           }
         }(),
         start: () {
-          if (start.string == 'None' || start.string.isEmpty) return null;
-          if (start.string == "stop") return "stop";
+          if (start.string == '-' || start.string.isEmpty) return null;
           try {
-            final parsed = DateFormat(datePattern).parse(start.string);
+            final parsed =
+                DateFormat('yyyy-MM-dd HH:mm:ss').parse(start.string);
             return parsed.toUtc().toIso8601String();
           } catch (e) {
             try {
@@ -299,9 +278,9 @@ class TaskcDetailsController extends GetxController {
           }
         }(),
         wait: () {
-          if (wait.string == 'None' || wait.string.isEmpty) return null;
+          if (wait.string == '-' || wait.string.isEmpty) return null;
           try {
-            final parsed = DateFormat(datePattern).parse(wait.string);
+            final parsed = DateFormat('yyyy-MM-dd HH:mm:ss').parse(wait.string);
             return parsed.toUtc().toIso8601String();
           } catch (e) {
             try {
@@ -319,7 +298,7 @@ class TaskcDetailsController extends GetxController {
         tags: tags.isNotEmpty ? tags.toList() : null,
         uuid: initialTask.uuid ?? '',
         priority: priority.string.isNotEmpty ? priority.string : null,
-        project: project.string != 'None' ? project.string : null,
+        project: project.string != '-' ? project.string : null,
       );
       debugPrint('Modified replica task: $modifiedTask');
       hasChanges.value = false;
@@ -353,7 +332,7 @@ class TaskcDetailsController extends GetxController {
     final BuildContext context = Get.context!;
     final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: field.value != 'None'
+      initialDate: field.value != '-'
           ? DateTime.tryParse(field.value) ?? DateTime.now()
           : DateTime.now(),
       firstDate: DateTime(2000),
@@ -363,7 +342,7 @@ class TaskcDetailsController extends GetxController {
     if (pickedDate != null) {
       final TimeOfDay? pickedTime = await showTimePicker(
         context: context,
-        initialTime: TimeOfDay.fromDateTime(field.value != 'None'
+        initialTime: TimeOfDay.fromDateTime(field.value != '-'
             ? DateTime.tryParse(field.value) ?? DateTime.now()
             : DateTime.now()),
       );

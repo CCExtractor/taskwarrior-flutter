@@ -10,7 +10,6 @@ import 'package:taskwarrior/app/utils/taskfunctions/modify.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/urgency.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
-import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 
 class DetailRouteController extends GetxController {
   late String uuid;
@@ -18,9 +17,6 @@ class DetailRouteController extends GetxController {
   var onEdit = false.obs;
   var isReadOnly = false.obs;
 
-  // Description Edit State
-  final descriptionController = TextEditingController();
-  var descriptionErrorText = Rxn<String>();
   // Track whether user explicitly selected a start date
   bool startEdited = false;
 
@@ -61,24 +57,6 @@ class DetailRouteController extends GetxController {
       startValue.value = newValue;
     }
     initValues();
-  }
-
-  // Validation Logic for Description
-  bool validateDescription() {
-    if (descriptionController.text.trim().isEmpty) {
-      descriptionErrorText.value =
-          SentenceManager(currentLanguage: AppSettings.selectedLanguage)
-              .sentences
-              .descriprtionCannotBeEmpty;
-      return false;
-    }
-    descriptionErrorText.value = null;
-    return true;
-  }
-
-  void prepareDescriptionEdit(String initialValue) {
-    descriptionController.text = initialValue;
-    descriptionErrorText.value = null;
   }
 
   Future<void> saveChanges() async {
@@ -196,11 +174,5 @@ class DetailRouteController extends GetxController {
             });
       },
     );
-  }
-
-  @override
-  void onClose() {
-    descriptionController.dispose();
-    super.onClose();
   }
 }

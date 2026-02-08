@@ -642,15 +642,4 @@ class HindiSentences extends Sentences {
   String get logs => 'लॉग्स';
   @override
   String get checkAllDebugLogsHere => 'यहाँ सभी डिबग लॉग्स देखें';
-  // सेटिंग
-  @override
-  String get syncSetting => 'सिंक सेटिंग';
-  @override
-  String get displaySettings => 'डिस्प्ले सेटिंग्स';
-  @override
-  String get storageAndData => 'स्टोरेज और डेटा';
-  @override
-  String get advanced => 'अड्वांस्ड';
-  @override
-  String get taskchampionBackendUrl => 'Taskchampion URL';
 }

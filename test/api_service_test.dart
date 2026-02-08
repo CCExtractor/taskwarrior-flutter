@@ -27,15 +27,6 @@ void main() {
 
   setUpAll(() {
     sqfliteFfiInit();
-    
-    // Mock SharedPreferences plugin
-    const MethodChannel('plugins.flutter.io/shared_preferences')
-        .setMockMethodCallHandler((MethodCall methodCall) async {
-      if (methodCall.method == 'getAll') {
-        return <String, Object>{}; // Return empty prefs
-      }
-      return null;
-    });
   });
 
   group('Tasks model', () {
@@ -187,9 +178,9 @@ void main() {
       await taskDatabase.insertTask(task);
       await taskDatabase.deleteAllTasksInDB();
 
-      // The implementation has a bug where it calls maps.last on empty results
-      // This will throw "Bad state: No element" when there are no tasks
-      expect(() => taskDatabase.fetchTasksFromDatabase(), throwsStateError);
+      final tasks = await taskDatabase.fetchTasksFromDatabase();
+
+      expect(tasks.length, 0);
     });
   });
 }

@@ -681,16 +681,4 @@ class FrenchSentences extends Sentences {
   @override
   String get checkAllDebugLogsHere =>
       'Vérifiez tous les journaux de débogage ici';
-
-  // Paramètres
-  @override
-  String get syncSetting => 'Paramètres de Synchronisation';
-  @override
-  String get displaySettings => "Paramètres d'affichage";
-  @override
-  String get storageAndData => 'Stockage et données';
-  @override
-  String get advanced => 'Avancé';
-  @override
-  String get taskchampionBackendUrl => 'URL de Taskchampion';
 }

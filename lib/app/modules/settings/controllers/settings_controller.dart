@@ -49,7 +49,6 @@ class SettingsController extends GetxController {
   void pickDirectory(BuildContext context) {
     TaskwarriorColorTheme tColors =
         Theme.of(context).extension<TaskwarriorColorTheme>()!;
-    final scaffoldMessenger = ScaffoldMessenger.of(context);
     FilePicker.platform.getDirectoryPath().then((value) async {
       if (value != null) {
         isMovingDirectory.value = true;
@@ -68,15 +67,11 @@ class SettingsController extends GetxController {
             SharedPreferences prefs = await SharedPreferences.getInstance();
             prefs.setString('baseDirectory', destination.path);
             baseDirectory.value = destination.path;
-            scaffoldMessenger.showSnackBar(
-              SnackBar(
-                content: Text(
-                  'Base directory moved successfully',
-                  style: TextStyle(color: tColors.primaryTextColor),
-                ),
-                backgroundColor: tColors.secondaryBackgroundColor,
-                duration: const Duration(seconds: 2),
-              ),
+            Get.snackbar(
+              'Success',
+              'Base directory moved successfully',
+              snackPosition: SnackPosition.BOTTOM,
+              duration: const Duration(seconds: 2),
             );
           } else {
             Get.dialog(
@@ -222,6 +217,7 @@ class SettingsController extends GetxController {
   RxBool isSyncOnStartActivel = false.obs;
   RxBool isSyncOnTaskCreateActivel = false.obs;
   RxBool delaytask = false.obs;
+  RxBool change24hr = false.obs;
   RxBool taskchampion = false.obs;
   RxBool isDarkModeOn = false.obs;
 
@@ -236,6 +232,7 @@ class SettingsController extends GetxController {
     isSyncOnTaskCreateActivel.value =
         prefs.getBool('sync-OnTaskCreate') ?? false;
     delaytask.value = prefs.getBool('delaytask') ?? false;
+    change24hr.value = prefs.getBool('24hourformate') ?? false;
     taskchampion.value = prefs.getBool('settings_taskc') ?? false;
     initDarkMode();
     baseDirectory.value = await getBaseDirectory();
