@@ -7,6 +7,7 @@ class Taskrc {
   Taskrc({
     this.server,
     this.credentials,
+    this.trust,
     // ignore: always_put_required_named_parameters_first
     required this.pemFilePaths,
   });
@@ -20,15 +21,20 @@ class Taskrc {
   factory Taskrc.fromMap(Map taskrc) {
     var server = taskrc['taskd.server'];
     var credentials = taskrc['taskd.credentials'];
+    var trust = taskrc['taskd.trust']; // ⬅️ ADD THIS LINE
+
     return Taskrc(
       server: (server == null) ? null : Server.fromString(server),
       credentials:
           (credentials == null) ? null : Credentials.fromString(credentials),
+      trust: trust, // ⬅️ ADD THIS LINE
       pemFilePaths: PemFilePaths.fromTaskrc(taskrc),
     );
   }
 
+
   final Server? server;
   final Credentials? credentials;
+  final String? trust;
   final PemFilePaths pemFilePaths;
 }
