@@ -2,6 +2,19 @@ import 'package:taskwarrior/app/utils/language/sentences.dart';
 
 class HindiSentences extends Sentences {
   @override
+  String get ccsyncLoginInstruction =>
+      'CCSync में लॉगिन करें, अपनी क्रेडेंशियल्स कॉपी करें, और उन्हें ऊपर पेस्ट करें।';
+  @override
+  String get ccsyncEasySyncTitle => 'आसान सिंक के लिए CCSync का उपयोग करें';
+  @override
+  String get ccsyncOpenButton => 'CCSync खोलें';
+  @override
+  String get ccsyncIntro =>
+      'CCSync आपके कार्यों को कई डिवाइसों पर TaskChampion के माध्यम से निर्बाध रूप से सिंक करता है। आपको किसी भी ब्राउज़र से अपने कार्यों को प्रबंधित करने के लिए एक वेब डैशबोर्ड भी मिलता है।';
+  @override
+  String get ccsyncSelfHosted =>
+      'या अपने स्वयं के TaskChampion सिंक सर्वर से क्रेडेंशियल्स लाएँ।';
+  @override
   String get helloWorld => 'नमस्ते दुनिया!';
   @override
   String get homePageTitle => 'होम पेज';

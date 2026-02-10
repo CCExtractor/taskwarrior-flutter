@@ -157,8 +157,8 @@ class ManageTaskChampionCredsView
                                               const Duration(seconds: 2)));
                                 },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: TaskWarriorColors.deepPurple,
-                            foregroundColor: TaskWarriorColors.white,
+                            backgroundColor: tColors.primaryTextColor,
+                            foregroundColor: tColors.primaryBackgroundColor,
                             elevation: 4,
                             shadowColor:
                                 TaskWarriorColors.purple.withValues(alpha: 0.4),
@@ -204,7 +204,10 @@ class ManageTaskChampionCredsView
                       color: tColors.primaryTextColor?.withValues(alpha: 0.3)),
                   const SizedBox(height: 16),
                   Text(
-                    'Use CCSync for Easy Sync',
+                    SentenceManager(
+                            currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .ccsyncEasySyncTitle,
                     style: GoogleFonts.poppins(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
@@ -213,10 +216,10 @@ class ManageTaskChampionCredsView
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'CCSync uses TaskChampion to sync your tasks '
-                    'across multiple devices seamlessly. You also '
-                    'get a web dashboard to manage your tasks from '
-                    'any browser.',
+                    SentenceManager(
+                            currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .ccsyncIntro,
                     style: TextStyle(
                       fontSize: 14,
                       color: tColors.primaryTextColor?.withValues(alpha: 0.8),
@@ -225,7 +228,10 @@ class ManageTaskChampionCredsView
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    'Login to CCSync, copy your credentials, and paste them above.',
+                    SentenceManager(
+                            currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .ccsyncLoginInstruction,
                     style: TextStyle(
                       fontSize: 14,
                       color: tColors.primaryTextColor?.withValues(alpha: 0.8),
@@ -235,13 +241,16 @@ class ManageTaskChampionCredsView
                   Center(
                     child: OutlinedButton.icon(
                       icon: Icon(Icons.open_in_new,
-                          color: TaskWarriorColors.purple),
+                          color: tColors.primaryTextColor),
                       label: Text(
-                        'Open CCSync',
-                        style: TextStyle(color: TaskWarriorColors.purple),
+                        SentenceManager(
+                                currentLanguage: AppSettings.selectedLanguage)
+                            .sentences
+                            .ccsyncOpenButton,
+                        style: TextStyle(color: tColors.primaryTextColor),
                       ),
                       style: OutlinedButton.styleFrom(
-                        side: BorderSide(color: TaskWarriorColors.purple),
+                        side: BorderSide(color: tColors.primaryTextColor!),
                         padding: const EdgeInsets.symmetric(
                             horizontal: 24, vertical: 12),
                       ),
@@ -260,8 +269,10 @@ class ManageTaskChampionCredsView
                       color: tColors.primaryTextColor?.withValues(alpha: 0.3)),
                   const SizedBox(height: 12),
                   Text(
-                    'Or bring your own credentials from a self-hosted '
-                    'TaskChampion sync server.',
+                    SentenceManager(
+                            currentLanguage: AppSettings.selectedLanguage)
+                        .sentences
+                        .ccsyncSelfHosted,
                     style: TextStyle(
                       fontSize: 13,
                       color: tColors.primaryTextColor?.withValues(alpha: 0.6),
@@ -281,9 +292,10 @@ class ManageTaskChampionCredsView
                       'GothenburgBitFactory/taskchampion-sync-server',
                       style: TextStyle(
                         fontSize: 13,
-                        color: TaskWarriorColors.purple,
+                        color: tColors.primaryTextColor?.withValues(alpha: 0.6),
                         decoration: TextDecoration.underline,
-                        decorationColor: TaskWarriorColors.purple,
+                        decorationColor:
+                            tColors.primaryTextColor?.withValues(alpha: 0.6),
                       ),
                     ),
                   ),
