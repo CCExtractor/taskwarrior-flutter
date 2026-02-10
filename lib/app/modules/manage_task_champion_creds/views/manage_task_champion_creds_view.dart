@@ -37,20 +37,20 @@ class ManageTaskChampionCredsView
           ],
         ),
         actions: [
-          IconButton(
-            icon: Icon(
-              Icons.info,
-              color: TaskWarriorColors.white,
-            ),
-            onPressed: () async {
-              String url = !controller.taskReplica.value
-                  ? "https://github.com/its-me-abhishek/ccsync"
-                  : "https://github.com/GothenburgBitFactory/taskchampion";
-              if (!await launchUrl(Uri.parse(url))) {
-                throw Exception('Could not launch $url');
-              }
-            },
-          ),
+          // IconButton(
+          //   icon: Icon(
+          //     Icons.info,
+          //     color: TaskWarriorColors.white,
+          //   ),
+          //   onPressed: () async {
+          //     String url = !controller.taskReplica.value
+          //         ? "https://github.com/its-me-abhishek/ccsync"
+          //         : "https://github.com/GothenburgBitFactory/taskchampion";
+          //     if (!await launchUrl(Uri.parse(url))) {
+          //       throw Exception('Could not launch $url');
+          //     }
+          //   },
+          // ),
         ],
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: TaskWarriorColors.white),
@@ -114,21 +114,39 @@ class ManageTaskChampionCredsView
                         ),
                       )),
                   const SizedBox(height: 20),
-                  Obx(() => Center(
-                          child: ElevatedButton(
-                        onPressed: controller.isCheckingCreds.value
-                            ? null
-                            : () async {
-                                int status = await controller.saveCredentials();
-                                if (status == 0) {
+                  Obx(() => SizedBox(
+                        width: double.infinity,
+                        height: 48,
+                        child: ElevatedButton(
+                          onPressed: controller.isCheckingCreds.value
+                              ? null
+                              : () async {
+                                  int status =
+                                      await controller.saveCredentials();
+                                  if (status == 0) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                            content: Text(
+                                              SentenceManager(
+                                                      currentLanguage:
+                                                          AppSettings
+                                                              .selectedLanguage)
+                                                  .sentences
+                                                  .credentialsSavedSuccessfully,
+                                              style: TextStyle(
+                                                color: tColors.primaryTextColor,
+                                              ),
+                                            ),
+                                            backgroundColor: tColors
+                                                .secondaryBackgroundColor,
+                                            duration:
+                                                const Duration(seconds: 2)));
+                                    return;
+                                  }
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                           content: Text(
-                                            SentenceManager(
-                                                    currentLanguage: AppSettings
-                                                        .selectedLanguage)
-                                                .sentences
-                                                .credentialsSavedSuccessfully,
+                                            "Unable to fetch tasks with it ! Check creds",
                                             style: TextStyle(
                                               color: tColors.primaryTextColor,
                                             ),
@@ -137,35 +155,39 @@ class ManageTaskChampionCredsView
                                               tColors.secondaryBackgroundColor,
                                           duration:
                                               const Duration(seconds: 2)));
-                                  return;
-                                }
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content: Text(
-                                          "Unable to fetch tasks with it ! Check creds",
-                                          style: TextStyle(
-                                            color: tColors.primaryTextColor,
-                                          ),
-                                        ),
-                                        backgroundColor:
-                                            tColors.secondaryBackgroundColor,
-                                        duration: const Duration(seconds: 2)));
-                              },
-                        child: controller.isCheckingCreds.value
-                            ? const SizedBox(
-                                height: 20,
-                                width: 20,
-                                child: CircularProgressIndicator(
-                                  color: Color.fromARGB(255, 83, 83, 83),
-                                  strokeWidth: 2.0,
+                                },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: TaskWarriorColors.deepPurple,
+                            foregroundColor: TaskWarriorColors.white,
+                            elevation: 4,
+                            shadowColor:
+                                TaskWarriorColors.purple.withValues(alpha: 0.4),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: controller.isCheckingCreds.value
+                              ? const SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 2.0,
+                                  ),
+                                )
+                              : Text(
+                                  SentenceManager(
+                                          currentLanguage:
+                                              AppSettings.selectedLanguage)
+                                      .sentences
+                                      .saveCredentials,
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
-                              )
-                            : Text(SentenceManager(
-                                    currentLanguage:
-                                        AppSettings.selectedLanguage)
-                                .sentences
-                                .saveCredentials),
-                      ))),
+                        ),
+                      )),
                   const SizedBox(height: 10),
                   Text(
                     SentenceManager(
@@ -177,6 +199,95 @@ class ManageTaskChampionCredsView
                       color: tColors.primaryTextColor,
                     ),
                   ),
+                  const SizedBox(height: 30),
+                  Divider(
+                      color: tColors.primaryTextColor?.withValues(alpha: 0.3)),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Use CCSync for Easy Sync',
+                    style: GoogleFonts.poppins(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: tColors.primaryTextColor,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'CCSync uses TaskChampion to sync your tasks '
+                    'across multiple devices seamlessly. You also '
+                    'get a web dashboard to manage your tasks from '
+                    'any browser.',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: tColors.primaryTextColor?.withValues(alpha: 0.8),
+                      height: 1.5,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Login to CCSync, copy your credentials, and paste them above.',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: tColors.primaryTextColor?.withValues(alpha: 0.8),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Center(
+                    child: OutlinedButton.icon(
+                      icon: Icon(Icons.open_in_new,
+                          color: TaskWarriorColors.purple),
+                      label: Text(
+                        'Open CCSync',
+                        style: TextStyle(color: TaskWarriorColors.purple),
+                      ),
+                      style: OutlinedButton.styleFrom(
+                        side: BorderSide(color: TaskWarriorColors.purple),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 24, vertical: 12),
+                      ),
+                      onPressed: () async {
+                        final url = Uri.parse(
+                            'https://taskwarrior-server.ccextractor.org/home');
+                        if (!await launchUrl(url,
+                            mode: LaunchMode.externalApplication)) {
+                          throw Exception('Could not launch $url');
+                        }
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  Divider(
+                      color: tColors.primaryTextColor?.withValues(alpha: 0.3)),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Or bring your own credentials from a self-hosted '
+                    'TaskChampion sync server.',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: tColors.primaryTextColor?.withValues(alpha: 0.6),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  GestureDetector(
+                    onTap: () async {
+                      final url = Uri.parse(
+                          'https://github.com/GothenburgBitFactory/taskchampion-sync-server');
+                      if (!await launchUrl(url,
+                          mode: LaunchMode.externalApplication)) {
+                        throw Exception('Could not launch $url');
+                      }
+                    },
+                    child: Text(
+                      'GothenburgBitFactory/taskchampion-sync-server',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: TaskWarriorColors.purple,
+                        decoration: TextDecoration.underline,
+                        decorationColor: TaskWarriorColors.purple,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
                 ],
               ),
             ),

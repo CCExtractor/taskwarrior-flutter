@@ -645,7 +645,7 @@ class EnglishSentences extends Sentences {
   @override
   String get credentialsSavedSuccessfully => 'Credentials saved successfully';
   @override
-  String get saveCredentials => 'save credentials';
+  String get saveCredentials => 'Save';
   @override
   String get tip =>
       "Tip: Click on the info icon in the top right corner to get your credentials";

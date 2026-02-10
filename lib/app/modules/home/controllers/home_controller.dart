@@ -550,15 +550,47 @@ class HomeController extends GetxController {
 
   isNeededtoSyncOnStart(BuildContext context) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool? value;
-    value = prefs.getBool('sync-onStart') ?? false;
-    String? clientId, encryptionSecret;
-    clientId = await CredentialsStorage.getClientId();
-    encryptionSecret = await CredentialsStorage.getEncryptionSecret();
-    if (value) {
-      synchronize(context, false);
-      refreshTasks(clientId!, encryptionSecret!);
-    } else {}
+    final bool syncEnabled = prefs.getBool('sync-onStart') ?? false;
+    if (!syncEnabled) return;
+
+    final String? clientId = await CredentialsStorage.getClientId();
+    final String? encryptionSecret =
+        await CredentialsStorage.getEncryptionSecret();
+
+    try {
+      isRefreshing.value = true;
+      if (taskReplica.value) {
+        if (clientId != null && encryptionSecret != null) {
+          await refreshReplicaTasks();
+        }
+      } else if (taskchampion.value) {
+        if (clientId != null && encryptionSecret != null) {
+          await refreshTasks(clientId, encryptionSecret);
+        }
+      } else {
+        await synchronize(context, false);
+      }
+      if (context.mounted) {
+        final tColors =
+            Theme.of(context).extension<TaskwarriorColorTheme>()!;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Sync Completed',
+              style: TextStyle(
+                color: tColors.primaryTextColor,
+              ),
+            ),
+            backgroundColor: tColors.primaryBackgroundColor,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+    } catch (e) {
+      debugPrint('Error during sync on start: $e');
+    } finally {
+      isRefreshing.value = false;
+    }
   }
 
   RxBool syncOnStart = false.obs;
