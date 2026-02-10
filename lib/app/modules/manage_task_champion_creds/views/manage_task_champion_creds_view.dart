@@ -188,17 +188,6 @@ class ManageTaskChampionCredsView
                                 ),
                         ),
                       )),
-                  const SizedBox(height: 10),
-                  Text(
-                    SentenceManager(
-                            currentLanguage: AppSettings.selectedLanguage)
-                        .sentences
-                        .tip,
-                    style: TextStyle(
-                      fontSize: 15,
-                      color: tColors.primaryTextColor,
-                    ),
-                  ),
                   const SizedBox(height: 30),
                   Divider(
                       color: tColors.primaryTextColor?.withValues(alpha: 0.3)),
