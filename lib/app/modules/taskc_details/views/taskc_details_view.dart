@@ -3,9 +3,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
+import 'package:taskwarrior/app/modules/taskc_details/views/tag_editor.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
+import 'package:taskwarrior/app/utils/home_path/impl/home.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import '../controllers/taskc_details_controller.dart';
@@ -102,7 +105,7 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
                     controller.wait.value,
                   ),
                 ],
-                _buildEditableDetail(
+                _buildTagEditorDetail(
                   context,
                   '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageTags}:',
                   controller.tags.join(', '),
@@ -177,6 +180,38 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
         if (result != null) {
           onChanged(result);
         }
+      },
+      child: _buildDetail(context, label, value),
+    );
+  }
+
+  Widget _buildTagEditorDetail(BuildContext context, String label, String value,
+      Function(String) onChanged) {
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    Iterable<String> suggestions =
+        Get.find<HomeController>().allTagsInCurrentTasks;
+    return InkWell(
+      onTap: () async {
+        showModalBottomSheet(
+          backgroundColor: tColors.dialogBackgroundColor,
+          context: context,
+          isScrollControlled: true,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(0),
+              topRight: Radius.circular(0),
+            ),
+          ),
+          builder: (context) => TagEditor(
+            suggestions:
+                suggestions.toList(), // You can pass tag suggestions here
+            initialTags: value.split(',').map((e) => e.trim()).toList(),
+            onSave: (List<String> newTags) {
+              onChanged(newTags.join(', '));
+            },
+          ),
+        );
       },
       child: _buildDetail(context, label, value),
     );
