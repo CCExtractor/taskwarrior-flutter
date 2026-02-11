@@ -127,7 +127,7 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
                 key: controller.refreshKey,
                 icon: !controller.isRefreshing.value
                     ? Icon(Icons.refresh, color: TaskWarriorColors.white)
-                    : Icon(Icons.autorenew, color: TaskWarriorColors.white),
+                    : const _SpinningIcon(),
                 onPressed: controller.isRefreshing.value
                     ? null
                     : () async {
@@ -151,8 +151,23 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
                           }
                           debugPrint("Refreshing Replica tasks");
                           controller.isRefreshing.value = true;
-                          await controller.refreshReplicaTasks();
-                          controller.isRefreshing.value = false;
+                          try {
+                            await controller.refreshReplicaTasks();
+                            _showResultSnackBar(
+                                context, 'Sync Completed', false);
+                          } catch (e) {
+                            debugPrint('Error refreshing replica tasks: $e');
+                            _showResultSnackBar(
+                                context,
+                                SentenceManager(
+                                        currentLanguage:
+                                            controller.selectedLanguage.value)
+                                    .sentences
+                                    .homePageTaskWarriorNotConfigured,
+                                true);
+                          } finally {
+                            controller.isRefreshing.value = false;
+                          }
                           return;
                         }
 
@@ -177,13 +192,7 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
                                   .hideCurrentSnackBar();
 
                               _showResultSnackBar(
-                                  context,
-                                  SentenceManager(
-                                          currentLanguage:
-                                              controller.selectedLanguage.value)
-                                      .sentences
-                                      .homePageFetchingTasks,
-                                  false);
+                                  context, 'Sync Completed', false);
                             } catch (e) {
                               debugPrint('Error refreshing tasks: $e');
                               ScaffoldMessenger.of(context)
@@ -216,6 +225,8 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
                               await controller.synchronize(context, true);
                               ScaffoldMessenger.of(context)
                                   .hideCurrentSnackBar();
+                              _showResultSnackBar(
+                                  context, 'Sync Completed', false);
                             } catch (e) {
                               ScaffoldMessenger.of(context)
                                   .hideCurrentSnackBar();
@@ -279,4 +290,39 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => AppBar().preferredSize;
+}
+
+class _SpinningIcon extends StatefulWidget {
+  const _SpinningIcon();
+
+  @override
+  State<_SpinningIcon> createState() => _SpinningIconState();
+}
+
+class _SpinningIconState extends State<_SpinningIcon>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(seconds: 1),
+      vsync: this,
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return RotationTransition(
+      turns: _controller,
+      child: Icon(Icons.refresh, color: TaskWarriorColors.white),
+    );
+  }
 }
