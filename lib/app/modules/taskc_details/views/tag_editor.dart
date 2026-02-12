@@ -41,9 +41,7 @@ class TagEditor extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  SentenceManager(currentLanguage: AppSettings.selectedLanguage)
-                      .sentences
-                      .addTaskAddTags,
+                  '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.edit}:${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.tags}',
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
