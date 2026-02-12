@@ -206,7 +206,9 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
           builder: (context) => TagEditor(
             suggestions:
                 suggestions.toList(), // You can pass tag suggestions here
-            initialTags: value.split(',').map((e) => e.trim()).toList(),
+            initialTags: value.isNotEmpty
+                ? value.split(',').map((e) => e.trim()).toList()
+                : [],
             onSave: (List<String> newTags) {
               onChanged(newTags.join(', '));
             },
