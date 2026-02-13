@@ -73,6 +73,7 @@ void main() {
     expect(french.filterDrawerShowWaiting, 'Afficher les en attente');
     expect(french.filterDrawerPending, 'En attente');
     expect(french.filterDrawerCompleted, 'Complété');
+    expect(french.filterDrawerDeleted, 'Supprimé');
     expect(french.filterDrawerFilterTagBy, 'Filtrer par tag');
     expect(french.filterDrawerAND, 'et');
     expect(french.filterDrawerOR, 'ou');

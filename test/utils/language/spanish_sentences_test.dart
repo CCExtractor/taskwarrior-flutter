@@ -74,6 +74,7 @@ void main() {
     expect(spanish.filterDrawerShowWaiting, 'Mostrar pendientes');
     expect(spanish.filterDrawerPending, 'Pendiente');
     expect(spanish.filterDrawerCompleted, 'Completado');
+    expect(spanish.filterDrawerDeleted, 'Eliminado');
     expect(spanish.filterDrawerFilterTagBy, 'Filtrar por etiqueta');
     expect(spanish.filterDrawerAND, 'y');
     expect(spanish.filterDrawerOR, 'o');

@@ -72,6 +72,7 @@ void main() {
     expect(marathi.filterDrawerShowWaiting, 'वाट दाखवा');
     expect(marathi.filterDrawerPending, 'प्रलंबित');
     expect(marathi.filterDrawerCompleted, 'पूर्ण');
+    expect(marathi.filterDrawerDeleted, 'काढून टाकलेले');
     expect(marathi.filterDrawerFilterTagBy, 'टॅगवर फिल्टर करा');
     expect(marathi.filterDrawerAND, 'आणि');
     expect(marathi.filterDrawerOR, 'किंवा');
