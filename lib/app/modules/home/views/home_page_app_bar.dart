@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -56,8 +57,12 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
   void _showResultSnackBar(BuildContext context, String message, bool isError) {
     TaskwarriorColorTheme tColors =
         Theme.of(context).extension<TaskwarriorColorTheme>()!;
+
+    ScaffoldMessenger.of(context).clearSnackBars();
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
+        duration: const Duration(seconds: 4),
         backgroundColor: tColors.secondaryBackgroundColor,
         content: Text(
           message,
@@ -72,6 +77,7 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
                     .sentences
                     .homePageSetup,
                 onPressed: () {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
                   if (controller.taskchampion.value ||
                       controller.taskReplica.value) {
                     Get.toNamed(Routes.MANAGE_TASK_CHAMPION_CREDS);
@@ -84,6 +90,10 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
             : null,
       ),
     );
+
+    Timer(const Duration(seconds: 4), () {
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    });
   }
 
   @override
