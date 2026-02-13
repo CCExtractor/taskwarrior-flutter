@@ -344,7 +344,7 @@ class GermanSentences extends Sentences {
   String get addTaskFieldCannotBeEmpty => "Du kannst dieses Feld nicht leer lassen!";
   @override
   String get addTaskTaskAddedSuccessfully =>
-      "Aufgabe erfolgreich hinzugefügt. Antippen zum Bearbeiten" 
+      "Aufgabe erfolgreich hinzugefügt. Antippen zum Bearbeiten";
 
   @override
   String get aboutPageGitHubLink =>
