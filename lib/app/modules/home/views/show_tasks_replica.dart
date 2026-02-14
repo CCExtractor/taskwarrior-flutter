@@ -98,6 +98,15 @@ class TaskReplicaViewBuilder extends StatelessWidget {
                 itemCount: tasks.length,
                 itemBuilder: (context, index) {
                   final task = tasks[index];
+                  final bool isRecurring =
+                      task.recur != null && task.recur!.trim().isNotEmpty;
+                  final String nextDueText = isRecurring
+                      ? (() {
+                          final parsed = DateTime.tryParse(task.due ?? '');
+                          if (parsed == null) return '';
+                          return ' | Next: ${parsed.toLocal().toString().split('.').first}';
+                        })()
+                      : '';
                   // Determine if due is within 24 hours or already past (only for pending filter)
                   final bool isDueSoon = (() {
                     if (!pendingFilter) return false;
@@ -148,11 +157,49 @@ class TaskReplicaViewBuilder extends StatelessWidget {
                             ),
                           ),
                           subtitle: Text(
-                            '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageStatus}: ${task.status ?? ''}',
+                            '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageStatus}: ${task.status ?? ''}$nextDueText',
                             style: GoogleFonts.poppins(
                               color: tColors.secondaryTextColor,
                             ),
                           ),
+                          trailing: isRecurring
+                              ? ConstrainedBox(
+                                  constraints:
+                                      const BoxConstraints(maxWidth: 96),
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 3,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(
+                                        color: tColors.secondaryTextColor!,
+                                      ),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(Icons.repeat,
+                                            size: 14,
+                                            color: tColors.secondaryTextColor),
+                                        const SizedBox(width: 3),
+                                        Flexible(
+                                          child: Text(
+                                            task.recur!,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: GoogleFonts.poppins(
+                                              fontSize: 10,
+                                              color: tColors.secondaryTextColor,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              : null,
                         ),
                       ),
                     ),
@@ -220,11 +267,13 @@ class TaskReplicaViewBuilder extends StatelessWidget {
   }
 
   void completeTask(TaskForReplica task) async {
+    Replica.cancelNotificationsForTask(task);
     await Replica.modifyTaskInReplica(task.copyWith(status: 'completed'));
     Get.find<HomeController>().refreshReplicaTaskList();
   }
 
   void deleteTask(TaskForReplica task) async {
+    Replica.cancelNotificationsForTask(task);
     await Replica.deleteTaskFromReplica(task.uuid);
     Get.find<HomeController>().refreshReplicaTaskList();
   }

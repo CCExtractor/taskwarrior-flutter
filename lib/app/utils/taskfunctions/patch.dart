@@ -49,6 +49,9 @@ Task _patch(Task task, String key, dynamic value) {
         case 'project':
           b.project = value;
           break;
+        case 'recur':
+          b.recur = value;
+          break;
         case 'tags':
           b.tags = BuiltList<String>(
                   (value as ListBuilder).build().toList().cast<String>())

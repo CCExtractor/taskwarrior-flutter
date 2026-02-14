@@ -113,6 +113,15 @@ class TaskViewBuilder extends StatelessWidget {
                 itemCount: tasks.length,
                 itemBuilder: (context, index) {
                   TaskForC task = tasks[index];
+                  final bool isRecurring =
+                      task.recur != null && task.recur!.trim().isNotEmpty;
+                  final String nextDueText = isRecurring
+                      ? (() {
+                          final parsed = DateTime.tryParse(task.due ?? '');
+                          if (parsed == null) return '';
+                          return ' | Next: ${parsed.toLocal().toString().split('.').first}';
+                        })()
+                      : '';
                   return Slidable(
                     startActionPane: ActionPane(
                       motion: const BehindMotion(),
@@ -210,11 +219,49 @@ class TaskViewBuilder extends StatelessWidget {
                               ),
                             ),
                             subtitle: Text(
-                              '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageUrgency}: ${task.urgency!.floorToDouble()} | ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageStatus}: ${task.status}',
+                              '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageUrgency}: ${task.urgency!.floorToDouble()} | ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageStatus}: ${task.status}$nextDueText',
                               style: GoogleFonts.poppins(
                                 color: tColors.secondaryTextColor,
                               ),
                             ),
+                            trailing: isRecurring
+                                ? ConstrainedBox(
+                                    constraints:
+                                        const BoxConstraints(maxWidth: 96),
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 8,
+                                        vertical: 3,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(
+                                          color: tColors.secondaryTextColor!,
+                                        ),
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(Icons.repeat,
+                                              size: 14,
+                                              color: tColors.secondaryTextColor),
+                                          const SizedBox(width: 3),
+                                          Flexible(
+                                            child: Text(
+                                              task.recur!,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: GoogleFonts.poppins(
+                                                fontSize: 10,
+                                                color: tColors.secondaryTextColor,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                : null,
                           ),
                         ),
                       ),
@@ -229,15 +276,17 @@ class TaskViewBuilder extends StatelessWidget {
   void _markTaskAsCompleted(String uuid) async {
     TaskDatabase taskDatabase = TaskDatabase();
     await taskDatabase.open();
-    taskDatabase.markTaskAsCompleted(uuid);
+    await taskDatabase.markTaskAsCompleted(uuid);
     completeTask('email', uuid);
+    await Get.find<HomeController>().fetchTasksFromDB();
   }
 
   void _markTaskAsDeleted(String uuid) async {
     TaskDatabase taskDatabase = TaskDatabase();
     await taskDatabase.open();
-    taskDatabase.markTaskAsDeleted(uuid);
+    await taskDatabase.markTaskAsDeleted(uuid);
     deleteTask('email', uuid);
+    await Get.find<HomeController>().fetchTasksFromDB();
   }
 
   Color _getPriorityColor(String priority) {

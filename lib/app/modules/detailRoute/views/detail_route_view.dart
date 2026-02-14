@@ -146,6 +146,7 @@ class DetailRouteView extends GetView<DetailRouteController> {
                       'due': controller.dueValue.value,
                       'wait': controller.waitValue.value,
                       'until': controller.untilValue.value,
+                      'recur': controller.recurValue.value,
                       'priority': controller.priorityValue?.value,
                       'project': controller.projectValue?.value,
                       'tags': controller.tagsValue?.value,
@@ -327,6 +328,90 @@ class AttributeWidget extends StatelessWidget {
           callback: callback,
           globalKey: priorityKey,
           isEditable: isEditable,
+        );
+      case 'recur':
+        final currentRecur =
+            (localValue == null || localValue.toString().trim().isEmpty)
+                ? 'None'
+                : localValue.toString();
+        return Card(
+          color: tColors.secondaryBackgroundColor,
+          child: ListTile(
+            enabled: isEditable,
+            textColor: isEditable
+                ? tColors.primaryTextColor
+                : tColors.primaryDisabledTextColor,
+            title: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  Text(
+                    'recurrence:'.padRight(13),
+                    style: TextStyle(
+                      fontFamily: FontFamily.poppins,
+                      fontWeight: TaskWarriorFonts.bold,
+                      fontSize: TaskWarriorFonts.fontSizeMedium,
+                      color: isEditable
+                          ? tColors.primaryTextColor
+                          : tColors.primaryDisabledTextColor,
+                    ),
+                  ),
+                  Text(
+                    currentRecur,
+                    style: TextStyle(
+                      fontFamily: FontFamily.poppins,
+                      fontSize: TaskWarriorFonts.fontSizeMedium,
+                      color: isEditable
+                          ? tColors.primaryTextColor
+                          : tColors.primaryDisabledTextColor,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            onTap: !isEditable
+                ? null
+                : () async {
+                    final options = [
+                      'None',
+                      'daily',
+                      'weekly',
+                      'monthly',
+                      'yearly',
+                    ];
+                    final selected = await showDialog<String>(
+                      context: context,
+                      builder: (dialogContext) {
+                        return AlertDialog(
+                          title: Text(
+                            'Select recurrence',
+                            style: TextStyle(color: tColors.primaryTextColor),
+                          ),
+                          backgroundColor: tColors.dialogBackgroundColor,
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: options
+                                .map(
+                                  (option) => ListTile(
+                                    title: Text(
+                                      option,
+                                      style: TextStyle(
+                                          color: tColors.primaryTextColor),
+                                    ),
+                                    onTap: () =>
+                                        Navigator.of(dialogContext).pop(option),
+                                  ),
+                                )
+                                .toList(),
+                          ),
+                        );
+                      },
+                    );
+                    if (selected != null) {
+                      callback(selected == 'None' ? null : selected);
+                    }
+                  },
+          ),
         );
       case 'project':
         return ProjectWidget(

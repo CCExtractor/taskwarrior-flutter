@@ -111,18 +111,25 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
                   controller.tags.join(', '),
                   (value) => controller.updateListField(controller.tags, value),
                 ),
-                if (controller.isLocalTask) ...[
-                  _buildDetail(
-                    context,
-                    'Rtype:',
-                    controller.rtype.value,
-                  ),
-                  _buildDetail(
-                    context,
-                    'Recur:',
-                    controller.recur.value,
-                  ),
-                ],
+                _buildSelectableDetail(
+                  context,
+                  'Recurrence:',
+                  controller.recur.value.isEmpty
+                      ? 'None'
+                      : controller.recur.value,
+                  ['None', 'daily', 'weekly', 'monthly', 'yearly'],
+                  (value) {
+                    controller.updateField(
+                      controller.recur,
+                      value == 'None' ? '' : value,
+                    );
+                    // Auto-set rtype
+                    controller.updateField(
+                      controller.rtype,
+                      value == 'None' ? '' : 'periodic',
+                    );
+                  },
+                ),
                 // Conditionally show fields that are only present on local tasks
                 if (controller.isLocalTask) ...[
                   _buildDetail(
