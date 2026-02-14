@@ -1,7 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:math';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -29,7 +27,8 @@ class ManageTaskServerPageAppBar extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return AppBar(
       backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
       titleSpacing: 0,
@@ -129,11 +128,6 @@ class ManageTaskServerPageAppBar extends StatelessWidget
               var header =
                   await controller.storage.home.statistics(await client());
 
-              // Determine the maximum key length for formatting purposes
-              var maxKeyLength = header.keys
-                  .map<int>((key) => (key as String).length)
-                  .reduce(max);
-
               // Dismiss the loading dialog
               // Navigator.of(context).pop();
               Get.back();
@@ -151,22 +145,37 @@ class ManageTaskServerPageAppBar extends StatelessWidget
                     style: const TextStyle(),
                   ),
                   content: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Display each key-value pair in the statistics header
-                            for (var key in header.keys.toList())
-                              Text(
-                                '${'$key:'.padRight(maxKeyLength + 1)} ${header[key]}',
-                                style: TextStyle(
-                                  color: tColors.primaryTextColor,
+                        // Display each key-value pair with aligned columns
+                        for (final entry in header.entries)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 2),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  width: 180, // Fixed width for key column
+                                  child: Text(
+                                    '${entry.key}:',
+                                    style: TextStyle(
+                                      color: tColors.primaryTextColor,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                          ],
-                        ),
+                                Expanded(
+                                  child: Text(
+                                    entry.value.toString(),
+                                    style: TextStyle(
+                                      color: tColors.primaryTextColor,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                       ],
                     ),
                   ),
