@@ -61,8 +61,8 @@ class TaskcDetailsController extends GetxController {
           : <String>[].obs;
       previousTags = tags.toList().obs;
       depends = "".split(",").obs;
-      rtype = "".obs;
-      recur = "".obs;
+      rtype = (task.rtype ?? '').obs;
+      recur = (task.recur ?? '').obs;
       annotations = <Annotation>[].obs;
     } else if (task is TaskForReplica) {
       description = (task.description ?? '').obs;
@@ -82,8 +82,8 @@ class TaskcDetailsController extends GetxController {
           : <String>[].obs;
       previousTags = tags.toList().obs;
       depends = "".split(",").obs;
-      rtype = "".obs;
-      recur = "".obs;
+      rtype = (task.rtype ?? '').obs;
+      recur = (task.recur ?? '').obs;
       annotations = <Annotation>[].obs;
     } else {
       // Fallback
@@ -141,6 +141,19 @@ class TaskcDetailsController extends GetxController {
     } catch (e) {
       debugPrint('Error parsing date: $dateString $e');
       return 'None';
+    }
+  }
+
+  DateTime? _parseUiDate(String value, String pattern) {
+    if (value == 'None' || value.isEmpty) return null;
+    try {
+      return DateFormat(pattern).parse(value).toUtc();
+    } catch (_) {
+      try {
+        return DateTime.parse(value).toUtc();
+      } catch (_) {
+        return null;
+      }
     }
   }
 
@@ -232,94 +245,75 @@ class TaskcDetailsController extends GetxController {
     final datePattern = is24hrFormat
         ? 'EEE, yyyy-MM-dd HH:mm:ss'
         : 'EEE, yyyy-MM-dd hh:mm:ss a';
+    final dueDate = _parseUiDate(due.string, datePattern);
+    final waitDate = _parseUiDate(wait.string, datePattern);
 
     if (tags.length == 1 && tags[0] == "") {
       tags.clear();
     }
     if (initialTask is TaskForC) {
+      final bool shouldSpawnRecurrence = status.string == 'completed' &&
+          initialTask.status != 'completed' &&
+          recur.string.isNotEmpty;
       await taskDatabase.saveEditedTaskInDB(
         initialTask.uuid!,
         description.string,
         project.string,
         status.string,
         priority.string,
-        DateTime.parse(due.string).toIso8601String(),
+        dueDate?.toIso8601String() ?? '',
         tags.toList(),
+        recur: recur.string.isNotEmpty ? recur.string : null,
+        rtype: recur.string.isNotEmpty ? 'periodic' : null,
       );
+      if (shouldSpawnRecurrence) {
+        await taskDatabase.markTaskAsCompleted(
+          initialTask.uuid!,
+          forceRecurrence: true,
+        );
+      }
       hasChanges.value = false;
       debugPrint('Task saved in local DB ${description.string}');
       processTagsLists();
       await modifyTaskOnTaskwarrior(
         description.string,
         project.string,
-        DateTime.parse(due.string).toIso8601String(),
+        dueDate?.toIso8601String() ?? '',
         priority.string,
         status.string,
         initialTask.uuid!,
         initialTask.id.toString(),
         tags.toList(),
+        recur: recur.string.isNotEmpty ? recur.string : null,
+        rtype: recur.string.isNotEmpty ? 'periodic' : null,
       );
+      try {
+        await Get.find<HomeController>().fetchTasksFromDB();
+      } catch (_) {}
     } else if (initialTask is TaskForReplica) {
       debugPrint(
           'Saving replica task changes... status ${status.string} ${tags.join(", ")}');
       final int nowEpoch = DateTime.now().millisecondsSinceEpoch ~/ 1000;
       final modifiedTask = TaskForReplica(
         modified: nowEpoch,
-        due: () {
-          if (due.string == 'None' || due.string.isEmpty) return null;
-          try {
-            final parsed = DateFormat(datePattern).parse(due.string);
-            return parsed.toUtc().toIso8601String();
-          } catch (e) {
-            try {
-              final parsed2 = DateTime.parse(due.string);
-              return parsed2.toUtc().toIso8601String();
-            } catch (_) {
-              debugPrint(
-                  'Could not parse due string for replica: ${due.string}');
-              return null;
-            }
-          }
-        }(),
+        due: dueDate?.toIso8601String(),
         start: () {
           if (start.string == 'None' || start.string.isEmpty) return null;
           if (start.string == "stop") return "stop";
-          try {
-            final parsed = DateFormat(datePattern).parse(start.string);
-            return parsed.toUtc().toIso8601String();
-          } catch (e) {
-            try {
-              final parsed2 = DateTime.parse(start.string);
-              return parsed2.toUtc().toIso8601String();
-            } catch (_) {
-              debugPrint(
-                  'Could not parse start string for replica: ${start.string}');
-              return null;
-            }
-          }
+          return _parseUiDate(start.string, datePattern)?.toIso8601String();
         }(),
-        wait: () {
-          if (wait.string == 'None' || wait.string.isEmpty) return null;
-          try {
-            final parsed = DateFormat(datePattern).parse(wait.string);
-            return parsed.toUtc().toIso8601String();
-          } catch (e) {
-            try {
-              final parsed2 = DateTime.parse(wait.string);
-              return parsed2.toUtc().toIso8601String();
-            } catch (_) {
-              debugPrint(
-                  'Could not parse wait string for replica: ${wait.string}');
-              return null;
-            }
-          }
-        }(),
+        wait: waitDate?.toIso8601String(),
         status: status.string.isNotEmpty ? status.string : null,
         description: description.string.isNotEmpty ? description.string : null,
         tags: tags.isNotEmpty ? tags.toList() : null,
         uuid: initialTask.uuid ?? '',
         priority: priority.string.isNotEmpty ? priority.string : null,
         project: project.string != 'None' ? project.string : null,
+        recur: recur.string.isNotEmpty ? recur.string : null,
+        rtype: recur.string.isNotEmpty ? 'periodic' : null,
+        mask: (initialTask.mask ?? '').toString(),
+        imask: (initialTask.imask ?? '').toString(),
+        parent: (initialTask.parent ?? '').toString(),
       );
       debugPrint('Modified replica task: $modifiedTask');
       hasChanges.value = false;

@@ -577,8 +577,7 @@ class HomeController extends GetxController {
         await synchronize(context, false);
       }
       if (context.mounted) {
-        final tColors =
-            Theme.of(context).extension<TaskwarriorColorTheme>()!;
+        final tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
@@ -622,6 +621,8 @@ class HomeController extends GetxController {
 
   final tagcontroller = TextEditingController();
   RxList<String> tags = <String>[].obs;
+  RxString recur = ''.obs;
+  RxBool dueAutoFromRecurrence = false.obs;
   RxBool inThePast = false.obs;
 
   Filters getFilters() {

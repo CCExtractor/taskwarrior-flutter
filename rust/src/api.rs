@@ -141,6 +141,24 @@ pub fn update_task(
                 "project" => {
                     let _ = t.set_value("project", Some(value), &mut ops);
                 }
+                "recur" => {
+                    let _ = t.set_value("recur", Some(value), &mut ops);
+                }
+                "rtype" => {
+                    let _ = t.set_value("rtype", Some(value), &mut ops);
+                }
+                "mask" => {
+                    let _ = t.set_value("mask", Some(value), &mut ops);
+                }
+                "imask" => {
+                    let _ = t.set_value("imask", Some(value), &mut ops);
+                }
+                "parent" => {
+                    let _ = t.set_value("parent", Some(value), &mut ops);
+                }
+                "entry" => {
+                    let _ = t.set_value("entry", Some(value), &mut ops);
+                }
                 "status" => {
                     let status = match value.as_str() {
                         "pending" => taskchampion::Status::Pending,
@@ -204,6 +222,24 @@ pub fn add_task(taskdb_dir_path: String, map: HashMap<String, String>) -> i8 {
             }
             "project" => {
                 let _ = t.set_user_defined_attribute("project", value, &mut ops);
+            }
+            "recur" => {
+                let _ = t.set_value("recur", Some(value), &mut ops);
+            }
+            "rtype" => {
+                let _ = t.set_value("rtype", Some(value), &mut ops);
+            }
+            "mask" => {
+                let _ = t.set_value("mask", Some(value), &mut ops);
+            }
+            "imask" => {
+                let _ = t.set_value("imask", Some(value), &mut ops);
+            }
+            "parent" => {
+                let _ = t.set_value("parent", Some(value), &mut ops);
+            }
+            "entry" => {
+                let _ = t.set_value("entry", Some(value), &mut ops);
             }
             _ => {}
         }

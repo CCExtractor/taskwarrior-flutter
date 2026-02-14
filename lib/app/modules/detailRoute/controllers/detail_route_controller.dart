@@ -127,6 +127,7 @@ class DetailRouteController extends GetxController {
   late Rx<DateTime?> dueValue = Rx<DateTime?>(null);
   late Rx<DateTime?> waitValue = Rx<DateTime?>(null);
   late Rx<DateTime?> untilValue = Rx<DateTime?>(null);
+  late RxString recurValue = ''.obs;
   late Rxn<String>? priorityValue = Rxn<String>(null);
   late Rxn<String>? projectValue = Rxn<String>(null);
   late Rxn<BuiltList<String>>? tagsValue = Rxn<BuiltList<String>>(null);
@@ -155,6 +156,7 @@ class DetailRouteController extends GetxController {
     dueValue.value = modify.draft.due;
     waitValue.value = modify.draft.wait;
     untilValue.value = modify.draft.until;
+    recurValue.value = modify.draft.recur ?? '';
     priorityValue?.value = modify.draft.priority;
     projectValue?.value = modify.draft.project;
     tagsValue?.value = modify.draft.tags;
