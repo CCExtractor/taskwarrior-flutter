@@ -2,7 +2,9 @@
 
 import 'package:collection/collection.dart';
 import 'package:taskwarrior/app/models/models.dart';
+import 'package:taskwarrior/app/utils/taskfunctions/recurrence_engine.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/draft.dart';
+import 'package:uuid/uuid.dart';
 
 class Modify {
   Modify({
@@ -38,6 +40,7 @@ class Modify {
         'due',
         'wait',
         'until',
+        'recur',
         'priority',
         'project',
         'tags',
@@ -76,9 +79,52 @@ class Modify {
     _draft.set(key, value);
   }
 
+  Task? _nextRecurringTask({
+    required Task source,
+    required DateTime now,
+  }) {
+    final recur = source.recur;
+    if (recur == null || recur.trim().isEmpty) {
+      return null;
+    }
+
+    final baseDue = source.due ?? now;
+    final nextDue = RecurrenceEngine.calculateNextDate(baseDue, recur);
+    if (nextDue == null) {
+      return null;
+    }
+
+    final nextWait = source.wait != null
+        ? RecurrenceEngine.calculateNextDate(source.wait!, recur)
+        : null;
+
+    return source.rebuild((b) {
+      b
+        ..id = null
+        ..uuid = const Uuid().v1()
+        ..status = 'pending'
+        ..entry = now
+        ..modified = now
+        ..start = null
+        ..end = null
+        ..due = nextDue.toUtc()
+        ..wait = nextWait?.toUtc();
+    });
+  }
+
   void save({required DateTime Function() modified}) {
-    _draft.set('modified', modified());
+    final now = modified();
+    final wasCompleted = _draft.original.status == 'completed';
+    final isNowCompleted = _draft.draft.status == 'completed';
+    final Task? spawnedRecurring = (!wasCompleted && isNowCompleted)
+        ? _nextRecurringTask(source: _draft.draft, now: now)
+        : null;
+
+    _draft.set('modified', now);
     _mergeTask(_draft.draft);
+    if (spawnedRecurring != null) {
+      _mergeTask(spawnedRecurring);
+    }
     _draft = Draft(_getTask(_uuid));
   }
 }

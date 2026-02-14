@@ -7,14 +7,17 @@ import 'package:taskwarrior/app/utils/taskchampion/credentials_storage.dart';
 import 'package:taskwarrior/app/v3/db/task_database.dart';
 
 Future<void> modifyTaskOnTaskwarrior(
-    String description,
-    String project,
-    String due,
-    String priority,
-    String status,
-    String taskuuid,
-    String id,
-    List<String> newTags) async {
+  String description,
+  String project,
+  String due,
+  String priority,
+  String status,
+  String taskuuid,
+  String id,
+  List<String> newTags, {
+  String? recur,
+  String? rtype,
+}) async {
   var baseUrl = await CredentialsStorage.getApiUrl();
   var c = await CredentialsStorage.getClientId();
   var e = await CredentialsStorage.getEncryptionSecret();
@@ -22,39 +25,29 @@ Future<void> modifyTaskOnTaskwarrior(
   debugPrint(c);
   debugPrint(e);
   debugPrint("modifyTaskOnTaskwarrior called");
-  debugPrint("description: $description project: $project due: $due "
-      "priority: $priority status: $status taskuuid: $taskuuid id: $id tags: $newTags"
-      "body: ${jsonEncode({
-        "email": "e",
-        "encryptionSecret": e,
-        "UUID": c,
-        "description": description,
-        "priority": priority,
-        "project": project,
-        "due": due,
-        "status": status,
-        "taskuuid": taskuuid,
-        "taskId": id,
-        "tags": newTags.isNotEmpty ? newTags : null
-      })}");
+  final bodyMap = <String, dynamic>{
+    "email": "e",
+    "encryptionSecret": e,
+    "UUID": c,
+    "description": description,
+    "priority": priority,
+    "project": project,
+    "due": due,
+    "status": status,
+    "taskuuid": taskuuid,
+    "taskId": id,
+    "tags": newTags.isNotEmpty ? newTags : null,
+  };
+  if (recur != null && recur.isNotEmpty) bodyMap["recur"] = recur;
+  if (rtype != null && rtype.isNotEmpty) bodyMap["rtype"] = rtype;
+
+  debugPrint("body: ${jsonEncode(bodyMap)}");
   final response = await http.post(
     Uri.parse(apiUrl),
     headers: {
       'Content-Type': 'text/plain',
     },
-    body: jsonEncode({
-      "email": "e",
-      "encryptionSecret": e,
-      "UUID": c,
-      "description": description,
-      "priority": priority,
-      "project": project,
-      "due": due,
-      "status": status,
-      "taskuuid": taskuuid,
-      "taskId": id,
-      "tags": newTags.isNotEmpty ? newTags : null
-    }),
+    body: jsonEncode(bodyMap),
   );
   debugPrint('Modify task response body: ${response.body}');
   if (response.statusCode < 200 || response.statusCode >= 300) {

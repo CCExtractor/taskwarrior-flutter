@@ -62,7 +62,7 @@ dependencies:
   tuple: ^2.0.0
   tutorial_coach_mark: ^1.2.11
   url_launcher: ^6.3.1
-  uuid: ^4.2.2
+  uuid: ^4.5.2
   built_collection: ^5.1.1
   textfield_tags: ^3.0.1
   path_provider: ^2.1.5

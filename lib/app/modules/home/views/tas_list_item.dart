@@ -29,7 +29,8 @@ class TaskListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     // ignore: unused_element
     void saveChanges() async {
       var now = DateTime.now().toUtc();
@@ -62,7 +63,7 @@ class TaskListItem extends StatelessWidget {
     }
 
     MaterialColor colours = Colors.grey;
-    Color colour =tColors.primaryTextColor!;
+    Color colour = tColors.primaryTextColor!;
     Color dimColor = tColors.dimCol!;
     if (task.priority == 'H') {
       colours = Colors.red;
@@ -71,6 +72,8 @@ class TaskListItem extends StatelessWidget {
     } else if (task.priority == 'L') {
       colours = Colors.green;
     }
+    final hasRecurrence = task.recur != null && task.recur!.trim().isNotEmpty;
+    final hasAnnotations = task.annotations != null && task.annotations!.isNotEmpty;
 
     if ((task.status[0].toUpperCase()) == 'P') {
       // Pending tasks
@@ -91,17 +94,16 @@ class TaskListItem extends StatelessWidget {
         ),
         child: ListTile(
           title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
+              Expanded(
+                child: Row(
                 children: [
                   CircleAvatar(
                     backgroundColor: colours,
                     radius: 8,
                   ),
                   const SizedBox(width: 8),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.70,
+                  Expanded(
                     child: Text(
                       '${(task.id == 0) ? '#' : task.id}. ${task.description}',
                       maxLines: 1,
@@ -115,15 +117,49 @@ class TaskListItem extends StatelessWidget {
                   ),
                 ],
               ),
-              Text(
-                (task.annotations != null)
-                    ? ' [${task.annotations!.length}]'
-                    : '',
-                // style: GoogleFonts.poppins(
-                //   color: colour,
-                // ),
-                style: TextStyle(fontFamily: FontFamily.poppins, color: colour),
               ),
+              if (hasRecurrence || hasAnnotations) const SizedBox(width: 8),
+              if (hasRecurrence)
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 96),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 2,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: colours.withAlpha(40),
+                      border: Border.all(color: colours),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.repeat, size: 12, color: colour),
+                        const SizedBox(width: 3),
+                        Flexible(
+                          child: Text(
+                            task.recur!,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontFamily: FontFamily.poppins,
+                              fontSize: 10,
+                              color: colour,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              if (hasAnnotations) ...[
+                const SizedBox(width: 6),
+                Text(
+                  '[${task.annotations!.length}]',
+                  style: TextStyle(fontFamily: FontFamily.poppins, color: colour),
+                ),
+              ],
             ],
           ),
           subtitle: Row(
@@ -161,17 +197,16 @@ class TaskListItem extends StatelessWidget {
       // Completed tasks
       return ListTile(
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
+            Expanded(
+              child: Row(
               children: [
                 CircleAvatar(
                   backgroundColor: colours,
                   radius: 8,
                 ),
                 const SizedBox(width: 8),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.65,
+                Expanded(
                   child: Text(
                     '${(task.id == 0) ? '#' : task.id}. ${task.description}',
                     maxLines: 1,
@@ -185,6 +220,41 @@ class TaskListItem extends StatelessWidget {
                 ),
               ],
             ),
+            ),
+            if (hasRecurrence) ...[
+              const SizedBox(width: 8),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 6,
+                  vertical: 2,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: colours.withAlpha(40),
+                  border: Border.all(color: colours),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.repeat, size: 12, color: colour),
+                    const SizedBox(width: 3),
+                    ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 96),
+                      child: Text(
+                        task.recur!,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontFamily: FontFamily.poppins,
+                          fontSize: 10,
+                          color: colour,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ],
         ),
         subtitle: Row(

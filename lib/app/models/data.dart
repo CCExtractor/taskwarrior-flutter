@@ -8,6 +8,7 @@ import 'package:taskwarrior/app/models/json/task.dart';
 import 'package:taskwarrior/app/services/notification_services.dart';
 import 'package:taskwarrior/app/utils/taskc/payload.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/urgency.dart';
+
 class Data {
   Data(this.home);
 
@@ -176,6 +177,11 @@ class Data {
           task.due!, task.description, false, task.entry);
 
       notificationService.cancelNotification(notificationid);
+      if (task.wait != null) {
+        int waitNotificationId = notificationService.calculateNotificationId(
+            task.wait!, task.description, true, task.entry);
+        notificationService.cancelNotification(waitNotificationId);
+      }
     }
     _mergeTasks([task]);
     File('${home.path}/.task/backlog.data').writeAsStringSync(
