@@ -9,8 +9,10 @@ import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
+import 'package:taskwarrior/app/utils/taskfunctions/datetime_differences.dart';
 import 'package:taskwarrior/app/v3/db/task_database.dart';
 import 'package:taskwarrior/app/v3/models/task.dart';
+import 'package:taskwarrior/app/v3/net/add_task.dart';
 import 'package:taskwarrior/app/v3/net/complete.dart';
 import 'package:taskwarrior/app/v3/net/delete.dart';
 
@@ -115,13 +117,13 @@ class TaskViewBuilder extends StatelessWidget {
                   TaskForC task = tasks[index];
                   final bool isRecurring =
                       task.recur != null && task.recur!.trim().isNotEmpty;
-                  final String nextDueText = isRecurring
-                      ? (() {
-                          final parsed = DateTime.tryParse(task.due ?? '');
-                          if (parsed == null) return '';
-                          return ' | Next: ${parsed.toLocal().toString().split('.').first}';
-                        })()
-                      : '';
+                  final String dueDateText = (() {
+                    final dueStr = task.due;
+                    if (dueStr == null || dueStr.isEmpty) return '';
+                    final parsed = DateTime.tryParse(dueStr);
+                    if (parsed == null) return '';
+                    return ' | ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.homePageDue}: ${when(parsed.toLocal())}';
+                  })();
                   return Slidable(
                     startActionPane: ActionPane(
                       motion: const BehindMotion(),
@@ -219,7 +221,7 @@ class TaskViewBuilder extends StatelessWidget {
                               ),
                             ),
                             subtitle: Text(
-                              '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageUrgency}: ${task.urgency!.floorToDouble()} | ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageStatus}: ${task.status}$nextDueText',
+                              '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageUrgency}: ${task.urgency!.floorToDouble()} | ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageStatus}: ${task.status}$dueDateText',
                               style: GoogleFonts.poppins(
                                 color: tColors.secondaryTextColor,
                               ),
@@ -244,7 +246,8 @@ class TaskViewBuilder extends StatelessWidget {
                                         children: [
                                           Icon(Icons.repeat,
                                               size: 14,
-                                              color: tColors.secondaryTextColor),
+                                              color:
+                                                  tColors.secondaryTextColor),
                                           const SizedBox(width: 3),
                                           Flexible(
                                             child: Text(
@@ -253,7 +256,8 @@ class TaskViewBuilder extends StatelessWidget {
                                               overflow: TextOverflow.ellipsis,
                                               style: GoogleFonts.poppins(
                                                 fontSize: 10,
-                                                color: tColors.secondaryTextColor,
+                                                color:
+                                                    tColors.secondaryTextColor,
                                               ),
                                             ),
                                           ),
@@ -278,6 +282,18 @@ class TaskViewBuilder extends StatelessWidget {
     await taskDatabase.open();
     await taskDatabase.markTaskAsCompleted(uuid);
     completeTask('email', uuid);
+    // Push any newly spawned recurring child task to the server immediately
+    // so it is visible there without waiting for the next manual sync.
+    try {
+      final children = await taskDatabase.getTasksByParent(uuid);
+      for (final child in children) {
+        if (child.status == 'pending') {
+          await pushNewTaskToServer(child);
+        }
+      }
+    } catch (e) {
+      debugPrint('Failed to push recurring child tasks to server: $e');
+    }
     await Get.find<HomeController>().fetchTasksFromDB();
   }
 

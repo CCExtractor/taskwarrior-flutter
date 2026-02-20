@@ -9,6 +9,7 @@ import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
+import 'package:taskwarrior/app/utils/taskfunctions/datetime_differences.dart';
 import 'package:taskwarrior/app/v3/champion/replica.dart';
 import 'package:taskwarrior/app/v3/champion/models/task_for_replica.dart';
 
@@ -100,13 +101,13 @@ class TaskReplicaViewBuilder extends StatelessWidget {
                   final task = tasks[index];
                   final bool isRecurring =
                       task.recur != null && task.recur!.trim().isNotEmpty;
-                  final String nextDueText = isRecurring
-                      ? (() {
-                          final parsed = DateTime.tryParse(task.due ?? '');
-                          if (parsed == null) return '';
-                          return ' | Next: ${parsed.toLocal().toString().split('.').first}';
-                        })()
-                      : '';
+                  final String dueDateText = (() {
+                    final dueStr = task.due;
+                    if (dueStr == null || dueStr.isEmpty) return '';
+                    final parsed = DateTime.tryParse(dueStr);
+                    if (parsed == null) return '';
+                    return ' | ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.homePageDue}: ${when(parsed.toLocal())}';
+                  })();
                   // Determine if due is within 24 hours or already past (only for pending filter)
                   final bool isDueSoon = (() {
                     if (!pendingFilter) return false;
@@ -157,7 +158,7 @@ class TaskReplicaViewBuilder extends StatelessWidget {
                             ),
                           ),
                           subtitle: Text(
-                            '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageStatus}: ${task.status ?? ''}$nextDueText',
+                            '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageStatus}: ${task.status ?? ''}$dueDateText',
                             style: GoogleFonts.poppins(
                               color: tColors.secondaryTextColor,
                             ),
@@ -267,7 +268,8 @@ class TaskReplicaViewBuilder extends StatelessWidget {
   }
 
   void completeTask(TaskForReplica task) async {
-    Replica.cancelNotificationsForTask(task);
+    // modifyTaskInReplica handles notification cancellation internally;
+    // no need to cancel here separately.
     await Replica.modifyTaskInReplica(task.copyWith(status: 'completed'));
     Get.find<HomeController>().refreshReplicaTaskList();
   }

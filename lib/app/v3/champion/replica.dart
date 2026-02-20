@@ -89,13 +89,14 @@ class Replica {
         if (nextDue != null) {
           var newMap = HashMap<String, dynamic>();
           newMap['description'] = newTask.description;
-          newMap['project'] = newTask.project;
-          newMap['priority'] = newTask.priority;
-          newMap['tags'] = newTask.tags;
+          if (newTask.project != null) newMap['project'] = newTask.project;
+          if (newTask.priority != null) newMap['priority'] = newTask.priority;
+          if (newTask.tags != null && newTask.tags!.isNotEmpty)
+            newMap['tags'] = newTask.tags;
           newMap['recur'] = newTask.recur;
-          newMap['rtype'] = newTask.rtype;
-          newMap['mask'] = newTask.mask;
-          newMap['imask'] = newTask.imask;
+          if (newTask.rtype != null) newMap['rtype'] = newTask.rtype;
+          if (newTask.mask != null) newMap['mask'] = newTask.mask;
+          if (newTask.imask != null) newMap['imask'] = newTask.imask;
           newMap['parent'] = newTask.uuid;
           newMap['entry'] = DateTime.now().toUtc().toIso8601String();
           newMap['status'] = 'pending';
@@ -106,6 +107,17 @@ class Replica {
 
           debugPrint("Creating next recurring replica task: $newMap");
           await addTaskToReplica(newMap);
+          // Schedule a 24-hour advance-warning notification for the new occurrence
+          try {
+            final entryTime = DateTime.parse(newMap['entry'] as String? ??
+                DateTime.now().toUtc().toIso8601String());
+            NotificationService().sendRecurrenceAdvanceNotification(
+                nextDue.toUtc(),
+                newMap['description'] as String? ?? '',
+                entryTime);
+          } catch (e) {
+            debugPrint('Error scheduling advance-warning for replica task: $e');
+          }
         }
       } catch (e) {
         debugPrint("Error creating recurring replica task: $e");
@@ -265,6 +277,9 @@ class Replica {
         final id = notificationService.calculateNotificationId(
             due, description, false, entryTime);
         notificationService.cancelNotification(id);
+        // Also cancel any advance-warning notification
+        notificationService.cancelRecurrenceAdvanceNotification(
+            due, description, entryTime);
       }
       if (wait != null) {
         final id = notificationService.calculateNotificationId(

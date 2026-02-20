@@ -32,6 +32,9 @@ class TaskDatabase {
         final id = _notificationService.calculateNotificationId(
             due, task.description, false, entryTime);
         _notificationService.cancelNotification(id);
+        // Also cancel any advance-warning notification for this task
+        _notificationService.cancelRecurrenceAdvanceNotification(
+            due, task.description, entryTime);
       }
       if (wait != null) {
         final id = _notificationService.calculateNotificationId(
@@ -77,7 +80,7 @@ class TaskDatabase {
 
   Future<void> _open(path) async {
     debugPrint("called _open with $path");
-    _database = await openDatabase(path, version: 2,
+    _database = await openDatabase(path, version: 3,
         onCreate: (Database db, version) async {
       await db.execute('''
             CREATE TABLE Tasks (
@@ -95,7 +98,10 @@ class TaskDatabase {
               start TEXT,
               wait TEXT,
               rtype TEXT,
-              recur TEXT
+              recur TEXT,
+              parent TEXT,
+              until TEXT,
+              scheduled TEXT
             )
           ''');
       await db.execute('''
@@ -135,6 +141,15 @@ class TaskDatabase {
                 ON UPDATE CASCADE 
             )
           ''');
+    }, onUpgrade: (Database db, int oldVersion, int newVersion) async {
+      if (oldVersion < 3) {
+        // Add recurrence chain tracking columns
+        await db.execute('ALTER TABLE Tasks ADD COLUMN parent TEXT');
+        await db.execute('ALTER TABLE Tasks ADD COLUMN until TEXT');
+        await db.execute('ALTER TABLE Tasks ADD COLUMN scheduled TEXT');
+        debugPrint(
+            'DB upgraded from v$oldVersion to v3: added parent/until/scheduled columns');
+      }
     });
     debugPrint("Database opened at $path");
   }
@@ -330,8 +345,20 @@ class TaskDatabase {
         recur: task.recur,
         depends: task.depends ?? [],
         annotations: task.annotations ?? [],
+        parent: task.uuid,
+        until: task.until,
+        scheduled: task.scheduled,
       );
       await insertTask(newTask);
+      // Schedule 24-hour advance-warning notification for the new occurrence.
+      // Use the task's own entry time so the ID matches when cancelling later.
+      try {
+        final entryTime = _parseUtc(newTask.entry) ?? DateTime.now().toUtc();
+        _notificationService.sendRecurrenceAdvanceNotification(
+            nextDue.toUtc(), newTask.description, entryTime);
+      } catch (e) {
+        debugPrint('Error scheduling advance-warning notification: $e');
+      }
       debugPrint(
           'Created next recurring task: ${newTask.uuid} due: ${newTask.due}');
     }
@@ -401,6 +428,21 @@ class TaskDatabase {
       whereArgs: [''],
     );
     debugPrint("Tasks without uuid are $maps");
+    return await Future.wait(
+      maps.map((mapItem) => getObjectForTask(mapItem)).toList(),
+    );
+  }
+
+  /// Returns all tasks whose [parent] field equals [parentUuid].
+  /// Used to locate recurring child tasks spawned when a recurring task is
+  /// completed, so they can be pushed to the server immediately.
+  Future<List<TaskForC>> getTasksByParent(String parentUuid) async {
+    await ensureDatabaseIsOpen();
+    final List<Map<String, dynamic>> maps = await _database!.query(
+      'Tasks',
+      where: 'parent = ?',
+      whereArgs: [parentUuid],
+    );
     return await Future.wait(
       maps.map((mapItem) => getObjectForTask(mapItem)).toList(),
     );
