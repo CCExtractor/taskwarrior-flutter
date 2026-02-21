@@ -166,6 +166,35 @@ class FilterDrawer extends StatelessWidget {
                 ),
               ),
 
+              Container(
+                decoration: BoxDecoration(
+                  color: tileColor,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: TaskWarriorColors.borderColor),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Hide Blocked Tasks',
+                        style: TextStyle(
+                          fontFamily: FontFamily.poppins,
+                          fontSize: TaskWarriorFonts.fontSizeMedium,
+                          color: tColors.primaryTextColor,
+                        ),
+                      ),
+                      Obx(() => Switch(
+                        value: homeController.hideBlocked.value,
+                        onChanged: (_) => filters.toggleHideBlocked(),
+                      )),
+                    ],
+                  ),
+                ),
+              ),
+              const Divider(color: Color.fromARGB(0, 48, 46, 46)),
+              
               const Divider(
                 color: Color.fromARGB(0, 48, 46, 46),
               ),

@@ -54,6 +54,7 @@ class HomeController extends GetxController {
   final Sentences sentences = Sentences();
   final RxBool pendingFilter = false.obs;
   final RxBool waitingFilter = false.obs;
+  final RxBool hideBlocked = false.obs;
   final RxString projectFilter = ''.obs;
   final RxBool completedFilter = false.obs;
   final RxBool deletedFilter = false.obs;
@@ -248,29 +249,28 @@ class HomeController extends GetxController {
   void _refreshTasks() {
     
     if (deletedFilter.value) {
-      // Show ONLY deleted tasks
       queriedTasks.value = storage.data
           .completedData()
           .where((task) => task.status == 'deleted')
           .toList();
-    } 
-    else if (completedFilter.value) {
-      // Show completed tasks (EXCLUDE deleted)
+    } else if (completedFilter.value) {
       queriedTasks.value = storage.data
           .completedData()
           .where((task) => task.status == 'completed')
           .toList();
-    } 
-    else if (pendingFilter.value) {
-      // Show pending tasks (default behaviour)
+    } else if (pendingFilter.value) {
       queriedTasks.value = storage.data
           .pendingData()
           .where((task) => task.status == 'pending')
           .toList();
-    } 
-    else {
-      // Fallback: pending tasks
+    } else {
       queriedTasks.value = storage.data.pendingData();
+    }
+
+    if (hideBlocked.value) {
+      queriedTasks.value = queriedTasks
+          .where((task) => task.depends == null || task.depends!.isEmpty)
+          .toList();
     }
 
 
@@ -706,16 +706,21 @@ class HomeController extends GetxController {
     var filters = Filters(
       pendingFilter: pendingFilter.value,
       waitingFilter: waitingFilter.value,
-      completedFilter: completedFilter.value,        // NEW - Add this line
-      deletedFilter: deletedFilter.value,            // NEW - Add this line
+      completedFilter: completedFilter.value,
+      deletedFilter: deletedFilter.value,
       togglePendingFilter: togglePendingFilter,
       toggleWaitingFilter: toggleWaitingFilter,
-      toggleCompletedFilter: toggleCompletedFilter,  // NEW - Add this line
-      toggleDeletedFilter: toggleDeletedFilter,      // NEW - Add this line
+      toggleCompletedFilter: toggleCompletedFilter,
+      toggleDeletedFilter: toggleDeletedFilter,
       projects: projects,
       projectFilter: projectFilter.value,
       toggleProjectFilter: toggleProjectFilter,
       tagFilters: tagFilters,
+      hideBlocked: hideBlocked.value,
+      toggleHideBlocked: () {
+        hideBlocked.value = !hideBlocked.value;
+        _refreshTasks();
+      },
     );
     return filters;
   }

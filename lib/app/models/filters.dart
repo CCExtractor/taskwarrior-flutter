@@ -17,6 +17,8 @@ class Filters {
     required this.projects,
     required this.projectFilter,
     required this.toggleProjectFilter,
+    required this.hideBlocked,           // ADD
+    required this.toggleHideBlocked,
   });
 
   final bool pendingFilter;
@@ -31,4 +33,6 @@ class Filters {
   final dynamic projects;
   final String projectFilter;
   final void Function(String) toggleProjectFilter;
+  final bool hideBlocked;
+  final void Function() toggleHideBlocked;
 }

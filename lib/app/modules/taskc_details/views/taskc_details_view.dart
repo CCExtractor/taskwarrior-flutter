@@ -41,6 +41,7 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
                   (value) =>
                       controller.updateField(controller.description, value),
                 ),
+                _buildDependsDetail(context),
                 _buildEditableDetail(
                   context,
                   '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.project}:',
@@ -166,6 +167,20 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
               : const SizedBox.shrink(),
         ),
       ),
+    );
+  }
+
+  Widget _buildDependsDetail(BuildContext context) {
+    return InkWell(
+      onTap: () => controller.showDependencyPicker(),
+      child: Obx(() => _buildDetail(
+        context,
+        'Dependencies:',
+        controller.depends.isEmpty || 
+        (controller.depends.length == 1 && controller.depends[0].isEmpty)
+            ? 'None'
+            : controller.depends.join(', '),
+      )),
     );
   }
 
