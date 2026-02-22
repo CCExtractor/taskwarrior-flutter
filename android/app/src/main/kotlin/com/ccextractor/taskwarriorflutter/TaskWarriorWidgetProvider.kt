@@ -4,16 +4,11 @@ import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.net.Uri
 import android.widget.RemoteViews
-import es.antonborri.home_widget.HomeWidgetBackgroundIntent
-import es.antonborri.home_widget.HomeWidgetLaunchIntent
-import es.antonborri.home_widget.HomeWidgetProvider
 import es.antonborri.home_widget.HomeWidgetPlugin
 import org.json.JSONException
 import android.content.Intent
 import android.widget.RemoteViewsService
-import org.json.JSONObject
 import org.json.JSONArray as OrgJSONArray
-import android.os.Bundle
 import android.app.PendingIntent
 import android.appwidget.AppWidgetProvider
 import android.os.Build
@@ -21,35 +16,6 @@ import android.os.Build
 
 @TargetApi(Build.VERSION_CODES.CUPCAKE)
 class TaskWarriorWidgetProvider : AppWidgetProvider() {
-
-	override fun onReceive(context: Context, intent: Intent) {
-        // Handle the custom action from your Widget buttons/list
-        if (intent.action == "TASK_ACTION") {
-            val uuid = intent.getStringExtra("uuid") ?: ""
-            val launchedFor = intent.getStringExtra("launchedFor")
-
-            // 1. Construct the URI exactly as Flutter expects it
-            // Scheme: taskwarrior://
-            // Host: cardclicked OR addclicked
-            val deepLinkUri = if (launchedFor == "ADD_TASK") {
-                Uri.parse("taskwarrior://addclicked")
-            } else {
-                // For list items, we attach the UUID
-                Uri.parse("taskwarrior://cardclicked?uuid=$uuid")
-            }
-
-            // 2. Create the Intent to open MainActivity
-            val launchIntent = Intent(context, MainActivity::class.java).apply {
-                action = Intent.ACTION_VIEW
-                data = deepLinkUri
-                // These flags ensure the app opens correctly whether running or not
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-            }
-            
-            context.startActivity(launchIntent)
-        }
-        super.onReceive(context, intent)
-    }
 	fun getLayoutId(context: Context) : Int{
 		val sharedPrefs = HomeWidgetPlugin.getData(context)
 		val theme = sharedPrefs.getString("themeMode", "")
@@ -78,25 +44,34 @@ override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appW
         val views = RemoteViews(context.packageName, getLayoutId(context)).apply {
             
             // Set up the Logo click (Open App)
-            val pendingIntent: PendingIntent = HomeWidgetLaunchIntent.getActivity(
+            val pendingIntent: PendingIntent = PendingIntent.getActivity(
                 context,
-                MainActivity::class.java
+                widgetId,
+                Intent(context, MainActivity::class.java).apply {
+                    action = Intent.ACTION_VIEW
+                    data = Uri.parse("taskwarrior://home")
+                    flags =
+                        Intent.FLAG_ACTIVITY_NEW_TASK or
+                            Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                            Intent.FLAG_ACTIVITY_SINGLE_TOP
+                },
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
             setOnClickPendingIntent(R.id.logo, pendingIntent)
 
             // Set up the Add Button click (Custom Action)
-            val intent_for_add = Intent(context, TaskWarriorWidgetProvider::class.java).apply {
-                action = "TASK_ACTION"
-                putExtra("launchedFor", "ADD_TASK")
-                // Unique data to ensure the broadcast is fresh
-                data = Uri.parse("taskwarrior://addtask/$widgetId")
-            }
-            
-            val pendingIntentAdd: PendingIntent = PendingIntent.getBroadcast(
+            val pendingIntentAdd: PendingIntent = PendingIntent.getActivity(
                 context,
-                widgetId, 
-                intent_for_add,
-                PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                widgetId,
+                Intent(context, MainActivity::class.java).apply {
+                    action = Intent.ACTION_VIEW
+                    data = Uri.parse("taskwarrior://addclicked")
+                    flags =
+                        Intent.FLAG_ACTIVITY_NEW_TASK or
+                            Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                            Intent.FLAG_ACTIVITY_SINGLE_TOP
+                },
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
             setOnClickPendingIntent(R.id.add_btn, pendingIntentAdd)
 
@@ -105,19 +80,19 @@ override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appW
         }
 
         // 4. Set up the Click Template for List Items (Deep Linking)
-        val clickPendingIntent: PendingIntent = Intent(
+        val clickPendingIntent: PendingIntent = PendingIntent.getActivity(
             context,
-            TaskWarriorWidgetProvider::class.java
-        ).run {
-            action = "TASK_ACTION"
-            // Important: Use widgetId as requestCode to keep it unique
-            PendingIntent.getBroadcast(
-                context,
-                widgetId,
-                this,
-                PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-            )
-        }
+            widgetId,
+            Intent(context, MainActivity::class.java).apply {
+                action = Intent.ACTION_VIEW
+                data = Uri.parse("taskwarrior://cardclicked")
+                flags =
+                    Intent.FLAG_ACTIVITY_NEW_TASK or
+                        Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                        Intent.FLAG_ACTIVITY_SINGLE_TOP
+            },
+            PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
         views.setPendingIntentTemplate(R.id.list_view, clickPendingIntent)
 
         // 5. THE THEME FIX: Notify the manager that the list data/layout needs a refresh
@@ -198,16 +173,11 @@ class ListViewRemoteViewsFactory(
 		return RemoteViews(context.packageName, getListItemLayoutId()).apply {
         	setTextViewText(R.id.todo__title, task.title)
 			setImageViewResource(R.id.dot, getDotIdByPriority(task.priority))
-			val a = Intent().apply {
-
-				Bundle().also { extras ->
-					extras.putString("action", "show_task")
-					extras.putString("uuid", tasks[position].uuid)
-					putExtras(extras)
-				}
-				
+			val fillInIntent = Intent().apply {
+                action = Intent.ACTION_VIEW
+                data = Uri.parse("taskwarrior://cardclicked?uuid=${tasks[position].uuid}")
 			}
-			setOnClickFillInIntent(R.id.list_item_container,a)
+			setOnClickFillInIntent(R.id.list_item_container, fillInIntent)
 		}
 		
     }

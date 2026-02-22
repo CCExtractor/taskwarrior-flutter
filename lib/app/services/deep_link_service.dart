@@ -17,10 +17,25 @@ class DeepLinkService extends GetxService {
 
   void _initDeepLinks() {
     _appLinks = AppLinks();
+
     _appLinks.uriLinkStream.listen((uri) {
       debugPrint('🔗 LINK RECEIVED: $uri');
       _handleWidgetUri(uri);
     });
+
+    _loadInitialLink();
+  }
+
+  Future<void> _loadInitialLink() async {
+    try {
+      final Uri? initialUri = await _appLinks.getInitialLink();
+      if (initialUri != null) {
+        debugPrint('🔗 INITIAL LINK: $initialUri');
+        _handleWidgetUri(initialUri);
+      }
+    } catch (e) {
+      debugPrint('Failed to get initial link: $e');
+    }
   }
 
   void _handleWidgetUri(Uri uri) {
@@ -53,7 +68,8 @@ class DeepLinkService extends GetxService {
         Get.toNamed(Routes.DETAIL_ROUTE, arguments: ["uuid", uuid]);
       }
     } else if (uri.host == "addclicked") {
-      if (Get.context != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (Get.context == null) return;
         Get.dialog(
           Material(
             child: AddTaskBottomSheet(
@@ -63,7 +79,7 @@ class DeepLinkService extends GetxService {
             ),
           ),
         );
-      }
+      });
     }
   }
 }
