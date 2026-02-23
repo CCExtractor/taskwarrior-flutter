@@ -83,21 +83,12 @@ override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appW
                 MainActivity::class.java
             )
             setOnClickPendingIntent(R.id.logo, pendingIntent)
-
-            // Set up the Add Button click (Custom Action)
-            val intent_for_add = Intent(context, TaskWarriorWidgetProvider::class.java).apply {
-                action = "TASK_ACTION"
-                putExtra("launchedFor", "ADD_TASK")
-                // Unique data to ensure the broadcast is fresh
-                data = Uri.parse("taskwarrior://addtask/$widgetId")
-            }
             
-            val pendingIntentAdd: PendingIntent = PendingIntent.getBroadcast(
-                context,
-                widgetId, 
-                intent_for_add,
-                PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-            )
+           	val pendingIntentAdd: PendingIntent = HomeWidgetLaunchIntent.getActivity(
+				context,
+				MainActivity::class.java,
+				Uri.parse("taskwarrior://addclicked")
+			)
             setOnClickPendingIntent(R.id.add_btn, pendingIntentAdd)
 
             // Attach the adapter to the ListView
@@ -111,12 +102,11 @@ override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appW
         ).run {
             action = "TASK_ACTION"
             // Important: Use widgetId as requestCode to keep it unique
-            PendingIntent.getBroadcast(
-                context,
-                widgetId,
-                this,
-                PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-            )
+            val clickPendingIntent: PendingIntent = HomeWidgetLaunchIntent.getActivity(
+				context,
+				MainActivity::class.java,
+				Uri.parse("taskwarrior://cardclicked")
+			)
         }
         views.setPendingIntentTemplate(R.id.list_view, clickPendingIntent)
 

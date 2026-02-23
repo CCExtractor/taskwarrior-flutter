@@ -15,8 +15,16 @@ class DeepLinkService extends GetxService {
     _initDeepLinks();
   }
 
-  void _initDeepLinks() {
+  void _initDeepLinks() async {
     _appLinks = AppLinks();
+    
+    // Cold start fix
+    final Uri? initialUri = await _appLinks.getInitialLink();
+    if (initialUri != null) {
+      debugPrint('🔗 COLD START LINK: $initialUri');
+      _handleWidgetUri(initialUri);
+    }
+
     _appLinks.uriLinkStream.listen((uri) {
       debugPrint('🔗 LINK RECEIVED: $uri');
       _handleWidgetUri(uri);
