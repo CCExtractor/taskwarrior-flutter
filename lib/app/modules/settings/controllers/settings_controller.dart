@@ -29,10 +29,18 @@ class SettingsController extends GetxController {
   RxString baseDirectory = "".obs;
 
   void setSelectedLanguage(SupportedLanguage language) async {
-    await SelectedLanguage.saveSelectedLanguage(language);
-    selectedLanguage.value = language;
-    AppSettings.selectedLanguage = language;
-    Get.find<HomeController>().selectedLanguage.value = language;
+    if (language == SupportedLanguage.system) {
+      await SelectedLanguage.clearSelectedLanguage(); // clears prefs
+      selectedLanguage.value = SupportedLanguage.system;
+      AppSettings.selectedLanguage = SupportedLanguage.system;
+      Get.updateLocale(SupportedLanguageExtension.getSystemLanguage().toLocale());
+    } else {
+      await SelectedLanguage.saveSelectedLanguage(language);
+      selectedLanguage.value = language;
+      AppSettings.selectedLanguage = language;
+      Get.updateLocale(Locale(language.languageCode));
+    }
+    Get.find<HomeController>().selectedLanguage.value = selectedLanguage.value;
   }
 
   Future<String> getBaseDirectory() async {
