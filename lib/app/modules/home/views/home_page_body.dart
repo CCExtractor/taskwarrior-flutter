@@ -43,8 +43,12 @@ class HomePageBody extends StatelessWidget {
                           (tColors.primaryBackgroundColor!)),
                       controller: controller.searchController,
                       // shape:,
+                      focusNode: controller.searchFocusNode,
                       onChanged: (value) {
                         controller.search(value);
+                      },
+                      onTapOutside: (event) {
+                        controller.searchFocusNode.unfocus();
                       },
 
                       shape: WidgetStateProperty.resolveWith<OutlinedBorder?>(

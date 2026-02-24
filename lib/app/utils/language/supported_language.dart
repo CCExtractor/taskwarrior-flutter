@@ -8,6 +8,7 @@ enum SupportedLanguage {
   french,
   spanish,
   bengali,
+  german,
 }
 
 extension SupportedLanguageExtension on SupportedLanguage {
@@ -27,6 +28,8 @@ extension SupportedLanguageExtension on SupportedLanguage {
         return 'es';
       case SupportedLanguage.bengali:
         return 'bn';
+      case SupportedLanguage.german:
+        return 'de';
       default:
         return '';
     }
@@ -48,6 +51,8 @@ extension SupportedLanguageExtension on SupportedLanguage {
         return SupportedLanguage.spanish;
       case 'bn':
         return SupportedLanguage.bengali;
+      case 'de':
+        return SupportedLanguage.german;
       default:
         return null;
     }
