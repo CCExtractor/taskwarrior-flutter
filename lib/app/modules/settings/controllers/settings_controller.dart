@@ -49,6 +49,7 @@ class SettingsController extends GetxController {
   void pickDirectory(BuildContext context) {
     TaskwarriorColorTheme tColors =
         Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
     FilePicker.platform.getDirectoryPath().then((value) async {
       if (value != null) {
         isMovingDirectory.value = true;
@@ -67,11 +68,15 @@ class SettingsController extends GetxController {
             SharedPreferences prefs = await SharedPreferences.getInstance();
             prefs.setString('baseDirectory', destination.path);
             baseDirectory.value = destination.path;
-            Get.snackbar(
-              'Success',
-              'Base directory moved successfully',
-              snackPosition: SnackPosition.BOTTOM,
-              duration: const Duration(seconds: 2),
+            scaffoldMessenger.showSnackBar(
+              SnackBar(
+                content: Text(
+                  'Base directory moved successfully',
+                  style: TextStyle(color: tColors.primaryTextColor),
+                ),
+                backgroundColor: tColors.secondaryBackgroundColor,
+                duration: const Duration(seconds: 2),
+              ),
             );
           } else {
             Get.dialog(
