@@ -5,13 +5,13 @@ class TaskForReplica {
   final String? due;
   final String? start;
   final String? wait;
-
   final String? status;
   final String? description;
   final List<String>? tags;
   final String uuid;
   final String? priority;
   final String? project;
+  final List<String>? depends;
 
   TaskForReplica({
     this.modified,
@@ -24,6 +24,7 @@ class TaskForReplica {
     required this.uuid,
     this.priority,
     this.project,
+    this.depends,
   });
 
   factory TaskForReplica.fromJson(Map<String, dynamic> json) {
@@ -38,6 +39,11 @@ class TaskForReplica {
               .toUtc()
               .toString()
           : null,
+      depends: (json['depends'] is List)
+          ? (json['depends'] as List).map((e) => e.toString()).toList()
+          : (json['depends'] is String)
+              ? json['depends'].toString().split(',')
+              : null,
       start: json['start'] != null
           ? DateTime.fromMillisecondsSinceEpoch(
                   (int.tryParse(json['start'].toString()) ?? 0) * 1000,
@@ -77,6 +83,7 @@ class TaskForReplica {
       'uuid': uuid,
       if (priority != null) 'priority': priority,
       if (project != null) 'project': project,
+      if (depends != null) 'depends': depends,
     };
   }
 
@@ -90,6 +97,8 @@ class TaskForReplica {
     List<String>? tags,
     String? uuid,
     String? priority,
+    String? project,     
+    List<String>? depends,
   }) {
     return TaskForReplica(
       modified: modified ?? this.modified,
@@ -101,7 +110,8 @@ class TaskForReplica {
       tags: tags ?? this.tags,
       uuid: uuid ?? this.uuid,
       priority: priority ?? this.priority,
-      project: project ?? project,
+      project: project ?? this.project,  
+      depends: depends ?? this.depends, 
     );
   }
 

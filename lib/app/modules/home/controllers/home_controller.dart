@@ -45,13 +45,14 @@ import 'package:textfield_tags/textfield_tags.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 
 
 class HomeController extends GetxController {
   final SplashController splashController = Get.find<SplashController>();
   late Storage storage;
   final RxBool taskServerBannerShown = false.obs;
-  final Sentences sentences = Sentences();
+  late Sentences sentences;
   final RxBool pendingFilter = false.obs;
   final RxBool waitingFilter = false.obs;
   final RxBool hideBlocked = false.obs;
@@ -82,6 +83,9 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    sentences = SentenceManager(
+      currentLanguage: AppSettings.selectedLanguage,
+    ).sentences;
     storage = Storage(
       Directory(
         '${splashController.baseDirectory.value.path}/profiles/${splashController.currentProfile.value}',
@@ -593,7 +597,7 @@ class HomeController extends GetxController {
             onPressed: () {
               messenger.hideCurrentMaterialBanner();
               taskServerBannerShown.value = false;  // ✅ RESET flag
-              Get.toNamed(Routes.TASKSERVER_SETUP),
+              Get.toNamed(Routes.MANAGE_TASK_SERVER);
             },
             child: Text(sentences.homePageSetup),
           ),
