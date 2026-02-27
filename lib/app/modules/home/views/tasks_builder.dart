@@ -181,7 +181,7 @@ class TasksBuilder extends StatelessWidget {
                         ? storageWidget.taskItemKey
                         : ValueKey(task.uuid);
 
-                    return pendingFilter
+                    return (pendingFilter || waitingFilter)
                         ? Slidable(
                             key: itemKey,
                             startActionPane: ActionPane(

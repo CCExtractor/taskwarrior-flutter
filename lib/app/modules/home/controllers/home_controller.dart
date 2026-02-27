@@ -231,12 +231,7 @@ class HomeController extends GetxController {
 
   void _profileSet() {
     pendingFilter.value = Query(storage.tabs.tab()).getPendingFilter();
-    if (!Query(storage.tabs.tab()).getWaitingFilter()) {
-      waitingFilter.value = Query(storage.tabs.tab()).getWaitingFilter();
-    } else {
-      Query(storage.tabs.tab()).toggleWaitingFilter();
-      waitingFilter.value = Query(storage.tabs.tab()).getWaitingFilter();
-    }
+    waitingFilter.value = Query(storage.tabs.tab()).getWaitingFilter();
     projectFilter.value = Query(storage.tabs.tab()).projectFilter();
     tagUnion.value = Query(storage.tabs.tab()).tagUnion();
     selectedSort.value = Query(storage.tabs.tab()).getSelectedSort();
@@ -268,7 +263,11 @@ class HomeController extends GetxController {
           .where((task) => task.status == 'pending')
           .toList();
     } else {
-      queriedTasks.value = storage.data.pendingData();
+      var currentTime = DateTime.now();
+      queriedTasks.value = storage.data.pendingData().where((task) =>
+        task.status != 'waiting' &&
+        !(task.wait != null && task.wait!.isAfter(currentTime))
+      ).toList();
     }
 
     if (hideBlocked.value) {
@@ -281,9 +280,10 @@ class HomeController extends GetxController {
     // Rest of the method stays the same...
     if (waitingFilter.value) {
       var currentTime = DateTime.now();
-      queriedTasks.value = queriedTasks
-          .where((task) => task.wait != null && task.wait!.isAfter(currentTime))
-          .toList();
+      queriedTasks.value = storage.data.pendingData().where((task) =>
+        task.status == 'waiting' ||
+        (task.wait != null && task.wait!.isAfter(currentTime))
+      ).toList();
     }
 
     if (projectFilter.value.isNotEmpty) {
