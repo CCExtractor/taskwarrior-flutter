@@ -5,3 +5,6 @@
 # Xcode-related
 **/dgph
 **/xcuserdata/
+
+# Rust-compiled native framework (built automatically by the Xcode build phase)
+Frameworks/tc_helper.framework/tc_helper
