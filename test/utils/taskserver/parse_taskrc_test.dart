@@ -72,5 +72,28 @@ key3 =value3
 
       expect(result, {});
     });
+
+    // --- Regression tests for = in values (PR #612) ---
+
+    test('preserves values containing = characters (base64 padding)', () {
+      const contents = 'taskd.certificate=abc123==\n';
+      final result = parseTaskrc(contents);
+
+      expect(result['taskd.certificate'], equals('abc123=='));
+    });
+
+    test('preserves values containing multiple = characters', () {
+      const contents = 'cert=MIIC...==...==\n';
+      final result = parseTaskrc(contents);
+
+      expect(result['cert'], equals('MIIC...==...=='));
+    });
+
+    test('preserves taskd.trust value containing spaces after =', () {
+      const contents = 'taskd.trust=ignore hostname\n';
+      final result = parseTaskrc(contents);
+
+      expect(result['taskd.trust'], equals('ignore hostname'));
+    });
   });
 }
