@@ -12,6 +12,8 @@ import 'package:taskwarrior/app/utils/debug_logger/log_databse_helper.dart';
 import 'package:taskwarrior/app/utils/themes/dark_theme.dart';
 import 'package:taskwarrior/app/utils/themes/light_theme.dart';
 import 'package:taskwarrior/rust_bridge/frb_generated.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart'; // Add this
+import 'package:sqflite/sqflite.dart'; // Add this
 import 'app/routes/app_pages.dart';
 
 LogDatabaseHelper _logDatabaseHelper = LogDatabaseHelper();
@@ -23,12 +25,20 @@ DynamicLibrary loadNativeLibrary() {
     return DynamicLibrary.open('libtc_helper.so');
   } else if (Platform.isMacOS) {
     return DynamicLibrary.open('tc_helper.framework/tc_helper');
+  }else if (Platform.isLinux) { // Add this block
+    return DynamicLibrary.open('libtc_helper.so');
   }
   throw UnsupportedError(
       'Platform ${Platform.operatingSystem} is not supported');
 }
 
 void main() async {
+  if (Platform.isLinux) {
+    // Initialize sqflite for Linux
+    sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
+  }
+
   debugPrint = (String? message, {int? wrapWidth}) {
     if (message != null) {
       debugPrintSynchronously(message, wrapWidth: wrapWidth);

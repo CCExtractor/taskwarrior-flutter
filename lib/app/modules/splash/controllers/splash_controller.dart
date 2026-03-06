@@ -139,6 +139,7 @@ class SplashController extends GetxController {
   }
 
   Future<void> checkForUpdate() async {
+    if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) return;
     try {
       AppUpdateInfo updateInfo = await InAppUpdate.checkForUpdate();
       if (updateInfo.updateAvailability == UpdateAvailability.updateAvailable) {

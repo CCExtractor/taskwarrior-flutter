@@ -692,12 +692,13 @@ class HomeController extends GetxController {
   void initLanguageAndDarkMode() {
     isDarkModeOn.value = AppSettings.isDarkMode;
     selectedLanguage.value = AppSettings.selectedLanguage;
-    HomeWidget.saveWidgetData(
-        "themeMode", AppSettings.isDarkMode ? "dark" : "light");
-    HomeWidget.updateWidget(
-        androidName: "TaskWarriorWidgetProvider",
-        iOSName: "TaskWarriorWidgets");
-    // print("called and value is${isDarkModeOn.value}");
+    if (Platform.isAndroid || Platform.isIOS) {
+      HomeWidget.saveWidgetData(
+          "themeMode", AppSettings.isDarkMode ? "dark" : "light");
+      HomeWidget.updateWidget(
+          androidName: "TaskWarriorWidgetProvider",
+          iOSName: "TaskWarriorWidgets");
+    }
   }
 
   final addKey = GlobalKey();
@@ -731,17 +732,14 @@ class HomeController extends GetxController {
     Future.delayed(
       const Duration(milliseconds: 500),
       () {
-        SaveTourStatus.getInAppTourStatus().then((value) => {
-              if (value == false)
-                {
-                  tutorialCoachMark.show(context: context),
-                }
-              else
-                {
-                  // ignore: avoid_print
-                  debugPrint('User has seen this page'),
-                  // User has seen this page
-                }
+        SaveTourStatus.getInAppTourStatus().then((value) {
+              if (value == false) {
+                tutorialCoachMark.show(context: context);
+              } else {
+                // ignore: avoid_print
+                debugPrint('User has seen this page');
+                // User has seen this page
+              }
             });
       },
     );
@@ -776,16 +774,13 @@ class HomeController extends GetxController {
     Future.delayed(
       const Duration(milliseconds: 500),
       () {
-        SaveTourStatus.getFilterTourStatus().then((value) => {
-              if (value == false)
-                {
-                  tutorialCoachMark.show(context: context),
-                }
-              else
-                {
-                  // ignore: avoid_print
-                  print('User has seen this page'),
-                }
+        SaveTourStatus.getFilterTourStatus().then((value) {
+              if (value == false) {
+                tutorialCoachMark.show(context: context);
+              } else {
+                // ignore: avoid_print
+                print('User has seen this page');
+              }
             });
       },
     );
