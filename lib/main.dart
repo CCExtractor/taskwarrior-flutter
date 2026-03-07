@@ -1,6 +1,6 @@
 import 'dart:ffi';
 import 'dart:io';
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart' show kIsWeb, debugPrintSynchronously;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:taskwarrior/app/services/deep_link_service.dart';
@@ -9,25 +9,26 @@ import 'package:taskwarrior/app/utils/debug_logger/log_databse_helper.dart';
 import 'package:taskwarrior/app/utils/themes/dark_theme.dart';
 import 'package:taskwarrior/app/utils/themes/light_theme.dart';
 import 'package:taskwarrior/rust_bridge/frb_generated.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart'; // Add this
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
 import 'app/routes/app_pages.dart';
 
 LogDatabaseHelper _logDatabaseHelper = LogDatabaseHelper();
 
-DynamicLibrary loadNativeLibrary() {
+ExternalLibrary loadNativeLibrary() {
   if (kIsWeb) {
     throw UnsupportedError("Native libraries are not supported on Web");
   }
 
   if (Platform.isIOS) {
-    return DynamicLibrary.open('Frameworks/tc_helper.framework/tc_helper');
+    return ExternalLibrary.open('Frameworks/tc_helper.framework/tc_helper');
   } else if (Platform.isAndroid) {
-    return DynamicLibrary.open('libtc_helper.so');
+    return ExternalLibrary.open('libtc_helper.so');
   } else if (Platform.isMacOS) {
-    return DynamicLibrary.open('tc_helper.framework/tc_helper');
-  }else if (Platform.isLinux) { // Add this block
-    return DynamicLibrary.open('libtc_helper.so');
+    return ExternalLibrary.open('tc_helper.framework/tc_helper');
+  } else if (Platform.isLinux) {
+    return ExternalLibrary.open('libtc_helper.so');
   }
   throw UnsupportedError(
       'Platform ${Platform.operatingSystem} is not supported');
@@ -47,8 +48,8 @@ void main() async {
     }
   };
 
-  loadNativeLibrary();
-  await RustLib.init();
+  final lib = loadNativeLibrary();
+  await RustLib.init(externalLibrary: lib);
 
   WidgetsFlutterBinding.ensureInitialized();
   await AppSettings.init();
