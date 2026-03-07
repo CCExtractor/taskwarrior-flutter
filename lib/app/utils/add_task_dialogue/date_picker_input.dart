@@ -24,7 +24,13 @@ class _AddTaskDatePickerInputState extends State<AddTaskDatePickerInput> {
   final List<TextEditingController> _controllers =
       List.generate(4, (index) => TextEditingController());
   final int length = 4;
-  final _currentIndex = 0.obs;
+  late final RxInt _currentIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentIndex = widget.allowedIndexes.first.obs;
+  }
 
   @override
   void dispose() {
@@ -116,8 +122,8 @@ class _AddTaskDatePickerInputState extends State<AddTaskDatePickerInput> {
         // If user cancels time picker, still set the date with default time
         if (time == null) {
           // Set date with end-of-day time (23:59)
-          _selectedDates[forIndex] = picked.add(
-            const Duration(hours: 23, minutes: 59),
+          _selectedDates[forIndex] = DateTime(
+            picked.year, picked.month, picked.day, 23, 59,
           );
           if (widget.onDateChanges != null) {
             widget.onDateChanges!(List<DateTime?>.from(_selectedDates));
@@ -126,8 +132,9 @@ class _AddTaskDatePickerInputState extends State<AddTaskDatePickerInput> {
         }
 
         // Both date and time selected
-        _selectedDates[forIndex] =
-            picked.add(Duration(hours: time.hour, minutes: time.minute));
+        _selectedDates[forIndex] = DateTime(
+          picked.year, picked.month, picked.day, time.hour, time.minute,
+        );
         if (widget.onDateChanges != null) {
           widget.onDateChanges!(List<DateTime?>.from(_selectedDates));
         }

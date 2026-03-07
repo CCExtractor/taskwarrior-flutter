@@ -43,13 +43,13 @@ class TagsController extends GetxController {
   }
 
   void removeTag(String tag) {
-    if (draftTags.value!.length == 1) {
-      draftTags.value!.remove(tag);
+    if (draftTags.value == null) return;
+    draftTags.value!.remove(tag);
+    if (draftTags.value!.isEmpty) {
       draftTags.value = null;
     } else {
-      draftTags.value!.remove(tag);
       draftTags.refresh();
     }
-    callback(draftTags.value ?? ListBuilder([]));
+    callback(draftTags.value);
   }
 }

@@ -416,6 +416,7 @@ class ManageTaskServerPageBody extends StatelessWidget {
                 ],
               )),
           Obx(() {
+            controller.pemVersion.value; // reactive trigger for PEM file changes
             List<Widget> pemWidgets = [];
             for (var pem in [
               'taskd.certificate',

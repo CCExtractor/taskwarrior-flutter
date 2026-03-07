@@ -28,6 +28,7 @@ class ManageTaskServerController extends GetxController {
   RxBool isTaskDServerActive = true.obs;
   RxBool hideKey = true.obs;
   final taskrcVersion = 0.obs;
+  final pemVersion = 0.obs;
 
   @override
   void onInit() {
@@ -101,7 +102,7 @@ class ManageTaskServerController extends GetxController {
 
           server = taskrc.server;
           credentials = taskrc.credentials;
-          update();
+          taskrcVersion.value++;
 
           // Handle the case when server or credentials are missing in the Taskrc object
           Navigator.pop(context);
@@ -180,16 +181,14 @@ class ManageTaskServerController extends GetxController {
         storage: storagePem,
         key: pem,
       );
-      update();
     }
+    pemVersion.value++;
   }
 
   void onLongPressPEMWidget(String pem, String? name) {
     if (pem != 'server.cert' && name != null) {
       storage.guiPemFiles.removePemFile(pem);
-      update();
-    } else {
-      null;
+      pemVersion.value++;
     }
   }
 
