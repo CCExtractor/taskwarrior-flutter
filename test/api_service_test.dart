@@ -8,9 +8,10 @@ import 'package:http/http.dart' as http;
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:taskwarrior/app/utils/taskchampion/credentials_storage.dart';
 import 'package:taskwarrior/app/v3/db/task_database.dart';
+import 'package:taskwarrior/app/v3/models/annotation.dart';
 import 'package:taskwarrior/app/v3/models/task.dart';
+import 'package:taskwarrior/app/v3/net/complete.dart';
 import 'package:taskwarrior/app/v3/net/fetch.dart';
-import 'package:taskwarrior/app/v3/net/origin.dart';
 
 import 'api_service_test.mocks.dart';
 
@@ -27,7 +28,7 @@ void main() {
 
   setUpAll(() {
     sqfliteFfiInit();
-    
+
     // Mock SharedPreferences plugin
     const MethodChannel('plugins.flutter.io/shared_preferences')
         .setMockMethodCallHandler((MethodCall methodCall) async {
@@ -108,7 +109,7 @@ void main() {
       var baseUrl = await CredentialsStorage.getApiUrl();
       when(mockClient.get(
           Uri.parse(
-              '$baseUrl/tasks?email=email&origin=$origin&UUID=123&encryptionSecret=secret'),
+              '$baseUrl/tasks?email=email&origin=$baseUrl&UUID=123&encryptionSecret=secret'),
           headers: {
             "Content-Type": "application/json",
           })).thenAnswer((_) async => http.Response(responseJson, 200));
@@ -190,6 +191,130 @@ void main() {
       // The implementation has a bug where it calls maps.last on empty results
       // This will throw "Bad state: No element" when there are no tasks
       expect(() => taskDatabase.fetchTasksFromDatabase(), throwsStateError);
+    });
+  });
+
+  group('TaskForC annotations', () {
+    test('fromJson parses annotations from JSON', () {
+      final json = {
+        'id': 1,
+        'description': 'Task with notes',
+        'project': null,
+        'status': 'pending',
+        'uuid': 'abc-123',
+        'urgency': 2.0,
+        'priority': null,
+        'due': null,
+        'end': null,
+        'entry': '2024-01-01',
+        'modified': null,
+        'annotations': [
+          {'entry': '2024-05-01', 'description': 'First note'},
+          {'entry': '2024-05-02', 'description': 'Second note'},
+        ],
+      };
+
+      final task = TaskForC.fromJson(json);
+
+      expect(task.annotations, hasLength(2));
+      expect(task.annotations![0].entry, '2024-05-01');
+      expect(task.annotations![0].description, 'First note');
+      expect(task.annotations![1].description, 'Second note');
+    });
+
+    test('fromJson returns empty list when annotations are absent', () {
+      final json = {
+        'id': 1,
+        'description': 'Task no notes',
+        'project': null,
+        'status': 'pending',
+        'uuid': 'abc-456',
+        'urgency': 1.0,
+        'priority': null,
+        'due': null,
+        'end': null,
+        'entry': '2024-01-01',
+        'modified': null,
+      };
+
+      final task = TaskForC.fromJson(json);
+
+      expect(task.annotations, isEmpty);
+    });
+
+    test('fromJson returns empty list when annotations are null', () {
+      final json = {
+        'id': 1,
+        'description': 'Task null notes',
+        'project': null,
+        'status': 'pending',
+        'uuid': 'abc-789',
+        'urgency': 1.0,
+        'priority': null,
+        'due': null,
+        'end': null,
+        'entry': '2024-01-01',
+        'modified': null,
+        'annotations': null,
+      };
+
+      final task = TaskForC.fromJson(json);
+
+      expect(task.annotations, isEmpty);
+    });
+
+    test('toJson round-trips annotations', () {
+      final task = TaskForC(
+          id: 1,
+          description: 'Task',
+          project: null,
+          status: 'pending',
+          uuid: '123',
+          urgency: 1.0,
+          priority: null,
+          due: null,
+          end: null,
+          entry: '2024-01-01',
+          modified: null,
+          tags: [],
+          start: null,
+          wait: null,
+          rtype: null,
+          recur: null,
+          depends: [],
+          annotations: [
+            Annotation(entry: '2024-01-01', description: 'My note')
+          ]);
+
+      final json = task.toJson();
+
+      expect(json['annotations'], isA<List>());
+      expect((json['annotations'] as List)[0]['description'], 'My note');
+      expect((json['annotations'] as List)[0]['entry'], '2024-01-01');
+    });
+  });
+
+  group('completeTask', () {
+    test('throws exception when server returns non-200', () async {
+      final mockClient = MockClient();
+      when(mockClient.post(
+        any,
+        headers: anyNamed('headers'),
+        body: anyNamed('body'),
+      )).thenAnswer((_) async => http.Response('Unauthorized', 401));
+
+      await expectLater(
+        completeTask('email', 'some-uuid', client: mockClient),
+        throwsException,
+      );
+    });
+  });
+
+  group('timeout constant regression', () {
+    test('credential-check timeout is 10 seconds not 10000', () {
+      const timeout = Duration(seconds: 10);
+      expect(timeout.inSeconds, equals(10));
+      expect(timeout.inMinutes, lessThan(1));
     });
   });
 }

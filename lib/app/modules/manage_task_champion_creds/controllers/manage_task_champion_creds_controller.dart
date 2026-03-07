@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taskwarrior/app/modules/splash/controllers/splash_controller.dart';
 import 'package:taskwarrior/app/utils/taskchampion/credentials_storage.dart';
-import 'package:taskwarrior/app/v3/net/origin.dart';
 import 'package:http/http.dart' as http;
 
 class ManageTaskChampionCredsController extends GetxController {
@@ -46,11 +45,11 @@ class ManageTaskChampionCredsController extends GetxController {
     String encryptionSecret = encryptionSecretController.text;
     try {
       String url =
-          '$baseUrl/tasks?email=email&origin=$origin&UUID=$uuid&encryptionSecret=$encryptionSecret';
+          '$baseUrl/tasks?email=email&origin=$baseUrl&UUID=$uuid&encryptionSecret=$encryptionSecret';
 
       var response = await http.get(Uri.parse(url), headers: {
         "Content-Type": "application/json",
-      }).timeout(const Duration(seconds: 10000));
+      }).timeout(const Duration(seconds: 10));
       debugPrint("Fetch tasks response: ${response.statusCode}");
       debugPrint("Fetch tasks body: ${response.body}");
       if (response.statusCode == 200) {

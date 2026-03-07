@@ -64,7 +64,10 @@ class TaskForC {
         recur: json['recur'],
         depends:
             json['depends']?.map<String>((d) => d.toString()).toList() ?? [],
-        annotations: <Annotation>[]);
+        annotations: (json['annotations'] as List?)
+                ?.map((a) => Annotation.fromJson(a as Map<String, dynamic>))
+                .toList() ??
+            []);
   }
 
   Map<String, dynamic> toJson() {

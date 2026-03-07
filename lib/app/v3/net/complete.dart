@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:taskwarrior/app/utils/taskchampion/credentials_storage.dart';
-import 'package:path/path.dart';
 
-Future<void> completeTask(String email, String taskUuid) async {
+Future<void> completeTask(String email, String taskUuid,
+    {http.Client? client}) async {
+  final httpClient = client ?? http.Client();
   var c = await CredentialsStorage.getClientId();
   var e = await CredentialsStorage.getEncryptionSecret();
   var baseUrl = await CredentialsStorage.getApiUrl();
@@ -17,7 +18,7 @@ Future<void> completeTask(String email, String taskUuid) async {
   });
 
   try {
-    final response = await http.post(
+    final response = await httpClient.post(
       url,
       headers: {
         'Content-Type': 'application/json',
@@ -29,13 +30,10 @@ Future<void> completeTask(String email, String taskUuid) async {
       debugPrint('Task completed successfully on server');
     } else {
       debugPrint('Failed to complete task: ${response.statusCode}');
-      ScaffoldMessenger.of(context as BuildContext).showSnackBar(const SnackBar(
-          content: Text(
-        "Failed to complete task!",
-        style: TextStyle(color: Colors.red),
-      )));
+      throw Exception('Failed to complete task: ${response.statusCode}');
     }
-  } catch (e) {
-    debugPrint('Error completing task: $e');
+  } catch (e, s) {
+    debugPrint('Error completing task: $e\n$s');
+    rethrow;
   }
 }

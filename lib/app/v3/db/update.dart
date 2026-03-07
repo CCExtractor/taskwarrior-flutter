@@ -77,7 +77,11 @@ Future<void> updateTasksInDatabase(List<TaskForC> tasks) async {
                 ? localTask.tags!.map((e) => e.toString()).toList()
                 : []);
         if (localTask.status == 'completed') {
-          completeTask('email', localTask.uuid!);
+          try {
+            await completeTask('email', localTask.uuid!);
+          } catch (e) {
+            debugPrint('Failed to complete task on server: $e');
+          }
         } else if (localTask.status == 'deleted') {
           deleteTask('email', localTask.uuid!);
         }

@@ -83,6 +83,16 @@ class ProfileView extends GetView<ProfileController> {
             currentProfileKey: controller.currentProfileKey,
             addNewProfileKey: controller.addNewProfileKey,
             manageSelectedProfileKey: controller.manageSelectedProfileKey,
+            getModeLabel: (profile) {
+              switch (controller.profilesWidget.getMode(profile)) {
+                case 'TW3C':
+                  return 'Taskchampion (v3)';
+                case 'TW3':
+                  return 'CCSync (v3)';
+                default:
+                  return 'TaskServer';
+              }
+            },
             controller.profilesMap,
             controller.currentProfile.value,
             controller.profilesWidget.addProfile,

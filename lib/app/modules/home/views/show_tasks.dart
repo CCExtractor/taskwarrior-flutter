@@ -230,7 +230,17 @@ class TaskViewBuilder extends StatelessWidget {
     TaskDatabase taskDatabase = TaskDatabase();
     await taskDatabase.open();
     taskDatabase.markTaskAsCompleted(uuid);
-    completeTask('email', uuid);
+    try {
+      await completeTask('email', uuid);
+    } catch (e) {
+      debugPrint('Error completing task on server: $e');
+      Get.snackbar(
+        'Sync Error',
+        'Failed to mark task complete on server',
+        snackPosition: SnackPosition.BOTTOM,
+        duration: const Duration(seconds: 3),
+      );
+    }
   }
 
   void _markTaskAsDeleted(String uuid) async {

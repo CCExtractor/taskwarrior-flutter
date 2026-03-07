@@ -19,6 +19,7 @@ class ProfilesList extends StatelessWidget {
     required this.currentProfileKey,
     required this.addNewProfileKey,
     required this.manageSelectedProfileKey,
+    this.getModeLabel,
     super.key,
   });
 
@@ -32,6 +33,7 @@ class ProfilesList extends StatelessWidget {
   final void Function(String) copy;
   final void Function(dynamic) delete;
   final void Function(String) changeMode;
+  final String Function(String)? getModeLabel;
   final GlobalKey currentProfileKey;
   final GlobalKey addNewProfileKey;
   final GlobalKey manageSelectedProfileKey;
@@ -197,6 +199,17 @@ class ProfilesList extends StatelessWidget {
                             color: AppSettings.isDarkMode
                                 ? TaskWarriorColors.kprimaryTextColor
                                 : TaskWarriorColors.kLightPrimaryTextColor)),
+                    subtitle: getModeLabel != null
+                        ? Text(
+                            getModeLabel!(profileId),
+                            style: TextStyle(
+                              color: AppSettings.isDarkMode
+                                  ? Colors.grey[400]
+                                  : Colors.grey[700],
+                              fontSize: 12.0,
+                            ),
+                          )
+                        : null,
                     onTap: () {
                       changeMode(profileId);
                     },
