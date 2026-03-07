@@ -233,6 +233,9 @@ class HomeController extends GetxController {
     }
   }
 
+  /// Exposes [_refreshTasks] for external callers (e.g. after undo).
+  void refreshTaskList() => _refreshTasks();
+
   void _refreshTasks() {
     if (pendingFilter.value) {
       queriedTasks.value = storage.data
@@ -577,8 +580,7 @@ class HomeController extends GetxController {
         await synchronize(context, false);
       }
       if (context.mounted) {
-        final tColors =
-            Theme.of(context).extension<TaskwarriorColorTheme>()!;
+        final tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(

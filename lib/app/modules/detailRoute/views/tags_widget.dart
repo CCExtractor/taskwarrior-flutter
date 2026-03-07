@@ -5,15 +5,13 @@ import 'package:built_collection/built_collection.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loggy/loggy.dart';
-import 'package:taskwarrior/app/models/tag_meta_data.dart';
-import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
+import 'package:taskwarrior/app/modules/detailRoute/controllers/tags_controller.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 
 import 'package:taskwarrior/app/utils/constants/constants.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
-import 'package:taskwarrior/app/utils/taskfunctions/validate.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 class TagsWidget extends StatelessWidget {
@@ -75,80 +73,22 @@ class TagsWidget extends StatelessWidget {
           ),
         ),
         onTap: () => Get.to(
-          TagsRoute(
-            value: value,
-            callback: callback,
-          ),
+          () => const TagsRoute(),
+          binding: BindingsBuilder(() {
+            Get.put(TagsController()
+              ..init(
+                value: value as ListBuilder<String>?,
+                callbackFn: (r) => callback(r),
+              ));
+          }),
         ),
       ),
     );
   }
 }
 
-class TagsRoute extends StatefulWidget {
-  const TagsRoute({required this.value, required this.callback, super.key});
-
-  final ListBuilder<String>? value;
-  final void Function(ListBuilder<String>?) callback;
-
-  @override
-  TagsRouteState createState() => TagsRouteState();
-}
-
-class TagsRouteState extends State<TagsRoute> {
-  Map<String, TagMetadata>? _pendingTags;
-  ListBuilder<String>? draftTags;
-
-  List<String> _parseTags(String input) {
-    return input
-        .split(',')
-        .map((e) => e.trim())
-        .where((e) => e.isNotEmpty)
-        .toList();
-  }
-
-  void _addTags(List<String> tags) {
-    if (tags.isEmpty) return;
-
-    draftTags ??= ListBuilder<String>();
-
-    for (final tag in tags) {
-      if (!draftTags!.build().contains(tag)) {
-        draftTags!.add(tag);
-      }
-    }
-
-    widget.callback(draftTags);
-    setState(() {});
-  }
-
-  void _removeTag(String tag) {
-    if (draftTags!.length == 1) {
-      draftTags!.remove(tag);
-      draftTags = null;
-    } else {
-      draftTags!.remove(tag);
-    }
-    widget.callback(draftTags ?? ListBuilder([]));
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    draftTags = widget.value;
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _initialize();
-  }
-
-  Future<void> _initialize() async {
-    _pendingTags = Get.find<HomeController>().pendingTags;
-    setState(() {});
-  }
+class TagsRoute extends GetView<TagsController> {
+  const TagsRoute({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -171,50 +111,53 @@ class TagsRouteState extends State<TagsRoute> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(4),
-          child: SingleChildScrollView(
-            padding:
-                const EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 0),
-            child: Wrap(
-              spacing: 8,
-              runSpacing: 4,
-              children: [
-                if (draftTags != null)
-                  for (var tag in draftTags!.build())
-                    FilterChip(
-                      backgroundColor: TaskWarriorColors.lightGrey,
-                      onSelected: (_) => _removeTag(tag),
-                      label: Text(
-                        '+$tag ${_pendingTags?[tag]?.frequency ?? 0}',
+          child: Obx(() {
+            final draftTags = controller.draftTags.value;
+            final pendingTags = controller.pendingTags;
+            return SingleChildScrollView(
+              padding: const EdgeInsets.only(
+                  left: 10, top: 10, right: 10, bottom: 0),
+              child: Wrap(
+                spacing: 8,
+                runSpacing: 4,
+                children: [
+                  if (draftTags != null)
+                    for (var tag in draftTags.build())
+                      FilterChip(
+                        backgroundColor: TaskWarriorColors.lightGrey,
+                        onSelected: (_) => controller.removeTag(tag),
+                        label: Text(
+                          '+$tag ${pendingTags[tag]?.frequency ?? 0}',
+                        ),
+                      ),
+                  if (draftTags == null)
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(15, 18, 0, 10),
+                      child: Text(
+                        SentenceManager(
+                          currentLanguage: AppSettings.selectedLanguage,
+                        ).sentences.addedTagsWillAppearHere,
+                        style: GoogleFonts.poppins(
+                            fontStyle: FontStyle.italic,
+                            color: tColors.primaryTextColor),
                       ),
                     ),
-                if (draftTags == null)
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 18, 0, 10),
-                    child: Text(
-                      SentenceManager(
-                        currentLanguage: AppSettings.selectedLanguage,
-                      ).sentences.addedTagsWillAppearHere,
-                      style: GoogleFonts.poppins(
-                          fontStyle: FontStyle.italic,
-                          color: tColors.primaryTextColor),
-                    ),
+                  Divider(
+                    color: tColors.dividerColor,
                   ),
-                Divider(
-                  color: tColors.dividerColor,
-                ),
-                if (_pendingTags != null)
-                  for (var tag in _pendingTags!.entries.where((tag) =>
+                  for (var tag in pendingTags.entries.where((tag) =>
                       !(draftTags?.build().contains(tag.key) ?? false)))
                     FilterChip(
                       backgroundColor: TaskWarriorColors.grey,
-                      onSelected: (_) => _addTags([tag.key]),
+                      onSelected: (_) => controller.addTags([tag.key]),
                       label: Text(
                         '${tag.key} ${tag.value.frequency}',
                       ),
                     ),
-              ],
-            ),
-          ),
+                ],
+              ),
+            );
+          }),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -224,7 +167,7 @@ class TagsRouteState extends State<TagsRoute> {
         heroTag: "btn4",
         onPressed: () {
           final formKey = GlobalKey<FormState>();
-          var controller = TextEditingController();
+          final textController = TextEditingController();
           showDialog(
             context: context,
             builder: (context) => Utils.showAlertDialog(
@@ -244,7 +187,7 @@ class TagsRouteState extends State<TagsRoute> {
                     color: tColors.primaryTextColor,
                   ),
                   validator: (value) {
-                    final tags = _parseTags(value ?? '');
+                    final tags = controller.parseTags(value ?? '');
 
                     if (tags.isEmpty) {
                       return "Please enter a tag";
@@ -255,7 +198,8 @@ class TagsRouteState extends State<TagsRoute> {
                         return "Tags cannot contain spaces";
                       }
 
-                      if (draftTags?.build().contains(tag) ?? false) {
+                      if (controller.draftTags.value?.build().contains(tag) ??
+                          false) {
                         return "Tag already exists";
                       }
                     }
@@ -263,13 +207,12 @@ class TagsRouteState extends State<TagsRoute> {
                     return null;
                   },
                   autofocus: true,
-                  controller: controller,
+                  controller: textController,
                 ),
               ),
               actions: [
                 TextButton(
                   onPressed: () {
-                    // Navigator.of(context).pop();
                     Get.back();
                   },
                   child: Text(
@@ -285,8 +228,8 @@ class TagsRouteState extends State<TagsRoute> {
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
                       try {
-                        final tags = _parseTags(controller.text);
-                        _addTags(tags);
+                        final tags = controller.parseTags(textController.text);
+                        controller.addTags(tags);
                         Get.back();
                       } on FormatException catch (e, trace) {
                         logError(e, trace);

@@ -27,6 +27,7 @@ class ManageTaskServerController extends GetxController {
   final TextEditingController taskrcContentController = TextEditingController();
   RxBool isTaskDServerActive = true.obs;
   RxBool hideKey = true.obs;
+  final taskrcVersion = 0.obs;
 
   @override
   void onInit() {

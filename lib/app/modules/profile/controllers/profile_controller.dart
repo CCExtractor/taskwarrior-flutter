@@ -10,6 +10,7 @@ class ProfileController extends GetxController {
   var profilesWidget = Get.find<SplashController>();
   late RxMap<String, String?> profilesMap;
   late RxString currentProfile;
+  final selectedProfileMode = RxnString();
   @override
   void onInit() {
     profilesMap = profilesWidget.profilesMap;
@@ -28,7 +29,6 @@ class ProfileController extends GetxController {
     tutorialCoachMark = TutorialCoachMark(
       targets: addProfilePage(
         currentProfileKey: currentProfileKey,
-
         addNewProfileKey: addNewProfileKey,
         manageSelectedProfileKey: manageSelectedProfileKey,
       ),

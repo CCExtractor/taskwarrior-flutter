@@ -237,7 +237,7 @@ class ProfileView extends GetView<ProfileController> {
             },
             (profile) {
               String currentMode = controller.profilesWidget.getMode(profile);
-              String? selectedMode = currentMode;
+              controller.selectedProfileMode.value = currentMode;
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -248,47 +248,36 @@ class ProfileView extends GetView<ProfileController> {
                           .sentences
                           .profilePageChangeProfileMode,
                     ),
-                    // Use StatefulBuilder to manage the state of the radio buttons inside the dialog
-                    content: StatefulBuilder(
-                      builder: (BuildContext context, StateSetter setState) {
-                        return Column(
-                          mainAxisSize: MainAxisSize.min, // Use minimum space
+                    content: Obx(() => Column(
+                          mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
                             RadioListTile<String>(
                               title: const Text('Taskchampion (v3)'),
                               value: 'TW3C',
-                              groupValue: selectedMode,
+                              groupValue: controller.selectedProfileMode.value,
                               onChanged: (String? value) {
-                                setState(() {
-                                  selectedMode = value;
-                                });
+                                controller.selectedProfileMode.value = value;
                               },
                             ),
                             // CCSync v3 is deprecated, so hiding it for now
                             // RadioListTile<String>(
                             //   title: const Text('CCSync (v3)'),
                             //   value: 'TW3',
-                            //   groupValue: selectedMode,
+                            //   groupValue: controller.selectedProfileMode.value,
                             //   onChanged: (String? value) {
-                            //     setState(() {
-                            //       selectedMode = value;
-                            //     });
+                            //     controller.selectedProfileMode.value = value;
                             //   },
                             // ),
                             RadioListTile<String>(
                               title: const Text('TaskServer'),
                               value: 'TW2',
-                              groupValue: selectedMode,
+                              groupValue: controller.selectedProfileMode.value,
                               onChanged: (String? value) {
-                                setState(() {
-                                  selectedMode = value;
-                                });
+                                controller.selectedProfileMode.value = value;
                               },
                             ),
                           ],
-                        );
-                      },
-                    ),
+                        )),
                     actions: <Widget>[
                       // A button to cancel the operation
                       TextButton(
@@ -296,11 +285,11 @@ class ProfileView extends GetView<ProfileController> {
                           SentenceManager(
                                   currentLanguage: AppSettings.selectedLanguage)
                               .sentences
-                              .cancel, // Assuming you have a 'cancel' string
+                              .cancel,
                           style: TextStyle(color: tColors.primaryTextColor),
                         ),
                         onPressed: () {
-                          Get.back(); // Dismiss the dialog
+                          Get.back();
                         },
                       ),
                       // A button to submit the change
@@ -309,16 +298,18 @@ class ProfileView extends GetView<ProfileController> {
                           SentenceManager(
                                   currentLanguage: AppSettings.selectedLanguage)
                               .sentences
-                              .submit, // Or use a translated string
+                              .submit,
                           style: TextStyle(color: tColors.primaryTextColor),
                         ),
                         onPressed: () {
                           Get.back();
+                          final selectedMode =
+                              controller.selectedProfileMode.value;
                           if (selectedMode != null &&
                               selectedMode != currentMode) {
                             controller.profilesWidget.changeModeTo(
                               profile,
-                              selectedMode!,
+                              selectedMode,
                             );
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 content: Text(
@@ -327,7 +318,7 @@ class ProfileView extends GetView<ProfileController> {
                                                   AppSettings.selectedLanguage)
                                           .sentences
                                           .profilePageSuccessfullyChangedProfileModeTo +
-                                      ((selectedMode ?? "") == "TW3"
+                                      (selectedMode == "TW3"
                                           ? "CCSync"
                                           : "Taskserver"),
                                   style: TextStyle(
