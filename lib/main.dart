@@ -29,13 +29,16 @@ ExternalLibrary loadNativeLibrary() {
     return ExternalLibrary.open('tc_helper.framework/tc_helper');
   } else if (Platform.isLinux) {
     return ExternalLibrary.open('libtc_helper.so');
+  } else if (Platform.isWindows) { // Add Windows back in!
+    return ExternalLibrary.open('tc_helper.dll');
   }
   throw UnsupportedError(
       'Platform ${Platform.operatingSystem} is not supported');
 }
 
 void main() async {
-  if (!kIsWeb && Platform.isLinux) {
+  // Update to support all Desktops
+  if (!kIsWeb && (Platform.isLinux || Platform.isWindows || Platform.isMacOS)) {
     // Initialize sqflite for Linux
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
