@@ -1,19 +1,16 @@
 import 'dart:ffi';
 import 'dart:io';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-// 1. Add this import
-import 'package:app_links/app_links.dart';
 import 'package:taskwarrior/app/services/deep_link_service.dart';
-
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/debug_logger/log_databse_helper.dart';
 import 'package:taskwarrior/app/utils/themes/dark_theme.dart';
 import 'package:taskwarrior/app/utils/themes/light_theme.dart';
 import 'package:taskwarrior/rust_bridge/frb_generated.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart'; // Add this
-import 'package:sqflite/sqflite.dart'; // Add this
+
 import 'app/routes/app_pages.dart';
 
 LogDatabaseHelper _logDatabaseHelper = LogDatabaseHelper();

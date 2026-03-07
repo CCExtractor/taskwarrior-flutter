@@ -15,7 +15,7 @@ class AppSettings {
   static final RxBool use24HourFormatRx = false.obs;
 
   static Future init() async {
-    if (!Platform.isLinux) {
+    if (Platform.isIOS){
       await HomeWidget.setAppGroupId("group.taskwarrior");
     }
     await SelectedTheme.init();
