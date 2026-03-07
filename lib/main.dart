@@ -16,6 +16,10 @@ import 'app/routes/app_pages.dart';
 LogDatabaseHelper _logDatabaseHelper = LogDatabaseHelper();
 
 DynamicLibrary loadNativeLibrary() {
+  if (kIsWeb) {
+    throw UnsupportedError("Native libraries are not supported on Web");
+  }
+
   if (Platform.isIOS) {
     return DynamicLibrary.open('Frameworks/tc_helper.framework/tc_helper');
   } else if (Platform.isAndroid) {
@@ -30,7 +34,7 @@ DynamicLibrary loadNativeLibrary() {
 }
 
 void main() async {
-  if (Platform.isLinux) {
+  if (!kIsWeb && Platform.isLinux) {
     // Initialize sqflite for Linux
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
