@@ -4,6 +4,8 @@ import '../modules/about/bindings/about_binding.dart';
 import '../modules/about/views/about_view.dart';
 import '../modules/detailRoute/bindings/detail_route_binding.dart';
 import '../modules/detailRoute/views/detail_route_view.dart';
+import '../modules/infoRoute/bindings/task_info_binding.dart';
+import '../modules/infoRoute/views/task_info_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/logs/bindings/logs_binding.dart';
@@ -61,6 +63,11 @@ class AppPages {
       name: _Paths.DETAIL_ROUTE,
       page: () => const DetailRouteView(),
       binding: DetailRouteBinding(),
+    ),
+    GetPage(
+      name: _Paths.TASK_INFO_ROUTE,
+      page: () => const TasksInfoView(),
+      binding: TasksInfoRouteBinding(),
     ),
     GetPage(
       name: _Paths.PROFILE,

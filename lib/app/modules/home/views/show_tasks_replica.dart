@@ -122,7 +122,8 @@ class TaskReplicaViewBuilder extends StatelessWidget {
                     child: InkWell(
                       splashColor: tColors.primaryBackgroundColor,
                       onTap: () =>
-                          Get.toNamed(Routes.TASKC_DETAILS, arguments: task),
+                          // Get.toNamed(Routes.TASKC_DETAILS, arguments: task),
+                          Get.toNamed(Routes.TASK_INFO_ROUTE, arguments: task),
                       child: Container(
                         decoration: BoxDecoration(
                           border: Border.all(

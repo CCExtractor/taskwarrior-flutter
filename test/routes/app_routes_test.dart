@@ -8,6 +8,7 @@ void main() {
     expect(Routes.SPLASH, '/splash');
     expect(Routes.MANAGE_TASK_SERVER, '/manage-task-server');
     expect(Routes.DETAIL_ROUTE, '/detail-route');
+    expect(Routes.TASK_INFO_ROUTE, '/task-info-route');
     expect(Routes.PROFILE, '/profile');
     expect(Routes.ABOUT, '/about');
     expect(Routes.REPORTS, '/reports');

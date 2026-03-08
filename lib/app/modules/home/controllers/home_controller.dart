@@ -15,6 +15,7 @@ import 'package:taskwarrior/app/models/json/task.dart';
 import 'package:taskwarrior/app/models/storage/client.dart';
 import 'package:taskwarrior/app/models/storage.dart';
 import 'package:taskwarrior/app/models/tag_meta_data.dart';
+import 'package:taskwarrior/app/models/json/annotation.dart';
 import 'package:taskwarrior/app/modules/home/controllers/widget.controller.dart';
 import 'package:taskwarrior/app/modules/splash/controllers/splash_controller.dart';
 import 'package:taskwarrior/app/services/deep_link_service.dart';
@@ -30,6 +31,7 @@ import 'package:taskwarrior/app/utils/taskfunctions/projects.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/query.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/tags.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/taskfunctions/urgency.dart';
 import 'package:taskwarrior/app/v3/champion/replica.dart';
 import 'package:taskwarrior/app/v3/champion/models/task_for_replica.dart';
 import 'package:taskwarrior/app/v3/db/task_database.dart';
@@ -39,6 +41,8 @@ import 'package:taskwarrior/app/v3/net/fetch.dart';
 import 'package:textfield_tags/textfield_tags.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
+import 'package:built_collection/built_collection.dart';
+import 'package:taskwarrior/app/v3/models/annotation.dart' as ChampionAnn;
 
 class HomeController extends GetxController {
   final SplashController splashController = Get.find<SplashController>();
@@ -207,7 +211,117 @@ class HomeController extends GetxController {
     tasksFromReplica.value = await Replica.getAllTasksFromReplica();
     debugPrint("Tasks from Replica: ${tasks.length}");
   }
-
+  
+  Future<void> mergeReplica(Task task) async {
+  final updated = task.rebuild(
+    (b) => b.modified = DateTime.now().toUtc(),
+  );
+  final replicaTask = convertTaskToReplica(updated);
+  await Replica.modifyTaskInReplica(replicaTask);
+  await refreshReplicaTaskList();
+}  
+   // its convert Task into Replica 
+  TaskForReplica convertTaskToReplica(Task t){
+    return TaskForReplica(
+    uuid: t.uuid,
+    description: t.description,
+    status: t.status,
+    project: t.project,
+    priority: t.priority,
+    due: t.due?.toIso8601String(),
+    start: t.start?.toIso8601String(),
+    wait: t.wait?.toIso8601String(),
+    // entry: t.entry?.toIso8601String(),
+    tags: t.tags?.toList(),
+   ); 
+  }
+  // its convert Replica into Task 
+  Task convertReplicaToTask(TaskForReplica t) {
+  final now = DateTime.now().toUtc(); 
+  return Task((b) => b
+    ..uuid = t.uuid
+    ..description = t.description ?? ''
+    ..status = t.status ?? 'pending'
+    ..project = t.project
+    ..priority = t.priority
+    ..due = t.due != null ? DateTime.parse(t.due!) : null
+    ..start = t.start != null ? DateTime.parse(t.start!) : null
+    ..wait = t.wait != null ? DateTime.parse(t.wait!) : null
+    // ..entry = DateTime.now().toUtc()
+    // ..modified = DateTime.now().toUtc()
+    ..entry = now
+    ..modified = now
+    ..end = null
+    ..tags = t.tags != null
+        ? ListBuilder<String>(t.tags!)
+        : null
+  );
+} 
+  
+  Future<void> mergeTaskChampion(TaskForC task) async {
+  await taskdb.updateTask(task);
+  tasks.value = await taskdb.fetchTasksFromDatabase();
+ } 
+   // its convert Task into TaskForC
+   TaskForC convertTaskToTaskForC(Task t) {
+    debugPrint("Annotations to save: ${t.annotations?.length}");
+  return TaskForC(
+    id: t.id!,
+    uuid: t.uuid,
+    description: t.description,
+    status: t.status,
+    project: t.project,
+    priority: t.priority,
+    due: t.due?.toIso8601String(),
+    start: t.start?.toIso8601String(),
+    wait: t.wait?.toIso8601String(),
+    entry: t.entry.toIso8601String(),
+    modified: t.modified?.toIso8601String(),
+    end: t.end?.toIso8601String(),
+    rtype: null,
+    recur: t.recur,
+    depends: t.depends?.toList(),
+    urgency: urgency(t),
+    tags: t.tags?.toList(),
+    annotations: (t.annotations ?? BuiltList<Annotation>())
+        .map((a) => ChampionAnn.Annotation(
+              description: a.description,
+              entry: a.entry?.toIso8601String() ?? DateTime.now().toIso8601String(),
+            ))
+            .toList()
+  );
+}
+  // its convert TaskForC into Task
+  Task convertTaskForCToTask(TaskForC t) {
+  return Task((b) => b
+    ..id = t.id
+    ..uuid = t.uuid
+    ..description = t.description
+    ..status = t.status
+    ..project = t.project
+    ..priority = t.priority
+    ..due = t.due != null ? DateTime.parse(t.due!) : null
+    ..start = t.start != null ? DateTime.parse(t.start!) : null
+    ..wait = t.wait != null ? DateTime.parse(t.wait!) : null
+    ..entry = DateTime.parse(t.entry)
+    ..modified = t.modified != null
+        ? DateTime.parse(t.modified!)
+        : null
+    ..end = t.end != null ? DateTime.parse(t.end!) : null
+    ..tags = t.tags != null
+        ? ListBuilder<String>(t.tags!)
+        : null
+    ..annotations = t.annotations != null
+        ? ListBuilder<Annotation>(
+            t.annotations!.map(
+              (a) => Annotation((ann) => ann
+                ..description = a.description ?? ''
+                ..entry = DateTime.parse(a.entry ?? DateTime.now().toIso8601String())),
+            ),
+          )
+        : null     
+  );
+}
   void addListenerToScrollController() {
     scrollController.addListener(() {
       //scroll listener

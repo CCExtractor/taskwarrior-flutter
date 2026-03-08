@@ -178,8 +178,11 @@ class TaskViewBuilder extends StatelessWidget {
                       color: tColors.secondaryBackgroundColor,
                       child: InkWell(
                         splashColor: tColors.primaryBackgroundColor,
-                        onTap: () =>
-                            Get.toNamed(Routes.TASKC_DETAILS, arguments: task),
+                        // onTap: () =>
+                            // Get.toNamed(Routes.TASKC_DETAILS, arguments: task),
+                            onTap: () =>
+                            //  print("NAVIGATING TO TASK_INFO_ROUTE");
+                             Get.toNamed(Routes.TASK_INFO_ROUTE, arguments: task),
                         child: Container(
                           decoration: BoxDecoration(
                             border: Border.all(

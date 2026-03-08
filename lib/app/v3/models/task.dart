@@ -64,7 +64,13 @@ class TaskForC {
         recur: json['recur'],
         depends:
             json['depends']?.map<String>((d) => d.toString()).toList() ?? [],
-        annotations: <Annotation>[]);
+        // annotations: <Annotation>[]);
+        annotations: json['annotations'] != null
+        ? (json['annotations'] as List)
+            .map((a) => Annotation.fromJson(a))
+            .toList()
+        : [], 
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -92,6 +98,31 @@ class TaskForC {
           : <Map<String, dynamic>>[],
     };
   }
+
+  TaskForC copyWith({
+  List<Annotation>? annotations,
+}) {
+  return TaskForC(
+    id: id,
+    description: description,
+    project: project,
+    status: status,
+    uuid: uuid,
+    urgency: urgency,
+    priority: priority,
+    due: due,
+    end: end,
+    entry: entry,
+    modified: modified,
+    tags: tags,
+    start: start,
+    wait: wait,
+    rtype: rtype,
+    recur: recur,
+    depends: depends,
+    annotations: annotations ?? this.annotations,
+  );
+}
 
   @override
   String toString() {
