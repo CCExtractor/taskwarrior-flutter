@@ -21,7 +21,8 @@ class ManageTaskServerPageBody extends StatelessWidget {
   Widget build(BuildContext context) {
     controller.initManageTaskServerPageTour();
     controller.showManageTaskServerPageTour(context);
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20),
       child: ListView(
@@ -54,138 +55,127 @@ class ManageTaskServerPageBody extends StatelessWidget {
                       isScrollControlled: true,
                       backgroundColor: tColors.dialogBackgroundColor,
                       builder: (context) {
-                        return StatefulBuilder(
-                          builder:
-                              (BuildContext context, StateSetter setState) {
-                            // double heightOfModalBottomSheet =
-                            //     MediaQuery.of(context).size.height * 0.6;
+                        // double heightOfModalBottomSheet =
+                        //     MediaQuery.of(context).size.height * 0.6;
 
-                            return Padding(
-                              padding: MediaQuery.of(context).viewInsets,
-                              child: Wrap(
-                                children: [
-                                  Container(
-                                    // height: heightOfModalBottomSheet,
-                                    padding: const EdgeInsets.all(16.0),
-                                    decoration: const BoxDecoration(
-                                      // color: tileColor,
-                                      borderRadius: BorderRadius.vertical(
-                                          top: Radius.circular(16.0)),
+                        return Padding(
+                          padding: MediaQuery.of(context).viewInsets,
+                          child: Wrap(
+                            children: [
+                              Container(
+                                // height: heightOfModalBottomSheet,
+                                padding: const EdgeInsets.all(16.0),
+                                decoration: const BoxDecoration(
+                                  // color: tileColor,
+                                  borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(16.0)),
+                                ),
+
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      SentenceManager(
+                                              currentLanguage:
+                                                  AppSettings.selectedLanguage)
+                                          .sentences
+                                          .manageTaskServerPageConfigureTaskRCDialogueBoxTitle,
+                                      style: TextStyle(
+                                        fontWeight: TaskWarriorFonts.bold,
+                                        color: tColors.primaryTextColor,
+                                      ),
                                     ),
-
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          SentenceManager(
-                                                  currentLanguage: AppSettings
-                                                      .selectedLanguage)
-                                              .sentences
-                                              .manageTaskServerPageConfigureTaskRCDialogueBoxTitle,
+                                    Text(
+                                      SentenceManager(
+                                              currentLanguage:
+                                                  AppSettings.selectedLanguage)
+                                          .sentences
+                                          .manageTaskServerPageConfigureTaskRCDialogueBoxSubtitle,
+                                      style: TextStyle(
+                                        color: tColors.primaryTextColor,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 16.0),
+                                    Padding(
+                                      padding: const EdgeInsets.all(12.0),
+                                      child: SizedBox(
+                                        height: Get.height * 0.15,
+                                        child: TextField(
                                           style: TextStyle(
-                                            fontWeight: TaskWarriorFonts.bold,
-                                            color: tColors.primaryTextColor,
-                                          ),
-                                        ),
-                                        Text(
-                                          SentenceManager(
-                                                  currentLanguage: AppSettings
-                                                      .selectedLanguage)
-                                              .sentences
-                                              .manageTaskServerPageConfigureTaskRCDialogueBoxSubtitle,
-                                          style: TextStyle(
-                                            color: tColors.primaryTextColor,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 16.0),
-                                        Padding(
-                                          padding: const EdgeInsets.all(12.0),
-                                          child: SizedBox(
-                                            height: Get.height * 0.15,
-                                            child: TextField(
-                                              style: TextStyle(
-                                                  color: tColors.primaryTextColor
-                                                  ),
-                                              controller: controller
-                                                  .taskrcContentController,
-                                              maxLines: 8,
-                                              decoration: InputDecoration(
-                                                counterStyle: TextStyle(
-                                                    color: tColors.primaryTextColor
-                                                  ),
-                                                suffixIconConstraints:
-                                                    const BoxConstraints(
-                                                  maxHeight: 24,
-                                                  maxWidth: 24,
-                                                ),
-                                                isDense: true,
-                                                suffix: IconButton(
-                                                  onPressed: () async {
-                                                    controller
-                                                        .setContent(context);
-                                                  },
-                                                  icon: const Icon(
-                                                      Icons.content_paste),
-                                                ),
-                                                border:
-                                                  const OutlineInputBorder(),
-                                                  labelStyle: GoogleFonts.poppins(
-                                                    color:tColors.primaryTextColor,
-                                                  ),
-                                                labelText: SentenceManager(
-                                                        currentLanguage:
-                                                            AppSettings
-                                                                .selectedLanguage
-                                                    )
-                                                    .sentences
-                                                    .manageTaskServerPageConfigureTaskRCDialogueBoxInputFieldText,
-                                              ),
+                                              color: tColors.primaryTextColor),
+                                          controller: controller
+                                              .taskrcContentController,
+                                          maxLines: 8,
+                                          decoration: InputDecoration(
+                                            counterStyle: TextStyle(
+                                                color:
+                                                    tColors.primaryTextColor),
+                                            suffixIconConstraints:
+                                                const BoxConstraints(
+                                              maxHeight: 24,
+                                              maxWidth: 24,
                                             ),
-                                          ),
-                                        ),
-                                        Text(
-                                          SentenceManager(
-                                                  currentLanguage: AppSettings
-                                                      .selectedLanguage)
-                                              .sentences
-                                              .manageTaskServerPageConfigureTaskRCDialogueBoxOr,
-                                          style: TextStyle(
-                                            color: tColors.primaryTextColor,
-                                          ),
-                                        ),
-                                        FilledButton.tonal(
-                                          style: ButtonStyle(
-                                              backgroundColor: WidgetStateProperty.all<Color>(tColors.secondaryBackgroundColor!)
-                                          ),
-                                          onPressed: () async {
-                                            await setConfig(
-                                              storage: controller.storage,
-                                              key: 'TASKRC',
-                                            );
-                                            setState(() {});
-                                            Get.back();
-                                          },
-                                          child: Text(
-                                            SentenceManager(
+                                            isDense: true,
+                                            suffix: IconButton(
+                                              onPressed: () async {
+                                                controller.setContent(context);
+                                              },
+                                              icon: const Icon(
+                                                  Icons.content_paste),
+                                            ),
+                                            border: const OutlineInputBorder(),
+                                            labelStyle: GoogleFonts.poppins(
+                                              color: tColors.primaryTextColor,
+                                            ),
+                                            labelText: SentenceManager(
                                                     currentLanguage: AppSettings
                                                         .selectedLanguage)
                                                 .sentences
-                                                .manageTaskServerPageConfigureTaskRCDialogueBoxSelectTaskRC,
-                                            style: TextStyle(
-                                              color: tColors.primaryTextColor,
-                                            ),
+                                                .manageTaskServerPageConfigureTaskRCDialogueBoxInputFieldText,
                                           ),
                                         ),
-                                      ],
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                    Text(
+                                      SentenceManager(
+                                              currentLanguage:
+                                                  AppSettings.selectedLanguage)
+                                          .sentences
+                                          .manageTaskServerPageConfigureTaskRCDialogueBoxOr,
+                                      style: TextStyle(
+                                        color: tColors.primaryTextColor,
+                                      ),
+                                    ),
+                                    FilledButton.tonal(
+                                      style: ButtonStyle(
+                                          backgroundColor: WidgetStateProperty
+                                              .all<Color>(tColors
+                                                  .secondaryBackgroundColor!)),
+                                      onPressed: () async {
+                                        await setConfig(
+                                          storage: controller.storage,
+                                          key: 'TASKRC',
+                                        );
+                                        controller.taskrcVersion.value++;
+                                        Get.back();
+                                      },
+                                      child: Text(
+                                        SentenceManager(
+                                                currentLanguage: AppSettings
+                                                    .selectedLanguage)
+                                            .sentences
+                                            .manageTaskServerPageConfigureTaskRCDialogueBoxSelectTaskRC,
+                                        style: TextStyle(
+                                          color: tColors.primaryTextColor,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            );
-                          },
+                            ],
+                          ),
                         );
                       },
                     );
@@ -199,47 +189,50 @@ class ManageTaskServerPageBody extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(color: TaskWarriorColors.borderColor),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          controller.taskrcContentController.text.isEmpty
-                              ? SentenceManager(
-                                      currentLanguage:
-                                          AppSettings.selectedLanguage)
-                                  .sentences
-                                  .manageTaskServerPageSetTaskRC
-                              : SentenceManager(
-                                      currentLanguage:
-                                          AppSettings.selectedLanguage)
-                                  .sentences
-                                  .manageTaskServerPageTaskRCFileIsVerified,
-                          style: TextStyle(
-                            color: tColors.primaryTextColor,
+                    child: Obx(() {
+                      controller.taskrcVersion.value;
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            controller.taskrcContentController.text.isEmpty
+                                ? SentenceManager(
+                                        currentLanguage:
+                                            AppSettings.selectedLanguage)
+                                    .sentences
+                                    .manageTaskServerPageSetTaskRC
+                                : SentenceManager(
+                                        currentLanguage:
+                                            AppSettings.selectedLanguage)
+                                    .sentences
+                                    .manageTaskServerPageTaskRCFileIsVerified,
+                            style: TextStyle(
+                              color: tColors.primaryTextColor,
+                            ),
                           ),
-                        ),
-                        Container(
-                          height: 30,
-                          width: 30,
-                          decoration: BoxDecoration(
-                            color: tColors.secondaryTextColor,
-                            shape: BoxShape.circle,
+                          Container(
+                            height: 30,
+                            width: 30,
+                            decoration: BoxDecoration(
+                              color: tColors.secondaryTextColor,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Center(
+                              child: controller
+                                      .taskrcContentController.text.isNotEmpty
+                                  ? Icon(
+                                      Icons.check,
+                                      color: TaskWarriorColors.green,
+                                    )
+                                  : Icon(
+                                      Icons.chevron_right_rounded,
+                                      color: tColors.secondaryBackgroundColor,
+                                    ),
+                            ),
                           ),
-                          child: Center(
-                            child: controller
-                                    .taskrcContentController.text.isNotEmpty
-                                ? Icon(
-                                    Icons.check,
-                                    color: TaskWarriorColors.green,
-                                  )
-                                : Icon(
-                                    Icons.chevron_right_rounded,
-                                    color: tColors.secondaryBackgroundColor,
-                                  ),
-                          ),
-                        ),
-                      ],
-                    ),
+                        ],
+                      );
+                    }),
                   ),
                 ),
               ],
@@ -316,7 +309,8 @@ class ManageTaskServerPageBody extends StatelessWidget {
                                           )
                                         : Icon(
                                             Icons.chevron_right_rounded,
-                                            color: tColors.secondaryBackgroundColor,
+                                            color: tColors
+                                                .secondaryBackgroundColor,
                                           ),
                                   ),
                                 ),
@@ -401,7 +395,8 @@ class ManageTaskServerPageBody extends StatelessWidget {
                                     child: controller.credentials == null
                                         ? Icon(
                                             Icons.chevron_right_rounded,
-                                            color: tColors.primaryBackgroundColor,
+                                            color:
+                                                tColors.primaryBackgroundColor,
                                           )
                                         : Icon(
                                             controller.hideKey.value
@@ -420,75 +415,72 @@ class ManageTaskServerPageBody extends StatelessWidget {
                   ),
                 ],
               )),
-          GetBuilder<ManageTaskServerController>(
-            builder: (controller) {
-              List<Widget> pemWidgets = [];
-              for (var pem in [
-                'taskd.certificate',
-                'taskd.key',
-                'taskd.ca',
-                if (controller.homeController.serverCertExists.value)
-                  'server.cert',
-              ]) {
-                pemWidgets.add(
-                  PemWidget(
-                    storage: controller.storage,
-                    pem: pem,
-                    optionString: pem == "taskd.certificate"
-                        ? SentenceManager(
-                                currentLanguage: AppSettings.selectedLanguage)
-                            .sentences
-                            .manageTaskServerPageConfigureYourCertificate
-                        : pem == "taskd.key"
-                            ? SentenceManager(
-                                    currentLanguage:
-                                        AppSettings.selectedLanguage)
-                                .sentences
-                                .manageTaskServerPageConfigureTaskserverKey
-                            : pem == "taskd.ca"
-                                ? SentenceManager(
-                                        currentLanguage:
-                                            AppSettings.selectedLanguage)
-                                    .sentences
-                                    .manageTaskServerPageConfigureServerCertificate
-                                : SentenceManager(
-                                        currentLanguage:
-                                            AppSettings.selectedLanguage)
-                                    .sentences
-                                    .manageTaskServerPageConfigureServerCertificate,
-                    listTileTitle: pem == "taskd.certificate"
-                        ? SentenceManager(
-                                currentLanguage: AppSettings.selectedLanguage)
-                            .sentences
-                            .manageTaskServerPageSelectCertificate
-                        : pem == "taskd.key"
-                            ? SentenceManager(
-                                    currentLanguage:
-                                        AppSettings.selectedLanguage)
-                                .sentences
-                                .manageTaskServerPageSelectKey
-                            : pem == "taskd.ca"
-                                ? SentenceManager(
-                                        currentLanguage:
-                                            AppSettings.selectedLanguage)
-                                    .sentences
-                                    .manageTaskServerPageSelectCertificate
-                                : SentenceManager(
-                                        currentLanguage:
-                                            AppSettings.selectedLanguage)
-                                    .sentences
-                                    .manageTaskServerPageSelectCertificate,
-                    onTapCallBack: controller.onTapPEMWidget,
-                    onLongPressCallBack: controller.onLongPressPEMWidget,
-                    globalKey: controller.getGlobalKey(pem),
-                  ),
-                );
-              }
-              return Column(
-                children: pemWidgets,
+          Obx(() {
+            controller.pemVersion.value; // reactive trigger for PEM file changes
+            List<Widget> pemWidgets = [];
+            for (var pem in [
+              'taskd.certificate',
+              'taskd.key',
+              'taskd.ca',
+              if (controller.homeController.serverCertExists.value)
+                'server.cert',
+            ]) {
+              pemWidgets.add(
+                PemWidget(
+                  storage: controller.storage,
+                  pem: pem,
+                  optionString: pem == "taskd.certificate"
+                      ? SentenceManager(
+                              currentLanguage: AppSettings.selectedLanguage)
+                          .sentences
+                          .manageTaskServerPageConfigureYourCertificate
+                      : pem == "taskd.key"
+                          ? SentenceManager(
+                                  currentLanguage: AppSettings.selectedLanguage)
+                              .sentences
+                              .manageTaskServerPageConfigureTaskserverKey
+                          : pem == "taskd.ca"
+                              ? SentenceManager(
+                                      currentLanguage:
+                                          AppSettings.selectedLanguage)
+                                  .sentences
+                                  .manageTaskServerPageConfigureServerCertificate
+                              : SentenceManager(
+                                      currentLanguage:
+                                          AppSettings.selectedLanguage)
+                                  .sentences
+                                  .manageTaskServerPageConfigureServerCertificate,
+                  listTileTitle: pem == "taskd.certificate"
+                      ? SentenceManager(
+                              currentLanguage: AppSettings.selectedLanguage)
+                          .sentences
+                          .manageTaskServerPageSelectCertificate
+                      : pem == "taskd.key"
+                          ? SentenceManager(
+                                  currentLanguage: AppSettings.selectedLanguage)
+                              .sentences
+                              .manageTaskServerPageSelectKey
+                          : pem == "taskd.ca"
+                              ? SentenceManager(
+                                      currentLanguage:
+                                          AppSettings.selectedLanguage)
+                                  .sentences
+                                  .manageTaskServerPageSelectCertificate
+                              : SentenceManager(
+                                      currentLanguage:
+                                          AppSettings.selectedLanguage)
+                                  .sentences
+                                  .manageTaskServerPageSelectCertificate,
+                  onTapCallBack: controller.onTapPEMWidget,
+                  onLongPressCallBack: controller.onLongPressPEMWidget,
+                  globalKey: controller.getGlobalKey(pem),
+                ),
               );
-            },
-          )
+            }
+            return Column(
+              children: pemWidgets,
+            );
+          })
         ],
       ),
     );

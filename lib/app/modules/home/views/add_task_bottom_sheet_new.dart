@@ -394,15 +394,12 @@ class AddTaskBottomSheet extends StatelessWidget {
         homeController.priority.value = 'X';
         homeController.tagcontroller.text = '';
         homeController.tags.value = [];
-        homeController.update();
         Get.back();
         if (Platform.isAndroid) {
           WidgetController widgetController = Get.put(WidgetController());
           widgetController.fetchAllData();
           widgetController.update();
         }
-
-        homeController.update();
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
@@ -473,15 +470,12 @@ class AddTaskBottomSheet extends StatelessWidget {
         homeController.priority.value = 'X';
         homeController.tagcontroller.text = '';
         homeController.tags.value = [];
-        homeController.update();
         Get.back();
         if (Platform.isAndroid) {
           WidgetController widgetController = Get.put(WidgetController());
           widgetController.fetchAllData();
           widgetController.update();
         }
-
-        homeController.update();
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
               SentenceManager(

@@ -243,6 +243,9 @@ class HomeController extends GetxController {
     }
   }
 
+  /// Exposes [_refreshTasks] for external callers (e.g. after undo).
+  void refreshTaskList() => _refreshTasks();
+
   void _refreshTasks() {
     if (pendingFilter.value) {
       queriedTasks.value = storage.data
