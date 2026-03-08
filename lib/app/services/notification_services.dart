@@ -136,4 +136,72 @@ class NotificationService {
   void cancelNotification(int notificationId) async {
     await _flutterLocalNotificationsPlugin.cancel(notificationId);
   }
+
+  /// Schedule an advance-warning notification 24 hours before [due] for a
+  /// recurring task.  Uses an ID offset of +4 over the base due-notification
+  /// ID so it never collides with the due (+0) or wait (+2) notifications.
+  void sendRecurrenceAdvanceNotification(
+      DateTime due, String taskname, DateTime entryTime) async {
+    final advanceTime = due.subtract(const Duration(hours: 24));
+    if (advanceTime.isBefore(DateTime.now().toUtc())) return;
+
+    tz.initializeTimeZones();
+    final tz.TZDateTime scheduledAt = tz.TZDateTime.from(advanceTime, tz.local);
+
+    final int baseId = calculateNotificationId(due, taskname, false, entryTime);
+    final int notificationId = (baseId + 4) % 2147483647;
+
+    AndroidNotificationDetails androidDetails =
+        const AndroidNotificationDetails('channelId', 'TaskReminder',
+            icon: "taskwarrior",
+            importance: Importance.max,
+            priority: Priority.max);
+
+    DarwinNotificationDetails iosDetails = const DarwinNotificationDetails(
+      presentAlert: true,
+      presentBadge: true,
+      presentSound: true,
+    );
+
+    DarwinNotificationDetails macDetails = const DarwinNotificationDetails(
+      presentAlert: true,
+      presentBadge: true,
+      presentSound: true,
+    );
+
+    NotificationDetails notificationDetails = NotificationDetails(
+      android: androidDetails,
+      iOS: iosDetails,
+      macOS: macDetails,
+    );
+
+    await _flutterLocalNotificationsPlugin
+        .zonedSchedule(
+            notificationId,
+            'Taskwarrior Reminder',
+            "Hey! Your recurring task '$taskname' is due tomorrow",
+            scheduledAt,
+            notificationDetails,
+            uiLocalNotificationDateInterpretation:
+                UILocalNotificationDateInterpretation.absoluteTime,
+            androidScheduleMode: AndroidScheduleMode.alarmClock)
+        .then((_) {
+      if (kDebugMode) {
+        print('Advance-warning notification scheduled for $taskname');
+      }
+    }).catchError((error) {
+      if (kDebugMode) {
+        print('Error scheduling advance-warning notification: $error');
+      }
+    });
+  }
+
+  /// Cancel the advance-warning notification previously scheduled for a
+  /// recurring task identified by [due] + [taskname] + [entryTime].
+  void cancelRecurrenceAdvanceNotification(
+      DateTime due, String taskname, DateTime entryTime) {
+    final int baseId = calculateNotificationId(due, taskname, false, entryTime);
+    final int notificationId = (baseId + 4) % 2147483647;
+    cancelNotification(notificationId);
+  }
 }

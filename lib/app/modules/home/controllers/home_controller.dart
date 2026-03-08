@@ -631,6 +631,8 @@ class HomeController extends GetxController {
 
   final tagcontroller = TextEditingController();
   RxList<String> tags = <String>[].obs;
+  RxString recur = ''.obs;
+  RxBool dueAutoFromRecurrence = false.obs;
   RxBool inThePast = false.obs;
 
   Filters getFilters() {

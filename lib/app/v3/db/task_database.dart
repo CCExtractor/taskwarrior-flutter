@@ -5,10 +5,73 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:taskwarrior/app/services/notification_services.dart';
 import 'package:taskwarrior/app/v3/models/task.dart';
+import 'package:taskwarrior/app/utils/taskfunctions/recurrence_engine.dart';
+import 'package:uuid/uuid.dart';
 
 class TaskDatabase {
   Database? _database;
+  final NotificationService _notificationService = NotificationService();
+
+  DateTime? _parseUtc(String? value) {
+    if (value == null || value.trim().isEmpty) return null;
+    try {
+      return DateTime.parse(value).toUtc();
+    } catch (_) {
+      return null;
+    }
+  }
+
+  void _cancelTaskNotifications(TaskForC task) {
+    try {
+      final entryTime = _parseUtc(task.entry) ?? DateTime.now().toUtc();
+      final due = _parseUtc(task.due);
+      final wait = _parseUtc(task.wait);
+      if (due != null) {
+        final id = _notificationService.calculateNotificationId(
+            due, task.description, false, entryTime);
+        _notificationService.cancelNotification(id);
+        // Also cancel any advance-warning notification for this task
+        _notificationService.cancelRecurrenceAdvanceNotification(
+            due, task.description, entryTime);
+      }
+      if (wait != null) {
+        final id = _notificationService.calculateNotificationId(
+            wait, task.description, true, entryTime);
+        _notificationService.cancelNotification(id);
+      }
+    } catch (e) {
+      debugPrint("Skipping notification cancellation for ${task.uuid}: $e");
+    }
+  }
+
+  void _syncTaskNotifications(TaskForC task, {TaskForC? previous}) {
+    try {
+      _notificationService.initiliazeNotification();
+      if (previous != null) {
+        _cancelTaskNotifications(previous);
+      }
+      _cancelTaskNotifications(task);
+      if (task.status != 'pending') return;
+
+      final entryTime = _parseUtc(task.entry) ?? DateTime.now().toUtc();
+      final now = DateTime.now().toUtc();
+      final due = _parseUtc(task.due);
+      final wait = _parseUtc(task.wait);
+
+      if (due != null && due.isAfter(now)) {
+        _notificationService.sendNotification(
+            due, task.description, false, entryTime);
+      }
+      if (wait != null && wait.isAfter(now)) {
+        _notificationService.sendNotification(
+            wait, task.description, true, entryTime);
+      }
+    } catch (e) {
+      debugPrint("Skipping notification sync for ${task.uuid}: $e");
+    }
+  }
 
   Future<void> open() async {
     String path = await getDatabasePathForCurrentProfile();
@@ -17,7 +80,7 @@ class TaskDatabase {
 
   Future<void> _open(path) async {
     debugPrint("called _open with $path");
-    _database = await openDatabase(path, version: 2,
+    _database = await openDatabase(path, version: 3,
         onCreate: (Database db, version) async {
       await db.execute('''
             CREATE TABLE Tasks (
@@ -35,7 +98,10 @@ class TaskDatabase {
               start TEXT,
               wait TEXT,
               rtype TEXT,
-              recur TEXT
+              recur TEXT,
+              parent TEXT,
+              until TEXT,
+              scheduled TEXT
             )
           ''');
       await db.execute('''
@@ -75,13 +141,22 @@ class TaskDatabase {
                 ON UPDATE CASCADE 
             )
           ''');
+    }, onUpgrade: (Database db, int oldVersion, int newVersion) async {
+      if (oldVersion < 3) {
+        // Add recurrence chain tracking columns
+        await db.execute('ALTER TABLE Tasks ADD COLUMN parent TEXT');
+        await db.execute('ALTER TABLE Tasks ADD COLUMN until TEXT');
+        await db.execute('ALTER TABLE Tasks ADD COLUMN scheduled TEXT');
+        debugPrint(
+            'DB upgraded from v$oldVersion to v3: added parent/until/scheduled columns');
+      }
     });
     debugPrint("Database opened at $path");
   }
 
   Future<void> openForProfile(String profile) async {
     String path = await getDatabasePathForProfile(profile);
-    _open(path);
+    await _open(path);
   }
 
   Future<void> ensureDatabaseIsOpen() async {
@@ -161,15 +236,19 @@ class TaskDatabase {
       await setAnnotationsForTask(
           task.uuid ?? '', task.id, taskAnnotations.toList());
     }
+    _syncTaskNotifications(task);
   }
 
   Future<void> updateTask(TaskForC task) async {
     await ensureDatabaseIsOpen();
+    final TaskForC? previousTask = (task.uuid == null || task.uuid!.isEmpty)
+        ? null
+        : await getTaskByUuid(task.uuid!);
     debugPrint("Database update");
     List<String> taskTags = task.tags?.map((e) => e.toString()).toList() ?? [];
     debugPrint("Database update $taskTags");
     List<String> taskDepends =
-        task.tags?.map((e) => e.toString()).toList() ?? [];
+        task.depends?.map((e) => e.toString()).toList() ?? [];
     debugPrint("Database update $taskDepends");
     List<Map<String, String?>> taskAnnotations = task.annotations != null
         ? task.annotations!
@@ -186,16 +265,11 @@ class TaskDatabase {
       where: 'uuid = ?',
       whereArgs: [task.uuid],
     );
-    if (taskTags.isNotEmpty) {
-      await setTagsForTask(task.uuid ?? '', task.id, taskTags.toList());
-    }
-    if (taskDepends.isNotEmpty) {
-      await setDependsForTask(task.uuid ?? '', task.id, taskDepends.toList());
-    }
-    if (taskAnnotations.isNotEmpty) {
-      await setAnnotationsForTask(
-          task.uuid ?? '', task.id, taskAnnotations.toList());
-    }
+    await setTagsForTask(task.uuid ?? '', task.id, taskTags.toList());
+    await setDependsForTask(task.uuid ?? '', task.id, taskDepends.toList());
+    await setAnnotationsForTask(
+        task.uuid ?? '', task.id, taskAnnotations.toList());
+    _syncTaskNotifications(task, previous: previousTask);
   }
 
   Future<TaskForC?> getTaskByUuid(String uuid) async {
@@ -214,28 +288,95 @@ class TaskDatabase {
     }
   }
 
-  Future<void> markTaskAsCompleted(String uuid) async {
+  Future<void> markTaskAsCompleted(String uuid,
+      {bool forceRecurrence = false}) async {
     await ensureDatabaseIsOpen();
 
+    // Check if this is a recurring task and spawn next instance
+    TaskForC? task = await getTaskByUuid(uuid);
+    if (task != null &&
+        (forceRecurrence || task.status != 'completed') &&
+        task.recur != null &&
+        task.recur!.isNotEmpty) {
+      await _handleRecurrenceForCompletedTask(task);
+    }
+
+    final nowIso = DateTime.now().toIso8601String();
     await _database!.update(
       'Tasks',
-      {'modified': (DateTime.now()).toIso8601String(), 'status': 'completed'},
+      {'modified': nowIso, 'status': 'completed', 'end': nowIso},
       where: 'uuid = ?',
       whereArgs: [uuid],
     );
+    if (task != null) {
+      _cancelTaskNotifications(task);
+    }
     debugPrint('task${uuid}completed');
-    debugPrint({DateTime.now().toIso8601String()}.toString());
+  }
+
+  Future<void> _handleRecurrenceForCompletedTask(TaskForC task) async {
+    String recur = task.recur!;
+    DateTime? due = task.due != null ? DateTime.tryParse(task.due!) : null;
+    DateTime? wait = task.wait != null ? DateTime.tryParse(task.wait!) : null;
+
+    due ??= DateTime.now();
+
+    DateTime? nextDue = RecurrenceEngine.calculateNextDate(due, recur);
+    DateTime? nextWait =
+        wait != null ? RecurrenceEngine.calculateNextDate(wait, recur) : null;
+
+    if (nextDue != null) {
+      TaskForC newTask = TaskForC(
+        id: 0,
+        description: task.description,
+        project: task.project,
+        status: 'pending',
+        uuid: const Uuid().v4(),
+        urgency: task.urgency,
+        priority: task.priority,
+        due: nextDue.toIso8601String(),
+        end: null,
+        entry: DateTime.now().toIso8601String(),
+        modified: DateTime.now().toIso8601String(),
+        tags: task.tags,
+        start: null,
+        wait: nextWait?.toIso8601String(),
+        rtype: task.rtype,
+        recur: task.recur,
+        depends: task.depends ?? [],
+        annotations: task.annotations ?? [],
+        parent: task.uuid,
+        until: task.until,
+        scheduled: task.scheduled,
+      );
+      await insertTask(newTask);
+      // Schedule 24-hour advance-warning notification for the new occurrence.
+      // Use the task's own entry time so the ID matches when cancelling later.
+      try {
+        final entryTime = _parseUtc(newTask.entry) ?? DateTime.now().toUtc();
+        _notificationService.sendRecurrenceAdvanceNotification(
+            nextDue.toUtc(), newTask.description, entryTime);
+      } catch (e) {
+        debugPrint('Error scheduling advance-warning notification: $e');
+      }
+      debugPrint(
+          'Created next recurring task: ${newTask.uuid} due: ${newTask.due}');
+    }
   }
 
   Future<void> markTaskAsDeleted(String uuid) async {
     await ensureDatabaseIsOpen();
+    TaskForC? task = await getTaskByUuid(uuid);
 
     await _database!.update(
       'Tasks',
-      {'status': 'deleted'},
+      {'status': 'deleted', 'modified': DateTime.now().toIso8601String()},
       where: 'uuid = ?',
       whereArgs: [uuid],
     );
+    if (task != null) {
+      _cancelTaskNotifications(task);
+    }
     debugPrint('task${uuid}deleted');
   }
 
@@ -246,28 +387,35 @@ class TaskDatabase {
     String newStatus,
     String newPriority,
     String newDue,
-    List<String> newTags,
-  ) async {
+    List<String> newTags, {
+    String? recur,
+    String? rtype,
+  }) async {
     await ensureDatabaseIsOpen();
 
     debugPrint('task in saveEditedTaskInDB: $uuid with due $newDue');
+    final updateMap = <String, dynamic>{
+      'description': newDescription,
+      'project': newProject,
+      'status': newStatus,
+      'priority': newPriority,
+      'due': newDue,
+      'modified': DateTime.now().toIso8601String(),
+    };
+    if (recur != null) updateMap['recur'] = recur;
+    if (rtype != null) updateMap['rtype'] = rtype;
+
     await _database!.update(
       'Tasks',
-      {
-        'description': newDescription,
-        'project': newProject,
-        'status': newStatus,
-        'priority': newPriority,
-        'due': newDue,
-        'modified': DateTime.now().toIso8601String(),
-      },
+      updateMap,
       where: 'uuid = ?',
       whereArgs: [uuid],
     );
     debugPrint('task${uuid}edited');
-    if (newTags.isNotEmpty) {
-      TaskForC? task = await getTaskByUuid(uuid);
-      await setTagsForTask(uuid, task?.id ?? 0, newTags.toList());
+    TaskForC? task = await getTaskByUuid(uuid);
+    await setTagsForTask(uuid, task?.id ?? 0, newTags.toList());
+    if (task != null) {
+      _syncTaskNotifications(task);
     }
   }
 
@@ -280,6 +428,21 @@ class TaskDatabase {
       whereArgs: [''],
     );
     debugPrint("Tasks without uuid are $maps");
+    return await Future.wait(
+      maps.map((mapItem) => getObjectForTask(mapItem)).toList(),
+    );
+  }
+
+  /// Returns all tasks whose [parent] field equals [parentUuid].
+  /// Used to locate recurring child tasks spawned when a recurring task is
+  /// completed, so they can be pushed to the server immediately.
+  Future<List<TaskForC>> getTasksByParent(String parentUuid) async {
+    await ensureDatabaseIsOpen();
+    final List<Map<String, dynamic>> maps = await _database!.query(
+      'Tasks',
+      where: 'parent = ?',
+      whereArgs: [parentUuid],
+    );
     return await Future.wait(
       maps.map((mapItem) => getObjectForTask(mapItem)).toList(),
     );

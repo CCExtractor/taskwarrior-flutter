@@ -29,6 +29,25 @@ class AddTaskBottomSheet extends StatelessWidget {
       this.forTaskC = false,
       this.forReplica = false});
 
+  void _closeComposer(BuildContext context, {required String result}) {
+    final navigator = Navigator.of(context);
+    if (navigator.canPop()) {
+      navigator.pop(result);
+      return;
+    }
+    final rootNavigator = Navigator.of(context, rootNavigator: true);
+    if (rootNavigator.canPop()) {
+      rootNavigator.pop(result);
+      return;
+    }
+    Get.back(result: result);
+  }
+
+  DateTime _defaultDueDate() {
+    final now = DateTime.now();
+    return DateTime(now.year, now.month, now.day, 23, 59);
+  }
+
   @override
   Widget build(BuildContext context) {
     debugPrint(
@@ -50,7 +69,7 @@ class AddTaskBottomSheet extends StatelessWidget {
                 children: [
                   TextButton(
                     onPressed: () {
-                      Get.back();
+                      _closeComposer(context, result: "cancel");
                     },
                     child: Text(SentenceManager(
                             currentLanguage:
@@ -70,14 +89,14 @@ class AddTaskBottomSheet extends StatelessWidget {
                     ),
                   ),
                   TextButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (forTaskC) {
-                        onSaveButtonClickedTaskC(context);
+                        await onSaveButtonClickedTaskC(context);
                       } else if (forReplica) {
                         debugPrint("Saving to Replica");
-                        onSaveButtonClickedForReplica(context);
+                        await onSaveButtonClickedForReplica(context);
                       } else {
-                        onSaveButtonClicked(context);
+                        await onSaveButtonClicked(context);
                       }
                     },
                     child: Text(SentenceManager(
@@ -129,6 +148,10 @@ class AddTaskBottomSheet extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(padding),
                       child: buildTagsInput(context),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(padding),
+                      child: buildRecurrenceSelector(context),
                     ),
                     const Padding(padding: EdgeInsets.all(20)),
                   ],
@@ -221,12 +244,25 @@ class AddTaskBottomSheet extends StatelessWidget {
         onTagsChanges: (p0) => homeController.tags.value = p0,
       );
 
-  Widget buildDatePicker(BuildContext context) => AddTaskDatePickerInput(
-        onDateChanges: (List<DateTime?> p0) {
-          homeController.selectedDates.value = p0;
-        },
-        allowedIndexes: forReplica ? [0, 1] : [0, 1, 2, 3],
-        onlyDueDate: forTaskC,
+  Widget buildDatePicker(BuildContext context) => Obx(
+        () => AddTaskDatePickerInput(
+          key: ValueKey('date-picker-${homeController.recur.value}'),
+          initialDates: List<DateTime?>.from(homeController.selectedDates),
+          onDateChanges: (List<DateTime?> p0) {
+            final previousDue =
+                homeController.selectedDates.isNotEmpty
+                    ? homeController.selectedDates[0]
+                    : null;
+            homeController.selectedDates.value = p0;
+            final nextDue = p0.isNotEmpty ? p0[0] : null;
+            if (previousDue != nextDue) {
+              homeController.dueAutoFromRecurrence.value = false;
+            }
+          },
+          allowedIndexes: forReplica ? [0, 1] : [0, 1, 2, 3],
+          onlyDueDate: forTaskC,
+          disableDueDate: false,
+        ),
       );
 
   Widget buildPriority(BuildContext context) => Column(
@@ -308,6 +344,55 @@ class AddTaskBottomSheet extends StatelessWidget {
         ],
       );
 
+  Widget buildRecurrenceSelector(BuildContext context) {
+    final options = ['', 'daily', 'weekly', 'monthly', 'yearly'];
+    final labels = ['None', 'Daily', 'Weekly', 'Monthly', 'Yearly'];
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Recurrence',
+          style: GoogleFonts.poppins(
+            fontWeight: FontWeight.w500,
+            fontSize: 14,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Obx(() => Wrap(
+              spacing: 8,
+              children: List.generate(options.length, (index) {
+                final isSelected = homeController.recur.value == options[index];
+                return ChoiceChip(
+                  label: Text(labels[index]),
+                  selected: isSelected,
+                  onSelected: (_) {
+                    final selectedRecur = options[index];
+                    homeController.recur.value = selectedRecur;
+                    if (selectedRecur.isNotEmpty) {
+                      final updated =
+                          List<DateTime?>.from(homeController.selectedDates);
+                      if (updated[0] == null) {
+                        updated[0] = _defaultDueDate();
+                        homeController.dueAutoFromRecurrence.value = true;
+                      }
+                      homeController.selectedDates.value = updated;
+                      return;
+                    }
+                    if (homeController.dueAutoFromRecurrence.value) {
+                      final updated =
+                          List<DateTime?>.from(homeController.selectedDates);
+                      updated[0] = null;
+                      homeController.selectedDates.value = updated;
+                    }
+                    homeController.dueAutoFromRecurrence.value = false;
+                  },
+                );
+              }),
+            )),
+      ],
+    );
+  }
+
   Set<String> getProjects() {
     if (homeController.taskReplica.value) {
       return homeController.tasksFromReplica
@@ -320,9 +405,12 @@ class AddTaskBottomSheet extends StatelessWidget {
         .fold(<String>{}, (aggregate, task) => aggregate..add(task.project!));
   }
 
-  void onSaveButtonClickedTaskC(BuildContext context) async {
+  Future<void> onSaveButtonClickedTaskC(BuildContext context) async {
     if (homeController.formKey.currentState!.validate()) {
       debugPrint("tags ${homeController.tags}");
+      final messenger = ScaffoldMessenger.maybeOf(context);
+      final DateTime? dueDate = getDueDate(homeController.selectedDates) ??
+          (homeController.recur.value.isNotEmpty ? _defaultDueDate() : null);
       var task = TaskForC(
           description: homeController.namecontroller.text.trim(),
           status: 'pending',
@@ -334,14 +422,16 @@ class AddTaskBottomSheet extends StatelessWidget {
               : null,
           uuid: '',
           urgency: 0,
-          due: getDueDate(homeController.selectedDates).toString(),
-          end: '',
-          modified: 'r',
+          due: dueDate?.toUtc().toIso8601String() ?? '',
+          end: null,
+          modified: DateTime.now().toIso8601String(),
           tags: homeController.tags,
-          start: '',
-          wait: '',
-          rtype: '',
-          recur: '',
+          start: null,
+          wait: getWaitDate(homeController.selectedDates)
+              ?.toUtc()
+              .toIso8601String(),
+          rtype: homeController.recur.value.isNotEmpty ? 'periodic' : '',
+          recur: homeController.recur.value,
           depends: [],
           annotations: []);
       await homeController.taskdb.insertTask(task);
@@ -349,7 +439,10 @@ class AddTaskBottomSheet extends StatelessWidget {
       homeController.due.value = null;
       homeController.priority.value = 'M';
       homeController.projectcontroller.text = '';
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      homeController.recur.value = '';
+      homeController.dueAutoFromRecurrence.value = false;
+      _closeComposer(context, result: "saved");
+      messenger?.showSnackBar(SnackBar(
           content: Text(
             SentenceManager(
                     currentLanguage: homeController.selectedLanguage.value)
@@ -365,16 +458,17 @@ class AddTaskBottomSheet extends StatelessWidget {
               ? TaskWarriorColors.ksecondaryBackgroundColor
               : TaskWarriorColors.kLightSecondaryBackgroundColor,
           duration: const Duration(seconds: 2)));
-      Navigator.of(context).pop();
     }
   }
 
-  void onSaveButtonClicked(BuildContext context) async {
+  Future<void> onSaveButtonClicked(BuildContext context) async {
     if (homeController.formKey.currentState!.validate()) {
+      final messenger = ScaffoldMessenger.maybeOf(context);
       try {
+        final DateTime? dueDate = getDueDate(homeController.selectedDates) ??
+            (homeController.recur.value.isNotEmpty ? _defaultDueDate() : null);
         var task = taskParser(homeController.namecontroller.text.trim())
-            .rebuild((b) =>
-                b..due = getDueDate(homeController.selectedDates)?.toUtc())
+            .rebuild((b) => b..due = dueDate?.toUtc())
             .rebuild((p) => p..priority = homeController.priority.value)
             .rebuild((t) => t..project = homeController.projectcontroller.text)
             .rebuild((t) =>
@@ -382,8 +476,11 @@ class AddTaskBottomSheet extends StatelessWidget {
             .rebuild((t) =>
                 t..until = getUntilDate(homeController.selectedDates)?.toUtc())
             .rebuild((t) => t
-              ..scheduled =
-                  getSchedDate(homeController.selectedDates)?.toUtc());
+              ..scheduled = getSchedDate(homeController.selectedDates)?.toUtc())
+            .rebuild((t) => t
+              ..recur = homeController.recur.value.isEmpty
+                  ? null
+                  : homeController.recur.value);
         if (homeController.tags.isNotEmpty) {
           task = task.rebuild((t) => t..tags.replace(homeController.tags));
         }
@@ -394,8 +491,10 @@ class AddTaskBottomSheet extends StatelessWidget {
         homeController.priority.value = 'X';
         homeController.tagcontroller.text = '';
         homeController.tags.value = [];
+        homeController.recur.value = '';
+        homeController.dueAutoFromRecurrence.value = false;
         homeController.update();
-        Get.back();
+        _closeComposer(context, result: "saved");
         if (Platform.isAndroid) {
           WidgetController widgetController = Get.put(WidgetController());
           widgetController.fetchAllData();
@@ -404,7 +503,7 @@ class AddTaskBottomSheet extends StatelessWidget {
 
         homeController.update();
 
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        messenger?.showSnackBar(SnackBar(
             content: Text(
               SentenceManager(
                       currentLanguage: homeController.selectedLanguage.value)
@@ -437,7 +536,7 @@ class AddTaskBottomSheet extends StatelessWidget {
           widgetController.update();
         }
       } on FormatException catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        messenger?.showSnackBar(SnackBar(
             content: Text(
               e.message,
               style: TextStyle(
@@ -454,18 +553,25 @@ class AddTaskBottomSheet extends StatelessWidget {
     }
   }
 
-  void onSaveButtonClickedForReplica(BuildContext context) async {
+  Future<void> onSaveButtonClickedForReplica(BuildContext context) async {
     if (homeController.formKey.currentState!.validate()) {
+      final messenger = ScaffoldMessenger.maybeOf(context);
       try {
+        final DateTime? dueDate = getDueDate(homeController.selectedDates) ??
+            (homeController.recur.value.isNotEmpty ? _defaultDueDate() : null);
         await Replica.addTaskToReplica(HashMap<String, dynamic>.from({
           "description": homeController.namecontroller.text.trim(),
-          "due": getDueDate(homeController.selectedDates)?.toUtc(),
+          "entry": DateTime.now().toUtc().toIso8601String(),
+          "due": dueDate?.toUtc(),
           "priority": homeController.priority.value,
           "project": homeController.projectcontroller.text != ""
               ? homeController.projectcontroller.text
               : null,
           "wait": getWaitDate(homeController.selectedDates)?.toUtc(),
           "tags": homeController.tags,
+          if (homeController.recur.value.isNotEmpty)
+            "recur": homeController.recur.value,
+          if (homeController.recur.value.isNotEmpty) "rtype": "periodic",
         }));
         homeController.namecontroller.text = '';
         homeController.projectcontroller.text = '';
@@ -473,8 +579,10 @@ class AddTaskBottomSheet extends StatelessWidget {
         homeController.priority.value = 'X';
         homeController.tagcontroller.text = '';
         homeController.tags.value = [];
+        homeController.recur.value = '';
+        homeController.dueAutoFromRecurrence.value = false;
         homeController.update();
-        Get.back();
+        _closeComposer(context, result: "saved");
         if (Platform.isAndroid) {
           WidgetController widgetController = Get.put(WidgetController());
           widgetController.fetchAllData();
@@ -482,7 +590,7 @@ class AddTaskBottomSheet extends StatelessWidget {
         }
 
         homeController.update();
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        messenger?.showSnackBar(SnackBar(
             content: Text(
               SentenceManager(
                       currentLanguage: homeController.selectedLanguage.value)
@@ -510,7 +618,7 @@ class AddTaskBottomSheet extends StatelessWidget {
         }
         await storageWidget.refreshReplicaTaskList();
       } on FormatException catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        messenger?.showSnackBar(SnackBar(
             content: Text(
               e.message,
               style: TextStyle(

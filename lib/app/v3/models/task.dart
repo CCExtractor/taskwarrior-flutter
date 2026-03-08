@@ -21,6 +21,10 @@ class TaskForC {
   final String? recur;
   final List<String>? depends;
   final List<Annotation>? annotations;
+  // Recurrence chain tracking
+  final String? parent;
+  final String? until;
+  final String? scheduled;
 
   TaskForC({
     required this.id,
@@ -41,6 +45,9 @@ class TaskForC {
     required this.recur,
     required this.depends,
     required this.annotations,
+    this.parent,
+    this.until,
+    this.scheduled,
   });
 
   factory TaskForC.fromJson(Map<String, dynamic> json) {
@@ -64,7 +71,10 @@ class TaskForC {
         recur: json['recur'],
         depends:
             json['depends']?.map<String>((d) => d.toString()).toList() ?? [],
-        annotations: <Annotation>[]);
+        annotations: <Annotation>[],
+        parent: json['parent'],
+        until: json['until'],
+        scheduled: json['scheduled']);
   }
 
   Map<String, dynamic> toJson() {
@@ -90,6 +100,9 @@ class TaskForC {
       'annotations': annotations != null
           ? annotations?.map((a) => a.toJson()).toList()
           : <Map<String, dynamic>>[],
+      'parent': parent,
+      'until': until,
+      'scheduled': scheduled,
     };
   }
 

@@ -9,6 +9,7 @@ import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
+import 'package:taskwarrior/app/utils/taskfunctions/datetime_differences.dart';
 import 'package:taskwarrior/app/v3/champion/replica.dart';
 import 'package:taskwarrior/app/v3/champion/models/task_for_replica.dart';
 
@@ -98,6 +99,15 @@ class TaskReplicaViewBuilder extends StatelessWidget {
                 itemCount: tasks.length,
                 itemBuilder: (context, index) {
                   final task = tasks[index];
+                  final bool isRecurring =
+                      task.recur != null && task.recur!.trim().isNotEmpty;
+                  final String dueDateText = (() {
+                    final dueStr = task.due;
+                    if (dueStr == null || dueStr.isEmpty) return '';
+                    final parsed = DateTime.tryParse(dueStr);
+                    if (parsed == null) return '';
+                    return ' | ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.homePageDue}: ${when(parsed.toLocal())}';
+                  })();
                   // Determine if due is within 24 hours or already past (only for pending filter)
                   final bool isDueSoon = (() {
                     if (!pendingFilter) return false;
@@ -148,11 +158,49 @@ class TaskReplicaViewBuilder extends StatelessWidget {
                             ),
                           ),
                           subtitle: Text(
-                            '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageStatus}: ${task.status ?? ''}',
+                            '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageStatus}: ${task.status ?? ''}$dueDateText',
                             style: GoogleFonts.poppins(
                               color: tColors.secondaryTextColor,
                             ),
                           ),
+                          trailing: isRecurring
+                              ? ConstrainedBox(
+                                  constraints:
+                                      const BoxConstraints(maxWidth: 96),
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 3,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(
+                                        color: tColors.secondaryTextColor!,
+                                      ),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(Icons.repeat,
+                                            size: 14,
+                                            color: tColors.secondaryTextColor),
+                                        const SizedBox(width: 3),
+                                        Flexible(
+                                          child: Text(
+                                            task.recur!,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: GoogleFonts.poppins(
+                                              fontSize: 10,
+                                              color: tColors.secondaryTextColor,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              : null,
                         ),
                       ),
                     ),
@@ -220,11 +268,14 @@ class TaskReplicaViewBuilder extends StatelessWidget {
   }
 
   void completeTask(TaskForReplica task) async {
+    // modifyTaskInReplica handles notification cancellation internally;
+    // no need to cancel here separately.
     await Replica.modifyTaskInReplica(task.copyWith(status: 'completed'));
     Get.find<HomeController>().refreshReplicaTaskList();
   }
 
   void deleteTask(TaskForReplica task) async {
+    Replica.cancelNotificationsForTask(task);
     await Replica.deleteTaskFromReplica(task.uuid);
     Get.find<HomeController>().refreshReplicaTaskList();
   }

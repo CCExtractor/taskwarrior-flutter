@@ -7,11 +7,15 @@ class AddTaskDatePickerInput extends StatefulWidget {
   final Function(List<DateTime?>)? onDateChanges;
   final bool onlyDueDate;
   final List<int> allowedIndexes;
+  final bool disableDueDate;
+  final List<DateTime?> initialDates;
   const AddTaskDatePickerInput(
       {super.key,
       this.onDateChanges,
       this.onlyDueDate = false,
-      this.allowedIndexes = const [0, 1, 2, 3]});
+      this.allowedIndexes = const [0, 1, 2, 3],
+      this.disableDueDate = false,
+      this.initialDates = const [null, null, null, null]});
 
   @override
   _AddTaskDatePickerInputState createState() => _AddTaskDatePickerInputState();
@@ -25,6 +29,62 @@ class _AddTaskDatePickerInputState extends State<AddTaskDatePickerInput> {
   final int length = 4;
   int currentIndex = 0;
 
+  List<int> get _effectiveAllowedIndexes => widget.allowedIndexes
+      .where((index) => !(widget.disableDueDate && index == 0))
+      .toList();
+
+  void _normalizeCurrentIndex() {
+    if (widget.onlyDueDate) {
+      currentIndex = 0;
+      return;
+    }
+    final allowed = _effectiveAllowedIndexes;
+    if (allowed.isEmpty) {
+      currentIndex = 0;
+      return;
+    }
+    if (!allowed.contains(currentIndex)) {
+      currentIndex = allowed.first;
+    }
+  }
+
+  void _applyInitialDates(List<DateTime?> values) {
+    for (var i = 0; i < length; i++) {
+      _selectedDates[i] = i < values.length ? values[i] : null;
+    }
+  }
+
+  bool _sameDates(List<DateTime?> a, List<DateTime?> b) {
+    if (a.length != b.length) return false;
+    for (var i = 0; i < a.length; i++) {
+      if (a[i] != b[i]) return false;
+    }
+    return true;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _applyInitialDates(widget.initialDates);
+  }
+
+  @override
+  void didUpdateWidget(covariant AddTaskDatePickerInput oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!_sameDates(widget.initialDates, oldWidget.initialDates)) {
+      _applyInitialDates(widget.initialDates);
+    }
+    if (widget.disableDueDate != oldWidget.disableDueDate &&
+        widget.disableDueDate) {
+      _selectedDates[0] = null;
+      _controllers[0].text = '';
+      if (widget.onDateChanges != null) {
+        widget.onDateChanges!(List<DateTime?>.from(_selectedDates));
+      }
+    }
+    _normalizeCurrentIndex();
+  }
+
   @override
   void dispose() {
     for (var controller in _controllers) {
@@ -35,6 +95,7 @@ class _AddTaskDatePickerInputState extends State<AddTaskDatePickerInput> {
 
   @override
   Widget build(BuildContext context) {
+    _normalizeCurrentIndex();
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -46,9 +107,7 @@ class _AddTaskDatePickerInputState extends State<AddTaskDatePickerInput> {
               child: DropdownButton<int>(
                 value: currentIndex,
                 items: [
-                  for (int index = 0; index < length; index++)
-                    if (widget.allowedIndexes
-                        .contains(index)) // Only add if allowed
+                  for (int index in _effectiveAllowedIndexes)
                       DropdownMenuItem<int>(
                         value: index,
                         child: Row(
@@ -79,21 +138,29 @@ class _AddTaskDatePickerInputState extends State<AddTaskDatePickerInput> {
         ? ''
         : dateToStringForAddTask(_selectedDates[forIndex]!);
 
+    final bool isDueField = forIndex == 0;
+    final bool isDisabled = isDueField && widget.disableDueDate;
+
     return TextFormField(
+      enabled: !isDisabled,
       controller: _controllers[forIndex],
       decoration: InputDecoration(
         labelText:
             SentenceManager(currentLanguage: AppSettings.selectedLanguage)
                 .sentences
                 .date,
-        hintText:
-            '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.select} ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.date}',
+        hintText: isDisabled
+            ? 'Due date disabled for recurring tasks'
+            : '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.select} ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.date}',
         suffixIcon: const Icon(Icons.calendar_today),
         border: const OutlineInputBorder(),
       ),
       validator: _validator,
       readOnly: true,
       onTap: () async {
+        if (isDisabled) {
+          return;
+        }
         final DateTime? picked = await showDatePicker(
           context: context,
           initialDate: _selectedDates[forIndex] ?? DateTime.now(),
@@ -124,7 +191,7 @@ class _AddTaskDatePickerInputState extends State<AddTaskDatePickerInput> {
                 dateToStringForAddTask(_selectedDates[forIndex]!);
           });
           if (widget.onDateChanges != null) {
-            widget.onDateChanges!(_selectedDates);
+            widget.onDateChanges!(List<DateTime?>.from(_selectedDates));
           }
           return;
         }
@@ -138,7 +205,7 @@ class _AddTaskDatePickerInputState extends State<AddTaskDatePickerInput> {
               dateToStringForAddTask(_selectedDates[forIndex]!);
         });
         if (widget.onDateChanges != null) {
-          widget.onDateChanges!(_selectedDates);
+          widget.onDateChanges!(List<DateTime?>.from(_selectedDates));
         }
       },
     );
