@@ -36,7 +36,7 @@ ExternalLibrary loadNativeLibrary() {
       'Platform ${Platform.operatingSystem} is not supported');
 }
 
-oid main() async {
+void main() async {
   // 1. Keep your Desktop SQLite fix 
   if (!kIsWeb && (Platform.isLinux || Platform.isWindows || Platform.isMacOS)) {
     sqfliteFfiInit();
