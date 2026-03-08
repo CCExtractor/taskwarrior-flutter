@@ -36,14 +36,15 @@ ExternalLibrary loadNativeLibrary() {
       'Platform ${Platform.operatingSystem} is not supported');
 }
 
-void main() async { 
+oid main() async {
+  // 1. Keep your Desktop SQLite fix 
   if (!kIsWeb && (Platform.isLinux || Platform.isWindows || Platform.isMacOS)) {
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
   }
-
+  // 2. Accept the project's early initialization
   WidgetsFlutterBinding.ensureInitialized();
- 
+  // 3. Keep the shared Logger setup
   debugPrint = (String? message, {int? wrapWidth}) {
     if (message != null) {
       debugPrintSynchronously(message, wrapWidth: wrapWidth);
@@ -51,11 +52,11 @@ void main() async {
     }
   };
   debugPrint("🚀 BOOT: main() started");
-
+  // 4. Keep your Native Library loader
   final lib = loadNativeLibrary();
   await RustLib.init(externalLibrary: lib);
   await AppSettings.init();
-  
+  // 5. Accept the new DeepLink logic from UPSTREAM
   await Get.putAsync<DeepLinkService>(() async {
     final service = DeepLinkService();
     await service.init();

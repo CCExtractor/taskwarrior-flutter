@@ -5,6 +5,7 @@ import 'package:taskwarrior/app/utils/language/french_sentences.dart';
 import 'package:taskwarrior/app/utils/language/spanish_sentences.dart';
 import 'package:taskwarrior/app/utils/language/bengali_sentences.dart';
 import 'package:taskwarrior/app/utils/language/german_sentences.dart';
+import 'package:taskwarrior/app/utils/language/urdu_sentences.dart';
 import 'package:taskwarrior/app/utils/language/sentences.dart';
 import 'package:taskwarrior/app/utils/language/supported_language.dart';
 
@@ -27,6 +28,8 @@ class SentenceManager {
         return BengaliSentences();
       case SupportedLanguage.german:
         return GermanSentences();
+      case SupportedLanguage.urdu:
+        return UrduSentences();
       case SupportedLanguage.english:
       default:
         return EnglishSentences();
