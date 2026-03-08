@@ -73,6 +73,7 @@ void main() {
     expect(hindi.filterDrawerShowWaiting, 'इंतजार दिखाएं');
     expect(hindi.filterDrawerPending, 'अपूर्ण');
     expect(hindi.filterDrawerCompleted, 'पूर्ण');
+    expect(hindi.filterDrawerDeleted, 'हटाए गए');
     expect(hindi.filterDrawerFilterTagBy, 'टैग से फ़िल्टर करें');
     expect(hindi.filterDrawerAND, 'और');
     expect(hindi.filterDrawerOR, 'या');

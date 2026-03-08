@@ -61,7 +61,7 @@ class Data {
 
   List<Task> _completedData() {
     var data = _allData().where(
-        (task) => task.status == 'completed' || task.status == 'deleted');
+        (task) => task.status == 'completed');
     return [
       for (var task in data) task.rebuild((b) => b..id = 0),
     ];
@@ -69,7 +69,7 @@ class Data {
 
   List<Task> completedData() {
     var data = _allData().where(
-        (task) => task.status == 'completed' || task.status == 'deleted');
+        (task) => task.status == 'completed');
     return data
         .toList()
         .asMap()
@@ -85,8 +85,19 @@ class Data {
     ];
   }
 
+  List<Task> deletedData() {
+  var data = _allData().where(
+      (task) => task.status == 'deleted');
+  return data
+      .toList()
+      .asMap()
+      .entries
+      .map((entry) => entry.value.rebuild((b) => b..id = entry.key + 1))
+      .toList();
+  }
+
   List<Task> allData() {
-    var data = pendingData()..addAll(_completedData());
+    var data = pendingData()..addAll(_completedData())..addAll(deletedData());
     return data;
   }
 

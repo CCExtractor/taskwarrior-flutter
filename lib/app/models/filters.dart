@@ -4,6 +4,7 @@ class Filters {
   const Filters({
     required this.pendingFilter,
     required this.waitingFilter,
+    required this.deletedFilter,
     required this.togglePendingFilter,
     required this.toggleWaitingFilter,
     required this.tagFilters,
@@ -14,8 +15,11 @@ class Filters {
 
   final bool pendingFilter;
   final bool waitingFilter;
+  final bool deletedFilter;
+
   final void Function() togglePendingFilter;
   final void Function() toggleWaitingFilter;
+
   final TagFilters tagFilters;
   final dynamic projects;
   final String projectFilter;

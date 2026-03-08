@@ -84,6 +84,7 @@ void main() {
         expect(sentences.filterDrawerShowWaiting, isA<String>());
         expect(sentences.filterDrawerPending, isA<String>());
         expect(sentences.filterDrawerCompleted, isA<String>());
+        expect(sentences.filterDrawerDeleted, isA<String>());
         expect(sentences.filterDrawerFilterTagBy, isA<String>());
         expect(sentences.filterDrawerAND, isA<String>());
         expect(sentences.filterDrawerOR, isA<String>());

@@ -141,6 +141,8 @@ class SpanishSentences extends Sentences {
   @override
   String get filterDrawerCompleted => 'Completado';
   @override
+  String get filterDrawerDeleted => 'Eliminado';
+  @override
   String get filterDrawerFilterTagBy => 'Filtrar por etiqueta';
   @override
   String get filterDrawerAND => 'y';
