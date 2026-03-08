@@ -36,28 +36,31 @@ ExternalLibrary loadNativeLibrary() {
       'Platform ${Platform.operatingSystem} is not supported');
 }
 
-void main() async {
-  // Update to support all Desktops
+void main() async { 
   if (!kIsWeb && (Platform.isLinux || Platform.isWindows || Platform.isMacOS)) {
-    // Initialize sqflite for Linux
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
   }
 
+  WidgetsFlutterBinding.ensureInitialized();
+ 
   debugPrint = (String? message, {int? wrapWidth}) {
     if (message != null) {
       debugPrintSynchronously(message, wrapWidth: wrapWidth);
       _logDatabaseHelper.insertLog(message);
     }
   };
+  debugPrint("🚀 BOOT: main() started");
 
   final lib = loadNativeLibrary();
   await RustLib.init(externalLibrary: lib);
-
-  WidgetsFlutterBinding.ensureInitialized();
   await AppSettings.init();
-
-  Get.put<DeepLinkService>(DeepLinkService(), permanent: true);
+  
+  await Get.putAsync<DeepLinkService>(() async {
+    final service = DeepLinkService();
+    await service.init();
+    return service;
+  });
   runApp(
     GetMaterialApp(
       darkTheme: darkTheme,
