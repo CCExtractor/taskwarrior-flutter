@@ -60,7 +60,8 @@ class TaskcDetailsController extends GetxController {
           ? task.tags!.map((e) => e.toString()).toList().obs
           : <String>[].obs;
       previousTags = tags.toList().obs;
-      depends = "".split(",").obs;
+      // For TaskForC block:
+      depends = (task.depends ?? []).obs;
       rtype = "".obs;
       recur = "".obs;
       annotations = <Annotation>[].obs;
@@ -81,7 +82,9 @@ class TaskcDetailsController extends GetxController {
           ? task.tags!.map((e) => e.toString()).toList().obs
           : <String>[].obs;
       previousTags = tags.toList().obs;
-      depends = "".split(",").obs;
+
+      // For TaskForReplica block:
+      depends = (task.depends ?? []).obs;
       rtype = "".obs;
       recur = "".obs;
       annotations = <Annotation>[].obs;
@@ -496,6 +499,53 @@ class TaskcDetailsController extends GetxController {
                 SentenceManager(currentLanguage: AppSettings.selectedLanguage)
                     .sentences
                     .save),
+          ),
+        ],
+      ),
+    );
+  }
+  Future<void> showDependencyPicker() async {
+    // Get all pending tasks except current
+    final allTasks = await taskDatabase.fetchTasksFromDatabase(); 
+    final BuildContext context = Get.context!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
+
+    await Get.dialog(
+      AlertDialog(
+        backgroundColor: tColors.secondaryBackgroundColor,
+        title: Text('Select Dependencies', style: TextStyle(color: tColors.primaryTextColor)),
+        content: StatefulBuilder(
+          builder: (context, setState) {
+            return SizedBox(
+              width: double.maxFinite,
+              child: ListView(
+                shrinkWrap: true,
+                children: allTasks
+                    .where((t) => t.uuid != initialTask.uuid && t.status == 'pending')
+                    .map((t) => CheckboxListTile(
+                          title: Text(t.description, style: TextStyle(color: tColors.primaryTextColor)),
+                          value: depends.contains(t.uuid),
+                          onChanged: (checked) {
+                            setState(() {
+                              if (checked == true) {
+                                depends.add(t.uuid!);
+                              } else {
+                                depends.remove(t.uuid);
+                              }
+                              hasChanges.value = true;
+                            });
+                          },
+                        ))
+                    .toList(),
+              ),
+            );
+          },
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text('Done', style: TextStyle(color: tColors.primaryTextColor)),
           ),
         ],
       ),

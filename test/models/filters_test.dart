@@ -1,9 +1,14 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:taskwarrior/app/models/filters.dart';
-import 'package:taskwarrior/app/services/tag_filter.dart';
+import 'package:taskwarrior/app/models/tag_filters.dart';
+
 
 void main() {
   group('Filters', () {
+
+    late bool completedFilter;
+    late bool deletedFilter;
+
     late Filters filters;
     late bool pendingFilter;
     late bool waitingFilter;
@@ -12,6 +17,9 @@ void main() {
     late Map<String, TagFilterMetadata> tags;
 
     setUp(() {
+      completedFilter = false;
+      deletedFilter = false;
+
       pendingFilter = false;
       waitingFilter = false;
       projectFilter = 'TestProject';
@@ -24,11 +32,19 @@ void main() {
       filters = Filters(
         pendingFilter: pendingFilter,
         waitingFilter: waitingFilter,
+        completedFilter: completedFilter,
+        deletedFilter: deletedFilter,
         togglePendingFilter: () {
           pendingFilter = !pendingFilter;
         },
         toggleWaitingFilter: () {
           waitingFilter = !waitingFilter;
+        },
+        toggleCompletedFilter: () {
+          completedFilter = !completedFilter;
+        },
+        toggleDeletedFilter: () {
+          deletedFilter = !deletedFilter;
         },
         tagFilters: TagFilters(
           tagUnion: tagUnion,
@@ -49,6 +65,7 @@ void main() {
           projectFilter = project;
         },
       );
+
     });
 
     test('should correctly initialize with given parameters', () {

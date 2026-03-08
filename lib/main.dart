@@ -2,8 +2,8 @@ import 'dart:ffi';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart'; // ADD THIS
 import 'package:get/get.dart';
-// 1. Add this import
 import 'package:app_links/app_links.dart';
 import 'package:taskwarrior/app/services/deep_link_service.dart';
 
@@ -51,6 +51,22 @@ void main() async {
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
       themeMode: AppSettings.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+
+      // ADD THESE 3 PROPERTIES
+      locale: AppSettings.selectedLocale,        // null = follow system
+      supportedLocales: const [
+        Locale('en'),
+        Locale('hi'),
+        Locale('mr'),
+        Locale('fr'),
+        Locale('es'),
+        Locale('bn'),
+      ],
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
     ),
   );
 }

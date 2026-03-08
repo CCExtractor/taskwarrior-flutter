@@ -30,8 +30,6 @@ class AppSettings {
     } else {
       // If no explicit preference, use the system language (if supported)
       selectedLanguage = SupportedLanguageExtension.getSystemLanguage();
-      // Save the system language as the user's preference
-      await SelectedLanguage.saveSelectedLanguage(selectedLanguage);
     }
     use24HourFormatRx.value = SelectedTimeFormat.getTimeFormat() ?? false;
   }
@@ -41,5 +39,12 @@ class AppSettings {
     await SelectedTheme.saveMode(isDarkMode);
     await SelectedLanguage.saveSelectedLanguage(language);
     await SelectedTimeFormat.saveTimeFormat(use24hour);
+  }
+
+  static Locale? get selectedLocale {
+    // If user explicitly saved a language, return it
+    String? saved = SelectedLanguage.getRawCode();
+    if (saved == null || saved.isEmpty) return null;  // null = follow system
+    return Locale(AppSettings.selectedLanguage.languageCode);
   }
 }

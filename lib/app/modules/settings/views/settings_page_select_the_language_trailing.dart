@@ -44,6 +44,8 @@ class SettingsPageSelectTheLanguageTrailing extends StatelessWidget {
 
   String _getLanguageName(SupportedLanguage language) {
     switch (language) {
+      case SupportedLanguage.system:
+        return 'Follow System Language';
       case SupportedLanguage.english:
         return 'English';
       case SupportedLanguage.hindi:
