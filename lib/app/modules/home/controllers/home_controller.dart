@@ -41,6 +41,7 @@ import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class HomeController extends GetxController {
+  static const String noProjectValue = " (No Project) ";
   final SplashController splashController = Get.find<SplashController>();
   late Storage storage;
   final RxBool pendingFilter = false.obs;
@@ -262,6 +263,9 @@ class HomeController extends GetxController {
 
     if (projectFilter.value.isNotEmpty) {
       queriedTasks.value = queriedTasks.where((task) {
+        if (projectFilter.value == noProjectValue) {
+          return task.project == null || task.project!.isEmpty;
+        }
         if (task.project == null) {
           return false;
         } else {
