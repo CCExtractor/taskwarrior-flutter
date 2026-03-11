@@ -412,6 +412,8 @@ class MarathiSentences extends Sentences {
   @override
   String get noProjectsFound => 'प्रकल्प सापडले नाहीत';
   @override
+  String get noProject => 'कोणताही प्रकल्प नाही';
+  @override
   String get project => 'प्रकल्प';
 
   @override

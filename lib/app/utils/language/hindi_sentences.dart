@@ -406,6 +406,8 @@ class HindiSentences extends Sentences {
   @override
   String get noProjectsFound => 'कोई परियोजना नहीं मिली';
   @override
+  String get noProject => 'कोई प्रोजेक्ट नहीं';
+  @override
   String get project => 'परियोजना';
 
   @override

@@ -404,6 +404,8 @@ class UrduSentences extends Sentences {
   @override
   String get noProjectsFound => 'کوئی پراجیکٹ نہیں ملا';
   @override
+  String get noProject => 'کوئی پروجیکٹ نہیں';
+  @override
   String get project => 'پراجیکٹ';
 
   @override

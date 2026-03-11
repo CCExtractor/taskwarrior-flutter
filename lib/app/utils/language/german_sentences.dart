@@ -401,6 +401,8 @@ class GermanSentences extends Sentences {
   @override
   String get noProjectsFound => 'Keine Projekte gefunden';
   @override
+  String get noProject => 'Kein Projekt';
+  @override
   String get project => 'Projekt';
 
   @override
