@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:get/get.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,7 +16,9 @@ class AppSettings {
   static final RxBool use24HourFormatRx = false.obs;
 
   static Future init() async {
-    await HomeWidget.setAppGroupId("group.taskwarrior");
+    if (Platform.isIOS || Platform.isAndroid) {
+      await HomeWidget.setAppGroupId("group.taskwarrior");
+    }
     await SelectedTheme.init();
     await SelectedLanguage.init();
     await SaveTourStatus.init();

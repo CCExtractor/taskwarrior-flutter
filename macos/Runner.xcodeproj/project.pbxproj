@@ -240,6 +240,7 @@
 				33CC10EB2044A3C60003C045 /* Resources */,
 				33CC110E2044A8840003C045 /* Bundle Framework */,
 				3399D490228B24CF009A79C7 /* ShellScript */,
+				B47EAE0DA7514E2B9140D50B /* Embed Rust Framework */,
 				57127D9BFB21B6F0C92D052B /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -362,6 +363,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "echo \"$PRODUCT_NAME.app\" > \"$PROJECT_DIR\"/Flutter/ephemeral/.app_filename && \"$FLUTTER_ROOT\"/packages/flutter_tools/bin/macos_assemble.sh embed\n";
+		};
+		B47EAE0DA7514E2B9140D50B /* Build and Embed Rust Framework */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build and Embed Rust Framework";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/tc_helper.framework/tc_helper",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\n\nRUST_DIR=\"$SRCROOT/../rust\"\nFRAMEWORK_DIR=\"$SRCROOT/Frameworks/tc_helper.framework\"\nRUST_LIB=\"$RUST_DIR/target/aarch64-apple-darwin/release/libtc_helper.dylib\"\n\nexport PATH=\"$HOME/.cargo/bin:$PATH\"\n\nif ! command -v cargo &>/dev/null; then\n  echo 'error: cargo not found. Install Rust from https://rustup.rs' >&2\n  exit 1\nfi\n\nrustup target add aarch64-apple-darwin 2>/dev/null || true\ncargo build --release --target aarch64-apple-darwin --manifest-path \"$RUST_DIR/Cargo.toml\"\n\nmkdir -p \"$FRAMEWORK_DIR\"\ncp -f \"$RUST_LIB\" \"$FRAMEWORK_DIR/tc_helper\"\ninstall_name_tool -id \"@rpath/tc_helper.framework/tc_helper\" \"$FRAMEWORK_DIR/tc_helper\"\n\nFRAMEWORK_DST=\"$BUILT_PRODUCTS_DIR/$FRAMEWORKS_FOLDER_PATH/tc_helper.framework\"\nmkdir -p \"$FRAMEWORK_DST\"\ncp -f \"$FRAMEWORK_DIR/tc_helper\" \"$FRAMEWORK_DST/tc_helper\"\ncodesign --force --sign \"$EXPANDED_CODE_SIGN_IDENTITY\" --preserve-metadata=identifier,entitlements \"$FRAMEWORK_DST/tc_helper\" 2>/dev/null || true\n";
 		};
 		33CC111E2044C6BF0003C045 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -557,7 +578,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -639,7 +660,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -689,7 +710,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
