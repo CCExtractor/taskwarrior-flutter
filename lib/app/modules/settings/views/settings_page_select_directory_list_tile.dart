@@ -54,15 +54,16 @@ class SettingsPageSelectDirectoryListTile extends StatelessWidget {
           ),
           IntrinsicHeight(
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 // Reset to Default Button
                 Expanded(
-                  child: TextButton(
-                    style: ButtonStyle(
-                      backgroundColor: WidgetStateProperty.all<Color>(
-                        tColors.secondaryBackgroundColor!,
+                  child: OutlinedButton.icon(
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(color: tColors.purpleShade!),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
                     onPressed: () async {
                       if (await controller.getBaseDirectory() == "Default") {
@@ -169,7 +170,8 @@ class SettingsPageSelectDirectoryListTile extends StatelessWidget {
                         );
                       }
                     },
-                    child: Text(
+                    icon: Icon(Icons.restore, color: tColors.purpleShade, size: 20),
+                    label: Text(
                       SentenceManager(
                               currentLanguage:
                                   controller.selectedLanguage.value)
@@ -178,24 +180,31 @@ class SettingsPageSelectDirectoryListTile extends StatelessWidget {
                       textAlign: TextAlign.center,
                       softWrap: true,
                       maxLines: 2,
-                      style: TextStyle(
+                      style: GoogleFonts.poppins(
                         color: tColors.purpleShade,
+                        fontSize: TaskWarriorFonts.fontSizeSmall,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: 12),
 
                 // Change Directory Button
                 Expanded(
-                  child: TextButton(
-                    style: ButtonStyle(
-                      backgroundColor: WidgetStateProperty.all<Color>(
-                        tColors.secondaryBackgroundColor!,
+                  child: ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: tColors.purpleShade,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      elevation: 2,
                     ),
                     onPressed: () => controller.pickDirectory(context),
-                    child: Text(
+                    icon: const Icon(Icons.folder_open, size: 20),
+                    label: Text(
                       SentenceManager(
                               currentLanguage:
                                   controller.selectedLanguage.value)
@@ -205,7 +214,11 @@ class SettingsPageSelectDirectoryListTile extends StatelessWidget {
                       softWrap: true,
                       maxLines: 2,
                       overflow: TextOverflow.visible,
-                      style: TextStyle(color: tColors.purpleShade),
+                      style: GoogleFonts.poppins(
+                        color: Colors.white,
+                        fontSize: TaskWarriorFonts.fontSizeSmall,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),
