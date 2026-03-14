@@ -59,6 +59,7 @@ class DeleteProfileDialog extends StatelessWidget {
                   try {
                     var splashController = Get.find<SplashController>();
                     await splashController.deleteProfile(profile);
+                    if (!context.mounted) return;
                     // Navigator.of(context).pop();
                     if (splashController
                             .getMode(splashController.currentProfile.value) !=
@@ -77,6 +78,7 @@ class DeleteProfileDialog extends StatelessWidget {
                         backgroundColor: tColors.secondaryBackgroundColor,
                         duration: const Duration(seconds: 2)));
                   } catch (e) {
+                    if (!context.mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
                           '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.profilePageProfile}: ${profile.characters} ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.profileDeletionFailed}',

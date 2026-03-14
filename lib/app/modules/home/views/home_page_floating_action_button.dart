@@ -43,6 +43,7 @@ class HomePageFloatingActionButton extends StatelessWidget {
                 forReplica: controller.taskReplica.value,
               ),
             ).then((value) {
+              if (!context.mounted) return;
               if (controller.isSyncNeeded.value && value != "cancel") {
                 controller.isNeededtoSyncOnStart(context);
               }

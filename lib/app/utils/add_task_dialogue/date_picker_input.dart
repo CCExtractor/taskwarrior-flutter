@@ -101,6 +101,8 @@ class _AddTaskDatePickerInputState extends State<AddTaskDatePickerInput> {
           lastDate: DateTime(2101),
         );
 
+        if (!context.mounted) return;
+
         // FIX: Check if date was selected before showing time picker
         if (picked == null) {
           return; // User canceled date picker, exit early
@@ -111,6 +113,8 @@ class _AddTaskDatePickerInputState extends State<AddTaskDatePickerInput> {
           context: context,
           initialTime: TimeOfDay.now(),
         );
+
+        if (!context.mounted) return;
 
         // If user cancels time picker, still set the date with default time
         if (time == null) {

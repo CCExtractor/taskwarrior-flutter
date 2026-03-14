@@ -66,6 +66,7 @@ dependencies:
   built_collection: ^5.1.1
   textfield_tags: ^3.0.1
   path_provider: ^2.1.5
+  path: ^1.9.1
   flutter_rust_bridge: ^2.11.1
   ffi: any  # Required for FFI
   app_links: ^6.4.1

@@ -89,17 +89,15 @@ class ReportsController extends GetxController
     Future.delayed(
       const Duration(milliseconds: 500),
       () {
-        SaveTourStatus.getReportsTourStatus().then((value) => {
-              if (value == false)
-                {
-                  tutorialCoachMark.show(context: context),
-                }
-              else
-                {
-                  // ignore: avoid_print
-                  print('User has seen this page'),
-                }
-            });
+        SaveTourStatus.getReportsTourStatus().then((value) {
+          if (!context.mounted) return;
+          if (value == false) {
+            tutorialCoachMark.show(context: context);
+          } else {
+            // ignore: avoid_print
+            print('User has seen this page');
+          }
+        });
       },
     );
   }

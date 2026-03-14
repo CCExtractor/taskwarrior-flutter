@@ -345,6 +345,7 @@ class AddTaskBottomSheet extends StatelessWidget {
           depends: [],
           annotations: []);
       await homeController.taskdb.insertTask(task);
+      if (!context.mounted) return;
       homeController.namecontroller.text = '';
       homeController.due.value = null;
       homeController.priority.value = 'M';
@@ -422,6 +423,7 @@ class AddTaskBottomSheet extends StatelessWidget {
             duration: const Duration(seconds: 2)));
 
         final SharedPreferences prefs = await SharedPreferences.getInstance();
+        if (!context.mounted) return;
         bool? value;
         value = prefs.getBool('sync-OnTaskCreate') ?? false;
         // late InheritedStorage storageWidget;
@@ -467,6 +469,7 @@ class AddTaskBottomSheet extends StatelessWidget {
           "wait": getWaitDate(homeController.selectedDates)?.toUtc(),
           "tags": homeController.tags,
         }));
+        if (!context.mounted) return;
         homeController.namecontroller.text = '';
         homeController.projectcontroller.text = '';
         homeController.dueString.value = "";
@@ -500,6 +503,7 @@ class AddTaskBottomSheet extends StatelessWidget {
             duration: const Duration(seconds: 2)));
 
         final SharedPreferences prefs = await SharedPreferences.getInstance();
+        if (!context.mounted) return;
         bool? value;
         value = prefs.getBool('sync-OnTaskCreate') ?? false;
         // late InheritedStorage storageWidget;
@@ -510,6 +514,7 @@ class AddTaskBottomSheet extends StatelessWidget {
         }
         await storageWidget.refreshReplicaTaskList();
       } on FormatException catch (e) {
+        if (!context.mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
               e.message,

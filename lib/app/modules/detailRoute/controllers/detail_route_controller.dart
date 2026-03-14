@@ -191,9 +191,12 @@ class DetailRouteController extends GetxController {
     Future.delayed(
       const Duration(milliseconds: 500),
       () {
-        SaveTourStatus.getDetailsTourStatus().then((value) => {
-              if (!value) {tutorialCoachMark.show(context: context)}
-            });
+        SaveTourStatus.getDetailsTourStatus().then((value) {
+          if (!context.mounted) return;
+          if (!value) {
+            tutorialCoachMark.show(context: context);
+          }
+        });
       },
     );
   }
