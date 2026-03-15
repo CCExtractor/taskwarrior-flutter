@@ -1,8 +1,10 @@
 // ignore_for_file: depend_on_referenced_packages
 
+import 'dart:io';
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:taskwarrior/app/modules/home/controllers/widget.controller.dart';
 import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
 import 'package:taskwarrior/app/tour/details_page_tour.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
@@ -91,6 +93,12 @@ class DetailRouteController extends GetxController {
     var now = DateTime.now().toUtc();
     modify.save(modified: () => now);
     onEdit.value = false;
+
+    if (Platform.isAndroid || Platform.isIOS) {
+      WidgetController widgetController = Get.put(WidgetController());
+      widgetController.fetchAllData();
+      widgetController.update();
+    }
 
     // Show snackbar
     Get.snackbar(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'package:taskwarrior/app/modules/home/views/add_task_bottom_sheet_new.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
@@ -27,28 +28,28 @@ class HomePageFloatingActionButton extends StatelessWidget {
             color: tColors.secondaryBackgroundColor,
           ),
         ),
-        onPressed: () => (showModalBottomSheet(
-              backgroundColor: tColors.dialogBackgroundColor,
-              context: context,
-              isScrollControlled: true,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(0),
-                  topRight: Radius.circular(0),
-                ),
+        onPressed: () {
+          Get.bottomSheet(
+            AddTaskBottomSheet(
+              homeController: controller,
+              forTaskC: controller.taskchampion.value,
+              forReplica: controller.taskReplica.value,
+            ),
+            backgroundColor: tColors.dialogBackgroundColor,
+            isScrollControlled: true,
+            ignoreSafeArea: true,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(0),
+                topRight: Radius.circular(0),
               ),
-              builder: (context) => AddTaskBottomSheet(
-                homeController: controller,
-                forTaskC: controller.taskchampion.value,
-                forReplica: controller.taskReplica.value,
-              ),
-            ).then((value) {
-              if (controller.isSyncNeeded.value && value != "cancel") {
-                controller.isNeededtoSyncOnStart(context);
-              }
-            }))
-
-        // .then((value) {
+            ),
+          ).then((value) {
+            if (controller.isSyncNeeded.value && value != "cancel") {
+              controller.isNeededtoSyncOnStart(context);
+            }
+          });
+        },        // .then((value) {
         //   // print(value);
 
         //   //if auto sync is turned on
@@ -65,3 +66,4 @@ class HomePageFloatingActionButton extends StatelessWidget {
         );
   }
 }
+

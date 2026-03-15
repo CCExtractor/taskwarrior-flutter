@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:taskwarrior/app/modules/home/controllers/widget.controller.dart';
 import 'package:get/get.dart';
 import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -222,10 +224,20 @@ class TaskReplicaViewBuilder extends StatelessWidget {
   void completeTask(TaskForReplica task) async {
     await Replica.modifyTaskInReplica(task.copyWith(status: 'completed'));
     Get.find<HomeController>().refreshReplicaTaskList();
+    if (Platform.isAndroid || Platform.isIOS) {
+      WidgetController widgetController = Get.put(WidgetController());
+      widgetController.fetchAllData();
+      widgetController.update();
+    }
   }
 
   void deleteTask(TaskForReplica task) async {
     await Replica.deleteTaskFromReplica(task.uuid);
     Get.find<HomeController>().refreshReplicaTaskList();
+    if (Platform.isAndroid || Platform.isIOS) {
+      WidgetController widgetController = Get.put(WidgetController());
+      widgetController.fetchAllData();
+      widgetController.update();
+    }
   }
 }

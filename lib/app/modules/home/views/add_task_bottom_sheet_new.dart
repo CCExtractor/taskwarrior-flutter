@@ -34,15 +34,16 @@ class AddTaskBottomSheet extends StatelessWidget {
     debugPrint(
         "Building Add Task Bottom Sheet for ${forTaskC ? "TaskC" : forReplica ? "Replica" : "Normal Task"}");
     const padding = 12.0;
-    return Padding(
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom,
-      ),
-      child: Form(
-        key: homeController.formKey,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
+    return SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: Form(
+          key: homeController.formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
             Padding(
               padding: const EdgeInsets.all(padding),
               child: Row(
@@ -89,55 +90,48 @@ class AddTaskBottomSheet extends StatelessWidget {
                 ],
               ),
             ),
-            Flexible(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(padding),
-                      child: TextFormField(
-                        controller: homeController.namecontroller,
-                        validator: (value) => value!.trim().isEmpty
-                            ? SentenceManager(
-                                    currentLanguage:
-                                        homeController.selectedLanguage.value)
-                                .sentences
-                                .descriprtionCannotBeEmpty
-                            : null,
-                        decoration: InputDecoration(
-                          labelText: SentenceManager(
-                                  currentLanguage:
-                                      homeController.selectedLanguage.value)
-                              .sentences
-                              .enterTaskDescription,
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                        padding: const EdgeInsets.all(padding),
-                        child: buildProjectInput(context)),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: padding, right: padding, top: padding),
-                      child: buildDatePicker(context),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(padding),
-                      child: buildPriority(context),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(padding),
-                      child: buildTagsInput(context),
-                    ),
-                    const Padding(padding: EdgeInsets.all(20)),
-                  ],
+            Padding(
+              padding: const EdgeInsets.all(padding),
+              child: TextFormField(
+                controller: homeController.namecontroller,
+                validator: (value) => value!.trim().isEmpty
+                    ? SentenceManager(
+                            currentLanguage:
+                                homeController.selectedLanguage.value)
+                        .sentences
+                        .descriprtionCannotBeEmpty
+                    : null,
+                decoration: InputDecoration(
+                  labelText: SentenceManager(
+                          currentLanguage:
+                              homeController.selectedLanguage.value)
+                      .sentences
+                      .enterTaskDescription,
+                  border: OutlineInputBorder(),
                 ),
               ),
             ),
+            Padding(
+                padding: const EdgeInsets.all(padding),
+                child: buildProjectInput(context)),
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: padding, right: padding, top: padding),
+              child: buildDatePicker(context),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(padding),
+              child: buildPriority(context),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(padding),
+              child: buildTagsInput(context),
+            ),
+            const Padding(padding: EdgeInsets.all(20)),
           ],
         ),
       ),
+    ),
     );
   }
 

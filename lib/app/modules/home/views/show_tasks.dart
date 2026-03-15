@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:taskwarrior/app/modules/home/controllers/widget.controller.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
@@ -231,6 +233,12 @@ class TaskViewBuilder extends StatelessWidget {
     await taskDatabase.open();
     taskDatabase.markTaskAsCompleted(uuid);
     completeTask('email', uuid);
+
+    if (Platform.isAndroid || Platform.isIOS) {
+      WidgetController widgetController = Get.put(WidgetController());
+      widgetController.fetchAllData();
+      widgetController.update();
+    }
   }
 
   void _markTaskAsDeleted(String uuid) async {
@@ -238,6 +246,12 @@ class TaskViewBuilder extends StatelessWidget {
     await taskDatabase.open();
     taskDatabase.markTaskAsDeleted(uuid);
     deleteTask('email', uuid);
+
+    if (Platform.isAndroid || Platform.isIOS) {
+      WidgetController widgetController = Get.put(WidgetController());
+      widgetController.fetchAllData();
+      widgetController.update();
+    }
   }
 
   Color _getPriorityColor(String priority) {
