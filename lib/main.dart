@@ -1,6 +1,6 @@
 import 'dart:ffi';
 import 'dart:io';
-import 'package:flutter/foundation.dart' show kIsWeb, debugPrintSynchronously;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:taskwarrior/app/services/deep_link_service.dart';
@@ -16,58 +16,69 @@ import 'app/routes/app_pages.dart';
 
 LogDatabaseHelper _logDatabaseHelper = LogDatabaseHelper();
 
-ExternalLibrary loadNativeLibrary() {
+DynamicLibrary loadNativeLibrary() {
   if (kIsWeb) {
     throw UnsupportedError("Native libraries are not supported on Web");
   }
 
   if (Platform.isIOS) {
-    return ExternalLibrary.open('Frameworks/tc_helper.framework/tc_helper');
+    return DynamicLibrary.open('Frameworks/tc_helper.framework/tc_helper');
   } else if (Platform.isAndroid) {
-    return ExternalLibrary.open('libtc_helper.so');
+    return DynamicLibrary.open('libtc_helper.so');
   } else if (Platform.isMacOS) {
-    return ExternalLibrary.open('tc_helper.framework/tc_helper');
+    return DynamicLibrary.open('tc_helper.framework/tc_helper');
   } else if (Platform.isLinux) {
-    return ExternalLibrary.open('libtc_helper.so');
-  } else if (Platform.isWindows) { // Add Windows back in!
-    return ExternalLibrary.open('tc_helper.dll');
+    return DynamicLibrary.open('libtc_helper.so');
+  } else if (Platform.isWindows) {
+    return DynamicLibrary.open('tc_helper.dll');
   }
   throw UnsupportedError(
       'Platform ${Platform.operatingSystem} is not supported');
 }
 
 void main() async {
-  // 1. Keep your Desktop SQLite fix 
+  // Initialize SQLite for Desktop platforms
   if (!kIsWeb && (Platform.isLinux || Platform.isWindows || Platform.isMacOS)) {
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
   }
-  // 2. Accept the project's early initialization
+
   WidgetsFlutterBinding.ensureInitialized();
-  // 3. Keep the shared Logger setup
+
+  // Redirect debug prints to the local database logger
   debugPrint = (String? message, {int? wrapWidth}) {
     if (message != null) {
       debugPrintSynchronously(message, wrapWidth: wrapWidth);
       _logDatabaseHelper.insertLog(message);
     }
   };
+
   debugPrint("🚀 BOOT: main() started");
-  // 4. Keep your Native Library loader
-  final lib = loadNativeLibrary();
-  await RustLib.init(externalLibrary: lib);
+
+  loadNativeLibrary();
+  await RustLib.init();
+
   await AppSettings.init();
-  // 5. Accept the new DeepLink logic from UPSTREAM
+
+  // fix: Actually await the service initialization so the OS intent is caught BEFORE runApp.
   await Get.putAsync<DeepLinkService>(() async {
     final service = DeepLinkService();
     await service.init();
     return service;
-  });
+  }, permanent: true);
   runApp(
     GetMaterialApp(
       darkTheme: darkTheme,
       theme: lightTheme,
       title: "Application",
       initialRoute: AppPages.INITIAL,
+      unknownRoute: AppPages.routes.firstWhere(
+        (page) => page.name == AppPages.INITIAL,
+        orElse: () {
+          debugPrint("⚠️ Unknown route requested, falling back to default");
+          return AppPages.routes.first;
+        },
+      ),
       getPages: AppPages.routes,
       themeMode: AppSettings.isDarkMode ? ThemeMode.dark : ThemeMode.light,
     ),
