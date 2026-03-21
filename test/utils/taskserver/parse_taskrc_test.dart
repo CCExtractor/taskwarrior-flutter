@@ -70,7 +70,25 @@ key3 =value3
       const contents = '';
       final result = parseTaskrc(contents);
 
+
       expect(result, {});
+    });
+
+    test('preserves values containing = characters (issue #611)', () {
+      const contents = '''
+taskd.certificate=LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0t==
+taskd.key=abc123==
+taskd.trust=yes
+simple.key=simplevalue
+''';
+      final result = parseTaskrc(contents);
+
+      expect(result, {
+        'taskd.certificate': 'LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0t==',
+        'taskd.key': 'abc123==',
+        'taskd.trust': 'yes',
+        'simple.key': 'simplevalue',
+      });
     });
   });
 }
