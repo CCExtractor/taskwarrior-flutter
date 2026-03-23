@@ -26,11 +26,6 @@ class HomeView extends GetView<HomeController> {
       credentials = Taskrc.fromString(contents).credentials;
     }
 
-    if (contents != null) {
-      server = Taskrc.fromString(contents).server;
-      credentials = Taskrc.fromString(contents).credentials;
-    }
-
     controller.checkForSync(context);
 
     return Obx(
@@ -44,10 +39,8 @@ class HomeView extends GetView<HomeController> {
             ? TaskWarriorColors.kprimaryBackgroundColor
             : TaskWarriorColors.kLightPrimaryBackgroundColor,
         drawer: NavDrawer(homeController: controller),
-
         drawerEnableOpenDragGesture: true,
         drawerEdgeDragWidth: 80,
-        
         body: HomePageBody(
           controller: controller,
         ),
