@@ -1,5 +1,3 @@
-#include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"
+// This configuration ensures Pods settings are applied for the Debug-production build.
 #include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.debug-production.xcconfig"
 #include "Generated.xcconfig"
-
-
