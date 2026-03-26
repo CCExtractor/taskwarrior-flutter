@@ -18,6 +18,7 @@ import 'package:taskwarrior/app/utils/taskfunctions/taskparser.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:taskwarrior/app/v3/champion/replica.dart';
 import 'package:taskwarrior/app/v3/models/task.dart';
+import 'package:taskwarrior/app/modules/ics_import/views/ics_import_bottom_sheet.dart';
 
 class AddTaskBottomSheet extends StatelessWidget {
   final HomeController homeController;
@@ -69,22 +70,38 @@ class AddTaskBottomSheet extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  TextButton(
-                    onPressed: () {
-                      if (forTaskC) {
-                        onSaveButtonClickedTaskC(context);
-                      } else if (forReplica) {
-                        debugPrint("Saving to Replica");
-                        onSaveButtonClickedForReplica(context);
-                      } else {
-                        onSaveButtonClicked(context);
-                      }
-                    },
-                    child: Text(SentenceManager(
-                            currentLanguage:
-                                homeController.selectedLanguage.value)
-                        .sentences
-                        .save),
+                  Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.system_update_alt),
+                        tooltip: "Import ICS",
+                        onPressed: () {
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            builder: (context) => IcsImportBottomSheet(homeController: homeController),
+                          );
+                        },
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          if (forTaskC) {
+                            onSaveButtonClickedTaskC(context);
+                          } else if (forReplica) {
+                            debugPrint("Saving to Replica");
+                            onSaveButtonClickedForReplica(context);
+                          } else {
+                            onSaveButtonClicked(context);
+                          }
+                        },
+                        child: Text(SentenceManager(
+                                currentLanguage:
+                                    homeController.selectedLanguage.value)
+                            .sentences
+                            .save),
+                      ),
+                    ],
                   ),
                 ],
               ),
