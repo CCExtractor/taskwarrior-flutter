@@ -12,6 +12,27 @@ enum SupportedLanguage {
 }
 
 extension SupportedLanguageExtension on SupportedLanguage {
+  String get nativeName {
+    switch (this) {
+      case SupportedLanguage.english:
+        return 'English';
+      case SupportedLanguage.hindi:
+        return 'हिन्दी';
+      case SupportedLanguage.marathi:
+        return 'मराठी';
+      case SupportedLanguage.french:
+        return 'Français';
+      case SupportedLanguage.spanish:
+        return 'Español';
+      case SupportedLanguage.bengali:
+        return 'বাংলা';
+      case SupportedLanguage.german:
+        return 'German';
+      case SupportedLanguage.urdu:
+        return 'اردو';
+    }
+  }
+
   String get languageCode {
     switch (this) {
       case SupportedLanguage.english:
