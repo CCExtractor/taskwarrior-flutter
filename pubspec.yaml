@@ -69,6 +69,8 @@ dependencies:
   flutter_rust_bridge: ^2.11.1
   ffi: any  # Required for FFI
   app_links: ^6.4.1
+  flutter_localizations:
+    sdk: flutter
 
 dev_dependencies:
   build_runner: null

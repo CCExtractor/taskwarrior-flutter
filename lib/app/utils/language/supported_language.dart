@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 enum SupportedLanguage {
+  system,
   english,
   hindi,
   marathi,
@@ -14,6 +15,8 @@ enum SupportedLanguage {
 extension SupportedLanguageExtension on SupportedLanguage {
   String get languageCode {
     switch (this) {
+      case SupportedLanguage.system:
+        return ''; // empty = follow system
       case SupportedLanguage.english:
         return 'en';
       case SupportedLanguage.hindi:
@@ -37,6 +40,8 @@ extension SupportedLanguageExtension on SupportedLanguage {
 
   static SupportedLanguage? fromCode(String? code) {
     switch (code) {
+      case 'system':
+        return SupportedLanguage.system;
       case 'en':
         return SupportedLanguage.english;
       case 'hi':
@@ -68,4 +73,12 @@ extension SupportedLanguageExtension on SupportedLanguage {
     // Return the supported language or default to English
     return supportedLanguage ?? SupportedLanguage.english;
   }
+
+  Locale toLocale() {
+    if (this == SupportedLanguage.system || languageCode.isEmpty) {
+      return const Locale('en');
+    }
+    return Locale(languageCode);
+  }
+  
 }

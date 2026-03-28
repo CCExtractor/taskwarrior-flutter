@@ -39,7 +39,7 @@ class Query {
     if (!_pendingFilter.existsSync()) {
       _pendingFilter
         ..createSync(recursive: true)
-        ..writeAsStringSync('true');
+        ..writeAsStringSync('false');
     }
     return json.decode(_pendingFilter.readAsStringSync());
   }
@@ -54,7 +54,7 @@ class Query {
     if (!_waitingFilter.existsSync()) {
       _waitingFilter
         ..createSync(recursive: true)
-        ..writeAsStringSync('true');
+        ..writeAsStringSync('false');
     }
     return json.decode(_waitingFilter.readAsStringSync());
   }

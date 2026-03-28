@@ -1,7 +1,11 @@
 // ignore_for_file: use_build_context_synchronously, unrelated_type_equality_checks
 
+import 'package:taskwarrior/app/utils/language/sentences.dart';
+
 import 'dart:collection';
 import 'dart:io';
+
+import 'package:taskwarrior/app/routes/app_pages.dart';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +22,8 @@ import 'package:taskwarrior/app/models/tag_meta_data.dart';
 import 'package:taskwarrior/app/modules/home/controllers/widget.controller.dart';
 import 'package:taskwarrior/app/modules/splash/controllers/splash_controller.dart';
 import 'package:taskwarrior/app/services/deep_link_service.dart';
-import 'package:taskwarrior/app/services/tag_filter.dart';
+import 'package:taskwarrior/app/models/tag_filters.dart';
+
 import 'package:taskwarrior/app/tour/filter_drawer_tour.dart';
 import 'package:taskwarrior/app/tour/home_page_tour.dart';
 import 'package:taskwarrior/app/tour/task_swipe_tour.dart';
@@ -40,12 +45,20 @@ import 'package:textfield_tags/textfield_tags.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
+import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
+
+
 class HomeController extends GetxController {
   final SplashController splashController = Get.find<SplashController>();
   late Storage storage;
+  final RxBool taskServerBannerShown = false.obs;
+  late Sentences sentences;
   final RxBool pendingFilter = false.obs;
   final RxBool waitingFilter = false.obs;
+  final RxBool hideBlocked = false.obs;
   final RxString projectFilter = ''.obs;
+  final RxBool completedFilter = false.obs;
+  final RxBool deletedFilter = false.obs;
   final RxBool tagUnion = false.obs;
   final RxString selectedSort = ''.obs;
   final RxSet<String> selectedTags = <String>{}.obs;
@@ -72,6 +85,9 @@ class HomeController extends GetxController {
   void onInit() {
     debugPrint("🚀 BOOT: HomeController.onInit()");
     super.onInit();
+    sentences = SentenceManager(
+      currentLanguage: AppSettings.selectedLanguage,
+    ).sentences;
     storage = Storage(
       Directory(
         '${splashController.baseDirectory.value.path}/profiles/${splashController.currentProfile.value}',
@@ -100,6 +116,8 @@ class HomeController extends GetxController {
     everAll([
       pendingFilter,
       waitingFilter,
+      completedFilter,   
+      deletedFilter,     
       projectFilter,
       tagUnion,
       selectedSort,
@@ -224,12 +242,7 @@ class HomeController extends GetxController {
 
   void _profileSet() {
     pendingFilter.value = Query(storage.tabs.tab()).getPendingFilter();
-    if (!Query(storage.tabs.tab()).getWaitingFilter()) {
-      waitingFilter.value = Query(storage.tabs.tab()).getWaitingFilter();
-    } else {
-      Query(storage.tabs.tab()).toggleWaitingFilter();
-      waitingFilter.value = Query(storage.tabs.tab()).getWaitingFilter();
-    }
+    waitingFilter.value = Query(storage.tabs.tab()).getWaitingFilter();
     projectFilter.value = Query(storage.tabs.tab()).projectFilter();
     tagUnion.value = Query(storage.tabs.tab()).tagUnion();
     selectedSort.value = Query(storage.tabs.tab()).getSelectedSort();
@@ -244,20 +257,44 @@ class HomeController extends GetxController {
   }
 
   void _refreshTasks() {
-    if (pendingFilter.value) {
+    
+    if (deletedFilter.value) {
+      queriedTasks.value = storage.data
+          .completedData()
+          .where((task) => task.status == 'deleted')
+          .toList();
+    } else if (completedFilter.value) {
+      queriedTasks.value = storage.data
+          .completedData()
+          .where((task) => task.status == 'completed')
+          .toList();
+    } else if (pendingFilter.value) {
       queriedTasks.value = storage.data
           .pendingData()
           .where((task) => task.status == 'pending')
           .toList();
     } else {
-      queriedTasks.value = storage.data.completedData();
+      var currentTime = DateTime.now();
+      queriedTasks.value = storage.data.pendingData().where((task) =>
+        task.status != 'waiting' &&
+        !(task.wait != null && task.wait!.isAfter(currentTime))
+      ).toList();
     }
 
+    if (hideBlocked.value) {
+      queriedTasks.value = queriedTasks
+          .where((task) => task.depends == null || task.depends!.isEmpty)
+          .toList();
+    }
+
+
+    // Rest of the method stays the same...
     if (waitingFilter.value) {
       var currentTime = DateTime.now();
-      queriedTasks.value = queriedTasks
-          .where((task) => task.wait != null && task.wait!.isAfter(currentTime))
-          .toList();
+      queriedTasks.value = storage.data.pendingData().where((task) =>
+        task.status == 'waiting' ||
+        (task.wait != null && task.wait!.isAfter(currentTime))
+      ).toList();
     }
 
     if (projectFilter.value.isNotEmpty) {
@@ -351,6 +388,22 @@ class HomeController extends GetxController {
   void toggleWaitingFilter() {
     Query(storage.tabs.tab()).toggleWaitingFilter();
     waitingFilter.value = Query(storage.tabs.tab()).getWaitingFilter();
+    _refreshTasks();
+  }
+
+  void toggleCompletedFilter() {
+    completedFilter.toggle();
+    if (completedFilter.value) {
+      deletedFilter.value = false;
+    }
+    _refreshTasks();
+  }
+
+  void toggleDeletedFilter() {
+    deletedFilter.toggle();
+    if (deletedFilter.value) {
+      completedFilter.value = false;
+    }
     _refreshTasks();
   }
 
@@ -544,6 +597,44 @@ class HomeController extends GetxController {
     _refreshTasks();
   }
 
+  void showTaskServerNotConfiguredBanner(BuildContext context) {
+    if (taskServerBannerShown.value) return;
+    
+    taskServerBannerShown.value = true;
+    final messenger = ScaffoldMessenger.of(context);
+    
+    messenger.clearMaterialBanners();
+    
+    messenger.showMaterialBanner(
+      MaterialBanner(
+        content: Text(sentences.homePageTaskWarriorNotConfigured),
+        actions: [
+          TextButton(
+            onPressed: () {
+              messenger.hideCurrentMaterialBanner();
+              taskServerBannerShown.value = false;  // ✅ RESET flag
+              Get.toNamed(Routes.MANAGE_TASK_SERVER);
+            },
+            child: Text(sentences.homePageSetup),
+          ),
+          TextButton(
+            onPressed: () {
+              messenger.hideCurrentMaterialBanner();
+              taskServerBannerShown.value = false;  // ✅ RESET flag
+            },
+            child: const Text('Dismiss'),
+          ),
+        ],
+      ),
+    );
+    
+    Future.delayed(const Duration(seconds: 5), () {
+      messenger.hideCurrentMaterialBanner();
+      taskServerBannerShown.value = false;  // ✅ RESET flag
+    });
+  }
+
+
   void renameTab({
     required String tab,
     required String name,
@@ -656,15 +747,26 @@ class HomeController extends GetxController {
       tags: tags,
       toggleTagFilter: toggleTagFilter,
     );
+    
+    // REPLACE this entire Filters() instantiation:
     var filters = Filters(
       pendingFilter: pendingFilter.value,
       waitingFilter: waitingFilter.value,
+      completedFilter: completedFilter.value,
+      deletedFilter: deletedFilter.value,
       togglePendingFilter: togglePendingFilter,
       toggleWaitingFilter: toggleWaitingFilter,
+      toggleCompletedFilter: toggleCompletedFilter,
+      toggleDeletedFilter: toggleDeletedFilter,
       projects: projects,
       projectFilter: projectFilter.value,
       toggleProjectFilter: toggleProjectFilter,
       tagFilters: tagFilters,
+      hideBlocked: hideBlocked.value,
+      toggleHideBlocked: () {
+        hideBlocked.value = !hideBlocked.value;
+        _refreshTasks();
+      },
     );
     return filters;
   }
