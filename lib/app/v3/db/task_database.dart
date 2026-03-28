@@ -240,18 +240,19 @@ class TaskDatabase {
   }
 
   Future<void> saveEditedTaskInDB(
-    String uuid,
-    String newDescription,
-    String newProject,
-    String newStatus,
-    String newPriority,
-    String newDue,
-    List<String> newTags,
-  ) async {
-    await ensureDatabaseIsOpen();
+  String uuid,
+  String newDescription,
+  String newProject,
+  String newStatus,
+  String newPriority,
+  String newDue,
+  List<String> newTags,
+) async {
+  await ensureDatabaseIsOpen();
 
-    debugPrint('task in saveEditedTaskInDB: $uuid with due $newDue');
-    await _database!.update(
+  await _database!.transaction((txn) async {
+    // 1. Update task
+    await txn.update(
       'Tasks',
       {
         'description': newDescription,
@@ -264,12 +265,42 @@ class TaskDatabase {
       where: 'uuid = ?',
       whereArgs: [uuid],
     );
-    debugPrint('task${uuid}edited');
+
+    // 2. Get task ID inside transaction
+    final taskMaps = await txn.query(
+      'Tasks',
+      columns: ['id'],
+      where: 'uuid = ?',
+      whereArgs: [uuid],
+    );
+
+    if (taskMaps.isEmpty) return;
+
+    final taskId = taskMaps.first['id'] as int;
+
+    // 3. Update tags inside SAME transaction
     if (newTags.isNotEmpty) {
-      TaskForC? task = await getTaskByUuid(uuid);
-      await setTagsForTask(uuid, task?.id ?? 0, newTags.toList());
+      await txn.delete(
+        'Tags',
+        where: 'task_uuid = ? AND task_id = ?',
+        whereArgs: [uuid, taskId],
+      );
+
+      for (String tag in newTags) {
+        if (tag.trim().isNotEmpty) {
+          await txn.insert(
+            'Tags',
+            {
+              'name': tag,
+              'task_uuid': uuid,
+              'task_id': taskId,
+            },
+          );
+        }
+      }
     }
-  }
+  });
+}
 
   Future<List<TaskForC>> findTasksWithoutUUIDs() async {
     await ensureDatabaseIsOpen();
