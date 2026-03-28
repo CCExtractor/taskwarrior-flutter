@@ -16,8 +16,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taskwarrior/app/models/filters.dart';
 
 import 'package:taskwarrior/app/models/json/task.dart';
-import 'package:taskwarrior/app/models/storage.dart';
 import 'package:taskwarrior/app/models/storage/client.dart';
+import 'package:taskwarrior/app/models/storage.dart';
 import 'package:taskwarrior/app/models/tag_meta_data.dart';
 import 'package:taskwarrior/app/modules/home/controllers/widget.controller.dart';
 import 'package:taskwarrior/app/modules/splash/controllers/splash_controller.dart';
@@ -72,6 +72,7 @@ class HomeController extends GetxController {
   late RxBool serverCertExists;
   final Rx<SupportedLanguage> selectedLanguage = SupportedLanguage.english.obs;
   final ScrollController scrollController = ScrollController();
+  final FocusNode searchFocusNode = FocusNode();
   final RxBool showbtn = false.obs;
   late TaskDatabase taskdb;
   var tasks = <TaskForC>[].obs;
@@ -80,6 +81,7 @@ class HomeController extends GetxController {
 
   @override
   void onInit() {
+    debugPrint("🚀 BOOT: HomeController.onInit()");
     super.onInit();
     storage = Storage(
       Directory(
@@ -88,6 +90,7 @@ class HomeController extends GetxController {
     );
     serverCertExists = RxBool(storage.guiPemFiles.serverCertExists());
     addListenerToScrollController();
+
     _profileSet();
     loadDelayTask();
     initLanguageAndDarkMode();
@@ -139,9 +142,17 @@ class HomeController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    if (Get.isRegistered<DeepLinkService>()) {
-      Get.find<DeepLinkService>().consumePendingActions(this);
-    }
+    // Replaced 50ms delay with a secure PostFrameCallback
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (isClosed) return;
+
+      final deepLinkService = Get.find<DeepLinkService>();
+      if (deepLinkService.queuedUri != null) {
+        debugPrint(
+            "🚀 TRACE: HomeController.onReady() consuming deferred queue!");
+        deepLinkService.consumePendingActions(this);
+      }
+    });
   }
 
   Future<List<String>> getUniqueProjects() async {
@@ -529,6 +540,11 @@ class HomeController extends GetxController {
 
   void toggleSearch() {
     searchVisible.value = !searchVisible.value;
+    if (searchVisible.value) {
+      Future.delayed(const Duration(milliseconds: 300), () {
+        searchFocusNode.requestFocus();
+      });
+    }
     if (!searchVisible.value) {
       searchedTasks.assignAll(queriedTasks);
       searchController.text = '';
@@ -637,19 +653,45 @@ class HomeController extends GetxController {
 
   isNeededtoSyncOnStart(BuildContext context) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool? value;
-    value = prefs.getBool('sync-onStart') ?? false;
-    String? clientId, encryptionSecret;
-    clientId = await CredentialsStorage.getClientId();
-    encryptionSecret = await CredentialsStorage.getEncryptionSecret();
-    if (value) {
-      if (clientId == null || encryptionSecret == null) {
-        showTaskServerNotConfiguredBanner(context);
-        return;
-      }
+    final bool syncEnabled = prefs.getBool('sync-onStart') ?? false;
+    if (!syncEnabled) return;
 
-      synchronize(context, false);
-      refreshTasks(clientId, encryptionSecret);
+    final String? clientId = await CredentialsStorage.getClientId();
+    final String? encryptionSecret =
+        await CredentialsStorage.getEncryptionSecret();
+
+    try {
+      isRefreshing.value = true;
+      if (taskReplica.value) {
+        if (clientId != null && encryptionSecret != null) {
+          await refreshReplicaTasks();
+        }
+      } else if (taskchampion.value) {
+        if (clientId != null && encryptionSecret != null) {
+          await refreshTasks(clientId, encryptionSecret);
+        }
+      } else {
+        await synchronize(context, false);
+      }
+      if (context.mounted) {
+        final tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Sync Completed',
+              style: TextStyle(
+                color: tColors.primaryTextColor,
+              ),
+            ),
+            backgroundColor: tColors.primaryBackgroundColor,
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+    } catch (e) {
+      debugPrint('Error during sync on start: $e');
+    } finally {
+      isRefreshing.value = false;
     }
   }
 
@@ -940,4 +982,9 @@ class HomeController extends GetxController {
   //           forReplica: taskReplica.value));
   //   Get.dialog(showDialog);
   // }
+  @override
+  void onClose() {
+    searchFocusNode.dispose();
+    super.onClose();
+  }
 }

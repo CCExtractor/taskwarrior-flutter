@@ -37,7 +37,7 @@ fn get_all_tasks(taskdb_dir_path: String) -> Vec<HashMap<String, String>> {
 
     for (_, value) in replica.all_tasks().unwrap() {
         let mut map: HashMap<String, String> = HashMap::new();
-        let mut tags = String::new();
+        let mut tags = "".to_string();
 
         for (k, v) in value.get_taskmap() {
             if k.contains("tag_") {
@@ -49,7 +49,7 @@ fn get_all_tasks(taskdb_dir_path: String) -> Vec<HashMap<String, String>> {
                 map.insert(k.into(), v.into());
             }
         }
-        map.insert("tags".into(), tags);
+        map.insert("tags".into(), tags.trim().into());
         map.insert("uuid".into(), value.get_uuid().to_string());
         vector.push(map);
     }

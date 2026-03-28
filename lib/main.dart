@@ -3,8 +3,6 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-// 1. Add this import
-import 'package:app_links/app_links.dart';
 import 'package:taskwarrior/app/services/deep_link_service.dart';
 
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
@@ -29,6 +27,9 @@ DynamicLibrary loadNativeLibrary() {
 }
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Move the logger override ABOVE the first boot print!
   debugPrint = (String? message, {int? wrapWidth}) {
     if (message != null) {
       debugPrintSynchronously(message, wrapWidth: wrapWidth);
@@ -36,19 +37,32 @@ void main() async {
     }
   };
 
+  debugPrint("🚀 BOOT: main() started");
+
   loadNativeLibrary();
   await RustLib.init();
 
-  WidgetsFlutterBinding.ensureInitialized();
   await AppSettings.init();
 
-  Get.put<DeepLinkService>(DeepLinkService(), permanent: true);
+  // fix: Actually await the service initialization so the OS intent is caught BEFORE runApp.
+  await Get.putAsync<DeepLinkService>(() async {
+    final service = DeepLinkService();
+    await service.init();
+    return service;
+  }, permanent: true);
   runApp(
     GetMaterialApp(
       darkTheme: darkTheme,
       theme: lightTheme,
       title: "Application",
       initialRoute: AppPages.INITIAL,
+      unknownRoute: AppPages.routes.firstWhere(
+        (page) => page.name == AppPages.INITIAL,
+        orElse: () {
+          debugPrint("⚠️ Unknown route requested, falling back to default");
+          return AppPages.routes.first;
+        },
+      ),
       getPages: AppPages.routes,
       themeMode: AppSettings.isDarkMode ? ThemeMode.dark : ThemeMode.light,
     ),

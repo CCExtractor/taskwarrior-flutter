@@ -1,3 +1,4 @@
+import 'dart:async'; // Add this import at the top
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:app_links/app_links.dart';
@@ -7,20 +8,35 @@ import 'package:taskwarrior/app/routes/app_pages.dart';
 
 class DeepLinkService extends GetxService {
   late AppLinks _appLinks;
-  Uri? _queuedUri;
+  String? _queuedUri; // Made private
+  String? get queuedUri => _queuedUri; // Added getter
+  StreamSubscription<Uri>? _linkSubscription; // Added stream subscription
 
-  @override
-  void onReady() {
-    super.onReady();
-    _initDeepLinks();
-  }
-
-  void _initDeepLinks() {
+  Future<void> init() async {
     _appLinks = AppLinks();
-    _appLinks.uriLinkStream.listen((uri) {
+
+    try {
+      final initialUri = await _appLinks.getInitialLink();
+      if (initialUri != null) {
+        _queuedUri = initialUri.toString();
+        debugPrint('🔗 INITIAL LINK QUEUED: $_queuedUri');
+      }
+    } catch (e) {
+      debugPrint('Deep link init error: $e');
+    }
+
+    _linkSubscription = _appLinks.uriLinkStream.listen((uri) {
       debugPrint('🔗 LINK RECEIVED: $uri');
       _handleWidgetUri(uri);
+    }, onError: (err) {
+      debugPrint('🔗 LINK STREAM ERROR: $err');
     });
+  }
+
+  @override
+  void onClose() {
+    _linkSubscription?.cancel();
+    super.onClose();
   }
 
   void _handleWidgetUri(Uri uri) {
@@ -28,14 +44,18 @@ class DeepLinkService extends GetxService {
       _executeAction(uri, Get.find<HomeController>());
     } else {
       debugPrint("⏳ HomeController not ready. Queuing action.");
-      _queuedUri = uri;
+      _queuedUri = uri.toString();
     }
   }
 
   void consumePendingActions(HomeController controller) {
     if (_queuedUri != null) {
       debugPrint("🚀 Executing queued action...");
-      _executeAction(_queuedUri!, controller);
+      try {
+        _executeAction(Uri.parse(_queuedUri!), controller);
+      } catch (e) {
+        debugPrint("🔗 FAILED TO PARSE URI: $_queuedUri - Error: $e");
+      }
       _queuedUri = null;
     }
   }
@@ -54,15 +74,17 @@ class DeepLinkService extends GetxService {
       }
     } else if (uri.host == "addclicked") {
       if (Get.context != null) {
-        Get.dialog(
-          Material(
-            child: AddTaskBottomSheet(
-              homeController: controller,
-              forTaskC: isTaskChampion,
-              forReplica: isReplica,
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Get.dialog(
+            Material(
+              child: AddTaskBottomSheet(
+                homeController: controller,
+                forTaskC: isTaskChampion,
+                forReplica: isReplica,
+              ),
             ),
-          ),
-        );
+          );
+        });
       }
     }
   }
