@@ -97,17 +97,20 @@ class FilterDrawer extends StatelessWidget {
                               color: tColors.primaryTextColor,
                             )),
                         TextSpan(
-                            text: filters.pendingFilter
-                                ? SentenceManager(
-                                        currentLanguage: homeController
-                                            .selectedLanguage.value)
-                                    .sentences
-                                    .filterDrawerPending
-                                : SentenceManager(
-                                        currentLanguage: homeController
-                                            .selectedLanguage.value)
-                                    .sentences
-                                    .filterDrawerCompleted,
+                          text: filters.deletedFilter
+                              ? 'Deleted'
+                              : filters.completedFilter
+                                  ? SentenceManager(
+                                          currentLanguage:
+                                              homeController.selectedLanguage.value)
+                                      .sentences
+                                      .filterDrawerCompleted
+                                  : SentenceManager(
+                                          currentLanguage:
+                                              homeController.selectedLanguage.value)
+                                      .sentences
+                                      .filterDrawerPending,
+
                             style: TextStyle(
                               fontFamily: FontFamily.poppins,
                               fontSize: TaskWarriorFonts.fontSizeMedium,
@@ -116,7 +119,16 @@ class FilterDrawer extends StatelessWidget {
                       ],
                     ),
                   ),
-                  onTap: filters.togglePendingFilter,
+                  onTap: () {
+                    if (filters.deletedFilter) {
+                      filters.toggleDeletedFilter();
+                    } else if (filters.completedFilter) {
+                      filters.toggleCompletedFilter();
+                    } else {
+                      filters.togglePendingFilter();
+                    }
+                  },
+
                   textColor: tColors.primaryTextColor,
                 ),
               ),
@@ -137,31 +149,23 @@ class FilterDrawer extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                            !filters.waitingFilter
-                                ? SentenceManager(
-                                        currentLanguage: homeController
-                                            .selectedLanguage.value)
-                                    .sentences
-                                    .filterDrawerShowWaiting
-                                : SentenceManager(
-                                        currentLanguage: homeController
-                                            .selectedLanguage.value)
-                                    .sentences
-                                    .filterDrawerHideWaiting,
-                            style: TextStyle(
-                              fontFamily: FontFamily.poppins,
-                              fontSize: TaskWarriorFonts.fontSizeMedium,
-                              color: tColors.primaryTextColor,
-                            )),
+                          'Show Deleted',
+                          style: TextStyle(
+                            fontFamily: FontFamily.poppins,
+                            fontSize: TaskWarriorFonts.fontSizeMedium,
+                            color: tColors.primaryTextColor,
+                          ),
+                        ),
                         Switch(
-                          value: filters.waitingFilter,
-                          onChanged: (_) => filters.toggleWaitingFilter(),
-                        )
+                          value: filters.deletedFilter,
+                          onChanged: (_) => filters.toggleDeletedFilter(),
+                        ),
                       ],
                     ),
                   ),
                 ),
               ),
+
               const Divider(
                 color: Color.fromARGB(0, 48, 46, 46),
               ),

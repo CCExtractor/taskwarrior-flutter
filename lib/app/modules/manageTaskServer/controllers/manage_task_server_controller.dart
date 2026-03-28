@@ -24,7 +24,9 @@ class ManageTaskServerController extends GetxController {
   late RxString alias;
   Server? server;
   Credentials? credentials;
+  String? trust; 
   final TextEditingController taskrcContentController = TextEditingController();
+
   RxBool isTaskDServerActive = true.obs;
   RxBool hideKey = true.obs;
 
@@ -37,13 +39,12 @@ class ManageTaskServerController extends GetxController {
     alias = RxString(splashController.profilesMap[profile.value] ?? '');
     var contents = rc.Taskrc(storage.home.home).readTaskrc();
     if (contents != null) {
-      server = Taskrc.fromString(contents).server;
-      credentials = Taskrc.fromString(contents).credentials;
+      final taskrc = Taskrc.fromString(contents);
+      server = taskrc.server;
+      credentials = taskrc.credentials;
+      trust = taskrc.trust; // ⬅️ ADD THIS
     }
-    if (contents != null) {
-      server = Taskrc.fromString(contents).server;
-      credentials = Taskrc.fromString(contents).credentials;
-    }
+
     configureCredentialString();
     update();
   }
@@ -53,8 +54,7 @@ class ManageTaskServerController extends GetxController {
       var contents = await rootBundle.loadString('assets/.taskrc');
       rc.Taskrc(storage.home.home).addTaskrc(contents);
       var taskrc = Taskrc.fromString(contents);
-      server = taskrc.server;
-      credentials = taskrc.credentials;
+      trust = taskrc.trust;
       for (var entry in {
         'taskd.certificate': '.task/first_last.cert.pem',
         'taskd.key': '.task/first_last.key.pem',
@@ -96,11 +96,11 @@ class ManageTaskServerController extends GetxController {
 
         // Check if the server and credentials are present in the Taskrc object
         if (taskrc.server != null && taskrc.credentials != null) {
-          // Update the server and credentials variables
-
           server = taskrc.server;
           credentials = taskrc.credentials;
+          trust = taskrc.trust; // ⬅️ ADD THIS
           update();
+
 
           // Handle the case when server or credentials are missing in the Taskrc object
           Navigator.pop(context);
@@ -162,8 +162,16 @@ class ManageTaskServerController extends GetxController {
 
       if (credentialsString!.value.isNotEmpty && server.toString().isNotEmpty) {
         //print(credentialsString.value);
-        taskrcContentController.text =
-            "taskd.server=$server\ntaskd.credentials=${credentials!.org}/${credentials!.user}/$key";
+        var taskrcContent =
+            "taskd.server=$server\n"
+            "taskd.credentials=${credentials!.org}/${credentials!.user}/$key";
+
+        if (trust?.isNotEmpty == true) {
+          taskrcContent += "\ntaskd.trust=$trust"; // ⬅️ ADD THIS
+        }
+
+        taskrcContentController.text = taskrcContent;
+
 
         isTaskDServerActive.value = false;
       }
