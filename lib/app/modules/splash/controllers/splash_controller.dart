@@ -13,6 +13,7 @@ import 'package:taskwarrior/app/routes/app_pages.dart';
 import 'package:taskwarrior/app/utils/taskchampion/credentials_storage.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/profiles.dart';
 import 'package:taskwarrior/app/v3/models/task.dart';
+import 'package:taskwarrior/app/services/deep_link_service.dart';
 
 class SplashController extends GetxController {
   late Rx<Directory> baseDirectory = Directory('').obs;
@@ -22,15 +23,29 @@ class SplashController extends GetxController {
   Profiles get _profiles => Profiles(baseDirectory.value);
 
   @override
-  void onInit() async {
+  void onInit() {
+    debugPrint("🚀 BOOT: SplashController.onInit()");
     super.onInit();
+  }
+
+  @override
+  void onReady() async {
+    super.onReady();
+
+    await initBaseDir();
+    _checkProfiles();
+    profilesMap.value = _profiles.profilesMap();
+    currentProfile.value = _profiles.getCurrentProfile()!;
+
+    final deepLinkService = Get.find<DeepLinkService>();
+    if (deepLinkService.queuedUri != null) {
+      debugPrint("🚀 TRACE: Bypassing Splash routing for queued URI");
+      Get.offNamed(Routes.HOME);
+      return;
+    }
+
     await checkForUpdate();
-    initBaseDir().then((_) {
-      _checkProfiles();
-      profilesMap.value = _profiles.profilesMap();
-      currentProfile.value = _profiles.getCurrentProfile()!;
-      sendToNextPage();
-    });
+    sendToNextPage();
   }
 
   Future<void> initBaseDir() async {

@@ -5,10 +5,13 @@ import 'package:textfield_tags/textfield_tags.dart';
 
 class AddTaskTagsInput extends StatefulWidget {
   final Iterable<String> suggestions;
+  final Iterable<String> initialTags;
   final Function(List<String>)? onTagsChanges;
+
   const AddTaskTagsInput(
       {super.key,
       this.suggestions = const Iterable.empty(),
+      this.initialTags = const Iterable.empty(),
       this.onTagsChanges});
 
   @override
@@ -73,6 +76,7 @@ class _AddTaskTagsInputState extends State<AddTaskTagsInput> {
       fieldViewBuilder:
           (context, textEditingController, focusNode, onFieldSubmitted) {
         return TextFieldTags<String>(
+          initialTags: [...widget.initialTags],
           textEditingController: textEditingController,
           focusNode: focusNode,
           textfieldTagsController: stringTagController,

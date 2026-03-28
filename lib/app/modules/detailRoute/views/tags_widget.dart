@@ -99,17 +99,27 @@ class TagsRouteState extends State<TagsRoute> {
   Map<String, TagMetadata>? _pendingTags;
   ListBuilder<String>? draftTags;
 
-  void _addTag(String tag) {
-    if (tag.isNotEmpty) {
-      // Add this condition to ensure the tag is not empty
-      if (draftTags == null) {
-        draftTags = ListBuilder([tag]);
-      } else {
+  List<String> _parseTags(String input) {
+    return input
+        .split(',')
+        .map((e) => e.trim())
+        .where((e) => e.isNotEmpty)
+        .toList();
+  }
+
+  void _addTags(List<String> tags) {
+    if (tags.isEmpty) return;
+
+    draftTags ??= ListBuilder<String>();
+
+    for (final tag in tags) {
+      if (!draftTags!.build().contains(tag)) {
         draftTags!.add(tag);
       }
-      widget.callback(draftTags);
-      setState(() {});
     }
+
+    widget.callback(draftTags);
+    setState(() {});
   }
 
   void _removeTag(String tag) {
@@ -197,7 +207,7 @@ class TagsRouteState extends State<TagsRoute> {
                       !(draftTags?.build().contains(tag.key) ?? false)))
                     FilterChip(
                       backgroundColor: TaskWarriorColors.grey,
-                      onSelected: (_) => _addTag(tag.key),
+                      onSelected: (_) => _addTags([tag.key]),
                       label: Text(
                         '${tag.key} ${tag.value.frequency}',
                       ),
@@ -234,11 +244,22 @@ class TagsRouteState extends State<TagsRoute> {
                     color: tColors.primaryTextColor,
                   ),
                   validator: (value) {
-                    if (value != null) {
-                      if (value.isNotEmpty && value.contains(" ")) {
+                    final tags = _parseTags(value ?? '');
+
+                    if (tags.isEmpty) {
+                      return "Please enter a tag";
+                    }
+
+                    for (final tag in tags) {
+                      if (tag.contains(' ')) {
                         return "Tags cannot contain spaces";
                       }
+
+                      if (draftTags?.build().contains(tag) ?? false) {
+                        return "Tag already exists";
+                      }
                     }
+
                     return null;
                   },
                   autofocus: true,
@@ -264,9 +285,8 @@ class TagsRouteState extends State<TagsRoute> {
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
                       try {
-                        validateTaskTags(controller.text);
-                        _addTag(controller.text);
-                        // Navigator.of(context).pop();
+                        final tags = _parseTags(controller.text);
+                        _addTags(tags);
                         Get.back();
                       } on FormatException catch (e, trace) {
                         logError(e, trace);

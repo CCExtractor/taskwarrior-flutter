@@ -58,6 +58,10 @@ class SettingsPageSelectTheLanguageTrailing extends StatelessWidget {
         return 'Español';
       case SupportedLanguage.bengali:
         return 'বাংলা';
+      case SupportedLanguage.german:
+        return 'German';
+      case SupportedLanguage.urdu:
+        return 'اردو';
       default:
         return '';
     }

@@ -1,4 +1,12 @@
 abstract class Sentences {
+  /// CCSync UI additional sentences
+  String get ccsyncLoginInstruction;
+  String get ccsyncEasySyncTitle;
+  String get ccsyncOpenButton;
+
+  /// CCSync intro and self-hosted sentences
+  String get ccsyncIntro;
+  String get ccsyncSelfHosted;
   String get helloWorld;
 
   String get homePageTitle;
