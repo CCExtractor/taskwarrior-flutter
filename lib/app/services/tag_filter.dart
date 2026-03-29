@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class TagFilterMetadata {
   const TagFilterMetadata({
     required this.display,

@@ -240,67 +240,82 @@ class TaskDatabase {
   }
 
   Future<void> saveEditedTaskInDB(
-  String uuid,
-  String newDescription,
-  String newProject,
-  String newStatus,
-  String newPriority,
-  String newDue,
-  List<String> newTags,
-) async {
-  await ensureDatabaseIsOpen();
+    String uuid,
+    String newDescription,
+    String newProject,
+    String newStatus,
+    String newPriority,
+    String newDue,
+    List<String> newTags,
+  ) async {
+    await ensureDatabaseIsOpen();
 
-  await _database!.transaction((txn) async {
-    // 1. Update task
-    await txn.update(
-      'Tasks',
-      {
-        'description': newDescription,
-        'project': newProject,
-        'status': newStatus,
-        'priority': newPriority,
-        'due': newDue,
-        'modified': DateTime.now().toIso8601String(),
-      },
-      where: 'uuid = ?',
-      whereArgs: [uuid],
-    );
+    try {
+      await _database!.transaction((txn) async {
+        // 1. Update task
+        final updatedCount = await txn.update(
+          'Tasks',
+          {
+            'description': newDescription,
+            'project': newProject,
+            'status': newStatus,
+            'priority': newPriority,
+            'due': newDue,
+            'modified': DateTime.now().toIso8601String(),
+          },
+          where: 'uuid = ?',
+          whereArgs: [uuid],
+        );
 
-    // 2. Get task ID inside transaction
-    final taskMaps = await txn.query(
-      'Tasks',
-      columns: ['id'],
-      where: 'uuid = ?',
-      whereArgs: [uuid],
-    );
-
-    if (taskMaps.isEmpty) return;
-
-    final taskId = taskMaps.first['id'] as int;
-
-    // 3. Update tags inside SAME transaction
-    if (newTags.isNotEmpty) {
-      await txn.delete(
-        'Tags',
-        where: 'task_uuid = ? AND task_id = ?',
-        whereArgs: [uuid, taskId],
-      );
-
-      for (String tag in newTags) {
-        if (tag.trim().isNotEmpty) {
-          await txn.insert(
-            'Tags',
-            {
-              'name': tag,
-              'task_uuid': uuid,
-              'task_id': taskId,
-            },
-          );
+        if (updatedCount == 0) {
+          throw Exception("Task not found for uuid: $uuid");
         }
-      }
+
+        // 2. Get task ID safely
+        final taskMaps = await txn.query(
+          'Tasks',
+          columns: ['id'],
+          where: 'uuid = ?',
+          whereArgs: [uuid],
+        );
+
+        if (taskMaps.isEmpty) {
+          throw Exception("No task found after update for uuid: $uuid");
+        }
+
+        final int? taskId = taskMaps.first['id'] as int?;
+
+        if (taskId == null) {
+          throw StateError("Missing task id for task: ${taskMaps.first}");
+        }
+
+        // ✅ 3. ALWAYS delete old tags (fix critical bug)
+        await txn.delete(
+          'Tags',
+          where: 'task_uuid = ? AND task_id = ?',
+          whereArgs: [uuid, taskId],
+        );
+
+        // ✅ 4. Insert new tags (if any)
+        for (final tag in newTags) {
+          final trimmedTag = tag.trim();
+          if (trimmedTag.isNotEmpty) {
+            await txn.insert(
+              'Tags',
+              {
+                'name': trimmedTag,
+                'task_uuid': uuid,
+                'task_id': taskId,
+              },
+            );
+          }
+        }
+      });
+    } catch (e) {
+      // optional logging
+      rethrow;
     }
-  });
-}
+  }
 
   Future<List<TaskForC>> findTasksWithoutUUIDs() async {
     await ensureDatabaseIsOpen();

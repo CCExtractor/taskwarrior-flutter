@@ -8,7 +8,8 @@ import 'package:taskwarrior/app/utils/constants/constants.dart';
 class OnboardingPageBottomSection extends StatelessWidget {
   final OnboardingController controller;
   final PageController pageController;
-  const OnboardingPageBottomSection({super.key, required this.controller,required this.pageController});
+  const OnboardingPageBottomSection(
+      {super.key, required this.controller, required this.pageController});
 
   @override
   Widget build(BuildContext context) {

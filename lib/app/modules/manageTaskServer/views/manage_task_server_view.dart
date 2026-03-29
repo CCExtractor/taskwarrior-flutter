@@ -1,6 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 
-
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -14,7 +13,8 @@ class ManageTaskServerView extends GetView<ManageTaskServerController> {
   const ManageTaskServerView({super.key});
   @override
   Widget build(BuildContext context) {
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Scaffold(
       appBar: ManageTaskServerPageAppBar(controller: controller),
       backgroundColor: tColors.primaryBackgroundColor,

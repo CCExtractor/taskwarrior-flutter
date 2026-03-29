@@ -28,7 +28,6 @@ class ProfileController extends GetxController {
     tutorialCoachMark = TutorialCoachMark(
       targets: addProfilePage(
         currentProfileKey: currentProfileKey,
-
         addNewProfileKey: addNewProfileKey,
         manageSelectedProfileKey: manageSelectedProfileKey,
       ),

@@ -13,8 +13,7 @@ void main() {
     ..tags.replace(['tag1', 'tag2'])
     ..status = 'pending'
     ..uuid = 'uuid1'
-    ..description = 'Task 1 Description'
-  );
+    ..description = 'Task 1 Description');
 
   final task2 = Task((builder) => builder
     ..entry = DateTime(2024, 7, 19)
@@ -26,8 +25,7 @@ void main() {
     ..tags.replace(['tag1'])
     ..status = 'pending'
     ..uuid = 'uuid2'
-    ..description = 'Task 2 Description'
-  );
+    ..description = 'Task 2 Description');
 
   test('Test compareTasks for Created column', () {
     final compare = compareTasks('Created');

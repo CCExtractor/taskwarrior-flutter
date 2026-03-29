@@ -17,7 +17,8 @@ class BurnDownMonthly extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var height = Get.height;
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -36,8 +37,7 @@ class BurnDownMonthly extends StatelessWidget {
                       fontFamily: FontFamily.poppins,
                       fontWeight: TaskWarriorFonts.bold,
                       fontSize: TaskWarriorFonts.fontSizeSmall,
-                      color:
-                          tColors.primaryTextColor,
+                      color: tColors.primaryTextColor,
                     )),
               ),
               primaryYAxis: NumericAxis(
@@ -50,8 +50,7 @@ class BurnDownMonthly extends StatelessWidget {
                       fontFamily: FontFamily.poppins,
                       fontWeight: TaskWarriorFonts.bold,
                       fontSize: TaskWarriorFonts.fontSizeSmall,
-                      color:
-                          tColors.primaryTextColor,
+                      color: tColors.primaryTextColor,
                     )),
               ),
               tooltipBehavior:

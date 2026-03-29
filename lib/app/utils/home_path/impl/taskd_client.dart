@@ -3,8 +3,6 @@
 import 'dart:async';
 import 'dart:io';
 
-
-
 import 'package:taskwarrior/app/models/storage/exceptions/taskserver_configuration_exception.dart';
 import 'package:taskwarrior/app/utils/taskc/impl/codec.dart';
 import 'package:taskwarrior/app/utils/taskc/impl/message.dart';
@@ -12,7 +10,6 @@ import 'package:taskwarrior/app/utils/taskc/message.dart';
 import 'package:taskwarrior/app/utils/taskc/response.dart';
 import 'package:taskwarrior/app/utils/taskserver/pem_file_paths.dart';
 import 'package:taskwarrior/app/utils/taskserver/taskrc.dart';
-
 
 enum TaskserverProgress {
   connecting,

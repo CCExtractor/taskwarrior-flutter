@@ -4,7 +4,6 @@ import 'package:file_picker_writable/file_picker_writable.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:taskwarrior/app/models/storage.dart';
 
-
 Future<void> setConfig({required Storage storage, required String key}) async {
   String? contents;
   String? name;

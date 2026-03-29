@@ -24,7 +24,8 @@ class GermanSentences extends Sentences {
   @override
   String get homePageDue => 'Fällig';
   @override
-  String get homePageTaskWarriorNotConfigured => 'TaskServer ist nicht konfiguriert';
+  String get homePageTaskWarriorNotConfigured =>
+      'TaskServer ist nicht konfiguriert';
   @override
   String get homePageSetup => 'Einrichtung';
   @override
@@ -71,7 +72,8 @@ class GermanSentences extends Sentences {
   String get settingsPageSyncOnStartDescription =>
       'Automatische Synchronisierung beim Start der App';
   @override
-  String get settingsPageEnableSyncOnTaskCreateTitle => 'Synchronisiere bei Erstellen neuer Aufgabe';
+  String get settingsPageEnableSyncOnTaskCreateTitle =>
+      'Synchronisiere bei Erstellen neuer Aufgabe';
   @override
   String get settingsPageEnableSyncOnTaskCreateDescription =>
       'Automatische Synchronisierung beim Erstellen einer neuen Aufgabe aktivieren';
@@ -81,7 +83,8 @@ class GermanSentences extends Sentences {
   String get settingsPageHighlightTaskDescription =>
       'Hebe Aufgaben hervor, die innerhalb eines Tages fällig oder bereits überfällig sind';
   @override
-  String get settingsPageEnable24hrFormatTitle => '24-Stunden-Format aktivieren';
+  String get settingsPageEnable24hrFormatTitle =>
+      '24-Stunden-Format aktivieren';
   @override
   String get settingsPageEnable24hrFormatDescription =>
       'Nach rechts schalten, um das 24-Stunden-Format zu aktivieren';
@@ -215,7 +218,8 @@ class GermanSentences extends Sentences {
   @override
   String get reportsPageNoTasksFound => 'Keine Aufgaben gefunden';
   @override
-  String get reportsPageAddTasksToSeeReports => 'Füge Aufgaben hinzu, um Berichte zu sehen';
+  String get reportsPageAddTasksToSeeReports =>
+      'Füge Aufgaben hinzu, um Berichte zu sehen';
 
   @override
   String get taskchampionTileDescription =>
@@ -263,7 +267,8 @@ class GermanSentences extends Sentences {
   String get profilePageSuccessfullyChangedProfileModeTo =>
       'Profilmodus erfolgreich geändert auf';
   @override
-  String get profilePageCopyConfigToNewProfile => 'Kopiere Konfiguration zu neuem Profil';
+  String get profilePageCopyConfigToNewProfile =>
+      'Kopiere Konfiguration zu neuem Profil';
   @override
   String get profilePageDeleteProfile => 'Profil löschen';
   @override
@@ -281,11 +286,11 @@ class GermanSentences extends Sentences {
   @override
   String get profilePageExportTasksDialogueTitle => 'Exportformat';
   @override
-  String get profilePageExportTasksDialogueSubtitle =>
-      'Wähle das Exportformat';
+  String get profilePageExportTasksDialogueSubtitle => 'Wähle das Exportformat';
 
   @override
-  String get manageTaskServerPageConfigureTaskserver => 'Konfiguriere Aufgaben-Server';
+  String get manageTaskServerPageConfigureTaskserver =>
+      'Konfiguriere Aufgaben-Server';
   @override
   String get manageTaskServerPageConfigureTASKRC => 'Konfiguriere TASKRC';
   @override
@@ -339,9 +344,11 @@ class GermanSentences extends Sentences {
   @override
   String get addTaskAdd => "Hinzufügen";
   @override
-  String get addTaskTimeInPast => "Die gewählte Zeit liegt in der Vergangenheit.";
+  String get addTaskTimeInPast =>
+      "Die gewählte Zeit liegt in der Vergangenheit.";
   @override
-  String get addTaskFieldCannotBeEmpty => "Du kannst dieses Feld nicht leer lassen!";
+  String get addTaskFieldCannotBeEmpty =>
+      "Du kannst dieses Feld nicht leer lassen!";
   @override
   String get addTaskTaskAddedSuccessfully =>
       "Aufgabe erfolgreich hinzugefügt. Antippen zum Bearbeiten";
@@ -375,7 +382,8 @@ class GermanSentences extends Sentences {
   String get submit => "Senden";
 
   @override
-  String get saveChangesConfirmation => 'Möchtest du deine Änderungen speichern?';
+  String get saveChangesConfirmation =>
+      'Möchtest du deine Änderungen speichern?';
   @override
   String get yes => 'Ja';
   @override
@@ -508,7 +516,8 @@ class GermanSentences extends Sentences {
   @override
   String get profileConfigCopied => 'Profilkonfiguration kopiert';
   @override
-  String get profileConfigCopyFailed => 'Profilkonfiguration kopieren fehlgeschlagen';
+  String get profileConfigCopyFailed =>
+      'Profilkonfiguration kopieren fehlgeschlagen';
   @override
   String get profileDeletedSuccessfully => 'Löschen erfolgreich';
   @override
@@ -555,11 +564,14 @@ class GermanSentences extends Sentences {
 
   // Tour strings - reports
   @override
-  String get tourReportsDaily => "Greife auf deine aktuellen täglichen Berichte hier zu";
+  String get tourReportsDaily =>
+      "Greife auf deine aktuellen täglichen Berichte hier zu";
   @override
-  String get tourReportsWeekly => "Greife auf deine aktuellen wöchentlichen Berichte hier zu";
+  String get tourReportsWeekly =>
+      "Greife auf deine aktuellen wöchentlichen Berichte hier zu";
   @override
-  String get tourReportsMonthly => "Greife auf deine aktuellen monatlichen Berichte hier zu";
+  String get tourReportsMonthly =>
+      "Greife auf deine aktuellen monatlichen Berichte hier zu";
 
   // Tour strings - profile
   @override
@@ -589,9 +601,11 @@ class GermanSentences extends Sentences {
   @override
   String get tourHomeSearch => "Suche Aufgaben";
   @override
-  String get tourHomeRefresh => "Aktualisier oder synchronisiere deine Aufgaben";
+  String get tourHomeRefresh =>
+      "Aktualisier oder synchronisiere deine Aufgaben";
   @override
-  String get tourHomeFilter => "Filter hinzufügen, um Aufgaben und Projekte zu sortieren";
+  String get tourHomeFilter =>
+      "Filter hinzufügen, um Aufgaben und Projekte zu sortieren";
   @override
   String get tourHomeMenu => "Greif auf weitere Einstellung hier zu";
 
@@ -602,14 +616,16 @@ class GermanSentences extends Sentences {
   @override
   String get tourFilterProjects => "Filtere Aufgaben basierend auf Projekten";
   @override
-  String get tourFilterTagUnion => "Zwischen AND und OR Tag-Vereinigungstypen umschalten";
+  String get tourFilterTagUnion =>
+      "Zwischen AND und OR Tag-Vereinigungstypen umschalten";
   @override
   String get tourFilterSort =>
       "Sortiere Aufgaben nach Erstellungszeitpunkt, Dringlichkeit, Fälligkeitsdatum, Startdatum usw.";
 
   // Tour strings - details page
   @override
-  String get tourDetailsDue => "Dies bezeichnet das Fälligkeitsdatum der Aufgabe";
+  String get tourDetailsDue =>
+      "Dies bezeichnet das Fälligkeitsdatum der Aufgabe";
   @override
   String get tourDetailsWait =>
       "Dies gibt das Wartedatum der Aufgabe an \n Die Aufgabe wird nach diesem Datum sichtbar sein";
@@ -636,7 +652,8 @@ class GermanSentences extends Sentences {
   @override
   String get tagAlreadyExists => "Tag existiert bereits";
   @override
-  String get tagShouldNotContainSpaces => "Tag sollte keine Leerzeichen enthalten";
+  String get tagShouldNotContainSpaces =>
+      "Tag sollte keine Leerzeichen enthalten";
   @override
   String get date => "Datum";
   @override
@@ -644,7 +661,8 @@ class GermanSentences extends Sentences {
   @override
   String get change => "Ändern";
   @override
-  String get dateCanNotBeInPast => "Datum kann nicht in der Vergangenheit liegen";
+  String get dateCanNotBeInPast =>
+      "Datum kann nicht in der Vergangenheit liegen";
   @override
   String get configureTaskchampion => 'Konfiguriere Taskchampion';
   @override
@@ -656,7 +674,8 @@ class GermanSentences extends Sentences {
   @override
   String get success => 'Erfolg';
   @override
-  String get credentialsSavedSuccessfully => 'Anmeldedaten erfolgreich gespeichert';
+  String get credentialsSavedSuccessfully =>
+      'Anmeldedaten erfolgreich gespeichert';
   @override
   String get saveCredentials => 'Speichern';
   @override

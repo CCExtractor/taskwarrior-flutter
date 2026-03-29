@@ -8,11 +8,13 @@ class PermissionsManager {
     try {
       for (var permission in permissions) {
         final status = await _requestPermission(permission);
-        
+
         if (status) {
-          print("Permission '${permission.toString().split('.').last}' granted.");
+          print(
+              "Permission '${permission.toString().split('.').last}' granted.");
         } else {
-          print("Permission '${permission.toString().split('.').last}' denied.");
+          print(
+              "Permission '${permission.toString().split('.').last}' denied.");
         }
       }
     } catch (e) {

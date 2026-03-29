@@ -21,7 +21,8 @@ class ManageTaskServerPageBody extends StatelessWidget {
   Widget build(BuildContext context) {
     controller.initManageTaskServerPageTour();
     controller.showManageTaskServerPageTour(context);
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20),
       child: ListView(
@@ -107,15 +108,15 @@ class ManageTaskServerPageBody extends StatelessWidget {
                                             height: Get.height * 0.15,
                                             child: TextField(
                                               style: TextStyle(
-                                                  color: tColors.primaryTextColor
-                                                  ),
+                                                  color:
+                                                      tColors.primaryTextColor),
                                               controller: controller
                                                   .taskrcContentController,
                                               maxLines: 8,
                                               decoration: InputDecoration(
                                                 counterStyle: TextStyle(
-                                                    color: tColors.primaryTextColor
-                                                  ),
+                                                    color: tColors
+                                                        .primaryTextColor),
                                                 suffixIconConstraints:
                                                     const BoxConstraints(
                                                   maxHeight: 24,
@@ -131,15 +132,15 @@ class ManageTaskServerPageBody extends StatelessWidget {
                                                       Icons.content_paste),
                                                 ),
                                                 border:
-                                                  const OutlineInputBorder(),
-                                                  labelStyle: GoogleFonts.poppins(
-                                                    color:tColors.primaryTextColor,
-                                                  ),
+                                                    const OutlineInputBorder(),
+                                                labelStyle: GoogleFonts.poppins(
+                                                  color:
+                                                      tColors.primaryTextColor,
+                                                ),
                                                 labelText: SentenceManager(
                                                         currentLanguage:
                                                             AppSettings
-                                                                .selectedLanguage
-                                                    )
+                                                                .selectedLanguage)
                                                     .sentences
                                                     .manageTaskServerPageConfigureTaskRCDialogueBoxInputFieldText,
                                               ),
@@ -158,8 +159,9 @@ class ManageTaskServerPageBody extends StatelessWidget {
                                         ),
                                         FilledButton.tonal(
                                           style: ButtonStyle(
-                                              backgroundColor: WidgetStateProperty.all<Color>(tColors.secondaryBackgroundColor!)
-                                          ),
+                                              backgroundColor: WidgetStateProperty
+                                                  .all<Color>(tColors
+                                                      .secondaryBackgroundColor!)),
                                           onPressed: () async {
                                             await setConfig(
                                               storage: controller.storage,
@@ -316,7 +318,8 @@ class ManageTaskServerPageBody extends StatelessWidget {
                                           )
                                         : Icon(
                                             Icons.chevron_right_rounded,
-                                            color: tColors.secondaryBackgroundColor,
+                                            color: tColors
+                                                .secondaryBackgroundColor,
                                           ),
                                   ),
                                 ),
@@ -401,7 +404,8 @@ class ManageTaskServerPageBody extends StatelessWidget {
                                     child: controller.credentials == null
                                         ? Icon(
                                             Icons.chevron_right_rounded,
-                                            color: tColors.primaryBackgroundColor,
+                                            color:
+                                                tColors.primaryBackgroundColor,
                                           )
                                         : Icon(
                                             controller.hideKey.value

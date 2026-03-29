@@ -7,8 +7,6 @@ import 'package:taskwarrior/app/models/json/annotation.dart';
 import 'package:taskwarrior/app/models/json/iso_8601_basic.dart';
 import 'package:taskwarrior/app/models/json/task.dart';
 
-
-
 part 'serializers.g.dart';
 
 @SerializersFor([

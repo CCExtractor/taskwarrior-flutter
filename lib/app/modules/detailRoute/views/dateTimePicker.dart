@@ -68,7 +68,8 @@ class DateTimeWidget extends StatelessWidget {
                       text: value ??
                           SentenceManager(
                                   currentLanguage: AppSettings.selectedLanguage)
-                              .sentences.notSelected,
+                              .sentences
+                              .notSelected,
                       // style: GoogleFonts.poppins(
                       //   fontSize: TaskWarriorFonts.fontSizeMedium,
                       //   color: AppSettings.isDarkMode
@@ -258,9 +259,11 @@ class StartWidget extends StatelessWidget {
                       ),
                     ),
                     TextSpan(
-                      text: value ?? SentenceManager(
-                              currentLanguage: AppSettings.selectedLanguage)
-                          .sentences.notSelected,
+                      text: value ??
+                          SentenceManager(
+                                  currentLanguage: AppSettings.selectedLanguage)
+                              .sentences
+                              .notSelected,
                       // style: GoogleFonts.poppins(
                       //   fontSize: TaskWarriorFonts.fontSizeMedium,
                       //   color: AppSettings.isDarkMode

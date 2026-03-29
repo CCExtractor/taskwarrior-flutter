@@ -27,7 +27,7 @@ void main() {
 
   setUpAll(() {
     sqfliteFfiInit();
-    
+
     // Mock SharedPreferences plugin
     const MethodChannel('plugins.flutter.io/shared_preferences')
         .setMockMethodCallHandler((MethodCall methodCall) async {

@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:taskwarrior/app/models/json/task.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/urgency.dart';
 
-
 int Function(Task, Task) compareTasks(String column) {
   return (a, b) {
     int? result;

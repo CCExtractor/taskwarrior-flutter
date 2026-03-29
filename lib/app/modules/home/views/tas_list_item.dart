@@ -29,7 +29,8 @@ class TaskListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     // ignore: unused_element
     void saveChanges() async {
       var now = DateTime.now().toUtc();
@@ -62,7 +63,7 @@ class TaskListItem extends StatelessWidget {
     }
 
     MaterialColor colours = Colors.grey;
-    Color colour =tColors.primaryTextColor!;
+    Color colour = tColors.primaryTextColor!;
     Color dimColor = tColors.dimCol!;
     if (task.priority == 'H') {
       colours = Colors.red;

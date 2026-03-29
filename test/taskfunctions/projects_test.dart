@@ -41,8 +41,10 @@ void main() {
       'projectX.subprojectZ.subsubprojectB',
       'projectX.subprojectZ.subsubprojectC',
     });
-    expect(result2['projectX.subprojectZ.subsubprojectA']!.parent, 'projectX.subprojectZ');
-    expect(result2['projectX.subprojectZ.subsubprojectC']!.parent, 'projectX.subprojectZ');
+    expect(result2['projectX.subprojectZ.subsubprojectA']!.parent,
+        'projectX.subprojectZ');
+    expect(result2['projectX.subprojectZ.subsubprojectC']!.parent,
+        'projectX.subprojectZ');
 
     var projects3 = {
       'rootProject': 0,
@@ -63,8 +65,7 @@ void main() {
       'projectP.subprojectQ',
       'projectP.subprojectQ.subsubprojectR',
     });
-    expect(result4['projectP.subprojectQ.subsubprojectR']!.parent, 'projectP.subprojectQ');
-
-
+    expect(result4['projectP.subprojectQ.subsubprojectR']!.parent,
+        'projectP.subprojectQ');
   });
 }

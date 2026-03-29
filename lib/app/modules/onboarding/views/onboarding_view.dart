@@ -14,40 +14,42 @@ class OnboardingView extends GetView<OnboardingController> {
     double height = Get.height;
 
     PageController pageController = PageController();
-    return Obx(() => Scaffold(
-          backgroundColor: contents[controller.getCurrentPage].colors,
-          body: SafeArea(
-            child: Column(
-              children: [
-                Expanded(
-                  flex: 5,
-                  child: PageView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    controller: pageController,
-                    onPageChanged: (value) {
-                      controller.setCurrentPage(value);
-                    },
-                    itemCount: contents.length,
-                    itemBuilder: (context, i) {
-                      return OnboardingPage(onboardingModel: contents[i]);
-                    },
+    return Obx(
+      () => Scaffold(
+        backgroundColor: contents[controller.getCurrentPage].colors,
+        body: SafeArea(
+          child: Column(
+            children: [
+              Expanded(
+                flex: 5,
+                child: PageView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  controller: pageController,
+                  onPageChanged: (value) {
+                    controller.setCurrentPage(value);
+                  },
+                  itemCount: contents.length,
+                  itemBuilder: (context, i) {
+                    return OnboardingPage(onboardingModel: contents[i]);
+                  },
+                ),
+              ),
+              SizedBox(
+                height: height * 5 / 100,
+              ),
+              Expanded(
+                flex: 1,
+                child: SingleChildScrollView(
+                  child: OnboardingPageBottomSection(
+                    controller: controller,
+                    pageController: pageController,
                   ),
                 ),
-                SizedBox(
-                  height: height * 5 / 100,
-                ),
-                Expanded(
-                  flex: 1,
-                  child: SingleChildScrollView(
-                    child: OnboardingPageBottomSection(
-                      controller: controller,
-                      pageController: pageController,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ),);
+        ),
+      ),
+    );
   }
 }

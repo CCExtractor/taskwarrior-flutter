@@ -12,9 +12,12 @@ class AboutView extends GetView<AboutController> {
   const AboutView({super.key});
   @override
   Widget build(BuildContext context) {
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Scaffold(
-      appBar: AboutPageAppBar(aboutController: controller,),
+      appBar: AboutPageAppBar(
+        aboutController: controller,
+      ),
       backgroundColor: tColors.primaryBackgroundColor,
       body: AboutPageBody(
         aboutController: controller,

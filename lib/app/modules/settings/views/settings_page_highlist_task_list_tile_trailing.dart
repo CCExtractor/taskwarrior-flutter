@@ -6,7 +6,6 @@ import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
 
 import '../controllers/settings_controller.dart';
 
-
 class SettingsPageHighlistTaskListTileTrailing extends StatelessWidget {
   final SettingsController controller;
   const SettingsPageHighlistTaskListTileTrailing(

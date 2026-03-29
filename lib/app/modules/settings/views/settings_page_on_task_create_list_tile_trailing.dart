@@ -5,7 +5,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controllers/settings_controller.dart';
 
-
 class SettingsPageOnTaskCreateListTileTrailing extends StatelessWidget {
   final SettingsController controller;
   const SettingsPageOnTaskCreateListTileTrailing(

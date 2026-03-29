@@ -1,5 +1,3 @@
-
-
 import 'package:taskwarrior/app/models/models.dart';
 
 String formatUrgency(double urgency) {

@@ -7,7 +7,6 @@ import 'package:taskwarrior/app/utils/home_path/impl/home.dart';
 import 'package:taskwarrior/app/utils/home_path/impl/taskrc.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/query.dart';
 
-
 class Storage {
   const Storage(this.profile);
 

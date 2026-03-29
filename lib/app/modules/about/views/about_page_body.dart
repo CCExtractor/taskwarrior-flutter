@@ -18,7 +18,8 @@ class AboutPageBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     String introduction =
         SentenceManager(currentLanguage: aboutController.selectedLanguage.value)
             .sentences
@@ -218,9 +219,7 @@ class AboutPageBody extends StatelessWidget {
                         height: 20,
                         colorFilter: ColorFilter.mode(
                             tColors.secondaryBackgroundColor!,
-                            BlendMode.srcIn
-                            )
-                        ),
+                            BlendMode.srcIn)),
                     label: Text(
                       "CCExtractor",
                       style: TextStyle(

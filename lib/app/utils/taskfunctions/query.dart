@@ -107,6 +107,8 @@ class Query {
         ..createSync(recursive: true)
         ..writeAsStringSync(json.encode([]));
     }
-    return (json.decode(_selectedTags.readAsStringSync()) as List).cast<String>().toSet();
+    return (json.decode(_selectedTags.readAsStringSync()) as List)
+        .cast<String>()
+        .toSet();
   }
 }

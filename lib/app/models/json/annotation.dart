@@ -4,8 +4,6 @@ import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:taskwarrior/app/models/json/serializers.dart';
 
-
-
 part 'annotation.g.dart';
 
 abstract class Annotation implements Built<Annotation, AnnotationBuilder> {

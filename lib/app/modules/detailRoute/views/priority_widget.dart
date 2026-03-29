@@ -21,7 +21,8 @@ class PriorityWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     final Color? textColor = isEditable
         ? tColors.primaryTextColor
         : tColors.primaryDisabledTextColor;

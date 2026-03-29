@@ -2,8 +2,6 @@ import 'dart:math';
 
 import 'package:taskwarrior/app/models/models.dart';
 
-
-
 Set<String> tagSet(Iterable<Task> tasks) {
   return tasks.where((task) => task.tags != null).fold(
       <String>{}, (aggregate, task) => aggregate..addAll(task.tags!.toList()));

@@ -23,7 +23,8 @@ class ProjectsColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Column(
       children: [
         Padding(
@@ -49,7 +50,13 @@ class ProjectsColumn extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        projectFilter == "" ? SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.notSelected : projectFilter,
+                        projectFilter == ""
+                            ? SentenceManager(
+                                    currentLanguage:
+                                        AppSettings.selectedLanguage)
+                                .sentences
+                                .notSelected
+                            : projectFilter,
                         style: TextStyle(
                           fontFamily: FontFamily.poppins,
                           fontSize: TaskWarriorFonts.fontSizeSmall,
@@ -68,8 +75,10 @@ class ProjectsColumn extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(SentenceManager(
-                      currentLanguage: AppSettings.selectedLanguage).sentences.allProjects,
+              Text(
+                  SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                      .sentences
+                      .allProjects,
                   style: TextStyle(
                     fontFamily: FontFamily.poppins,
                     fontSize: TaskWarriorFonts.fontSizeSmall,
@@ -91,8 +100,7 @@ class ProjectsColumn extends StatelessWidget {
           Column(
             children: [
               Text(
-                SentenceManager(
-                        currentLanguage: AppSettings.selectedLanguage)
+                SentenceManager(currentLanguage: AppSettings.selectedLanguage)
                     .sentences
                     .noProjectsFound,
                 style: TextStyle(
@@ -127,7 +135,8 @@ class ProjectTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
 
     var node = projects[project]!;
 
@@ -135,20 +144,17 @@ class ProjectTile extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Flexible(
-          child: Text(
-            project,
-            style: GoogleFonts.poppins(
-                color: tColors.primaryTextColor,
-            ),
-          ) 
-        ),
+            child: Text(
+          project,
+          style: GoogleFonts.poppins(
+            color: tColors.primaryTextColor,
+          ),
+        )),
         Text(
           (node.children.isEmpty)
               ? '${node.subtasks}'
               : '(${node.tasks}) ${node.subtasks}',
-          style: GoogleFonts.poppins(
-              color: tColors.primaryTextColor
-           ),
+          style: GoogleFonts.poppins(color: tColors.primaryTextColor),
         )
       ],
     );

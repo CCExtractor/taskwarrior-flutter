@@ -19,7 +19,8 @@ class BurnDownWeekly extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     var height = Get.height;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -39,8 +40,7 @@ class BurnDownWeekly extends StatelessWidget {
                       fontFamily: FontFamily.poppins,
                       fontWeight: TaskWarriorFonts.bold,
                       fontSize: TaskWarriorFonts.fontSizeSmall,
-                      color:
-                          tColors.primaryTextColor,
+                      color: tColors.primaryTextColor,
                     )),
               ),
               primaryYAxis: NumericAxis(
@@ -53,8 +53,7 @@ class BurnDownWeekly extends StatelessWidget {
                       fontFamily: FontFamily.poppins,
                       fontWeight: TaskWarriorFonts.bold,
                       fontSize: TaskWarriorFonts.fontSizeSmall,
-                      color:
-                          tColors.primaryTextColor,
+                      color: tColors.primaryTextColor,
                     )),
               ),
               tooltipBehavior: reportsController.weeklyBurndownTooltipBehaviour,

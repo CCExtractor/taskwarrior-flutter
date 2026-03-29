@@ -9,7 +9,6 @@ import 'package:taskwarrior/app/models/json/annotation.dart';
 import 'package:taskwarrior/app/models/json/serializers.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/validate.dart';
 
-
 part 'task.g.dart';
 
 final coreAttributes = [

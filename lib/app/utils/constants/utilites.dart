@@ -101,7 +101,9 @@ class Utils {
       shape: shape,
       alignment: alignment,
       scrollable: scrollable,
-      backgroundColor:AppSettings.isDarkMode? TaskWarriorColors.kdialogBackGroundColor : TaskWarriorColors.kLightDialogBackGroundColor,
+      backgroundColor: AppSettings.isDarkMode
+          ? TaskWarriorColors.kdialogBackGroundColor
+          : TaskWarriorColors.kLightDialogBackGroundColor,
     );
   }
 }

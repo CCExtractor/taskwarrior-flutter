@@ -7,7 +7,8 @@ void main() {
 
     expect(() => validateTaskDescription(''), throwsFormatException);
 
-    expect(() => validateTaskDescription('Do something\\'), throwsFormatException);
+    expect(
+        () => validateTaskDescription('Do something\\'), throwsFormatException);
   });
 
   test('validateTaskProject', () {

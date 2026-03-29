@@ -85,7 +85,7 @@ void main() {
       expect(draft.draft.id, original.id);
 
       expect(draft.draft.description, original.description);
-	  
+
       expect(draft.draft.status, original.status);
     });
   });

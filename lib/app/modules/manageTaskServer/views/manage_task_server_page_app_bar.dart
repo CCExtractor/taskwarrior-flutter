@@ -29,7 +29,8 @@ class ManageTaskServerPageAppBar extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return AppBar(
       backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
       titleSpacing: 0,

@@ -29,7 +29,8 @@ class PemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
     String fingerprint(String pemContents) {
       var firstCertificateBlock = decodePemBlocks(
         PemLabel.certificate,
