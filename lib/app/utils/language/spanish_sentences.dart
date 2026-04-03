@@ -2,18 +2,18 @@ import 'package:taskwarrior/app/utils/language/sentences.dart';
 
 class SpanishSentences extends Sentences {
   @override
-  String get ccsyncLoginInstruction =>
-      'Inicia sesión en CCSync, copia tus credenciales y pégalas arriba.';
+  String get syncLoginInstruction =>
+      'Inicia sesión en Sync, copia tus credenciales y pégalas arriba.';
   @override
-  String get ccsyncEasySyncTitle => 'Usa CCSync para una sincronización fácil';
+  String get syncEasySyncTitle => 'Usa Sync para una sincronización fácil';
   @override
-  String get ccsyncOpenButton => 'Abrir CCSync';
+  String get syncOpenButton => 'Abrir Sync';
   @override
-  String get ccsyncIntro =>
-      'CCSync utiliza TaskChampion para sincronizar tus tareas en múltiples dispositivos sin problemas. También obtienes un panel web para gestionar tus tareas desde cualquier navegador.';
+  String get syncIntro =>
+      'Sync utiliza TaskChampion para sincronizar tus tareas en varios dispositivos de forma fluida. También obtienes un panel web para administrar tus tareas desde cualquier navegador.';
   @override
-  String get ccsyncSelfHosted =>
-      'O utiliza tus propias credenciales de un servidor de sincronización TaskChampion autohospedado.';
+  String get syncSelfHosted =>
+      'O trae tus propias credenciales de un servidor de sincronización TaskChampion auto-alojado.';
   @override
   String get helloWorld => '¡Hola, mundo!';
   @override
@@ -212,7 +212,7 @@ class SpanishSentences extends Sentences {
   String get taskchampionTileTitle => 'Sincronización Taskchampion';
 
   @override
-  String get ccsyncCredentials => 'Credenciales de CCSync';
+  String get syncCredentials => 'Credenciales de Sync';
 
   @override
   String get deleteTaskConfirmation => 'Eliminar tarea';
@@ -665,9 +665,9 @@ class SpanishSentences extends Sentences {
   @override
   String get encryptionSecret => 'Secreto de cifrado';
   @override
-  String get ccsyncBackendUrl => 'URL del backend de CCSync';
+  String get syncBackendUrl => 'URL del backend de Sync';
   @override
-  String get ccsyncClientId => 'ID de cliente';
+  String get syncClientId => 'ID de cliente';
   @override
   String get success => 'Éxito';
   @override

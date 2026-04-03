@@ -2,19 +2,19 @@ import 'package:taskwarrior/app/utils/language/sentences.dart';
 
 class FrenchSentences extends Sentences {
   @override
-  String get ccsyncLoginInstruction =>
-      'Connectez-vous à CCSync, copiez vos identifiants et collez-les ci-dessus.';
+  String get syncLoginInstruction =>
+      'Connectez-vous à Sync, copiez vos identifiants et collez-les ci-dessus.';
   @override
-  String get ccsyncEasySyncTitle =>
-      'Utilisez CCSync pour une synchronisation facile';
+  String get syncEasySyncTitle =>
+      'Utilisez Sync pour une synchronisation facile';
   @override
-  String get ccsyncOpenButton => 'Ouvrir CCSync';
+  String get syncOpenButton => 'Ouvrir Sync';
   @override
-  String get ccsyncIntro =>
-      'CCSync utilise TaskChampion pour synchroniser vos tâches sur plusieurs appareils sans effort. Vous bénéficiez également d’un tableau de bord web pour gérer vos tâches depuis n’importe quel navigateur.';
+  String get syncIntro =>
+      'Sync utilise TaskChampion pour synchroniser vos tâches sur plusieurs appareils de manière fluide. Vous bénéficiez également d’un tableau de bord Web pour gérer vos tâches depuis n’importe quel navigateur.';
   @override
-  String get ccsyncSelfHosted =>
-      'Ou utilisez vos propres identifiants depuis un serveur TaskChampion auto-hébergé.';
+  String get syncSelfHosted =>
+      'Ou apportez vos propres identifiants depuis un serveur de synchronisation TaskChampion auto-hébergé.';
   @override
   String get helloWorld => 'Bonjour, le monde!';
   @override

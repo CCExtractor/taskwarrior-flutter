@@ -2,17 +2,17 @@ import 'package:taskwarrior/app/utils/language/sentences.dart';
 
 class EnglishSentences extends Sentences {
   @override
-  String get ccsyncLoginInstruction =>
-      'Login to CCSync, copy your credentials, and paste them above.';
+  String get syncLoginInstruction =>
+      'Login to Sync, copy your credentials, and paste them above.';
   @override
-  String get ccsyncEasySyncTitle => 'Use CCSync for Easy Sync';
+  String get syncEasySyncTitle => 'Use Sync for Easy Sync';
   @override
-  String get ccsyncOpenButton => 'Open CCSync';
+  String get syncOpenButton => 'Open Sync';
   @override
-  String get ccsyncIntro =>
-      'CCSync uses TaskChampion to sync your tasks across multiple devices seamlessly. You also get a web dashboard to manage your tasks from any browser.';
+  String get syncIntro =>
+      'Sync uses TaskChampion to sync your tasks across multiple devices seamlessly. You also get a web dashboard to manage your tasks from any browser.';
   @override
-  String get ccsyncSelfHosted =>
+  String get syncSelfHosted =>
       'Or bring your own credentials from a self-hosted TaskChampion sync server.';
   @override
   String get helloWorld => 'Hello, World!';
@@ -219,12 +219,12 @@ class EnglishSentences extends Sentences {
 
   @override
   String get taskchampionTileDescription =>
-      'Switch to Taskwarrior sync with CCSync or Taskchampion Sync Server';
+      'Switch to Taskwarrior sync with Sync or Taskchampion Sync Server';
   @override
   String get taskchampionTileTitle => 'Taskchampion sync';
 
   @override
-  String get ccsyncCredentials => 'CCync credentials';
+  String get syncCredentials => 'CCync credentials';
 
   @override
   String get deleteTaskConfirmation => 'Delete Tasks';
@@ -650,9 +650,9 @@ class EnglishSentences extends Sentences {
   @override
   String get encryptionSecret => 'Encryption Secret';
   @override
-  String get ccsyncBackendUrl => 'CCSync Backend URL';
+  String get syncBackendUrl => 'Sync Backend URL';
   @override
-  String get ccsyncClientId => 'Client ID';
+  String get syncClientId => 'Client ID';
   @override
   String get success => 'Success';
   @override

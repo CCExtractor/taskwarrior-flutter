@@ -2,18 +2,18 @@ import 'package:taskwarrior/app/utils/language/sentences.dart';
 
 class GermanSentences extends Sentences {
   @override
-  String get ccsyncLoginInstruction =>
-      'Melde dich bei CCSync an, kopiere deine Anmeldedaten und füge sie oben ein.';
+  String get syncLoginInstruction =>
+      'Melden Sie sich bei Sync an, kopieren Sie Ihre Zugangsdaten und fügen Sie diese oben ein.';
   @override
-  String get ccsyncEasySyncTitle => 'CCSync nutzen für einfachen Sync';
+  String get syncEasySyncTitle => 'Sync nutzen für einfachen Sync';
   @override
-  String get ccsyncOpenButton => 'CCSync öffnen';
+  String get syncOpenButton => 'Sync öffnen';
   @override
-  String get ccsyncIntro =>
-      'CCSync nutzt TaskChampion, um Aufgaben nahtlos über mehrere Geräte hinweg zu synchronisieren. Außerdem erhälst du ein Web-Dashboard, über das du deine Aufgaben von jedem Browser aus verwalten kannst.';
+  String get syncIntro =>
+      'Sync verwendet TaskChampion, um Ihre Aufgaben nahtlos auf mehreren Geräten zu synchronisieren. Sie erhalten auch ein Web-Dashboard, um Ihre Aufgaben über jeden Browser zu verwalten.';
   @override
-  String get ccsyncSelfHosted =>
-      'Oder bringe deine eigenen Anmeldedaten von einem selbst gehosteten TaskChampion-Synchronisierungsserver mit.';
+  String get syncSelfHosted =>
+      'Oder bringen Sie Ihre eigenen Zugangsdaten von einem selbst gehosteten TaskChampion-Sync-Server mit.';
   @override
   String get helloWorld => 'Hallo Welt!';
 
@@ -650,9 +650,9 @@ class GermanSentences extends Sentences {
   @override
   String get encryptionSecret => 'Encryption Secret';
   @override
-  String get ccsyncBackendUrl => 'CCSync Backend URL';
+  String get syncBackendUrl => 'CCSync Backend URL';
   @override
-  String get ccsyncClientId => 'Client ID';
+  String get syncClientId => 'Client ID';
   @override
   String get success => 'Erfolg';
   @override
