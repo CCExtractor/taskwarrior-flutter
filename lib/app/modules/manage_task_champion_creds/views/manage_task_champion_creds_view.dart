@@ -74,7 +74,7 @@ class ManageTaskChampionCredsView
                       labelText: SentenceManager(
                               currentLanguage: AppSettings.selectedLanguage)
                           .sentences
-                          .ccsyncClientId,
+                          .syncClientId,
                       labelStyle: TextStyle(color: tColors.primaryTextColor),
                       border: const OutlineInputBorder(),
                     ),
@@ -107,7 +107,7 @@ class ManageTaskChampionCredsView
                                       currentLanguage:
                                           AppSettings.selectedLanguage)
                                   .sentences
-                                  .ccsyncBackendUrl,
+                                  .syncBackendUrl,
                           labelStyle:
                               TextStyle(color: tColors.primaryTextColor),
                           border: const OutlineInputBorder(),
@@ -196,7 +196,7 @@ class ManageTaskChampionCredsView
                     SentenceManager(
                             currentLanguage: AppSettings.selectedLanguage)
                         .sentences
-                        .ccsyncEasySyncTitle,
+                        .syncEasySyncTitle,
                     style: GoogleFonts.poppins(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
@@ -208,7 +208,7 @@ class ManageTaskChampionCredsView
                     SentenceManager(
                             currentLanguage: AppSettings.selectedLanguage)
                         .sentences
-                        .ccsyncIntro,
+                        .syncIntro,
                     style: TextStyle(
                       fontSize: 14,
                       color: tColors.primaryTextColor?.withValues(alpha: 0.8),
@@ -220,7 +220,7 @@ class ManageTaskChampionCredsView
                     SentenceManager(
                             currentLanguage: AppSettings.selectedLanguage)
                         .sentences
-                        .ccsyncLoginInstruction,
+                        .syncLoginInstruction,
                     style: TextStyle(
                       fontSize: 14,
                       color: tColors.primaryTextColor?.withValues(alpha: 0.8),
@@ -235,7 +235,7 @@ class ManageTaskChampionCredsView
                         SentenceManager(
                                 currentLanguage: AppSettings.selectedLanguage)
                             .sentences
-                            .ccsyncOpenButton,
+                            .syncOpenButton,
                         style: TextStyle(color: tColors.primaryTextColor),
                       ),
                       style: OutlinedButton.styleFrom(
@@ -261,7 +261,7 @@ class ManageTaskChampionCredsView
                     SentenceManager(
                             currentLanguage: AppSettings.selectedLanguage)
                         .sentences
-                        .ccsyncSelfHosted,
+                        .syncSelfHosted,
                     style: TextStyle(
                       fontSize: 13,
                       color: tColors.primaryTextColor?.withValues(alpha: 0.6),

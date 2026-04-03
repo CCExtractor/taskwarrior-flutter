@@ -206,7 +206,7 @@ class SpanishSentences extends Sentences {
 
   @override
   String get taskchampionTileDescription =>
-      'Cambia la sincronización de Taskwarrior al servidor de sincronización CCSync o Taskchampion';
+      'Cambia la sincronización de Taskwarrior al servidor de sincronización Sync o Taskchampion';
 
   @override
   String get taskchampionTileTitle => 'Sincronización Taskchampion';
@@ -656,6 +656,7 @@ class SpanishSentences extends Sentences {
   String get date => "Fecha";
   @override
   String get add => "Agregar";
+  @override
   @override
   String get change => "Cambiar";
   @override

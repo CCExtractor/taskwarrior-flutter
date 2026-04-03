@@ -208,13 +208,13 @@ class FrenchSentences extends Sentences {
 
   @override
   String get taskchampionTileDescription =>
-      'Basculez la synchronisation de Taskwarrior vers le serveur de synchronisation CCSync ou Taskchampion';
+      'Basculez la synchronisation de Taskwarrior vers le serveur de synchronisation Sync ou Taskchampion';
 
   @override
   String get taskchampionTileTitle => 'Synchronisation Taskchampion';
 
   @override
-  String get ccsyncCredentials => 'Identifiants CCSync';
+  String get syncCredentials => 'Identifiants Sync';
 
   @override
   String get deleteTaskConfirmation => 'Supprimer la tâche';
@@ -677,9 +677,9 @@ class FrenchSentences extends Sentences {
   @override
   String get encryptionSecret => 'Secret de chiffrement';
   @override
-  String get ccsyncBackendUrl => 'URL du backend CCSync';
+  String get syncBackendUrl => 'URL du backend Sync';
   @override
-  String get ccsyncClientId => 'ID client';
+  String get syncClientId => 'ID client';
   @override
   String get success => 'Succès';
   @override

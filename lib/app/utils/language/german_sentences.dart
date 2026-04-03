@@ -219,12 +219,12 @@ class GermanSentences extends Sentences {
 
   @override
   String get taskchampionTileDescription =>
-      'Wechsel zu Taskwarrior Sync mit CCSync oder Taskchampion Sync Server';
+      'Wechsel zu Taskwarrior Sync mit Sync oder Taskchampion Sync Server';
   @override
   String get taskchampionTileTitle => 'Taskchampion Sync';
 
   @override
-  String get ccsyncCredentials => 'CCync Anmeldedaten';
+  String get syncCredentials => 'Sync Anmeldedaten';
 
   @override
   String get deleteTaskConfirmation => 'Aufgaben löschen';
@@ -650,7 +650,7 @@ class GermanSentences extends Sentences {
   @override
   String get encryptionSecret => 'Encryption Secret';
   @override
-  String get syncBackendUrl => 'CCSync Backend URL';
+  String get syncBackendUrl => 'Sync Backend URL';
   @override
   String get syncClientId => 'Client ID';
   @override
