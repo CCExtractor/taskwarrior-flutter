@@ -9,7 +9,14 @@ flutter_rust_bridge_codegen generate \
   --dart-output lib/bridge/bridge_generated.dart
 ```
 
-### Compile Rust library for Android
+### Native Library Compilation
+
+#### 🚀 Desktop (Linux, Windows, macOS)
+
+The native library is now **automatically compiled** for Desktop platforms when you run the app. No manual cargo build is required.
+
+#### 📱 Android
+Android still requires manual compilation of JNI libraries:
 
 ```bash
 cargo ndk -t arm64-v8a -t armeabi-v7a -o ../android/app/src/main/jniLibs build --release
