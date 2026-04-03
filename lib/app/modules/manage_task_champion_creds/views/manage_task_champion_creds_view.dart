@@ -95,7 +95,7 @@ class ManageTaskChampionCredsView
                   const SizedBox(height: 10),
                   Obx(() => TextField(
                         style: TextStyle(color: tColors.primaryTextColor),
-                        controller: controller.ccsyncBackendUrlController,
+                        controller: controller.syncBackendUrlController,
                         decoration: InputDecoration(
                           labelText: controller.taskReplica.value
                               ? SentenceManager(

@@ -11,7 +11,7 @@ import 'package:http/http.dart' as http;
 class ManageTaskChampionCredsController extends GetxController {
   final encryptionSecretController = TextEditingController();
   final clientIdController = TextEditingController();
-  final ccsyncBackendUrlController = TextEditingController();
+  final syncBackendUrlController = TextEditingController();
   var profilesWidget = Get.find<SplashController>();
   RxBool isCheckingCreds = false.obs;
   RxBool taskReplica = false.obs;
@@ -25,7 +25,7 @@ class ManageTaskChampionCredsController extends GetxController {
     encryptionSecretController.text =
         await CredentialsStorage.getEncryptionSecret() ?? '';
     clientIdController.text = await CredentialsStorage.getClientId() ?? '';
-    ccsyncBackendUrlController.text =
+    syncBackendUrlController.text =
         await CredentialsStorage.getApiUrl() ?? '';
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     taskReplica.value = prefs.getBool('settings_taskr_repl') ?? false;
@@ -37,11 +37,11 @@ class ManageTaskChampionCredsController extends GetxController {
           profilesWidget.currentProfile.value,
           clientIdController.text,
           encryptionSecretController.text,
-          ccsyncBackendUrlController.text);
+          syncBackendUrlController.text);
       return 0;
     }
     isCheckingCreds.value = true;
-    String baseUrl = ccsyncBackendUrlController.text;
+    String baseUrl = syncBackendUrlController.text;
     String uuid = clientIdController.text;
     String encryptionSecret = encryptionSecretController.text;
     try {
@@ -60,7 +60,7 @@ class ManageTaskChampionCredsController extends GetxController {
             profilesWidget.currentProfile.value,
             clientIdController.text,
             encryptionSecretController.text,
-            ccsyncBackendUrlController.text);
+            syncBackendUrlController.text);
 
         isCheckingCreds.value = false;
         return 0;
@@ -78,7 +78,7 @@ class ManageTaskChampionCredsController extends GetxController {
   void onClose() {
     encryptionSecretController.dispose();
     clientIdController.dispose();
-    ccsyncBackendUrlController.dispose();
+    syncBackendUrlController.dispose();
     super.onClose();
   }
 }
