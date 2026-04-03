@@ -176,15 +176,19 @@ class WidgetController extends GetxController {
         }
       }
     }
-    await HomeWidget.saveWidgetData("tasks", jsonEncode(l));
+    if (Platform.isAndroid || Platform.isIOS) {
+      await HomeWidget.saveWidgetData("tasks", jsonEncode(l));
+    }
   }
 
   Future updateWidget() async {
-    try {
-      return HomeWidget.updateWidget(
-          name: 'TaskWarriorWidgetProvider', iOSName: 'TaskWarriorWidgets');
-    } on PlatformException catch (exception) {
-      debugPrint('Error Updating Widget. $exception');
+    if (Platform.isAndroid || Platform.isIOS) {
+      try {
+        return HomeWidget.updateWidget(
+            name: 'TaskWarriorWidgetProvider', iOSName: 'TaskWarriorWidgets');
+      } on PlatformException catch (exception) {
+        debugPrint('Error Updating Widget. $exception');
+      }
     }
   }
 }

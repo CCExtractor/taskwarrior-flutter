@@ -305,7 +305,7 @@ class TaskDatabase {
     final List<
         Map<String,
             dynamic>> result = await taskDatabase._database!.rawQuery(
-        'SELECT DISTINCT project FROM Tasks WHERE project IS NOT NULL AND status IS NOT "deleted"');
+        "SELECT DISTINCT project FROM Tasks WHERE project IS NOT NULL AND status IS NOT 'deleted'");
 
     return result.map((row) => row['project'] as String).toList();
   }

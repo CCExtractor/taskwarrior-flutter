@@ -10,7 +10,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taskwarrior/app/models/storage.dart';
 import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
 import 'package:taskwarrior/app/routes/app_pages.dart';
-import 'package:taskwarrior/app/utils/taskchampion/credentials_storage.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/profiles.dart';
 import 'package:taskwarrior/app/v3/models/task.dart';
 import 'package:taskwarrior/app/services/deep_link_service.dart';
@@ -154,6 +153,7 @@ class SplashController extends GetxController {
   }
 
   Future<void> checkForUpdate() async {
+    if (!Platform.isAndroid) return;
     try {
       AppUpdateInfo updateInfo = await InAppUpdate.checkForUpdate();
       if (updateInfo.updateAvailability == UpdateAvailability.updateAvailable) {
