@@ -104,9 +104,9 @@ void main() {
     expect(hindi.reportsPageAddTasksToSeeReports,
         'रिपोर्ट देखने के लिए कार्य जोड़ें');
     expect(hindi.taskchampionTileDescription,
-        'CCSync या Taskchampion सिंक सर्वर के साथ Taskwarrior सिंक पर स्विच करें');
+        'Sync या Taskchampion सिंक सर्वर के साथ Taskwarrior सिंक पर स्विच करें');
     expect(hindi.taskchampionTileTitle, 'Taskchampion सिंक');
-    expect(hindi.ccsyncCredentials, 'CCync क्रेडेन्शियल');
+    expect(hindi.syncCredentials, 'Sync क्रेडेंशियल');
     expect(hindi.deleteTaskConfirmation, 'कार्य हटाएं');
     expect(hindi.deleteTaskTitle, 'सभी कार्य हटाएं?');
     expect(hindi.deleteTaskWarning,

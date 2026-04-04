@@ -2,18 +2,17 @@ import 'package:taskwarrior/app/utils/language/sentences.dart';
 
 class MarathiSentences extends Sentences {
   @override
-  String get ccsyncLoginInstruction =>
-      'CCSync मध्ये लॉगिन करा, तुमची क्रेडेन्शियल्स कॉपी करा आणि वर पेस्ट करा.';
+  String get syncLoginInstruction =>
+      'Sync मध्ये लॉगिन करा, तुमची क्रेडेन्शियल्स कॉपी करा आणि वर पेस्ट करा.';
   @override
-  String get ccsyncEasySyncTitle => 'सोप्या सिंकसाठी CCSync वापरा';
+  String get syncEasySyncTitle => 'सोप्या सिंकसाठी Sync वापरा';
   @override
-  String get ccsyncOpenButton => 'CCSync उघडा';
+  String get syncOpenButton => 'Sync उघडा';
   @override
-  String get ccsyncIntro =>
-      'CCSync TaskChampion वापरून तुमची कामे अनेक उपकरणांवर सहजपणे सिंक करते. तुम्हाला कोणत्याही ब्राउझरमधून तुमची कामे व्यवस्थापित करण्यासाठी वेब डॅशबोर्ड देखील मिळतो.';
-
+  String get syncIntro =>
+      'Sync TaskChampion वापरून तुमची कामे अनेक उपकरणांवर सहजपणे सिंक करते. तुम्हाला कोणत्याही ब्राउझरमधून तुमची कामे व्यवस्थापित करण्यासाठी वेब डॅशबोर्ड देखील मिळतो.';
   @override
-  String get ccsyncSelfHosted =>
+  String get syncSelfHosted =>
       'किंवा स्वतःच्या TaskChampion सिंक सर्व्हरमधून तुमची क्रेडेन्शियल्स वापरा.';
   @override
   String get helloWorld => 'नमस्कार, जग!';
@@ -206,13 +205,13 @@ class MarathiSentences extends Sentences {
 
   @override
   String get taskchampionTileDescription =>
-      'CCSync किंवा Taskchampion Sync Server सह Taskwarrior सिंक वर स्विच करा';
+      'Sync किंवा Taskchampion Sync Server सह Taskwarrior सिंक वर स्विच करा';
 
   @override
   String get taskchampionTileTitle => 'Taskchampion सिंक';
 
   @override
-  String get ccsyncCredentials => 'CCync क्रेडेन्शियल';
+  String get syncCredentials => 'Sync क्रेडेन्शियल';
 
   @override
   String get deleteTaskConfirmation => 'कार्य हटवा';
@@ -661,9 +660,9 @@ class MarathiSentences extends Sentences {
   @override
   String get encryptionSecret => 'एन्क्रिप्शन गुपित';
   @override
-  String get ccsyncBackendUrl => 'CCSync बॅकएंड URL';
+  String get syncBackendUrl => 'Sync बॅकएंड URL';
   @override
-  String get ccsyncClientId => 'क्लायंट आयडी';
+  String get syncClientId => 'क्लायंट आयडी';
   @override
   String get success => 'यशस्वी';
   @override

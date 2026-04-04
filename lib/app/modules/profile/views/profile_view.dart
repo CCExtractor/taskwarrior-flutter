@@ -264,9 +264,9 @@ class ProfileView extends GetView<ProfileController> {
                                 });
                               },
                             ),
-                            // CCSync v3 is deprecated, so hiding it for now
+                            // Sync v3 is deprecated, so hiding it for now
                             // RadioListTile<String>(
-                            //   title: const Text('CCSync (v3)'),
+                            //   title: const Text('Sync (v3)'),
                             //   value: 'TW3',
                             //   groupValue: selectedMode,
                             //   onChanged: (String? value) {
@@ -328,7 +328,7 @@ class ProfileView extends GetView<ProfileController> {
                                           .sentences
                                           .profilePageSuccessfullyChangedProfileModeTo +
                                       ((selectedMode ?? "") == "TW3"
-                                          ? "CCSync"
+                                          ? "Sync"
                                           : "Taskserver"),
                                   style: TextStyle(
                                     color: tColors.primaryTextColor,
