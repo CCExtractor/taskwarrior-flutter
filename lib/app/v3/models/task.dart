@@ -14,7 +14,7 @@ class TaskForC {
   final String entry;
   final String? modified;
   final List<String>? tags;
-  // newer feilds in CCSync Model
+  // newer feilds in Sync Model
   final String? start;
   final String? wait;
   final String? rtype;

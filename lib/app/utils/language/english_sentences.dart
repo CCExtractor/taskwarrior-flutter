@@ -224,7 +224,7 @@ class EnglishSentences extends Sentences {
   String get taskchampionTileTitle => 'Taskchampion sync';
 
   @override
-  String get syncCredentials => 'CCync credentials';
+  String get syncCredentials => 'Sync credentials';
 
   @override
   String get deleteTaskConfirmation => 'Delete Tasks';

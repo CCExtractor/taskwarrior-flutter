@@ -3,15 +3,14 @@ import 'package:taskwarrior/app/utils/language/sentences.dart';
 class MarathiSentences extends Sentences {
   @override
   String get syncLoginInstruction =>
-      'CCSync मध्ये लॉगिन करा, तुमची क्रेडेन्शियल्स कॉपी करा आणि वर पेस्ट करा.';
+      'Sync मध्ये लॉगिन करा, तुमची क्रेडेन्शियल्स कॉपी करा आणि वर पेस्ट करा.';
   @override
-  String get syncEasySyncTitle => 'सोप्या सिंकसाठी CCSync वापरा';
+  String get syncEasySyncTitle => 'सोप्या सिंकसाठी Sync वापरा';
   @override
-  String get syncOpenButton => 'CCSync उघडा';
+  String get syncOpenButton => 'Sync उघडा';
   @override
   String get syncIntro =>
-      'CCSync TaskChampion वापरून तुमची कामे अनेक उपकरणांवर सहजपणे सिंक करते. तुम्हाला कोणत्याही ब्राउझरमधून तुमची कामे व्यवस्थापित करण्यासाठी वेब डॅशबोर्ड देखील मिळतो.';
-
+      'Sync TaskChampion वापरून तुमची कामे अनेक उपकरणांवर सहजपणे सिंक करते. तुम्हाला कोणत्याही ब्राउझरमधून तुमची कामे व्यवस्थापित करण्यासाठी वेब डॅशबोर्ड देखील मिळतो.';
   @override
   String get syncSelfHosted =>
       'किंवा स्वतःच्या TaskChampion सिंक सर्व्हरमधून तुमची क्रेडेन्शियल्स वापरा.';
@@ -206,7 +205,7 @@ class MarathiSentences extends Sentences {
 
   @override
   String get taskchampionTileDescription =>
-      'CCSync किंवा Taskchampion Sync Server सह Taskwarrior सिंक वर स्विच करा';
+      'Sync किंवा Taskchampion Sync Server सह Taskwarrior सिंक वर स्विच करा';
 
   @override
   String get taskchampionTileTitle => 'Taskchampion सिंक';

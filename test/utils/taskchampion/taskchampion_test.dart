@@ -20,27 +20,27 @@ void main() {
 
       expect(controller.encryptionSecretController.text, '');
       expect(controller.clientIdController.text, '');
-      expect(controller.ccsyncBackendUrlController.text, '');
+      expect(controller.syncBackendUrlController.text, '');
     });
 
     test('should load existing credentials', () async {
       SharedPreferences.setMockInitialValues({
         'encryptionSecret': 'mysecret',
         'clientId': 'client123',
-        'ccsyncBackendUrl': 'https://example.com',
+        'syncBackendUrl': 'https://example.com',
       });
 
       controller = ManageTaskChampionCredsController();
       await controller.loadCredentials();
       expect(controller.encryptionSecretController.text, 'mysecret');
       expect(controller.clientIdController.text, 'client123');
-      expect(controller.ccsyncBackendUrlController.text, 'https://example.com');
+      expect(controller.syncBackendUrlController.text, 'https://example.com');
     });
 
     test('should save credentials', () async {
       controller.encryptionSecretController.text = 'secret123';
       controller.clientIdController.text = 'clientABC';
-      controller.ccsyncBackendUrlController.text = 'https://backend.url';
+      controller.syncBackendUrlController.text = 'https://backend.url';
 
       await controller.saveCredentials();
 
@@ -48,7 +48,7 @@ void main() {
 
       expect(prefs.getString('encryptionSecret'), 'secret123');
       expect(prefs.getString('clientId'), 'clientABC');
-      expect(prefs.getString('ccsyncBackendUrl'), 'https://backend.url');
+      expect(prefs.getString('syncBackendUrl'), 'https://backend.url');
     });
   });
 }
