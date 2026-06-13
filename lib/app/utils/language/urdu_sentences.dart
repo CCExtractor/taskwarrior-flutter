@@ -2,17 +2,17 @@ import 'package:taskwarrior/app/utils/language/sentences.dart';
 
 class UrduSentences extends Sentences {
   @override
-  String get ccsyncLoginInstruction =>
-      'CCSync میں لاگ ان کریں، اپنی اسناد کاپی کریں، اور اوپر پیسٹ کریں۔';
+  String get syncServerLoginInstruction =>
+      'TaskChampion میں لاگ ان کریں، اپنی اسناد کاپی کریں، اور اوپر پیسٹ کریں۔';
   @override
-  String get ccsyncEasySyncTitle => 'آسان سینک کے لیے CCSync کا używaj';
+  String get syncServerEasySyncTitle => 'آسان سینک کے لیے TaskChampion کا używaj';
   @override
-  String get ccsyncOpenButton => 'CCSync کھولیں';
+  String get syncServerOpenButton => 'TaskChampion کھولیں';
   @override
-  String get ccsyncIntro =>
-      'CCSync آپ کے کاموں کو کئی آلاتوں میں ہموار طور پر سینک کرنے کے لیے TaskChampion کا gebruikt۔ آپ کو اپنے کاموں کو کسی بھی براؤزر سے manage کرنے کے لیے ویب ڈیش بورد بھی ملتی ہے۔';
+  String get syncServerIntro =>
+      'TaskChampion آپ کے کاموں کو کئی آلاتوں میں ہموار طور پر سینک کرتا ہے۔ آپ کو اپنے کاموں کو کسی بھی براؤزر سے manage کرنے کے لیے ویب ڈیش بورد بھی ملتی ہے۔';
   @override
-  String get ccsyncSelfHosted =>
+  String get syncServerSelfHosted =>
       'یا اپنے سیلف ہوسٹڈ TaskChampion sync سرور سے اپنی اسناد لائیں۔';
   @override
   String get helloWorld => 'ہیلو، دنیا!';
@@ -221,12 +221,12 @@ class UrduSentences extends Sentences {
 
   @override
   String get taskchampionTileDescription =>
-      'CCSync یا Taskchampion Sync Server کے ساتھ ٹاسکواریر sync پر سوئچ کریں';
+      'TaskChampion Sync Server کے ساتھ ٹاسکواریر sync پر سوئچ کریں';
   @override
   String get taskchampionTileTitle => 'Taskchampion sync';
 
   @override
-  String get ccsyncCredentials => 'CCync اسناد';
+  String get syncServerCredentials => 'TaskChampion اسناد';
 
   @override
   String get deleteTaskConfirmation => 'کام حذف کریں';
@@ -653,9 +653,9 @@ class UrduSentences extends Sentences {
   @override
   String get encryptionSecret => 'انکرپشن سیکریٹ';
   @override
-  String get ccsyncBackendUrl => 'CCSync بیک اینڈ یو آر ایل';
+  String get syncServerBackendUrl => 'TaskChampion بیک اینڈ یو آر ایل';
   @override
-  String get ccsyncClientId => 'کلائنٹ آئی ڈی';
+  String get syncServerClientId => 'کلائنٹ آئی ڈی';
   @override
   String get success => 'کامیابی';
   @override

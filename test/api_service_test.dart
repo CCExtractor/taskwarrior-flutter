@@ -1,33 +1,17 @@
-import 'dart:convert';
-
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
-import 'package:http/http.dart' as http;
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:taskwarrior/app/utils/taskchampion/credentials_storage.dart';
 import 'package:taskwarrior/app/v3/db/task_database.dart';
 import 'package:taskwarrior/app/v3/models/task.dart';
-import 'package:taskwarrior/app/v3/net/fetch.dart';
-import 'package:taskwarrior/app/v3/net/origin.dart';
 
-import 'api_service_test.mocks.dart';
-
-class MockCredentialsStorage extends Mock implements CredentialsStorage {}
-
-class MockMethodChannel extends Mock implements MethodChannel {}
-
-@GenerateMocks([MockMethodChannel, http.Client])
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   databaseFactory = databaseFactoryFfi;
-  MockClient mockClient = MockClient();
 
   setUpAll(() {
     sqfliteFfiInit();
-    
+
     // Mock SharedPreferences plugin
     const MethodChannel('plugins.flutter.io/shared_preferences')
         .setMockMethodCallHandler((MethodCall methodCall) async {
@@ -99,30 +83,6 @@ void main() {
       expect(json['urgency'], 5.0);
       expect(json['priority'], 'H');
       expect(json['due'], '2024-12-31');
-    });
-  });
-
-  group('fetchTasks', () {
-    test('Fetch data successfully', () async {
-      final responseJson = jsonEncode({'data': 'Mock data'});
-      var baseUrl = await CredentialsStorage.getApiUrl();
-      when(mockClient.get(
-          Uri.parse(
-              '$baseUrl/tasks?email=email&origin=$origin&UUID=123&encryptionSecret=secret'),
-          headers: {
-            "Content-Type": "application/json",
-          })).thenAnswer((_) async => http.Response(responseJson, 200));
-
-      final result = await fetchTasks('123', 'secret');
-
-      expect(result, isA<List<TaskForC>>());
-    });
-
-    test('fetchTasks returns empty array', () async {
-      const uuid = '123';
-      const encryptionSecret = 'secret';
-
-      expect(await fetchTasks(uuid, encryptionSecret), isEmpty);
     });
   });
 

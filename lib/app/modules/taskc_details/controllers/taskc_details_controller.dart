@@ -13,7 +13,6 @@ import 'package:taskwarrior/app/v3/models/annotation.dart';
 import 'package:taskwarrior/app/v3/models/task.dart';
 import 'package:taskwarrior/app/v3/champion/replica.dart';
 import 'package:taskwarrior/app/v3/champion/models/task_for_replica.dart';
-import 'package:taskwarrior/app/v3/net/modify.dart';
 
 enum UnsavedChangesAction { save, discard, cancel }
 
@@ -249,16 +248,6 @@ class TaskcDetailsController extends GetxController {
       hasChanges.value = false;
       debugPrint('Task saved in local DB ${description.string}');
       processTagsLists();
-      await modifyTaskOnTaskwarrior(
-        description.string,
-        project.string,
-        DateTime.parse(due.string).toIso8601String(),
-        priority.string,
-        status.string,
-        initialTask.uuid!,
-        initialTask.id.toString(),
-        tags.toList(),
-      );
     } else if (initialTask is TaskForReplica) {
       debugPrint(
           'Saving replica task changes... status ${status.string} ${tags.join(", ")}');

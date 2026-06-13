@@ -186,7 +186,7 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
                                       .sentences
                                       .homePageFetchingTasks);
 
-                              await controller.refreshTasks(c, e);
+                              await controller.fetchTasksFromDB();
 
                               ScaffoldMessenger.of(context)
                                   .hideCurrentSnackBar();
