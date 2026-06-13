@@ -20,7 +20,7 @@ void main() {
 
       expect(controller.encryptionSecretController.text, '');
       expect(controller.clientIdController.text, '');
-      expect(controller.ccsyncBackendUrlController.text, '');
+      expect(controller.syncServerUrlController.text, '');
     });
 
     test('should load existing credentials', () async {
@@ -34,13 +34,13 @@ void main() {
       await controller.loadCredentials();
       expect(controller.encryptionSecretController.text, 'mysecret');
       expect(controller.clientIdController.text, 'client123');
-      expect(controller.ccsyncBackendUrlController.text, 'https://example.com');
+      expect(controller.syncServerUrlController.text, 'https://example.com');
     });
 
     test('should save credentials', () async {
       controller.encryptionSecretController.text = 'secret123';
       controller.clientIdController.text = 'clientABC';
-      controller.ccsyncBackendUrlController.text = 'https://backend.url';
+      controller.syncServerUrlController.text = 'https://backend.url';
 
       await controller.saveCredentials();
 

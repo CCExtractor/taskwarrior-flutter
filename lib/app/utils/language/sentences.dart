@@ -1,12 +1,12 @@
 abstract class Sentences {
-  /// CCSync UI additional sentences
-  String get ccsyncLoginInstruction;
-  String get ccsyncEasySyncTitle;
-  String get ccsyncOpenButton;
+  /// TaskChampion UI additional sentences
+  String get syncServerLoginInstruction;
+  String get syncServerEasySyncTitle;
+  String get syncServerOpenButton;
 
-  /// CCSync intro and self-hosted sentences
-  String get ccsyncIntro;
-  String get ccsyncSelfHosted;
+  /// TaskChampion intro and self-hosted sentences
+  String get syncServerIntro;
+  String get syncServerSelfHosted;
   String get helloWorld;
 
   String get homePageTitle;
@@ -64,7 +64,7 @@ abstract class Sentences {
   String get navDrawerReports;
   String get navDrawerAbout;
   String get navDrawerSettings;
-  String get ccsyncCredentials;
+  String get syncServerCredentials;
   String get deleteTaskTitle;
   String get deleteTaskConfirmation;
   String get deleteTaskWarning;
@@ -344,12 +344,12 @@ abstract class Sentences {
   String get add;
   String get change;
   String get dateCanNotBeInPast;
-  // ccsync credentials page
+  // sync server credentials page
   String get configureTaskchampion;
   String get encryptionSecret;
-  String get ccsyncBackendUrl;
+  String get syncServerBackendUrl;
   String get taskchampionBackendUrl;
-  String get ccsyncClientId;
+  String get syncServerClientId;
   String get success;
   String get credentialsSavedSuccessfully;
   String get tip;

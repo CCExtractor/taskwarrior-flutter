@@ -101,9 +101,9 @@ void main() {
     expect(english.reportsPageNoTasksFound, 'No Tasks Found');
     expect(english.reportsPageAddTasksToSeeReports, 'Add Tasks To See Reports');
     expect(english.taskchampionTileDescription,
-        'Switch to Taskwarrior sync with CCSync or Taskchampion Sync Server');
+        'Switch to Taskwarrior sync with a TaskChampion sync server');
     expect(english.taskchampionTileTitle, 'Taskchampion sync');
-    expect(english.ccsyncCredentials, 'CCync credentials');
+    expect(english.syncServerCredentials, 'TaskChampion credentials');
     expect(english.deleteTaskConfirmation, 'Delete Tasks');
     expect(english.deleteTaskTitle, 'Delete All Tasks?');
     expect(english.deleteTaskWarning,

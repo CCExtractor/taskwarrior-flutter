@@ -2,18 +2,18 @@ import 'package:taskwarrior/app/utils/language/sentences.dart';
 
 class FrenchSentences extends Sentences {
   @override
-  String get ccsyncLoginInstruction =>
-      'Connectez-vous à CCSync, copiez vos identifiants et collez-les ci-dessus.';
+  String get syncServerLoginInstruction =>
+      'Connectez-vous à TaskChampion, copiez vos identifiants et collez-les ci-dessus.';
   @override
-  String get ccsyncEasySyncTitle =>
-      'Utilisez CCSync pour une synchronisation facile';
+  String get syncServerEasySyncTitle =>
+      'Utilisez TaskChampion pour une synchronisation facile';
   @override
-  String get ccsyncOpenButton => 'Ouvrir CCSync';
+  String get syncServerOpenButton => 'Ouvrir TaskChampion';
   @override
-  String get ccsyncIntro =>
-      'CCSync utilise TaskChampion pour synchroniser vos tâches sur plusieurs appareils sans effort. Vous bénéficiez également d’un tableau de bord web pour gérer vos tâches depuis n’importe quel navigateur.';
+  String get syncServerIntro =>
+      'TaskChampion synchronise vos tâches sur plusieurs appareils sans effort. Vous bénéficiez également d’un tableau de bord web pour gérer vos tâches depuis n’importe quel navigateur.';
   @override
-  String get ccsyncSelfHosted =>
+  String get syncServerSelfHosted =>
       'Ou utilisez vos propres identifiants depuis un serveur TaskChampion auto-hébergé.';
   @override
   String get helloWorld => 'Bonjour, le monde!';
@@ -208,13 +208,13 @@ class FrenchSentences extends Sentences {
 
   @override
   String get taskchampionTileDescription =>
-      'Basculez la synchronisation de Taskwarrior vers le serveur de synchronisation CCSync ou Taskchampion';
+      'Basculez la synchronisation de Taskwarrior vers le serveur de synchronisation TaskChampion';
 
   @override
   String get taskchampionTileTitle => 'Synchronisation Taskchampion';
 
   @override
-  String get ccsyncCredentials => 'Identifiants CCSync';
+  String get syncServerCredentials => 'Identifiants TaskChampion';
 
   @override
   String get deleteTaskConfirmation => 'Supprimer la tâche';
@@ -677,9 +677,9 @@ class FrenchSentences extends Sentences {
   @override
   String get encryptionSecret => 'Secret de chiffrement';
   @override
-  String get ccsyncBackendUrl => 'URL du backend CCSync';
+  String get syncServerBackendUrl => 'URL du backend TaskChampion';
   @override
-  String get ccsyncClientId => 'ID client';
+  String get syncServerClientId => 'ID client';
   @override
   String get success => 'Succès';
   @override
