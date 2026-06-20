@@ -675,6 +675,4 @@ class GermanSentences extends Sentences {
   String get storageAndData => 'Speicher und Daten';
   @override
   String get advanced => 'Fortgeschritten';
-  @override
-  String get taskchampionBackendUrl => 'Taskchampion URL';
 }

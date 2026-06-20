@@ -348,7 +348,6 @@ abstract class Sentences {
   String get configureTaskchampion;
   String get encryptionSecret;
   String get syncServerBackendUrl;
-  String get taskchampionBackendUrl;
   String get syncServerClientId;
   String get success;
   String get credentialsSavedSuccessfully;

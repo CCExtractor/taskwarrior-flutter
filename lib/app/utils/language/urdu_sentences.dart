@@ -5,7 +5,7 @@ class UrduSentences extends Sentences {
   String get syncServerLoginInstruction =>
       'TaskChampion میں لاگ ان کریں، اپنی اسناد کاپی کریں، اور اوپر پیسٹ کریں۔';
   @override
-  String get syncServerEasySyncTitle => 'آسان سینک کے لیے TaskChampion کا używaj';
+  String get syncServerEasySyncTitle => 'آسان سینک کے لیے TaskChampion کا استعمال کریں';
   @override
   String get syncServerOpenButton => 'TaskChampion کھولیں';
   @override
@@ -679,6 +679,4 @@ class UrduSentences extends Sentences {
   String get storageAndData => 'اسٹوریج اور ڈیٹا';
   @override
   String get advanced => 'ایڈوانس';
-  @override
-  String get taskchampionBackendUrl => 'Taskchampion یو آر ایل';
 }
