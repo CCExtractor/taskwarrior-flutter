@@ -686,6 +686,4 @@ class BengaliSentences extends Sentences {
   String get storageAndData => 'স্টোরেজ এবং ডাটা';
   @override
   String get advanced => 'উন্নত';
-  @override
-  String get taskchampionBackendUrl => 'Taskchampion ব্যাকএন্ড URL';
 }

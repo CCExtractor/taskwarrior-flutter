@@ -675,6 +675,4 @@ class EnglishSentences extends Sentences {
   String get storageAndData => 'Storage and Data';
   @override
   String get advanced => 'Advanced';
-  @override
-  String get taskchampionBackendUrl => 'Taskchampion URL';
 }

@@ -692,6 +692,4 @@ class SpanishSentences extends Sentences {
   String get storageAndData => 'Almacenamiento y datos';
   @override
   String get advanced => 'Avanzado';
-  @override
-  String get taskchampionBackendUrl => 'Taskchampion URL';
 }

@@ -29,25 +29,31 @@ class ManageTaskChampionCredsController extends GetxController {
     taskReplica.value = prefs.getBool('settings_taskr_repl') ?? false;
   }
 
-  /// Validates and persists sync credentials through a single path:
-  /// the native TaskChampion sync via the Rust FFI bridge. A successful
-  /// [sync_] confirms the credentials are valid; invalid credentials raise a
-  /// Rust-level exception that surfaces here as a thrown error.
+  /// Validates and persists sync credentials through a single path: the native
+  /// TaskChampion sync via the Rust FFI bridge.
+  ///
+  /// The entered credentials are validated with a real [sync_] *before* they
+  /// are persisted — a successful sync confirms they are valid, while invalid
+  /// credentials raise a Rust-level exception that surfaces here as a thrown
+  /// error. This ordering guarantees we never write unverified credentials into
+  /// the active profile. (Because validation is a live sync, saving requires
+  /// connectivity to the sync server.)
   Future<int> saveCredentials() async {
     isCheckingCreds.value = true;
     try {
-      profilesWidget.setTaskcCreds(
-        profilesWidget.currentProfile.value,
-        clientIdController.text,
-        encryptionSecretController.text,
-        syncServerUrlController.text,
-      );
       final String replicaPath = await Replica.getReplicaPath();
       await sync_(
         taskdbDirPath: replicaPath,
         url: syncServerUrlController.text,
         clientId: clientIdController.text,
         encryptionSecret: encryptionSecretController.text,
+      );
+      // Only persist after the sync has confirmed the credentials are valid.
+      profilesWidget.setTaskcCreds(
+        profilesWidget.currentProfile.value,
+        clientIdController.text,
+        encryptionSecretController.text,
+        syncServerUrlController.text,
       );
       isCheckingCreds.value = false;
       return 0;
