@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:taskwarrior/app/v3/models/annotation.dart';
+
 class TaskForReplica {
   final int? modified;
   final String? due;
@@ -13,6 +15,13 @@ class TaskForReplica {
   final String? priority;
   final String? project;
 
+  // Attributes surfaced from the TaskChampion Rust serializer.
+  final bool? isBlocked;
+  final bool? isBlocking;
+  final List<String>? depends;
+  final String? recur;
+  final List<Annotation>? annotations;
+
   TaskForReplica({
     this.modified,
     this.due,
@@ -24,7 +33,17 @@ class TaskForReplica {
     required this.uuid,
     this.priority,
     this.project,
+    this.isBlocked,
+    this.isBlocking,
+    this.depends,
+    this.recur,
+    this.annotations,
   });
+
+  static bool _parseBool(dynamic value) {
+    if (value is bool) return value;
+    return value?.toString().toLowerCase() == 'true';
+  }
 
   factory TaskForReplica.fromJson(Map<String, dynamic> json) {
     return TaskForReplica(
@@ -62,6 +81,21 @@ class TaskForReplica {
       uuid: json['uuid']?.toString() ?? '',
       priority: json['priority']?.toString(),
       project: json['project']?.toString(),
+      isBlocked:
+          json['is_blocked'] != null ? _parseBool(json['is_blocked']) : null,
+      isBlocking:
+          json['is_blocking'] != null ? _parseBool(json['is_blocking']) : null,
+      depends: (json['depends'] is List)
+          ? (json['depends'] as List).map((e) => e.toString()).toList()
+          : null,
+      recur: (json['recur'] != null && json['recur'].toString().isNotEmpty)
+          ? json['recur'].toString()
+          : null,
+      annotations: (json['annotations'] is List)
+          ? (json['annotations'] as List)
+              .map((e) => Annotation.fromJson(Map<String, dynamic>.from(e)))
+              .toList()
+          : null,
     );
   }
 
@@ -77,6 +111,12 @@ class TaskForReplica {
       'uuid': uuid,
       if (priority != null) 'priority': priority,
       if (project != null) 'project': project,
+      if (isBlocked != null) 'is_blocked': isBlocked,
+      if (isBlocking != null) 'is_blocking': isBlocking,
+      if (depends != null) 'depends': depends,
+      if (recur != null) 'recur': recur,
+      if (annotations != null)
+        'annotations': annotations!.map((a) => a.toJson()).toList(),
     };
   }
 
@@ -90,6 +130,12 @@ class TaskForReplica {
     List<String>? tags,
     String? uuid,
     String? priority,
+    String? project,
+    bool? isBlocked,
+    bool? isBlocking,
+    List<String>? depends,
+    String? recur,
+    List<Annotation>? annotations,
   }) {
     return TaskForReplica(
       modified: modified ?? this.modified,
@@ -101,7 +147,12 @@ class TaskForReplica {
       tags: tags ?? this.tags,
       uuid: uuid ?? this.uuid,
       priority: priority ?? this.priority,
-      project: project ?? project,
+      project: project ?? this.project,
+      isBlocked: isBlocked ?? this.isBlocked,
+      isBlocking: isBlocking ?? this.isBlocking,
+      depends: depends ?? this.depends,
+      recur: recur ?? this.recur,
+      annotations: annotations ?? this.annotations,
     );
   }
 
@@ -120,7 +171,11 @@ class TaskForReplica {
         other.description == description &&
         _listEquals(other.tags, tags) &&
         other.uuid == uuid &&
-        other.priority == priority;
+        other.priority == priority &&
+        other.isBlocked == isBlocked &&
+        other.isBlocking == isBlocking &&
+        _listEquals(other.depends, depends) &&
+        other.recur == recur;
   }
 
   @override
