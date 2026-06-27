@@ -81,10 +81,11 @@ class TaskcDetailsController extends GetxController {
           ? task.tags!.map((e) => e.toString()).toList().obs
           : <String>[].obs;
       previousTags = tags.toList().obs;
-      depends = "".split(",").obs;
+      // Attributes now surfaced by the Rust serializer.
+      depends = (task.depends ?? <String>[]).obs;
       rtype = "".obs;
-      recur = "".obs;
-      annotations = <Annotation>[].obs;
+      recur = (task.recur ?? "").obs;
+      annotations = (task.annotations ?? <Annotation>[]).obs;
     } else {
       // Fallback
       description = ''.obs;

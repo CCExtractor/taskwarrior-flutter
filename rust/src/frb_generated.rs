@@ -72,9 +72,8 @@ fn wire__crate__api__add_task_impl(
                 <std::collections::HashMap<String, String>>::sse_decode(&mut deserializer);
             deserializer.end();
             move |context| {
-                transform_result_sse::<_, ()>((move || {
-                    let output_ok =
-                        Result::<_, ()>::Ok(crate::api::add_task(api_taskdb_dir_path, api_map))?;
+                transform_result_sse::<_, String>((move || {
+                    let output_ok = crate::api::add_task(api_taskdb_dir_path, api_map)?;
                     Ok(output_ok)
                 })())
             }
@@ -107,11 +106,8 @@ fn wire__crate__api__delete_task_impl(
             let api_taskdb_dir_path = <String>::sse_decode(&mut deserializer);
             deserializer.end();
             move |context| {
-                transform_result_sse::<_, ()>((move || {
-                    let output_ok = Result::<_, ()>::Ok(crate::api::delete_task(
-                        api_uuid_st,
-                        api_taskdb_dir_path,
-                    ))?;
+                transform_result_sse::<_, String>((move || {
+                    let output_ok = crate::api::delete_task(api_uuid_st, api_taskdb_dir_path)?;
                     Ok(output_ok)
                 })())
             }
@@ -143,12 +139,10 @@ fn wire__crate__api__get_all_tasks_json_impl(
             let api_taskdb_dir_path = <String>::sse_decode(&mut deserializer);
             deserializer.end();
             move |context| {
-                transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
-                    (move || {
-                        let output_ok = crate::api::get_all_tasks_json(api_taskdb_dir_path)?;
-                        Ok(output_ok)
-                    })(),
-                )
+                transform_result_sse::<_, String>((move || {
+                    let output_ok = crate::api::get_all_tasks_json(api_taskdb_dir_path)?;
+                    Ok(output_ok)
+                })())
             }
         },
     )
@@ -181,17 +175,15 @@ fn wire__crate__api__sync_impl(
             let api_encryption_secret = <String>::sse_decode(&mut deserializer);
             deserializer.end();
             move |context| async move {
-                transform_result_sse::<_, ()>(
+                transform_result_sse::<_, String>(
                     (move || async move {
-                        let output_ok = Result::<_, ()>::Ok(
-                            crate::api::sync(
-                                api_taskdb_dir_path,
-                                api_url,
-                                api_client_id,
-                                api_encryption_secret,
-                            )
-                            .await,
-                        )?;
+                        let output_ok = crate::api::sync(
+                            api_taskdb_dir_path,
+                            api_url,
+                            api_client_id,
+                            api_encryption_secret,
+                        )
+                        .await?;
                         Ok(output_ok)
                     })()
                     .await,
@@ -228,12 +220,9 @@ fn wire__crate__api__update_task_impl(
                 <std::collections::HashMap<String, String>>::sse_decode(&mut deserializer);
             deserializer.end();
             move |context| {
-                transform_result_sse::<_, ()>((move || {
-                    let output_ok = Result::<_, ()>::Ok(crate::api::update_task(
-                        api_uuid_st,
-                        api_taskdb_dir_path,
-                        api_map,
-                    ))?;
+                transform_result_sse::<_, String>((move || {
+                    let output_ok =
+                        crate::api::update_task(api_uuid_st, api_taskdb_dir_path, api_map)?;
                     Ok(output_ok)
                 })())
             }
@@ -242,14 +231,6 @@ fn wire__crate__api__update_task_impl(
 }
 
 // Section: dart2rust
-
-impl SseDecode for flutter_rust_bridge::for_generated::anyhow::Error {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut inner = <String>::sse_decode(deserializer);
-        return flutter_rust_bridge::for_generated::anyhow::anyhow!("{}", inner);
-    }
-}
 
 impl SseDecode for std::collections::HashMap<String, String> {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -264,13 +245,6 @@ impl SseDecode for String {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut inner = <Vec<u8>>::sse_decode(deserializer);
         return String::from_utf8(inner).unwrap();
-    }
-}
-
-impl SseDecode for i8 {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        deserializer.cursor.read_i8().unwrap()
     }
 }
 
@@ -365,13 +339,6 @@ fn pde_ffi_dispatcher_sync_impl(
 
 // Section: rust2dart
 
-impl SseEncode for flutter_rust_bridge::for_generated::anyhow::Error {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <String>::sse_encode(format!("{:?}", self), serializer);
-    }
-}
-
 impl SseEncode for std::collections::HashMap<String, String> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -383,13 +350,6 @@ impl SseEncode for String {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <Vec<u8>>::sse_encode(self.into_bytes(), serializer);
-    }
-}
-
-impl SseEncode for i8 {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        serializer.cursor.write_i8(self).unwrap();
     }
 }
 

@@ -6,29 +6,35 @@
 import 'frb_generated.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
-// These functions are ignored because they are not marked as `pub`: `get_all_tasks`, `parse_datetime`
+// These functions are ignored because they are not marked as `pub`: `add_task_impl`, `delete_task_impl`, `get_all_tasks_json_impl`, `parse_datetime`, `sync_impl`, `update_task_impl`
 
+/// Return every task in the replica as a JSON array string.
 Future<String> getAllTasksJson({required String taskdbDirPath}) =>
     RustLib.instance.api.crateApiGetAllTasksJson(taskdbDirPath: taskdbDirPath);
 
-Future<int> deleteTask(
+/// Delete the task with the given UUID. A no-op if the task does not exist.
+Future<void> deleteTask(
         {required String uuidSt, required String taskdbDirPath}) =>
     RustLib.instance.api
         .crateApiDeleteTask(uuidSt: uuidSt, taskdbDirPath: taskdbDirPath);
 
-Future<int> updateTask(
+/// Update the mutable fields of an existing task from the supplied key/value map.
+Future<void> updateTask(
         {required String uuidSt,
         required String taskdbDirPath,
         required Map<String, String> map}) =>
     RustLib.instance.api.crateApiUpdateTask(
         uuidSt: uuidSt, taskdbDirPath: taskdbDirPath, map: map);
 
-Future<int> addTask(
+/// Create a new task from the supplied key/value map. The map must contain a
+/// `uuid` entry.
+Future<void> addTask(
         {required String taskdbDirPath, required Map<String, String> map}) =>
     RustLib.instance.api
         .crateApiAddTask(taskdbDirPath: taskdbDirPath, map: map);
 
-Future<int> sync_(
+/// Synchronise the local replica with a remote TaskChampion sync server.
+Future<void> sync_(
         {required String taskdbDirPath,
         required String url,
         required String clientId,

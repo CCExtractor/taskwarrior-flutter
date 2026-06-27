@@ -3627,6 +3627,7 @@ dependencies = [
  "serde",
  "serde_json",
  "taskchampion",
+ "thiserror 1.0.69",
  "tokio",
  "uuid",
 ]
