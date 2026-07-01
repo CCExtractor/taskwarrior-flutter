@@ -1,0 +1,29 @@
+{{ define "main" }}
+<section class="hero">
+  <h1>Your tasks, everywhere.</h1>
+  <p class="tagline">{{ .Site.Params.description }}</p>
+  <p class="cta">
+    <a class="button" href="{{ "downloads/" | relURL }}">Get the app</a>
+    <a class="button button-ghost" href="{{ .Site.Params.repo }}" rel="noopener">View source</a>
+  </p>
+</section>
+
+<section class="features">
+  <div class="feature">
+    <h3>Offline-first</h3>
+    <p>Every create, edit, and complete is written to a local database instantly — no spinner, no network wait.</p>
+  </div>
+  <div class="feature">
+    <h3>Native sync</h3>
+    <p>Synchronise with a TaskChampion sync server through the native Rust bridge whenever you are online.</p>
+  </div>
+  <div class="feature">
+    <h3>Cross-platform</h3>
+    <p>One app across Android, iOS, Windows, macOS, and Linux, built with Flutter.</p>
+  </div>
+</section>
+
+<section class="intro">
+  {{ .Content }}
+</section>
+{{ end }}
