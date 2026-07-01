@@ -1,0 +1,85 @@
+name: Nightly Build & Log
+
+# Builds the signed nightly APK on a schedule and records the result in the
+# website build log (website/data/nightly_builds.json). Committing that file to
+# main touches website/**, which triggers deploy-website.yml to refresh the
+# published site. This complements the push-triggered F-Droid deploy
+# (nightlydepolyci.yml); the two can be unified later.
+
+on:
+  schedule:
+    - cron: '0 2 * * *' # 02:00 UTC daily
+  workflow_dispatch:
+
+permissions:
+  contents: write # commit the updated build log back to main
+
+jobs:
+  nightly:
+    name: Build nightly APK and record build log
+    runs-on: ubuntu-latest
+    steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: false # keep Android SDKs for Flutter
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17.x'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.29.2'
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Decode signing secrets
+        env:
+          NIGHTLY_KEYSTORE_B64: ${{ secrets.NIGHTLY_KEYSTORE_B64 }}
+          NIGHTLY_PROPERTIES_B64: ${{ secrets.NIGHTLY_PROPERTIES_B64 }}
+        run: |
+          echo "$NIGHTLY_KEYSTORE_B64" | base64 --decode > android/nightly.jks
+          echo "$NIGHTLY_PROPERTIES_B64" | base64 --decode > android/key_nightly.properties
+
+      - name: Build nightly APK
+        id: build
+        run: flutter build apk --flavor nightly --build-number=${{ github.run_number }} --release
+
+      - name: Record successful build
+        if: success()
+        run: |
+          python3 scripts/update_build_log.py success \
+            "https://github.com/${{ github.repository }}/raw/fdroid-repo/repo/nightly.${{ github.run_number }}.apk" \
+            "${{ github.run_number }}"
+
+      - name: Record failed build
+        if: failure()
+        run: python3 scripts/update_build_log.py failure "" "${{ github.run_number }}"
+
+      - name: Commit build log
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- website/data/nightly_builds.json; then
+            echo "No build-log changes to commit."
+          else
+            git add website/data/nightly_builds.json
+            git commit -m "chore(nightly): record build ${{ github.run_number }}"
+            git push
+          fi
