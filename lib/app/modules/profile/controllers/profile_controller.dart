@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:taskwarrior/app/modules/splash/controllers/splash_controller.dart';
 import 'package:taskwarrior/app/tour/profile_page_tour.dart';
+import 'package:taskwarrior/app/tour/safe_tour.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
@@ -45,18 +46,19 @@ class ProfileController extends GetxController {
   void showProfilePageTour(BuildContext context) {
     Future.delayed(
       const Duration(milliseconds: 500),
-      () {
-        SaveTourStatus.getProfileTourStatus().then((value) => {
-              if (value == false)
-                {
-                  tutorialCoachMark.show(context: context),
-                }
-              else
-                {
-                  // ignore: avoid_print
-                  print('User has seen this page'),
-                }
-            });
+      () async {
+        final seen = await SaveTourStatus.getProfileTourStatus();
+        if (seen) return;
+        await safeShowTour(
+          tutorialCoachMark: tutorialCoachMark,
+          context: context,
+          targetKeys: [
+            currentProfileKey,
+            addNewProfileKey,
+            manageSelectedProfileKey,
+          ],
+          markSeen: () => SaveTourStatus.saveProfileTourStatus(true),
+        );
       },
     );
   }

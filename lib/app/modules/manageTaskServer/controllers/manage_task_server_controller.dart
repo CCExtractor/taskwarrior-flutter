@@ -9,6 +9,7 @@ import 'package:taskwarrior/app/models/storage/set_config.dart';
 import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
 import 'package:taskwarrior/app/modules/splash/controllers/splash_controller.dart';
 import 'package:taskwarrior/app/tour/manage_task_server_page_tour.dart';
+import 'package:taskwarrior/app/tour/safe_tour.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/home_path/home_path.dart' as rc;
 import 'package:taskwarrior/app/utils/taskserver/taskserver.dart';
@@ -221,18 +222,20 @@ class ManageTaskServerController extends GetxController {
   void showManageTaskServerPageTour(BuildContext context) {
     Future.delayed(
       const Duration(milliseconds: 500),
-      () {
-        SaveTourStatus.getManageTaskServerTourStatus().then((value) => {
-              if (value == false)
-                {
-                  tutorialCoachMark.show(context: context),
-                }
-              else
-                {
-                  // ignore: avoid_print
-                  print('User has seen this page'),
-                }
-            });
+      () async {
+        final seen = await SaveTourStatus.getManageTaskServerTourStatus();
+        if (seen) return;
+        await safeShowTour(
+          tutorialCoachMark: tutorialCoachMark,
+          context: context,
+          targetKeys: [
+            configureTaskRC,
+            configureServerCertificate,
+            configureTaskServerKey,
+            configureYourCertificate,
+          ],
+          markSeen: () => SaveTourStatus.saveManageTaskServerTourStatus(true),
+        );
       },
     );
   }
