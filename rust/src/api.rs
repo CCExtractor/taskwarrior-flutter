@@ -275,3 +275,73 @@ fn test_add_task_with_tags() {
     // cleanup
     fs::remove_dir_all(&tmp).ok();
 }
+
+#[test]
+fn test_dependencies_and_annotations_surface() {
+    // Exercises the POPULATED cases of the enriched serializer: a real
+    // dependency (A depends on B) must surface as depends[]/is_blocked/is_blocking,
+    // and an annotation must surface as {entry (RFC3339), description}.
+    use std::{env, fs};
+    use serde_json::Value;
+    use taskchampion::{chrono::{DateTime, Utc}, Annotation, Operations, Status};
+
+    let tmp = env::temp_dir().join(format!("taskdb_deptest_{}", Uuid::new_v4()));
+    let taskdb_path = tmp.to_string_lossy().into_owned();
+    fs::create_dir_all(&tmp).expect("create temp taskdb dir");
+
+    let uuid_a = Uuid::new_v4(); // dependent task
+    let uuid_b = Uuid::new_v4(); // blocker task
+
+    {
+        let mut replica = open_replica(&taskdb_path).expect("open replica");
+        let mut ops = Operations::new();
+
+        let mut b = replica.create_task(uuid_b, &mut ops).expect("create B");
+        let _ = b.set_status(Status::Pending, &mut ops);
+        let _ = b.set_description("blocker".to_string(), &mut ops);
+
+        let mut a = replica.create_task(uuid_a, &mut ops).expect("create A");
+        let _ = a.set_status(Status::Pending, &mut ops);
+        let _ = a.set_description("dependent".to_string(), &mut ops);
+        a.add_dependency(uuid_b, &mut ops).expect("add dependency A->B");
+        a.add_annotation(
+            Annotation { entry: Utc::now(), description: "note-one".to_string() },
+            &mut ops,
+        ).expect("add annotation");
+
+        replica.commit_operations(ops).expect("commit");
+    }
+
+    // Read back through the SAME path the app uses (fresh replica + all_tasks()).
+    let json = get_all_tasks_json(taskdb_path.clone()).expect("get_all_tasks_json");
+    let tasks: Vec<Value> = serde_json::from_str(&json).expect("parse json");
+    let find = |u: &Uuid| {
+        tasks
+            .iter()
+            .find(|t| t.get("uuid").and_then(|v| v.as_str()) == Some(u.to_string().as_str()))
+            .cloned()
+            .expect("task present")
+    };
+    let a = find(&uuid_a);
+    let b = find(&uuid_b);
+
+    // A depends on B → depends[] carries B, and A is blocked (unresolved dep).
+    let deps: Vec<String> = a["depends"].as_array().unwrap()
+        .iter().map(|v| v.as_str().unwrap().to_string()).collect();
+    assert!(deps.contains(&uuid_b.to_string()), "A.depends must contain B: {:?}", deps);
+    assert_eq!(a["is_blocked"].as_bool(), Some(true), "A must be blocked");
+    assert_eq!(a["is_blocking"].as_bool(), Some(false), "A must not be blocking");
+
+    // A's annotation surfaces with description + RFC3339 entry.
+    let anns = a["annotations"].as_array().unwrap();
+    assert_eq!(anns.len(), 1, "A must have one annotation");
+    assert_eq!(anns[0]["description"].as_str(), Some("note-one"));
+    let entry = anns[0]["entry"].as_str().unwrap();
+    assert!(DateTime::parse_from_rfc3339(entry).is_ok(), "entry must be RFC3339: {}", entry);
+
+    // B is depended-upon → B is blocking, not blocked.
+    assert_eq!(b["is_blocking"].as_bool(), Some(true), "B must be blocking");
+    assert_eq!(b["is_blocked"].as_bool(), Some(false), "B must not be blocked");
+
+    fs::remove_dir_all(&tmp).ok();
+}
