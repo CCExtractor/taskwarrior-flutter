@@ -1,0 +1,79 @@
+# Compiles the tc_helper Rust native library from source (instead of relying on
+# the pre-built .so committed under android/app/src/main/jniLibs/) and then
+# builds the production APK against the freshly-compiled library.
+#
+# This is the "proper" fix for stale committed binaries: the .so is regenerated
+# from rust/ on every run, so it can never drift from the Rust source. Once this
+# is green, the committed jniLibs/*.so can be git-ignored and purged from history.
+#
+# NOTE: This workflow has not yet been run on CI — action versions, the NDK
+# version, and the cargo-ndk invocation are transcribed from a verified LOCAL
+# build (macOS) and may need small adjustments on the first CI run.
+#
+# armeabi-v7a (32-bit ARM) is intentionally NOT built here: the transitive
+# aws-lc-sys crypto dependency fails to cross-compile for 32-bit ARM unless its
+# `bindgen` feature is enabled (which needs libclang). To add it later:
+#   - apt-get install -y libclang-dev clang
+#   - enable the aws-lc-sys `bindgen` feature, then add `-t armeabi-v7a`.
+name: Build tc_helper (compile from source)
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main, reports]
+    paths:
+      - "rust/**"
+      - "android/**"
+      - ".github/workflows/build-tc-helper.yml"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "17"
+
+      # Android SDK + NDK. cargo-ndk reads ANDROID_NDK_HOME to find the toolchain.
+      - uses: android-actions/setup-android@v3
+      - name: Install NDK
+        run: |
+          sdkmanager "ndk;26.1.10909125"
+          echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/26.1.10909125" >> "$GITHUB_ENV"
+
+      # aws-lc-sys (pulled in transitively) builds C code via cmake + ninja.
+      - name: Install cmake + ninja
+        run: sudo apt-get update && sudo apt-get install -y cmake ninja-build
+
+      - name: Install Rust + Android target + cargo-ndk
+        run: |
+          rustup toolchain install stable --profile minimal
+          rustup target add aarch64-linux-android
+          cargo install cargo-ndk --version ^4
+
+      - name: Compile tc_helper (arm64-v8a) from source
+        working-directory: rust
+        env:
+          CMAKE_GENERATOR: Ninja
+        run: |
+          cargo ndk -t arm64-v8a \
+            -o ../android/app/src/main/jniLibs \
+            build --release
+
+      - name: Show freshly-built libs
+        run: ls -lh android/app/src/main/jniLibs/arm64-v8a/
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.44.5"
+
+      - run: flutter pub get
+      - run: flutter build apk --release --flavor production
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: production-apk-from-source
+          path: build/app/outputs/flutter-apk/app-production-release.apk
