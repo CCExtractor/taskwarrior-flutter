@@ -86,6 +86,12 @@ class HomeController extends GetxController {
     taskdb = TaskDatabase();
     taskdb.open();
     getUniqueProjects();
+    // Initialize the pending/waiting filters from their persisted values.
+    // Without this the RxBool defaults to false, and the replica list view
+    // (which filters `status == pending` only when pendingFilter is true)
+    // shows completed tasks only — hiding every pending task on first load.
+    pendingFilter.value = Query(storage.tabs.tab()).getPendingFilter();
+    waitingFilter.value = Query(storage.tabs.tab()).getWaitingFilter();
     _loadTaskChampion();
     fetchTasksFromDB();
 
