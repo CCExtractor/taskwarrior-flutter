@@ -8,7 +8,13 @@ name="tc_helper"
 crate-type=["staticlib","cdylib"]
 
 [dependencies]
-taskchampion = "2.0.3"
+# Only the "server-sync" backend (the remote TaskChampion sync server, used by
+# our sync_() via ServerConfig::Remote) — NOT server-aws / server-gcp. Those
+# cloud backends dragged in the AWS + Google-Cloud SDKs → aws-lc-rs/aws-lc-sys,
+# which (a) bloats the binary, (b) needs bindgen for 32-bit ARM, and (c) fails
+# to cross-compile for iOS. server-sync uses ureq + ring, which build cleanly
+# on every target. `bundled` keeps SQLite compiled in.
+taskchampion = { version = "2.0.3", default-features = false, features = ["server-sync", "bundled"] }
 anyhow = "1.0"
 tokio = { version = "1.40", features = ["full"] }
 uuid = "1.0"
@@ -20,10 +26,3 @@ flutter_rust_bridge_macros = "2.11.1"    # Procedural macros support
 
 [build-dependencies]
 flutter_rust_bridge_codegen = "2.11.1"  # Code generator CLI
-
-# 32-bit ARM (armeabi-v7a) has no pre-generated aws-lc-sys bindings, so its
-# `bindgen` feature (needs libclang) is required — but ONLY for that target.
-# arm64 Android, iOS and the host use aws-lc-sys' pre-generated bindings;
-# forcing bindgen on them (notably iOS) breaks linking.
-[target.armv7-linux-androideabi.dependencies]
-aws-lc-sys = { version = "0.30", features = ["bindgen"] }
