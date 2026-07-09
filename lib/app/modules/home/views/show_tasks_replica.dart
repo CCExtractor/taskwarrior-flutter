@@ -31,9 +31,11 @@ class TaskReplicaViewBuilder extends StatelessWidget {
     TaskwarriorColorTheme tColors =
         Theme.of(context).extension<TaskwarriorColorTheme>()!;
 
-    return Obx(() {
-      List<TaskForReplica> tasks = List<TaskForReplica>.from(replicaTasks);
-      if (project != null && project != 'All Projects') {
+    // Reactivity is handled by the parent Obx in home_page_body (which reads
+    // tasksFromReplica); this widget just renders the snapshot it's given, so
+    // it must NOT be an Obx (an Obx with no observable read throws ObxError).
+    List<TaskForReplica> tasks = List<TaskForReplica>.from(replicaTasks);
+      if (project != null && project!.isNotEmpty && project != 'All Projects') {
         tasks = tasks.where((task) => task.project == project).toList();
       }
       tasks.sort((a, b) {
@@ -203,7 +205,6 @@ class TaskReplicaViewBuilder extends StatelessWidget {
                 },
               ),
       );
-    });
   }
 
   Color _getPriorityColor(String priority) {
