@@ -30,7 +30,14 @@ class HomePageBody extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.only(left: 8.0, right: 8.0),
           child: Obx(
-            () => Column(
+            () {
+              // Read the replica list reactively here so the whole view rebuilds
+              // when tasks arrive. On launch, taskReplica flips true (triggering a
+              // rebuild) *before* the async FFI fetch populates tasksFromReplica;
+              // without a reactive read of the list itself, the populated tasks
+              // would never appear (the view stays on its initial empty build).
+              final replicaTasks = controller.tasksFromReplica.toList();
+              return Column(
               children: <Widget>[
                 if (controller.searchVisible.value)
                   Container(
@@ -134,14 +141,15 @@ class HomePageBody extends StatelessWidget {
                     child: Expanded(
                         child: Scrollbar(
                       child: TaskReplicaViewBuilder(
-                        replicaTasks: controller.tasksFromReplica,
+                        replicaTasks: replicaTasks,
                         pendingFilter: controller.pendingFilter.value,
                         selectedSort: controller.selectedSort.value,
                         project: controller.projectFilter.value,
                       ),
                     )))
               ],
-            ),
+              );
+            },
           ),
         ),
       ),

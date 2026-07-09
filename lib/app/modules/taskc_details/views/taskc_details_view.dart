@@ -111,6 +111,45 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
                   controller.tags.join(', '),
                   (value) => controller.updateListField(controller.tags, value),
                 ),
+                // Attributes surfaced by the enriched Rust serializer (D2).
+                // Replica tasks only; read-only (the mobile UI cannot edit
+                // dependencies/annotations yet).
+                if (controller.isReplicaTask) ...[
+                  _buildDetail(
+                    context,
+                    'Blocked:',
+                    controller.isBlocked.value ? 'Yes' : 'No',
+                  ),
+                  _buildDetail(
+                    context,
+                    'Blocking:',
+                    controller.isBlocking.value ? 'Yes' : 'No',
+                  ),
+                  _buildDetail(
+                    context,
+                    'Depends:',
+                    controller.depends.isEmpty
+                        ? 'None'
+                        : controller.depends.join(', '),
+                  ),
+                  _buildDetail(
+                    context,
+                    'Recur:',
+                    controller.recur.value.isEmpty
+                        ? 'None'
+                        : controller.recur.value,
+                  ),
+                  _buildDetail(
+                    context,
+                    'Annotations:',
+                    controller.annotations.isEmpty
+                        ? 'None'
+                        : controller.annotations
+                            .map((a) =>
+                                '• ${a.description ?? ''}${(a.entry != null && a.entry!.isNotEmpty) ? '  (${a.entry})' : ''}')
+                            .join('\n'),
+                  ),
+                ],
                 if (controller.isLocalTask) ...[
                   _buildDetail(
                     context,

@@ -35,6 +35,9 @@ class TaskcDetailsController extends GetxController {
   late RxString rtype;
   late RxString recur;
   late RxList<Annotation> annotations;
+  // Blocking state surfaced by the Rust serializer (replica tasks only).
+  late RxBool isBlocked;
+  late RxBool isBlocking;
   late RxList<String> previousTags = <String>[].obs;
 
   @override
@@ -64,6 +67,8 @@ class TaskcDetailsController extends GetxController {
       rtype = "".obs;
       recur = "".obs;
       annotations = <Annotation>[].obs;
+      isBlocked = false.obs;
+      isBlocking = false.obs;
     } else if (task is TaskForReplica) {
       description = (task.description ?? '').obs;
       project = (task.project ?? 'None').obs;
@@ -86,6 +91,8 @@ class TaskcDetailsController extends GetxController {
       rtype = "".obs;
       recur = (task.recur ?? "").obs;
       annotations = (task.annotations ?? <Annotation>[]).obs;
+      isBlocked = (task.isBlocked ?? false).obs;
+      isBlocking = (task.isBlocking ?? false).obs;
     } else {
       // Fallback
       description = ''.obs;
@@ -101,6 +108,8 @@ class TaskcDetailsController extends GetxController {
       rtype = "".obs;
       recur = "".obs;
       annotations = <Annotation>[].obs;
+      isBlocked = false.obs;
+      isBlocking = false.obs;
     }
   }
 
