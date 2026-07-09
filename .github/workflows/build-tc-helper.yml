@@ -10,9 +10,10 @@
 # version, and the cargo-ndk invocation are transcribed from a verified LOCAL
 # build (macOS) and may need small adjustments on the first CI run.
 #
-# Both arm64-v8a and armeabi-v7a are built. 32-bit ARM has no pre-generated
-# aws-lc-sys bindings, so the crate's `bindgen` feature is enabled in
-# rust/Cargo.toml and libclang is installed below.
+# Both arm64-v8a and armeabi-v7a are built. taskchampion is configured with only
+# the server-sync backend (see rust/Cargo.toml), so there's no aws-lc-sys — hence
+# no cmake/ninja/bindgen/libclang toolchain needed; ring builds with just the
+# Rust + NDK toolchain.
 name: Build tc_helper (compile from source)
 
 on:
@@ -42,11 +43,6 @@ jobs:
           sdkmanager "ndk;26.1.10909125"
           echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/26.1.10909125" >> "$GITHUB_ENV"
 
-      # aws-lc-sys builds C via cmake + ninja; its `bindgen` feature (needed for
-      # 32-bit ARM) needs libclang.
-      - name: Install cmake + ninja + libclang
-        run: sudo apt-get update && sudo apt-get install -y cmake ninja-build libclang-dev clang
-
       - name: Install Rust + Android targets + cargo-ndk
         run: |
           rustup toolchain install stable --profile minimal
@@ -55,15 +51,13 @@ jobs:
 
       - name: Compile tc_helper (arm64-v8a + armeabi-v7a) from source
         working-directory: rust
-        env:
-          CMAKE_GENERATOR: Ninja
         run: |
           cargo ndk -t arm64-v8a -t armeabi-v7a \
             -o ../android/app/src/main/jniLibs \
             build --release
 
       - name: Show freshly-built libs
-        run: ls -lh android/app/src/main/jniLibs/arm64-v8a/
+        run: ls -lhR android/app/src/main/jniLibs/
 
       - uses: subosito/flutter-action@v2
         with:
