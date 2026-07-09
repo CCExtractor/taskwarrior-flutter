@@ -3621,6 +3621,7 @@ name = "tc_helper"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "aws-lc-sys",
  "flutter_rust_bridge",
  "flutter_rust_bridge_codegen",
  "flutter_rust_bridge_macros",
