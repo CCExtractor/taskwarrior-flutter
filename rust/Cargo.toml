@@ -20,3 +20,10 @@ flutter_rust_bridge_macros = "2.11.1"    # Procedural macros support
 
 [build-dependencies]
 flutter_rust_bridge_codegen = "2.11.1"  # Code generator CLI
+
+# 32-bit ARM (armeabi-v7a) has no pre-generated aws-lc-sys bindings, so its
+# `bindgen` feature (needs libclang) is required — but ONLY for that target.
+# arm64 Android, iOS and the host use aws-lc-sys' pre-generated bindings;
+# forcing bindgen on them (notably iOS) breaks linking.
+[target.armv7-linux-androideabi.dependencies]
+aws-lc-sys = { version = "0.30", features = ["bindgen"] }
