@@ -36,7 +36,18 @@ class HomePageBody extends StatelessWidget {
               // rebuild) *before* the async FFI fetch populates tasksFromReplica;
               // without a reactive read of the list itself, the populated tasks
               // would never appear (the view stays on its initial empty build).
-              final replicaTasks = controller.tasksFromReplica.toList();
+              var replicaTasks = controller.tasksFromReplica.toList();
+              // Apply the search text to the replica list. Unlike the local-taskc
+              // path (which reads the pre-filtered `searchedTasks`), this builder
+              // gets the raw list, so filter here. Reading `searchQuery`/
+              // `searchVisible` inside the Obx makes it rebuild on each keystroke.
+              final query = controller.searchQuery.value.trim().toLowerCase();
+              if (controller.searchVisible.value && query.isNotEmpty) {
+                replicaTasks = replicaTasks
+                    .where((task) =>
+                        (task.description ?? '').toLowerCase().contains(query))
+                    .toList();
+              }
               return Column(
               children: <Widget>[
                 if (controller.searchVisible.value)

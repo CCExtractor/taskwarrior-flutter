@@ -51,6 +51,11 @@ class HomeController extends GetxController {
   final RxSet<String> selectedTags = <String>{}.obs;
   final RxList<Task> queriedTasks = <Task>[].obs;
   final RxList<Task> searchedTasks = <Task>[].obs;
+  // Reactive mirror of the search box text. `searchedTasks` only drives the
+  // local-taskc list (TasksBuilder); the TaskChampion replica list reads
+  // `tasksFromReplica` directly, so it needs an observable query to rebuild and
+  // filter on each keystroke. Kept in sync by search()/toggleSearch().
+  final RxString searchQuery = ''.obs;
   final RxList<DateTime?> selectedDates = List<DateTime?>.filled(4, null).obs;
   final RxMap<String, TagMetadata> pendingTags = <String, TagMetadata>{}.obs;
   final RxMap<String, ProjectNode> projects = <String, ProjectNode>{}.obs;
@@ -505,10 +510,12 @@ class HomeController extends GetxController {
     if (!searchVisible.value) {
       searchedTasks.assignAll(queriedTasks);
       searchController.text = '';
+      searchQuery.value = '';
     }
   }
 
   void search(String term) {
+    searchQuery.value = term;
     searchedTasks.assignAll(
       queriedTasks
           .where(
