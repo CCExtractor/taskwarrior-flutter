@@ -21,10 +21,14 @@ enableGitInfo = true
     url = "/"
     weight = 1
   [[menu.main]]
+    name = "Features"
+    url = "/features/"
+    weight = 2
+  [[menu.main]]
     name = "Downloads"
     url = "/downloads/"
-    weight = 2
+    weight = 3
   [[menu.main]]
     name = "Docs"
     url = "/docs/"
-    weight = 3
+    weight = 4

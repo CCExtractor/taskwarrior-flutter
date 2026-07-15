@@ -91,7 +91,40 @@ code {
 
 /* Pages */
 .page h1 { border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+.page h2 { margin-top: 2rem; }
 .page-list { padding-left: 1.2rem; }
+
+/* Content tables (markdown) */
+.page table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.25rem 0;
+  font-size: 0.95rem;
+}
+.page th, .page td {
+  text-align: left;
+  padding: 0.55rem 0.7rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.page th { color: var(--muted); font-weight: 600; }
+.page thead tr { border-bottom: 2px solid var(--border); }
+
+/* Code blocks */
+.page pre {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  overflow-x: auto;
+}
+.page pre code { background: none; border: none; padding: 0; }
+.page blockquote {
+  margin: 1.25rem 0;
+  padding: 0.25rem 1rem;
+  border-left: 3px solid var(--accent);
+  color: var(--muted);
+}
 
 /* Nightly build table */
 .table-scroll { overflow-x: auto; }
