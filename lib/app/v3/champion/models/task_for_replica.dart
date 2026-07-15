@@ -4,6 +4,7 @@ import 'package:taskwarrior/app/v3/models/annotation.dart';
 
 class TaskForReplica {
   final int? modified;
+  final int? entry;
   final String? due;
   final String? start;
   final String? wait;
@@ -24,6 +25,7 @@ class TaskForReplica {
 
   TaskForReplica({
     this.modified,
+    this.entry,
     this.due,
     this.start,
     this.wait,
@@ -50,6 +52,9 @@ class TaskForReplica {
       modified: json['modified'] is int
           ? json['modified'] as int
           : int.tryParse('${json['modified']}'),
+      entry: json['entry'] is int
+          ? json['entry'] as int
+          : int.tryParse('${json['entry']}'),
       due: json['due'] != null
           ? DateTime.fromMillisecondsSinceEpoch(
                   (int.tryParse(json['due'].toString()) ?? 0) * 1000,
@@ -102,6 +107,7 @@ class TaskForReplica {
   Map<String, dynamic> toJson() {
     return {
       if (modified != null) 'modified': modified,
+      if (entry != null) 'entry': entry,
       if (due != null) 'due': due,
       if (start != null) 'start': start,
       if (wait != null) 'wait': wait,
@@ -122,6 +128,7 @@ class TaskForReplica {
 
   TaskForReplica copyWith({
     int? modified,
+    int? entry,
     String? due,
     String? start,
     String? wait,
@@ -139,6 +146,7 @@ class TaskForReplica {
   }) {
     return TaskForReplica(
       modified: modified ?? this.modified,
+      entry: entry ?? this.entry,
       due: due ?? this.due,
       start: start ?? this.start,
       wait: wait ?? this.wait,
