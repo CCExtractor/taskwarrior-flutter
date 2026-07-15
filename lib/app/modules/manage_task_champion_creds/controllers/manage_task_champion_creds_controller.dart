@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
 import 'package:taskwarrior/app/modules/splash/controllers/splash_controller.dart';
 import 'package:taskwarrior/app/utils/taskchampion/credentials_storage.dart';
 import 'package:taskwarrior/app/v3/champion/replica.dart';
@@ -55,6 +56,21 @@ class ManageTaskChampionCredsController extends GetxController {
         encryptionSecretController.text,
         syncServerUrlController.text,
       );
+      // Populate the task list immediately. The home list is otherwise only
+      // filled by an explicit refresh, so right after configuring credentials
+      // the user would see an empty list (until a manual refresh or restart)
+      // even though the sync above already succeeded. Reload the sync-mode flag
+      // and sync so the freshly-synced tasks appear at once. Guarded so a
+      // transient refresh failure never flips an already-successful save.
+      try {
+        if (Get.isRegistered<HomeController>()) {
+          final homeController = Get.find<HomeController>();
+          await homeController.fetchTasksFromDB();
+          await homeController.refreshReplicaTasks();
+        }
+      } catch (refreshErr) {
+        debugPrint('Post-save replica refresh failed: $refreshErr');
+      }
       isCheckingCreds.value = false;
       return 0;
     } catch (err) {
