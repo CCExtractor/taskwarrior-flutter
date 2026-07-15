@@ -38,11 +38,6 @@ class TaskReplicaViewBuilder extends StatelessWidget {
       if (project != null && project!.isNotEmpty && project != 'All Projects') {
         tasks = tasks.where((task) => task.project == project).toList();
       }
-      tasks.sort((a, b) {
-        final am = a.modified ?? 0;
-        final bm = b.modified ?? 0;
-        return bm.compareTo(am);
-      });
       tasks = tasks.where((task) {
         if (pendingFilter) {
           return task.status == 'pending';
@@ -51,22 +46,41 @@ class TaskReplicaViewBuilder extends StatelessWidget {
         }
       }).toList();
 
+      // Sort by the selected column. Columns backed by the replica model:
+      // Created (entry), Modified, Start Time, Due till, Priority, Project.
+      // Urgency is not surfaced by the taskchampion 2.0.3 serializer and Tags
+      // has no meaningful single-key ordering, so those fall through to the
+      // default (most recently modified first).
       tasks.sort((a, b) {
         switch (selectedSort) {
+          case 'Created+':
+            return (a.entry ?? 0).compareTo(b.entry ?? 0);
+          case 'Created-':
+            return (b.entry ?? 0).compareTo(a.entry ?? 0);
           case 'Modified+':
             return (a.modified ?? 0).compareTo(b.modified ?? 0);
           case 'Modified-':
             return (b.modified ?? 0).compareTo(a.modified ?? 0);
+          case 'Start Time+':
+            return (a.start ?? '').compareTo(b.start ?? '');
+          case 'Start Time-':
+            return (b.start ?? '').compareTo(a.start ?? '');
           case 'Due till+':
             return (a.due ?? '').compareTo(b.due ?? '');
           case 'Due till-':
             return (b.due ?? '').compareTo(a.due ?? '');
           case 'Priority+':
-            return (a.priority ?? '').compareTo(b.priority ?? '');
+            return _priorityRank(a.priority)
+                .compareTo(_priorityRank(b.priority));
           case 'Priority-':
-            return (b.priority ?? '').compareTo(a.priority ?? '');
+            return _priorityRank(b.priority)
+                .compareTo(_priorityRank(a.priority));
+          case 'Project+':
+            return (a.project ?? '').compareTo(b.project ?? '');
+          case 'Project-':
+            return (b.project ?? '').compareTo(a.project ?? '');
           default:
-            return 0;
+            return (b.modified ?? 0).compareTo(a.modified ?? 0);
         }
       });
 
@@ -205,6 +219,21 @@ class TaskReplicaViewBuilder extends StatelessWidget {
                 },
               ),
       );
+  }
+
+  // Rank priorities by severity (H > M > L > none) so Priority sort is
+  // meaningful rather than alphabetical (which would order H < L < M).
+  int _priorityRank(String? priority) {
+    switch (priority) {
+      case 'H':
+        return 3;
+      case 'M':
+        return 2;
+      case 'L':
+        return 1;
+      default:
+        return 0;
+    }
   }
 
   Color _getPriorityColor(String priority) {
