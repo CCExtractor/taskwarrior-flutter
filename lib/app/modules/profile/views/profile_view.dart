@@ -316,6 +316,7 @@ class ProfileView extends GetView<ProfileController> {
                                                   AppSettings.selectedLanguage)
                                           .sentences
                                           .profilePageSuccessfullyChangedProfileModeTo +
+                                      " " +
                                       ((selectedMode ?? "") == "TW3C"
                                           ? "Taskchampion"
                                           : "Taskserver"),
