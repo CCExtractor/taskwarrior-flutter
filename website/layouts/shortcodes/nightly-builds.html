@@ -1,0 +1,37 @@
+{{/*
+  nightly-builds shortcode — renders the build log collected by
+  scripts/update_build_log.py into website/data/nightly_builds.json.
+  Usage in content:  {{< nightly-builds >}}   (optionally {{< nightly-builds limit="15" >}})
+*/}}
+{{ $builds := hugo.Data.nightly_builds }}
+{{ $limit := int (.Get "limit" | default "20") }}
+<div class="nightly-builds">
+  {{ if $builds }}
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>Date (UTC)</th>
+          <th>Commit</th>
+          <th>Message</th>
+          <th>Status</th>
+          <th>APK</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{ range first $limit $builds }}
+        <tr>
+          <td class="nowrap">{{ .ts }}</td>
+          <td><code>{{ .sha }}</code></td>
+          <td>{{ .msg }}</td>
+          <td><span class="status status-{{ .status }}">{{ .status }}</span></td>
+          <td>{{ with .artifact }}<a href="{{ . }}" rel="noopener">download</a>{{ else }}&mdash;{{ end }}</td>
+        </tr>
+        {{ end }}
+      </tbody>
+    </table>
+  </div>
+  {{ else }}
+  <p class="empty">No nightly builds have been recorded yet. Check back after the next scheduled build.</p>
+  {{ end }}
+</div>

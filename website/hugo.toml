@@ -1,0 +1,34 @@
+baseURL = "https://taskwarrior.ccextractor.org/"
+locale = "en-us"
+title = "TaskWarrior Mobile"
+enableGitInfo = true
+
+# Self-contained site: layouts live in ./layouts, so no external theme (and thus
+# no submodule / network fetch) is required — Hugo builds it from its single
+# binary alone.
+
+[params]
+  description = "The cross-platform TaskWarrior mobile app by CCExtractor — offline-first task management with native TaskChampion sync."
+  repo = "https://github.com/CCExtractor/taskwarrior-flutter"
+  org = "https://ccextractor.org/"
+
+[markup.goldmark.renderer]
+  unsafe = true
+
+[menu]
+  [[menu.main]]
+    name = "Home"
+    url = "/"
+    weight = 1
+  [[menu.main]]
+    name = "Features"
+    url = "/features/"
+    weight = 2
+  [[menu.main]]
+    name = "Downloads"
+    url = "/downloads/"
+    weight = 3
+  [[menu.main]]
+    name = "Docs"
+    url = "/docs/"
+    weight = 4

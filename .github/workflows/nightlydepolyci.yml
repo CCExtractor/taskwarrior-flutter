@@ -4,6 +4,13 @@ on:
   push:
     branches:
       - main
+    # Website content and the nightly build-log commit must not trigger a full
+    # APK rebuild + F-Droid redeploy (see build-nightly.yml / deploy-website.yml).
+    paths-ignore:
+      - 'website/**'
+      - 'scripts/**'
+      - '.github/workflows/deploy-website.yml'
+      - '.github/workflows/build-nightly.yml'
 
 jobs:
   build-and-deploy:
