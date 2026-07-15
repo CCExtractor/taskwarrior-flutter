@@ -33,9 +33,7 @@ import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/v3/champion/replica.dart';
 import 'package:taskwarrior/app/v3/champion/models/task_for_replica.dart';
 import 'package:taskwarrior/app/v3/db/task_database.dart';
-import 'package:taskwarrior/app/v3/db/update.dart';
 import 'package:taskwarrior/app/v3/models/task.dart';
-import 'package:taskwarrior/app/v3/net/fetch.dart';
 import 'package:textfield_tags/textfield_tags.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
@@ -177,16 +175,6 @@ class HomeController extends GetxController {
     if (!taskReplica.value) return;
     tasksFromReplica.value = await Replica.getAllTasksFromReplica();
     debugPrint("Tasks from Replica: ${tasks.length}");
-  }
-
-  Future<void> refreshTasks(String clientId, String encryptionSecret) async {
-    TaskDatabase taskDatabase = TaskDatabase();
-    await taskDatabase.open();
-    List<TaskForC> tasksFromServer =
-        await fetchTasks(clientId, encryptionSecret);
-    await updateTasksInDatabase(tasksFromServer);
-    List<TaskForC> fetchedTasks = await taskDatabase.fetchTasksFromDatabase();
-    tasks.value = fetchedTasks;
   }
 
   Future<void> fetchTasksFromDB() async {
@@ -593,9 +581,10 @@ class HomeController extends GetxController {
           await refreshReplicaTasks();
         }
       } else if (taskchampion.value) {
-        if (clientId != null && encryptionSecret != null) {
-          await refreshTasks(clientId, encryptionSecret);
-        }
+        // CCSync HTTP sync has been retired; the local TaskChampion database is
+        // the source of truth for this mode, so reload it without a remote
+        // round-trip.
+        await fetchTasksFromDB();
       } else {
         await synchronize(context, false);
       }

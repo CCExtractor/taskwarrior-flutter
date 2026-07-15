@@ -105,9 +105,9 @@ void main() {
     expect(spanish.reportsPageAddTasksToSeeReports,
         'Agrega tareas para ver informes');
     expect(spanish.taskchampionTileDescription,
-        'Cambia la sincronización de Taskwarrior al servidor de sincronización CCSync o Taskchampion');
+        'Cambia la sincronización de Taskwarrior al servidor de sincronización TaskChampion');
     expect(spanish.taskchampionTileTitle, 'Sincronización Taskchampion');
-    expect(spanish.ccsyncCredentials, 'Credenciales de CCSync');
+    expect(spanish.syncServerCredentials, 'Credenciales de TaskChampion');
     expect(spanish.deleteTaskConfirmation, 'Eliminar tarea');
     expect(spanish.deleteTaskTitle, '¿Eliminar todas las tareas?');
     expect(spanish.deleteTaskWarning,

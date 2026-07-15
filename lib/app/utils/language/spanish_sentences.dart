@@ -2,17 +2,17 @@ import 'package:taskwarrior/app/utils/language/sentences.dart';
 
 class SpanishSentences extends Sentences {
   @override
-  String get ccsyncLoginInstruction =>
-      'Inicia sesión en CCSync, copia tus credenciales y pégalas arriba.';
+  String get syncServerLoginInstruction =>
+      'Inicia sesión en TaskChampion, copia tus credenciales y pégalas arriba.';
   @override
-  String get ccsyncEasySyncTitle => 'Usa CCSync para una sincronización fácil';
+  String get syncServerEasySyncTitle => 'Usa TaskChampion para una sincronización fácil';
   @override
-  String get ccsyncOpenButton => 'Abrir CCSync';
+  String get syncServerOpenButton => 'Abrir TaskChampion';
   @override
-  String get ccsyncIntro =>
-      'CCSync utiliza TaskChampion para sincronizar tus tareas en múltiples dispositivos sin problemas. También obtienes un panel web para gestionar tus tareas desde cualquier navegador.';
+  String get syncServerIntro =>
+      'TaskChampion sincroniza tus tareas en múltiples dispositivos sin problemas. También obtienes un panel web para gestionar tus tareas desde cualquier navegador.';
   @override
-  String get ccsyncSelfHosted =>
+  String get syncServerSelfHosted =>
       'O utiliza tus propias credenciales de un servidor de sincronización TaskChampion autohospedado.';
   @override
   String get helloWorld => '¡Hola, mundo!';
@@ -206,13 +206,13 @@ class SpanishSentences extends Sentences {
 
   @override
   String get taskchampionTileDescription =>
-      'Cambia la sincronización de Taskwarrior al servidor de sincronización CCSync o Taskchampion';
+      'Cambia la sincronización de Taskwarrior al servidor de sincronización TaskChampion';
 
   @override
   String get taskchampionTileTitle => 'Sincronización Taskchampion';
 
   @override
-  String get ccsyncCredentials => 'Credenciales de CCSync';
+  String get syncServerCredentials => 'Credenciales de TaskChampion';
 
   @override
   String get deleteTaskConfirmation => 'Eliminar tarea';
@@ -665,9 +665,9 @@ class SpanishSentences extends Sentences {
   @override
   String get encryptionSecret => 'Secreto de cifrado';
   @override
-  String get ccsyncBackendUrl => 'URL del backend de CCSync';
+  String get syncServerBackendUrl => 'URL del backend de TaskChampion';
   @override
-  String get ccsyncClientId => 'ID de cliente';
+  String get syncServerClientId => 'ID de cliente';
   @override
   String get success => 'Éxito';
   @override
@@ -692,6 +692,4 @@ class SpanishSentences extends Sentences {
   String get storageAndData => 'Almacenamiento y datos';
   @override
   String get advanced => 'Avanzado';
-  @override
-  String get taskchampionBackendUrl => 'Taskchampion URL';
 }
