@@ -46,11 +46,19 @@ class TaskReplicaViewBuilder extends StatelessWidget {
         }
       }).toList();
 
-      // Sort by the selected column. Columns backed by the replica model:
-      // Created (entry), Modified, Start Time, Due till, Priority, Project.
-      // Urgency is not surfaced by the taskchampion 2.0.3 serializer and Tags
-      // has no meaningful single-key ordering, so those fall through to the
-      // default (most recently modified first).
+      // Urgency is computed (TaskChampion doesn't store it) — precompute once
+      // per task against a single "now" so every comparison is consistent and
+      // we don't recompute inside the O(n log n) sort.
+      final bool sortingByUrgency =
+          selectedSort == 'Urgency+' || selectedSort == 'Urgency-';
+      final DateTime now = DateTime.now().toUtc();
+      final Map<String, double> urgencyByUuid = sortingByUrgency
+          ? {for (final t in tasks) t.uuid: t.computeUrgency(clock: now)}
+          : const <String, double>{};
+
+      // Sort by the selected column. All eight columns are backed:
+      // Created (entry), Modified, Start Time, Due till, Priority (by severity),
+      // Project, Tags (grouped by sorted tag list), and Urgency (computed).
       tasks.sort((a, b) {
         switch (selectedSort) {
           case 'Created+':
@@ -79,6 +87,16 @@ class TaskReplicaViewBuilder extends StatelessWidget {
             return (a.project ?? '').compareTo(b.project ?? '');
           case 'Project-':
             return (b.project ?? '').compareTo(a.project ?? '');
+          case 'Tags+':
+            return _tagKey(a).compareTo(_tagKey(b));
+          case 'Tags-':
+            return _tagKey(b).compareTo(_tagKey(a));
+          case 'Urgency+':
+            return (urgencyByUuid[a.uuid] ?? 0.0)
+                .compareTo(urgencyByUuid[b.uuid] ?? 0.0);
+          case 'Urgency-':
+            return (urgencyByUuid[b.uuid] ?? 0.0)
+                .compareTo(urgencyByUuid[a.uuid] ?? 0.0);
           default:
             return (b.modified ?? 0).compareTo(a.modified ?? 0);
         }
@@ -219,6 +237,14 @@ class TaskReplicaViewBuilder extends StatelessWidget {
                 },
               ),
       );
+  }
+
+  // A stable key for Tags sort: the task's tags sorted alphabetically and
+  // joined, so tasks that share the same tags group together and untagged
+  // tasks (empty key) sort to one end.
+  String _tagKey(TaskForReplica task) {
+    final tags = [...(task.tags ?? const <String>[])]..sort();
+    return tags.join(' ');
   }
 
   // Rank priorities by severity (H > M > L > none) so Priority sort is
