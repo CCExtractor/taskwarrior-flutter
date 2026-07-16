@@ -331,76 +331,105 @@ class FilterDrawer extends StatelessWidget {
                         spacing: 8,
                         runSpacing: 4,
                         children: [
-                          for (var sort in [
-                            SentenceManager(
-                                    currentLanguage:
-                                        homeController.selectedLanguage.value)
-                                .sentences
-                                .filterDrawerCreated,
-                            SentenceManager(
-                                    currentLanguage:
-                                        homeController.selectedLanguage.value)
-                                .sentences
-                                .filterDrawerModified,
-                            SentenceManager(
-                                    currentLanguage:
-                                        homeController.selectedLanguage.value)
-                                .sentences
-                                .filterDrawerStartTime,
-                            SentenceManager(
-                                    currentLanguage:
-                                        homeController.selectedLanguage.value)
-                                .sentences
-                                .filterDrawerDueTill,
-                            SentenceManager(
-                                    currentLanguage:
-                                        homeController.selectedLanguage.value)
-                                .sentences
-                                .filterDrawerPriority,
-                            SentenceManager(
-                                    currentLanguage:
-                                        homeController.selectedLanguage.value)
-                                .sentences
-                                .filterDrawerProject,
-                            SentenceManager(
-                                    currentLanguage:
-                                        homeController.selectedLanguage.value)
-                                .sentences
-                                .filterDrawerTags,
-                            SentenceManager(
-                                    currentLanguage:
-                                        homeController.selectedLanguage.value)
-                                .sentences
-                                .filterDrawerUrgency,
+                          // Each sort option pairs a STABLE key (always English,
+                          // e.g. 'Created') with a localized display label. The
+                          // key is what gets stored in `selectedSort` and matched
+                          // by the sort switches in show_tasks*.dart. Previously
+                          // the localized label doubled as the sort value, so in
+                          // any non-English locale the stored value (e.g.
+                          // "Creado+") never matched case 'Created+' and sorting
+                          // silently did nothing.
+                          for (final option in <Map<String, String>>[
+                            {
+                              'key': 'Created',
+                              'label': SentenceManager(
+                                      currentLanguage:
+                                          homeController.selectedLanguage.value)
+                                  .sentences
+                                  .filterDrawerCreated
+                            },
+                            {
+                              'key': 'Modified',
+                              'label': SentenceManager(
+                                      currentLanguage:
+                                          homeController.selectedLanguage.value)
+                                  .sentences
+                                  .filterDrawerModified
+                            },
+                            {
+                              'key': 'Start Time',
+                              'label': SentenceManager(
+                                      currentLanguage:
+                                          homeController.selectedLanguage.value)
+                                  .sentences
+                                  .filterDrawerStartTime
+                            },
+                            {
+                              'key': 'Due till',
+                              'label': SentenceManager(
+                                      currentLanguage:
+                                          homeController.selectedLanguage.value)
+                                  .sentences
+                                  .filterDrawerDueTill
+                            },
+                            {
+                              'key': 'Priority',
+                              'label': SentenceManager(
+                                      currentLanguage:
+                                          homeController.selectedLanguage.value)
+                                  .sentences
+                                  .filterDrawerPriority
+                            },
+                            {
+                              'key': 'Project',
+                              'label': SentenceManager(
+                                      currentLanguage:
+                                          homeController.selectedLanguage.value)
+                                  .sentences
+                                  .filterDrawerProject
+                            },
+                            {
+                              'key': 'Tags',
+                              'label': SentenceManager(
+                                      currentLanguage:
+                                          homeController.selectedLanguage.value)
+                                  .sentences
+                                  .filterDrawerTags
+                            },
+                            {
+                              'key': 'Urgency',
+                              'label': SentenceManager(
+                                      currentLanguage:
+                                          homeController.selectedLanguage.value)
+                                  .sentences
+                                  .filterDrawerUrgency
+                            },
                           ])
                             Obx(
-                              () => ChoiceChip(
-                                label: (homeController.selectedSort.value
-                                        .startsWith(sort))
-                                    ? Text(
-                                        homeController.selectedSort.value,
-                                      )
-                                    : Text(sort),
-                                selected: false,
-                                onSelected: (_) {
-                                  if (homeController.selectedSort == '$sort+') {
-                                    homeController.selectSort('$sort-');
-                                  } else if (homeController.selectedSort ==
-                                      '$sort-') {
-                                    homeController.selectSort(sort);
-                                  } else {
-                                    homeController.selectSort('$sort+');
-                                  }
-                                },
-                                // labelStyle: GoogleFonts.poppins(
-                                //     color: AppSettings.isDarkMode
-                                //         ? TaskWarriorColors.black
-                                //         : TaskWarriorColors.white),
-                                // backgroundColor: AppSettings.isDarkMode
-                                //     ? TaskWarriorColors
-                                //         .kLightSecondaryBackgroundColor
-                                //     : TaskWarriorColors.ksecondaryBackgroundColor,
-                              ),
+                              () {
+                                final String key = option['key']!;
+                                final String label = option['label']!;
+                                final String value =
+                                    homeController.selectedSort.value;
+                                final String display = value == '$key+'
+                                    ? '$label+'
+                                    : value == '$key-'
+                                        ? '$label-'
+                                        : label;
+                                return ChoiceChip(
+                                  label: Text(display),
+                                  selected: false,
+                                  onSelected: (_) {
+                                    if (value == '$key+') {
+                                      homeController.selectSort('$key-');
+                                    } else if (value == '$key-') {
+                                      homeController.selectSort(key);
+                                    } else {
+                                      homeController.selectSort('$key+');
+                                    }
+                                  },
+                                );
+                              },
                             )
                         ],
                       ),
