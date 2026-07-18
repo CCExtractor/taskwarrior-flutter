@@ -13,6 +13,7 @@ abstract class Routes {
   static const PROFILE = _Paths.PROFILE;
   static const ABOUT = _Paths.ABOUT;
   static const REPORTS = _Paths.REPORTS;
+  static const REPORT_ENGINE = _Paths.REPORT_ENGINE;
   static const SETTINGS = _Paths.SETTINGS;
   static const PERMISSION = _Paths.PERMISSION;
   static const MANAGE_TASK_CHAMPION_CREDS = _Paths.MANAGE_TASK_CHAMPION_CREDS;
@@ -30,6 +31,7 @@ abstract class _Paths {
   static const PROFILE = '/profile';
   static const ABOUT = '/about';
   static const REPORTS = '/reports';
+  static const REPORT_ENGINE = '/report-engine';
   static const SETTINGS = '/settings';
   static const PERMISSION = '/permission';
   static const MANAGE_TASK_CHAMPION_CREDS = '/manage-task-champion-creds';

@@ -255,6 +255,14 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
                       },
               )),
         ),
+        IconButton(
+          icon: Tooltip(
+            message: 'Reports',
+            child: Icon(Icons.assignment_outlined,
+                color: TaskWarriorColors.white),
+          ),
+          onPressed: () => Get.toNamed(Routes.REPORT_ENGINE),
+        ),
         Builder(
           builder: (context) => IconButton(
             key: controller.filterKey,
