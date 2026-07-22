@@ -231,7 +231,10 @@ class HomeController extends GetxController {
     projectFilter.value = Query(storage.tabs.tab()).projectFilter();
     tagUnion.value = Query(storage.tabs.tab()).tagUnion();
     selectedSort.value = Query(storage.tabs.tab()).getSelectedSort();
-    selectedTags.addAll(Query(storage.tabs.tab()).getSelectedTags());
+    // Replace, not merge: this runs every time a profile becomes active (see
+    // refreshTaskWithNewProfile), so a plain addAll would leak the previous
+    // profile's tag filters into the new one instead of loading its own.
+    selectedTags.assignAll(Query(storage.tabs.tab()).getSelectedTags());
 
     _refreshTasks();
     pendingTags.value = _pendingTags();
@@ -677,7 +680,12 @@ class HomeController extends GetxController {
         '${splashController.baseDirectory.value.path}/profiles/${splashController.currentProfile.value}',
       ),
     );
-    _refreshTasks();
+    // Reload the filter/sort/tag state from the NEW profile's own persisted
+    // Query/storage.tabs, not just re-point storage and refresh with whatever
+    // filters happened to be in memory from the previous profile — otherwise
+    // the previous profile's project/tag/sort preferences silently carry over
+    // and get applied to the new profile's tasks.
+    _profileSet();
   }
 
   void changeInDirectory() {
@@ -687,7 +695,10 @@ class HomeController extends GetxController {
         '${splashController.baseDirectory.value.path}/profiles/${splashController.currentProfile.value}',
       ),
     );
-    _refreshTasks();
+    // Same reasoning as refreshTaskWithNewProfile: reload the filter/sort/tag
+    // state from the profile's Query/storage.tabs at the new location, rather
+    // than reusing whatever was in memory from the old base directory.
+    _profileSet();
   }
 
   RxBool useDelayTask = false.obs;
