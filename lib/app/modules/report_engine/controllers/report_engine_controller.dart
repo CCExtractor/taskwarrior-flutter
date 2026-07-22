@@ -13,6 +13,7 @@ class ReportEngineController extends GetxController {
   final Rxn<ReportDefinition> selectedReport = Rxn<ReportDefinition>();
   final RxList<TaskForReplica> results = <TaskForReplica>[].obs;
   final RxBool isLoading = false.obs;
+  final RxBool hasError = false.obs;
   final RxString taskrcPath = ''.obs;
 
   @override
@@ -41,13 +42,17 @@ class ReportEngineController extends GetxController {
   /// filtered, sorted result.
   Future<void> runReport(ReportDefinition report) async {
     isLoading.value = true;
+    hasError.value = false;
     selectedReport.value = report;
     try {
       final List<TaskForReplica> tasks =
           await Replica.getAllTasksFromReplica();
       results.assignAll(ReportService.execute(report, tasks));
     } catch (_) {
+      // Surface the failure distinctly from a legitimately empty report —
+      // otherwise a broken replica read silently looks like "no tasks match".
       results.clear();
+      hasError.value = true;
     } finally {
       isLoading.value = false;
     }

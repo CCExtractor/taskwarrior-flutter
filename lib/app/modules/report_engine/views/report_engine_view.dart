@@ -191,7 +191,28 @@ class ReportEngineView extends GetView<ReportEngineController> {
           ),
         ),
         Expanded(
-          child: controller.results.isEmpty
+          child: controller.hasError.value
+              ? RefreshIndicator(
+                  onRefresh: controller.rerunSelected,
+                  child: ListView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 24, vertical: 80),
+                        child: Text(
+                          "Couldn't load tasks for this report. "
+                          'Check that TaskChampion sync is configured, then '
+                          'pull down to retry.',
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.poppins(
+                              color: tColors.secondaryTextColor),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : controller.results.isEmpty
               ? Center(
                   child: Text('No tasks match this report.',
                       style: GoogleFonts.poppins(
