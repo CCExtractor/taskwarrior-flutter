@@ -11,43 +11,59 @@ import 'package:taskwarrior/app/v3/champion/models/task_for_replica.dart';
 class ReportEngineView extends GetView<ReportEngineController> {
   const ReportEngineView({super.key});
 
+  /// Steps back one level: from report results to the picker, or from the
+  /// picker out of the screen entirely. Shared by the AppBar back arrow and
+  /// the hardware/gesture back button (via [PopScope]) so the two can
+  /// never drift out of sync.
+  bool _handleBack() {
+    if (controller.selectedReport.value != null) {
+      controller.clearSelection();
+      return false; // handled here; don't pop the route
+    }
+    return true; // nothing to unwind; let the route pop
+  }
+
   @override
   Widget build(BuildContext context) {
     final TaskwarriorColorTheme tColors =
         Theme.of(context).extension<TaskwarriorColorTheme>()!;
 
-    return Scaffold(
-      backgroundColor: tColors.primaryBackgroundColor,
-      appBar: AppBar(
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        if (_handleBack()) Get.back();
+      },
+      child: Scaffold(
         backgroundColor: tColors.primaryBackgroundColor,
-        foregroundColor: tColors.primaryTextColor,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            if (controller.selectedReport.value != null) {
-              controller.clearSelection();
-            } else {
-              Get.back();
-            }
-          },
+        appBar: AppBar(
+          backgroundColor: tColors.primaryBackgroundColor,
+          foregroundColor: tColors.primaryTextColor,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              if (_handleBack()) Get.back();
+            },
+          ),
+          title: Obx(() {
+            final ReportDefinition? sel = controller.selectedReport.value;
+            return Text(
+              sel == null ? 'Reports' : sel.name,
+              style: GoogleFonts.poppins(
+                  color: tColors.primaryTextColor,
+                  fontWeight: FontWeight.w600),
+            );
+          }),
         ),
-        title: Obx(() {
-          final ReportDefinition? sel = controller.selectedReport.value;
-          return Text(
-            sel == null ? 'Reports' : sel.name,
-            style: GoogleFonts.poppins(
-                color: tColors.primaryTextColor, fontWeight: FontWeight.w600),
-          );
+        body: Obx(() {
+          if (controller.isLoading.value) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          return controller.selectedReport.value == null
+              ? _buildPicker(context, tColors)
+              : _buildResults(context, tColors);
         }),
       ),
-      body: Obx(() {
-        if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        return controller.selectedReport.value == null
-            ? _buildPicker(context, tColors)
-            : _buildResults(context, tColors);
-      }),
     );
   }
 
