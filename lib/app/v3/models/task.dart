@@ -51,7 +51,7 @@ class TaskForC {
         project: json['project'],
         status: json['status'],
         uuid: json['uuid'],
-        urgency: json['urgency'].toDouble(),
+        urgency: (json['urgency'] as num?)?.toDouble(),
         priority: json['priority'],
         due: json['due'],
         end: json['end'],
@@ -64,7 +64,10 @@ class TaskForC {
         recur: json['recur'],
         depends:
             json['depends']?.map<String>((d) => d.toString()).toList() ?? [],
-        annotations: <Annotation>[]);
+        annotations: (json['annotations'] as List?)
+                ?.map((a) => Annotation.fromJson(Map<String, dynamic>.from(a)))
+                .toList() ??
+            <Annotation>[]);
   }
 
   Map<String, dynamic> toJson() {
