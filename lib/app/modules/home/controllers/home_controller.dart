@@ -223,12 +223,11 @@ class HomeController extends GetxController {
 
   void _profileSet() {
     pendingFilter.value = Query(storage.tabs.tab()).getPendingFilter();
-    if (!Query(storage.tabs.tab()).getWaitingFilter()) {
-      waitingFilter.value = Query(storage.tabs.tab()).getWaitingFilter();
-    } else {
-      Query(storage.tabs.tab()).toggleWaitingFilter();
-      waitingFilter.value = Query(storage.tabs.tab()).getWaitingFilter();
-    }
+    // Load the persisted waiting-filter value as-is. The previous logic here
+    // toggled (and thus persisted) it to false whenever it was true, so a
+    // profile with the waiting filter enabled silently had it disabled every
+    // time the app started.
+    waitingFilter.value = Query(storage.tabs.tab()).getWaitingFilter();
     projectFilter.value = Query(storage.tabs.tab()).projectFilter();
     tagUnion.value = Query(storage.tabs.tab()).tagUnion();
     selectedSort.value = Query(storage.tabs.tab()).getSelectedSort();
