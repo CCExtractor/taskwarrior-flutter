@@ -119,7 +119,15 @@ class SplashController extends GetxController {
 
   void changeModeTo(String profile, String mode) {
     _profiles.setModeTo(profile, mode);
-    selectProfile(currentProfile.value);
+    // Only refresh the live app state (HomeController's mode flags, task
+    // list, etc.) when the profile whose mode just changed is the one
+    // actually active. selectProfile() unconditionally clears
+    // HomeController.tasks as a side effect, so calling it for an unrelated,
+    // inactive profile would wipe the currently-active profile's visible
+    // task list even though nothing about it changed.
+    if (profile == currentProfile.value) {
+      selectProfile(profile);
+    }
     profilesMap.value = _profiles.profilesMap();
   }
 

@@ -394,6 +394,7 @@ class AddTaskBottomSheet extends StatelessWidget {
         homeController.priority.value = 'X';
         homeController.tagcontroller.text = '';
         homeController.tags.value = [];
+        homeController.selectedDates.value = List<DateTime?>.filled(4, null);
         homeController.update();
         Get.back();
         if (Platform.isAndroid) {
@@ -473,6 +474,7 @@ class AddTaskBottomSheet extends StatelessWidget {
         homeController.priority.value = 'X';
         homeController.tagcontroller.text = '';
         homeController.tags.value = [];
+        homeController.selectedDates.value = List<DateTime?>.filled(4, null);
         homeController.update();
         Get.back();
         if (Platform.isAndroid) {
