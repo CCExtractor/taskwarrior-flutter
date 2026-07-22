@@ -40,14 +40,22 @@ void main() {
       task('overdue', due: now.subtract(const Duration(days: 2)).toIso8601String());
   final waiting =
       task('waiting', wait: now.add(const Duration(days: 5)).toIso8601String());
-  final completed = task('completed', status: 'completed');
+  // Also carries a past due date to prove +OVERDUE excludes non-pending tasks.
+  final completed = task('completed',
+      status: 'completed',
+      due: now.subtract(const Duration(days: 3)).toIso8601String());
   final recurring = task('recurring', status: 'recurring');
   final work = task('work', project: 'work', tags: ['office']);
+  // Deleted (so it doesn't affect any pending-based assertions) sibling
+  // project, to prove project: requires a dot boundary, not a raw prefix.
+  final workshop =
+      task('workshop-item', status: 'deleted', project: 'workshop');
 
   final all = [
     active,
     ready,
     blocked,
+    workshop,
     overdue,
     waiting,
     completed,
@@ -74,6 +82,13 @@ void main() {
           {'overdue'});
     });
 
+    test('+OVERDUE excludes non-pending tasks even with a past due date', () {
+      // 'completed' has a due date 3 days in the past but is completed, not
+      // pending — Taskwarrior never calls a closed task "overdue".
+      final result = VirtualFilterEngine.applyFilter(all, '+OVERDUE', now: now);
+      expect(ids(result).contains('completed'), isFalse);
+    });
+
     test('+WAITING = a future wait date', () {
       expect(ids(VirtualFilterEngine.applyFilter(all, '+WAITING', now: now)),
           {'waiting'});
@@ -96,6 +111,15 @@ void main() {
     test('project: prefix match', () {
       expect(ids(VirtualFilterEngine.applyFilter(all, 'project:work', now: now)),
           {'work'});
+    });
+
+    test('project: requires a dot boundary, not a raw prefix', () {
+      // 'workshop-item' is in project "workshop" — a raw startsWith("work")
+      // would wrongly include it when filtering project:work.
+      final result =
+          ids(VirtualFilterEngine.applyFilter(all, 'project:work', now: now));
+      expect(result, {'work'});
+      expect(result.contains('workshop-item'), isFalse);
     });
 
     test('priority: attribute', () {

@@ -26,8 +26,11 @@ class VirtualFilterEngine {
       case 'BLOCKING':
         return task.isBlocking ?? false;
       case 'OVERDUE':
+        // Taskwarrior defines +OVERDUE as pending tasks whose due date has
+        // passed; a completed/deleted task is never "overdue" even if its due
+        // date lapsed before it was closed.
         final DateTime? due = _parseDate(task.due);
-        return due != null && due.isBefore(clock);
+        return task.status == 'pending' && due != null && due.isBefore(clock);
       case 'WAITING':
         return task.status == 'waiting' || _isFutureWait(task, clock);
       case 'PENDING':
@@ -80,8 +83,12 @@ class VirtualFilterEngine {
       case 'status':
         return (task.status ?? '') == value;
       case 'project':
-        // Taskwarrior treats project as a hierarchy prefix match.
-        return (task.project ?? '').startsWith(value);
+        // Taskwarrior treats project as a hierarchy match: "work" matches
+        // "work" and its children ("work.sub"), but a raw prefix match would
+        // also wrongly match an unrelated sibling like "workshop" — require a
+        // dot boundary after the prefix.
+        final String proj = task.project ?? '';
+        return proj == value || proj.startsWith('$value.');
       case 'priority':
         return (task.priority ?? '') == value;
       default:
