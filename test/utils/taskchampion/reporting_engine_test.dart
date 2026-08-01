@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:taskwarrior/app/models/report.dart';
 import 'package:taskwarrior/app/services/report_service.dart';
-import 'package:taskwarrior/app/utils/taskc/taskrc_parser.dart';
-import 'package:taskwarrior/app/utils/taskc/virtual_filter_engine.dart';
+import 'package:taskwarrior/app/utils/taskchampion/taskrc_parser.dart';
+import 'package:taskwarrior/app/utils/taskchampion/virtual_filter_engine.dart';
 import 'package:taskwarrior/app/v3/champion/models/task_for_replica.dart';
 
 void main() {

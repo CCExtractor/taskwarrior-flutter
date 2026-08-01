@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:taskwarrior/app/utils/taskc/message.dart';
+import 'package:taskwarrior/app/utils/taskchampion/message.dart';
 import 'package:taskwarrior/app/utils/taskserver/credentials.dart';
 
 void main() {
