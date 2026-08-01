@@ -1,5 +1,5 @@
 import 'package:taskwarrior/app/models/report.dart';
-import 'package:taskwarrior/app/utils/taskc/virtual_filter_engine.dart';
+import 'package:taskwarrior/app/utils/taskchampion/virtual_filter_engine.dart';
 import 'package:taskwarrior/app/v3/champion/models/task_for_replica.dart';
 
 /// The reporting engine (Issue #418): the default report catalogue plus the

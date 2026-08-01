@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:taskwarrior/app/utils/taskc/response.dart';
-import 'package:taskwarrior/app/utils/taskc/payload.dart';
+import 'package:taskwarrior/app/utils/taskchampion/response.dart';
+import 'package:taskwarrior/app/utils/taskchampion/payload.dart';
 
 void main() {
   group('Response', () {

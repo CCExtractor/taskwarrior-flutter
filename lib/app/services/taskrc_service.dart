@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
 import 'package:taskwarrior/app/models/report.dart';
-import 'package:taskwarrior/app/utils/taskc/taskrc_parser.dart';
+import 'package:taskwarrior/app/utils/taskchampion/taskrc_parser.dart';
 
 /// Loads an optional user `.taskrc` so power users can tweak or add reports
 /// (Issue #418). The file lives in the app's documents directory; if it is

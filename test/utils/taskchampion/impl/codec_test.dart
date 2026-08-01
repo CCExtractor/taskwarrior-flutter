@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:taskwarrior/app/utils/taskc/impl/codec.dart';
+import 'package:taskwarrior/app/utils/taskchampion/impl/codec.dart';
 
 void main() {
   group('Codec', () {

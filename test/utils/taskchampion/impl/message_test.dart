@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:taskwarrior/app/utils/taskc/impl/message.dart';
+import 'package:taskwarrior/app/utils/taskchampion/impl/message.dart';
 
 void main() {
   group('TaskserverResponseException', () {
