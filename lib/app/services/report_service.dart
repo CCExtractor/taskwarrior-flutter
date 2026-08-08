@@ -1,6 +1,7 @@
 import 'package:taskwarrior/app/models/report.dart';
+import 'package:taskwarrior/app/models/task_like.dart';
+import 'package:taskwarrior/app/models/task_urgency.dart';
 import 'package:taskwarrior/app/utils/taskchampion/virtual_filter_engine.dart';
-import 'package:taskwarrior/app/v3/champion/models/task_for_replica.dart';
 
 /// The reporting engine (Issue #418): the default report catalogue plus the
 /// executor that turns a [ReportDefinition] + a task list into a filtered,
@@ -90,14 +91,14 @@ class ReportService {
 
   /// Runs a report over [tasks]: apply its filter, then its (multi-key) sort.
   /// [clock] anchors time-relative logic (urgency, `+OVERDUE`) for determinism.
-  static List<TaskForReplica> execute(
+  static List<T> execute<T extends TaskLike>(
     ReportDefinition report,
-    List<TaskForReplica> tasks, {
+    List<T> tasks, {
     DateTime? clock,
   }) {
     final DateTime now = (clock ?? DateTime.now()).toUtc();
 
-    final List<TaskForReplica> filtered = VirtualFilterEngine.applyFilter(
+    final List<T> filtered = VirtualFilterEngine.applyFilter(
       tasks,
       report.filterExpression,
       now: now,
@@ -105,10 +106,11 @@ class ReportService {
 
     // Urgency is comparatively expensive; compute once per task.
     final Map<String, double> urgencyCache = <String, double>{};
-    double urgencyOf(TaskForReplica t) =>
-        urgencyCache.putIfAbsent(t.uuid, () => t.computeUrgency(clock: now));
+    double urgencyOf(TaskLike t) => urgencyCache.putIfAbsent(
+        t.uuid ?? identityHashCode(t).toString(),
+        () => computeTaskUrgency(t, clock: now));
 
-    final List<TaskForReplica> sorted = List<TaskForReplica>.from(filtered);
+    final List<T> sorted = List<T>.from(filtered);
     sorted.sort((a, b) {
       for (final SortCriterion c in report.sortCriteria) {
         final int cmp = _compareField(a, b, c.field, urgencyOf);
@@ -120,10 +122,10 @@ class ReportService {
   }
 
   static int _compareField(
-    TaskForReplica a,
-    TaskForReplica b,
+    TaskLike a,
+    TaskLike b,
     String field,
-    double Function(TaskForReplica) urgencyOf,
+    double Function(TaskLike) urgencyOf,
   ) {
     switch (field) {
       case 'urgency':
@@ -135,9 +137,9 @@ class ReportService {
       case 'start':
         return _s(a.start).compareTo(_s(b.start));
       case 'entry':
-        return (a.entry ?? 0).compareTo(b.entry ?? 0);
+        return _cmpDate(a.entryDate, b.entryDate);
       case 'modified':
-        return (a.modified ?? 0).compareTo(b.modified ?? 0);
+        return _cmpDate(a.modifiedDate, b.modifiedDate);
       case 'priority':
         return _priorityRank(a.priority).compareTo(_priorityRank(b.priority));
       case 'project':
@@ -154,6 +156,15 @@ class ReportService {
   }
 
   static String _s(String? v) => v ?? '';
+
+  /// Nulls sort before real dates, so a task with no date never jumps ahead of
+  /// one that has it under an ascending sort.
+  static int _cmpDate(DateTime? a, DateTime? b) {
+    if (a == null && b == null) return 0;
+    if (a == null) return -1;
+    if (b == null) return 1;
+    return a.compareTo(b);
+  }
 
   static int _priorityRank(String? p) {
     switch (p) {
