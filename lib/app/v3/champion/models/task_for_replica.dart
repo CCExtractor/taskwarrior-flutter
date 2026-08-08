@@ -1,26 +1,44 @@
 import 'dart:convert';
 
+import 'package:taskwarrior/app/models/task_like.dart';
+import 'package:taskwarrior/app/models/task_urgency.dart';
 import 'package:taskwarrior/app/v3/models/annotation.dart';
 
-class TaskForReplica {
+/// The TaskChampion-path task model. Stores `entry`/`modified` as epoch
+/// seconds; see [TaskLike] for the normalized cross-model accessors.
+class TaskForReplica implements TaskLike {
   final int? modified;
   final int? entry;
+  @override
   final String? due;
+  @override
   final String? start;
+  @override
   final String? wait;
 
+  @override
   final String? status;
+  @override
   final String? description;
+  @override
   final List<String>? tags;
+  @override
   final String uuid;
+  @override
   final String? priority;
+  @override
   final String? project;
 
   // Attributes surfaced from the TaskChampion Rust serializer.
+  @override
   final bool? isBlocked;
+  @override
   final bool? isBlocking;
+  @override
   final List<String>? depends;
+  @override
   final String? recur;
+  @override
   final List<Annotation>? annotations;
 
   TaskForReplica({
@@ -164,115 +182,19 @@ class TaskForReplica {
     );
   }
 
-  /// Computes the task's urgency using Taskwarrior's standard algorithm and its
-  /// built-in default coefficients.
-  ///
-  /// TaskChampion (the storage/sync layer this app embeds) does not compute or
-  /// store urgency — it is a Taskwarrior-CLI concept — so we reproduce the
-  /// formula here from the attributes the Rust serializer surfaces. Urgency is a
-  /// weighted sum of independent terms; the default coefficients match upstream
-  /// Taskwarrior (Task.cpp `urgency_c`):
-  ///
-  ///   priority H/M/L = 6.0 / 3.9 / 1.8   due = 12.0     next(tag) = 15.0
-  ///   active = 4.0    age = 2.0 (over 365d)    annotations = 1.0
-  ///   tags = 1.0      project = 1.0    blocking = 8.0   blocked = -5.0
-  ///   waiting = -3.0
-  ///
-  /// `scheduled` (+5.0) and user-defined attributes/coefficients are omitted:
-  /// TaskChampion does not surface a scheduled date, and there are no UDAs here.
-  ///
-  /// [clock] overrides "now" (for age/due/waiting) so the result is testable.
-  double computeUrgency({DateTime? clock}) {
-    final DateTime now = (clock ?? DateTime.now()).toUtc();
-    double urgency = 0.0;
+  /// Normalized creation time. This model stores `entry` as epoch seconds.
+  @override
+  DateTime? get entryDate => epochToDate(entry);
 
-    // Priority.
-    switch (priority) {
-      case 'H':
-        urgency += 6.0;
-        break;
-      case 'M':
-        urgency += 3.9;
-        break;
-      case 'L':
-        urgency += 1.8;
-        break;
-    }
+  /// Normalized last-modified time, stored as epoch seconds.
+  @override
+  DateTime? get modifiedDate => epochToDate(modified);
 
-    // Belongs to a project.
-    if (project != null && project!.isNotEmpty) urgency += 1.0;
-
-    // Active (has been started).
-    if (start != null && start!.isNotEmpty) urgency += 4.0;
-
-    // Tags: 1 -> 0.8, 2 -> 0.9, 3+ -> 1.0. The special "next" tag adds 15.0.
-    final List<String> tagList = tags ?? const <String>[];
-    if (tagList.length == 1) {
-      urgency += 0.8;
-    } else if (tagList.length == 2) {
-      urgency += 0.9;
-    } else if (tagList.length >= 3) {
-      urgency += 1.0;
-    }
-    if (tagList.contains('next')) urgency += 15.0;
-
-    // Annotations: 1 -> 0.8, 2 -> 0.9, 3+ -> 1.0.
-    final int annCount = annotations?.length ?? 0;
-    if (annCount == 1) {
-      urgency += 0.8;
-    } else if (annCount == 2) {
-      urgency += 0.9;
-    } else if (annCount >= 3) {
-      urgency += 1.0;
-    }
-
-    // Age: linear ramp from 0 to 1 over 365 days since entry, coefficient 2.0.
-    if (entry != null) {
-      final DateTime entryDate =
-          DateTime.fromMillisecondsSinceEpoch(entry! * 1000, isUtc: true);
-      final double ageDays = now.difference(entryDate).inSeconds / 86400.0;
-      const double maxAge = 365.0;
-      final double ageTerm =
-          ageDays >= maxAge ? 1.0 : (ageDays <= 0 ? 0.0 : ageDays / maxAge);
-      urgency += 2.0 * ageTerm;
-    }
-
-    // Due: ramp mapping ~21 days around the due date to 0.2..1.0, coefficient 12.
-    final DateTime? dueDate = _parseDate(due);
-    if (dueDate != null) {
-      final double daysOverdue = now.difference(dueDate).inSeconds / 86400.0;
-      double term;
-      if (daysOverdue >= 7.0) {
-        term = 1.0;
-      } else if (daysOverdue >= -14.0) {
-        term = ((daysOverdue + 14.0) * 0.8 / 21.0) + 0.2;
-      } else {
-        term = 0.2;
-      }
-      urgency += 12.0 * term;
-    }
-
-    // Waiting (wait date in the future).
-    final DateTime? waitDate = _parseDate(wait);
-    if (waitDate != null && waitDate.isAfter(now)) urgency -= 3.0;
-
-    // Dependency relationships.
-    if (isBlocking == true) urgency += 8.0;
-    if (isBlocked == true) urgency -= 5.0;
-
-    return urgency;
-  }
-
-  static DateTime? _parseDate(String? value) {
-    if (value == null || value.isEmpty) return null;
-    final DateTime? parsed = DateTime.tryParse(value);
-    if (parsed != null) return parsed.toUtc();
-    final int? epoch = int.tryParse(value);
-    if (epoch != null) {
-      return DateTime.fromMillisecondsSinceEpoch(epoch * 1000, isUtc: true);
-    }
-    return null;
-  }
+  /// Computes this task's urgency with Taskwarrior's standard algorithm.
+  /// The formula and its coefficients live in [computeTaskUrgency], shared
+  /// with every other task model via [TaskLike].
+  double computeUrgency({DateTime? clock}) =>
+      computeTaskUrgency(this, clock: clock);
 
   @override
   String toString() => 'TaskForReplica(${jsonEncode(toJson())})';

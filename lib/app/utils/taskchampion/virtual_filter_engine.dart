@@ -1,6 +1,6 @@
-import 'package:taskwarrior/app/v3/champion/models/task_for_replica.dart';
+import 'package:taskwarrior/app/models/task_like.dart';
 
-/// Evaluates Taskwarrior-style filter expressions against replica tasks.
+/// Evaluates Taskwarrior-style filter expressions against tasks.
 ///
 /// Supports the virtual tags that drive the default reports (Issue #418) —
 /// `+ACTIVE`, `+READY`, `+BLOCKED`, `+BLOCKING`, `+OVERDUE`, `+WAITING`,
@@ -8,10 +8,12 @@ import 'package:taskwarrior/app/v3/champion/models/task_for_replica.dart';
 /// (`status:`, `project:`, `priority:`) and negation (`-TAG`). Tokens are
 /// combined with AND, so `"status:pending +ACTIVE project:work"` keeps tasks
 /// that satisfy every token.
+///
+/// Written against [TaskLike] so it works for every task model / sync mode.
 class VirtualFilterEngine {
   /// Returns whether [task] satisfies a single virtual/real tag like `+READY`
   /// or `+home`. [now] anchors time-relative tags (`+OVERDUE`).
-  static bool evaluateTag(TaskForReplica task, String tag, {DateTime? now}) {
+  static bool evaluateTag(TaskLike task, String tag, {DateTime? now}) {
     final DateTime clock = (now ?? DateTime.now()).toUtc();
     final String bare = tag.replaceFirst('+', '');
     switch (bare.toUpperCase()) {
@@ -29,7 +31,7 @@ class VirtualFilterEngine {
         // Taskwarrior defines +OVERDUE as pending tasks whose due date has
         // passed; a completed/deleted task is never "overdue" even if its due
         // date lapsed before it was closed.
-        final DateTime? due = _parseDate(task.due);
+        final DateTime? due = parseTaskDate(task.due);
         return task.status == 'pending' && due != null && due.isBefore(clock);
       case 'WAITING':
         return task.status == 'waiting' || _isFutureWait(task, clock);
@@ -46,14 +48,15 @@ class VirtualFilterEngine {
   }
 
   /// Applies a compound filter [expression] to [tasks]. An empty/blank
-  /// expression matches everything.
-  static List<TaskForReplica> applyFilter(
-    List<TaskForReplica> tasks,
+  /// expression matches everything. The element type is preserved, so callers
+  /// keep their concrete model type.
+  static List<T> applyFilter<T extends TaskLike>(
+    List<T> tasks,
     String? expression, {
     DateTime? now,
   }) {
     final String expr = (expression ?? '').trim();
-    if (expr.isEmpty) return List<TaskForReplica>.from(tasks);
+    if (expr.isEmpty) return List<T>.from(tasks);
 
     final List<String> tokens =
         expr.split(RegExp(r'\s+')).where((t) => t.isNotEmpty).toList();
@@ -78,7 +81,7 @@ class VirtualFilterEngine {
     }).toList();
   }
 
-  static bool _matchAttribute(TaskForReplica task, String attr, String value) {
+  static bool _matchAttribute(TaskLike task, String attr, String value) {
     switch (attr) {
       case 'status':
         return (task.status ?? '') == value;
@@ -99,19 +102,8 @@ class VirtualFilterEngine {
 
   static bool _isSet(String? v) => v != null && v.isNotEmpty;
 
-  static bool _isFutureWait(TaskForReplica task, DateTime clock) {
-    final DateTime? wait = _parseDate(task.wait);
+  static bool _isFutureWait(TaskLike task, DateTime clock) {
+    final DateTime? wait = parseTaskDate(task.wait);
     return wait != null && wait.isAfter(clock);
-  }
-
-  static DateTime? _parseDate(String? value) {
-    if (value == null || value.isEmpty) return null;
-    final DateTime? parsed = DateTime.tryParse(value);
-    if (parsed != null) return parsed.toUtc();
-    final int? epoch = int.tryParse(value);
-    if (epoch != null) {
-      return DateTime.fromMillisecondsSinceEpoch(epoch * 1000, isUtc: true);
-    }
-    return null;
   }
 }
