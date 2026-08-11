@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
 import 'package:taskwarrior/app/modules/reports/controllers/reports_controller.dart';
-import 'package:taskwarrior/app/modules/reports/views/burn_down_daily_taskc.dart';
-import 'package:taskwarrior/app/modules/reports/views/burn_down_monthly_taskc.dart';
-import 'package:taskwarrior/app/modules/reports/views/burn_down_weekly_taskc.dart';
+import 'package:taskwarrior/app/modules/reports/burn_down_data.dart';
+import 'package:taskwarrior/app/modules/reports/views/burn_down_chart.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
@@ -145,14 +144,27 @@ class ReportsHomeTaskc extends StatelessWidget {
                         ),
                       ],
                     )
-                  : TabBarView(
-                      controller: reportsController.tabController,
-                      children: [
-                        BurnDownDailyTaskc(),
-                        BurnDownWeeklyTask(),
-                        BurnDownMonthlyTaskc(),
-                      ],
-                    ),
+                  : Builder(builder: (context) {
+                      // Reuse the tasks this screen already fetched. The taskc
+                      // charts bucketed by `entry` (an ISO/compact string);
+                      // unparseable entries were skipped, as they are here.
+                      final entries = <BurnDownEntry>[];
+                      for (final t in allTasks) {
+                        final parsed = DateTime.tryParse(t.entry);
+                        if (parsed == null) continue;
+                        entries.add(BurnDownEntry(
+                          date: parsed,
+                          status: t.status,
+                        ));
+                      }
+                      return TabBarView(
+                        controller: reportsController.tabController,
+                        children: [
+                          for (final period in BurnDownPeriod.values)
+                            BurnDownChart(entries: entries, period: period),
+                        ],
+                      );
+                    }),
         );
       },
     );
