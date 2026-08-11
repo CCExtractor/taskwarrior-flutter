@@ -154,6 +154,7 @@ class HomePageBody extends StatelessWidget {
                       child: TaskReplicaViewBuilder(
                         replicaTasks: replicaTasks,
                         pendingFilter: controller.pendingFilter.value,
+                        statusFilter: controller.statusFilter.value,
                         selectedSort: controller.selectedSort.value,
                         project: controller.projectFilter.value,
                       ),

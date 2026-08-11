@@ -17,12 +17,17 @@ class TaskReplicaViewBuilder extends StatelessWidget {
     super.key,
     this.project,
     required this.pendingFilter,
+    required this.statusFilter,
     required this.selectedSort,
     required this.replicaTasks,
   });
 
   final String selectedSort;
   final bool pendingFilter;
+
+  /// pending / completed / deleted — supersedes [pendingFilter], which cannot
+  /// express the deleted state.
+  final String statusFilter;
   final String? project;
   final List<TaskForReplica> replicaTasks;
 
@@ -38,13 +43,7 @@ class TaskReplicaViewBuilder extends StatelessWidget {
       if (project != null && project!.isNotEmpty && project != 'All Projects') {
         tasks = tasks.where((task) => task.project == project).toList();
       }
-      tasks = tasks.where((task) {
-        if (pendingFilter) {
-          return task.status == 'pending';
-        } else {
-          return task.status == 'completed';
-        }
-      }).toList();
+      tasks = tasks.where((task) => task.status == statusFilter).toList();
 
       // Urgency is computed (TaskChampion doesn't store it) — precompute once
       // per task against a single "now" so every comparison is consistent and

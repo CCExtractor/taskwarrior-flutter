@@ -11,6 +11,7 @@ import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
+import 'package:taskwarrior/app/utils/taskfunctions/query.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
@@ -97,17 +98,22 @@ class FilterDrawer extends StatelessWidget {
                               color: tColors.primaryTextColor,
                             )),
                         TextSpan(
-                            text: filters.pendingFilter
-                                ? SentenceManager(
-                                        currentLanguage: homeController
-                                            .selectedLanguage.value)
-                                    .sentences
-                                    .filterDrawerPending
-                                : SentenceManager(
-                                        currentLanguage: homeController
-                                            .selectedLanguage.value)
-                                    .sentences
-                                    .filterDrawerCompleted,
+                            // pending / completed / deleted, rather than the
+                            // old pending-or-completed boolean.
+                            text: () {
+                              final sentences = SentenceManager(
+                                      currentLanguage:
+                                          homeController.selectedLanguage.value)
+                                  .sentences;
+                              switch (homeController.statusFilter.value) {
+                                case Query.statusCompleted:
+                                  return sentences.filterDrawerCompleted;
+                                case Query.statusDeleted:
+                                  return sentences.filterDrawerDeleted;
+                                default:
+                                  return sentences.filterDrawerPending;
+                              }
+                            }(),
                             style: TextStyle(
                               fontFamily: FontFamily.poppins,
                               fontSize: TaskWarriorFonts.fontSizeMedium,
