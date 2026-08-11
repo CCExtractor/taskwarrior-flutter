@@ -52,6 +52,26 @@ add_subdirectory(${FLUTTER_MANAGED_DIR})
 # Application build; see runner/CMakeLists.txt.
 add_subdirectory("runner")
 
+# Rebuild the tc_helper Rust library from rust/ as part of the build, so the
+# native library cannot drift from its source. flutter_rust_bridge's desktop
+# loader reads rust/target/release (see ioDirectory in frb_generated.dart), so
+# a plain `cargo build --release` is all that is required here.
+#
+# Intentionally non-fatal: if cargo is absent the target prints a warning and
+# succeeds, leaving any existing library in place, so contributors without a
+# Rust toolchain can still build the app.
+find_program(CARGO_EXECUTABLE cargo HINTS "$ENV{HOME}/.cargo/bin")
+if(CARGO_EXECUTABLE)
+  add_custom_target(tc_helper_rust ALL
+    COMMAND "${CARGO_EXECUTABLE}" build --release
+    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../rust"
+    COMMENT "Building tc_helper Rust library"
+  )
+  add_dependencies(${BINARY_NAME} tc_helper_rust)
+else()
+  message(WARNING "cargo not found; skipping the tc_helper rebuild and using any existing library")
+endif()
+
 
 # Generated plugin build rules, which manage building the plugins and adding
 # them to the application.
