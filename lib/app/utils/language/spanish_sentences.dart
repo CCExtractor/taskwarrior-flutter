@@ -140,6 +140,7 @@ class SpanishSentences extends Sentences {
   String get filterDrawerPending => 'Pendiente';
   @override
   String get filterDrawerCompleted => 'Completado';
+  String get filterDrawerDeleted => 'Eliminado';
   @override
   String get filterDrawerFilterTagBy => 'Filtrar por etiqueta';
   @override

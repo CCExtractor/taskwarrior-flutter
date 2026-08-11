@@ -42,6 +42,10 @@ class HomeController extends GetxController {
   final SplashController splashController = Get.find<SplashController>();
   late Storage storage;
   final RxBool pendingFilter = false.obs;
+  /// Which status the list is filtered to: pending / completed / deleted.
+  /// Supersedes [pendingFilter], which can only express the first two; that
+  /// flag is kept in step for the call sites still reading it.
+  final RxString statusFilter = Query.statusPending.obs;
   final RxBool waitingFilter = false.obs;
   final RxString projectFilter = ''.obs;
   final RxBool tagUnion = false.obs;
@@ -94,6 +98,7 @@ class HomeController extends GetxController {
     // (which filters `status == pending` only when pendingFilter is true)
     // shows completed tasks only — hiding every pending task on first load.
     pendingFilter.value = Query(storage.tabs.tab()).getPendingFilter();
+    statusFilter.value = Query(storage.tabs.tab()).getStatusFilter();
     waitingFilter.value = Query(storage.tabs.tab()).getWaitingFilter();
     _loadTaskChampion();
     fetchTasksFromDB();
@@ -108,6 +113,7 @@ class HomeController extends GetxController {
     });
     everAll([
       pendingFilter,
+      statusFilter,
       waitingFilter,
       projectFilter,
       tagUnion,
@@ -223,6 +229,7 @@ class HomeController extends GetxController {
 
   void _profileSet() {
     pendingFilter.value = Query(storage.tabs.tab()).getPendingFilter();
+    statusFilter.value = Query(storage.tabs.tab()).getStatusFilter();
     // Load the persisted waiting-filter value as-is. The previous logic here
     // toggled (and thus persisted) it to false whenever it was true, so a
     // profile with the waiting filter enabled silently had it disabled every
@@ -344,8 +351,14 @@ class HomeController extends GetxController {
   }
 
   void togglePendingFilter() {
-    Query(storage.tabs.tab()).togglePendingFilter();
+    // Cycle pending -> completed -> deleted -> pending. "Deleted" is only
+    // offered on the TaskChampion path, which is the only one that keeps
+    // deleted tasks (the local list has no deleted view), so other modes keep
+    // the original two-way toggle.
+    Query(storage.tabs.tab())
+        .cycleStatusFilter(includeDeleted: taskReplica.value);
     pendingFilter.value = Query(storage.tabs.tab()).getPendingFilter();
+    statusFilter.value = Query(storage.tabs.tab()).getStatusFilter();
     _refreshTasks();
   }
 
@@ -519,6 +532,7 @@ class HomeController extends GetxController {
   void setInitialTabIndex(int index) {
     storage.tabs.setInitialTabIndex(index);
     pendingFilter.value = Query(storage.tabs.tab()).getPendingFilter();
+    statusFilter.value = Query(storage.tabs.tab()).getStatusFilter();
     waitingFilter.value = Query(storage.tabs.tab()).getWaitingFilter();
     selectedSort.value = Query(storage.tabs.tab()).getSelectedSort();
     selectedTags.addAll(Query(storage.tabs.tab()).getSelectedTags());
@@ -541,6 +555,7 @@ class HomeController extends GetxController {
   void removeTab(int index) {
     storage.tabs.removeTab(index);
     pendingFilter.value = Query(storage.tabs.tab()).getPendingFilter();
+    statusFilter.value = Query(storage.tabs.tab()).getStatusFilter();
     waitingFilter.value = Query(storage.tabs.tab()).getWaitingFilter();
     selectedSort.value = Query(storage.tabs.tab()).getSelectedSort();
     selectedTags.addAll(Query(storage.tabs.tab()).getSelectedTags());

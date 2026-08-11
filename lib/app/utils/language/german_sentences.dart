@@ -152,6 +152,7 @@ class GermanSentences extends Sentences {
   String get filterDrawerPending => 'Bevorstehend';
   @override
   String get filterDrawerCompleted => 'Erledigt';
+  String get filterDrawerDeleted => 'Gelöscht';
   @override
   String get filterDrawerFilterTagBy => 'Tag filtern nach';
   @override

@@ -34,6 +34,13 @@ fn get_all_tasks_json_impl(taskdb_dir_path: &str) -> Result<String, TcHelperErro
 }
 
 /// Delete the task with the given UUID. A no-op if the task does not exist.
+///
+/// This is a *soft* delete, matching what `task delete` does in the Taskwarrior
+/// CLI: the task's status becomes `deleted` but the record is preserved, so it
+/// still syncs, remains auditable, and can be restored (`task undelete`).
+/// Previously this purged the task from the replica outright via
+/// `TaskData::delete()`, which is the equivalent of `task purge` — the data was
+/// unrecoverable and never appeared in a "deleted" view on any client.
 #[frb]
 pub fn delete_task(uuid_st: String, taskdb_dir_path: String) -> Result<(), String> {
     delete_task_impl(&uuid_st, &taskdb_dir_path).map_err(|e| e.to_string())
@@ -45,10 +52,11 @@ fn delete_task_impl(uuid_st: &str, taskdb_dir_path: &str) -> Result<(), TcHelper
     let uuid = Uuid::parse_str(uuid_st).map_err(|_| TcHelperError::InvalidUuid(uuid_st.to_string()))?;
 
     if let Some(mut t) = replica
-        .get_task_data(uuid)
+        .get_task(uuid)
         .map_err(|e| TcHelperError::Champion(e.to_string()))?
     {
-        t.delete(&mut ops);
+        t.set_status(taskchampion::Status::Deleted, &mut ops)
+            .map_err(|e| TcHelperError::Champion(e.to_string()))?;
     }
     replica
         .commit_operations(ops)
@@ -80,7 +88,10 @@ fn update_task_impl(
         .get_task(uuid)
         .map_err(|e| TcHelperError::Champion(e.to_string()))?
     {
-        let _ = t.set_status(taskchampion::Status::Pending, &mut ops);
+        // NOTE: do not force the status here. This used to unconditionally set
+        // Pending before applying the map, so any update that didn't carry an
+        // explicit "status" silently resurrected a completed or deleted task.
+        // Status is applied below only when the caller actually supplies it.
         for (key, value) in map {
             match key.as_str() {
                 "description" => {
@@ -342,6 +353,91 @@ fn test_dependencies_and_annotations_surface() {
     // B is depended-upon → B is blocking, not blocked.
     assert_eq!(b["is_blocking"].as_bool(), Some(true), "B must be blocking");
     assert_eq!(b["is_blocked"].as_bool(), Some(false), "B must not be blocked");
+
+    fs::remove_dir_all(&tmp).ok();
+}
+
+#[test]
+fn test_delete_task_is_a_soft_delete() {
+    // `task delete` in the Taskwarrior CLI is a *soft* delete: the record
+    // survives with status=deleted so it still syncs and can be restored.
+    // This previously used TaskData::delete(), which purged the task outright
+    // (the `task purge` equivalent) and left nothing to recover or display.
+    use std::{collections::HashMap, env, fs};
+    use serde_json::Value;
+
+    let tmp = env::temp_dir().join(format!("taskdb_deltest_{}", Uuid::new_v4()));
+    let taskdb_path = tmp.to_string_lossy().into_owned();
+    fs::create_dir_all(&tmp).expect("create temp taskdb dir");
+
+    let uuid = Uuid::new_v4().to_string();
+    let mut map: HashMap<String, String> = HashMap::new();
+    map.insert("uuid".to_string(), uuid.clone());
+    map.insert("description".to_string(), "doomed task".to_string());
+    add_task(taskdb_path.clone(), map).expect("add_task");
+
+    delete_task(uuid.clone(), taskdb_path.clone()).expect("delete_task");
+
+    let json = get_all_tasks_json(taskdb_path.clone()).expect("get_all_tasks_json");
+    let tasks: Vec<Value> = serde_json::from_str(&json).expect("parse json");
+    let task = tasks
+        .into_iter()
+        .find(|t| t.get("uuid").and_then(|u| u.as_str()) == Some(uuid.as_str()));
+
+    // The task must still exist...
+    let task = task.expect("deleted task was purged from the replica, not soft-deleted");
+    // ...and be marked deleted rather than left pending.
+    assert_eq!(
+        task.get("status").and_then(|v| v.as_str()),
+        Some("deleted"),
+        "expected status=deleted after delete_task"
+    );
+
+    fs::remove_dir_all(&tmp).ok();
+}
+
+#[test]
+fn test_update_preserves_status_when_not_supplied() {
+    // Regression: update_task_impl used to force Status::Pending before
+    // applying the caller's map, so editing (say) a description on a deleted
+    // or completed task silently resurrected it as pending — which would also
+    // quietly undo a soft delete.
+    use std::{collections::HashMap, env, fs};
+    use serde_json::Value;
+
+    let tmp = env::temp_dir().join(format!("taskdb_statustest_{}", Uuid::new_v4()));
+    let taskdb_path = tmp.to_string_lossy().into_owned();
+    fs::create_dir_all(&tmp).expect("create temp taskdb dir");
+
+    let uuid = Uuid::new_v4().to_string();
+    let mut map: HashMap<String, String> = HashMap::new();
+    map.insert("uuid".to_string(), uuid.clone());
+    map.insert("description".to_string(), "will be deleted".to_string());
+    add_task(taskdb_path.clone(), map).expect("add_task");
+    delete_task(uuid.clone(), taskdb_path.clone()).expect("delete_task");
+
+    // Edit only the description — no "status" key in the map.
+    let mut edit: HashMap<String, String> = HashMap::new();
+    edit.insert("description".to_string(), "renamed".to_string());
+    update_task(uuid.clone(), taskdb_path.clone(), edit).expect("update_task");
+
+    let json = get_all_tasks_json(taskdb_path.clone()).expect("get_all_tasks_json");
+    let tasks: Vec<Value> = serde_json::from_str(&json).expect("parse json");
+    let task = tasks
+        .into_iter()
+        .find(|t| t.get("uuid").and_then(|u| u.as_str()) == Some(uuid.as_str()))
+        .expect("task missing");
+
+    assert_eq!(
+        task.get("description").and_then(|v| v.as_str()),
+        Some("renamed"),
+        "the description edit should have applied"
+    );
+    assert_eq!(
+        task.get("status").and_then(|v| v.as_str()),
+        Some("deleted"),
+        "editing a deleted task must not resurrect it to pending"
+    );
 
     fs::remove_dir_all(&tmp).ok();
 }

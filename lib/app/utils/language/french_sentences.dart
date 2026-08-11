@@ -139,6 +139,7 @@ class FrenchSentences extends Sentences {
   String get filterDrawerPending => 'En attente';
   @override
   String get filterDrawerCompleted => 'Complété';
+  String get filterDrawerDeleted => 'Supprimé';
   @override
   String get filterDrawerFilterTagBy => 'Filtrer par tag';
   @override

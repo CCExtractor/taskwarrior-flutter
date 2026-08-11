@@ -152,6 +152,7 @@ class HindiSentences extends Sentences {
   String get filterDrawerPending => 'अपूर्ण';
   @override
   String get filterDrawerCompleted => 'पूर्ण';
+  String get filterDrawerDeleted => 'हटाए गए';
   @override
   String get filterDrawerFilterTagBy => 'टैग से फ़िल्टर करें';
   @override

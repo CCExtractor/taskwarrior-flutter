@@ -152,6 +152,7 @@ class UrduSentences extends Sentences {
   String get filterDrawerPending => 'زیر التواء';
   @override
   String get filterDrawerCompleted => 'مکمل';
+  String get filterDrawerDeleted => 'حذف شدہ';
   @override
   String get filterDrawerFilterTagBy => 'ٹیگ کے لحاظ سے فلٹر کریں';
   @override

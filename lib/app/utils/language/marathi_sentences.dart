@@ -140,6 +140,7 @@ class MarathiSentences extends Sentences {
   String get filterDrawerPending => 'प्रलंबित';
   @override
   String get filterDrawerCompleted => 'पूर्ण';
+  String get filterDrawerDeleted => 'हटवलेले';
   @override
   String get filterDrawerFilterTagBy => 'टॅगवर फिल्टर करा';
   @override

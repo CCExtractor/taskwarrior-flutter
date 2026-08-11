@@ -152,6 +152,7 @@ class EnglishSentences extends Sentences {
   String get filterDrawerPending => 'Pending';
   @override
   String get filterDrawerCompleted => 'Completed';
+  String get filterDrawerDeleted => 'Deleted';
   @override
   String get filterDrawerFilterTagBy => 'Filter Tag By';
   @override
