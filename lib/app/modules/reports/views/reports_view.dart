@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:taskwarrior/app/modules/reports/views/burn_down_daily.dart';
-import 'package:taskwarrior/app/modules/reports/views/burn_down_monthly.dart';
-import 'package:taskwarrior/app/modules/reports/views/burn_down_weekly.dart';
+import 'package:taskwarrior/app/modules/reports/burn_down_data.dart';
+import 'package:taskwarrior/app/modules/reports/views/burn_down_chart.dart';
 import 'package:taskwarrior/app/utils/constants/constants.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
@@ -130,20 +129,24 @@ class ReportsView extends GetView<ReportsController> {
                   ),
                 ],
               )
-            : TabBarView(
-                controller: controller.tabController,
-                children: [
-                  BurnDownDaily(
-                    reportsController: controller,
-                  ),
-                  BurnDownWeekly(
-                    reportsController: controller,
-                  ),
-                  BurnDownMonthly(
-                    reportsController: controller,
-                  ),
-                ],
-              ),
+            : Builder(builder: (context) {
+                // The local path buckets by `entry`, which is already a
+                // DateTime on this model, matching the controller's previous
+                // sortBurnDown* behaviour.
+                final entries = controller.allData
+                    .map((t) => BurnDownEntry(
+                          date: t.entry,
+                          status: t.status,
+                        ))
+                    .toList();
+                return TabBarView(
+                  controller: controller.tabController,
+                  children: [
+                    for (final period in BurnDownPeriod.values)
+                      BurnDownChart(entries: entries, period: period),
+                  ],
+                );
+              }),
       ),
     );
   }

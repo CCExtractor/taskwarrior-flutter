@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
 import 'package:taskwarrior/app/modules/reports/controllers/reports_controller.dart';
-import 'package:taskwarrior/app/modules/reports/views/burn_down_daily_replica.dart';
-import 'package:taskwarrior/app/modules/reports/views/burn_down_monthly_replica.dart';
-import 'package:taskwarrior/app/modules/reports/views/burn_down_weekly_replica.dart';
+import 'package:taskwarrior/app/modules/reports/burn_down_data.dart';
+import 'package:taskwarrior/app/modules/reports/views/burn_down_chart.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
@@ -149,14 +148,33 @@ class ReportsHomeReplica extends StatelessWidget {
                         ),
                       ],
                     )
-                  : TabBarView(
-                      controller: reportsController.tabController,
-                      children: [
-                        BurnDownDailyReplica(),
-                        BurnDownWeeklyReplica(),
-                        BurnDownMonthlyReplica(),
-                      ],
-                    ),
+                  : Builder(builder: (context) {
+                      // Reuse the tasks this screen already fetched instead of
+                      // each chart re-fetching them. Replica charts bucket by
+                      // `modified` (epoch seconds), as they did before.
+                      final entries = allTasks
+                          .where((t) => t.modified != null)
+                          .map((t) => BurnDownEntry(
+                                date: DateTime.fromMillisecondsSinceEpoch(
+                                        t.modified! * 1000,
+                                        isUtc: true)
+                                    .toLocal(),
+                                status: t.status ?? '',
+                              ))
+                          .toList();
+                      return TabBarView(
+                        controller: reportsController.tabController,
+                        children: [
+                          for (final period in BurnDownPeriod.values)
+                            BurnDownChart(
+                              entries: entries,
+                              period: period,
+                              titleSuffix: ' (Replica)',
+                              dateAxisSuffix: ' (Modified Date)',
+                            ),
+                        ],
+                      );
+                    }),
         );
       },
     );
