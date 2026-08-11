@@ -32,6 +32,14 @@ target 'Runner' do
   use_modular_headers!
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+
+  # Rebuild the tc_helper Rust library from rust/ on every build, so the native
+  # library can never drift from its source. The script is intentionally
+  # non-fatal: without a Rust toolchain it warns and the build proceeds using
+  # the existing binary, so contributors without Rust are unaffected.
+  script_phase :name => 'Build tc_helper (Rust)',
+               :script => '"$PODS_TARGET_SRCROOT"/../scripts/build_tc_helper_apple.sh ios',
+               :execution_position => :before_compile
 end
 
 post_install do |installer|
