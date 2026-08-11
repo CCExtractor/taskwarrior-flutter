@@ -10,7 +10,10 @@
 # version, and the cargo-ndk invocation are transcribed from a verified LOCAL
 # build (macOS) and may need small adjustments on the first CI run.
 #
-# Both arm64-v8a and armeabi-v7a are built. taskchampion is configured with only
+# All three ABIs Flutter builds are covered: arm64-v8a, armeabi-v7a and x86_64.
+# The list must stay in sync with android/app/build.gradle's cargoBuildTcHelper —
+# an ABI missing here ships an APK without libtc_helper.so that installs fine and
+# then crashes at RustLib.init(). taskchampion is configured with only
 # the server-sync backend (see rust/Cargo.toml), so there's no aws-lc-sys — hence
 # no cmake/ninja/bindgen/libclang toolchain needed; ring builds with just the
 # Rust + NDK toolchain.
@@ -46,15 +49,23 @@ jobs:
       - name: Install Rust + Android targets + cargo-ndk
         run: |
           rustup toolchain install stable --profile minimal
-          rustup target add aarch64-linux-android armv7-linux-androideabi
+          rustup target add aarch64-linux-android armv7-linux-androideabi x86_64-linux-android
           cargo install cargo-ndk --version ^4
 
-      - name: Compile tc_helper (arm64-v8a + armeabi-v7a) from source
+      - name: Compile tc_helper (arm64-v8a + armeabi-v7a + x86_64) from source
         working-directory: rust
         run: |
-          cargo ndk -t arm64-v8a -t armeabi-v7a \
+          cargo ndk -t arm64-v8a -t armeabi-v7a -t x86_64 \
             -o ../android/app/src/main/jniLibs \
             build --release
+
+      - name: Assert every ABI Flutter builds got a library
+        run: |
+          for abi in arm64-v8a armeabi-v7a x86_64; do
+            f="android/app/src/main/jniLibs/$abi/libtc_helper.so"
+            [ -f "$f" ] || { echo "::error::missing $f — the APK for $abi would crash at RustLib.init()"; exit 1; }
+            echo "ok: $f"
+          done
 
       - name: Show freshly-built libs
         run: ls -lhR android/app/src/main/jniLibs/

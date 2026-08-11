@@ -152,8 +152,11 @@ tasks.register("cargoBuildTcHelper", Exec) {
         "  echo 'cargoBuildTcHelper: Rust toolchain (cargo/cargo-ndk) not found — using committed jniLibs'; exit 0; " +
         "fi; " +
         "set -e; " +
-        "rustup target add aarch64-linux-android armv7-linux-androideabi >/dev/null 2>&1 || true; " +
-        "cargo ndk -t arm64-v8a -t armeabi-v7a -o \"${rustJniOut}\" build --release"
+        // Must cover every ABI Flutter builds (arm64-v8a, armeabi-v7a, x86_64),
+        // or the APK for a missing one ships without libtc_helper.so and dies at
+        // RustLib.init(). x86_64 is what the standard Android emulator runs.
+        "rustup target add aarch64-linux-android armv7-linux-androideabi x86_64-linux-android >/dev/null 2>&1 || true; " +
+        "cargo ndk -t arm64-v8a -t armeabi-v7a -t x86_64 -o \"${rustJniOut}\" build --release"
 }
 
 tasks.matching { it.name == "preBuild" }.configureEach {
