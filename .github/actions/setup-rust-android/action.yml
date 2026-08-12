@@ -1,0 +1,68 @@
+name: Setup Rust for Android
+description: >
+  Installs the Android NDK, a Rust toolchain with every Android target the app
+  ships, and cargo-ndk — everything android/app/build.gradle's cargoBuildTcHelper
+  task needs to compile libtc_helper.so from rust/ during the Gradle build.
+
+  Any workflow that builds an APK must use this. Without it the Gradle hook finds
+  no cargo, prints "using committed jniLibs", and silently produces an APK whose
+  native library is stale or (once the committed .so files are purged) absent —
+  an APK that installs cleanly and then crashes at RustLib.init().
+
+inputs:
+  ndk-version:
+    description: NDK version to install. Must satisfy the ring/taskchampion build.
+    required: false
+    default: "26.1.10909125"
+  cargo-ndk-version:
+    description: cargo-ndk version requirement.
+    required: false
+    default: "^4"
+
+runs:
+  using: composite
+  steps:
+    - uses: android-actions/setup-android@v3
+
+    - name: Install NDK ${{ inputs.ndk-version }}
+      shell: bash
+      run: |
+        sdkmanager "ndk;${{ inputs.ndk-version }}"
+        # cargo-ndk locates the clang cross-compilers through this variable.
+        echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/${{ inputs.ndk-version }}" >> "$GITHUB_ENV"
+
+    # The three targets correspond to the three ABIs Flutter builds
+    # (arm64-v8a, armeabi-v7a, x86_64) and to the -t flags in
+    # android/app/build.gradle. Adding an ABI means changing both.
+    - name: Install Rust toolchain + Android targets
+      shell: bash
+      run: |
+        rustup toolchain install stable --profile minimal
+        rustup target add \
+          aarch64-linux-android \
+          armv7-linux-androideabi \
+          x86_64-linux-android
+
+    # Compiling taskchampion for three targets is the slow part; cache it.
+    - uses: Swatinem/rust-cache@v2
+      with:
+        workspaces: rust
+        # Distinguishes this cache from any host-only Rust build.
+        key: android-${{ inputs.ndk-version }}
+
+    - name: Install cargo-ndk
+      shell: bash
+      run: |
+        if command -v cargo-ndk >/dev/null 2>&1; then
+          echo "cargo-ndk already present: $(cargo-ndk --version)"
+        else
+          cargo install cargo-ndk --version '${{ inputs.cargo-ndk-version }}' --locked
+        fi
+
+    - name: Report toolchain
+      shell: bash
+      run: |
+        cargo --version
+        cargo-ndk --version
+        echo "ANDROID_NDK_HOME=$ANDROID_NDK_HOME"
+        rustup target list --installed | grep android
