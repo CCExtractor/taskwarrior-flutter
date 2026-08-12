@@ -53,16 +53,21 @@ runs:
     - name: Install cargo-ndk
       shell: bash
       run: |
+        # Note: the binary must be invoked as `cargo ndk`, never as `cargo-ndk` —
+        # called directly it exits 1 with "This binary may only be called via
+        # `cargo ndk`". command -v is the safe way to test for its presence.
         if command -v cargo-ndk >/dev/null 2>&1; then
-          echo "cargo-ndk already present: $(cargo-ndk --version)"
+          echo "cargo-ndk already present: $(cargo ndk --version)"
         else
           cargo install cargo-ndk --version '${{ inputs.cargo-ndk-version }}' --locked
         fi
 
+    # Diagnostics only. Guarded with || true so a future CLI change here can never
+    # be the thing that fails a build — the APK verification is the real gate.
     - name: Report toolchain
       shell: bash
       run: |
-        cargo --version
-        cargo-ndk --version
+        cargo --version || true
+        cargo ndk --version || true
         echo "ANDROID_NDK_HOME=$ANDROID_NDK_HOME"
-        rustup target list --installed | grep android
+        rustup target list --installed | grep android || true

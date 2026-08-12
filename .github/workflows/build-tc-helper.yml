@@ -6,9 +6,10 @@
 # from rust/ on every run, so it can never drift from the Rust source. Once this
 # is green, the committed jniLibs/*.so can be git-ignored and purged from history.
 #
-# NOTE: This workflow has not yet been run on CI — action versions, the NDK
-# version, and the cargo-ndk invocation are transcribed from a verified LOCAL
-# build (macOS) and may need small adjustments on the first CI run.
+# This workflow has run green on CI (ubuntu-latest), so the NDK version and the
+# cargo-ndk invocation are known to work on a runner and not just locally. The
+# NDK + Rust setup has since moved to .github/actions/setup-rust-android, shared
+# with every workflow that builds an APK.
 #
 # All three ABIs Flutter builds are covered: arm64-v8a, armeabi-v7a and x86_64.
 # The list must stay in sync with android/app/build.gradle's cargoBuildTcHelper —
