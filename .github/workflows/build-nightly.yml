@@ -40,6 +40,10 @@ jobs:
           distribution: temurin
           java-version: '17.x'
 
+      # Rust + NDK + cargo-ndk, so the Gradle hook compiles libtc_helper.so from
+      # rust/ instead of falling back to a prebuilt binary.
+      - uses: ./.github/actions/setup-rust-android
+
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -59,6 +63,11 @@ jobs:
       - name: Build nightly APK
         id: build
         run: flutter build apk --flavor nightly --build-number=${{ github.run_number }} --release
+
+      # Placed before the build-log steps on purpose: an APK missing its native
+      # library must be recorded as a FAILED nightly, not published as a good one.
+      - name: Verify native libraries are in the APK
+        run: ./scripts/verify_apk_native_libs.sh build/app/outputs/flutter-apk/app-nightly-release.apk
 
       - name: Record successful build
         if: success()

@@ -20,6 +20,11 @@ jobs:
           distribution: "temurin"
           java-version: "17.x"
 
+      # Rust + NDK + cargo-ndk, so the Gradle hook compiles libtc_helper.so from
+      # rust/ instead of falling back to a prebuilt binary. Must come before any
+      # `flutter build apk`.
+      - uses: ./.github/actions/setup-rust-android
+
       # Step 3: Setup Flutter with version 3.7.11
       - uses: subosito/flutter-action@v1
         with:
@@ -39,6 +44,11 @@ jobs:
 
       # Step 8: Build APK using flutter build apk
       - run: flutter build apk --release --flavor production
+
+      # The APK must carry libtc_helper.so for every ABI, or it installs fine and
+      # crashes at RustLib.init(). Fails the build rather than uploading a dud.
+      - name: Verify native libraries are in the APK
+        run: ./scripts/verify_apk_native_libs.sh build/app/outputs/flutter-apk/app-production-release.apk
 
       # Step 9: Upload the built APK as an artifact
       - uses: actions/upload-artifact@v4

@@ -39,18 +39,9 @@ jobs:
           distribution: "temurin"
           java-version: "17"
 
-      # Android SDK + NDK. cargo-ndk reads ANDROID_NDK_HOME to find the toolchain.
-      - uses: android-actions/setup-android@v3
-      - name: Install NDK
-        run: |
-          sdkmanager "ndk;26.1.10909125"
-          echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/26.1.10909125" >> "$GITHUB_ENV"
-
-      - name: Install Rust + Android targets + cargo-ndk
-        run: |
-          rustup toolchain install stable --profile minimal
-          rustup target add aarch64-linux-android armv7-linux-androideabi x86_64-linux-android
-          cargo install cargo-ndk --version ^4
+      # NDK + Rust + Android targets + cargo-ndk. Shared with the APK-building
+      # workflows so the target list can't drift between them.
+      - uses: ./.github/actions/setup-rust-android
 
       - name: Compile tc_helper (arm64-v8a + armeabi-v7a + x86_64) from source
         working-directory: rust
@@ -76,6 +67,11 @@ jobs:
 
       - run: flutter pub get
       - run: flutter build apk --release --flavor production
+
+      # The step above asserts the libraries were *built*; this asserts they were
+      # *packaged*. Both are needed — Gradle can silently drop a library it has.
+      - name: Verify native libraries are in the APK
+        run: ./scripts/verify_apk_native_libs.sh build/app/outputs/flutter-apk/app-production-release.apk
 
       - uses: actions/upload-artifact@v4
         with:

@@ -42,6 +42,10 @@ jobs:
           distribution: "temurin"
           java-version: "17.x"
 
+      # Step 2b: Rust + NDK + cargo-ndk, so the Gradle hook compiles
+      # libtc_helper.so from rust/ instead of falling back to a prebuilt binary.
+      - uses: ./.github/actions/setup-rust-android
+
       # Step 3: Setup Flutter
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
@@ -64,6 +68,11 @@ jobs:
       # Step 6: Build the APK
       - name: Build APK
         run: flutter build apk --flavor nightly --build-number=${{ github.run_number }} --release
+
+      # Step 6b: An APK missing its native library installs fine and then crashes
+      # at RustLib.init() — fail here rather than deploying it to F-Droid.
+      - name: Verify native libraries are in the APK
+        run: ./scripts/verify_apk_native_libs.sh build/app/outputs/flutter-apk/app-nightly-release.apk
 
       # Step 7: Verify the APK is signed
       - name: Verify sign
