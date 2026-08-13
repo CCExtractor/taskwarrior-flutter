@@ -2,7 +2,7 @@ use flutter_rust_bridge::frb;
 use std::{collections::HashMap, str::FromStr};
 use taskchampion::{
     chrono::{DateTime, Utc},
-    Operations, Tag, ServerConfig,
+    utc_timestamp, Annotation, Operations, ServerConfig, Tag,
 };
 use uuid::Uuid;
 
@@ -245,6 +245,139 @@ fn sync_impl(
     Ok(())
 }
 
+/// Attach a timestamped note (annotation) to a task, returning the entry
+/// timestamp that identifies it.
+///
+/// TaskChampion stores an annotation as an `annotation_<epoch-seconds>`
+/// property, so **the entry time is the annotation's primary key** — two notes
+/// on the same task in the same second would collide and the later one would
+/// silently replace the earlier. The Taskwarrior CLI has that behaviour too,
+/// but a phone makes it far easier to hit (two quick taps on Add). Rather than
+/// destroy a note, this advances to the next free second. The result is still
+/// an ordinary annotation that any Taskwarrior client reads normally; only the
+/// recorded time differs, by a second or two.
+///
+/// The returned RFC 3339 string is what [`remove_annotation`] expects, so a
+/// caller can delete the note it just created without re-reading the task.
+#[frb]
+pub fn add_annotation(
+    uuid_st: String,
+    description: String,
+    taskdb_dir_path: String,
+) -> Result<String, String> {
+    add_annotation_impl(&uuid_st, &description, &taskdb_dir_path).map_err(|e| e.to_string())
+}
+
+fn add_annotation_impl(
+    uuid_st: &str,
+    description: &str,
+    taskdb_dir_path: &str,
+) -> Result<String, TcHelperError> {
+    let description = description.trim();
+    if description.is_empty() {
+        return Err(TcHelperError::InvalidInput(
+            "annotation text cannot be empty".to_string(),
+        ));
+    }
+
+    let uuid =
+        Uuid::parse_str(uuid_st).map_err(|_| TcHelperError::InvalidUuid(uuid_st.to_string()))?;
+    let mut replica = open_replica(taskdb_dir_path)?;
+    let mut ops = Operations::new();
+
+    let mut task = replica
+        .get_task(uuid)
+        .map_err(|e| TcHelperError::Champion(e.to_string()))?
+        .ok_or_else(|| TcHelperError::TaskNotFound(uuid_st.to_string()))?;
+
+    // Whole seconds only: get_annotations() rebuilds each entry from the
+    // integer in the property key, so any sub-second precision is discarded on
+    // read anyway. Comparing at the same resolution is what makes the
+    // collision check meaningful.
+    let taken: std::collections::HashSet<i64> =
+        task.get_annotations().map(|a| a.entry.timestamp()).collect();
+
+    let mut secs = Utc::now().timestamp();
+    // Bounded so a pathological replica can never spin here. A day of
+    // consecutively-occupied seconds is not a real state; failing loudly beats
+    // looping.
+    let limit = secs + 86_400;
+    while taken.contains(&secs) {
+        secs += 1;
+        if secs > limit {
+            return Err(TcHelperError::InvalidInput(
+                "could not find a free annotation timestamp".to_string(),
+            ));
+        }
+    }
+    let entry = utc_timestamp(secs);
+
+    task.add_annotation(
+        Annotation {
+            entry,
+            description: description.to_string(),
+        },
+        &mut ops,
+    )
+    .map_err(|e| TcHelperError::Champion(e.to_string()))?;
+
+    replica
+        .commit_operations(ops)
+        .map_err(|e| TcHelperError::Commit(e.to_string()))?;
+
+    Ok(entry.to_rfc3339())
+}
+
+/// Remove the annotation identified by `entry_rfc3339` from a task.
+///
+/// The timestamp must be one returned by the serializer (or by
+/// [`add_annotation`]); it is matched at whole-second resolution, which is how
+/// TaskChampion keys annotations. Removing an annotation that is not present is
+/// a no-op rather than an error, so a double-tap on delete cannot fail.
+#[frb]
+pub fn remove_annotation(
+    uuid_st: String,
+    entry_rfc3339: String,
+    taskdb_dir_path: String,
+) -> Result<(), String> {
+    remove_annotation_impl(&uuid_st, &entry_rfc3339, &taskdb_dir_path).map_err(|e| e.to_string())
+}
+
+fn remove_annotation_impl(
+    uuid_st: &str,
+    entry_rfc3339: &str,
+    taskdb_dir_path: &str,
+) -> Result<(), TcHelperError> {
+    let uuid =
+        Uuid::parse_str(uuid_st).map_err(|_| TcHelperError::InvalidUuid(uuid_st.to_string()))?;
+
+    let entry = DateTime::parse_from_rfc3339(entry_rfc3339)
+        .map_err(|_| {
+            TcHelperError::InvalidInput(format!(
+                "annotation entry '{entry_rfc3339}' is not a valid RFC 3339 timestamp"
+            ))
+        })?
+        .with_timezone(&Utc);
+
+    let mut replica = open_replica(taskdb_dir_path)?;
+    let mut ops = Operations::new();
+
+    let mut task = replica
+        .get_task(uuid)
+        .map_err(|e| TcHelperError::Champion(e.to_string()))?
+        .ok_or_else(|| TcHelperError::TaskNotFound(uuid_st.to_string()))?;
+
+    // Normalise to whole seconds so a caller passing a timestamp with a
+    // fractional part still targets the right property key.
+    task.remove_annotation(utc_timestamp(entry.timestamp()), &mut ops)
+        .map_err(|e| TcHelperError::Champion(e.to_string()))?;
+
+    replica
+        .commit_operations(ops)
+        .map_err(|e| TcHelperError::Commit(e.to_string()))?;
+    Ok(())
+}
+
 #[test]
 fn test_add_task_with_tags() {
     use std::{collections::HashMap, env, fs};
@@ -440,4 +573,152 @@ fn test_update_preserves_status_when_not_supplied() {
     );
 
     fs::remove_dir_all(&tmp).ok();
+}
+
+#[cfg(test)]
+mod annotation_tests {
+    use super::*;
+    use serde_json::Value;
+    use std::{collections::HashMap, env, fs};
+
+    /// Create a temp replica holding one task, returning (dir, path, uuid).
+    fn task_fixture() -> (std::path::PathBuf, String, String) {
+        let tmp = env::temp_dir().join(format!("taskdb_ann_{}", Uuid::new_v4()));
+        fs::create_dir_all(&tmp).expect("create temp taskdb dir");
+        let path = tmp.to_string_lossy().into_owned();
+
+        let uuid = Uuid::new_v4().to_string();
+        let mut map: HashMap<String, String> = HashMap::new();
+        map.insert("uuid".to_string(), uuid.clone());
+        map.insert("description".to_string(), "annotated task".to_string());
+        add_task(path.clone(), map).expect("add_task");
+
+        (tmp, path, uuid)
+    }
+
+    /// Read back the annotations of `uuid` as (entry, description) pairs.
+    fn annotations_of(path: &str, uuid: &str) -> Vec<(String, String)> {
+        let json = get_all_tasks_json(path.to_string()).expect("get_all_tasks_json");
+        let tasks: Vec<Value> = serde_json::from_str(&json).expect("parse json");
+        let task = tasks
+            .into_iter()
+            .find(|t| t.get("uuid").and_then(|u| u.as_str()) == Some(uuid))
+            .expect("task not found");
+        task.get("annotations")
+            .and_then(|a| a.as_array())
+            .expect("annotations array")
+            .iter()
+            .map(|a| {
+                (
+                    a["entry"].as_str().unwrap_or_default().to_string(),
+                    a["description"].as_str().unwrap_or_default().to_string(),
+                )
+            })
+            .collect()
+    }
+
+    #[test]
+    fn add_then_read_back() {
+        let (tmp, path, uuid) = task_fixture();
+
+        let entry = add_annotation(uuid.clone(), "  bought the paint  ".to_string(), path.clone())
+            .expect("add_annotation");
+
+        let anns = annotations_of(&path, &uuid);
+        assert_eq!(anns.len(), 1);
+        // Surrounding whitespace is trimmed before storing.
+        assert_eq!(anns[0].1, "bought the paint");
+        // The returned entry is exactly what the serializer reports, so a caller
+        // can delete the note it just made without re-reading the task.
+        assert_eq!(anns[0].0, entry);
+
+        fs::remove_dir_all(&tmp).ok();
+    }
+
+    #[test]
+    fn two_annotations_in_the_same_second_both_survive() {
+        // The regression this guards: TaskChampion keys an annotation by its
+        // entry time in whole seconds, so a naive implementation would let the
+        // second call overwrite the first when both land in the same second —
+        // which is exactly what two quick taps on "Add" produce.
+        let (tmp, path, uuid) = task_fixture();
+
+        let first = add_annotation(uuid.clone(), "first note".to_string(), path.clone())
+            .expect("add first");
+        let second = add_annotation(uuid.clone(), "second note".to_string(), path.clone())
+            .expect("add second");
+
+        assert_ne!(first, second, "the two notes must not share an entry key");
+
+        let anns = annotations_of(&path, &uuid);
+        assert_eq!(anns.len(), 2, "both notes must survive: {anns:?}");
+        let mut descriptions: Vec<&str> = anns.iter().map(|(_, d)| d.as_str()).collect();
+        descriptions.sort_unstable();
+        assert_eq!(descriptions, vec!["first note", "second note"]);
+
+        fs::remove_dir_all(&tmp).ok();
+    }
+
+    #[test]
+    fn remove_deletes_only_the_targeted_note() {
+        let (tmp, path, uuid) = task_fixture();
+
+        let keep = add_annotation(uuid.clone(), "keep me".to_string(), path.clone()).unwrap();
+        let drop = add_annotation(uuid.clone(), "drop me".to_string(), path.clone()).unwrap();
+
+        remove_annotation(uuid.clone(), drop, path.clone()).expect("remove_annotation");
+
+        let anns = annotations_of(&path, &uuid);
+        assert_eq!(anns.len(), 1, "exactly one note should remain: {anns:?}");
+        assert_eq!(anns[0].1, "keep me");
+        assert_eq!(anns[0].0, keep);
+
+        fs::remove_dir_all(&tmp).ok();
+    }
+
+    #[test]
+    fn removing_a_missing_annotation_is_a_no_op() {
+        // A double-tap on delete must not surface an error.
+        let (tmp, path, uuid) = task_fixture();
+        let entry = add_annotation(uuid.clone(), "only note".to_string(), path.clone()).unwrap();
+
+        remove_annotation(uuid.clone(), entry.clone(), path.clone()).expect("first remove");
+        remove_annotation(uuid.clone(), entry, path.clone()).expect("second remove must not error");
+
+        assert!(annotations_of(&path, &uuid).is_empty());
+
+        fs::remove_dir_all(&tmp).ok();
+    }
+
+    #[test]
+    fn empty_text_is_rejected() {
+        let (tmp, path, uuid) = task_fixture();
+
+        let err = add_annotation(uuid.clone(), "   ".to_string(), path.clone())
+            .expect_err("whitespace-only text must be rejected");
+        assert!(err.contains("empty"), "unhelpful error: {err}");
+        assert!(annotations_of(&path, &uuid).is_empty());
+
+        fs::remove_dir_all(&tmp).ok();
+    }
+
+    #[test]
+    fn unknown_task_and_bad_input_report_clearly() {
+        let (tmp, path, uuid) = task_fixture();
+
+        let missing = Uuid::new_v4().to_string();
+        let err = add_annotation(missing.clone(), "note".to_string(), path.clone())
+            .expect_err("unknown task must error");
+        assert!(err.contains("no task with UUID"), "unhelpful error: {err}");
+
+        let err = add_annotation("not-a-uuid".to_string(), "note".to_string(), path.clone())
+            .expect_err("malformed uuid must error");
+        assert!(err.contains("invalid UUID"), "unhelpful error: {err}");
+
+        let err = remove_annotation(uuid, "yesterday".to_string(), path.clone())
+            .expect_err("malformed timestamp must error");
+        assert!(err.contains("RFC 3339"), "unhelpful error: {err}");
+
+        fs::remove_dir_all(&tmp).ok();
+    }
 }

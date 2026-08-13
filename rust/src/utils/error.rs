@@ -15,6 +15,12 @@ pub enum TcHelperError {
     #[error("invalid UUID '{0}'")]
     InvalidUuid(String),
 
+    #[error("no task with UUID '{0}'")]
+    TaskNotFound(String),
+
+    #[error("invalid input: {0}")]
+    InvalidInput(String),
+
     #[error("sync failed: {0}")]
     Sync(String),
 

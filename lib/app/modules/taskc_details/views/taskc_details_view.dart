@@ -139,16 +139,7 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
                         ? 'None'
                         : controller.recur.value,
                   ),
-                  _buildDetail(
-                    context,
-                    'Annotations:',
-                    controller.annotations.isEmpty
-                        ? 'None'
-                        : controller.annotations
-                            .map((a) =>
-                                '• ${a.description ?? ''}${(a.entry != null && a.entry!.isNotEmpty) ? '  (${a.entry})' : ''}')
-                            .join('\n'),
-                  ),
+                  _buildAnnotationEditor(context, controller),
                 ],
                 if (controller.isLocalTask) ...[
                   _buildDetail(
@@ -276,6 +267,151 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
     return InkWell(
       onTap: onTap,
       child: _buildDetail(context, label, value),
+    );
+  }
+
+  /// Notes on a task, with add and remove.
+  ///
+  /// Notes are written straight through to the replica rather than joining the
+  /// draft the Save button commits, because each one is its own record in
+  /// TaskChampion. The list therefore reflects what is stored, not what is
+  /// pending, and leaving the page never discards a note.
+  Widget _buildAnnotationEditor(
+      BuildContext context, TaskcDetailsController controller) {
+    final TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    final TextEditingController input = controller.annotationInput;
+
+    Future<void> submit() async {
+      final String text = input.text.trim();
+      if (text.isEmpty) return;
+      final String? error = await controller.addAnnotationToTask(text);
+      if (error == null) {
+        input.clear();
+      } else if (context.mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(error)));
+      }
+    }
+
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: tColors.secondaryBackgroundColor,
+        borderRadius: BorderRadius.circular(8.0),
+        boxShadow: const [
+          BoxShadow(color: Colors.black12, blurRadius: 4.0, offset: Offset(0, 2)),
+        ],
+      ),
+      padding: const EdgeInsets.all(16.0),
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Obx(
+        () => Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Annotations:',
+              style: GoogleFonts.poppins(
+                fontWeight: TaskWarriorFonts.bold,
+                fontSize: TaskWarriorFonts.fontSizeMedium,
+                color: tColors.primaryTextColor,
+              ),
+            ),
+            const SizedBox(height: 8),
+            if (controller.annotations.isEmpty)
+              Text(
+                'None',
+                style: GoogleFonts.poppins(
+                  fontSize: TaskWarriorFonts.fontSizeMedium,
+                  color: tColors.primaryTextColor,
+                ),
+              )
+            else
+              ...controller.annotations.map(
+                (annotation) => Padding(
+                  padding: const EdgeInsets.only(bottom: 4.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              annotation.description ?? '',
+                              style: GoogleFonts.poppins(
+                                fontSize: TaskWarriorFonts.fontSizeMedium,
+                                color: tColors.primaryTextColor,
+                              ),
+                            ),
+                            if (annotation.entry != null &&
+                                annotation.entry!.isNotEmpty)
+                              Text(
+                                annotation.entry!,
+                                style: GoogleFonts.poppins(
+                                  fontSize: TaskWarriorFonts.fontSizeSmall,
+                                  color: tColors.primaryDisabledTextColor,
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                      if (controller.canEditAnnotations)
+                        IconButton(
+                          tooltip: 'Remove note',
+                          icon: const Icon(Icons.close, size: 18),
+                          color: tColors.primaryTextColor,
+                          onPressed: controller.annotationBusy.value
+                              ? null
+                              : () async {
+                                  final String? error = await controller
+                                      .removeAnnotationFromTask(annotation);
+                                  if (error != null && context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(content: Text(error)));
+                                  }
+                                },
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            if (controller.canEditAnnotations) ...[
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: input,
+                      enabled: !controller.annotationBusy.value,
+                      textInputAction: TextInputAction.done,
+                      onSubmitted: (_) => submit(),
+                      style: GoogleFonts.poppins(
+                        fontSize: TaskWarriorFonts.fontSizeMedium,
+                        color: tColors.primaryTextColor,
+                      ),
+                      decoration: InputDecoration(
+                        isDense: true,
+                        hintText: 'Add a note',
+                        hintStyle: GoogleFonts.poppins(
+                          fontSize: TaskWarriorFonts.fontSizeMedium,
+                          color: tColors.primaryDisabledTextColor,
+                        ),
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    tooltip: 'Add note',
+                    icon: const Icon(Icons.add),
+                    color: tColors.primaryTextColor,
+                    onPressed: controller.annotationBusy.value ? null : submit,
+                  ),
+                ],
+              ),
+            ],
+          ],
+        ),
+      ),
     );
   }
 

@@ -81,6 +81,34 @@ class Replica {
     return "scc";
   }
 
+  /// Attach a note to a task, returning the entry timestamp that identifies it.
+  ///
+  /// Unlike the older helpers here, this deliberately lets the FFI error
+  /// propagate instead of collapsing it to `"err"`. The Rust side reports why a
+  /// write was refused — empty text, unknown task, malformed UUID — and the
+  /// caller shows that reason to the user, which a sentinel string cannot do.
+  static Future<String> addAnnotationToReplica(
+      String uuid, String description) async {
+    final taskdbDirPath = await getReplicaPath();
+    return addAnnotation(
+      uuidSt: uuid,
+      description: description,
+      taskdbDirPath: taskdbDirPath,
+    );
+  }
+
+  /// Remove the note identified by [entryRfc3339] — the `entry` value the
+  /// serializer reported for it. Removing one that is already gone is a no-op.
+  static Future<void> removeAnnotationFromReplica(
+      String uuid, String entryRfc3339) async {
+    final taskdbDirPath = await getReplicaPath();
+    return removeAnnotation(
+      uuidSt: uuid,
+      entryRfc3339: entryRfc3339,
+      taskdbDirPath: taskdbDirPath,
+    );
+  }
+
   static Future<String> deleteTaskFromReplica(String uuid) async {
     var taskdbDirPath = await getReplicaPath();
     try {

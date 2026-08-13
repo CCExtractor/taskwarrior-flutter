@@ -168,6 +168,94 @@ class TaskcDetailsController extends GetxController {
     }
   }
 
+  /// Whether this task's notes can be edited.
+  ///
+  /// Only replica tasks: the annotation write path is the TaskChampion FFI, and
+  /// the legacy SQLite model has no equivalent. The view hides the editor
+  /// entirely rather than offering a control that would silently do nothing.
+  bool get canEditAnnotations => isReplicaTask;
+
+  /// True while an annotation write is in flight, so the view can disable its
+  /// controls instead of allowing a second write to race the first.
+  final annotationBusy = false.obs;
+
+  /// Backing field for the "add a note" input. Owned by the controller rather
+  /// than the view so its text survives rebuilds, and so it is disposed exactly
+  /// once when the page is torn down.
+  final TextEditingController annotationInput = TextEditingController();
+
+  @override
+  void onClose() {
+    annotationInput.dispose();
+    super.onClose();
+  }
+
+  /// Add a note to this task.
+  ///
+  /// Unlike the field editors, this writes through immediately rather than
+  /// joining the draft that [saveTask] commits. An annotation is its own
+  /// record in TaskChampion, added and removed by dedicated operations — there
+  /// is no "whole task" write that would carry it along, so deferring it would
+  /// mean inventing a pending-notes buffer for no benefit. It therefore does
+  /// not set [hasChanges]; leaving the page after adding a note loses nothing.
+  ///
+  /// Returns null on success, or a message describing why the write failed.
+  Future<String?> addAnnotationToTask(String description) async {
+    if (!canEditAnnotations) return 'Notes can only be edited on synced tasks.';
+    if (annotationBusy.value) return null;
+
+    final String uuid = initialTaskUuidDisplay();
+    if (uuid == 'None') return 'This task has no identifier yet.';
+
+    annotationBusy.value = true;
+    try {
+      final String entry =
+          await Replica.addAnnotationToReplica(uuid, description);
+      // Append locally rather than re-reading every task from the replica: the
+      // entry the FFI returns is authoritative, so the list stays in step.
+      annotations.add(Annotation(entry: entry, description: description.trim()));
+      return null;
+    } catch (e) {
+      return _annotationErrorMessage(e);
+    } finally {
+      annotationBusy.value = false;
+    }
+  }
+
+  /// Remove a note. Returns null on success, or a message on failure.
+  Future<String?> removeAnnotationFromTask(Annotation annotation) async {
+    if (!canEditAnnotations) return 'Notes can only be edited on synced tasks.';
+    if (annotationBusy.value) return null;
+
+    final String uuid = initialTaskUuidDisplay();
+    final String? entry = annotation.entry;
+    if (uuid == 'None' || entry == null || entry.isEmpty) {
+      return 'This note cannot be identified, so it cannot be removed.';
+    }
+
+    annotationBusy.value = true;
+    try {
+      await Replica.removeAnnotationFromReplica(uuid, entry);
+      annotations.removeWhere((a) => a.entry == entry);
+      return null;
+    } catch (e) {
+      return _annotationErrorMessage(e);
+    } finally {
+      annotationBusy.value = false;
+    }
+  }
+
+  /// The Rust layer returns typed, already-readable messages ("annotation text
+  /// cannot be empty", "no task with UUID ..."). Surface those rather than a
+  /// generic failure, but strip the exception wrapper Dart adds around them.
+  String _annotationErrorMessage(Object error) {
+    final String raw = error.toString();
+    final int marker = raw.indexOf(': ');
+    final String message =
+        marker >= 0 && marker + 2 < raw.length ? raw.substring(marker + 2) : raw;
+    return message.trim().isEmpty ? 'Could not save the note.' : message.trim();
+  }
+
   // Safe accessors for fields on the initial task so views don't attempt to
   // read properties that don't exist on TaskForReplica (which is a different
   // model shape than TaskForC).

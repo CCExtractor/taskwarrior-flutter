@@ -37,7 +37,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.11.1";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -2049867087;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 1041161676;
 
 // Section: executor
 
@@ -45,6 +45,45 @@ flutter_rust_bridge::frb_generated_default_handler!();
 
 // Section: wire_funcs
 
+fn wire__crate__api__add_annotation_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "add_annotation",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_uuid_st = <String>::sse_decode(&mut deserializer);
+            let api_description = <String>::sse_decode(&mut deserializer);
+            let api_taskdb_dir_path = <String>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| {
+                transform_result_sse::<_, String>((move || {
+                    let output_ok = crate::api::add_annotation(
+                        api_uuid_st,
+                        api_description,
+                        api_taskdb_dir_path,
+                    )?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
 fn wire__crate__api__add_task_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
@@ -141,6 +180,45 @@ fn wire__crate__api__get_all_tasks_json_impl(
             move |context| {
                 transform_result_sse::<_, String>((move || {
                     let output_ok = crate::api::get_all_tasks_json(api_taskdb_dir_path)?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
+fn wire__crate__api__remove_annotation_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "remove_annotation",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_uuid_st = <String>::sse_decode(&mut deserializer);
+            let api_entry_rfc3339 = <String>::sse_decode(&mut deserializer);
+            let api_taskdb_dir_path = <String>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| {
+                transform_result_sse::<_, String>((move || {
+                    let output_ok = crate::api::remove_annotation(
+                        api_uuid_st,
+                        api_entry_rfc3339,
+                        api_taskdb_dir_path,
+                    )?;
                     Ok(output_ok)
                 })())
             }
@@ -316,11 +394,13 @@ fn pde_ffi_dispatcher_primary_impl(
 ) {
     // Codec=Pde (Serialization + dispatch), see doc to use other codecs
     match func_id {
-        1 => wire__crate__api__add_task_impl(port, ptr, rust_vec_len, data_len),
-        2 => wire__crate__api__delete_task_impl(port, ptr, rust_vec_len, data_len),
-        3 => wire__crate__api__get_all_tasks_json_impl(port, ptr, rust_vec_len, data_len),
-        4 => wire__crate__api__sync_impl(port, ptr, rust_vec_len, data_len),
-        5 => wire__crate__api__update_task_impl(port, ptr, rust_vec_len, data_len),
+        1 => wire__crate__api__add_annotation_impl(port, ptr, rust_vec_len, data_len),
+        2 => wire__crate__api__add_task_impl(port, ptr, rust_vec_len, data_len),
+        3 => wire__crate__api__delete_task_impl(port, ptr, rust_vec_len, data_len),
+        4 => wire__crate__api__get_all_tasks_json_impl(port, ptr, rust_vec_len, data_len),
+        5 => wire__crate__api__remove_annotation_impl(port, ptr, rust_vec_len, data_len),
+        6 => wire__crate__api__sync_impl(port, ptr, rust_vec_len, data_len),
+        7 => wire__crate__api__update_task_impl(port, ptr, rust_vec_len, data_len),
         _ => unreachable!(),
     }
 }
