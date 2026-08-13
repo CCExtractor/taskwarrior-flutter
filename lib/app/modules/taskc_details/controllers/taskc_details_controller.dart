@@ -214,6 +214,7 @@ class TaskcDetailsController extends GetxController {
       // Append locally rather than re-reading every task from the replica: the
       // entry the FFI returns is authoritative, so the list stays in step.
       annotations.add(Annotation(entry: entry, description: description.trim()));
+      await _refreshHomeTasks();
       return null;
     } catch (e) {
       return _annotationErrorMessage(e);
@@ -237,11 +238,126 @@ class TaskcDetailsController extends GetxController {
     try {
       await Replica.removeAnnotationFromReplica(uuid, entry);
       annotations.removeWhere((a) => a.entry == entry);
+      await _refreshHomeTasks();
       return null;
     } catch (e) {
       return _annotationErrorMessage(e);
     } finally {
       annotationBusy.value = false;
+    }
+  }
+
+  /// Whether this task's dependencies can be edited. Replica tasks only, for
+  /// the same reason as annotations: the write path is the TaskChampion FFI.
+  bool get canEditDependencies => isReplicaTask;
+
+  /// True while a dependency write is in flight.
+  final dependencyBusy = false.obs;
+
+  /// Tasks that can be picked as a dependency: everything in the replica except
+  /// this task and the ones it already depends on.
+  ///
+  /// Cycles are rejected by the Rust layer rather than filtered out here — the
+  /// check needs the whole graph, and doing it in one place keeps the answer
+  /// consistent no matter which client asks.
+  List<TaskForReplica> availableDependencyCandidates() {
+    if (!canEditDependencies) return <TaskForReplica>[];
+    final String self = initialTaskUuidDisplay();
+    final Set<String> already = depends.toSet();
+    try {
+      return Get.find<HomeController>()
+          .tasksFromReplica
+          .where((t) => t.uuid != self && !already.contains(t.uuid))
+          .toList();
+    } catch (e) {
+      debugPrint('Could not list dependency candidates: $e');
+      return <TaskForReplica>[];
+    }
+  }
+
+  /// A dependency is stored as a bare UUID, which means nothing to a reader.
+  /// Resolve it to the task's description, falling back to a short UUID prefix
+  /// when the task is not in the local replica.
+  String describeDependency(String uuid) {
+    try {
+      final matches = Get.find<HomeController>()
+          .tasksFromReplica
+          .where((t) => t.uuid == uuid);
+      if (matches.isNotEmpty) {
+        final String? description = matches.first.description;
+        if (description != null && description.trim().isNotEmpty) {
+          return description.trim();
+        }
+      }
+    } catch (_) {
+      // fall through to the UUID form
+    }
+    return uuid.length > 8 ? '${uuid.substring(0, 8)}…' : uuid;
+  }
+
+  /// Add a dependency. Returns null on success, or a message on failure.
+  Future<String?> addDependencyToTask(String dependsOnUuid) async {
+    if (!canEditDependencies) {
+      return 'Dependencies can only be edited on synced tasks.';
+    }
+    if (dependencyBusy.value) return null;
+
+    final String uuid = initialTaskUuidDisplay();
+    if (uuid == 'None') return 'This task has no identifier yet.';
+
+    dependencyBusy.value = true;
+    try {
+      await Replica.addDependencyToReplica(uuid, dependsOnUuid);
+      depends.add(dependsOnUuid);
+      // Adding a dependency makes this task blocked; the depended-on task
+      // becomes blocking. Reflect the half we are showing.
+      isBlocked.value = true;
+      await _refreshHomeTasks();
+      return null;
+    } catch (e) {
+      return _annotationErrorMessage(e);
+    } finally {
+      dependencyBusy.value = false;
+    }
+  }
+
+  /// Remove a dependency. Returns null on success, or a message on failure.
+  Future<String?> removeDependencyFromTask(String dependsOnUuid) async {
+    if (!canEditDependencies) {
+      return 'Dependencies can only be edited on synced tasks.';
+    }
+    if (dependencyBusy.value) return null;
+
+    final String uuid = initialTaskUuidDisplay();
+    if (uuid == 'None') return 'This task has no identifier yet.';
+
+    dependencyBusy.value = true;
+    try {
+      await Replica.removeDependencyFromReplica(uuid, dependsOnUuid);
+      depends.remove(dependsOnUuid);
+      // Only the last remaining dependency clears the blocked flag.
+      if (depends.isEmpty) isBlocked.value = false;
+      await _refreshHomeTasks();
+      return null;
+    } catch (e) {
+      return _annotationErrorMessage(e);
+    } finally {
+      dependencyBusy.value = false;
+    }
+  }
+
+  /// Reload the home list after a write.
+  ///
+  /// The detail page renders the `TaskForReplica` it was handed from that list,
+  /// so without this the cached copy goes stale the moment anything is written.
+  /// It matters most for dependencies: adding one changes the *other* task's
+  /// computed `is_blocking`, and opening that task would otherwise still show
+  /// the value from before the edge existed.
+  Future<void> _refreshHomeTasks() async {
+    try {
+      await Get.find<HomeController>().refreshReplicaTasks();
+    } catch (e) {
+      debugPrint('Could not refresh tasks after write: $e');
     }
   }
 

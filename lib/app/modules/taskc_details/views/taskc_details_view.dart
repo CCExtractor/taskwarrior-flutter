@@ -11,6 +11,7 @@ import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/home_path/impl/home.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
+import 'package:taskwarrior/app/v3/champion/models/task_for_replica.dart';
 import '../controllers/taskc_details_controller.dart';
 
 class TaskcDetailsView extends GetView<TaskcDetailsController> {
@@ -111,9 +112,11 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
                   controller.tags.join(', '),
                   (value) => controller.updateListField(controller.tags, value),
                 ),
-                // Attributes surfaced by the enriched Rust serializer (D2).
-                // Replica tasks only; read-only (the mobile UI cannot edit
-                // dependencies/annotations yet).
+                // Attributes surfaced by the enriched Rust serializer (D2),
+                // replica tasks only. Dependencies and annotations are
+                // editable; Blocked/Blocking are computed from the dependency
+                // graph and Recur is owned by the Taskwarrior CLI, so both stay
+                // read-only.
                 if (controller.isReplicaTask) ...[
                   _buildDetail(
                     context,
@@ -125,13 +128,7 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
                     'Blocking:',
                     controller.isBlocking.value ? 'Yes' : 'No',
                   ),
-                  _buildDetail(
-                    context,
-                    'Depends:',
-                    controller.depends.isEmpty
-                        ? 'None'
-                        : controller.depends.join(', '),
-                  ),
+                  _buildDependencyEditor(context, controller),
                   _buildDetail(
                     context,
                     'Recur:',
@@ -267,6 +264,137 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
     return InkWell(
       onTap: onTap,
       child: _buildDetail(context, label, value),
+    );
+  }
+
+  /// Tasks this one is waiting on, with add and remove.
+  ///
+  /// Dependencies are stored as bare UUIDs, so each is resolved to its task
+  /// description — a raw UUID tells the reader nothing. Whether an edge is
+  /// legal (no self-reference, no missing task, no loop) is decided by the Rust
+  /// layer, which can see the whole graph; this only reports what it says.
+  Widget _buildDependencyEditor(
+      BuildContext context, TaskcDetailsController controller) {
+    final TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
+
+    Future<void> pick() async {
+      final candidates = controller.availableDependencyCandidates();
+      if (candidates.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('No other tasks available to depend on.')),
+        );
+        return;
+      }
+      final String? chosen = await showModalBottomSheet<String>(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: tColors.primaryBackgroundColor,
+        builder: (sheetContext) => _DependencyPicker(
+          candidates: candidates,
+          colors: tColors,
+        ),
+      );
+      if (chosen == null) return;
+      final String? error = await controller.addDependencyToTask(chosen);
+      if (error != null && context.mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(error)));
+      }
+    }
+
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: tColors.secondaryBackgroundColor,
+        borderRadius: BorderRadius.circular(8.0),
+        boxShadow: const [
+          BoxShadow(color: Colors.black12, blurRadius: 4.0, offset: Offset(0, 2)),
+        ],
+      ),
+      padding: const EdgeInsets.all(16.0),
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Obx(
+        () => Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Depends:',
+              style: GoogleFonts.poppins(
+                fontWeight: TaskWarriorFonts.bold,
+                fontSize: TaskWarriorFonts.fontSizeMedium,
+                color: tColors.primaryTextColor,
+              ),
+            ),
+            const SizedBox(height: 8),
+            if (controller.depends.isEmpty)
+              Text(
+                'None',
+                style: GoogleFonts.poppins(
+                  fontSize: TaskWarriorFonts.fontSizeMedium,
+                  color: tColors.primaryTextColor,
+                ),
+              )
+            else
+              ...controller.depends.map(
+                (uuid) => Padding(
+                  padding: const EdgeInsets.only(bottom: 4.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          controller.describeDependency(uuid),
+                          style: GoogleFonts.poppins(
+                            fontSize: TaskWarriorFonts.fontSizeMedium,
+                            color: tColors.primaryTextColor,
+                          ),
+                        ),
+                      ),
+                      if (controller.canEditDependencies)
+                        IconButton(
+                          tooltip: 'Remove dependency',
+                          icon: const Icon(Icons.close, size: 18),
+                          color: tColors.primaryTextColor,
+                          onPressed: controller.dependencyBusy.value
+                              ? null
+                              : () async {
+                                  final String? error = await controller
+                                      .removeDependencyFromTask(uuid);
+                                  if (error != null && context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(content: Text(error)));
+                                  }
+                                },
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            if (controller.canEditDependencies) ...[
+              const SizedBox(height: 4),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: TextButton.icon(
+                  onPressed: controller.dependencyBusy.value ? null : pick,
+                  icon: const Icon(Icons.add, size: 18),
+                  label: Text(
+                    'Add dependency',
+                    style: GoogleFonts.poppins(
+                      fontSize: TaskWarriorFonts.fontSizeMedium,
+                    ),
+                  ),
+                  style: TextButton.styleFrom(
+                    foregroundColor: tColors.primaryTextColor,
+                    padding: EdgeInsets.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
     );
   }
 
@@ -461,6 +589,134 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// Bottom sheet for choosing a task to depend on.
+///
+/// Stateful purely for the filter field: a replica can hold hundreds of tasks,
+/// so an unfiltered list is not usable. Selecting pops the chosen UUID; the
+/// caller decides whether the edge is legal.
+class _DependencyPicker extends StatefulWidget {
+  const _DependencyPicker({
+    required this.candidates,
+    required this.colors,
+  });
+
+  final List<TaskForReplica> candidates;
+  final TaskwarriorColorTheme colors;
+
+  @override
+  State<_DependencyPicker> createState() => _DependencyPickerState();
+}
+
+class _DependencyPickerState extends State<_DependencyPicker> {
+  final TextEditingController _query = TextEditingController();
+
+  @override
+  void dispose() {
+    _query.dispose();
+    super.dispose();
+  }
+
+  List<TaskForReplica> get _visible {
+    final String q = _query.text.trim().toLowerCase();
+    if (q.isEmpty) return widget.candidates;
+    return widget.candidates
+        .where((t) => (t.description ?? '').toLowerCase().contains(q))
+        .toList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final TaskwarriorColorTheme colors = widget.colors;
+    final List<TaskForReplica> visible = _visible;
+
+    return SafeArea(
+      child: Padding(
+        // Keep the field above the keyboard.
+        padding: EdgeInsets.only(
+          left: 16,
+          right: 16,
+          top: 16,
+          bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Depends on',
+              style: GoogleFonts.poppins(
+                fontWeight: TaskWarriorFonts.bold,
+                fontSize: TaskWarriorFonts.fontSizeLarge,
+                color: colors.primaryTextColor,
+              ),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _query,
+              autofocus: false,
+              onChanged: (_) => setState(() {}),
+              style: GoogleFonts.poppins(color: colors.primaryTextColor),
+              decoration: InputDecoration(
+                isDense: true,
+                prefixIcon: const Icon(Icons.search, size: 20),
+                hintText: 'Search tasks',
+                hintStyle:
+                    GoogleFonts.poppins(color: colors.primaryDisabledTextColor),
+                border: const OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 12),
+            ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height * 0.45,
+              ),
+              child: visible.isEmpty
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 24),
+                      child: Text(
+                        'No tasks match that search.',
+                        style: GoogleFonts.poppins(
+                          color: colors.primaryDisabledTextColor,
+                        ),
+                      ),
+                    )
+                  : ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: visible.length,
+                      itemBuilder: (context, index) {
+                        final TaskForReplica task = visible[index];
+                        final String description =
+                            (task.description ?? '').trim();
+                        return ListTile(
+                          dense: true,
+                          contentPadding: EdgeInsets.zero,
+                          title: Text(
+                            description.isEmpty ? task.uuid : description,
+                            style: GoogleFonts.poppins(
+                              color: colors.primaryTextColor,
+                            ),
+                          ),
+                          subtitle: task.status == null
+                              ? null
+                              : Text(
+                                  task.status!,
+                                  style: GoogleFonts.poppins(
+                                    fontSize: TaskWarriorFonts.fontSizeSmall,
+                                    color: colors.primaryDisabledTextColor,
+                                  ),
+                                ),
+                          onTap: () => Navigator.of(context).pop(task.uuid),
+                        );
+                      },
+                    ),
+            ),
+          ],
+        ),
       ),
     );
   }

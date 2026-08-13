@@ -6,7 +6,7 @@
 import 'frb_generated.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
-// These functions are ignored because they are not marked as `pub`: `add_annotation_impl`, `add_task_impl`, `delete_task_impl`, `get_all_tasks_json_impl`, `parse_datetime`, `remove_annotation_impl`, `sync_impl`, `update_task_impl`
+// These functions are ignored because they are not marked as `pub`: `add_annotation_impl`, `add_dependency_impl`, `add_task_impl`, `delete_task_impl`, `dependency_path_exists`, `get_all_tasks_json_impl`, `parse_datetime`, `remove_annotation_impl`, `remove_dependency_impl`, `sync_impl`, `update_task_impl`
 
 /// Return every task in the replica as a JSON array string.
 Future<String> getAllTasksJson({required String taskdbDirPath}) =>
@@ -87,3 +87,36 @@ Future<void> removeAnnotation(
         uuidSt: uuidSt,
         entryRfc3339: entryRfc3339,
         taskdbDirPath: taskdbDirPath);
+
+/// Make `uuid_st` depend on `depends_on_st`, so the first is blocked until the
+/// second is done.
+///
+/// TaskChampion's own `add_dependency` validates nothing at all — it writes a
+/// `dep_<uuid>` property and returns. It will accept a task depending on itself,
+/// on a UUID that is not a task, or on something that already depends on it.
+/// None of those crash, but a cycle leaves both tasks permanently blocked and
+/// never "ready", with nothing to explain why. So the checks live here:
+///
+/// * a task may not depend on itself
+/// * both tasks must exist
+/// * the edge must not close a loop
+///
+/// Adding a dependency that is already present is a no-op, not an error.
+Future<void> addDependency(
+        {required String uuidSt,
+        required String dependsOnSt,
+        required String taskdbDirPath}) =>
+    RustLib.instance.api.crateApiAddDependency(
+        uuidSt: uuidSt, dependsOnSt: dependsOnSt, taskdbDirPath: taskdbDirPath);
+
+/// Drop a dependency of `uuid_st` on `depends_on_st`.
+///
+/// Removing one that is not there is a no-op, and the depended-on task need not
+/// exist — that is deliberate, so a dependency left dangling by another client
+/// can still be cleared.
+Future<void> removeDependency(
+        {required String uuidSt,
+        required String dependsOnSt,
+        required String taskdbDirPath}) =>
+    RustLib.instance.api.crateApiRemoveDependency(
+        uuidSt: uuidSt, dependsOnSt: dependsOnSt, taskdbDirPath: taskdbDirPath);

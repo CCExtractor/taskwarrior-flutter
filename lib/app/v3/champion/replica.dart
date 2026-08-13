@@ -109,6 +109,30 @@ class Replica {
     );
   }
 
+  /// Make [uuid] depend on [dependsOn], so it stays blocked until that task is
+  /// done. Refused, with a reason, if it would be self-referential, point at a
+  /// task that does not exist, or close a dependency loop.
+  static Future<void> addDependencyToReplica(
+      String uuid, String dependsOn) async {
+    final taskdbDirPath = await getReplicaPath();
+    return addDependency(
+      uuidSt: uuid,
+      dependsOnSt: dependsOn,
+      taskdbDirPath: taskdbDirPath,
+    );
+  }
+
+  /// Drop [uuid]'s dependency on [dependsOn]. A no-op if it is not there.
+  static Future<void> removeDependencyFromReplica(
+      String uuid, String dependsOn) async {
+    final taskdbDirPath = await getReplicaPath();
+    return removeDependency(
+      uuidSt: uuid,
+      dependsOnSt: dependsOn,
+      taskdbDirPath: taskdbDirPath,
+    );
+  }
+
   static Future<String> deleteTaskFromReplica(String uuid) async {
     var taskdbDirPath = await getReplicaPath();
     try {

@@ -378,6 +378,148 @@ fn remove_annotation_impl(
     Ok(())
 }
 
+/// Does a dependency path lead from `from` to `target`?
+///
+/// Used to reject an edge that would close a loop. Iterative rather than
+/// recursive so a long chain cannot overflow the stack, and `seen` means a cycle
+/// already present in the data — one another client could have written, since
+/// nothing in TaskChampion prevents it — terminates the walk instead of hanging.
+fn dependency_path_exists(
+    tasks: &HashMap<Uuid, taskchampion::Task>,
+    from: Uuid,
+    target: Uuid,
+) -> bool {
+    let mut stack = vec![from];
+    let mut seen: std::collections::HashSet<Uuid> = std::collections::HashSet::new();
+    while let Some(current) = stack.pop() {
+        if current == target {
+            return true;
+        }
+        if !seen.insert(current) {
+            continue;
+        }
+        if let Some(task) = tasks.get(&current) {
+            stack.extend(task.get_dependencies());
+        }
+    }
+    false
+}
+
+/// Make `uuid_st` depend on `depends_on_st`, so the first is blocked until the
+/// second is done.
+///
+/// TaskChampion's own `add_dependency` validates nothing at all — it writes a
+/// `dep_<uuid>` property and returns. It will accept a task depending on itself,
+/// on a UUID that is not a task, or on something that already depends on it.
+/// None of those crash, but a cycle leaves both tasks permanently blocked and
+/// never "ready", with nothing to explain why. So the checks live here:
+///
+/// * a task may not depend on itself
+/// * both tasks must exist
+/// * the edge must not close a loop
+///
+/// Adding a dependency that is already present is a no-op, not an error.
+#[frb]
+pub fn add_dependency(
+    uuid_st: String,
+    depends_on_st: String,
+    taskdb_dir_path: String,
+) -> Result<(), String> {
+    add_dependency_impl(&uuid_st, &depends_on_st, &taskdb_dir_path).map_err(|e| e.to_string())
+}
+
+fn add_dependency_impl(
+    uuid_st: &str,
+    depends_on_st: &str,
+    taskdb_dir_path: &str,
+) -> Result<(), TcHelperError> {
+    let uuid =
+        Uuid::parse_str(uuid_st).map_err(|_| TcHelperError::InvalidUuid(uuid_st.to_string()))?;
+    let depends_on = Uuid::parse_str(depends_on_st)
+        .map_err(|_| TcHelperError::InvalidUuid(depends_on_st.to_string()))?;
+
+    if uuid == depends_on {
+        return Err(TcHelperError::InvalidInput(
+            "a task cannot depend on itself".to_string(),
+        ));
+    }
+
+    let mut replica = open_replica(taskdb_dir_path)?;
+    let tasks = replica
+        .all_tasks()
+        .map_err(|e| TcHelperError::Champion(e.to_string()))?;
+
+    let task = tasks
+        .get(&uuid)
+        .ok_or_else(|| TcHelperError::TaskNotFound(uuid_st.to_string()))?;
+    if !tasks.contains_key(&depends_on) {
+        return Err(TcHelperError::TaskNotFound(depends_on_st.to_string()));
+    }
+
+    if task.get_dependencies().any(|d| d == depends_on) {
+        return Ok(());
+    }
+
+    // The new edge is uuid -> depends_on, so it closes a loop exactly when
+    // depends_on can already reach uuid.
+    if dependency_path_exists(&tasks, depends_on, uuid) {
+        return Err(TcHelperError::InvalidInput(
+            "that would create a circular dependency".to_string(),
+        ));
+    }
+
+    let mut ops = Operations::new();
+    let mut task = replica
+        .get_task(uuid)
+        .map_err(|e| TcHelperError::Champion(e.to_string()))?
+        .ok_or_else(|| TcHelperError::TaskNotFound(uuid_st.to_string()))?;
+    task.add_dependency(depends_on, &mut ops)
+        .map_err(|e| TcHelperError::Champion(e.to_string()))?;
+    replica
+        .commit_operations(ops)
+        .map_err(|e| TcHelperError::Commit(e.to_string()))?;
+    Ok(())
+}
+
+/// Drop a dependency of `uuid_st` on `depends_on_st`.
+///
+/// Removing one that is not there is a no-op, and the depended-on task need not
+/// exist — that is deliberate, so a dependency left dangling by another client
+/// can still be cleared.
+#[frb]
+pub fn remove_dependency(
+    uuid_st: String,
+    depends_on_st: String,
+    taskdb_dir_path: String,
+) -> Result<(), String> {
+    remove_dependency_impl(&uuid_st, &depends_on_st, &taskdb_dir_path).map_err(|e| e.to_string())
+}
+
+fn remove_dependency_impl(
+    uuid_st: &str,
+    depends_on_st: &str,
+    taskdb_dir_path: &str,
+) -> Result<(), TcHelperError> {
+    let uuid =
+        Uuid::parse_str(uuid_st).map_err(|_| TcHelperError::InvalidUuid(uuid_st.to_string()))?;
+    let depends_on = Uuid::parse_str(depends_on_st)
+        .map_err(|_| TcHelperError::InvalidUuid(depends_on_st.to_string()))?;
+
+    let mut replica = open_replica(taskdb_dir_path)?;
+    let mut ops = Operations::new();
+    let mut task = replica
+        .get_task(uuid)
+        .map_err(|e| TcHelperError::Champion(e.to_string()))?
+        .ok_or_else(|| TcHelperError::TaskNotFound(uuid_st.to_string()))?;
+
+    task.remove_dependency(depends_on, &mut ops)
+        .map_err(|e| TcHelperError::Champion(e.to_string()))?;
+    replica
+        .commit_operations(ops)
+        .map_err(|e| TcHelperError::Commit(e.to_string()))?;
+    Ok(())
+}
+
 #[test]
 fn test_add_task_with_tags() {
     use std::{collections::HashMap, env, fs};
@@ -718,6 +860,170 @@ mod annotation_tests {
         let err = remove_annotation(uuid, "yesterday".to_string(), path.clone())
             .expect_err("malformed timestamp must error");
         assert!(err.contains("RFC 3339"), "unhelpful error: {err}");
+
+        fs::remove_dir_all(&tmp).ok();
+    }
+}
+
+#[cfg(test)]
+mod dependency_tests {
+    use super::*;
+    use serde_json::Value;
+    use std::{collections::HashMap, env, fs};
+
+    /// A temp replica with `n` tasks, returning (dir, path, uuids).
+    fn tasks_fixture(n: usize) -> (std::path::PathBuf, String, Vec<String>) {
+        let tmp = env::temp_dir().join(format!("taskdb_dep_{}", Uuid::new_v4()));
+        fs::create_dir_all(&tmp).expect("create temp taskdb dir");
+        let path = tmp.to_string_lossy().into_owned();
+
+        let mut uuids = Vec::new();
+        for i in 0..n {
+            let uuid = Uuid::new_v4().to_string();
+            let mut map: HashMap<String, String> = HashMap::new();
+            map.insert("uuid".to_string(), uuid.clone());
+            map.insert("description".to_string(), format!("task {i}"));
+            add_task(path.clone(), map).expect("add_task");
+            uuids.push(uuid);
+        }
+        (tmp, path, uuids)
+    }
+
+    fn task_json(path: &str, uuid: &str) -> Value {
+        let json = get_all_tasks_json(path.to_string()).expect("get_all_tasks_json");
+        let tasks: Vec<Value> = serde_json::from_str(&json).expect("parse json");
+        tasks
+            .into_iter()
+            .find(|t| t.get("uuid").and_then(|u| u.as_str()) == Some(uuid))
+            .expect("task not found")
+    }
+
+    #[test]
+    fn add_then_surfaces_as_depends_and_blocking() {
+        let (tmp, path, u) = tasks_fixture(2);
+        let (a, b) = (u[0].clone(), u[1].clone());
+
+        add_dependency(a.clone(), b.clone(), path.clone()).expect("add_dependency");
+
+        let ja = task_json(&path, &a);
+        let deps: Vec<&str> = ja["depends"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|d| d.as_str().unwrap())
+            .collect();
+        assert_eq!(deps, vec![b.as_str()]);
+        assert_eq!(ja["is_blocked"].as_bool(), Some(true), "A depends on B");
+        assert_eq!(ja["is_blocking"].as_bool(), Some(false));
+
+        // The reverse view updates with no extra work, because each FFI call
+        // opens a fresh replica and so rebuilds the dependency map.
+        let jb = task_json(&path, &b);
+        assert_eq!(jb["is_blocking"].as_bool(), Some(true), "B blocks A");
+        assert_eq!(jb["is_blocked"].as_bool(), Some(false));
+
+        fs::remove_dir_all(&tmp).ok();
+    }
+
+    #[test]
+    fn a_task_cannot_depend_on_itself() {
+        let (tmp, path, u) = tasks_fixture(1);
+        let err = add_dependency(u[0].clone(), u[0].clone(), path.clone())
+            .expect_err("self-dependency must be refused");
+        assert!(err.contains("cannot depend on itself"), "unhelpful: {err}");
+        fs::remove_dir_all(&tmp).ok();
+    }
+
+    #[test]
+    fn the_other_task_must_exist() {
+        let (tmp, path, u) = tasks_fixture(1);
+        let ghost = Uuid::new_v4().to_string();
+        let err = add_dependency(u[0].clone(), ghost, path.clone())
+            .expect_err("depending on a non-task must be refused");
+        assert!(err.contains("no task with UUID"), "unhelpful: {err}");
+        fs::remove_dir_all(&tmp).ok();
+    }
+
+    #[test]
+    fn a_direct_cycle_is_refused() {
+        // A -> B is fine; B -> A would leave both permanently blocked and never
+        // ready, which TaskChampion itself does nothing to prevent.
+        let (tmp, path, u) = tasks_fixture(2);
+        let (a, b) = (u[0].clone(), u[1].clone());
+
+        add_dependency(a.clone(), b.clone(), path.clone()).expect("A -> B");
+        let err = add_dependency(b.clone(), a.clone(), path.clone())
+            .expect_err("B -> A must be refused");
+        assert!(err.contains("circular"), "unhelpful: {err}");
+
+        // and the refusal must not have written anything
+        let jb = task_json(&path, &b);
+        assert!(jb["depends"].as_array().unwrap().is_empty());
+
+        fs::remove_dir_all(&tmp).ok();
+    }
+
+    #[test]
+    fn an_indirect_cycle_is_refused() {
+        // A -> B -> C, then C -> A closes the loop three edges later.
+        let (tmp, path, u) = tasks_fixture(3);
+        let (a, b, c) = (u[0].clone(), u[1].clone(), u[2].clone());
+
+        add_dependency(a.clone(), b.clone(), path.clone()).expect("A -> B");
+        add_dependency(b.clone(), c.clone(), path.clone()).expect("B -> C");
+        let err = add_dependency(c.clone(), a.clone(), path.clone())
+            .expect_err("C -> A must be refused");
+        assert!(err.contains("circular"), "unhelpful: {err}");
+
+        fs::remove_dir_all(&tmp).ok();
+    }
+
+    #[test]
+    fn a_diamond_is_allowed() {
+        // Not every repeated path is a cycle: A -> B, A -> C, B -> D, C -> D is
+        // a diamond and perfectly legal. A naive "have I seen D twice" check
+        // would wrongly reject it.
+        let (tmp, path, u) = tasks_fixture(4);
+        let (a, b, c, d) = (u[0].clone(), u[1].clone(), u[2].clone(), u[3].clone());
+
+        add_dependency(a.clone(), b.clone(), path.clone()).expect("A -> B");
+        add_dependency(a.clone(), c.clone(), path.clone()).expect("A -> C");
+        add_dependency(b.clone(), d.clone(), path.clone()).expect("B -> D");
+        add_dependency(c, d, path.clone()).expect("C -> D must be allowed");
+
+        assert_eq!(task_json(&path, &a)["depends"].as_array().unwrap().len(), 2);
+        fs::remove_dir_all(&tmp).ok();
+    }
+
+    #[test]
+    fn adding_twice_is_a_no_op() {
+        let (tmp, path, u) = tasks_fixture(2);
+        let (a, b) = (u[0].clone(), u[1].clone());
+
+        add_dependency(a.clone(), b.clone(), path.clone()).expect("first");
+        add_dependency(a.clone(), b.clone(), path.clone()).expect("second must not error");
+
+        assert_eq!(task_json(&path, &a)["depends"].as_array().unwrap().len(), 1);
+        fs::remove_dir_all(&tmp).ok();
+    }
+
+    #[test]
+    fn remove_clears_the_edge_and_is_idempotent() {
+        let (tmp, path, u) = tasks_fixture(2);
+        let (a, b) = (u[0].clone(), u[1].clone());
+
+        add_dependency(a.clone(), b.clone(), path.clone()).expect("add");
+        remove_dependency(a.clone(), b.clone(), path.clone()).expect("remove");
+        remove_dependency(a.clone(), b.clone(), path.clone()).expect("second remove must not error");
+
+        let ja = task_json(&path, &a);
+        assert!(ja["depends"].as_array().unwrap().is_empty());
+        assert_eq!(ja["is_blocked"].as_bool(), Some(false));
+        assert_eq!(
+            task_json(&path, &b)["is_blocking"].as_bool(),
+            Some(false),
+            "B should no longer block anything"
+        );
 
         fs::remove_dir_all(&tmp).ok();
     }
