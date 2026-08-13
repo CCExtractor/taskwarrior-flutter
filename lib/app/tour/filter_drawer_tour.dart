@@ -9,6 +9,9 @@ List<TargetFocus> filterDrawer({
   required GlobalKey statusKey,
   required GlobalKey projectsKey,
   required GlobalKey projectsKeyTaskc,
+  // The drawer shows either the legacy projects column or the TaskChampion
+  // one, never both, so only the matching key is ever laid out.
+  required bool useTaskchampionProjects,
   required GlobalKey filterTagKey,
   required GlobalKey sortByKey,
 }) {
@@ -50,10 +53,13 @@ List<TargetFocus> filterDrawer({
     ),
   );
 
-  // projectsKey
+  // Projects. Registering BOTH keys guaranteed one target with no render
+  // box — each column sits behind a mutually exclusive Visibility, so only
+  // one is ever mounted. That is the "could not obtain target position
+  // (null)" failure, by construction rather than by race.
   targets.add(
     TargetFocus(
-      keyTarget: projectsKey,
+      keyTarget: useTaskchampionProjects ? projectsKeyTaskc : projectsKey,
       alignSkip: Alignment.topRight,
       radius: 10,
       shape: ShapeLightFocus.RRect,
@@ -86,41 +92,6 @@ List<TargetFocus> filterDrawer({
     ),
   );
 
-  // projectsKeyTaskc
-  targets.add(
-    TargetFocus(
-      keyTarget: projectsKeyTaskc,
-      alignSkip: Alignment.topRight,
-      radius: 10,
-      shape: ShapeLightFocus.RRect,
-      contents: [
-        TargetContent(
-          align: ContentAlign.top,
-          builder: (context, controller) {
-            return Container(
-              alignment: Alignment.center,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    SentenceManager(
-                            currentLanguage: AppSettings.selectedLanguage)
-                        .sentences
-                        .tourFilterProjects,
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.poppins(
-                      color: TaskWarriorColors.white,
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
-      ],
-    ),
-  );
 
   // filterTagByKey
   targets.add(

@@ -10,6 +10,7 @@ import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/v3/db/task_database.dart';
 import 'package:taskwarrior/app/v3/models/task.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
+import 'package:taskwarrior/app/tour/safe_tour.dart';
 
 class ReportsController extends GetxController
     with GetTickerProviderStateMixin {
@@ -81,18 +82,17 @@ class ReportsController extends GetxController
   void showReportsTour(BuildContext context) {
     Future.delayed(
       const Duration(milliseconds: 500),
-      () {
-        SaveTourStatus.getReportsTourStatus().then((value) => {
-              if (value == false)
-                {
-                  tutorialCoachMark.show(context: context),
-                }
-              else
-                {
-                  // ignore: avoid_print
-                  print('User has seen this page'),
-                }
-            });
+      () async {
+        if (await SaveTourStatus.getReportsTourStatus()) {
+          debugPrint('User has seen this page');
+          return;
+        }
+        await safeShowTour(
+          tutorialCoachMark: tutorialCoachMark,
+          context: context,
+          targetKeys: [daily, weekly, monthly],
+          markSeen: () => SaveTourStatus.saveReportsTourStatus(true),
+        );
       },
     );
   }
