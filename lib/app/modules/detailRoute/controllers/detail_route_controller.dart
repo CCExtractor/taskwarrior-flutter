@@ -11,6 +11,7 @@ import 'package:taskwarrior/app/utils/taskfunctions/urgency.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
+import 'package:taskwarrior/app/tour/safe_tour.dart';
 
 class DetailRouteController extends GetxController {
   late String uuid;
@@ -190,10 +191,14 @@ class DetailRouteController extends GetxController {
   void showDetailsPageTour(BuildContext context) {
     Future.delayed(
       const Duration(milliseconds: 500),
-      () {
-        SaveTourStatus.getDetailsTourStatus().then((value) => {
-              if (!value) {tutorialCoachMark.show(context: context)}
-            });
+      () async {
+        if (await SaveTourStatus.getDetailsTourStatus()) return;
+        await safeShowTour(
+          tutorialCoachMark: tutorialCoachMark,
+          context: context,
+          targetKeys: [dueKey, waitKey, untilKey, priorityKey],
+          markSeen: () => SaveTourStatus.saveDetailsTourStatus(true),
+        );
       },
     );
   }

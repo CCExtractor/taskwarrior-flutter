@@ -37,6 +37,7 @@ import 'package:taskwarrior/app/v3/models/task.dart';
 import 'package:textfield_tags/textfield_tags.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
+import 'package:taskwarrior/app/tour/safe_tour.dart';
 
 class HomeController extends GetxController {
   final SplashController splashController = Get.find<SplashController>();
@@ -766,19 +767,17 @@ class HomeController extends GetxController {
   void showInAppTour(BuildContext context) {
     Future.delayed(
       const Duration(milliseconds: 500),
-      () {
-        SaveTourStatus.getInAppTourStatus().then((value) => {
-              if (value == false)
-                {
-                  tutorialCoachMark.show(context: context),
-                }
-              else
-                {
-                  // ignore: avoid_print
-                  debugPrint('User has seen this page'),
-                  // User has seen this page
-                }
-            });
+      () async {
+        if (await SaveTourStatus.getInAppTourStatus()) {
+          debugPrint('User has seen this page');
+          return;
+        }
+        await safeShowTour(
+          tutorialCoachMark: tutorialCoachMark,
+          context: context,
+          targetKeys: [addKey, searchKey1, filterKey, menuKey, refreshKey],
+          markSeen: () => SaveTourStatus.saveInAppTourStatus(true),
+        );
       },
     );
   }
@@ -789,6 +788,12 @@ class HomeController extends GetxController {
   final GlobalKey filterTagKey = GlobalKey();
   final GlobalKey sortByKey = GlobalKey();
 
+  /// Which projects column the filter drawer is currently showing. The two sit
+  /// behind mutually exclusive `Visibility` widgets, so only one of
+  /// [projectsKey] / [projectsKeyTaskc] is ever laid out.
+  bool get usesTaskchampionProjects =>
+      taskchampion.value || taskReplica.value;
+
   void initFilterDrawerTour() {
     tutorialCoachMark = TutorialCoachMark(
       targets: filterDrawer(
@@ -797,6 +802,7 @@ class HomeController extends GetxController {
         projectsKeyTaskc: projectsKeyTaskc,
         filterTagKey: filterTagKey,
         sortByKey: sortByKey,
+        useTaskchampionProjects: usesTaskchampionProjects,
       ),
       colorShadow: TaskWarriorColors.black,
       paddingFocus: 10,
@@ -811,18 +817,24 @@ class HomeController extends GetxController {
   void showFilterDrawerTour(BuildContext context) {
     Future.delayed(
       const Duration(milliseconds: 500),
-      () {
-        SaveTourStatus.getFilterTourStatus().then((value) => {
-              if (value == false)
-                {
-                  tutorialCoachMark.show(context: context),
-                }
-              else
-                {
-                  // ignore: avoid_print
-                  print('User has seen this page'),
-                }
-            });
+      () async {
+        if (await SaveTourStatus.getFilterTourStatus()) {
+          debugPrint('User has seen this page');
+          return;
+        }
+        await safeShowTour(
+          tutorialCoachMark: tutorialCoachMark,
+          context: context,
+          targetKeys: [
+            statusKey,
+            // Only the column actually on screen; the other key is never laid
+            // out, so requiring it would suppress the tour permanently.
+            usesTaskchampionProjects ? projectsKeyTaskc : projectsKey,
+            filterTagKey,
+            sortByKey,
+          ],
+          markSeen: () => SaveTourStatus.saveFilterTourStatus(true),
+        );
       },
     );
   }
@@ -843,15 +855,20 @@ class HomeController extends GetxController {
   }
 
   void showTaskSwipeTutorial(BuildContext context) {
-    SaveTourStatus.getTaskSwipeTutorialStatus().then((value) {
-      print("value is $value");
-      print("tasks is ${tasks.isNotEmpty}");
-      if (value == false) {
-        initTaskSwipeTutorial();
-        tutorialCoachMark.show(context: context);
-      } else {
+    SaveTourStatus.getTaskSwipeTutorialStatus().then((value) async {
+      if (value) {
         debugPrint('User has already seen the task swipe tutorial');
+        return;
       }
+      initTaskSwipeTutorial();
+      // This tour points at a task row, so it has nothing to highlight on an
+      // empty list — the guard turns that into a skip rather than a throw.
+      await safeShowTour(
+        tutorialCoachMark: tutorialCoachMark,
+        context: context,
+        targetKeys: [taskItemKey],
+        markSeen: () => SaveTourStatus.saveTaskSwipeTutorialStatus(true),
+      );
     });
   }
 
