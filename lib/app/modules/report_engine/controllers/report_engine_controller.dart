@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:taskwarrior/app/models/report.dart';
 import 'package:taskwarrior/app/services/report_service.dart';
 import 'package:taskwarrior/app/services/taskrc_service.dart';
+import 'package:taskwarrior/app/utils/taskchampion/virtual_filter_engine.dart';
 import 'package:taskwarrior/app/v3/champion/models/task_for_replica.dart';
 import 'package:taskwarrior/app/v3/champion/replica.dart';
 
@@ -68,5 +69,52 @@ class ReportEngineController extends GetxController {
   void clearSelection() {
     selectedReport.value = null;
     results.clear();
+  }
+
+  /// Save a user-built report and refresh the catalogue.
+  ///
+  /// Returns null on success, or a message explaining why it was refused —
+  /// the caller shows that rather than a generic failure.
+  Future<String?> saveReport(ReportDefinition report) async {
+    final String? nameError = TaskrcService.validateName(report.name);
+    if (nameError != null) return nameError;
+
+    // A custom report may deliberately override a default of the same name
+    // (that is how Taskwarrior behaves), so a clash is allowed — but silently
+    // shadowing a built-in would be surprising, so say so.
+    try {
+      await TaskrcService.saveReport(report);
+      await loadReports();
+      return null;
+    } catch (e) {
+      return 'Could not save the report: $e';
+    }
+  }
+
+  /// Delete a user-built report. Returns null on success, or a message.
+  Future<String?> deleteReport(String name) async {
+    try {
+      await TaskrcService.deleteReport(name);
+      if (selectedReport.value?.name == name) clearSelection();
+      await loadReports();
+      return null;
+    } catch (e) {
+      return 'Could not delete the report: $e';
+    }
+  }
+
+  /// True when [name] would shadow one of the built-in reports.
+  bool shadowsDefault(String name) =>
+      ReportService.defaultReports.any((r) => r.name == name.trim());
+
+  /// How many tasks a filter currently matches.
+  ///
+  /// This is the practical check on a filter expression. The engine ignores an
+  /// attribute it does not recognise instead of failing, so a typo such as
+  /// `statuss:pending` quietly matches everything — a count shown while typing
+  /// makes that visible immediately, which validation alone cannot do.
+  Future<int> previewMatchCount(String? filterExpression) async {
+    final List<TaskForReplica> tasks = await Replica.getAllTasksFromReplica();
+    return VirtualFilterEngine.applyFilter(tasks, filterExpression).length;
   }
 }

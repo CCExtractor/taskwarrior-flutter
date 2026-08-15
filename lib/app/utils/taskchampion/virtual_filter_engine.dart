@@ -11,6 +11,59 @@ import 'package:taskwarrior/app/models/task_like.dart';
 ///
 /// Written against [TaskLike] so it works for every task model / sync mode.
 class VirtualFilterEngine {
+  /// The virtual tags this engine understands, for filter-building UI and
+  /// validation. Anything else after `+` is treated as a real user tag, which
+  /// is legitimate — so an unrecognised tag is never an error.
+  static const List<String> virtualTags = <String>[
+    'ACTIVE',
+    'READY',
+    'BLOCKED',
+    'BLOCKING',
+    'OVERDUE',
+    'WAITING',
+    'PENDING',
+    'COMPLETED',
+    'DELETED',
+  ];
+
+  /// Attributes usable as `name:value`. Unlike tags, an unknown attribute is a
+  /// genuine mistake — see [validate].
+  static const List<String> attributes = <String>[
+    'status',
+    'project',
+    'priority',
+  ];
+
+  /// Human-readable problems with [expression], or an empty list if it is fine.
+  ///
+  /// This exists because of an asymmetry in how unmatched tokens behave.
+  /// [_matchAttribute] returns `true` for an attribute it does not recognise,
+  /// so a typo like `statuss:pending` excludes nothing and the report silently
+  /// returns *every* task rather than failing. A bare word is a description
+  /// search and a `+word` is a user tag, so neither can be wrong — only an
+  /// unknown `name:value` can, and that is what this reports.
+  static List<String> validate(String? expression) {
+    final String expr = (expression ?? '').trim();
+    if (expr.isEmpty) return const <String>[];
+
+    final List<String> issues = <String>[];
+    for (final String tok in expr.split(RegExp(r'\s+'))) {
+      if (tok.isEmpty || tok.startsWith('+') || tok.startsWith('-')) continue;
+      final int colon = tok.indexOf(':');
+      if (colon <= 0) continue; // bare word: description search
+      final String attr = tok.substring(0, colon);
+      if (!attributes.contains(attr)) {
+        issues.add(
+          '"$attr:" is not a filter attribute, so it matches every task. '
+          'Use one of: ${attributes.join(', ')}.',
+        );
+      } else if (tok.substring(colon + 1).isEmpty) {
+        issues.add('"$tok" has no value after the colon.');
+      }
+    }
+    return issues;
+  }
+
   /// Returns whether [task] satisfies a single virtual/real tag like `+READY`
   /// or `+home`. [now] anchors time-relative tags (`+OVERDUE`).
   static bool evaluateTag(TaskLike task, String tag, {DateTime? now}) {
