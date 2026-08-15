@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:taskwarrior/app/models/report.dart';
 import 'package:taskwarrior/app/modules/report_engine/controllers/report_engine_controller.dart';
+import 'package:taskwarrior/app/modules/report_engine/views/report_builder_sheet.dart';
 import 'package:taskwarrior/app/routes/app_pages.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
@@ -67,6 +68,22 @@ class ReportEngineView extends GetView<ReportEngineController> {
     );
   }
 
+
+  /// Opens the report builder. [existing] is null when creating.
+  Future<void> _openBuilder(BuildContext context, ReportDefinition? existing) {
+    return showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Theme.of(context)
+          .extension<TaskwarriorColorTheme>()!
+          .primaryBackgroundColor,
+      builder: (_) => ReportBuilderSheet(
+        controller: controller,
+        existing: existing,
+      ),
+    );
+  }
+
   // --- Report picker -------------------------------------------------------
 
   Widget _buildPicker(BuildContext context, TaskwarriorColorTheme tColors) {
@@ -85,11 +102,20 @@ class ReportEngineView extends GetView<ReportEngineController> {
         _sectionHeader('Default reports', tColors),
         ...defaults.map((r) => _reportTile(context, r, tColors)),
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+          child: OutlinedButton.icon(
+            onPressed: () => _openBuilder(context, null),
+            icon: const Icon(Icons.add, size: 18),
+            label: const Text('New report'),
+            style: OutlinedButton.styleFrom(
+                foregroundColor: tColors.primaryTextColor),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
           child: Text(
-            'Tip: add or tweak reports by placing a .taskrc with '
-            'report.<name>.sort/.filter/.description entries at:\n'
-            '${controller.taskrcPath.value}',
+            'Reports you create are saved as Taskwarrior config, so the same '
+            'file works on desktop:\n${controller.taskrcPath.value}',
             style: GoogleFonts.poppins(
                 fontSize: 11, color: tColors.secondaryTextColor),
           ),
@@ -161,8 +187,14 @@ class ReportEngineView extends GetView<ReportEngineController> {
               ),
           ],
         ),
-        trailing:
-            Icon(Icons.chevron_right, color: tColors.secondaryTextColor),
+        trailing: r.isCustom
+            ? IconButton(
+                tooltip: 'Edit report',
+                icon: Icon(Icons.edit_outlined,
+                    size: 20, color: tColors.secondaryTextColor),
+                onPressed: () => _openBuilder(context, r),
+              )
+            : Icon(Icons.chevron_right, color: tColors.secondaryTextColor),
       ),
     );
   }
