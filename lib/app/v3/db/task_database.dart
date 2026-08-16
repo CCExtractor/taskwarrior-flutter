@@ -251,24 +251,48 @@ class TaskDatabase {
     await ensureDatabaseIsOpen();
 
     debugPrint('task in saveEditedTaskInDB: $uuid with due $newDue');
-    await _database!.update(
-      'Tasks',
-      {
-        'description': newDescription,
-        'project': newProject,
-        'status': newStatus,
-        'priority': newPriority,
-        'due': newDue,
-        'modified': DateTime.now().toIso8601String(),
-      },
-      where: 'uuid = ?',
-      whereArgs: [uuid],
-    );
-    debugPrint('task${uuid}edited');
-    if (newTags.isNotEmpty) {
-      TaskForC? task = await getTaskByUuid(uuid);
-      await setTagsForTask(uuid, task?.id ?? 0, newTags.toList());
-    }
+    // Keep task fields and tag replacement atomic so a crash between the
+    // former update() and setTagsForTask() cannot leave stale tags.
+    await _database!.transaction((txn) async {
+      await txn.update(
+        'Tasks',
+        {
+          'description': newDescription,
+          'project': newProject,
+          'status': newStatus,
+          'priority': newPriority,
+          'due': newDue,
+          'modified': DateTime.now().toIso8601String(),
+        },
+        where: 'uuid = ?',
+        whereArgs: [uuid],
+      );
+      debugPrint('task${uuid}edited');
+      if (newTags.isNotEmpty) {
+        final taskMaps = await txn.query(
+          'Tasks',
+          columns: ['id'],
+          where: 'uuid = ?',
+          whereArgs: [uuid],
+          limit: 1,
+        );
+        final taskId =
+            taskMaps.isNotEmpty ? (taskMaps.first['id'] as int? ?? 0) : 0;
+        await txn.delete(
+          'Tags',
+          where: 'task_uuid = ? AND task_id = ?',
+          whereArgs: [uuid, taskId],
+        );
+        for (final tag in newTags) {
+          if (tag.trim().isNotEmpty) {
+            await txn.insert(
+              'Tags',
+              {'name': tag, 'task_uuid': uuid, 'task_id': taskId},
+            );
+          }
+        }
+      }
+    });
   }
 
   Future<List<TaskForC>> findTasksWithoutUUIDs() async {
