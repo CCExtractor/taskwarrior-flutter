@@ -268,28 +268,26 @@ class TaskDatabase {
         whereArgs: [uuid],
       );
       debugPrint('task${uuid}edited');
-      if (newTags.isNotEmpty) {
-        final taskMaps = await txn.query(
-          'Tasks',
-          columns: ['id'],
-          where: 'uuid = ?',
-          whereArgs: [uuid],
-          limit: 1,
-        );
-        final taskId =
-            taskMaps.isNotEmpty ? (taskMaps.first['id'] as int? ?? 0) : 0;
-        await txn.delete(
-          'Tags',
-          where: 'task_uuid = ? AND task_id = ?',
-          whereArgs: [uuid, taskId],
-        );
-        for (final tag in newTags) {
-          if (tag.trim().isNotEmpty) {
-            await txn.insert(
-              'Tags',
-              {'name': tag, 'task_uuid': uuid, 'task_id': taskId},
-            );
-          }
+      final taskMaps = await txn.query(
+        'Tasks',
+        columns: ['id'],
+        where: 'uuid = ?',
+        whereArgs: [uuid],
+        limit: 1,
+      );
+      final taskId =
+          taskMaps.isNotEmpty ? (taskMaps.first['id'] as int? ?? 0) : 0;
+      await txn.delete(
+        'Tags',
+        where: 'task_uuid = ? AND task_id = ?',
+        whereArgs: [uuid, taskId],
+      );
+      for (final tag in newTags) {
+        if (tag.trim().isNotEmpty) {
+          await txn.insert(
+            'Tags',
+            {'name': tag, 'task_uuid': uuid, 'task_id': taskId},
+          );
         }
       }
     });
@@ -346,7 +344,10 @@ class TaskDatabase {
   }
 
   Future<void> close() async {
-    await _database!.close();
+    if (_database != null) {
+      await _database!.close();
+      _database = null;
+    }
   }
 
   Future<void> deleteTask({description, due, project, priority}) async {

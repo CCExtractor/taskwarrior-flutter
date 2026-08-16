@@ -151,6 +151,10 @@ void main() {
       await taskDatabase.open();
     });
 
+    tearDown(() async {
+      await taskDatabase.close();
+    });
+
     test('insertTask adds a task to the database', () async {
       final task = TaskForC(
           id: 1,
@@ -249,6 +253,44 @@ void main() {
       expect(edited.priority, 'M');
       expect(edited.due, '2025-01-01');
       expect(edited.tags, unorderedEquals(['new-a', 'new-b']));
+    });
+
+    test('saveEditedTaskInDB clears tags when given an empty list', () async {
+      final task = TaskForC(
+          id: 8,
+          description: 'Tagged task',
+          project: 'Project 1',
+          status: 'pending',
+          uuid: 'clear-tags-uuid',
+          urgency: 5.0,
+          priority: 'H',
+          due: '2024-12-31',
+          end: '',
+          entry: '2024-01-01',
+          modified: '2024-11-01',
+          tags: ['keep-me-not'],
+          start: '',
+          wait: '',
+          rtype: '',
+          recur: '',
+          depends: [],
+          annotations: []);
+
+      await taskDatabase.insertTask(task);
+
+      await taskDatabase.saveEditedTaskInDB(
+        'clear-tags-uuid',
+        'Tagged task',
+        'Project 1',
+        'pending',
+        'H',
+        '2024-12-31',
+        const [],
+      );
+
+      final edited = await taskDatabase.getTaskByUuid('clear-tags-uuid');
+      expect(edited, isNotNull);
+      expect(edited!.tags, isEmpty);
     });
   });
 }
