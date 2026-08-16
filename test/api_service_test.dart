@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -24,10 +25,12 @@ void main() {
 
   databaseFactory = databaseFactoryFfi;
   MockClient mockClient = MockClient();
+  late Directory docsDir;
 
   setUpAll(() {
     sqfliteFfiInit();
-    
+    docsDir = Directory.systemTemp.createTempSync('taskwarrior_test_docs_');
+
     // Mock SharedPreferences plugin
     const MethodChannel('plugins.flutter.io/shared_preferences')
         .setMockMethodCallHandler((MethodCall methodCall) async {
@@ -36,6 +39,20 @@ void main() {
       }
       return null;
     });
+
+    const MethodChannel('plugins.flutter.io/path_provider')
+        .setMockMethodCallHandler((MethodCall methodCall) async {
+      if (methodCall.method == 'getApplicationDocumentsDirectory') {
+        return docsDir.path;
+      }
+      return null;
+    });
+  });
+
+  tearDownAll(() {
+    if (docsDir.existsSync()) {
+      docsDir.deleteSync(recursive: true);
+    }
   });
 
   group('Tasks model', () {
@@ -134,6 +151,10 @@ void main() {
       await taskDatabase.open();
     });
 
+    tearDown(() async {
+      await taskDatabase.close();
+    });
+
     test('insertTask adds a task to the database', () async {
       final task = TaskForC(
           id: 1,
@@ -190,6 +211,86 @@ void main() {
       // The implementation has a bug where it calls maps.last on empty results
       // This will throw "Bad state: No element" when there are no tasks
       expect(() => taskDatabase.fetchTasksFromDatabase(), throwsStateError);
+    });
+
+    test('saveEditedTaskInDB updates description and tags together', () async {
+      final task = TaskForC(
+          id: 7,
+          description: 'Old description',
+          project: 'Project 1',
+          status: 'pending',
+          uuid: 'edit-uuid',
+          urgency: 5.0,
+          priority: 'H',
+          due: '2024-12-31',
+          end: '',
+          entry: '2024-01-01',
+          modified: '2024-11-01',
+          tags: ['old'],
+          start: '',
+          wait: '',
+          rtype: '',
+          recur: '',
+          depends: [],
+          annotations: []);
+
+      await taskDatabase.insertTask(task);
+
+      await taskDatabase.saveEditedTaskInDB(
+        'edit-uuid',
+        'New description',
+        'Project 2',
+        'pending',
+        'M',
+        '2025-01-01',
+        ['new-a', 'new-b'],
+      );
+
+      final edited = await taskDatabase.getTaskByUuid('edit-uuid');
+      expect(edited, isNotNull);
+      expect(edited!.description, 'New description');
+      expect(edited.project, 'Project 2');
+      expect(edited.priority, 'M');
+      expect(edited.due, '2025-01-01');
+      expect(edited.tags, unorderedEquals(['new-a', 'new-b']));
+    });
+
+    test('saveEditedTaskInDB clears tags when given an empty list', () async {
+      final task = TaskForC(
+          id: 8,
+          description: 'Tagged task',
+          project: 'Project 1',
+          status: 'pending',
+          uuid: 'clear-tags-uuid',
+          urgency: 5.0,
+          priority: 'H',
+          due: '2024-12-31',
+          end: '',
+          entry: '2024-01-01',
+          modified: '2024-11-01',
+          tags: ['keep-me-not'],
+          start: '',
+          wait: '',
+          rtype: '',
+          recur: '',
+          depends: [],
+          annotations: []);
+
+      await taskDatabase.insertTask(task);
+
+      await taskDatabase.saveEditedTaskInDB(
+        'clear-tags-uuid',
+        'Tagged task',
+        'Project 1',
+        'pending',
+        'H',
+        '2024-12-31',
+        const [],
+      );
+
+      final edited = await taskDatabase.getTaskByUuid('clear-tags-uuid');
+      expect(edited, isNotNull);
+      expect(edited!.tags, isEmpty);
     });
   });
 }
