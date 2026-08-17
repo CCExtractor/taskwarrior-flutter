@@ -1,0 +1,14 @@
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Setting up sync · TaskWarrior Mobile</title><meta name=description content="Connect TaskWarrior Mobile to a TaskChampion sync server."><link rel=stylesheet href=/taskwarrior-flutter/css/style.css></head><body><header class=site-header><a class=brand href=/>TaskWarrior <span>Mobile</span></a><nav><a href=/taskwarrior-flutter/>Home</a>
+<a href=/taskwarrior-flutter/features/>Features</a>
+<a href=/taskwarrior-flutter/downloads/>Downloads</a>
+<a href=/taskwarrior-flutter/docs/>Docs</a>
+<a href=https://github.com/CCExtractor/taskwarrior-flutter rel=noopener>GitHub</a></nav></header><main class=content><article class=page><h1>Setting up sync</h1><p>TaskWarrior Mobile syncs through a <a href=https://github.com/GothenburgBitFactory/taskchampion>TaskChampion</a>
+sync server — the same protocol used by TaskWarrior 3.x on the desktop. Sync is
+<strong>optional and offline-first</strong>: your tasks always live in a local replica, and syncing
+simply reconciles that replica with the server when you are online.</p><h2 id=what-you-need>What you need</h2><p>Three values from your TaskChampion sync server:</p><table><thead><tr><th>Field</th><th>Description</th></tr></thead><tbody><tr><td><strong>Sync server URL</strong></td><td>The base URL of the TaskChampion server, e.g. <code>https://example.org/taskchampion/</code>.</td></tr><tr><td><strong>Client ID</strong></td><td>A UUID identifying your replica on the server.</td></tr><tr><td><strong>Encryption secret</strong></td><td>The secret used to encrypt your data end-to-end. Only clients that share it can read your tasks.</td></tr></tbody></table><p>The server never sees your task data in the clear — everything is encrypted locally with
+your encryption secret before it is uploaded.</p><h2 id=connecting>Connecting</h2><ol><li>Open <strong>Profile</strong> → change the sync server → choose <strong>Taskchampion</strong>.</li><li>Tap <strong>Configure</strong> and paste the three values above.</li><li>Tap <strong>Save</strong>. The app performs a live sync against the server to confirm the
+credentials work <em>before</em> it stores them — if anything is wrong, you find out
+immediately instead of silently failing later.</li></ol><p>Once connected, changes flow both ways whenever you have connectivity. You can keep
+working offline at any time; the next sync catches the server up.</p><h2 id=self-hosting-a-server>Self-hosting a server</h2><p>Any TaskChampion-compatible sync server works. See the upstream
+<a href=https://github.com/GothenburgBitFactory/taskchampion-sync-server>TaskChampion sync-server</a>
+project to run your own.</p></article></main><footer class=site-footer><p>TaskWarrior Mobile · maintained by <a href=https://ccextractor.org/ rel=noopener>CCExtractor</a> · built with Hugo</p></footer></body></html>
