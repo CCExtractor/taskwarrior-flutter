@@ -216,7 +216,10 @@ class _ReportBuilderSheetState extends State<ReportBuilderSheet> {
               children: [
                 Expanded(
                   child: DropdownButtonFormField<String>(
-                    initialValue: _sortField,
+                    // `value:` not `initialValue:` — the latter only exists in
+                    // Flutter newer than the 3.29.2 this project pins in CI, so
+                    // it compiles on a current local SDK and fails the build.
+                    value: _sortField,
                     isDense: true,
                     dropdownColor: c.secondaryBackgroundColor,
                     decoration: const InputDecoration(
