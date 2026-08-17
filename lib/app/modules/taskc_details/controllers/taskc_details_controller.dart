@@ -563,7 +563,14 @@ class TaskcDetailsController extends GetxController {
         // Sent as part of the same edit rather than as its own write, because
         // the FFI validates recurrence against the due date — and the user may
         // legitimately set both in one go.
-        recur: recur.string.trim().isEmpty ? null : recur.string.trim(),
+        //
+        // Cleared as an EMPTY STRING, never null. modifyTaskInReplica skips null
+        // fields, so a null here means "leave it alone" rather than "remove it":
+        // turning the repeat off would revert the status but strand `recur` on
+        // the task, and a pending task that still carries `recur` is promoted
+        // back to recurring by the desktop CLI. The repeat would silently come
+        // back. An empty string reaches update_task, which clears the property.
+        recur: recur.string.trim(),
       );
       debugPrint('Modified replica task: $modifiedTask');
       hasChanges.value = false;
