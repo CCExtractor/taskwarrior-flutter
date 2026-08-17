@@ -1,10 +1,9 @@
 name: Nightly Build & Log
 
-# Builds the signed nightly APK on a schedule and records the result in the
-# website build log (website/data/nightly_builds.json). Committing that file to
-# main touches website/**, which triggers deploy-website.yml to refresh the
-# published site. This complements the push-triggered F-Droid deploy
-# (nightlydepolyci.yml); the two can be unified later.
+# Scheduled canary: builds the signed nightly APK so a break is caught even on a
+# day with no commits. It deliberately publishes nothing — the F-Droid deploy and
+# the website build log are handled by nightlydepolyci.yml, which runs on push and
+# builds the site from the deploy branch where its source now lives.
 
 on:
   schedule:
@@ -12,7 +11,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write # commit the updated build log back to main
+  contents: read # nothing is committed; this only proves the build still works
 
 jobs:
   nightly:
@@ -64,31 +63,7 @@ jobs:
         id: build
         run: flutter build apk --flavor nightly --build-number=${{ github.run_number }} --release
 
-      # Placed before the build-log steps on purpose: an APK missing its native
-      # library must be recorded as a FAILED nightly, not published as a good one.
+      # A missing native library produces an APK that installs and then crashes
+      # at RustLib.init(), so fail the canary on it.
       - name: Verify native libraries are in the APK
         run: ./scripts/verify_apk_native_libs.sh build/app/outputs/flutter-apk/app-nightly-release.apk
-
-      - name: Record successful build
-        if: success()
-        run: |
-          python3 scripts/update_build_log.py success \
-            "https://github.com/${{ github.repository }}/raw/fdroid-repo/repo/nightly.${{ github.run_number }}.apk" \
-            "${{ github.run_number }}"
-
-      - name: Record failed build
-        if: failure()
-        run: python3 scripts/update_build_log.py failure "" "${{ github.run_number }}"
-
-      - name: Commit build log
-        if: always()
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          if git diff --quiet -- website/data/nightly_builds.json; then
-            echo "No build-log changes to commit."
-          else
-            git add website/data/nightly_builds.json
-            git commit -m "chore(nightly): record build ${{ github.run_number }}"
-            git push
-          fi

@@ -4,12 +4,9 @@ on:
   push:
     branches:
       - main
-    # Website content and the nightly build-log commit must not trigger a full
-    # APK rebuild + F-Droid redeploy (see build-nightly.yml / deploy-website.yml).
+    # The website lives on the deploy branch now, so nothing here needs to be
+    # excluded to avoid rebuilding the APK for a site-only change.
     paths-ignore:
-      - 'website/**'
-      - 'scripts/**'
-      - '.github/workflows/deploy-website.yml'
       - '.github/workflows/build-nightly.yml'
 
 jobs:
@@ -78,51 +75,16 @@ jobs:
       - name: Verify sign
         run: keytool -printcert -jarfile build/app/outputs/flutter-apk/app-nightly-release.apk
 
-      # Step 7b: Record this deploy in the website's build log and rebuild the
-      # site, while we are still on the source branch.
+      # Step 7b: Capture which commit is being released.
       #
-      # The log has to be read from and written back to fdroid-repo, not main.
-      # Pages serves fdroid-repo, so the *built* site is what users see; updating
-      # the JSON on main would change nothing they can load. Keeping the log on
-      # the deploy branch also means the history survives, since that branch is
-      # replaced by an orphan commit on every run and only files present on disk
-      # are carried over.
-      - name: Record deploy and rebuild the website
+      # It has to be captured now: the job switches this work tree to the deploy
+      # branch further down, and from that point git HEAD is that branch's own
+      # orphan commit rather than the app commit. The site source lives on the
+      # deploy branch, so the site itself is built after the switch.
+      - name: Capture the deployed commit
         run: |
-          set -e
-          # Force-fetch: fdroid-repo is replaced by an orphan commit each run, so
-          # it is never a fast-forward and a plain fetch would be rejected.
-          git fetch origin +fdroid-repo:fdroid-repo || echo "No fdroid-repo yet."
-
-          mkdir -p website/data
-          git show fdroid-repo:site-data/nightly_builds.json \
-            > website/data/nightly_builds.json 2>/dev/null \
-            || echo "[]" > website/data/nightly_builds.json
-
-          # Records the current commit's sha and subject line — this is what the
-          # site's Commit/Message columns display.
-          python3 scripts/update_build_log.py success \
-            "https://github.com/${{ github.repository }}/raw/fdroid-repo/repo/nightly.${{ github.run_number }}.apk" \
-            "${{ github.run_number }}"
-
-          # Pinned Hugo rather than a floating action, so a site build cannot
-          # start failing because an upstream default moved.
-          HUGO_VERSION=0.164.0
-          curl -sSL -o /tmp/hugo.tar.gz \
-            "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz"
-          tar -xzf /tmp/hugo.tar.gz -C /tmp hugo
-
-          # Built for the Pages URL. The generated CNAME is dropped on purpose:
-          # no custom domain is configured, and committing one would make Pages
-          # claim a domain with no DNS behind it — taking the site down and
-          # breaking the F-Droid repo URL that clients already poll.
-          /tmp/hugo --source website --destination /tmp/site --gc --minify \
-            --baseURL "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
-          rm -f /tmp/site/CNAME
-
-          # Stash outside the work tree so the branch switch cannot disturb it.
-          mkdir -p /tmp/site-data
-          cp website/data/nightly_builds.json /tmp/site-data/
+          echo "DEPLOY_SHA=${{ github.sha }}" >> "$GITHUB_ENV"
+          echo "DEPLOY_MSG=$(git log -1 --pretty=%s)" >> "$GITHUB_ENV"
 
       # Step 8: Configure git, fetch existing repo, and place new APK
       # We fetch the repo so we can see existing APKs to prune them in the next step.
@@ -171,15 +133,34 @@ jobs:
           # Run the update command
           fdroid update -c
 
-      # Step 10b: Place the rebuilt site at the branch root. Additions only —
-      # repo/, metadata/ and assets/ are untouched, so F-Droid clients are
-      # unaffected. .nojekyll stops Pages running the files through Jekyll.
-      - name: Publish the website onto the deploy branch
+      # Step 10b: Record the deploy and rebuild the site from this branch's own
+      # source, then place it at the root. Additions only — repo/, metadata/ and
+      # assets/ are untouched, so F-Droid clients are unaffected.
+      - name: Record deploy and rebuild the website
         run: |
           set -e
+          # website/ and scripts/ live on this branch, so they are on disk now.
+          python3 scripts/update_build_log.py success \
+            "https://github.com/${{ github.repository }}/raw/fdroid-repo/repo/nightly.${{ github.run_number }}.apk" \
+            "${{ github.run_number }}" "$DEPLOY_SHA" "$DEPLOY_MSG"
+
+          # Pinned Hugo rather than a floating action, so a site build cannot
+          # start failing because an upstream default moved.
+          HUGO_VERSION=0.164.0
+          curl -sSL -o /tmp/hugo.tar.gz \
+            "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz"
+          tar -xzf /tmp/hugo.tar.gz -C /tmp hugo
+
+          /tmp/hugo --source website --destination /tmp/site --gc --minify \
+            --baseURL "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
+
+          # The generated CNAME is dropped on purpose: no custom domain is
+          # configured, and committing one would make Pages claim a domain with
+          # no DNS behind it — taking the site down and breaking the F-Droid repo
+          # URL that clients already poll.
+          rm -f /tmp/site/CNAME
+
           cp -R /tmp/site/. .
-          mkdir -p site-data
-          cp /tmp/site-data/nightly_builds.json site-data/
           touch .nojekyll
 
       # Step 11: Push a fresh history with NO bloat
