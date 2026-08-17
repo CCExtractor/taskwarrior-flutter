@@ -20,7 +20,10 @@ class Replica {
     "wait",
     "priority",
     "project",
-    "status"
+    "status",
+    // Written like project — an opaque string TaskChampion stores but never
+    // interprets. The desktop CLI is what acts on it.
+    "recur",
   ];
   static Future<String> addTaskToReplica(
       HashMap<String, dynamic> newTask) async {
@@ -53,11 +56,16 @@ class Replica {
     return "scc";
   }
 
-  static Future<String> modifyTaskInReplica(TaskForReplica newTask) async {
+  /// Apply an edit to a replica task.
+  ///
+  /// Returns null on success, or the reason the write was refused — the FFI
+  /// rejects some combinations outright (a repeating task with no due date, for
+  /// one), and that explanation has to reach the user rather than be logged.
+  static Future<String?> modifyTaskInReplica(TaskForReplica newTask) async {
     var taskdbDirPath = await getReplicaPath();
     HashMap<String, String> map = HashMap<String, String>();
     if (newTask.uuid.isEmpty) {
-      return "err";
+      return "This task has no identifier yet.";
     }
     String tags = "";
     if (newTask.tags != null) {
@@ -76,9 +84,13 @@ class Replica {
     } catch (e, s) {
       debugPrint(e.toString());
       debugPrint(s.toString());
-      return "err";
+      final String raw = e.toString();
+      final int marker = raw.indexOf(': ');
+      return marker >= 0 && marker + 2 < raw.length
+          ? raw.substring(marker + 2)
+          : raw;
     }
-    return "scc";
+    return null;
   }
 
   /// Attach a note to a task, returning the entry timestamp that identifies it.

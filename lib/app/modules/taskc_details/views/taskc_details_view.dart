@@ -113,10 +113,9 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
                   (value) => controller.updateListField(controller.tags, value),
                 ),
                 // Attributes surfaced by the enriched Rust serializer (D2),
-                // replica tasks only. Dependencies and annotations are
-                // editable; Blocked/Blocking are computed from the dependency
-                // graph and Recur is owned by the Taskwarrior CLI, so both stay
-                // read-only.
+                // replica tasks only. Dependencies, annotations and recurrence
+                // are editable; Blocked/Blocking are computed from the
+                // dependency graph, so they stay read-only.
                 if (controller.isReplicaTask) ...[
                   _buildDetail(
                     context,
@@ -129,13 +128,7 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
                     controller.isBlocking.value ? 'Yes' : 'No',
                   ),
                   _buildDependencyEditor(context, controller),
-                  _buildDetail(
-                    context,
-                    'Recur:',
-                    controller.recur.value.isEmpty
-                        ? 'None'
-                        : controller.recur.value,
-                  ),
+                  _buildRecurrenceDetail(context, controller),
                   _buildAnnotationEditor(context, controller),
                 ],
                 if (controller.isLocalTask) ...[
@@ -396,6 +389,114 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
         ),
       ),
     );
+  }
+
+
+  /// Recurrence.
+  ///
+  /// This app cannot generate the repeats itself — TaskChampion has no
+  /// recurrence engine, so the value written here is acted on by the desktop
+  /// Taskwarrior CLI the next time it opens the same database. The caption says
+  /// so, because a control that looks self-contained but is not would be worse
+  /// than none.
+  ///
+  /// It also requires a due date. Taskwarrior *deletes* a recurring task that
+  /// has none, so offering the option without one would let the app destroy a
+  /// task on the user's next desktop sync.
+  Widget _buildRecurrenceDetail(
+      BuildContext context, TaskcDetailsController controller) {
+    final TaskwarriorColorTheme c =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    final bool enabled = controller.canEditRecurrence;
+    final String current = controller.recur.value.trim();
+
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: c.secondaryBackgroundColor,
+        borderRadius: BorderRadius.circular(8.0),
+        boxShadow: const [
+          BoxShadow(color: Colors.black12, blurRadius: 4.0, offset: Offset(0, 2)),
+        ],
+      ),
+      padding: const EdgeInsets.all(16.0),
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Repeats:',
+                style: GoogleFonts.poppins(
+                  fontWeight: TaskWarriorFonts.bold,
+                  fontSize: TaskWarriorFonts.fontSizeMedium,
+                  color: enabled
+                      ? c.primaryTextColor
+                      : c.primaryDisabledTextColor,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: GestureDetector(
+                  onTap: enabled
+                      ? () => _pickRecurrence(context, controller)
+                      : null,
+                  child: Text(
+                    current.isEmpty ? 'None' : current,
+                    textAlign: TextAlign.end,
+                    style: GoogleFonts.poppins(
+                      fontSize: TaskWarriorFonts.fontSizeMedium,
+                      color: enabled
+                          ? c.primaryTextColor
+                          : c.primaryDisabledTextColor,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Text(
+            enabled
+                ? 'Repeats are created by Taskwarrior on desktop, not on the phone.'
+                : 'Set a due date first — a repeating task needs one.',
+            style: GoogleFonts.poppins(
+              fontSize: TaskWarriorFonts.fontSizeSmall,
+              color: c.primaryDisabledTextColor,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _pickRecurrence(
+      BuildContext context, TaskcDetailsController controller) async {
+    final TaskwarriorColorTheme c =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    final String? chosen = await showModalBottomSheet<String>(
+      context: context,
+      backgroundColor: c.primaryBackgroundColor,
+      builder: (sheetContext) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (final String option
+                in TaskcDetailsController.recurrenceOptions)
+              ListTile(
+                title: Text(option,
+                    style: GoogleFonts.poppins(color: c.primaryTextColor)),
+                onTap: () => Navigator.of(sheetContext).pop(option),
+              ),
+          ],
+        ),
+      ),
+    );
+    if (chosen == null) return;
+    controller.updateField(
+        controller.recur, chosen == 'None' ? '' : chosen);
   }
 
   /// Notes on a task, with add and remove.

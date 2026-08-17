@@ -247,6 +247,34 @@ class TaskcDetailsController extends GetxController {
     }
   }
 
+  /// Recurrence options the picker offers. Taskwarrior accepts far more, but
+  /// these cover the ordinary cases and cannot be mistyped.
+  static const List<String> recurrenceOptions = <String>[
+    'None',
+    'daily',
+    'weekly',
+    'monthly',
+    'quarterly',
+    'yearly',
+  ];
+
+  /// Whether a due date is currently set. Recurrence depends on it: Taskwarrior
+  /// deletes a recurring task that has no due date, so the control stays
+  /// unavailable until there is one.
+  bool get hasDueDate {
+    final String d = due.value.trim();
+    return d.isNotEmpty && d != 'None';
+  }
+
+  /// Whether recurrence can be edited: replica tasks with a due date.
+  bool get canEditRecurrence => isReplicaTask && hasDueDate;
+
+  /// Why the due date cannot be cleared right now, or null if it can.
+  String? get dueRemovalBlockedReason =>
+      (isReplicaTask && recur.value.trim().isNotEmpty)
+          ? 'Clear the repeat first — a repeating task needs a due date.'
+          : null;
+
   /// Whether this task's dependencies can be edited. Replica tasks only, for
   /// the same reason as annotations: the write path is the TaskChampion FFI.
   bool get canEditDependencies => isReplicaTask;
@@ -517,17 +545,38 @@ class TaskcDetailsController extends GetxController {
             }
           }
         }(),
-        status: status.string.isNotEmpty ? status.string : null,
+        // Setting a repeat turns the task into a recurrence *template*, which
+        // Taskwarrior marks with status `recurring`. Verified against the CLI:
+        // with `recur` alone it reads the value but generates nothing; only a
+        // task whose status is `recurring` gets instances created. Clearing the
+        // repeat turns it back into an ordinary pending task.
+        status: recur.string.trim().isNotEmpty
+            ? 'recurring'
+            : (status.string.isNotEmpty
+                ? (status.string == 'recurring' ? 'pending' : status.string)
+                : null),
         description: description.string.isNotEmpty ? description.string : null,
         tags: tags.isNotEmpty ? tags.toList() : null,
         uuid: initialTask.uuid ?? '',
         priority: priority.string.isNotEmpty ? priority.string : null,
         project: project.string != 'None' ? project.string : null,
+        // Sent as part of the same edit rather than as its own write, because
+        // the FFI validates recurrence against the due date — and the user may
+        // legitimately set both in one go.
+        recur: recur.string.trim().isEmpty ? null : recur.string.trim(),
       );
       debugPrint('Modified replica task: $modifiedTask');
       hasChanges.value = false;
       processTagsLists();
-      await Replica.modifyTaskInReplica(modifiedTask);
+      final String? error = await Replica.modifyTaskInReplica(modifiedTask);
+      if (error != null) {
+        // The edit was rejected outright (e.g. recurrence without a due date),
+        // so the draft is still unsaved — say why rather than silently losing it.
+        hasChanges.value = true;
+        Get.snackbar('Not saved', error,
+            snackPosition: SnackPosition.BOTTOM, duration: const Duration(seconds: 4));
+        return;
+      }
       try {
         final HomeController homeController = Get.find<HomeController>();
         await homeController.refreshReplicaTasks();
