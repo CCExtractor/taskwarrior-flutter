@@ -184,7 +184,18 @@ fn update_task_impl(
                         // at all — and the Taskwarrior CLI only generates
                         // instances for a task whose status is `recurring`.
                         "recurring" => taskchampion::Status::Recurring,
-                        _ => taskchampion::Status::Pending,
+                        // Refuse rather than coerce. This arm used to fall back
+                        // to Pending, which meant an unrecognised status was
+                        // silently downgraded instead of reported — exactly how
+                        // "recurring" went missing before it was added above.
+                        // A caller sending something unknown has a bug, and it
+                        // should be visible at the point it happens.
+                        other => {
+                            return Err(TcHelperError::InvalidInput(format!(
+                                "unknown status '{other}' — expected pending, \
+                                 completed, deleted or recurring"
+                            )))
+                        }
                     };
                     let _ = t.set_status(status, &mut ops);
                 }
@@ -1230,6 +1241,53 @@ mod recurring_status_tests {
 
         assert_eq!(t["status"].as_str(), Some("recurring"), "status must stick");
         assert_eq!(t["recur"].as_str(), Some("weekly"));
+
+        fs::remove_dir_all(&tmp).ok();
+    }
+}
+
+#[cfg(test)]
+mod status_validation_tests {
+    use super::*;
+    use serde_json::Value;
+    use std::{collections::HashMap, env, fs};
+
+    /// An unrecognised status must be refused, not quietly turned into Pending.
+    ///
+    /// The old catch-all did the latter, which is how "recurring" was accepted
+    /// by the caller and silently discarded — the app could not create a
+    /// recurrence template and nothing said why.
+    #[test]
+    fn unknown_status_is_refused_not_coerced() {
+        let tmp = env::temp_dir().join(format!("taskdb_st_{}", Uuid::new_v4()));
+        fs::create_dir_all(&tmp).unwrap();
+        let path = tmp.to_string_lossy().into_owned();
+
+        let uuid = Uuid::new_v4().to_string();
+        let mut add: HashMap<String, String> = HashMap::new();
+        add.insert("uuid".into(), uuid.clone());
+        add.insert("description".into(), "t".into());
+        add_task(path.clone(), add).unwrap();
+
+        // put it in a non-default state so a silent coercion would be visible
+        let mut done: HashMap<String, String> = HashMap::new();
+        done.insert("status".into(), "completed".into());
+        update_task(uuid.clone(), path.clone(), done).unwrap();
+
+        let mut bogus: HashMap<String, String> = HashMap::new();
+        bogus.insert("status".into(), "waiting".into());
+        let err = update_task(uuid.clone(), path.clone(), bogus)
+            .expect_err("an unknown status must be refused");
+        assert!(err.contains("unknown status"), "unhelpful: {err}");
+
+        // and the refusal must not have changed anything
+        let json = get_all_tasks_json(path.clone()).unwrap();
+        let tasks: Vec<Value> = serde_json::from_str(&json).unwrap();
+        let t = tasks
+            .into_iter()
+            .find(|t| t["uuid"].as_str() == Some(uuid.as_str()))
+            .unwrap();
+        assert_eq!(t["status"].as_str(), Some("completed"));
 
         fs::remove_dir_all(&tmp).ok();
     }
