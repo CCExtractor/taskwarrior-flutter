@@ -141,6 +141,8 @@ class FrenchSentences extends Sentences {
   String get filterDrawerCompleted => 'Complété';
   String get filterDrawerDeleted => 'Supprimé';
   @override
+  String get filterDrawerRecurring => 'Récurrent';
+  @override
   String get filterDrawerFilterTagBy => 'Filtrer par tag';
   @override
   String get filterDrawerAND => 'et';

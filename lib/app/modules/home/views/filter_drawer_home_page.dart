@@ -110,6 +110,8 @@ class FilterDrawer extends StatelessWidget {
                                   return sentences.filterDrawerCompleted;
                                 case Query.statusDeleted:
                                   return sentences.filterDrawerDeleted;
+                                case Query.statusRecurring:
+                                  return sentences.filterDrawerRecurring;
                                 default:
                                   return sentences.filterDrawerPending;
                               }

@@ -154,6 +154,8 @@ class UrduSentences extends Sentences {
   String get filterDrawerCompleted => 'مکمل';
   String get filterDrawerDeleted => 'حذف شدہ';
   @override
+  String get filterDrawerRecurring => 'بار بار';
+  @override
   String get filterDrawerFilterTagBy => 'ٹیگ کے لحاظ سے فلٹر کریں';
   @override
   String get filterDrawerAND => 'اور';
