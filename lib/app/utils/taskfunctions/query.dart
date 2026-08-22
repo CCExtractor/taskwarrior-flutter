@@ -34,6 +34,18 @@ class Query {
   static const String statusPending = 'pending';
   static const String statusCompleted = 'completed';
   static const String statusDeleted = 'deleted';
+  /// A recurrence template. TaskChampion models this as a real status
+  /// (Pending/Completed/Deleted/Recurring), and setting a repeat moves the task
+  /// into it — so without this the task simply vanishes from every view.
+  static const String statusRecurring = 'recurring';
+
+  /// Statuses offered in TaskChampion mode, in cycle order.
+  static const List<String> replicaStatuses = <String>[
+    statusPending,
+    statusCompleted,
+    statusDeleted,
+    statusRecurring,
+  ];
 
   /// The status the task list is currently filtered to.
   ///
@@ -51,9 +63,7 @@ class Query {
     }
     final String value = _statusFilter.readAsStringSync().trim();
     // Guard against a corrupt/unknown value rather than filtering to nothing.
-    return const [statusPending, statusCompleted, statusDeleted].contains(value)
-        ? value
-        : statusPending;
+    return replicaStatuses.contains(value) ? value : statusPending;
   }
 
   void setStatusFilter(String status) {
@@ -69,14 +79,13 @@ class Query {
       ..writeAsStringSync(json.encode(status == statusPending));
   }
 
-  /// Advances to the next status in the cycle. [includeDeleted] is false for
-  /// sync modes with no deleted view, so those keep the original two-way
-  /// pending/completed toggle.
-  void cycleStatusFilter({bool includeDeleted = false}) {
+  /// Advances to the next status in the cycle. [includeReplicaStatuses] is
+  /// false for sync modes that have neither a deleted nor a recurring view, so
+  /// those keep the original two-way pending/completed toggle.
+  void cycleStatusFilter({bool includeReplicaStatuses = false}) {
     final String current = getStatusFilter();
-    final List<String> cycle = includeDeleted
-        ? const [statusPending, statusCompleted, statusDeleted]
-        : const [statusPending, statusCompleted];
+    final List<String> cycle =
+        includeReplicaStatuses ? replicaStatuses : const [statusPending, statusCompleted];
     final int index = cycle.indexOf(current);
     // A value outside this cycle (e.g. "deleted" while in a two-way mode)
     // falls back to the start rather than getting stuck.

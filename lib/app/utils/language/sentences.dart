@@ -93,6 +93,7 @@ abstract class Sentences {
   String get filterDrawerPending;
   String get filterDrawerCompleted;
   String get filterDrawerDeleted;
+  String get filterDrawerRecurring;
   String get filterDrawerFilterTagBy;
   String get filterDrawerAND;
   String get filterDrawerOR;

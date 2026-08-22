@@ -154,6 +154,8 @@ class GermanSentences extends Sentences {
   String get filterDrawerCompleted => 'Erledigt';
   String get filterDrawerDeleted => 'Gelöscht';
   @override
+  String get filterDrawerRecurring => 'Wiederkehrend';
+  @override
   String get filterDrawerFilterTagBy => 'Tag filtern nach';
   @override
   String get filterDrawerAND => 'AND';

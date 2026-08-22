@@ -43,7 +43,8 @@ class HomeController extends GetxController {
   final SplashController splashController = Get.find<SplashController>();
   late Storage storage;
   final RxBool pendingFilter = false.obs;
-  /// Which status the list is filtered to: pending / completed / deleted.
+  /// Which status the list is filtered to: pending / completed / deleted /
+  /// recurring.
   /// Supersedes [pendingFilter], which can only express the first two; that
   /// flag is kept in step for the call sites still reading it.
   final RxString statusFilter = Query.statusPending.obs;
@@ -352,12 +353,12 @@ class HomeController extends GetxController {
   }
 
   void togglePendingFilter() {
-    // Cycle pending -> completed -> deleted -> pending. "Deleted" is only
-    // offered on the TaskChampion path, which is the only one that keeps
-    // deleted tasks (the local list has no deleted view), so other modes keep
-    // the original two-way toggle.
+    // Cycle pending -> completed -> deleted -> recurring -> pending. The last
+    // two are only offered on the TaskChampion path: it is the only one that
+    // keeps deleted tasks, and the only one where setting a repeat moves a task
+    // to the `recurring` status — which would otherwise hide it from every view.
     Query(storage.tabs.tab())
-        .cycleStatusFilter(includeDeleted: taskReplica.value);
+        .cycleStatusFilter(includeReplicaStatuses: taskReplica.value);
     pendingFilter.value = Query(storage.tabs.tab()).getPendingFilter();
     statusFilter.value = Query(storage.tabs.tab()).getStatusFilter();
     _refreshTasks();
