@@ -256,6 +256,24 @@ class TaskcDetailsController extends GetxController {
     }
   }
 
+  /// Statuses a user can pick directly.
+  ///
+  /// `recurring` is deliberately absent: a task becomes a template by being
+  /// given a repeat, not by having the status set, and [saveTask] derives the
+  /// status from the repeat. Offering it here would let the two disagree.
+  static const List<String> selectableStatuses = <String>[
+    'pending',
+    'completed',
+    'deleted',
+  ];
+
+  /// Whether the status can be chosen at all.
+  ///
+  /// While a repeat is set the status is not the user's to pick — saveTask
+  /// forces `recurring`, so any choice made here would be silently overridden.
+  /// Clearing the repeat is what returns the task to an ordinary status.
+  bool get canEditStatus => recur.value.trim().isEmpty;
+
   /// Recurrence options the picker offers. Taskwarrior accepts far more, but
   /// these cover the ordinary cases and cannot be mistyped.
   static const List<String> recurrenceOptions = <String>[

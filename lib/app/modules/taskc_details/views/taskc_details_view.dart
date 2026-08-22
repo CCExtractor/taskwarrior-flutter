@@ -51,13 +51,26 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
                   controller.project.value,
                   (value) => controller.updateField(controller.project, value),
                 ),
-                _buildSelectableDetail(
-                  context,
-                  '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageStatus}:',
-                  controller.status.value,
-                  ['pending', 'completed'],
-                  (value) => controller.updateField(controller.status, value),
-                ),
+                // Offered statuses come from the controller so `deleted` is
+                // reachable and `recurring` is not: a task becomes a template by
+                // being given a repeat, and saveTask derives the status from it.
+                // While a repeat is set the row is read-only, because any choice
+                // made here would be silently overridden on save.
+                if (controller.canEditStatus)
+                  _buildSelectableDetail(
+                    context,
+                    '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageStatus}:',
+                    controller.status.value,
+                    TaskcDetailsController.selectableStatuses,
+                    (value) => controller.updateField(controller.status, value),
+                  )
+                else
+                  _buildDetail(
+                    context,
+                    '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageStatus}:',
+                    controller.status.value,
+                    disabled: true,
+                  ),
                 _buildSelectableDetail(
                   context,
                   '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPagePriority}:',
