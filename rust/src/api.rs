@@ -135,7 +135,17 @@ fn update_task_impl(
                     let _ = t.set_wait(parse_datetime(&value), &mut ops);
                 }
                 "priority" => {
-                    let _ = t.set_priority(value, &mut ops);
+                    // Empty clears, mirroring `recur`. set_priority always
+                    // stores its argument, so a clear must remove the property
+                    // outright — an empty-string "priority" is still a value,
+                    // and sending null from Dart never transmits at all (the
+                    // key is simply absent from the map).
+                    let trimmed = value.trim();
+                    if trimmed.is_empty() {
+                        let _ = t.set_value("priority", None, &mut ops);
+                    } else {
+                        let _ = t.set_priority(trimmed.to_string(), &mut ops);
+                    }
                 }
                 "tags" => {
                     let existing_tags: Vec<String> = t
@@ -257,7 +267,12 @@ fn add_task_impl(taskdb_dir_path: &str, map: HashMap<String, String>) -> Result<
                 let _ = t.set_wait(parse_datetime(&value), &mut ops);
             }
             "priority" => {
-                let _ = t.set_priority(value, &mut ops);
+                // Nothing to clear on a brand-new task, so empty means "not
+                // set" rather than a removal.
+                let trimmed = value.trim();
+                if !trimmed.is_empty() {
+                    let _ = t.set_priority(trimmed.to_string(), &mut ops);
+                }
             }
             "tags" => {
                 for part in value.split_whitespace() {
@@ -1468,6 +1483,75 @@ mod add_task_attribute_tests {
         assert_eq!(field(&path, &uuid, "description").as_deref(), Some("full sweep"));
         assert_eq!(field(&path, &uuid, "project").as_deref(), Some("home"));
         assert_eq!(field(&path, &uuid, "recur").as_deref(), Some("monthly"));
+        fs::remove_dir_all(&tmp).ok();
+    }
+}
+
+#[cfg(test)]
+mod priority_tests {
+    //! Priority used to be write-only in practice: set_priority always stores
+    //! its argument, so the UI sentinels ('X', 'None') were stored as literal
+    //! priorities and there was no way to transmit a clear at all.
+    use super::*;
+    use serde_json::Value;
+    use std::{collections::HashMap, env, fs};
+
+    fn fixture(priority: Option<&str>) -> (std::path::PathBuf, String, String) {
+        let tmp = env::temp_dir().join(format!("taskdb_prio_{}", Uuid::new_v4()));
+        fs::create_dir_all(&tmp).expect("create temp taskdb dir");
+        let path = tmp.to_string_lossy().into_owned();
+
+        let uuid = Uuid::new_v4().to_string();
+        let mut map: HashMap<String, String> = HashMap::new();
+        map.insert("uuid".to_string(), uuid.clone());
+        map.insert("description".to_string(), "chore".to_string());
+        if let Some(p) = priority {
+            map.insert("priority".to_string(), p.to_string());
+        }
+        add_task(path.clone(), map).expect("add_task");
+        (tmp, path, uuid)
+    }
+
+    fn priority_of(path: &str, uuid: &str) -> Option<String> {
+        let json = get_all_tasks_json(path.to_string()).expect("get_all_tasks_json");
+        let tasks: Vec<Value> = serde_json::from_str(&json).expect("parse json");
+        tasks
+            .into_iter()
+            .find(|t| t.get("uuid").and_then(|u| u.as_str()) == Some(uuid))
+            .expect("task exists")
+            .get("priority")
+            .and_then(|v| v.as_str().map(|s| s.to_string()))
+    }
+
+    #[test]
+    fn empty_priority_at_creation_is_not_stored() {
+        let (tmp, path, uuid) = fixture(Some(""));
+        assert_eq!(priority_of(&path, &uuid), None);
+        fs::remove_dir_all(&tmp).ok();
+    }
+
+    #[test]
+    fn empty_priority_on_update_removes_the_property() {
+        let (tmp, path, uuid) = fixture(Some("M"));
+        assert_eq!(priority_of(&path, &uuid).as_deref(), Some("M"));
+
+        let mut map: HashMap<String, String> = HashMap::new();
+        map.insert("priority".to_string(), "".to_string());
+        update_task(uuid.clone(), path.clone(), map).expect("update_task");
+
+        // Removed outright — not left behind as an empty-string property the
+        // desktop CLI would still render as a (blank) priority.
+        assert_eq!(priority_of(&path, &uuid), None);
+        fs::remove_dir_all(&tmp).ok();
+    }
+
+    #[test]
+    fn a_real_priority_still_round_trips() {
+        let (tmp, path, uuid) = fixture(None);
+        let mut map: HashMap<String, String> = HashMap::new();
+        map.insert("priority".to_string(), "H".to_string());
+        update_task(uuid.clone(), path.clone(), map).expect("update_task");
+        assert_eq!(priority_of(&path, &uuid).as_deref(), Some("H"));
         fs::remove_dir_all(&tmp).ok();
     }
 }
