@@ -6,29 +6,42 @@
 import 'frb_generated.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
-// These functions are ignored because they are not marked as `pub`: `get_all_tasks`, `parse_datetime`
+// These functions are ignored because they are not marked as `pub`: `add_annotation_impl`, `add_dependency_impl`, `add_task_impl`, `delete_task_impl`, `dependency_path_exists`, `get_all_tasks_json_impl`, `parse_datetime`, `remove_annotation_impl`, `remove_dependency_impl`, `sync_impl`, `update_task_impl`
 
+/// Return every task in the replica as a JSON array string.
 Future<String> getAllTasksJson({required String taskdbDirPath}) =>
     RustLib.instance.api.crateApiGetAllTasksJson(taskdbDirPath: taskdbDirPath);
 
-Future<int> deleteTask(
+/// Delete the task with the given UUID. A no-op if the task does not exist.
+///
+/// This is a *soft* delete, matching what `task delete` does in the Taskwarrior
+/// CLI: the task's status becomes `deleted` but the record is preserved, so it
+/// still syncs, remains auditable, and can be restored (`task undelete`).
+/// Previously this purged the task from the replica outright via
+/// `TaskData::delete()`, which is the equivalent of `task purge` — the data was
+/// unrecoverable and never appeared in a "deleted" view on any client.
+Future<void> deleteTask(
         {required String uuidSt, required String taskdbDirPath}) =>
     RustLib.instance.api
         .crateApiDeleteTask(uuidSt: uuidSt, taskdbDirPath: taskdbDirPath);
 
-Future<int> updateTask(
+/// Update the mutable fields of an existing task from the supplied key/value map.
+Future<void> updateTask(
         {required String uuidSt,
         required String taskdbDirPath,
         required Map<String, String> map}) =>
     RustLib.instance.api.crateApiUpdateTask(
         uuidSt: uuidSt, taskdbDirPath: taskdbDirPath, map: map);
 
-Future<int> addTask(
+/// Create a new task from the supplied key/value map. The map must contain a
+/// `uuid` entry.
+Future<void> addTask(
         {required String taskdbDirPath, required Map<String, String> map}) =>
     RustLib.instance.api
         .crateApiAddTask(taskdbDirPath: taskdbDirPath, map: map);
 
-Future<int> sync_(
+/// Synchronise the local replica with a remote TaskChampion sync server.
+Future<void> sync_(
         {required String taskdbDirPath,
         required String url,
         required String clientId,
@@ -38,3 +51,72 @@ Future<int> sync_(
         url: url,
         clientId: clientId,
         encryptionSecret: encryptionSecret);
+
+/// Attach a timestamped note (annotation) to a task, returning the entry
+/// timestamp that identifies it.
+///
+/// TaskChampion stores an annotation as an `annotation_<epoch-seconds>`
+/// property, so **the entry time is the annotation's primary key** — two notes
+/// on the same task in the same second would collide and the later one would
+/// silently replace the earlier. The Taskwarrior CLI has that behaviour too,
+/// but a phone makes it far easier to hit (two quick taps on Add). Rather than
+/// destroy a note, this advances to the next free second. The result is still
+/// an ordinary annotation that any Taskwarrior client reads normally; only the
+/// recorded time differs, by a second or two.
+///
+/// The returned RFC 3339 string is what [`remove_annotation`] expects, so a
+/// caller can delete the note it just created without re-reading the task.
+Future<String> addAnnotation(
+        {required String uuidSt,
+        required String description,
+        required String taskdbDirPath}) =>
+    RustLib.instance.api.crateApiAddAnnotation(
+        uuidSt: uuidSt, description: description, taskdbDirPath: taskdbDirPath);
+
+/// Remove the annotation identified by `entry_rfc3339` from a task.
+///
+/// The timestamp must be one returned by the serializer (or by
+/// [`add_annotation`]); it is matched at whole-second resolution, which is how
+/// TaskChampion keys annotations. Removing an annotation that is not present is
+/// a no-op rather than an error, so a double-tap on delete cannot fail.
+Future<void> removeAnnotation(
+        {required String uuidSt,
+        required String entryRfc3339,
+        required String taskdbDirPath}) =>
+    RustLib.instance.api.crateApiRemoveAnnotation(
+        uuidSt: uuidSt,
+        entryRfc3339: entryRfc3339,
+        taskdbDirPath: taskdbDirPath);
+
+/// Make `uuid_st` depend on `depends_on_st`, so the first is blocked until the
+/// second is done.
+///
+/// TaskChampion's own `add_dependency` validates nothing at all — it writes a
+/// `dep_<uuid>` property and returns. It will accept a task depending on itself,
+/// on a UUID that is not a task, or on something that already depends on it.
+/// None of those crash, but a cycle leaves both tasks permanently blocked and
+/// never "ready", with nothing to explain why. So the checks live here:
+///
+/// * a task may not depend on itself
+/// * both tasks must exist
+/// * the edge must not close a loop
+///
+/// Adding a dependency that is already present is a no-op, not an error.
+Future<void> addDependency(
+        {required String uuidSt,
+        required String dependsOnSt,
+        required String taskdbDirPath}) =>
+    RustLib.instance.api.crateApiAddDependency(
+        uuidSt: uuidSt, dependsOnSt: dependsOnSt, taskdbDirPath: taskdbDirPath);
+
+/// Drop a dependency of `uuid_st` on `depends_on_st`.
+///
+/// Removing one that is not there is a no-op, and the depended-on task need not
+/// exist — that is deliberate, so a dependency left dangling by another client
+/// can still be cleared.
+Future<void> removeDependency(
+        {required String uuidSt,
+        required String dependsOnSt,
+        required String taskdbDirPath}) =>
+    RustLib.instance.api.crateApiRemoveDependency(
+        uuidSt: uuidSt, dependsOnSt: dependsOnSt, taskdbDirPath: taskdbDirPath);

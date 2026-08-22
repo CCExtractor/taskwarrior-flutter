@@ -13,7 +13,6 @@ import 'package:taskwarrior/app/v3/models/annotation.dart';
 import 'package:taskwarrior/app/v3/models/task.dart';
 import 'package:taskwarrior/app/v3/champion/replica.dart';
 import 'package:taskwarrior/app/v3/champion/models/task_for_replica.dart';
-import 'package:taskwarrior/app/v3/net/modify.dart';
 
 enum UnsavedChangesAction { save, discard, cancel }
 
@@ -35,6 +34,9 @@ class TaskcDetailsController extends GetxController {
   late RxString rtype;
   late RxString recur;
   late RxList<Annotation> annotations;
+  // Blocking state surfaced by the Rust serializer (replica tasks only).
+  late RxBool isBlocked;
+  late RxBool isBlocking;
   late RxList<String> previousTags = <String>[].obs;
 
   @override
@@ -64,11 +66,22 @@ class TaskcDetailsController extends GetxController {
       rtype = "".obs;
       recur = "".obs;
       annotations = <Annotation>[].obs;
+      isBlocked = false.obs;
+      isBlocking = false.obs;
     } else if (task is TaskForReplica) {
       description = (task.description ?? '').obs;
-      project = (task.project ?? 'None').obs;
+      // Empty-string is what an older build stored when the project field was
+      // cleared; render it as None like a missing one.
+      project = ((task.project == null || task.project!.isEmpty)
+              ? 'None'
+              : task.project!)
+          .obs;
       status = (task.status ?? '').obs;
-      priority = (task.priority ?? 'None').obs;
+      // Normalise the sentinels older builds stored as literal priorities ('X'
+      // from the add sheet's "no priority" chip, 'None' from this screen) so
+      // they render as None, sit on a real radio option, and get cleared from
+      // the replica on the next save.
+      priority = _displayPriority(task.priority).obs;
       // TaskForReplica stores epoch seconds; convert to ISO string for formatting
       debugPrint('Replica task due: ${task.due}');
       due = formatDate(task.due).obs;
@@ -81,10 +94,13 @@ class TaskcDetailsController extends GetxController {
           ? task.tags!.map((e) => e.toString()).toList().obs
           : <String>[].obs;
       previousTags = tags.toList().obs;
-      depends = "".split(",").obs;
+      // Attributes now surfaced by the Rust serializer.
+      depends = (task.depends ?? <String>[]).obs;
       rtype = "".obs;
-      recur = "".obs;
-      annotations = <Annotation>[].obs;
+      recur = (task.recur ?? "").obs;
+      annotations = (task.annotations ?? <Annotation>[]).obs;
+      isBlocked = (task.isBlocked ?? false).obs;
+      isBlocking = (task.isBlocking ?? false).obs;
     } else {
       // Fallback
       description = ''.obs;
@@ -100,6 +116,8 @@ class TaskcDetailsController extends GetxController {
       rtype = "".obs;
       recur = "".obs;
       annotations = <Annotation>[].obs;
+      isBlocked = false.obs;
+      isBlocking = false.obs;
     }
   }
 
@@ -157,6 +175,267 @@ class TaskcDetailsController extends GetxController {
       field.assignAll(newList);
       hasChanges.value = true;
     }
+  }
+
+  /// Whether this task's notes can be edited.
+  ///
+  /// Only replica tasks: the annotation write path is the TaskChampion FFI, and
+  /// the legacy SQLite model has no equivalent. The view hides the editor
+  /// entirely rather than offering a control that would silently do nothing.
+  bool get canEditAnnotations => isReplicaTask;
+
+  /// True while an annotation write is in flight, so the view can disable its
+  /// controls instead of allowing a second write to race the first.
+  final annotationBusy = false.obs;
+
+  /// Whether a note or dependency was changed during this visit.
+  ///
+  /// Those editors write through immediately, so they are already saved and
+  /// "Don't save" cannot undo them. The unsaved-changes dialog says so when it
+  /// applies, because otherwise discarding looks like it discards everything.
+  final wroteThroughThisVisit = false.obs;
+
+  /// Backing field for the "add a note" input. Owned by the controller rather
+  /// than the view so its text survives rebuilds, and so it is disposed exactly
+  /// once when the page is torn down.
+  final TextEditingController annotationInput = TextEditingController();
+
+  @override
+  void onClose() {
+    annotationInput.dispose();
+    super.onClose();
+  }
+
+  /// Add a note to this task.
+  ///
+  /// Unlike the field editors, this writes through immediately rather than
+  /// joining the draft that [saveTask] commits. An annotation is its own
+  /// record in TaskChampion, added and removed by dedicated operations — there
+  /// is no "whole task" write that would carry it along, so deferring it would
+  /// mean inventing a pending-notes buffer for no benefit. It therefore does
+  /// not set [hasChanges]; leaving the page after adding a note loses nothing.
+  ///
+  /// Returns null on success, or a message describing why the write failed.
+  Future<String?> addAnnotationToTask(String description) async {
+    if (!canEditAnnotations) return 'Notes can only be edited on synced tasks.';
+    if (annotationBusy.value) return null;
+
+    final String uuid = initialTaskUuidDisplay();
+    if (uuid == 'None') return 'This task has no identifier yet.';
+
+    annotationBusy.value = true;
+    try {
+      final String entry =
+          await Replica.addAnnotationToReplica(uuid, description);
+      // Append locally rather than re-reading every task from the replica: the
+      // entry the FFI returns is authoritative, so the list stays in step.
+      annotations.add(Annotation(entry: entry, description: description.trim()));
+      wroteThroughThisVisit.value = true;
+      await _refreshHomeTasks();
+      return null;
+    } catch (e) {
+      return _annotationErrorMessage(e);
+    } finally {
+      annotationBusy.value = false;
+    }
+  }
+
+  /// Remove a note. Returns null on success, or a message on failure.
+  Future<String?> removeAnnotationFromTask(Annotation annotation) async {
+    if (!canEditAnnotations) return 'Notes can only be edited on synced tasks.';
+    if (annotationBusy.value) return null;
+
+    final String uuid = initialTaskUuidDisplay();
+    final String? entry = annotation.entry;
+    if (uuid == 'None' || entry == null || entry.isEmpty) {
+      return 'This note cannot be identified, so it cannot be removed.';
+    }
+
+    annotationBusy.value = true;
+    try {
+      await Replica.removeAnnotationFromReplica(uuid, entry);
+      annotations.removeWhere((a) => a.entry == entry);
+      wroteThroughThisVisit.value = true;
+      await _refreshHomeTasks();
+      return null;
+    } catch (e) {
+      return _annotationErrorMessage(e);
+    } finally {
+      annotationBusy.value = false;
+    }
+  }
+
+  /// Statuses a user can pick directly.
+  ///
+  /// `recurring` is deliberately absent: a task becomes a template by being
+  /// given a repeat, not by having the status set, and [saveTask] derives the
+  /// status from the repeat. Offering it here would let the two disagree.
+  static const List<String> selectableStatuses = <String>[
+    'pending',
+    'completed',
+    'deleted',
+  ];
+
+  /// Whether the status can be chosen at all.
+  ///
+  /// While a repeat is set the status is not the user's to pick — saveTask
+  /// forces `recurring`, so any choice made here would be silently overridden.
+  /// Clearing the repeat is what returns the task to an ordinary status.
+  bool get canEditStatus => recur.value.trim().isEmpty;
+
+  /// Recurrence options the picker offers. Taskwarrior accepts far more, but
+  /// these cover the ordinary cases and cannot be mistyped.
+  static const List<String> recurrenceOptions = <String>[
+    'None',
+    'daily',
+    'weekly',
+    'monthly',
+    'quarterly',
+    'yearly',
+  ];
+
+  /// Whether a due date is currently set. Recurrence depends on it: Taskwarrior
+  /// deletes a recurring task that has no due date, so the control stays
+  /// unavailable until there is one.
+  bool get hasDueDate {
+    final String d = due.value.trim();
+    return d.isNotEmpty && d != 'None';
+  }
+
+  /// Whether recurrence can be edited: replica tasks with a due date.
+  bool get canEditRecurrence => isReplicaTask && hasDueDate;
+
+  /// Why the due date cannot be cleared right now, or null if it can.
+  String? get dueRemovalBlockedReason =>
+      (isReplicaTask && recur.value.trim().isNotEmpty)
+          ? 'Clear the repeat first — a repeating task needs a due date.'
+          : null;
+
+  /// Whether this task's dependencies can be edited. Replica tasks only, for
+  /// the same reason as annotations: the write path is the TaskChampion FFI.
+  bool get canEditDependencies => isReplicaTask;
+
+  /// True while a dependency write is in flight.
+  final dependencyBusy = false.obs;
+
+  /// Tasks that can be picked as a dependency: everything in the replica except
+  /// this task and the ones it already depends on.
+  ///
+  /// Cycles are rejected by the Rust layer rather than filtered out here — the
+  /// check needs the whole graph, and doing it in one place keeps the answer
+  /// consistent no matter which client asks.
+  List<TaskForReplica> availableDependencyCandidates() {
+    if (!canEditDependencies) return <TaskForReplica>[];
+    final String self = initialTaskUuidDisplay();
+    final Set<String> already = depends.toSet();
+    try {
+      return Get.find<HomeController>()
+          .tasksFromReplica
+          .where((t) => t.uuid != self && !already.contains(t.uuid))
+          .toList();
+    } catch (e) {
+      debugPrint('Could not list dependency candidates: $e');
+      return <TaskForReplica>[];
+    }
+  }
+
+  /// A dependency is stored as a bare UUID, which means nothing to a reader.
+  /// Resolve it to the task's description, falling back to a short UUID prefix
+  /// when the task is not in the local replica.
+  String describeDependency(String uuid) {
+    try {
+      final matches = Get.find<HomeController>()
+          .tasksFromReplica
+          .where((t) => t.uuid == uuid);
+      if (matches.isNotEmpty) {
+        final String? description = matches.first.description;
+        if (description != null && description.trim().isNotEmpty) {
+          return description.trim();
+        }
+      }
+    } catch (_) {
+      // fall through to the UUID form
+    }
+    return uuid.length > 8 ? '${uuid.substring(0, 8)}…' : uuid;
+  }
+
+  /// Add a dependency. Returns null on success, or a message on failure.
+  Future<String?> addDependencyToTask(String dependsOnUuid) async {
+    if (!canEditDependencies) {
+      return 'Dependencies can only be edited on synced tasks.';
+    }
+    if (dependencyBusy.value) return null;
+
+    final String uuid = initialTaskUuidDisplay();
+    if (uuid == 'None') return 'This task has no identifier yet.';
+
+    dependencyBusy.value = true;
+    try {
+      await Replica.addDependencyToReplica(uuid, dependsOnUuid);
+      depends.add(dependsOnUuid);
+      wroteThroughThisVisit.value = true;
+      // Adding a dependency makes this task blocked; the depended-on task
+      // becomes blocking. Reflect the half we are showing.
+      isBlocked.value = true;
+      await _refreshHomeTasks();
+      return null;
+    } catch (e) {
+      return _annotationErrorMessage(e);
+    } finally {
+      dependencyBusy.value = false;
+    }
+  }
+
+  /// Remove a dependency. Returns null on success, or a message on failure.
+  Future<String?> removeDependencyFromTask(String dependsOnUuid) async {
+    if (!canEditDependencies) {
+      return 'Dependencies can only be edited on synced tasks.';
+    }
+    if (dependencyBusy.value) return null;
+
+    final String uuid = initialTaskUuidDisplay();
+    if (uuid == 'None') return 'This task has no identifier yet.';
+
+    dependencyBusy.value = true;
+    try {
+      await Replica.removeDependencyFromReplica(uuid, dependsOnUuid);
+      depends.remove(dependsOnUuid);
+      wroteThroughThisVisit.value = true;
+      // Only the last remaining dependency clears the blocked flag.
+      if (depends.isEmpty) isBlocked.value = false;
+      await _refreshHomeTasks();
+      return null;
+    } catch (e) {
+      return _annotationErrorMessage(e);
+    } finally {
+      dependencyBusy.value = false;
+    }
+  }
+
+  /// Reload the home list after a write.
+  ///
+  /// The detail page renders the `TaskForReplica` it was handed from that list,
+  /// so without this the cached copy goes stale the moment anything is written.
+  /// It matters most for dependencies: adding one changes the *other* task's
+  /// computed `is_blocking`, and opening that task would otherwise still show
+  /// the value from before the edge existed.
+  Future<void> _refreshHomeTasks() async {
+    try {
+      await Get.find<HomeController>().refreshReplicaTasks();
+    } catch (e) {
+      debugPrint('Could not refresh tasks after write: $e');
+    }
+  }
+
+  /// The Rust layer returns typed, already-readable messages ("annotation text
+  /// cannot be empty", "no task with UUID ..."). Surface those rather than a
+  /// generic failure, but strip the exception wrapper Dart adds around them.
+  String _annotationErrorMessage(Object error) {
+    final String raw = error.toString();
+    final int marker = raw.indexOf(': ');
+    final String message =
+        marker >= 0 && marker + 2 < raw.length ? raw.substring(marker + 2) : raw;
+    return message.trim().isEmpty ? 'Could not save the note.' : message.trim();
   }
 
   // Safe accessors for fields on the initial task so views don't attempt to
@@ -227,6 +506,13 @@ class TaskcDetailsController extends GetxController {
     previousTags.removeWhere((item) => itemsToMove.contains(item));
   }
 
+  static String _displayPriority(String? stored) {
+    if (stored == null || stored.isEmpty || stored == 'X' || stored == 'None') {
+      return 'None';
+    }
+    return stored;
+  }
+
   Future<void> saveTask() async {
     bool is24hrFormat = AppSettings.use24HourFormatRx.value;
     final datePattern = is24hrFormat
@@ -249,16 +535,6 @@ class TaskcDetailsController extends GetxController {
       hasChanges.value = false;
       debugPrint('Task saved in local DB ${description.string}');
       processTagsLists();
-      await modifyTaskOnTaskwarrior(
-        description.string,
-        project.string,
-        DateTime.parse(due.string).toIso8601String(),
-        priority.string,
-        status.string,
-        initialTask.uuid!,
-        initialTask.id.toString(),
-        tags.toList(),
-      );
     } else if (initialTask is TaskForReplica) {
       debugPrint(
           'Saving replica task changes... status ${status.string} ${tags.join(", ")}');
@@ -266,7 +542,11 @@ class TaskcDetailsController extends GetxController {
       final modifiedTask = TaskForReplica(
         modified: nowEpoch,
         due: () {
-          if (due.string == 'None' || due.string.isEmpty) return null;
+          // Empty transmits the clear (the FFI removes the date); null would
+          // drop the key and the old date would silently survive. A parse
+          // failure still returns null — omitting is the safe direction there,
+          // since sending '' would delete a date the user never asked to lose.
+          if (due.string == 'None' || due.string.isEmpty) return '';
           try {
             final parsed = DateFormat(datePattern).parse(due.string);
             return parsed.toUtc().toIso8601String();
@@ -299,7 +579,8 @@ class TaskcDetailsController extends GetxController {
           }
         }(),
         wait: () {
-          if (wait.string == 'None' || wait.string.isEmpty) return null;
+          // Same clear semantics as due.
+          if (wait.string == 'None' || wait.string.isEmpty) return '';
           try {
             final parsed = DateFormat(datePattern).parse(wait.string);
             return parsed.toUtc().toIso8601String();
@@ -314,17 +595,56 @@ class TaskcDetailsController extends GetxController {
             }
           }
         }(),
-        status: status.string.isNotEmpty ? status.string : null,
+        // Setting a repeat turns the task into a recurrence *template*, which
+        // Taskwarrior marks with status `recurring`. Verified against the CLI:
+        // with `recur` alone it reads the value but generates nothing; only a
+        // task whose status is `recurring` gets instances created. Clearing the
+        // repeat turns it back into an ordinary pending task.
+        status: recur.string.trim().isNotEmpty
+            ? 'recurring'
+            : (status.string.isNotEmpty
+                ? (status.string == 'recurring' ? 'pending' : status.string)
+                : null),
         description: description.string.isNotEmpty ? description.string : null,
-        tags: tags.isNotEmpty ? tags.toList() : null,
+        // Always sent, even empty: the FFI replaces the whole tag set on every
+        // save, and null just drops the key — so deleting the last chip used
+        // to transmit nothing and the task kept its old tags.
+        tags: tags.toList(),
         uuid: initialTask.uuid ?? '',
-        priority: priority.string.isNotEmpty ? priority.string : null,
-        project: project.string != 'None' ? project.string : null,
+        // 'None' maps to an empty string, which the FFI treats as removal —
+        // null would simply drop the key from the payload, so picking None
+        // used to store the literal string "None" and a clear never
+        // transmitted (the same trap recur had).
+        priority: priority.string == 'None' ? '' : priority.string,
+        // 'None' and an emptied field both mean "no project", sent as an empty
+        // string because the FFI treats empty as removal — null drops the key
+        // and transmits nothing, so clearing a project used to either do
+        // nothing or (via an emptied field) store a project literally named "".
+        project: project.string == 'None' ? '' : project.string.trim(),
+        // Sent as part of the same edit rather than as its own write, because
+        // the FFI validates recurrence against the due date — and the user may
+        // legitimately set both in one go.
+        //
+        // Cleared as an EMPTY STRING, never null. modifyTaskInReplica skips null
+        // fields, so a null here means "leave it alone" rather than "remove it":
+        // turning the repeat off would revert the status but strand `recur` on
+        // the task, and a pending task that still carries `recur` is promoted
+        // back to recurring by the desktop CLI. The repeat would silently come
+        // back. An empty string reaches update_task, which clears the property.
+        recur: recur.string.trim(),
       );
       debugPrint('Modified replica task: $modifiedTask');
       hasChanges.value = false;
       processTagsLists();
-      await Replica.modifyTaskInReplica(modifiedTask);
+      final String? error = await Replica.modifyTaskInReplica(modifiedTask);
+      if (error != null) {
+        // The edit was rejected outright (e.g. recurrence without a due date),
+        // so the draft is still unsaved — say why rather than silently losing it.
+        hasChanges.value = true;
+        Get.snackbar('Not saved', error,
+            snackPosition: SnackPosition.BOTTOM, duration: const Duration(seconds: 4));
+        return;
+      }
       try {
         final HomeController homeController = Get.find<HomeController>();
         await homeController.refreshReplicaTasks();
@@ -470,9 +790,16 @@ class TaskcDetailsController extends GetxController {
           style: TextStyle(color: tColors.primaryTextColor),
         ),
         content: Text(
-          SentenceManager(currentLanguage: AppSettings.selectedLanguage)
-              .sentences
-              .unsavedChangesWarning,
+          // Notes and dependencies are written the moment they are edited, so
+          // discarding cannot take them back. Saying nothing would let
+          // "Don't save" read as discarding everything on the page.
+          wroteThroughThisVisit.value
+              ? '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.unsavedChangesWarning}'
+                  '\n\nNotes and dependencies you changed are already saved '
+                  'and will be kept.'
+              : SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                  .sentences
+                  .unsavedChangesWarning,
           style: TextStyle(color: tColors.primaryTextColor),
         ),
         actions: <Widget>[

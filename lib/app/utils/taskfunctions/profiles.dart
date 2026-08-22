@@ -119,8 +119,9 @@ class Profiles {
   Future<void> deleteDatabase(String profile) async {
     String dbPath = await getDatabasesPath();
     if (getMode(profile) == 'TW3') {
-      if (File(Path.join(dbPath, '$profile.db')).existsSync()) {
-        File('${base.path}/current-profile').deleteSync();
+      final dbFile = File(Path.join(dbPath, '$profile.db'));
+      if (dbFile.existsSync()) {
+        dbFile.deleteSync();
       }
     }
   }

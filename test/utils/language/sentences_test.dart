@@ -60,7 +60,7 @@ void main() {
         expect(sentences.navDrawerReports, isA<String>());
         expect(sentences.navDrawerAbout, isA<String>());
         expect(sentences.navDrawerSettings, isA<String>());
-        expect(sentences.ccsyncCredentials, isA<String>());
+        expect(sentences.syncServerCredentials, isA<String>());
         expect(sentences.deleteTaskTitle, isA<String>());
         expect(sentences.deleteTaskConfirmation, isA<String>());
         expect(sentences.deleteTaskWarning, isA<String>());

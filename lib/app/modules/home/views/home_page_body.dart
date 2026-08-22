@@ -30,7 +30,25 @@ class HomePageBody extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.only(left: 8.0, right: 8.0),
           child: Obx(
-            () => Column(
+            () {
+              // Read the replica list reactively here so the whole view rebuilds
+              // when tasks arrive. On launch, taskReplica flips true (triggering a
+              // rebuild) *before* the async FFI fetch populates tasksFromReplica;
+              // without a reactive read of the list itself, the populated tasks
+              // would never appear (the view stays on its initial empty build).
+              var replicaTasks = controller.tasksFromReplica.toList();
+              // Apply the search text to the replica list. Unlike the local-taskc
+              // path (which reads the pre-filtered `searchedTasks`), this builder
+              // gets the raw list, so filter here. Reading `searchQuery`/
+              // `searchVisible` inside the Obx makes it rebuild on each keystroke.
+              final query = controller.searchQuery.value.trim().toLowerCase();
+              if (controller.searchVisible.value && query.isNotEmpty) {
+                replicaTasks = replicaTasks
+                    .where((task) =>
+                        (task.description ?? '').toLowerCase().contains(query))
+                    .toList();
+              }
+              return Column(
               children: <Widget>[
                 if (controller.searchVisible.value)
                   Container(
@@ -134,14 +152,16 @@ class HomePageBody extends StatelessWidget {
                     child: Expanded(
                         child: Scrollbar(
                       child: TaskReplicaViewBuilder(
-                        replicaTasks: controller.tasksFromReplica,
+                        replicaTasks: replicaTasks,
                         pendingFilter: controller.pendingFilter.value,
+                        statusFilter: controller.statusFilter.value,
                         selectedSort: controller.selectedSort.value,
                         project: controller.projectFilter.value,
                       ),
                     )))
               ],
-            ),
+              );
+            },
           ),
         ),
       ),

@@ -68,7 +68,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => -2049867087;
+  int get rustContentHash => -1358106344;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -79,21 +79,41 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
 }
 
 abstract class RustLibApi extends BaseApi {
-  Future<int> crateApiAddTask(
+  Future<String> crateApiAddAnnotation(
+      {required String uuidSt,
+      required String description,
+      required String taskdbDirPath});
+
+  Future<void> crateApiAddDependency(
+      {required String uuidSt,
+      required String dependsOnSt,
+      required String taskdbDirPath});
+
+  Future<void> crateApiAddTask(
       {required String taskdbDirPath, required Map<String, String> map});
 
-  Future<int> crateApiDeleteTask(
+  Future<void> crateApiDeleteTask(
       {required String uuidSt, required String taskdbDirPath});
 
   Future<String> crateApiGetAllTasksJson({required String taskdbDirPath});
 
-  Future<int> crateApiSync(
+  Future<void> crateApiRemoveAnnotation(
+      {required String uuidSt,
+      required String entryRfc3339,
+      required String taskdbDirPath});
+
+  Future<void> crateApiRemoveDependency(
+      {required String uuidSt,
+      required String dependsOnSt,
+      required String taskdbDirPath});
+
+  Future<void> crateApiSync(
       {required String taskdbDirPath,
       required String url,
       required String clientId,
       required String encryptionSecret});
 
-  Future<int> crateApiUpdateTask(
+  Future<void> crateApiUpdateTask(
       {required String uuidSt,
       required String taskdbDirPath,
       required Map<String, String> map});
@@ -108,7 +128,65 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   });
 
   @override
-  Future<int> crateApiAddTask(
+  Future<String> crateApiAddAnnotation(
+      {required String uuidSt,
+      required String description,
+      required String taskdbDirPath}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_String(uuidSt, serializer);
+        sse_encode_String(description, serializer);
+        sse_encode_String(taskdbDirPath, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 1, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_String,
+        decodeErrorData: sse_decode_String,
+      ),
+      constMeta: kCrateApiAddAnnotationConstMeta,
+      argValues: [uuidSt, description, taskdbDirPath],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiAddAnnotationConstMeta => const TaskConstMeta(
+        debugName: "add_annotation",
+        argNames: ["uuidSt", "description", "taskdbDirPath"],
+      );
+
+  @override
+  Future<void> crateApiAddDependency(
+      {required String uuidSt,
+      required String dependsOnSt,
+      required String taskdbDirPath}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_String(uuidSt, serializer);
+        sse_encode_String(dependsOnSt, serializer);
+        sse_encode_String(taskdbDirPath, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 2, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: sse_decode_String,
+      ),
+      constMeta: kCrateApiAddDependencyConstMeta,
+      argValues: [uuidSt, dependsOnSt, taskdbDirPath],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiAddDependencyConstMeta => const TaskConstMeta(
+        debugName: "add_dependency",
+        argNames: ["uuidSt", "dependsOnSt", "taskdbDirPath"],
+      );
+
+  @override
+  Future<void> crateApiAddTask(
       {required String taskdbDirPath, required Map<String, String> map}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
@@ -116,11 +194,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_String(taskdbDirPath, serializer);
         sse_encode_Map_String_String_None(map, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 1, port: port_);
+            funcId: 3, port: port_);
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_i_8,
-        decodeErrorData: null,
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: sse_decode_String,
       ),
       constMeta: kCrateApiAddTaskConstMeta,
       argValues: [taskdbDirPath, map],
@@ -134,7 +212,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<int> crateApiDeleteTask(
+  Future<void> crateApiDeleteTask(
       {required String uuidSt, required String taskdbDirPath}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
@@ -142,11 +220,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_String(uuidSt, serializer);
         sse_encode_String(taskdbDirPath, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 2, port: port_);
+            funcId: 4, port: port_);
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_i_8,
-        decodeErrorData: null,
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: sse_decode_String,
       ),
       constMeta: kCrateApiDeleteTaskConstMeta,
       argValues: [uuidSt, taskdbDirPath],
@@ -166,11 +244,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(taskdbDirPath, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 3, port: port_);
+            funcId: 5, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
-        decodeErrorData: sse_decode_AnyhowException,
+        decodeErrorData: sse_decode_String,
       ),
       constMeta: kCrateApiGetAllTasksJsonConstMeta,
       argValues: [taskdbDirPath],
@@ -184,7 +262,65 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<int> crateApiSync(
+  Future<void> crateApiRemoveAnnotation(
+      {required String uuidSt,
+      required String entryRfc3339,
+      required String taskdbDirPath}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_String(uuidSt, serializer);
+        sse_encode_String(entryRfc3339, serializer);
+        sse_encode_String(taskdbDirPath, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 6, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: sse_decode_String,
+      ),
+      constMeta: kCrateApiRemoveAnnotationConstMeta,
+      argValues: [uuidSt, entryRfc3339, taskdbDirPath],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiRemoveAnnotationConstMeta => const TaskConstMeta(
+        debugName: "remove_annotation",
+        argNames: ["uuidSt", "entryRfc3339", "taskdbDirPath"],
+      );
+
+  @override
+  Future<void> crateApiRemoveDependency(
+      {required String uuidSt,
+      required String dependsOnSt,
+      required String taskdbDirPath}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_String(uuidSt, serializer);
+        sse_encode_String(dependsOnSt, serializer);
+        sse_encode_String(taskdbDirPath, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 7, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: sse_decode_String,
+      ),
+      constMeta: kCrateApiRemoveDependencyConstMeta,
+      argValues: [uuidSt, dependsOnSt, taskdbDirPath],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiRemoveDependencyConstMeta => const TaskConstMeta(
+        debugName: "remove_dependency",
+        argNames: ["uuidSt", "dependsOnSt", "taskdbDirPath"],
+      );
+
+  @override
+  Future<void> crateApiSync(
       {required String taskdbDirPath,
       required String url,
       required String clientId,
@@ -197,11 +333,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_String(clientId, serializer);
         sse_encode_String(encryptionSecret, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 4, port: port_);
+            funcId: 8, port: port_);
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_i_8,
-        decodeErrorData: null,
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: sse_decode_String,
       ),
       constMeta: kCrateApiSyncConstMeta,
       argValues: [taskdbDirPath, url, clientId, encryptionSecret],
@@ -215,7 +351,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<int> crateApiUpdateTask(
+  Future<void> crateApiUpdateTask(
       {required String uuidSt,
       required String taskdbDirPath,
       required Map<String, String> map}) {
@@ -226,11 +362,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_String(taskdbDirPath, serializer);
         sse_encode_Map_String_String_None(map, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 5, port: port_);
+            funcId: 9, port: port_);
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_i_8,
-        decodeErrorData: null,
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: sse_decode_String,
       ),
       constMeta: kCrateApiUpdateTaskConstMeta,
       argValues: [uuidSt, taskdbDirPath, map],
@@ -244,12 +380,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @protected
-  AnyhowException dco_decode_AnyhowException(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return AnyhowException(raw as String);
-  }
-
-  @protected
   Map<String, String> dco_decode_Map_String_String_None(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return Map.fromEntries(dco_decode_list_record_string_string(raw)
@@ -260,12 +390,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   String dco_decode_String(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as String;
-  }
-
-  @protected
-  int dco_decode_i_8(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return raw as int;
   }
 
   @protected
@@ -306,13 +430,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  AnyhowException sse_decode_AnyhowException(SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    var inner = sse_decode_String(deserializer);
-    return AnyhowException(inner);
-  }
-
-  @protected
   Map<String, String> sse_decode_Map_String_String_None(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -325,12 +442,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var inner = sse_decode_list_prim_u_8_strict(deserializer);
     return utf8.decoder.convert(inner);
-  }
-
-  @protected
-  int sse_decode_i_8(SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    return deserializer.buffer.getInt8();
   }
 
   @protected
@@ -386,13 +497,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_AnyhowException(
-      AnyhowException self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_String(self.message, serializer);
-  }
-
-  @protected
   void sse_encode_Map_String_String_None(
       Map<String, String> self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -404,12 +508,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   void sse_encode_String(String self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_list_prim_u_8_strict(utf8.encoder.convert(self), serializer);
-  }
-
-  @protected
-  void sse_encode_i_8(int self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    serializer.buffer.putInt8(self);
   }
 
   @protected

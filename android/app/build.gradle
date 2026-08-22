@@ -105,3 +105,61 @@ dependencies {
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
 }
 
+// ---------------------------------------------------------------------------
+// Auto-compile the tc_helper Rust native library on every Android build.
+//
+// When a Rust toolchain is available, this task cross-compiles rust/ with
+// cargo-ndk straight into src/main/jniLibs/<abi>/, so `flutter run` /
+// `flutter build` always package a library that matches the current Rust
+// source instead of a stale pre-built binary. It is wired into `preBuild`, so
+// it runs before the APK's native libraries are merged.
+//
+// If the toolchain is NOT present (rustup/cargo/cargo-ndk missing), the task
+// skips with a warning and the build falls back to the committed .so — so a
+// checkout without Rust still builds. (Once every build environment, including
+// CI, has the toolchain, the committed jniLibs can be git-ignored and removed.)
+//
+// The Android std targets are added on demand, so a fresh toolchain self-heals.
+// ---------------------------------------------------------------------------
+def rustCrateDir = file("${projectDir}/../../rust")
+def rustJniOut = "${projectDir}/src/main/jniLibs"
+def cargoBinDir = "${System.getenv('HOME')}/.cargo/bin"
+
+def resolveNdkDir = {
+    try {
+        if (android.ndkDirectory != null) return android.ndkDirectory.absolutePath
+    } catch (ignored) { /* no ndkVersion configured; fall through */ }
+    def ndkRoot = new File(android.sdkDirectory, "ndk")
+    if (ndkRoot.isDirectory()) {
+        def versions = ndkRoot.listFiles()?.findAll { it.isDirectory() }?.sort { it.name }
+        if (versions) return versions.last().absolutePath
+    }
+    return System.getenv("ANDROID_NDK_HOME")
+}
+
+tasks.register("cargoBuildTcHelper", Exec) {
+    workingDir rustCrateDir
+    def ndkDir = resolveNdkDir()
+    def cargoPath = "${cargoBinDir}:/opt/homebrew/bin:/usr/local/bin:${System.getenv('PATH')}"
+    environment "PATH", cargoPath
+    if (ndkDir != null) environment "ANDROID_NDK_HOME", ndkDir
+    doFirst { new File(rustJniOut).mkdirs() }
+    // If cargo/cargo-ndk aren't on PATH, skip (the committed .so is used as a
+    // fallback) rather than failing the whole build. When they are present, a
+    // real compile error DOES fail the build, so problems surface loudly.
+    commandLine "sh", "-c",
+        "if ! command -v cargo >/dev/null 2>&1 || ! command -v cargo-ndk >/dev/null 2>&1; then " +
+        "  echo 'cargoBuildTcHelper: Rust toolchain (cargo/cargo-ndk) not found — using committed jniLibs'; exit 0; " +
+        "fi; " +
+        "set -e; " +
+        // Must cover every ABI Flutter builds (arm64-v8a, armeabi-v7a, x86_64),
+        // or the APK for a missing one ships without libtc_helper.so and dies at
+        // RustLib.init(). x86_64 is what the standard Android emulator runs.
+        "rustup target add aarch64-linux-android armv7-linux-androideabi x86_64-linux-android >/dev/null 2>&1 || true; " +
+        "cargo ndk -t arm64-v8a -t armeabi-v7a -t x86_64 -o \"${rustJniOut}\" build --release"
+}
+
+tasks.matching { it.name == "preBuild" }.configureEach {
+    dependsOn "cargoBuildTcHelper"
+}
+

@@ -36,22 +36,7 @@ class ManageTaskChampionCredsView
             ),
           ],
         ),
-        actions: [
-          // IconButton(
-          //   icon: Icon(
-          //     Icons.info,
-          //     color: TaskWarriorColors.white,
-          //   ),
-          //   onPressed: () async {
-          //     String url = !controller.taskReplica.value
-          //         ? "https://github.com/its-me-abhishek/ccsync"
-          //         : "https://github.com/GothenburgBitFactory/taskchampion";
-          //     if (!await launchUrl(Uri.parse(url))) {
-          //       throw Exception('Could not launch $url');
-          //     }
-          //   },
-          // ),
-        ],
+        actions: const [],
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: TaskWarriorColors.white),
           onPressed: () => Get.back(),
@@ -74,7 +59,7 @@ class ManageTaskChampionCredsView
                       labelText: SentenceManager(
                               currentLanguage: AppSettings.selectedLanguage)
                           .sentences
-                          .ccsyncClientId,
+                          .syncServerClientId,
                       labelStyle: TextStyle(color: tColors.primaryTextColor),
                       border: const OutlineInputBorder(),
                     ),
@@ -93,26 +78,18 @@ class ManageTaskChampionCredsView
                     ),
                   ),
                   const SizedBox(height: 10),
-                  Obx(() => TextField(
-                        style: TextStyle(color: tColors.primaryTextColor),
-                        controller: controller.ccsyncBackendUrlController,
-                        decoration: InputDecoration(
-                          labelText: controller.taskReplica.value
-                              ? SentenceManager(
-                                      currentLanguage:
-                                          AppSettings.selectedLanguage)
-                                  .sentences
-                                  .taskchampionBackendUrl
-                              : SentenceManager(
-                                      currentLanguage:
-                                          AppSettings.selectedLanguage)
-                                  .sentences
-                                  .ccsyncBackendUrl,
-                          labelStyle:
-                              TextStyle(color: tColors.primaryTextColor),
-                          border: const OutlineInputBorder(),
-                        ),
-                      )),
+                  TextField(
+                    style: TextStyle(color: tColors.primaryTextColor),
+                    controller: controller.syncServerUrlController,
+                    decoration: InputDecoration(
+                      labelText: SentenceManager(
+                              currentLanguage: AppSettings.selectedLanguage)
+                          .sentences
+                          .syncServerBackendUrl,
+                      labelStyle: TextStyle(color: tColors.primaryTextColor),
+                      border: const OutlineInputBorder(),
+                    ),
+                  ),
                   const SizedBox(height: 20),
                   Obx(() => SizedBox(
                         width: double.infinity,
@@ -196,7 +173,7 @@ class ManageTaskChampionCredsView
                     SentenceManager(
                             currentLanguage: AppSettings.selectedLanguage)
                         .sentences
-                        .ccsyncEasySyncTitle,
+                        .syncServerEasySyncTitle,
                     style: GoogleFonts.poppins(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
@@ -208,7 +185,7 @@ class ManageTaskChampionCredsView
                     SentenceManager(
                             currentLanguage: AppSettings.selectedLanguage)
                         .sentences
-                        .ccsyncIntro,
+                        .syncServerIntro,
                     style: TextStyle(
                       fontSize: 14,
                       color: tColors.primaryTextColor?.withValues(alpha: 0.8),
@@ -220,7 +197,7 @@ class ManageTaskChampionCredsView
                     SentenceManager(
                             currentLanguage: AppSettings.selectedLanguage)
                         .sentences
-                        .ccsyncLoginInstruction,
+                        .syncServerLoginInstruction,
                     style: TextStyle(
                       fontSize: 14,
                       color: tColors.primaryTextColor?.withValues(alpha: 0.8),
@@ -235,7 +212,7 @@ class ManageTaskChampionCredsView
                         SentenceManager(
                                 currentLanguage: AppSettings.selectedLanguage)
                             .sentences
-                            .ccsyncOpenButton,
+                            .syncServerOpenButton,
                         style: TextStyle(color: tColors.primaryTextColor),
                       ),
                       style: OutlinedButton.styleFrom(
@@ -261,7 +238,7 @@ class ManageTaskChampionCredsView
                     SentenceManager(
                             currentLanguage: AppSettings.selectedLanguage)
                         .sentences
-                        .ccsyncSelfHosted,
+                        .syncServerSelfHosted,
                     style: TextStyle(
                       fontSize: 13,
                       color: tColors.primaryTextColor?.withValues(alpha: 0.6),

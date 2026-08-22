@@ -219,7 +219,22 @@ class AddTaskBottomSheet extends StatelessWidget {
   Widget buildTagsInput(BuildContext context) => AddTaskTagsInput(
         suggestions: homeController.allTagsInCurrentTasks,
         onTagsChanges: (p0) => homeController.tags.value = p0,
+        // Mirror the uncommitted field text so save can flush it — a tag only
+        // enters `tags` on enter or a separator, and text still in the field
+        // at save time used to be silently thrown away.
+        onTextChanged: (text) => homeController.tagcontroller.text = text,
       );
+
+  /// A tag typed but not yet submitted lives only in the text field. Saving is
+  /// as clear a submission as pressing enter, so adopt it instead of dropping
+  /// it. Trim is enough: the field splits on space and comma, so pending text
+  /// can never contain a separator.
+  void _adoptPendingTag() {
+    final String pending = homeController.tagcontroller.text.trim();
+    if (pending.isNotEmpty && !homeController.tags.contains(pending)) {
+      homeController.tags.add(pending);
+    }
+  }
 
   Widget buildDatePicker(BuildContext context) => AddTaskDatePickerInput(
         onDateChanges: (List<DateTime?> p0) {
@@ -321,12 +336,16 @@ class AddTaskBottomSheet extends StatelessWidget {
   }
 
   void onSaveButtonClickedTaskC(BuildContext context) async {
+    _adoptPendingTag();
     if (homeController.formKey.currentState!.validate()) {
       debugPrint("tags ${homeController.tags}");
       var task = TaskForC(
           description: homeController.namecontroller.text.trim(),
           status: 'pending',
-          priority: homeController.priority.value,
+          // 'X' is the "no priority" chip, not a priority — leave unset.
+          priority: homeController.priority.value == 'X'
+              ? null
+              : homeController.priority.value,
           entry: DateTime.now().toIso8601String(),
           id: 0,
           project: homeController.projectcontroller.text != ""
@@ -370,12 +389,17 @@ class AddTaskBottomSheet extends StatelessWidget {
   }
 
   void onSaveButtonClicked(BuildContext context) async {
+    _adoptPendingTag();
     if (homeController.formKey.currentState!.validate()) {
       try {
         var task = taskParser(homeController.namecontroller.text.trim())
             .rebuild((b) =>
                 b..due = getDueDate(homeController.selectedDates)?.toUtc())
-            .rebuild((p) => p..priority = homeController.priority.value)
+            .rebuild((p) => p
+              // 'X' is the "no priority" chip, not a priority — leave unset.
+              ..priority = homeController.priority.value == 'X'
+                  ? null
+                  : homeController.priority.value)
             .rebuild((t) => t..project = homeController.projectcontroller.text)
             .rebuild((t) =>
                 t..wait = getWaitDate(homeController.selectedDates)?.toUtc())
@@ -394,6 +418,7 @@ class AddTaskBottomSheet extends StatelessWidget {
         homeController.priority.value = 'X';
         homeController.tagcontroller.text = '';
         homeController.tags.value = [];
+        homeController.selectedDates.value = List<DateTime?>.filled(4, null);
         homeController.update();
         Get.back();
         if (Platform.isAndroid) {
@@ -455,24 +480,51 @@ class AddTaskBottomSheet extends StatelessWidget {
   }
 
   void onSaveButtonClickedForReplica(BuildContext context) async {
+    _adoptPendingTag();
     if (homeController.formKey.currentState!.validate()) {
       try {
-        await Replica.addTaskToReplica(HashMap<String, dynamic>.from({
+        final String? error =
+            await Replica.addTaskToReplica(HashMap<String, dynamic>.from({
           "description": homeController.namecontroller.text.trim(),
           "due": getDueDate(homeController.selectedDates)?.toUtc(),
-          "priority": homeController.priority.value,
+          // 'X' is the "no priority" chip, a UI sentinel — it used to be sent
+          // as-is and stored as a literal priority the desktop CLI has no idea
+          // what to do with (Taskwarrior priorities are H, M and L).
+          "priority": homeController.priority.value == 'X'
+              ? null
+              : homeController.priority.value,
           "project": homeController.projectcontroller.text != ""
               ? homeController.projectcontroller.text
               : null,
           "wait": getWaitDate(homeController.selectedDates)?.toUtc(),
           "tags": homeController.tags,
         }));
+        if (error != null) {
+          // The result used to be discarded and the success message shown
+          // regardless, so a refused write still reported the task as added.
+          // Leave the sheet open with the input intact — it is still unsaved.
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(
+                error,
+                style: TextStyle(
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.kprimaryTextColor
+                      : TaskWarriorColors.kLightPrimaryTextColor,
+                ),
+              ),
+              backgroundColor: AppSettings.isDarkMode
+                  ? TaskWarriorColors.ksecondaryBackgroundColor
+                  : TaskWarriorColors.kLightSecondaryBackgroundColor,
+              duration: const Duration(seconds: 4)));
+          return;
+        }
         homeController.namecontroller.text = '';
         homeController.projectcontroller.text = '';
         homeController.dueString.value = "";
         homeController.priority.value = 'X';
         homeController.tagcontroller.text = '';
         homeController.tags.value = [];
+        homeController.selectedDates.value = List<DateTime?>.filled(4, null);
         homeController.update();
         Get.back();
         if (Platform.isAndroid) {

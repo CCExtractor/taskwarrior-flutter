@@ -2,17 +2,17 @@ import 'package:taskwarrior/app/utils/language/sentences.dart';
 
 class EnglishSentences extends Sentences {
   @override
-  String get ccsyncLoginInstruction =>
-      'Login to CCSync, copy your credentials, and paste them above.';
+  String get syncServerLoginInstruction =>
+      'Login to TaskChampion, copy your credentials, and paste them above.';
   @override
-  String get ccsyncEasySyncTitle => 'Use CCSync for Easy Sync';
+  String get syncServerEasySyncTitle => 'Use TaskChampion for Easy Sync';
   @override
-  String get ccsyncOpenButton => 'Open CCSync';
+  String get syncServerOpenButton => 'Open TaskChampion';
   @override
-  String get ccsyncIntro =>
-      'CCSync uses TaskChampion to sync your tasks across multiple devices seamlessly. You also get a web dashboard to manage your tasks from any browser.';
+  String get syncServerIntro =>
+      'TaskChampion syncs your tasks across multiple devices seamlessly. You also get a web dashboard to manage your tasks from any browser.';
   @override
-  String get ccsyncSelfHosted =>
+  String get syncServerSelfHosted =>
       'Or bring your own credentials from a self-hosted TaskChampion sync server.';
   @override
   String get helloWorld => 'Hello, World!';
@@ -152,6 +152,9 @@ class EnglishSentences extends Sentences {
   String get filterDrawerPending => 'Pending';
   @override
   String get filterDrawerCompleted => 'Completed';
+  String get filterDrawerDeleted => 'Deleted';
+  @override
+  String get filterDrawerRecurring => 'Recurring';
   @override
   String get filterDrawerFilterTagBy => 'Filter Tag By';
   @override
@@ -219,12 +222,12 @@ class EnglishSentences extends Sentences {
 
   @override
   String get taskchampionTileDescription =>
-      'Switch to Taskwarrior sync with CCSync or Taskchampion Sync Server';
+      'Switch to Taskwarrior sync with a TaskChampion sync server';
   @override
   String get taskchampionTileTitle => 'Taskchampion sync';
 
   @override
-  String get ccsyncCredentials => 'CCync credentials';
+  String get syncServerCredentials => 'TaskChampion credentials';
 
   @override
   String get deleteTaskConfirmation => 'Delete Tasks';
@@ -650,9 +653,9 @@ class EnglishSentences extends Sentences {
   @override
   String get encryptionSecret => 'Encryption Secret';
   @override
-  String get ccsyncBackendUrl => 'CCSync Backend URL';
+  String get syncServerBackendUrl => 'TaskChampion Backend URL';
   @override
-  String get ccsyncClientId => 'Client ID';
+  String get syncServerClientId => 'Client ID';
   @override
   String get success => 'Success';
   @override
@@ -675,6 +678,4 @@ class EnglishSentences extends Sentences {
   String get storageAndData => 'Storage and Data';
   @override
   String get advanced => 'Advanced';
-  @override
-  String get taskchampionBackendUrl => 'Taskchampion URL';
 }

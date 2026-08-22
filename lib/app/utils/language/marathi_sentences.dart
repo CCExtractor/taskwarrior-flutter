@@ -2,18 +2,18 @@ import 'package:taskwarrior/app/utils/language/sentences.dart';
 
 class MarathiSentences extends Sentences {
   @override
-  String get ccsyncLoginInstruction =>
-      'CCSync मध्ये लॉगिन करा, तुमची क्रेडेन्शियल्स कॉपी करा आणि वर पेस्ट करा.';
+  String get syncServerLoginInstruction =>
+      'TaskChampion मध्ये लॉगिन करा, तुमची क्रेडेन्शियल्स कॉपी करा आणि वर पेस्ट करा.';
   @override
-  String get ccsyncEasySyncTitle => 'सोप्या सिंकसाठी CCSync वापरा';
+  String get syncServerEasySyncTitle => 'सोप्या सिंकसाठी TaskChampion वापरा';
   @override
-  String get ccsyncOpenButton => 'CCSync उघडा';
+  String get syncServerOpenButton => 'TaskChampion उघडा';
   @override
-  String get ccsyncIntro =>
-      'CCSync TaskChampion वापरून तुमची कामे अनेक उपकरणांवर सहजपणे सिंक करते. तुम्हाला कोणत्याही ब्राउझरमधून तुमची कामे व्यवस्थापित करण्यासाठी वेब डॅशबोर्ड देखील मिळतो.';
+  String get syncServerIntro =>
+      'TaskChampion वापरून तुमची कामे अनेक उपकरणांवर सहजपणे सिंक करते. तुम्हाला कोणत्याही ब्राउझरमधून तुमची कामे व्यवस्थापित करण्यासाठी वेब डॅशबोर्ड देखील मिळतो.';
 
   @override
-  String get ccsyncSelfHosted =>
+  String get syncServerSelfHosted =>
       'किंवा स्वतःच्या TaskChampion सिंक सर्व्हरमधून तुमची क्रेडेन्शियल्स वापरा.';
   @override
   String get helloWorld => 'नमस्कार, जग!';
@@ -140,6 +140,9 @@ class MarathiSentences extends Sentences {
   String get filterDrawerPending => 'प्रलंबित';
   @override
   String get filterDrawerCompleted => 'पूर्ण';
+  String get filterDrawerDeleted => 'हटवलेले';
+  @override
+  String get filterDrawerRecurring => 'पुनरावर्ती';
   @override
   String get filterDrawerFilterTagBy => 'टॅगवर फिल्टर करा';
   @override
@@ -206,13 +209,13 @@ class MarathiSentences extends Sentences {
 
   @override
   String get taskchampionTileDescription =>
-      'CCSync किंवा Taskchampion Sync Server सह Taskwarrior सिंक वर स्विच करा';
+      'TaskChampion Sync Server सह Taskwarrior सिंक वर स्विच करा';
 
   @override
   String get taskchampionTileTitle => 'Taskchampion सिंक';
 
   @override
-  String get ccsyncCredentials => 'CCync क्रेडेन्शियल';
+  String get syncServerCredentials => 'TaskChampion क्रेडेन्शियल';
 
   @override
   String get deleteTaskConfirmation => 'कार्य हटवा';
@@ -661,9 +664,9 @@ class MarathiSentences extends Sentences {
   @override
   String get encryptionSecret => 'एन्क्रिप्शन गुपित';
   @override
-  String get ccsyncBackendUrl => 'CCSync बॅकएंड URL';
+  String get syncServerBackendUrl => 'TaskChampion बॅकएंड URL';
   @override
-  String get ccsyncClientId => 'क्लायंट आयडी';
+  String get syncServerClientId => 'क्लायंट आयडी';
   @override
   String get success => 'यशस्वी';
   @override
@@ -688,6 +691,4 @@ class MarathiSentences extends Sentences {
   String get storageAndData => 'स्टोरेज आणि डेटा';
   @override
   String get advanced => 'अड्वांस्ड';
-  @override
-  String get taskchampionBackendUrl => 'Taskchampion URL';
 }

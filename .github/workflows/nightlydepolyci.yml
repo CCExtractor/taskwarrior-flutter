@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - main
+    # The website lives on the deploy branch now, so nothing here needs to be
+    # excluded to avoid rebuilding the APK for a site-only change.
+    paths-ignore:
+      - '.github/workflows/build-nightly.yml'
 
 jobs:
   build-and-deploy:
@@ -35,6 +39,10 @@ jobs:
           distribution: "temurin"
           java-version: "17.x"
 
+      # Step 2b: Rust + NDK + cargo-ndk, so the Gradle hook compiles
+      # libtc_helper.so from rust/ instead of falling back to a prebuilt binary.
+      - uses: ./.github/actions/setup-rust-android
+
       # Step 3: Setup Flutter
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
@@ -58,9 +66,25 @@ jobs:
       - name: Build APK
         run: flutter build apk --flavor nightly --build-number=${{ github.run_number }} --release
 
+      # Step 6b: An APK missing its native library installs fine and then crashes
+      # at RustLib.init() — fail here rather than deploying it to F-Droid.
+      - name: Verify native libraries are in the APK
+        run: ./scripts/verify_apk_native_libs.sh build/app/outputs/flutter-apk/app-nightly-release.apk
+
       # Step 7: Verify the APK is signed
       - name: Verify sign
         run: keytool -printcert -jarfile build/app/outputs/flutter-apk/app-nightly-release.apk
+
+      # Step 7b: Capture which commit is being released.
+      #
+      # It has to be captured now: the job switches this work tree to the deploy
+      # branch further down, and from that point git HEAD is that branch's own
+      # orphan commit rather than the app commit. The site source lives on the
+      # deploy branch, so the site itself is built after the switch.
+      - name: Capture the deployed commit
+        run: |
+          echo "DEPLOY_SHA=${{ github.sha }}" >> "$GITHUB_ENV"
+          echo "DEPLOY_MSG=$(git log -1 --pretty=%s)" >> "$GITHUB_ENV"
 
       # Step 8: Configure git, fetch existing repo, and place new APK
       # We fetch the repo so we can see existing APKs to prune them in the next step.
@@ -108,6 +132,36 @@ jobs:
 
           # Run the update command
           fdroid update -c
+
+      # Step 10b: Record the deploy and rebuild the site from this branch's own
+      # source, then place it at the root. Additions only — repo/, metadata/ and
+      # assets/ are untouched, so F-Droid clients are unaffected.
+      - name: Record deploy and rebuild the website
+        run: |
+          set -e
+          # website/ and scripts/ live on this branch, so they are on disk now.
+          python3 scripts/update_build_log.py success \
+            "https://github.com/${{ github.repository }}/raw/fdroid-repo/repo/nightly.${{ github.run_number }}.apk" \
+            "${{ github.run_number }}" "$DEPLOY_SHA" "$DEPLOY_MSG"
+
+          # Pinned Hugo rather than a floating action, so a site build cannot
+          # start failing because an upstream default moved.
+          HUGO_VERSION=0.164.0
+          curl -sSL -o /tmp/hugo.tar.gz \
+            "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz"
+          tar -xzf /tmp/hugo.tar.gz -C /tmp hugo
+
+          /tmp/hugo --source website --destination /tmp/site --gc --minify \
+            --baseURL "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
+
+          # The generated CNAME is dropped on purpose: no custom domain is
+          # configured, and committing one would make Pages claim a domain with
+          # no DNS behind it — taking the site down and breaking the F-Droid repo
+          # URL that clients already poll.
+          rm -f /tmp/site/CNAME
+
+          cp -R /tmp/site/. .
+          touch .nojekyll
 
       # Step 11: Push a fresh history with NO bloat
       # This creates a temporary orphan branch (no parents) containing ONLY

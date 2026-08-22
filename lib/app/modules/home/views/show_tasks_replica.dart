@@ -11,18 +11,24 @@ import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/v3/champion/replica.dart';
 import 'package:taskwarrior/app/v3/champion/models/task_for_replica.dart';
+import 'package:taskwarrior/app/utils/taskchampion/virtual_filter_engine.dart';
 
 class TaskReplicaViewBuilder extends StatelessWidget {
   const TaskReplicaViewBuilder({
     super.key,
     this.project,
     required this.pendingFilter,
+    required this.statusFilter,
     required this.selectedSort,
     required this.replicaTasks,
   });
 
   final String selectedSort;
   final bool pendingFilter;
+
+  /// pending / completed / deleted — supersedes [pendingFilter], which cannot
+  /// express the deleted state.
+  final String statusFilter;
   final String? project;
   final List<TaskForReplica> replicaTasks;
 
@@ -31,40 +37,74 @@ class TaskReplicaViewBuilder extends StatelessWidget {
     TaskwarriorColorTheme tColors =
         Theme.of(context).extension<TaskwarriorColorTheme>()!;
 
-    return Obx(() {
-      List<TaskForReplica> tasks = List<TaskForReplica>.from(replicaTasks);
-      if (project != null && project != 'All Projects') {
-        tasks = tasks.where((task) => task.project == project).toList();
+    // Reactivity is handled by the parent Obx in home_page_body (which reads
+    // tasksFromReplica); this widget just renders the snapshot it's given, so
+    // it must NOT be an Obx (an Obx with no observable read throws ObxError).
+    List<TaskForReplica> tasks = List<TaskForReplica>.from(replicaTasks);
+      if (project != null && project!.isNotEmpty && project != 'All Projects') {
+        // Same hierarchy rule as report filters: selecting "work" includes
+        // "work.sub". An exact match here made the drawer disagree with the
+        // report engine (and with desktop Taskwarrior) about the same project.
+        tasks = tasks
+            .where((task) =>
+                VirtualFilterEngine.projectMatches(task.project, project!))
+            .toList();
       }
-      tasks.sort((a, b) {
-        final am = a.modified ?? 0;
-        final bm = b.modified ?? 0;
-        return bm.compareTo(am);
-      });
-      tasks = tasks.where((task) {
-        if (pendingFilter) {
-          return task.status == 'pending';
-        } else {
-          return task.status == 'completed';
-        }
-      }).toList();
+      tasks = tasks.where((task) => task.status == statusFilter).toList();
 
+      // Urgency is computed (TaskChampion doesn't store it) — precompute once
+      // per task against a single "now" so every comparison is consistent and
+      // we don't recompute inside the O(n log n) sort.
+      final bool sortingByUrgency =
+          selectedSort == 'Urgency+' || selectedSort == 'Urgency-';
+      final DateTime now = DateTime.now().toUtc();
+      final Map<String, double> urgencyByUuid = sortingByUrgency
+          ? {for (final t in tasks) t.uuid: t.computeUrgency(clock: now)}
+          : const <String, double>{};
+
+      // Sort by the selected column. All eight columns are backed:
+      // Created (entry), Modified, Start Time, Due till, Priority (by severity),
+      // Project, Tags (grouped by sorted tag list), and Urgency (computed).
       tasks.sort((a, b) {
         switch (selectedSort) {
+          case 'Created+':
+            return (a.entry ?? 0).compareTo(b.entry ?? 0);
+          case 'Created-':
+            return (b.entry ?? 0).compareTo(a.entry ?? 0);
           case 'Modified+':
             return (a.modified ?? 0).compareTo(b.modified ?? 0);
           case 'Modified-':
             return (b.modified ?? 0).compareTo(a.modified ?? 0);
+          case 'Start Time+':
+            return (a.start ?? '').compareTo(b.start ?? '');
+          case 'Start Time-':
+            return (b.start ?? '').compareTo(a.start ?? '');
           case 'Due till+':
             return (a.due ?? '').compareTo(b.due ?? '');
           case 'Due till-':
             return (b.due ?? '').compareTo(a.due ?? '');
           case 'Priority+':
-            return (a.priority ?? '').compareTo(b.priority ?? '');
+            return _priorityRank(a.priority)
+                .compareTo(_priorityRank(b.priority));
           case 'Priority-':
-            return (b.priority ?? '').compareTo(a.priority ?? '');
+            return _priorityRank(b.priority)
+                .compareTo(_priorityRank(a.priority));
+          case 'Project+':
+            return (a.project ?? '').compareTo(b.project ?? '');
+          case 'Project-':
+            return (b.project ?? '').compareTo(a.project ?? '');
+          case 'Tags+':
+            return _tagKey(a).compareTo(_tagKey(b));
+          case 'Tags-':
+            return _tagKey(b).compareTo(_tagKey(a));
+          case 'Urgency+':
+            return (urgencyByUuid[a.uuid] ?? 0.0)
+                .compareTo(urgencyByUuid[b.uuid] ?? 0.0);
+          case 'Urgency-':
+            return (urgencyByUuid[b.uuid] ?? 0.0)
+                .compareTo(urgencyByUuid[a.uuid] ?? 0.0);
           default:
-            return 0;
+            return (b.modified ?? 0).compareTo(a.modified ?? 0);
         }
       });
 
@@ -203,7 +243,29 @@ class TaskReplicaViewBuilder extends StatelessWidget {
                 },
               ),
       );
-    });
+  }
+
+  // A stable key for Tags sort: the task's tags sorted alphabetically and
+  // joined, so tasks that share the same tags group together and untagged
+  // tasks (empty key) sort to one end.
+  String _tagKey(TaskForReplica task) {
+    final tags = [...(task.tags ?? const <String>[])]..sort();
+    return tags.join(' ');
+  }
+
+  // Rank priorities by severity (H > M > L > none) so Priority sort is
+  // meaningful rather than alphabetical (which would order H < L < M).
+  int _priorityRank(String? priority) {
+    switch (priority) {
+      case 'H':
+        return 3;
+      case 'M':
+        return 2;
+      case 'L':
+        return 1;
+      default:
+        return 0;
+    }
   }
 
   Color _getPriorityColor(String priority) {
@@ -219,13 +281,29 @@ class TaskReplicaViewBuilder extends StatelessWidget {
     }
   }
 
+  // Both of these used to discard the result. A refused write left the task
+  // exactly where it was with no explanation, which reads as the swipe simply
+  // not having registered.
   void completeTask(TaskForReplica task) async {
-    await Replica.modifyTaskInReplica(task.copyWith(status: 'completed'));
+    final String? error =
+        await Replica.modifyTaskInReplica(task.copyWith(status: 'completed'));
+    if (error != null) {
+      Get.snackbar('Not completed', error,
+          snackPosition: SnackPosition.BOTTOM,
+          duration: const Duration(seconds: 4));
+      return;
+    }
     Get.find<HomeController>().refreshReplicaTaskList();
   }
 
   void deleteTask(TaskForReplica task) async {
-    await Replica.deleteTaskFromReplica(task.uuid);
+    final String? error = await Replica.deleteTaskFromReplica(task.uuid);
+    if (error != null) {
+      Get.snackbar('Not deleted', error,
+          snackPosition: SnackPosition.BOTTOM,
+          duration: const Duration(seconds: 4));
+      return;
+    }
     Get.find<HomeController>().refreshReplicaTaskList();
   }
 }

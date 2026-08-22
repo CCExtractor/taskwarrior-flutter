@@ -2,17 +2,17 @@ import 'package:taskwarrior/app/utils/language/sentences.dart';
 
 class GermanSentences extends Sentences {
   @override
-  String get ccsyncLoginInstruction =>
-      'Melde dich bei CCSync an, kopiere deine Anmeldedaten und füge sie oben ein.';
+  String get syncServerLoginInstruction =>
+      'Melde dich bei TaskChampion an, kopiere deine Anmeldedaten und füge sie oben ein.';
   @override
-  String get ccsyncEasySyncTitle => 'CCSync nutzen für einfachen Sync';
+  String get syncServerEasySyncTitle => 'TaskChampion nutzen für einfachen Sync';
   @override
-  String get ccsyncOpenButton => 'CCSync öffnen';
+  String get syncServerOpenButton => 'TaskChampion öffnen';
   @override
-  String get ccsyncIntro =>
-      'CCSync nutzt TaskChampion, um Aufgaben nahtlos über mehrere Geräte hinweg zu synchronisieren. Außerdem erhälst du ein Web-Dashboard, über das du deine Aufgaben von jedem Browser aus verwalten kannst.';
+  String get syncServerIntro =>
+      'TaskChampion synchronisiert deine Aufgaben nahtlos über mehrere Geräte hinweg. Außerdem erhälst du ein Web-Dashboard, über das du deine Aufgaben von jedem Browser aus verwalten kannst.';
   @override
-  String get ccsyncSelfHosted =>
+  String get syncServerSelfHosted =>
       'Oder bringe deine eigenen Anmeldedaten von einem selbst gehosteten TaskChampion-Synchronisierungsserver mit.';
   @override
   String get helloWorld => 'Hallo Welt!';
@@ -152,6 +152,9 @@ class GermanSentences extends Sentences {
   String get filterDrawerPending => 'Bevorstehend';
   @override
   String get filterDrawerCompleted => 'Erledigt';
+  String get filterDrawerDeleted => 'Gelöscht';
+  @override
+  String get filterDrawerRecurring => 'Wiederkehrend';
   @override
   String get filterDrawerFilterTagBy => 'Tag filtern nach';
   @override
@@ -219,12 +222,12 @@ class GermanSentences extends Sentences {
 
   @override
   String get taskchampionTileDescription =>
-      'Wechsel zu Taskwarrior Sync mit CCSync oder Taskchampion Sync Server';
+      'Wechsel zu Taskwarrior Sync mit einem TaskChampion Sync Server';
   @override
   String get taskchampionTileTitle => 'Taskchampion Sync';
 
   @override
-  String get ccsyncCredentials => 'CCync Anmeldedaten';
+  String get syncServerCredentials => 'TaskChampion Anmeldedaten';
 
   @override
   String get deleteTaskConfirmation => 'Aufgaben löschen';
@@ -650,9 +653,9 @@ class GermanSentences extends Sentences {
   @override
   String get encryptionSecret => 'Encryption Secret';
   @override
-  String get ccsyncBackendUrl => 'CCSync Backend URL';
+  String get syncServerBackendUrl => 'TaskChampion Backend URL';
   @override
-  String get ccsyncClientId => 'Client ID';
+  String get syncServerClientId => 'Client ID';
   @override
   String get success => 'Erfolg';
   @override
@@ -675,6 +678,4 @@ class GermanSentences extends Sentences {
   String get storageAndData => 'Speicher und Daten';
   @override
   String get advanced => 'Fortgeschritten';
-  @override
-  String get taskchampionBackendUrl => 'Taskchampion URL';
 }

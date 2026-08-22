@@ -20,14 +20,22 @@ class Replica {
     "wait",
     "priority",
     "project",
-    "status"
+    "status",
+    // Written like project — an opaque string TaskChampion stores but never
+    // interprets. The desktop CLI is what acts on it.
+    "recur",
   ];
-  static Future<String> addTaskToReplica(
+  /// Create a task, returning null on success or the reason it was refused.
+  ///
+  /// This used to answer with a success/failure sentinel that no caller read —
+  /// the add sheet announced success unconditionally, so a rejected write still
+  /// told the user the task had been added. Matches modifyTaskInReplica.
+  static Future<String?> addTaskToReplica(
       HashMap<String, dynamic> newTask) async {
     var taskdbDirPath = await getReplicaPath();
     HashMap<String, String> map = HashMap<String, String>();
     if (newTask.containsKey("uuid") && newTask['uuid'].isEmpty) {
-      return "err";
+      return "This task has no identifier yet.";
     }
     String tags = "";
     if (newTask['tags'] != null && (newTask['tags'] as List).isNotEmpty) {
@@ -48,16 +56,21 @@ class Replica {
     } catch (e, s) {
       debugPrint(e.toString());
       debugPrint(s.toString());
-      return "err";
+      return _reason(e);
     }
-    return "scc";
+    return null;
   }
 
-  static Future<String> modifyTaskInReplica(TaskForReplica newTask) async {
+  /// Apply an edit to a replica task.
+  ///
+  /// Returns null on success, or the reason the write was refused — the FFI
+  /// rejects some combinations outright (a repeating task with no due date, for
+  /// one), and that explanation has to reach the user rather than be logged.
+  static Future<String?> modifyTaskInReplica(TaskForReplica newTask) async {
     var taskdbDirPath = await getReplicaPath();
     HashMap<String, String> map = HashMap<String, String>();
     if (newTask.uuid.isEmpty) {
-      return "err";
+      return "This task has no identifier yet.";
     }
     String tags = "";
     if (newTask.tags != null) {
@@ -76,19 +89,86 @@ class Replica {
     } catch (e, s) {
       debugPrint(e.toString());
       debugPrint(s.toString());
-      return "err";
+      return _reason(e);
     }
-    return "scc";
+    return null;
   }
 
-  static Future<String> deleteTaskFromReplica(String uuid) async {
+  /// The human-readable half of an FFI error.
+  ///
+  /// The Rust side reports why a write was refused; flutter_rust_bridge hands
+  /// it over prefixed with the error variant, which is noise to the user.
+  static String _reason(Object e) {
+    final String raw = e.toString();
+    final int marker = raw.indexOf(': ');
+    return marker >= 0 && marker + 2 < raw.length
+        ? raw.substring(marker + 2)
+        : raw;
+  }
+
+  /// Attach a note to a task, returning the entry timestamp that identifies it.
+  ///
+  /// Unlike the older helpers here, this deliberately lets the FFI error
+  /// propagate instead of collapsing it to `"err"`. The Rust side reports why a
+  /// write was refused — empty text, unknown task, malformed UUID — and the
+  /// caller shows that reason to the user, which a sentinel string cannot do.
+  static Future<String> addAnnotationToReplica(
+      String uuid, String description) async {
+    final taskdbDirPath = await getReplicaPath();
+    return addAnnotation(
+      uuidSt: uuid,
+      description: description,
+      taskdbDirPath: taskdbDirPath,
+    );
+  }
+
+  /// Remove the note identified by [entryRfc3339] — the `entry` value the
+  /// serializer reported for it. Removing one that is already gone is a no-op.
+  static Future<void> removeAnnotationFromReplica(
+      String uuid, String entryRfc3339) async {
+    final taskdbDirPath = await getReplicaPath();
+    return removeAnnotation(
+      uuidSt: uuid,
+      entryRfc3339: entryRfc3339,
+      taskdbDirPath: taskdbDirPath,
+    );
+  }
+
+  /// Make [uuid] depend on [dependsOn], so it stays blocked until that task is
+  /// done. Refused, with a reason, if it would be self-referential, point at a
+  /// task that does not exist, or close a dependency loop.
+  static Future<void> addDependencyToReplica(
+      String uuid, String dependsOn) async {
+    final taskdbDirPath = await getReplicaPath();
+    return addDependency(
+      uuidSt: uuid,
+      dependsOnSt: dependsOn,
+      taskdbDirPath: taskdbDirPath,
+    );
+  }
+
+  /// Drop [uuid]'s dependency on [dependsOn]. A no-op if it is not there.
+  static Future<void> removeDependencyFromReplica(
+      String uuid, String dependsOn) async {
+    final taskdbDirPath = await getReplicaPath();
+    return removeDependency(
+      uuidSt: uuid,
+      dependsOnSt: dependsOn,
+      taskdbDirPath: taskdbDirPath,
+    );
+  }
+
+  /// Soft-delete a task, returning null on success or the reason it failed.
+  static Future<String?> deleteTaskFromReplica(String uuid) async {
     var taskdbDirPath = await getReplicaPath();
     try {
       await deleteTask(uuidSt: uuid, taskdbDirPath: taskdbDirPath);
-    } catch (e) {
-      return "err";
+    } catch (e, s) {
+      debugPrint(e.toString());
+      debugPrint(s.toString());
+      return _reason(e);
     }
-    return "scc";
+    return null;
   }
 
   static Future<List<TaskForReplica>> getAllTasksFromReplica() async {
