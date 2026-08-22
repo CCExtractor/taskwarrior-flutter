@@ -458,7 +458,8 @@ class AddTaskBottomSheet extends StatelessWidget {
   void onSaveButtonClickedForReplica(BuildContext context) async {
     if (homeController.formKey.currentState!.validate()) {
       try {
-        await Replica.addTaskToReplica(HashMap<String, dynamic>.from({
+        final String? error =
+            await Replica.addTaskToReplica(HashMap<String, dynamic>.from({
           "description": homeController.namecontroller.text.trim(),
           "due": getDueDate(homeController.selectedDates)?.toUtc(),
           "priority": homeController.priority.value,
@@ -468,6 +469,25 @@ class AddTaskBottomSheet extends StatelessWidget {
           "wait": getWaitDate(homeController.selectedDates)?.toUtc(),
           "tags": homeController.tags,
         }));
+        if (error != null) {
+          // The result used to be discarded and the success message shown
+          // regardless, so a refused write still reported the task as added.
+          // Leave the sheet open with the input intact — it is still unsaved.
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(
+                error,
+                style: TextStyle(
+                  color: AppSettings.isDarkMode
+                      ? TaskWarriorColors.kprimaryTextColor
+                      : TaskWarriorColors.kLightPrimaryTextColor,
+                ),
+              ),
+              backgroundColor: AppSettings.isDarkMode
+                  ? TaskWarriorColors.ksecondaryBackgroundColor
+                  : TaskWarriorColors.kLightSecondaryBackgroundColor,
+              duration: const Duration(seconds: 4)));
+          return;
+        }
         homeController.namecontroller.text = '';
         homeController.projectcontroller.text = '';
         homeController.dueString.value = "";

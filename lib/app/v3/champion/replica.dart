@@ -25,12 +25,17 @@ class Replica {
     // interprets. The desktop CLI is what acts on it.
     "recur",
   ];
-  static Future<String> addTaskToReplica(
+  /// Create a task, returning null on success or the reason it was refused.
+  ///
+  /// This used to answer with a success/failure sentinel that no caller read —
+  /// the add sheet announced success unconditionally, so a rejected write still
+  /// told the user the task had been added. Matches modifyTaskInReplica.
+  static Future<String?> addTaskToReplica(
       HashMap<String, dynamic> newTask) async {
     var taskdbDirPath = await getReplicaPath();
     HashMap<String, String> map = HashMap<String, String>();
     if (newTask.containsKey("uuid") && newTask['uuid'].isEmpty) {
-      return "err";
+      return "This task has no identifier yet.";
     }
     String tags = "";
     if (newTask['tags'] != null && (newTask['tags'] as List).isNotEmpty) {
@@ -51,9 +56,9 @@ class Replica {
     } catch (e, s) {
       debugPrint(e.toString());
       debugPrint(s.toString());
-      return "err";
+      return _reason(e);
     }
-    return "scc";
+    return null;
   }
 
   /// Apply an edit to a replica task.
@@ -84,13 +89,21 @@ class Replica {
     } catch (e, s) {
       debugPrint(e.toString());
       debugPrint(s.toString());
-      final String raw = e.toString();
-      final int marker = raw.indexOf(': ');
-      return marker >= 0 && marker + 2 < raw.length
-          ? raw.substring(marker + 2)
-          : raw;
+      return _reason(e);
     }
     return null;
+  }
+
+  /// The human-readable half of an FFI error.
+  ///
+  /// The Rust side reports why a write was refused; flutter_rust_bridge hands
+  /// it over prefixed with the error variant, which is noise to the user.
+  static String _reason(Object e) {
+    final String raw = e.toString();
+    final int marker = raw.indexOf(': ');
+    return marker >= 0 && marker + 2 < raw.length
+        ? raw.substring(marker + 2)
+        : raw;
   }
 
   /// Attach a note to a task, returning the entry timestamp that identifies it.
@@ -145,14 +158,17 @@ class Replica {
     );
   }
 
-  static Future<String> deleteTaskFromReplica(String uuid) async {
+  /// Soft-delete a task, returning null on success or the reason it failed.
+  static Future<String?> deleteTaskFromReplica(String uuid) async {
     var taskdbDirPath = await getReplicaPath();
     try {
       await deleteTask(uuidSt: uuid, taskdbDirPath: taskdbDirPath);
-    } catch (e) {
-      return "err";
+    } catch (e, s) {
+      debugPrint(e.toString());
+      debugPrint(s.toString());
+      return _reason(e);
     }
-    return "scc";
+    return null;
   }
 
   static Future<List<TaskForReplica>> getAllTasksFromReplica() async {

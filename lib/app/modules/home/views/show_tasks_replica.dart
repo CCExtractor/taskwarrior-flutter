@@ -274,13 +274,29 @@ class TaskReplicaViewBuilder extends StatelessWidget {
     }
   }
 
+  // Both of these used to discard the result. A refused write left the task
+  // exactly where it was with no explanation, which reads as the swipe simply
+  // not having registered.
   void completeTask(TaskForReplica task) async {
-    await Replica.modifyTaskInReplica(task.copyWith(status: 'completed'));
+    final String? error =
+        await Replica.modifyTaskInReplica(task.copyWith(status: 'completed'));
+    if (error != null) {
+      Get.snackbar('Not completed', error,
+          snackPosition: SnackPosition.BOTTOM,
+          duration: const Duration(seconds: 4));
+      return;
+    }
     Get.find<HomeController>().refreshReplicaTaskList();
   }
 
   void deleteTask(TaskForReplica task) async {
-    await Replica.deleteTaskFromReplica(task.uuid);
+    final String? error = await Replica.deleteTaskFromReplica(task.uuid);
+    if (error != null) {
+      Get.snackbar('Not deleted', error,
+          snackPosition: SnackPosition.BOTTOM,
+          duration: const Duration(seconds: 4));
+      return;
+    }
     Get.find<HomeController>().refreshReplicaTaskList();
   }
 }
