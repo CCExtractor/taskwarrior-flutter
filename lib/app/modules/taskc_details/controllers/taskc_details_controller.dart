@@ -179,6 +179,13 @@ class TaskcDetailsController extends GetxController {
   /// controls instead of allowing a second write to race the first.
   final annotationBusy = false.obs;
 
+  /// Whether a note or dependency was changed during this visit.
+  ///
+  /// Those editors write through immediately, so they are already saved and
+  /// "Don't save" cannot undo them. The unsaved-changes dialog says so when it
+  /// applies, because otherwise discarding looks like it discards everything.
+  final wroteThroughThisVisit = false.obs;
+
   /// Backing field for the "add a note" input. Owned by the controller rather
   /// than the view so its text survives rebuilds, and so it is disposed exactly
   /// once when the page is torn down.
@@ -214,6 +221,7 @@ class TaskcDetailsController extends GetxController {
       // Append locally rather than re-reading every task from the replica: the
       // entry the FFI returns is authoritative, so the list stays in step.
       annotations.add(Annotation(entry: entry, description: description.trim()));
+      wroteThroughThisVisit.value = true;
       await _refreshHomeTasks();
       return null;
     } catch (e) {
@@ -238,6 +246,7 @@ class TaskcDetailsController extends GetxController {
     try {
       await Replica.removeAnnotationFromReplica(uuid, entry);
       annotations.removeWhere((a) => a.entry == entry);
+      wroteThroughThisVisit.value = true;
       await _refreshHomeTasks();
       return null;
     } catch (e) {
@@ -337,6 +346,7 @@ class TaskcDetailsController extends GetxController {
     try {
       await Replica.addDependencyToReplica(uuid, dependsOnUuid);
       depends.add(dependsOnUuid);
+      wroteThroughThisVisit.value = true;
       // Adding a dependency makes this task blocked; the depended-on task
       // becomes blocking. Reflect the half we are showing.
       isBlocked.value = true;
@@ -363,6 +373,7 @@ class TaskcDetailsController extends GetxController {
     try {
       await Replica.removeDependencyFromReplica(uuid, dependsOnUuid);
       depends.remove(dependsOnUuid);
+      wroteThroughThisVisit.value = true;
       // Only the last remaining dependency clears the blocked flag.
       if (depends.isEmpty) isBlocked.value = false;
       await _refreshHomeTasks();
@@ -729,9 +740,16 @@ class TaskcDetailsController extends GetxController {
           style: TextStyle(color: tColors.primaryTextColor),
         ),
         content: Text(
-          SentenceManager(currentLanguage: AppSettings.selectedLanguage)
-              .sentences
-              .unsavedChangesWarning,
+          // Notes and dependencies are written the moment they are edited, so
+          // discarding cannot take them back. Saying nothing would let
+          // "Don't save" read as discarding everything on the page.
+          wroteThroughThisVisit.value
+              ? '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.unsavedChangesWarning}'
+                  '\n\nNotes and dependencies you changed are already saved '
+                  'and will be kept.'
+              : SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                  .sentences
+                  .unsavedChangesWarning,
           style: TextStyle(color: tColors.primaryTextColor),
         ),
         actions: <Widget>[
