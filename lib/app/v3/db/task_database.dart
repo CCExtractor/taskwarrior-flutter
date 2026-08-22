@@ -81,7 +81,7 @@ class TaskDatabase {
 
   Future<void> openForProfile(String profile) async {
     String path = await getDatabasePathForProfile(profile);
-    _open(path);
+    await _open(path);
   }
 
   Future<void> ensureDatabaseIsOpen() async {
@@ -169,7 +169,7 @@ class TaskDatabase {
     List<String> taskTags = task.tags?.map((e) => e.toString()).toList() ?? [];
     debugPrint("Database update $taskTags");
     List<String> taskDepends =
-        task.tags?.map((e) => e.toString()).toList() ?? [];
+        task.depends?.map((e) => e.toString()).toList() ?? [];
     debugPrint("Database update $taskDepends");
     List<Map<String, String?>> taskAnnotations = task.annotations != null
         ? task.annotations!
@@ -335,7 +335,7 @@ class TaskDatabase {
 
 // Get tags using a composite key
   Future<List<String>> getTagsForTask(String uuid, int id) async {
-    ensureDatabaseIsOpen();
+    await ensureDatabaseIsOpen();
     final db = _database;
     if (db == null) {
       return <String>[];
@@ -355,7 +355,7 @@ class TaskDatabase {
   Future<void> setTagsForTask(String uuid, int id, List<String> tags) async {
     debugPrint('Setting tags for task $uuid: $tags');
     try {
-      ensureDatabaseIsOpen();
+      await ensureDatabaseIsOpen();
       final db = _database;
       if (db == null) {
         return;
@@ -384,7 +384,7 @@ class TaskDatabase {
 
   // depends methods
   Future<List<String>> getDependsForTask(String uuid, int id) async {
-    ensureDatabaseIsOpen();
+    await ensureDatabaseIsOpen();
     final db = _database;
     if (db == null) {
       return <String>[];
@@ -403,7 +403,7 @@ class TaskDatabase {
   Future<void> setDependsForTask(
       String uuid, int id, List<String> depends) async {
     try {
-      ensureDatabaseIsOpen();
+      await ensureDatabaseIsOpen();
       final db = _database;
       if (db == null) {
         return;
@@ -431,7 +431,7 @@ class TaskDatabase {
   // annotations methods
   Future<List<Map<String, String>>> getAnnotationsForTask(
       String uuid, int id) async {
-    ensureDatabaseIsOpen();
+    await ensureDatabaseIsOpen();
     final db = _database;
     if (db == null) {
       return <Map<String, String>>[];
@@ -453,7 +453,7 @@ class TaskDatabase {
   Future<void> setAnnotationsForTask(
       String uuid, int id, List<Map<String, String?>> annotations) async {
     try {
-      ensureDatabaseIsOpen();
+      await ensureDatabaseIsOpen();
       final db = _database;
       if (db == null) {
         return;

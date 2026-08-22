@@ -11,8 +11,6 @@ import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/v3/db/task_database.dart';
 import 'package:taskwarrior/app/v3/models/task.dart';
-import 'package:taskwarrior/app/v3/net/complete.dart';
-import 'package:taskwarrior/app/v3/net/delete.dart';
 
 class TaskViewBuilder extends StatelessWidget {
   const TaskViewBuilder({
@@ -230,14 +228,12 @@ class TaskViewBuilder extends StatelessWidget {
     TaskDatabase taskDatabase = TaskDatabase();
     await taskDatabase.open();
     taskDatabase.markTaskAsCompleted(uuid);
-    completeTask('email', uuid);
   }
 
   void _markTaskAsDeleted(String uuid) async {
     TaskDatabase taskDatabase = TaskDatabase();
     await taskDatabase.open();
     taskDatabase.markTaskAsDeleted(uuid);
-    deleteTask('email', uuid);
   }
 
   Color _getPriorityColor(String priority) {

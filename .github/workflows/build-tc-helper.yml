@@ -1,0 +1,80 @@
+# Compiles the tc_helper Rust native library from source (instead of relying on
+# the pre-built .so committed under android/app/src/main/jniLibs/) and then
+# builds the production APK against the freshly-compiled library.
+#
+# This is the "proper" fix for stale committed binaries: the .so is regenerated
+# from rust/ on every run, so it can never drift from the Rust source. Once this
+# is green, the committed jniLibs/*.so can be git-ignored and purged from history.
+#
+# This workflow has run green on CI (ubuntu-latest), so the NDK version and the
+# cargo-ndk invocation are known to work on a runner and not just locally. The
+# NDK + Rust setup has since moved to .github/actions/setup-rust-android, shared
+# with every workflow that builds an APK.
+#
+# All three ABIs Flutter builds are covered: arm64-v8a, armeabi-v7a and x86_64.
+# The list must stay in sync with android/app/build.gradle's cargoBuildTcHelper —
+# an ABI missing here ships an APK without libtc_helper.so that installs fine and
+# then crashes at RustLib.init(). taskchampion is configured with only
+# the server-sync backend (see rust/Cargo.toml), so there's no aws-lc-sys — hence
+# no cmake/ninja/bindgen/libclang toolchain needed; ring builds with just the
+# Rust + NDK toolchain.
+name: Build tc_helper (compile from source)
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main, reports]
+    paths:
+      - "rust/**"
+      - "android/**"
+      - ".github/workflows/build-tc-helper.yml"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "17"
+
+      # NDK + Rust + Android targets + cargo-ndk. Shared with the APK-building
+      # workflows so the target list can't drift between them.
+      - uses: ./.github/actions/setup-rust-android
+
+      - name: Compile tc_helper (arm64-v8a + armeabi-v7a + x86_64) from source
+        working-directory: rust
+        run: |
+          cargo ndk -t arm64-v8a -t armeabi-v7a -t x86_64 \
+            -o ../android/app/src/main/jniLibs \
+            build --release
+
+      - name: Assert every ABI Flutter builds got a library
+        run: |
+          for abi in arm64-v8a armeabi-v7a x86_64; do
+            f="android/app/src/main/jniLibs/$abi/libtc_helper.so"
+            [ -f "$f" ] || { echo "::error::missing $f — the APK for $abi would crash at RustLib.init()"; exit 1; }
+            echo "ok: $f"
+          done
+
+      - name: Show freshly-built libs
+        run: ls -lhR android/app/src/main/jniLibs/
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.44.5"
+
+      - run: flutter pub get
+      - run: flutter build apk --release --flavor production
+
+      # The step above asserts the libraries were *built*; this asserts they were
+      # *packaged*. Both are needed — Gradle can silently drop a library it has.
+      - name: Verify native libraries are in the APK
+        run: ./scripts/verify_apk_native_libs.sh build/app/outputs/flutter-apk/app-production-release.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: production-apk-from-source
+          path: build/app/outputs/flutter-apk/app-production-release.apk

@@ -1,17 +1,16 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
 import 'package:taskwarrior/app/modules/splash/controllers/splash_controller.dart';
 import 'package:taskwarrior/app/utils/taskchampion/credentials_storage.dart';
-import 'package:taskwarrior/app/v3/net/origin.dart';
-import 'package:http/http.dart' as http;
+import 'package:taskwarrior/app/v3/champion/replica.dart';
+import 'package:taskwarrior/rust_bridge/api.dart';
 
 class ManageTaskChampionCredsController extends GetxController {
   final encryptionSecretController = TextEditingController();
   final clientIdController = TextEditingController();
-  final ccsyncBackendUrlController = TextEditingController();
+  final syncServerUrlController = TextEditingController();
   var profilesWidget = Get.find<SplashController>();
   RxBool isCheckingCreds = false.obs;
   RxBool taskReplica = false.obs;
@@ -25,50 +24,57 @@ class ManageTaskChampionCredsController extends GetxController {
     encryptionSecretController.text =
         await CredentialsStorage.getEncryptionSecret() ?? '';
     clientIdController.text = await CredentialsStorage.getClientId() ?? '';
-    ccsyncBackendUrlController.text =
+    syncServerUrlController.text =
         await CredentialsStorage.getApiUrl() ?? '';
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     taskReplica.value = prefs.getBool('settings_taskr_repl') ?? false;
   }
 
+  /// Validates and persists sync credentials through a single path: the native
+  /// TaskChampion sync via the Rust FFI bridge.
+  ///
+  /// The entered credentials are validated with a real [sync_] *before* they
+  /// are persisted — a successful sync confirms they are valid, while invalid
+  /// credentials raise a Rust-level exception that surfaces here as a thrown
+  /// error. This ordering guarantees we never write unverified credentials into
+  /// the active profile. (Because validation is a live sync, saving requires
+  /// connectivity to the sync server.)
   Future<int> saveCredentials() async {
-    if (taskReplica.value) {
-      profilesWidget.setTaskcCreds(
-          profilesWidget.currentProfile.value,
-          clientIdController.text,
-          encryptionSecretController.text,
-          ccsyncBackendUrlController.text);
-      return 0;
-    }
     isCheckingCreds.value = true;
-    String baseUrl = ccsyncBackendUrlController.text;
-    String uuid = clientIdController.text;
-    String encryptionSecret = encryptionSecretController.text;
     try {
-      String url =
-          '$baseUrl/tasks?email=email&origin=$origin&UUID=$uuid&encryptionSecret=$encryptionSecret';
-
-      var response = await http.get(Uri.parse(url), headers: {
-        "Content-Type": "application/json",
-      }).timeout(const Duration(seconds: 10000));
-      debugPrint("Fetch tasks response: ${response.statusCode}");
-      debugPrint("Fetch tasks body: ${response.body}");
-      if (response.statusCode == 200) {
-        List<dynamic> allTasks = jsonDecode(response.body);
-        debugPrint(allTasks.toString());
-        profilesWidget.setTaskcCreds(
-            profilesWidget.currentProfile.value,
-            clientIdController.text,
-            encryptionSecretController.text,
-            ccsyncBackendUrlController.text);
-
-        isCheckingCreds.value = false;
-        return 0;
-      } else {
-        throw Exception('Failed to load tasks');
+      final String replicaPath = await Replica.getReplicaPath();
+      await sync_(
+        taskdbDirPath: replicaPath,
+        url: syncServerUrlController.text,
+        clientId: clientIdController.text,
+        encryptionSecret: encryptionSecretController.text,
+      );
+      // Only persist after the sync has confirmed the credentials are valid.
+      profilesWidget.setTaskcCreds(
+        profilesWidget.currentProfile.value,
+        clientIdController.text,
+        encryptionSecretController.text,
+        syncServerUrlController.text,
+      );
+      // Populate the task list immediately. The home list is otherwise only
+      // filled by an explicit refresh, so right after configuring credentials
+      // the user would see an empty list (until a manual refresh or restart)
+      // even though the sync above already succeeded. Reload the sync-mode flag
+      // and sync so the freshly-synced tasks appear at once. Guarded so a
+      // transient refresh failure never flips an already-successful save.
+      try {
+        if (Get.isRegistered<HomeController>()) {
+          final homeController = Get.find<HomeController>();
+          await homeController.fetchTasksFromDB();
+          await homeController.refreshReplicaTasks();
+        }
+      } catch (refreshErr) {
+        debugPrint('Post-save replica refresh failed: $refreshErr');
       }
-    } catch (e, s) {
-      debugPrint('Error fetching tasks: $e\n $s');
+      isCheckingCreds.value = false;
+      return 0;
+    } catch (err) {
+      debugPrint('Credential check failed: $err');
       isCheckingCreds.value = false;
       return 1;
     }
@@ -78,7 +84,7 @@ class ManageTaskChampionCredsController extends GetxController {
   void onClose() {
     encryptionSecretController.dispose();
     clientIdController.dispose();
-    ccsyncBackendUrlController.dispose();
+    syncServerUrlController.dispose();
     super.onClose();
   }
 }

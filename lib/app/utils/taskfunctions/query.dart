@@ -8,6 +8,7 @@ class Query {
 
   File get _selectedSort => File('${_queryStorage.path}/selectedSort');
   File get _pendingFilter => File('${_queryStorage.path}/pendingFilter');
+  File get _statusFilter => File('${_queryStorage.path}/statusFilter');
   File get _waitingFilter => File('${_queryStorage.path}/waitingFilter');
   File get _projectFilter => File('${_queryStorage.path}/projectFilter');
   File get _tagUnion => File('${_queryStorage.path}/tagUnion');
@@ -27,6 +28,68 @@ class Query {
         ..writeAsStringSync('urgency+');
     }
     return _selectedSort.readAsStringSync();
+  }
+
+  /// The statuses the task list can be filtered to, in cycle order.
+  static const String statusPending = 'pending';
+  static const String statusCompleted = 'completed';
+  static const String statusDeleted = 'deleted';
+  /// A recurrence template. TaskChampion models this as a real status
+  /// (Pending/Completed/Deleted/Recurring), and setting a repeat moves the task
+  /// into it — so without this the task simply vanishes from every view.
+  static const String statusRecurring = 'recurring';
+
+  /// Statuses offered in TaskChampion mode, in cycle order.
+  static const List<String> replicaStatuses = <String>[
+    statusPending,
+    statusCompleted,
+    statusDeleted,
+    statusRecurring,
+  ];
+
+  /// The status the task list is currently filtered to.
+  ///
+  /// Supersedes the older boolean `pendingFilter`, which could only express
+  /// pending-vs-completed. On first read this migrates the persisted boolean
+  /// so an existing profile keeps whichever of the two it was already showing.
+  String getStatusFilter() {
+    if (!_statusFilter.existsSync()) {
+      final String migrated =
+          getPendingFilter() ? statusPending : statusCompleted;
+      _statusFilter
+        ..createSync(recursive: true)
+        ..writeAsStringSync(migrated);
+      return migrated;
+    }
+    final String value = _statusFilter.readAsStringSync().trim();
+    // Guard against a corrupt/unknown value rather than filtering to nothing.
+    return replicaStatuses.contains(value) ? value : statusPending;
+  }
+
+  void setStatusFilter(String status) {
+    if (!_statusFilter.existsSync()) {
+      _statusFilter.createSync(recursive: true);
+    }
+    _statusFilter.writeAsStringSync(status);
+    // Keep the legacy boolean in step: call sites that still read it (the
+    // local/Taskserver list, the home widget) then behave sensibly, treating
+    // "deleted" as not-pending.
+    _pendingFilter
+      ..createSync(recursive: true)
+      ..writeAsStringSync(json.encode(status == statusPending));
+  }
+
+  /// Advances to the next status in the cycle. [includeReplicaStatuses] is
+  /// false for sync modes that have neither a deleted nor a recurring view, so
+  /// those keep the original two-way pending/completed toggle.
+  void cycleStatusFilter({bool includeReplicaStatuses = false}) {
+    final String current = getStatusFilter();
+    final List<String> cycle =
+        includeReplicaStatuses ? replicaStatuses : const [statusPending, statusCompleted];
+    final int index = cycle.indexOf(current);
+    // A value outside this cycle (e.g. "deleted" while in a two-way mode)
+    // falls back to the start rather than getting stuck.
+    setStatusFilter(index == -1 ? cycle.first : cycle[(index + 1) % cycle.length]);
   }
 
   void togglePendingFilter() {

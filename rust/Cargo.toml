@@ -1,19 +1,26 @@
 [package]
 name = "tc_helper"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
 
 [lib]
 name="tc_helper"
 crate-type=["staticlib","cdylib"]
 
 [dependencies]
-taskchampion = "2.0.3"
+# Only the "server-sync" backend (the remote TaskChampion sync server, used by
+# our sync_() via ServerConfig::Remote) — NOT server-aws / server-gcp. Those
+# cloud backends dragged in the AWS + Google-Cloud SDKs → aws-lc-rs/aws-lc-sys,
+# which (a) bloats the binary, (b) needs bindgen for 32-bit ARM, and (c) fails
+# to cross-compile for iOS. server-sync uses ureq + ring, which build cleanly
+# on every target. `bundled` keeps SQLite compiled in.
+taskchampion = { version = "2.0.3", default-features = false, features = ["server-sync", "bundled"] }
 anyhow = "1.0"
 tokio = { version = "1.40", features = ["full"] }
 uuid = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
+thiserror = "1.0"                          # Structured, typed error handling
 flutter_rust_bridge = "=2.11.1"           # Rust runtime bridge
 flutter_rust_bridge_macros = "2.11.1"    # Procedural macros support
 

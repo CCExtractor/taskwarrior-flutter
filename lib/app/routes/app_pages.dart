@@ -20,6 +20,8 @@ import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
 import '../modules/reports/bindings/reports_binding.dart';
 import '../modules/reports/views/reports_view.dart';
+import '../modules/report_engine/bindings/report_engine_binding.dart';
+import '../modules/report_engine/views/report_engine_view.dart';
 import '../modules/settings/bindings/settings_binding.dart';
 import '../modules/settings/views/settings_view.dart';
 import '../modules/splash/bindings/splash_binding.dart';
@@ -76,6 +78,11 @@ class AppPages {
       name: _Paths.REPORTS,
       page: () => const ReportsView(),
       binding: ReportsBinding(),
+    ),
+    GetPage(
+      name: _Paths.REPORT_ENGINE,
+      page: () => const ReportEngineView(),
+      binding: ReportEngineBinding(),
     ),
     GetPage(
       name: _Paths.SETTINGS,

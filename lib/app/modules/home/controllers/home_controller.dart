@@ -33,17 +33,21 @@ import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/v3/champion/replica.dart';
 import 'package:taskwarrior/app/v3/champion/models/task_for_replica.dart';
 import 'package:taskwarrior/app/v3/db/task_database.dart';
-import 'package:taskwarrior/app/v3/db/update.dart';
 import 'package:taskwarrior/app/v3/models/task.dart';
-import 'package:taskwarrior/app/v3/net/fetch.dart';
 import 'package:textfield_tags/textfield_tags.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
+import 'package:taskwarrior/app/tour/safe_tour.dart';
 
 class HomeController extends GetxController {
   final SplashController splashController = Get.find<SplashController>();
   late Storage storage;
   final RxBool pendingFilter = false.obs;
+  /// Which status the list is filtered to: pending / completed / deleted /
+  /// recurring.
+  /// Supersedes [pendingFilter], which can only express the first two; that
+  /// flag is kept in step for the call sites still reading it.
+  final RxString statusFilter = Query.statusPending.obs;
   final RxBool waitingFilter = false.obs;
   final RxString projectFilter = ''.obs;
   final RxBool tagUnion = false.obs;
@@ -51,6 +55,11 @@ class HomeController extends GetxController {
   final RxSet<String> selectedTags = <String>{}.obs;
   final RxList<Task> queriedTasks = <Task>[].obs;
   final RxList<Task> searchedTasks = <Task>[].obs;
+  // Reactive mirror of the search box text. `searchedTasks` only drives the
+  // local-taskc list (TasksBuilder); the TaskChampion replica list reads
+  // `tasksFromReplica` directly, so it needs an observable query to rebuild and
+  // filter on each keystroke. Kept in sync by search()/toggleSearch().
+  final RxString searchQuery = ''.obs;
   final RxList<DateTime?> selectedDates = List<DateTime?>.filled(4, null).obs;
   final RxMap<String, TagMetadata> pendingTags = <String, TagMetadata>{}.obs;
   final RxMap<String, ProjectNode> projects = <String, ProjectNode>{}.obs;
@@ -86,6 +95,13 @@ class HomeController extends GetxController {
     taskdb = TaskDatabase();
     taskdb.open();
     getUniqueProjects();
+    // Initialize the pending/waiting filters from their persisted values.
+    // Without this the RxBool defaults to false, and the replica list view
+    // (which filters `status == pending` only when pendingFilter is true)
+    // shows completed tasks only — hiding every pending task on first load.
+    pendingFilter.value = Query(storage.tabs.tab()).getPendingFilter();
+    statusFilter.value = Query(storage.tabs.tab()).getStatusFilter();
+    waitingFilter.value = Query(storage.tabs.tab()).getWaitingFilter();
     _loadTaskChampion();
     fetchTasksFromDB();
 
@@ -99,6 +115,7 @@ class HomeController extends GetxController {
     });
     everAll([
       pendingFilter,
+      statusFilter,
       waitingFilter,
       projectFilter,
       tagUnion,
@@ -168,16 +185,6 @@ class HomeController extends GetxController {
     debugPrint("Tasks from Replica: ${tasks.length}");
   }
 
-  Future<void> refreshTasks(String clientId, String encryptionSecret) async {
-    TaskDatabase taskDatabase = TaskDatabase();
-    await taskDatabase.open();
-    List<TaskForC> tasksFromServer =
-        await fetchTasks(clientId, encryptionSecret);
-    await updateTasksInDatabase(tasksFromServer);
-    List<TaskForC> fetchedTasks = await taskDatabase.fetchTasksFromDatabase();
-    tasks.value = fetchedTasks;
-  }
-
   Future<void> fetchTasksFromDB() async {
     debugPrint("Fetching tasks from DB ${taskReplica.value}");
     await _loadTaskChampion();
@@ -224,16 +231,19 @@ class HomeController extends GetxController {
 
   void _profileSet() {
     pendingFilter.value = Query(storage.tabs.tab()).getPendingFilter();
-    if (!Query(storage.tabs.tab()).getWaitingFilter()) {
-      waitingFilter.value = Query(storage.tabs.tab()).getWaitingFilter();
-    } else {
-      Query(storage.tabs.tab()).toggleWaitingFilter();
-      waitingFilter.value = Query(storage.tabs.tab()).getWaitingFilter();
-    }
+    statusFilter.value = Query(storage.tabs.tab()).getStatusFilter();
+    // Load the persisted waiting-filter value as-is. The previous logic here
+    // toggled (and thus persisted) it to false whenever it was true, so a
+    // profile with the waiting filter enabled silently had it disabled every
+    // time the app started.
+    waitingFilter.value = Query(storage.tabs.tab()).getWaitingFilter();
     projectFilter.value = Query(storage.tabs.tab()).projectFilter();
     tagUnion.value = Query(storage.tabs.tab()).tagUnion();
     selectedSort.value = Query(storage.tabs.tab()).getSelectedSort();
-    selectedTags.addAll(Query(storage.tabs.tab()).getSelectedTags());
+    // Replace, not merge: this runs every time a profile becomes active (see
+    // refreshTaskWithNewProfile), so a plain addAll would leak the previous
+    // profile's tag filters into the new one instead of loading its own.
+    selectedTags.assignAll(Query(storage.tabs.tab()).getSelectedTags());
 
     _refreshTasks();
     pendingTags.value = _pendingTags();
@@ -300,13 +310,16 @@ class HomeController extends GetxController {
     });
 
     searchedTasks.assignAll(queriedTasks);
-    var searchTerm = searchController.text;
+    // Lowercase both sides to match search() below — this path re-runs on
+    // every sort/filter change, and when it was case-sensitive the same query
+    // returned different results before and after a refresh.
+    var searchTerm = searchController.text.toLowerCase();
     if (searchVisible.value) {
       searchedTasks.value = searchedTasks
           .where((task) =>
-              task.description.contains(searchTerm) ||
-              (task.annotations?.asList() ?? []).any(
-                  (annotation) => annotation.description.contains(searchTerm)))
+              task.description.toLowerCase().contains(searchTerm) ||
+              (task.annotations?.asList() ?? []).any((annotation) =>
+                  annotation.description.toLowerCase().contains(searchTerm)))
           .toList();
     }
     pendingTags.value = _pendingTags();
@@ -343,8 +356,14 @@ class HomeController extends GetxController {
   }
 
   void togglePendingFilter() {
-    Query(storage.tabs.tab()).togglePendingFilter();
+    // Cycle pending -> completed -> deleted -> recurring -> pending. The last
+    // two are only offered on the TaskChampion path: it is the only one that
+    // keeps deleted tasks, and the only one where setting a repeat moves a task
+    // to the `recurring` status — which would otherwise hide it from every view.
+    Query(storage.tabs.tab())
+        .cycleStatusFilter(includeReplicaStatuses: taskReplica.value);
     pendingFilter.value = Query(storage.tabs.tab()).getPendingFilter();
+    statusFilter.value = Query(storage.tabs.tab()).getStatusFilter();
     _refreshTasks();
   }
 
@@ -499,10 +518,12 @@ class HomeController extends GetxController {
     if (!searchVisible.value) {
       searchedTasks.assignAll(queriedTasks);
       searchController.text = '';
+      searchQuery.value = '';
     }
   }
 
   void search(String term) {
+    searchQuery.value = term;
     searchedTasks.assignAll(
       queriedTasks
           .where(
@@ -516,6 +537,7 @@ class HomeController extends GetxController {
   void setInitialTabIndex(int index) {
     storage.tabs.setInitialTabIndex(index);
     pendingFilter.value = Query(storage.tabs.tab()).getPendingFilter();
+    statusFilter.value = Query(storage.tabs.tab()).getStatusFilter();
     waitingFilter.value = Query(storage.tabs.tab()).getWaitingFilter();
     selectedSort.value = Query(storage.tabs.tab()).getSelectedSort();
     selectedTags.addAll(Query(storage.tabs.tab()).getSelectedTags());
@@ -538,6 +560,7 @@ class HomeController extends GetxController {
   void removeTab(int index) {
     storage.tabs.removeTab(index);
     pendingFilter.value = Query(storage.tabs.tab()).getPendingFilter();
+    statusFilter.value = Query(storage.tabs.tab()).getStatusFilter();
     waitingFilter.value = Query(storage.tabs.tab()).getWaitingFilter();
     selectedSort.value = Query(storage.tabs.tab()).getSelectedSort();
     selectedTags.addAll(Query(storage.tabs.tab()).getSelectedTags());
@@ -580,9 +603,10 @@ class HomeController extends GetxController {
           await refreshReplicaTasks();
         }
       } else if (taskchampion.value) {
-        if (clientId != null && encryptionSecret != null) {
-          await refreshTasks(clientId, encryptionSecret);
-        }
+        // CCSync HTTP sync has been retired; the local TaskChampion database is
+        // the source of truth for this mode, so reload it without a remote
+        // round-trip.
+        await fetchTasksFromDB();
       } else {
         await synchronize(context, false);
       }
@@ -676,7 +700,12 @@ class HomeController extends GetxController {
         '${splashController.baseDirectory.value.path}/profiles/${splashController.currentProfile.value}',
       ),
     );
-    _refreshTasks();
+    // Reload the filter/sort/tag state from the NEW profile's own persisted
+    // Query/storage.tabs, not just re-point storage and refresh with whatever
+    // filters happened to be in memory from the previous profile — otherwise
+    // the previous profile's project/tag/sort preferences silently carry over
+    // and get applied to the new profile's tasks.
+    _profileSet();
   }
 
   void changeInDirectory() {
@@ -686,7 +715,10 @@ class HomeController extends GetxController {
         '${splashController.baseDirectory.value.path}/profiles/${splashController.currentProfile.value}',
       ),
     );
-    _refreshTasks();
+    // Same reasoning as refreshTaskWithNewProfile: reload the filter/sort/tag
+    // state from the profile's Query/storage.tabs at the new location, rather
+    // than reusing whatever was in memory from the old base directory.
+    _profileSet();
   }
 
   RxBool useDelayTask = false.obs;
@@ -739,19 +771,17 @@ class HomeController extends GetxController {
   void showInAppTour(BuildContext context) {
     Future.delayed(
       const Duration(milliseconds: 500),
-      () {
-        SaveTourStatus.getInAppTourStatus().then((value) => {
-              if (value == false)
-                {
-                  tutorialCoachMark.show(context: context),
-                }
-              else
-                {
-                  // ignore: avoid_print
-                  debugPrint('User has seen this page'),
-                  // User has seen this page
-                }
-            });
+      () async {
+        if (await SaveTourStatus.getInAppTourStatus()) {
+          debugPrint('User has seen this page');
+          return;
+        }
+        await safeShowTour(
+          tutorialCoachMark: tutorialCoachMark,
+          context: context,
+          targetKeys: [addKey, searchKey1, filterKey, menuKey, refreshKey],
+          markSeen: () => SaveTourStatus.saveInAppTourStatus(true),
+        );
       },
     );
   }
@@ -762,6 +792,12 @@ class HomeController extends GetxController {
   final GlobalKey filterTagKey = GlobalKey();
   final GlobalKey sortByKey = GlobalKey();
 
+  /// Which projects column the filter drawer is currently showing. The two sit
+  /// behind mutually exclusive `Visibility` widgets, so only one of
+  /// [projectsKey] / [projectsKeyTaskc] is ever laid out.
+  bool get usesTaskchampionProjects =>
+      taskchampion.value || taskReplica.value;
+
   void initFilterDrawerTour() {
     tutorialCoachMark = TutorialCoachMark(
       targets: filterDrawer(
@@ -770,6 +806,7 @@ class HomeController extends GetxController {
         projectsKeyTaskc: projectsKeyTaskc,
         filterTagKey: filterTagKey,
         sortByKey: sortByKey,
+        useTaskchampionProjects: usesTaskchampionProjects,
       ),
       colorShadow: TaskWarriorColors.black,
       paddingFocus: 10,
@@ -784,18 +821,24 @@ class HomeController extends GetxController {
   void showFilterDrawerTour(BuildContext context) {
     Future.delayed(
       const Duration(milliseconds: 500),
-      () {
-        SaveTourStatus.getFilterTourStatus().then((value) => {
-              if (value == false)
-                {
-                  tutorialCoachMark.show(context: context),
-                }
-              else
-                {
-                  // ignore: avoid_print
-                  print('User has seen this page'),
-                }
-            });
+      () async {
+        if (await SaveTourStatus.getFilterTourStatus()) {
+          debugPrint('User has seen this page');
+          return;
+        }
+        await safeShowTour(
+          tutorialCoachMark: tutorialCoachMark,
+          context: context,
+          targetKeys: [
+            statusKey,
+            // Only the column actually on screen; the other key is never laid
+            // out, so requiring it would suppress the tour permanently.
+            usesTaskchampionProjects ? projectsKeyTaskc : projectsKey,
+            filterTagKey,
+            sortByKey,
+          ],
+          markSeen: () => SaveTourStatus.saveFilterTourStatus(true),
+        );
       },
     );
   }
@@ -816,15 +859,20 @@ class HomeController extends GetxController {
   }
 
   void showTaskSwipeTutorial(BuildContext context) {
-    SaveTourStatus.getTaskSwipeTutorialStatus().then((value) {
-      print("value is $value");
-      print("tasks is ${tasks.isNotEmpty}");
-      if (value == false) {
-        initTaskSwipeTutorial();
-        tutorialCoachMark.show(context: context);
-      } else {
+    SaveTourStatus.getTaskSwipeTutorialStatus().then((value) async {
+      if (value) {
         debugPrint('User has already seen the task swipe tutorial');
+        return;
       }
+      initTaskSwipeTutorial();
+      // This tour points at a task row, so it has nothing to highlight on an
+      // empty list — the guard turns that into a skip rather than a throw.
+      await safeShowTour(
+        tutorialCoachMark: tutorialCoachMark,
+        context: context,
+        targetKeys: [taskItemKey],
+        markSeen: () => SaveTourStatus.saveTaskSwipeTutorialStatus(true),
+      );
     });
   }
 
