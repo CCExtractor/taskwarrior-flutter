@@ -105,7 +105,22 @@ class _ReportBuilderSheetState extends State<ReportBuilderSheet> {
     }
   }
 
+  /// Whether the expression already carries [token]. Tokens AND together, so
+  /// a repeated virtual tag is pure noise and a second `attr:` token can only
+  /// contradict the first (`status:pending status:completed` matches nothing) —
+  /// either way there is nothing for a second tap to add. Case-insensitive
+  /// because the engine is: `+active` and `+ACTIVE` are the same filter.
+  bool _tokenPresent(String token) {
+    final String want = token.toLowerCase();
+    final bool isAttributePrefix = token.endsWith(':');
+    return _filter.text
+        .split(RegExp(r'\s+'))
+        .map((t) => t.toLowerCase())
+        .any((t) => isAttributePrefix ? t.startsWith(want) : t == want);
+  }
+
   void _insertToken(String token) {
+    if (_tokenPresent(token)) return;
     final String current = _filter.text.trimRight();
     final String next = current.isEmpty ? token : '$current $token';
     _filter.text = next;
@@ -196,10 +211,15 @@ class _ReportBuilderSheetState extends State<ReportBuilderSheet> {
               spacing: 6,
               runSpacing: 4,
               children: [
+                // A chip whose token is already in the expression is disabled
+                // rather than left looking tappable-but-inert; the chip row
+                // rebuilds on every keystroke, so this tracks hand-edits too.
                 for (final String t in VirtualFilterEngine.virtualTags)
-                  _chip(c, '+$t', () => _insertToken('+$t')),
+                  _chip(c, '+$t',
+                      _tokenPresent('+$t') ? null : () => _insertToken('+$t')),
                 for (final String a in VirtualFilterEngine.attributes)
-                  _chip(c, '$a:', () => _insertToken('$a:')),
+                  _chip(c, '$a:',
+                      _tokenPresent('$a:') ? null : () => _insertToken('$a:')),
               ],
             ),
 
@@ -314,12 +334,17 @@ class _ReportBuilderSheetState extends State<ReportBuilderSheet> {
         ),
       );
 
-  Widget _chip(TaskwarriorColorTheme c, String label, VoidCallback onTap) =>
+  Widget _chip(TaskwarriorColorTheme c, String label, VoidCallback? onTap) =>
       ActionChip(
         label: Text(label,
             style: GoogleFonts.poppins(
-                fontSize: 11, color: c.primaryTextColor)),
+                fontSize: 11,
+                color: onTap == null
+                    ? c.secondaryTextColor
+                    : c.primaryTextColor)),
         backgroundColor: c.secondaryBackgroundColor,
+        // Null disables the chip — Flutter renders it non-interactive, which
+        // is the honest state for a token the expression already contains.
         onPressed: onTap,
         visualDensity: VisualDensity.compact,
       );
