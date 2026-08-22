@@ -144,10 +144,41 @@ class _ReportBuilderSheetState extends State<ReportBuilderSheet> {
       isCustom: true,
     );
 
+    final String newName = draft.name;
+    final String? oldName = widget.existing?.name;
+
+    // Refuse to silently clobber a different custom report. mergeReport
+    // replaces same-name blocks, so without this check "Create" with a taken
+    // name quietly destroyed the report already stored under it. Shadowing a
+    // *default* name stays allowed — that is how Taskwarrior overrides work,
+    // and the sheet already shows a hint for it.
+    final bool clobbersOtherCustom = newName != oldName &&
+        widget.controller.reports
+            .any((r) => r.isCustom && r.name == newName);
+    if (clobbersOtherCustom) {
+      setState(() => _error =
+          'A report named "$newName" already exists — pick another name, '
+          'or edit that report instead.');
+      return;
+    }
+
     final String? error = await widget.controller.saveReport(draft);
     if (error != null) {
       setState(() => _error = error);
       return;
+    }
+
+    // A rename writes a block under the new name; the old block must go too,
+    // or the report comes back duplicated under both names.
+    if (oldName != null && oldName != newName) {
+      final String? deleteError =
+          await widget.controller.deleteReport(oldName);
+      if (deleteError != null) {
+        setState(() => _error =
+            'Saved as "$newName", but the old "$oldName" could not be '
+            'removed: $deleteError');
+        return;
+      }
     }
     if (mounted) Navigator.of(context).pop(true);
   }
