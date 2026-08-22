@@ -174,30 +174,7 @@ fn update_task_impl(
                     );
                 }
                 "status" => {
-                    let status = match value.as_str() {
-                        "pending" => taskchampion::Status::Pending,
-                        "completed" => taskchampion::Status::Completed,
-                        "deleted" => taskchampion::Status::Deleted,
-                        // A recurrence template. Without this arm "recurring"
-                        // fell into the catch-all below and was silently
-                        // downgraded to Pending, so the status could not be set
-                        // at all — and the Taskwarrior CLI only generates
-                        // instances for a task whose status is `recurring`.
-                        "recurring" => taskchampion::Status::Recurring,
-                        // Refuse rather than coerce. This arm used to fall back
-                        // to Pending, which meant an unrecognised status was
-                        // silently downgraded instead of reported — exactly how
-                        // "recurring" went missing before it was added above.
-                        // A caller sending something unknown has a bug, and it
-                        // should be visible at the point it happens.
-                        other => {
-                            return Err(TcHelperError::InvalidInput(format!(
-                                "unknown status '{other}' — expected pending, \
-                                 completed, deleted or recurring"
-                            )))
-                        }
-                    };
-                    let _ = t.set_status(status, &mut ops);
+                    let _ = t.set_status(parse_status(&value)?, &mut ops);
                 }
                 _ => {}
             }
@@ -207,6 +184,28 @@ fn update_task_impl(
             .map_err(|e| TcHelperError::Commit(e.to_string()))?;
     }
     Ok(())
+}
+
+/// The one place a status string is turned into a `Status`.
+///
+/// Both `add_task` and `update_task` go through this. They used to carry their
+/// own idea of which statuses existed, which is how `recurring` came to be
+/// writable through one entry point and silently dropped by the other. An
+/// unrecognised value is refused rather than coerced, so a caller with a bug
+/// hears about it instead of quietly getting a pending task.
+fn parse_status(value: &str) -> Result<taskchampion::Status, TcHelperError> {
+    match value {
+        "pending" => Ok(taskchampion::Status::Pending),
+        "completed" => Ok(taskchampion::Status::Completed),
+        "deleted" => Ok(taskchampion::Status::Deleted),
+        // A recurrence template. The Taskwarrior CLI only generates instances
+        // for a task whose status is `recurring`.
+        "recurring" => Ok(taskchampion::Status::Recurring),
+        other => Err(TcHelperError::InvalidInput(format!(
+            "unknown status '{other}' — expected pending, completed, deleted \
+             or recurring"
+        ))),
+    }
 }
 
 /// Create a new task from the supplied key/value map. The map must contain a
@@ -224,6 +223,19 @@ fn add_task_impl(taskdb_dir_path: &str, map: HashMap<String, String>) -> Result<
         .get("uuid")
         .ok_or_else(|| TcHelperError::InvalidUuid("<missing>".to_string()))?;
     let uuid = Uuid::parse_str(uuid_str).map_err(|_| TcHelperError::InvalidUuid(uuid_str.clone()))?;
+
+    // Same invariant update_task enforces: Taskwarrior deletes a recurring task
+    // that has no due date the next time it runs. On a new task the map is the
+    // whole of the state, so there is nothing to read back.
+    if map.get("recur").is_some_and(|v| !v.trim().is_empty())
+        && map.get("due").and_then(|v| parse_datetime(v)).is_none()
+    {
+        return Err(TcHelperError::InvalidInput(
+            "a repeating task needs a due date — Taskwarrior deletes a \
+             recurring task that has none"
+                .to_string(),
+        ));
+    }
 
     let mut t = replica
         .create_task(uuid, &mut ops)
@@ -257,7 +269,35 @@ fn add_task_impl(taskdb_dir_path: &str, map: HashMap<String, String>) -> Result<
             "project" => {
                 let _ = t.set_user_defined_attribute("project", value, &mut ops);
             }
-            _ => {}
+            // Both of these used to fall into the catch-all below. Replica.attrs
+            // on the Dart side lists them as round-trippable and sends them
+            // through this same map, so a task created with a repeat or an
+            // explicit status had that silently discarded while the write
+            // reported success.
+            "recur" => {
+                let trimmed = value.trim();
+                let _ = t.set_value(
+                    "recur",
+                    if trimmed.is_empty() {
+                        None
+                    } else {
+                        Some(trimmed.to_string())
+                    },
+                    &mut ops,
+                );
+            }
+            "status" => {
+                let _ = t.set_status(parse_status(&value)?, &mut ops);
+            }
+            // Consumed above to create the task.
+            "uuid" => {}
+            // Every key Replica.attrs can send is handled above, so reaching
+            // here means the two sides have drifted apart. Say so.
+            other => {
+                return Err(TcHelperError::InvalidInput(format!(
+                    "unknown attribute '{other}'"
+                )))
+            }
         }
     }
     replica
@@ -1289,6 +1329,145 @@ mod status_validation_tests {
             .unwrap();
         assert_eq!(t["status"].as_str(), Some("completed"));
 
+        fs::remove_dir_all(&tmp).ok();
+    }
+}
+
+#[cfg(test)]
+mod add_task_attribute_tests {
+    //! `add_task` and `update_task` are handed the same key set — Replica.attrs
+    //! on the Dart side drives both — but add_task only implemented seven of the
+    //! nine, dropping the other two into a catch-all that returned success.
+    //! These pin the two entry points to the same contract.
+    use super::*;
+    use serde_json::Value;
+    use std::{collections::HashMap, env, fs};
+
+    fn dir() -> (std::path::PathBuf, String) {
+        let tmp = env::temp_dir().join(format!("taskdb_addattr_{}", Uuid::new_v4()));
+        fs::create_dir_all(&tmp).expect("create temp taskdb dir");
+        let path = tmp.to_string_lossy().into_owned();
+        (tmp, path)
+    }
+
+    fn add(path: &str, pairs: &[(&str, &str)]) -> (String, Result<(), String>) {
+        let uuid = Uuid::new_v4().to_string();
+        let mut map: HashMap<String, String> = pairs
+            .iter()
+            .map(|(k, v)| (k.to_string(), v.to_string()))
+            .collect();
+        map.insert("uuid".to_string(), uuid.clone());
+        map.entry("description".to_string())
+            .or_insert_with(|| "chore".to_string());
+        let res = add_task(path.to_string(), map);
+        (uuid, res)
+    }
+
+    fn field(path: &str, uuid: &str, key: &str) -> Option<String> {
+        let json = get_all_tasks_json(path.to_string()).expect("get_all_tasks_json");
+        let tasks: Vec<Value> = serde_json::from_str(&json).expect("parse json");
+        tasks
+            .into_iter()
+            .find(|t| t.get("uuid").and_then(|u| u.as_str()) == Some(uuid))
+            .and_then(|t| t.get(key).and_then(|v| v.as_str()).map(|s| s.to_string()))
+    }
+
+    fn exists(path: &str, uuid: &str) -> bool {
+        field(path, uuid, "uuid").is_some()
+    }
+
+    #[test]
+    fn status_supplied_at_creation_is_honoured() {
+        let (tmp, path) = dir();
+        // add_task sets Pending before applying the map; an explicit status has
+        // to win over that default rather than be discarded by the catch-all.
+        let (uuid, res) = add(&path, &[("status", "completed")]);
+        res.expect("add_task");
+
+        assert_eq!(field(&path, &uuid, "status").as_deref(), Some("completed"));
+        fs::remove_dir_all(&tmp).ok();
+    }
+
+    #[test]
+    fn recur_supplied_at_creation_is_stored() {
+        let (tmp, path) = dir();
+        let (uuid, res) = add(
+            &path,
+            &[
+                ("recur", "weekly"),
+                ("due", "2026-09-01T09:00:00Z"),
+                ("status", "recurring"),
+            ],
+        );
+        res.expect("add_task");
+
+        assert_eq!(field(&path, &uuid, "recur").as_deref(), Some("weekly"));
+        assert_eq!(field(&path, &uuid, "status").as_deref(), Some("recurring"));
+        fs::remove_dir_all(&tmp).ok();
+    }
+
+    #[test]
+    fn recur_without_a_due_date_is_refused_at_creation() {
+        let (tmp, path) = dir();
+        // update_task already refuses this. Creation had no such check, so the
+        // same task the editor cannot produce could be created outright — and
+        // the CLI deletes it on the next run.
+        let (uuid, res) = add(&path, &[("recur", "weekly")]);
+
+        let err = res.expect_err("must be refused");
+        assert!(err.contains("needs a due date"), "unhelpful: {err}");
+        assert!(!exists(&path, &uuid), "nothing should have been created");
+        fs::remove_dir_all(&tmp).ok();
+    }
+
+    #[test]
+    fn unknown_status_is_refused_at_creation() {
+        let (tmp, path) = dir();
+        let (uuid, res) = add(&path, &[("status", "archived")]);
+
+        let err = res.expect_err("must be refused");
+        assert!(err.contains("unknown status 'archived'"), "unhelpful: {err}");
+        assert!(!exists(&path, &uuid), "nothing should have been created");
+        fs::remove_dir_all(&tmp).ok();
+    }
+
+    #[test]
+    fn an_attribute_neither_side_agrees_on_is_refused() {
+        let (tmp, path) = dir();
+        // The failure this guards against is silent drift: Dart grows an entry
+        // in attrs, Rust does not, and the write reports success either way.
+        let (uuid, res) = add(&path, &[("energy", "high")]);
+
+        let err = res.expect_err("must be refused");
+        assert!(err.contains("unknown attribute 'energy'"), "unhelpful: {err}");
+        assert!(!exists(&path, &uuid), "nothing should have been created");
+        fs::remove_dir_all(&tmp).ok();
+    }
+
+    #[test]
+    fn every_attribute_the_dart_side_can_send_is_accepted() {
+        let (tmp, path) = dir();
+        // Mirrors Replica.attrs plus the two keys the Dart layer adds itself.
+        // If this fails, the catch-all above will be rejecting a real write.
+        let (uuid, res) = add(
+            &path,
+            &[
+                ("description", "full sweep"),
+                ("due", "2026-09-01T09:00:00Z"),
+                ("start", "2026-08-01T09:00:00Z"),
+                ("wait", "2026-08-20T09:00:00Z"),
+                ("priority", "H"),
+                ("project", "home"),
+                ("status", "recurring"),
+                ("recur", "monthly"),
+                ("tags", "one two"),
+            ],
+        );
+        res.expect("every declared attribute must be accepted");
+
+        assert_eq!(field(&path, &uuid, "description").as_deref(), Some("full sweep"));
+        assert_eq!(field(&path, &uuid, "project").as_deref(), Some("home"));
+        assert_eq!(field(&path, &uuid, "recur").as_deref(), Some("monthly"));
         fs::remove_dir_all(&tmp).ok();
     }
 }
