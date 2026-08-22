@@ -342,7 +342,10 @@ class AddTaskBottomSheet extends StatelessWidget {
       var task = TaskForC(
           description: homeController.namecontroller.text.trim(),
           status: 'pending',
-          priority: homeController.priority.value,
+          // 'X' is the "no priority" chip, not a priority — leave unset.
+          priority: homeController.priority.value == 'X'
+              ? null
+              : homeController.priority.value,
           entry: DateTime.now().toIso8601String(),
           id: 0,
           project: homeController.projectcontroller.text != ""
@@ -392,7 +395,11 @@ class AddTaskBottomSheet extends StatelessWidget {
         var task = taskParser(homeController.namecontroller.text.trim())
             .rebuild((b) =>
                 b..due = getDueDate(homeController.selectedDates)?.toUtc())
-            .rebuild((p) => p..priority = homeController.priority.value)
+            .rebuild((p) => p
+              // 'X' is the "no priority" chip, not a priority — leave unset.
+              ..priority = homeController.priority.value == 'X'
+                  ? null
+                  : homeController.priority.value)
             .rebuild((t) => t..project = homeController.projectcontroller.text)
             .rebuild((t) =>
                 t..wait = getWaitDate(homeController.selectedDates)?.toUtc())
@@ -480,7 +487,12 @@ class AddTaskBottomSheet extends StatelessWidget {
             await Replica.addTaskToReplica(HashMap<String, dynamic>.from({
           "description": homeController.namecontroller.text.trim(),
           "due": getDueDate(homeController.selectedDates)?.toUtc(),
-          "priority": homeController.priority.value,
+          // 'X' is the "no priority" chip, a UI sentinel — it used to be sent
+          // as-is and stored as a literal priority the desktop CLI has no idea
+          // what to do with (Taskwarrior priorities are H, M and L).
+          "priority": homeController.priority.value == 'X'
+              ? null
+              : homeController.priority.value,
           "project": homeController.projectcontroller.text != ""
               ? homeController.projectcontroller.text
               : null,

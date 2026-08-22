@@ -72,7 +72,11 @@ class TaskcDetailsController extends GetxController {
       description = (task.description ?? '').obs;
       project = (task.project ?? 'None').obs;
       status = (task.status ?? '').obs;
-      priority = (task.priority ?? 'None').obs;
+      // Normalise the sentinels older builds stored as literal priorities ('X'
+      // from the add sheet's "no priority" chip, 'None' from this screen) so
+      // they render as None, sit on a real radio option, and get cleared from
+      // the replica on the next save.
+      priority = _displayPriority(task.priority).obs;
       // TaskForReplica stores epoch seconds; convert to ISO string for formatting
       debugPrint('Replica task due: ${task.due}');
       due = formatDate(task.due).obs;
@@ -497,6 +501,13 @@ class TaskcDetailsController extends GetxController {
     previousTags.removeWhere((item) => itemsToMove.contains(item));
   }
 
+  static String _displayPriority(String? stored) {
+    if (stored == null || stored.isEmpty || stored == 'X' || stored == 'None') {
+      return 'None';
+    }
+    return stored;
+  }
+
   Future<void> saveTask() async {
     bool is24hrFormat = AppSettings.use24HourFormatRx.value;
     final datePattern = is24hrFormat
@@ -587,7 +598,11 @@ class TaskcDetailsController extends GetxController {
         description: description.string.isNotEmpty ? description.string : null,
         tags: tags.isNotEmpty ? tags.toList() : null,
         uuid: initialTask.uuid ?? '',
-        priority: priority.string.isNotEmpty ? priority.string : null,
+        // 'None' maps to an empty string, which the FFI treats as removal —
+        // null would simply drop the key from the payload, so picking None
+        // used to store the literal string "None" and a clear never
+        // transmitted (the same trap recur had).
+        priority: priority.string == 'None' ? '' : priority.string,
         project: project.string != 'None' ? project.string : null,
         // Sent as part of the same edit rather than as its own write, because
         // the FFI validates recurrence against the due date — and the user may
