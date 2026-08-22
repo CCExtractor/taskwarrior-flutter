@@ -107,6 +107,55 @@ void main() {
     expect(chip(tester, '+READY').onPressed, isNotNull);
   });
 
+  testWidgets('creating a report under a taken custom name is refused',
+      (tester) async {
+    final ReportEngineController controller =
+        Get.find<ReportEngineController>();
+    controller.reports.assignAll([
+      ReportDefinition(
+        name: 'mine',
+        description: 'mine',
+        filterExpression: '+OVERDUE',
+        sortCriteria: SortCriterion.parseList('due+'),
+        columns: ColumnSpec.parseList('id,description'),
+        isCustom: true,
+      ),
+    ]);
+    await pump(tester);
+
+    await tester.enterText(find.byType(TextField).at(0), 'mine');
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Create'));
+    await tester.pumpAndSettle();
+
+    // Refused with an explanation instead of silently replacing the stored
+    // report (mergeReport clobbers same-name blocks).
+    expect(find.textContaining('already exists'), findsOneWidget);
+  });
+
+  testWidgets('re-saving an edited report under its own name is not refused',
+      (tester) async {
+    final ReportDefinition mine = ReportDefinition(
+      name: 'mine',
+      description: 'mine',
+      filterExpression: '+OVERDUE',
+      sortCriteria: SortCriterion.parseList('due+'),
+      columns: ColumnSpec.parseList('id,description'),
+      isCustom: true,
+    );
+    final ReportEngineController controller =
+        Get.find<ReportEngineController>();
+    controller.reports.assignAll([mine]);
+    await pump(tester, existing: mine);
+
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+
+    // Its own name is the normal update path, not a clobber. (The actual file
+    // write fails in the test environment; the point is which error we get.)
+    expect(find.textContaining('already exists'), findsNothing);
+  });
+
   testWidgets('editing an existing report opens with its tokens disabled',
       (tester) async {
     await pump(
