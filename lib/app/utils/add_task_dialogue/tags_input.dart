@@ -8,11 +8,19 @@ class AddTaskTagsInput extends StatefulWidget {
   final Iterable<String> initialTags;
   final Function(List<String>)? onTagsChanges;
 
+  /// Fires with the raw field text on every keystroke. A tag only enters the
+  /// committed list on enter, a separator, or a suggestion tap — so text still
+  /// sitting in the field when the parent saves is invisible through
+  /// [onTagsChanges] alone, and every caller was silently dropping it. The
+  /// parent mirrors this and flushes it as a final tag at save time.
+  final Function(String)? onTextChanged;
+
   const AddTaskTagsInput(
       {super.key,
       this.suggestions = const Iterable.empty(),
       this.initialTags = const Iterable.empty(),
-      this.onTagsChanges});
+      this.onTagsChanges,
+      this.onTextChanged});
 
   @override
   _AddTaskTagsInputState createState() => _AddTaskTagsInputState();
@@ -25,6 +33,13 @@ class _AddTaskTagsInputState extends State<AddTaskTagsInput> {
   void initState() {
     super.initState();
     stringTagController = StringTagController();
+    // Registered once here — this used to happen in build(), which stacked a
+    // fresh listener on every rebuild.
+    stringTagController.addListener(() {
+      if (widget.onTagsChanges != null) {
+        widget.onTagsChanges!(stringTagController.getTags!);
+      }
+    });
   }
 
   @override
@@ -36,14 +51,10 @@ class _AddTaskTagsInputState extends State<AddTaskTagsInput> {
   @override
   Widget build(BuildContext context) {
     const paddingX = 12;
-    stringTagController.addListener(() {
-      if (widget.onTagsChanges != null) {
-        widget.onTagsChanges!(stringTagController.getTags!);
-      }
-    });
     return Autocomplete<String>(
       onSelected: (String value) {
         stringTagController.onTagSubmitted(value);
+        widget.onTextChanged?.call('');
       },
       optionsViewBuilder: (context, onAutoCompleteSelect, options) {
         return Align(
@@ -140,8 +151,14 @@ class _AddTaskTagsInputState extends State<AddTaskTagsInput> {
                         ))
                     : null,
               ),
-              onChanged: inputFieldValues.onTagChanged,
-              onFieldSubmitted: inputFieldValues.onTagSubmitted,
+              onChanged: (value) {
+                inputFieldValues.onTagChanged(value);
+                widget.onTextChanged?.call(value);
+              },
+              onFieldSubmitted: (value) {
+                inputFieldValues.onTagSubmitted(value);
+                widget.onTextChanged?.call('');
+              },
             );
           },
         );

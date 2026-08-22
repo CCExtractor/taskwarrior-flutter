@@ -219,7 +219,22 @@ class AddTaskBottomSheet extends StatelessWidget {
   Widget buildTagsInput(BuildContext context) => AddTaskTagsInput(
         suggestions: homeController.allTagsInCurrentTasks,
         onTagsChanges: (p0) => homeController.tags.value = p0,
+        // Mirror the uncommitted field text so save can flush it — a tag only
+        // enters `tags` on enter or a separator, and text still in the field
+        // at save time used to be silently thrown away.
+        onTextChanged: (text) => homeController.tagcontroller.text = text,
       );
+
+  /// A tag typed but not yet submitted lives only in the text field. Saving is
+  /// as clear a submission as pressing enter, so adopt it instead of dropping
+  /// it. Trim is enough: the field splits on space and comma, so pending text
+  /// can never contain a separator.
+  void _adoptPendingTag() {
+    final String pending = homeController.tagcontroller.text.trim();
+    if (pending.isNotEmpty && !homeController.tags.contains(pending)) {
+      homeController.tags.add(pending);
+    }
+  }
 
   Widget buildDatePicker(BuildContext context) => AddTaskDatePickerInput(
         onDateChanges: (List<DateTime?> p0) {
@@ -321,6 +336,7 @@ class AddTaskBottomSheet extends StatelessWidget {
   }
 
   void onSaveButtonClickedTaskC(BuildContext context) async {
+    _adoptPendingTag();
     if (homeController.formKey.currentState!.validate()) {
       debugPrint("tags ${homeController.tags}");
       var task = TaskForC(
@@ -370,6 +386,7 @@ class AddTaskBottomSheet extends StatelessWidget {
   }
 
   void onSaveButtonClicked(BuildContext context) async {
+    _adoptPendingTag();
     if (homeController.formKey.currentState!.validate()) {
       try {
         var task = taskParser(homeController.namecontroller.text.trim())
@@ -456,6 +473,7 @@ class AddTaskBottomSheet extends StatelessWidget {
   }
 
   void onSaveButtonClickedForReplica(BuildContext context) async {
+    _adoptPendingTag();
     if (homeController.formKey.currentState!.validate()) {
       try {
         final String? error =

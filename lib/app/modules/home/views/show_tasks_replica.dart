@@ -11,6 +11,7 @@ import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/v3/champion/replica.dart';
 import 'package:taskwarrior/app/v3/champion/models/task_for_replica.dart';
+import 'package:taskwarrior/app/utils/taskchampion/virtual_filter_engine.dart';
 
 class TaskReplicaViewBuilder extends StatelessWidget {
   const TaskReplicaViewBuilder({
@@ -41,7 +42,13 @@ class TaskReplicaViewBuilder extends StatelessWidget {
     // it must NOT be an Obx (an Obx with no observable read throws ObxError).
     List<TaskForReplica> tasks = List<TaskForReplica>.from(replicaTasks);
       if (project != null && project!.isNotEmpty && project != 'All Projects') {
-        tasks = tasks.where((task) => task.project == project).toList();
+        // Same hierarchy rule as report filters: selecting "work" includes
+        // "work.sub". An exact match here made the drawer disagree with the
+        // report engine (and with desktop Taskwarrior) about the same project.
+        tasks = tasks
+            .where((task) =>
+                VirtualFilterEngine.projectMatches(task.project, project!))
+            .toList();
       }
       tasks = tasks.where((task) => task.status == statusFilter).toList();
 
