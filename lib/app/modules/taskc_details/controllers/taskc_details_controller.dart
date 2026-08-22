@@ -70,7 +70,12 @@ class TaskcDetailsController extends GetxController {
       isBlocking = false.obs;
     } else if (task is TaskForReplica) {
       description = (task.description ?? '').obs;
-      project = (task.project ?? 'None').obs;
+      // Empty-string is what an older build stored when the project field was
+      // cleared; render it as None like a missing one.
+      project = ((task.project == null || task.project!.isEmpty)
+              ? 'None'
+              : task.project!)
+          .obs;
       status = (task.status ?? '').obs;
       // Normalise the sentinels older builds stored as literal priorities ('X'
       // from the add sheet's "no priority" chip, 'None' from this screen) so
@@ -537,7 +542,11 @@ class TaskcDetailsController extends GetxController {
       final modifiedTask = TaskForReplica(
         modified: nowEpoch,
         due: () {
-          if (due.string == 'None' || due.string.isEmpty) return null;
+          // Empty transmits the clear (the FFI removes the date); null would
+          // drop the key and the old date would silently survive. A parse
+          // failure still returns null — omitting is the safe direction there,
+          // since sending '' would delete a date the user never asked to lose.
+          if (due.string == 'None' || due.string.isEmpty) return '';
           try {
             final parsed = DateFormat(datePattern).parse(due.string);
             return parsed.toUtc().toIso8601String();
@@ -570,7 +579,8 @@ class TaskcDetailsController extends GetxController {
           }
         }(),
         wait: () {
-          if (wait.string == 'None' || wait.string.isEmpty) return null;
+          // Same clear semantics as due.
+          if (wait.string == 'None' || wait.string.isEmpty) return '';
           try {
             final parsed = DateFormat(datePattern).parse(wait.string);
             return parsed.toUtc().toIso8601String();
@@ -596,14 +606,21 @@ class TaskcDetailsController extends GetxController {
                 ? (status.string == 'recurring' ? 'pending' : status.string)
                 : null),
         description: description.string.isNotEmpty ? description.string : null,
-        tags: tags.isNotEmpty ? tags.toList() : null,
+        // Always sent, even empty: the FFI replaces the whole tag set on every
+        // save, and null just drops the key — so deleting the last chip used
+        // to transmit nothing and the task kept its old tags.
+        tags: tags.toList(),
         uuid: initialTask.uuid ?? '',
         // 'None' maps to an empty string, which the FFI treats as removal —
         // null would simply drop the key from the payload, so picking None
         // used to store the literal string "None" and a clear never
         // transmitted (the same trap recur had).
         priority: priority.string == 'None' ? '' : priority.string,
-        project: project.string != 'None' ? project.string : null,
+        // 'None' and an emptied field both mean "no project", sent as an empty
+        // string because the FFI treats empty as removal — null drops the key
+        // and transmits nothing, so clearing a project used to either do
+        // nothing or (via an emptied field) store a project literally named "".
+        project: project.string == 'None' ? '' : project.string.trim(),
         // Sent as part of the same edit rather than as its own write, because
         // the FFI validates recurrence against the due date — and the user may
         // legitimately set both in one go.

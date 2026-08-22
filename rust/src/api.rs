@@ -165,7 +165,20 @@ fn update_task_impl(
                     }
                 }
                 "project" => {
-                    let _ = t.set_value("project", Some(value), &mut ops);
+                    // Empty removes, mirroring priority and recur. Storing
+                    // Some("") left a blank-valued property behind: the task
+                    // then had a project named "", which surfaced in project
+                    // lists and never matched anything.
+                    let trimmed = value.trim();
+                    let _ = t.set_value(
+                        "project",
+                        if trimmed.is_empty() {
+                            None
+                        } else {
+                            Some(trimmed.to_string())
+                        },
+                        &mut ops,
+                    );
                 }
                 // Stored like `project`: an opaque string TaskChampion keeps but
                 // never interprets. Unlike `project`, nothing in this app acts on
@@ -282,7 +295,12 @@ fn add_task_impl(taskdb_dir_path: &str, map: HashMap<String, String>) -> Result<
                 }
             }
             "project" => {
-                let _ = t.set_user_defined_attribute("project", value, &mut ops);
+                // Nothing to clear on a brand-new task; empty means "not set".
+                let trimmed = value.trim();
+                if !trimmed.is_empty() {
+                    let _ =
+                        t.set_user_defined_attribute("project", trimmed.to_string(), &mut ops);
+                }
             }
             // Both of these used to fall into the catch-all below. Replica.attrs
             // on the Dart side lists them as round-trippable and sends them
@@ -1552,6 +1570,103 @@ mod priority_tests {
         map.insert("priority".to_string(), "H".to_string());
         update_task(uuid.clone(), path.clone(), map).expect("update_task");
         assert_eq!(priority_of(&path, &uuid).as_deref(), Some("H"));
+        fs::remove_dir_all(&tmp).ok();
+    }
+}
+
+#[cfg(test)]
+mod clear_semantics_tests {
+    //! Clearing a field must remove its property, not leave a blank-valued
+    //! one behind — and the Dart side clears by sending an empty string,
+    //! because an omitted key transmits nothing at all.
+    use super::*;
+    use serde_json::Value;
+    use std::{collections::HashMap, env, fs};
+
+    fn fixture(pairs: &[(&str, &str)]) -> (std::path::PathBuf, String, String) {
+        let tmp = env::temp_dir().join(format!("taskdb_clear_{}", Uuid::new_v4()));
+        fs::create_dir_all(&tmp).expect("create temp taskdb dir");
+        let path = tmp.to_string_lossy().into_owned();
+
+        let uuid = Uuid::new_v4().to_string();
+        let mut map: HashMap<String, String> = HashMap::new();
+        map.insert("uuid".to_string(), uuid.clone());
+        map.insert("description".to_string(), "chore".to_string());
+        for (k, v) in pairs {
+            map.insert(k.to_string(), v.to_string());
+        }
+        add_task(path.clone(), map).expect("add_task");
+        (tmp, path, uuid)
+    }
+
+    fn task_json(path: &str, uuid: &str) -> Value {
+        let json = get_all_tasks_json(path.to_string()).expect("get_all_tasks_json");
+        let tasks: Vec<Value> = serde_json::from_str(&json).expect("parse json");
+        tasks
+            .into_iter()
+            .find(|t| t.get("uuid").and_then(|u| u.as_str()) == Some(uuid))
+            .expect("task exists")
+    }
+
+    fn update(path: &str, uuid: &str, pairs: &[(&str, &str)]) {
+        let map: HashMap<String, String> = pairs
+            .iter()
+            .map(|(k, v)| (k.to_string(), v.to_string()))
+            .collect();
+        update_task(uuid.to_string(), path.to_string(), map).expect("update_task");
+    }
+
+    #[test]
+    fn empty_project_on_update_removes_the_property() {
+        let (tmp, path, uuid) = fixture(&[("project", "work")]);
+        assert_eq!(
+            task_json(&path, &uuid)["project"].as_str(),
+            Some("work")
+        );
+
+        update(&path, &uuid, &[("project", "")]);
+
+        // Removed, not stored as a task whose project is named "".
+        assert!(task_json(&path, &uuid).get("project").is_none());
+        fs::remove_dir_all(&tmp).ok();
+    }
+
+    #[test]
+    fn empty_project_at_creation_is_not_stored() {
+        let (tmp, path, uuid) = fixture(&[("project", "")]);
+        assert!(task_json(&path, &uuid).get("project").is_none());
+        fs::remove_dir_all(&tmp).ok();
+    }
+
+    #[test]
+    fn empty_tags_on_update_removes_every_tag() {
+        let (tmp, path, uuid) = fixture(&[("tags", "one two")]);
+        let json = task_json(&path, &uuid);
+        let mut stored: Vec<&str> = json["tags"]
+            .as_str()
+            .unwrap_or("")
+            .split_whitespace()
+            .collect();
+        stored.sort_unstable();
+        // Order is unspecified (the taskmap is a hash map), so compare as a set.
+        assert_eq!(stored, vec!["one", "two"], "both tags stored at creation");
+
+        // The Dart side sends the full replacement set on every save; deleting
+        // the last chip makes that set empty.
+        update(&path, &uuid, &[("tags", "")]);
+
+        assert_eq!(task_json(&path, &uuid)["tags"].as_str(), Some(""));
+        fs::remove_dir_all(&tmp).ok();
+    }
+
+    #[test]
+    fn empty_due_on_update_removes_it_for_a_plain_task() {
+        let (tmp, path, uuid) = fixture(&[("due", "2026-09-01T09:00:00Z")]);
+        assert!(task_json(&path, &uuid).get("due").is_some());
+
+        update(&path, &uuid, &[("due", "")]);
+
+        assert!(task_json(&path, &uuid).get("due").is_none());
         fs::remove_dir_all(&tmp).ok();
     }
 }
