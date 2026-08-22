@@ -83,6 +83,15 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
                   '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.homePageDue}:',
                   controller.due.value,
                   () => controller.pickDateTime(controller.due),
+                  // No clear while a repeat is set: a recurring task without a
+                  // due date is exactly what the FFI refuses (the desktop CLI
+                  // deletes such a task), so don't offer the dead end.
+                  onClear: controller.isReplicaTask &&
+                          controller.due.value != 'None' &&
+                          controller.due.value.isNotEmpty &&
+                          controller.recur.value.trim().isEmpty
+                      ? () => controller.updateField(controller.due, 'None')
+                      : null,
                 ),
                 // Start / Wait: editable date pickers for replica tasks, read-only otherwise
                 if (controller.isReplicaTask) ...[
@@ -106,6 +115,10 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
                     '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageWait}:',
                     controller.wait.value,
                     () => controller.pickDateTime(controller.wait),
+                    onClear: controller.wait.value != 'None' &&
+                            controller.wait.value.isNotEmpty
+                        ? () => controller.updateField(controller.wait, 'None')
+                        : null,
                   ),
                 ] else ...[
                   _buildDetail(
@@ -266,10 +279,27 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
   }
 
   Widget _buildDatePickerDetail(
-      BuildContext context, String label, String value, VoidCallback onTap) {
-    return InkWell(
+      BuildContext context, String label, String value, VoidCallback onTap,
+      {VoidCallback? onClear}) {
+    final TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    final Widget row = InkWell(
       onTap: onTap,
       child: _buildDetail(context, label, value),
+    );
+    // The picker has no "no date" option, so without this a date, once set,
+    // could never be removed.
+    if (onClear == null) return row;
+    return Stack(
+      alignment: Alignment.centerRight,
+      children: [
+        row,
+        IconButton(
+          icon: Icon(Icons.clear, size: 18, color: tColors.secondaryTextColor),
+          tooltip: 'Clear',
+          onPressed: onClear,
+        ),
+      ],
     );
   }
 
