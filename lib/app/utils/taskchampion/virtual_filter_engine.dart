@@ -134,17 +134,22 @@ class VirtualFilterEngine {
     }).toList();
   }
 
+  /// Taskwarrior's project semantics: [selected] matches its own tasks and its
+  /// children's ("work" matches "work" and "work.sub"). A raw prefix match
+  /// would also wrongly match an unrelated sibling like "workshop", so a dot
+  /// boundary is required after the prefix. Public because the home filter
+  /// drawer must agree with report filters about what "project = X" means.
+  static bool projectMatches(String? taskProject, String selected) {
+    final String proj = taskProject ?? '';
+    return proj == selected || proj.startsWith('$selected.');
+  }
+
   static bool _matchAttribute(TaskLike task, String attr, String value) {
     switch (attr) {
       case 'status':
         return (task.status ?? '') == value;
       case 'project':
-        // Taskwarrior treats project as a hierarchy match: "work" matches
-        // "work" and its children ("work.sub"), but a raw prefix match would
-        // also wrongly match an unrelated sibling like "workshop" — require a
-        // dot boundary after the prefix.
-        final String proj = task.project ?? '';
-        return proj == value || proj.startsWith('$value.');
+        return projectMatches(task.project, value);
       case 'priority':
         return (task.priority ?? '') == value;
       default:

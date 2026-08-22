@@ -155,6 +155,30 @@ void main() {
     });
   });
 
+  group('VirtualFilterEngine.projectMatches', () {
+    // The home filter drawer calls this directly (it used to exact-match,
+    // so selecting "work" hid "work.sub" tasks the report engine showed).
+    // Pin the seam itself, not just applyFilter above it.
+    test('exact project matches', () {
+      expect(VirtualFilterEngine.projectMatches('work', 'work'), isTrue);
+    });
+    test('child project matches its parent', () {
+      expect(VirtualFilterEngine.projectMatches('work.sub', 'work'), isTrue);
+      expect(
+          VirtualFilterEngine.projectMatches('work.sub.deep', 'work'), isTrue);
+    });
+    test('a sibling sharing the prefix does not match', () {
+      expect(VirtualFilterEngine.projectMatches('workshop', 'work'), isFalse);
+    });
+    test('parent does not match when a child is selected', () {
+      expect(VirtualFilterEngine.projectMatches('work', 'work.sub'), isFalse);
+    });
+    test('no project never matches a selection', () {
+      expect(VirtualFilterEngine.projectMatches(null, 'work'), isFalse);
+      expect(VirtualFilterEngine.projectMatches('', 'work'), isFalse);
+    });
+  });
+
   group('ReportService.execute', () {
     ReportDefinition report(String name) =>
         ReportService.defaultReports.firstWhere((r) => r.name == name);

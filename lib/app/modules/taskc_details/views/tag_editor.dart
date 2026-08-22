@@ -19,6 +19,9 @@ class TagEditor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final RxList<String> tags = RxList<String>(initialTags);
+    // The raw field text, mirrored on every keystroke. A tag typed but not
+    // submitted is invisible in `tags`, and Save used to drop it silently.
+    String pendingText = '';
     return Padding(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -49,7 +52,14 @@ class TagEditor extends StatelessWidget {
                 ),
                 TextButton(
                   onPressed: () {
-                    onSave(tags);
+                    // Saving is as clear a submission as pressing enter, so a
+                    // tag still sitting in the field is adopted, not dropped.
+                    final List<String> result = List<String>.from(tags);
+                    final String pending = pendingText.trim();
+                    if (pending.isNotEmpty && !result.contains(pending)) {
+                      result.add(pending);
+                    }
+                    onSave(result);
                     Get.back();
                   },
                   child: Text(
@@ -68,6 +78,7 @@ class TagEditor extends StatelessWidget {
               initialTags: initialTags,
               suggestions: suggestions,
               onTagsChanges: (newTags) => tags.value = newTags,
+              onTextChanged: (text) => pendingText = text,
             ),
           ),
           const Padding(padding: EdgeInsets.all(20)),

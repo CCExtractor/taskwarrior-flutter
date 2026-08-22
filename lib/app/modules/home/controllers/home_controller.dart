@@ -310,13 +310,16 @@ class HomeController extends GetxController {
     });
 
     searchedTasks.assignAll(queriedTasks);
-    var searchTerm = searchController.text;
+    // Lowercase both sides to match search() below — this path re-runs on
+    // every sort/filter change, and when it was case-sensitive the same query
+    // returned different results before and after a refresh.
+    var searchTerm = searchController.text.toLowerCase();
     if (searchVisible.value) {
       searchedTasks.value = searchedTasks
           .where((task) =>
-              task.description.contains(searchTerm) ||
-              (task.annotations?.asList() ?? []).any(
-                  (annotation) => annotation.description.contains(searchTerm)))
+              task.description.toLowerCase().contains(searchTerm) ||
+              (task.annotations?.asList() ?? []).any((annotation) =>
+                  annotation.description.toLowerCase().contains(searchTerm)))
           .toList();
     }
     pendingTags.value = _pendingTags();
