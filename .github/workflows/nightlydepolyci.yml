@@ -8,6 +8,9 @@ on:
     # excluded to avoid rebuilding the APK for a site-only change.
     paths-ignore:
       - '.github/workflows/build-nightly.yml'
+  # A deploy that failed (or was skipped) can be redone by hand — without this
+  # the only way to re-deploy was an otherwise-pointless commit to main.
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
@@ -136,10 +139,20 @@ jobs:
       # Step 10b: Record the deploy and rebuild the site from this branch's own
       # source, then place it at the root. Additions only — repo/, metadata/ and
       # assets/ are untouched, so F-Droid clients are unaffected.
+      #
+      # Guarded: if the deploy branch does not carry the site yet (the website
+      # PR not merged, or ever rolled back), this step skips with a warning
+      # instead of failing. It used to die on the missing script, which
+      # cancelled the push step below — a website problem blocking the APK
+      # deploy, the one thing this workflow exists to do. When the site source
+      # IS present, a build failure is still fatal so real breakage stays loud.
       - name: Record deploy and rebuild the website
         run: |
           set -e
-          # website/ and scripts/ live on this branch, so they are on disk now.
+          if [ ! -f scripts/update_build_log.py ] || [ ! -d website ]; then
+            echo "::warning::website/ or scripts/update_build_log.py not on the deploy branch — skipping the site rebuild. The F-Droid deploy continues. (Is the website PR merged into fdroid-repo?)"
+            exit 0
+          fi
           python3 scripts/update_build_log.py success \
             "https://github.com/${{ github.repository }}/raw/fdroid-repo/repo/nightly.${{ github.run_number }}.apk" \
             "${{ github.run_number }}" "$DEPLOY_SHA" "$DEPLOY_MSG"
