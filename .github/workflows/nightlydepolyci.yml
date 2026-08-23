@@ -192,3 +192,16 @@ jobs:
 
           # Force push this new state to overwrite fdroid-repo
           git push origin temp_deploy_branch:fdroid-repo --force
+
+      # Step 12: put the local action definitions back. This job switches the
+      # work tree to the deploy branch, which does not carry .github/actions/ —
+      # and post-job steps of composite actions (rust-cache's save) resolve
+      # their action.yml from the workspace at job END. Without this, every
+      # run since the branch switch was added has ended "failure" on the post
+      # step even when the deploy itself fully succeeded — a red X that reads
+      # as a broken deploy but means nothing. `always()` so it also runs when
+      # a step after the switch genuinely failed, keeping the real error the
+      # only one reported.
+      - name: Restore local action definitions for post-job steps
+        if: always()
+        run: git checkout ${{ github.sha }} -- .github/ || true
