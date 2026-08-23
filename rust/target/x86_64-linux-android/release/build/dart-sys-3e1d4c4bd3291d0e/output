@@ -1,0 +1,34 @@
+OUT_DIR = Some(/home/runner/work/taskwarrior-flutter/taskwarrior-flutter/rust/target/x86_64-linux-android/release/build/dart-sys-3e1d4c4bd3291d0e/out)
+OPT_LEVEL = Some(3)
+TARGET = Some(x86_64-linux-android)
+HOST = Some(x86_64-unknown-linux-gnu)
+cargo:rerun-if-env-changed=CC_x86_64-linux-android
+CC_x86_64-linux-android = Some(/usr/local/lib/android/sdk/ndk/26.1.10909125/toolchains/llvm/prebuilt/linux-x86_64/bin/clang)
+RUSTC_WRAPPER = None
+cargo:rerun-if-env-changed=CC_ENABLE_DEBUG_OUTPUT
+cargo:rerun-if-env-changed=CRATE_CC_NO_DEFAULTS
+CRATE_CC_NO_DEFAULTS = None
+DEBUG = Some(false)
+cargo:rerun-if-env-changed=CFLAGS
+CFLAGS = None
+cargo:rerun-if-env-changed=TARGET_CFLAGS
+TARGET_CFLAGS = None
+cargo:rerun-if-env-changed=CFLAGS_x86_64_linux_android
+CFLAGS_x86_64_linux_android = None
+cargo:rerun-if-env-changed=CFLAGS_x86_64-linux-android
+CFLAGS_x86_64-linux-android = Some(--target=x86_64-linux-android21)
+cargo:rerun-if-env-changed=CC_SHELL_ESCAPED_FLAGS
+CC_SHELL_ESCAPED_FLAGS = None
+CARGO_ENCODED_RUSTFLAGS = Some()
+cargo:rerun-if-env-changed=AR_x86_64-linux-android
+AR_x86_64-linux-android = Some(/usr/local/lib/android/sdk/ndk/26.1.10909125/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar)
+cargo:rerun-if-env-changed=ARFLAGS
+ARFLAGS = None
+cargo:rerun-if-env-changed=TARGET_ARFLAGS
+TARGET_ARFLAGS = None
+cargo:rerun-if-env-changed=ARFLAGS_x86_64_linux_android
+ARFLAGS_x86_64_linux_android = None
+cargo:rerun-if-env-changed=ARFLAGS_x86_64-linux-android
+ARFLAGS_x86_64-linux-android = None
+cargo:rustc-link-lib=static=dart_api_dl
+cargo:rustc-link-search=native=/home/runner/work/taskwarrior-flutter/taskwarrior-flutter/rust/target/x86_64-linux-android/release/build/dart-sys-3e1d4c4bd3291d0e/out

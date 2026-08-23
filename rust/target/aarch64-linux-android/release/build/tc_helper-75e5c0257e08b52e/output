@@ -1,0 +1,3 @@
+cargo:rerun-if-changed=src/
+cargo:rerun-if-env-changed=FRB_CODEGEN
+cargo:rustc-env=TC_HELPER_PLATFORM=android

@@ -1,0 +1,43 @@
+cargo:rerun-if-env-changed=LIBSQLITE3_SYS_USE_PKG_CONFIG
+cargo:include=/home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libsqlite3-sys-0.30.1/sqlite3
+cargo:rerun-if-changed=sqlite3/sqlite3.c
+cargo:rerun-if-changed=sqlite3/wasm32-wasi-vfs.c
+cargo:rerun-if-env-changed=SQLITE_MAX_VARIABLE_NUMBER
+cargo:rerun-if-env-changed=SQLITE_MAX_EXPR_DEPTH
+cargo:rerun-if-env-changed=SQLITE_MAX_COLUMN
+cargo:rerun-if-env-changed=LIBSQLITE3_FLAGS
+OUT_DIR = Some(/home/runner/work/taskwarrior-flutter/taskwarrior-flutter/rust/target/armv7-linux-androideabi/release/build/libsqlite3-sys-523f7b8f638cd11b/out)
+OPT_LEVEL = Some(3)
+TARGET = Some(armv7-linux-androideabi)
+HOST = Some(x86_64-unknown-linux-gnu)
+cargo:rerun-if-env-changed=CC_armv7-linux-androideabi
+CC_armv7-linux-androideabi = Some(/usr/local/lib/android/sdk/ndk/26.1.10909125/toolchains/llvm/prebuilt/linux-x86_64/bin/clang)
+RUSTC_WRAPPER = None
+cargo:rerun-if-env-changed=CC_ENABLE_DEBUG_OUTPUT
+cargo:rerun-if-env-changed=CRATE_CC_NO_DEFAULTS
+CRATE_CC_NO_DEFAULTS = None
+DEBUG = Some(false)
+cargo:rerun-if-env-changed=CFLAGS
+CFLAGS = None
+cargo:rerun-if-env-changed=TARGET_CFLAGS
+TARGET_CFLAGS = None
+cargo:rerun-if-env-changed=CFLAGS_armv7_linux_androideabi
+CFLAGS_armv7_linux_androideabi = None
+cargo:rerun-if-env-changed=CFLAGS_armv7-linux-androideabi
+CFLAGS_armv7-linux-androideabi = Some(--target=armv7a-linux-androideabi21)
+cargo:rerun-if-env-changed=CC_SHELL_ESCAPED_FLAGS
+CC_SHELL_ESCAPED_FLAGS = None
+CARGO_ENCODED_RUSTFLAGS = Some()
+cargo:rerun-if-env-changed=AR_armv7-linux-androideabi
+AR_armv7-linux-androideabi = Some(/usr/local/lib/android/sdk/ndk/26.1.10909125/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar)
+cargo:rerun-if-env-changed=ARFLAGS
+ARFLAGS = None
+cargo:rerun-if-env-changed=TARGET_ARFLAGS
+TARGET_ARFLAGS = None
+cargo:rerun-if-env-changed=ARFLAGS_armv7_linux_androideabi
+ARFLAGS_armv7_linux_androideabi = None
+cargo:rerun-if-env-changed=ARFLAGS_armv7-linux-androideabi
+ARFLAGS_armv7-linux-androideabi = None
+cargo:rustc-link-lib=static=sqlite3
+cargo:rustc-link-search=native=/home/runner/work/taskwarrior-flutter/taskwarrior-flutter/rust/target/armv7-linux-androideabi/release/build/libsqlite3-sys-523f7b8f638cd11b/out
+cargo:lib_dir=/home/runner/work/taskwarrior-flutter/taskwarrior-flutter/rust/target/armv7-linux-androideabi/release/build/libsqlite3-sys-523f7b8f638cd11b/out
