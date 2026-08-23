@@ -61,3 +61,10 @@ app.*.map.json
 /windows
 /android
 /tmp
+
+# Cargo build artifacts. The deploy runner compiles the Rust FFI before it
+# switches to this branch; rust/target/ survives the switch as untracked files
+# (main's gitignore covers it, this one must too) and "git add ." swept 4318 of
+# them into the 2026-08-23 deploy. The Rust source itself also never belongs
+# on this branch.
+/rust

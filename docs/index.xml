@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Documentation on TaskWarrior Mobile</title><link>https://ccextractor.github.io/taskwarrior-flutter/docs/</link><description>Recent content in Documentation on TaskWarrior Mobile</description><generator>Hugo</generator><language>en-us</language><atom:link href="https://ccextractor.github.io/taskwarrior-flutter/docs/index.xml" rel="self" type="application/rss+xml"/><item><title>Getting started</title><link>https://ccextractor.github.io/taskwarrior-flutter/docs/getting-started/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://ccextractor.github.io/taskwarrior-flutter/docs/getting-started/</guid><description>&lt;h2 id="install-the-app"&gt;Install the app&lt;/h2&gt;
+&lt;p&gt;Grab a build from the &lt;a href="../../downloads/"&gt;downloads page&lt;/a&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Stable&lt;/strong&gt; — the latest signed APK from the GitHub &lt;a href="https://github.com/CCExtractor/taskwarrior-flutter/releases"&gt;releases page&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Nightly&lt;/strong&gt; — an automatically-built snapshot from the &lt;code&gt;main&lt;/code&gt; branch, for testing the newest changes.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;On Android you may need to allow installation from your browser or file manager the
+first time you sideload an APK.&lt;/p&gt;
+&lt;h2 id="create-your-first-task"&gt;Create your first task&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;Open the app — you land on the task list.&lt;/li&gt;
+&lt;li&gt;Tap the &lt;strong&gt;+&lt;/strong&gt; button.&lt;/li&gt;
+&lt;li&gt;Give the task a description, and optionally a project, tags, priority, and due date.&lt;/li&gt;
+&lt;li&gt;Save. The task is written to the local database immediately — no network required.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Everything you do works fully offline. Sync is optional and layered on top; set it up
+whenever you want your tasks mirrored to a server or another device.&lt;/p&gt;</description></item><item><title>Setting up sync</title><link>https://ccextractor.github.io/taskwarrior-flutter/docs/sync-setup/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://ccextractor.github.io/taskwarrior-flutter/docs/sync-setup/</guid><description>&lt;p&gt;TaskWarrior Mobile syncs through a &lt;a href="https://github.com/GothenburgBitFactory/taskchampion"&gt;TaskChampion&lt;/a&gt;
+sync server — the same protocol used by TaskWarrior 3.x on the desktop. Sync is
+&lt;strong&gt;optional and offline-first&lt;/strong&gt;: your tasks always live in a local replica, and syncing
+simply reconciles that replica with the server when you are online.&lt;/p&gt;
+&lt;h2 id="what-you-need"&gt;What you need&lt;/h2&gt;
+&lt;p&gt;Three values from your TaskChampion sync server:&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;Field&lt;/th&gt;
+					&lt;th&gt;Description&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;Sync server URL&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;The base URL of the TaskChampion server, e.g. &lt;code&gt;https://example.org/taskchampion/&lt;/code&gt;.&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;Client ID&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;A UUID identifying your replica on the server.&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;strong&gt;Encryption secret&lt;/strong&gt;&lt;/td&gt;
+					&lt;td&gt;The secret used to encrypt your data end-to-end. Only clients that share it can read your tasks.&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;The server never sees your task data in the clear — everything is encrypted locally with
+your encryption secret before it is uploaded.&lt;/p&gt;</description></item><item><title>Architecture</title><link>https://ccextractor.github.io/taskwarrior-flutter/docs/architecture/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://ccextractor.github.io/taskwarrior-flutter/docs/architecture/</guid><description>&lt;p&gt;TaskWarrior Mobile is a Flutter app sitting on top of a native Rust core, so the same
+task engine that powers TaskWarrior on the desktop runs unchanged on your phone.&lt;/p&gt;
+&lt;h2 id="layers"&gt;Layers&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;UI — Flutter (Dart).&lt;/strong&gt; Screens, navigation, and state management use
+&lt;a href="https://pub.dev/packages/get"&gt;GetX&lt;/a&gt;. This layer never talks to the network for task
+data; it reads and writes through the core.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Core — Rust (&lt;code&gt;tc_helper&lt;/code&gt;).&lt;/strong&gt; A thin wrapper around
+&lt;a href="https://github.com/GothenburgBitFactory/taskchampion"&gt;TaskChampion&lt;/a&gt; exposed to Dart
+through &lt;a href="https://github.com/fzyzcjy/flutter_rust_bridge"&gt;&lt;code&gt;flutter_rust_bridge&lt;/code&gt;&lt;/a&gt;. It
+owns task storage, mutations, and sync.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Storage &amp;amp; sync — TaskChampion.&lt;/strong&gt; Tasks live in a local replica on the device.
+Syncing reconciles that replica with a TaskChampion sync server; there is no
+bespoke HTTP API in between.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="offline-first-data-flow"&gt;Offline-first data flow&lt;/h2&gt;
+&lt;pre tabindex="0"&gt;&lt;code&gt;tap &amp;#34;complete&amp;#34; ─▶ Flutter ─▶ Rust FFI ─▶ local replica (instant, no network)
+ │
+ (later, when online)
+ ▼
+ TaskChampion sync server
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Every create, edit, and complete is committed to the local replica synchronously, so the
+UI never waits on the network. Synchronisation is a separate, best-effort step that runs
+when connectivity is available.&lt;/p&gt;</description></item><item><title>FAQ</title><link>https://ccextractor.github.io/taskwarrior-flutter/docs/faq/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://ccextractor.github.io/taskwarrior-flutter/docs/faq/</guid><description>&lt;h2 id="do-i-need-a-sync-server-to-use-the-app"&gt;Do I need a sync server to use the app?&lt;/h2&gt;
+&lt;p&gt;No. TaskWarrior Mobile is fully usable offline — tasks are stored in a local replica on
+your device. A sync server is only needed if you want your tasks mirrored to another
+device or backed up remotely.&lt;/p&gt;
+&lt;h2 id="is-my-data-encrypted"&gt;Is my data encrypted?&lt;/h2&gt;
+&lt;p&gt;Yes. When you sync, your tasks are encrypted locally with your encryption secret before
+being uploaded. The server stores only ciphertext; only clients that hold the secret can
+read your tasks.&lt;/p&gt;</description></item></channel></rss>
