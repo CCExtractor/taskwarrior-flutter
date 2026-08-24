@@ -1,0 +1,2 @@
+cargo:rerun-if-changed=/home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cbindgen-0.28.0/tests/rust
+cargo:rerun-if-changed=/home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cbindgen-0.28.0/tests/depfile
