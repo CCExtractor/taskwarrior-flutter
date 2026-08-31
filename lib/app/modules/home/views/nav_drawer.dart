@@ -86,6 +86,7 @@ class NavDrawer extends StatelessWidget {
                   currentLanguage: homeController.selectedLanguage.value,
                 ).sentences.navDrawerProfile,
                 onTap: () {
+                  Navigator.of(context).pop();
                   Get.toNamed(Routes.PROFILE);
                 },
               ),
@@ -100,6 +101,7 @@ class NavDrawer extends StatelessWidget {
                     currentLanguage: homeController.selectedLanguage.value,
                   ).sentences.navDrawerReports,
                   onTap: () {
+                    Navigator.of(context).pop();
                     Get.toNamed(Routes.REPORTS);
                   },
                 ),
@@ -115,6 +117,7 @@ class NavDrawer extends StatelessWidget {
                     currentLanguage: homeController.selectedLanguage.value,
                   ).sentences.navDrawerReports,
                   onTap: () {
+                    Navigator.of(context).pop();
                     Get.to(() => ReportsHomeTaskc());
                   },
                 ),
@@ -130,6 +133,7 @@ class NavDrawer extends StatelessWidget {
                     currentLanguage: homeController.selectedLanguage.value,
                   ).sentences.navDrawerReports,
                   onTap: () {
+                    Navigator.of(context).pop();
                     Get.to(() => ReportsHomeReplica());
                   },
                 ),
@@ -142,6 +146,7 @@ class NavDrawer extends StatelessWidget {
                   currentLanguage: homeController.selectedLanguage.value,
                 ).sentences.navDrawerAbout,
                 onTap: () {
+                  Navigator.of(context).pop();
                   Get.toNamed(Routes.ABOUT);
                 },
               ),
@@ -153,6 +158,7 @@ class NavDrawer extends StatelessWidget {
                   currentLanguage: homeController.selectedLanguage.value,
                 ).sentences.navDrawerSettings,
                 onTap: () async {
+                  Navigator.of(context).pop();
                   final SharedPreferences prefs =
                       await SharedPreferences.getInstance();
                   homeController.syncOnStart.value =
