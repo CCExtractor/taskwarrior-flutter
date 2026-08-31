@@ -39,6 +39,7 @@ class SettingsPageSelectDirectoryListTile extends StatelessWidget {
         ),
       ),
       subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Obx(
             () => Text(
