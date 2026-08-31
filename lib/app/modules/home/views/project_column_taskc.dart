@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
@@ -65,17 +66,27 @@ class ProjectColumnTaskc extends StatelessWidget {
           ),
         ),
         ProjectTileTaskc(
-            project: SentenceManager(
-              currentLanguage: AppSettings.selectedLanguage,
-            ).sentences.allProjects,
+            project: '',
             projectFilter: projectFilter,
-            callback: callback),
+            callback: callback,
+            displayName: SentenceManager(
+              currentLanguage: AppSettings.selectedLanguage,
+            ).sentences.allProjects),
+        ProjectTileTaskc(
+            project: HomeController.noProjectValue,
+            projectFilter: projectFilter,
+            callback: (val) => callback(val),
+            displayName: SentenceManager(
+              currentLanguage: AppSettings.selectedLanguage,
+            ).sentences.noProject),
         if (projects.isNotEmpty)
-          ...projects.map((entry) => ProjectTileTaskc(
-                project: entry,
-                projectFilter: projectFilter,
-                callback: callback,
-              ))
+          ...projects
+              .where((entry) => entry.isNotEmpty)
+              .map((entry) => ProjectTileTaskc(
+                    project: entry,
+                    projectFilter: projectFilter,
+                    callback: callback,
+                  ))
         else
           Column(
             children: [
@@ -105,11 +116,13 @@ class ProjectTileTaskc extends StatelessWidget {
     required this.project,
     required this.projectFilter,
     required this.callback,
+    this.displayName,
   });
 
   final String project;
   final String projectFilter;
   final void Function(String) callback;
+  final String? displayName;
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +139,7 @@ class ProjectTileTaskc extends StatelessWidget {
             onChanged: (_) => callback(project),
           ),
           Text(
-            project,
+            displayName ?? project,
             style: TextStyle(
               color: tColors.primaryTextColor,
             ),

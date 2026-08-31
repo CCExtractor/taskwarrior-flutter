@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
@@ -63,24 +64,58 @@ class ProjectsColumn extends StatelessWidget {
             ],
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+        GestureDetector(
+          onTap: () => callback(''),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(SentenceManager(
-                      currentLanguage: AppSettings.selectedLanguage).sentences.allProjects,
-                  style: TextStyle(
-                    fontFamily: FontFamily.poppins,
-                    fontSize: TaskWarriorFonts.fontSizeSmall,
-                    color: tColors.primaryTextColor,
-                  )),
+              Radio(
+                activeColor: tColors.primaryTextColor,
+                focusColor: tColors.secondaryTextColor,
+                toggleable: true,
+                value: '',
+                groupValue: projectFilter,
+                onChanged: (_) => callback(''),
+              ),
+              Text(
+                SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                    .sentences
+                    .allProjects,
+                style: GoogleFonts.poppins(
+                  color: tColors.primaryTextColor,
+                ),
+              ),
+            ],
+          ),
+        ),
+        GestureDetector(
+          onTap: () => callback(HomeController.noProjectValue),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Radio(
+                activeColor: tColors.primaryTextColor,
+                focusColor: tColors.secondaryTextColor,
+                toggleable: true,
+                value: HomeController.noProjectValue,
+                groupValue: projectFilter,
+                onChanged: (_) => callback(HomeController.noProjectValue),
+              ),
+              Text(
+                SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+                    .sentences
+                    .noProject,
+                style: GoogleFonts.poppins(
+                  color: tColors.primaryTextColor,
+                ),
+              ),
             ],
           ),
         ),
         if (projects.isNotEmpty)
           ...projects.entries
-              .where((entry) => entry.value.parent == null)
+              .where((entry) =>
+                  entry.value.parent == null && entry.key.isNotEmpty)
               .map((entry) => ProjectTile(
                     project: entry.key,
                     projects: projects,

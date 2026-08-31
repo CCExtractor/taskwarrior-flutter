@@ -212,6 +212,7 @@ abstract class Sentences {
 
   String get allProjects;
   String get noProjectsFound;
+  String get noProject;
   String get project;
 
   String get select;

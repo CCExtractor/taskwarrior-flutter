@@ -417,6 +417,8 @@ class FrenchSentences extends Sentences {
   @override
   String get noProjectsFound => 'Aucun projet trouvé';
   @override
+  String get noProject => 'Aucun Projet';
+  @override
   String get project => 'Projet';
 
   @override

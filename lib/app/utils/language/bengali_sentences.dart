@@ -414,6 +414,8 @@ class BengaliSentences extends Sentences {
   @override
   String get noProjectsFound => 'কোনো প্রকল্প পাওয়া যায়নি';
   @override
+  String get noProject => 'কোন প্রকল্প নেই';
+  @override
   String get project => 'প্রকল্প';
 
   @override

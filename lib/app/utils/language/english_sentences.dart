@@ -404,6 +404,8 @@ class EnglishSentences extends Sentences {
   @override
   String get noProjectsFound => 'No Projects Found';
   @override
+  String get noProject => 'No Project';
+  @override
   String get project => 'Project';
 
   @override

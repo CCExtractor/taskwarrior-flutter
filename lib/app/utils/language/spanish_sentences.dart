@@ -415,6 +415,8 @@ class SpanishSentences extends Sentences {
   @override
   String get noProjectsFound => 'No se encontraron proyectos';
   @override
+  String get noProject => 'Sin Proyecto';
+  @override
   String get project => 'Proyecto';
 
   @override
