@@ -179,8 +179,10 @@ class ProfileView extends GetView<ProfileController> {
                         onPressed: () {
                           // Navigator.of(context).pop();
                           Get.back();
+                          // Convert exported data to human-readable TXT
+                          var txt = formatTasksAsTxt(tasks);
                           exportTasks(
-                            contents: tasks,
+                            contents: txt,
                             suggestedName: 'tasks-$now.txt',
                           );
                         },
