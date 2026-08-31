@@ -119,122 +119,128 @@ class DetailRouteView extends GetView<DetailRouteController> {
         return true;
       },
       child: Scaffold(
-          backgroundColor: tColors.primaryBackgroundColor,
-          appBar: AppBar(
-              leading: BackButton(color: TaskWarriorColors.white),
-              backgroundColor: Palette.kToDark,
-              title: Text(
-                '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageID}: ${(controller.modify.id == 0) ? '-' : controller.modify.id}',
-                style: TextStyle(
-                  color: TaskWarriorColors.white,
-                ),
-              )),
-          body: Padding(
-              padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-              child: Obx(
-                () => ListView(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
-                  children: [
-                    for (var entry in {
-                      'description': controller.descriptionValue.value,
-                      'status': controller.statusValue.value,
-                      'entry': controller.entryValue.value,
-                      'modified': controller.modifiedValue.value,
-                      'start': controller.startValue.value,
-                      'end': controller.endValue.value,
-                      'due': controller.dueValue.value,
-                      'wait': controller.waitValue.value,
-                      'until': controller.untilValue.value,
-                      'priority': controller.priorityValue?.value,
-                      'project': controller.projectValue?.value,
-                      'tags': controller.tagsValue?.value,
-                      'urgency': controller.urgencyValue.value,
-                    }.entries)
-                      AttributeWidget(
-                        name: entry.key,
-                        value: entry.value,
-                        callback: (newValue) =>
-                            controller.setAttribute(entry.key, newValue),
-                        waitKey: controller.waitKey,
-                        dueKey: controller.dueKey,
-                        untilKey: controller.untilKey,
-                        priorityKey: controller.priorityKey,
-                      ),
-                  ],
-                ),
-              )),
-          floatingActionButton: controller.modify.changes.isEmpty
-              ? const SizedBox.shrink()
-              : FloatingActionButton(
-                  backgroundColor: tColors.primaryTextColor,
-                  foregroundColor: tColors.secondaryBackgroundColor,
-                  splashColor: tColors.primaryTextColor,
-                  heroTag: "btn1",
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          scrollable: true,
-                          title: Text(
-                            '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.reviewChanges}:',
-                            style: TextStyle(
-                              color: tColors.primaryTextColor,
-                            ),
-                          ),
-                          content: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Text(
-                              controller.modify.changes.entries
-                                  .map((entry) => '${entry.key}:\n'
-                                      '  ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.oldChanges}: ${entry.value['old']}\n'
-                                      '  ${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.newChanges}: ${entry.value['new']}')
-                                  .toList()
-                                  .join('\n'),
-                              style: TextStyle(
-                                color: tColors.primaryTextColor,
-                              ),
-                            ),
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Get.back();
-                              },
-                              child: Text(
-                                SentenceManager(
-                                        currentLanguage:
-                                            AppSettings.selectedLanguage)
-                                    .sentences
-                                    .cancel,
-                                style: TextStyle(
-                                  color: tColors.primaryTextColor,
-                                ),
-                              ),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                controller.saveChanges();
-                              },
-                              child: Text(
-                                SentenceManager(
-                                        currentLanguage:
-                                            AppSettings.selectedLanguage)
-                                    .sentences
-                                    .submit,
-                                style: TextStyle(
-                                  color: tColors.primaryBackgroundColor,
-                                ),
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                  child: const Icon(Icons.save),
-                )),
+        backgroundColor: tColors.primaryBackgroundColor,
+        appBar: AppBar(
+            leading: BackButton(color: TaskWarriorColors.white),
+            backgroundColor: Palette.kToDark,
+            title: Text(
+              '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.detailPageID}: ${(controller.modify.id == 0) ? '-' : controller.modify.id}',
+              style: TextStyle(
+                color: TaskWarriorColors.white,
+              ),
+            )),
+        body: Padding(
+            padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+            child: Obx(
+              () => ListView(
+                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
+                children: [
+                  for (var entry in {
+                    'description': controller.descriptionValue.value,
+                    'status': controller.statusValue.value,
+                    'entry': controller.entryValue.value,
+                    'modified': controller.modifiedValue.value,
+                    'start': controller.startValue.value,
+                    'end': controller.endValue.value,
+                    'due': controller.dueValue.value,
+                    'wait': controller.waitValue.value,
+                    'until': controller.untilValue.value,
+                    'priority': controller.priorityValue?.value,
+                    'project': controller.projectValue?.value,
+                    'tags': controller.tagsValue?.value,
+                    'urgency': controller.urgencyValue.value,
+                  }.entries)
+                    AttributeWidget(
+                      name: entry.key,
+                      value: entry.value,
+                      callback: (newValue) =>
+                          controller.setAttribute(entry.key, newValue),
+                      waitKey: controller.waitKey,
+                      dueKey: controller.dueKey,
+                      untilKey: controller.untilKey,
+                      priorityKey: controller.priorityKey,
+                    ),
+                ],
+              ),
+            )),
+
+        // SAVE BUTTON — Bottom Right
+
+        floatingActionButton: Obx(() {
+          if (!controller.onEdit.value) {
+            return const SizedBox.shrink();
+          }
+
+          return FloatingActionButton(
+            onPressed: () => _showReviewChangesDialog(context, tColors),
+            backgroundColor: tColors.primaryTextColor,
+            foregroundColor: tColors.secondaryBackgroundColor,
+            splashColor: tColors.primaryTextColor,
+            child: const Icon(Icons.save),
+          );
+        }),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      ),
+    );
+  }
+
+  // REVIEW CHANGES DIALOG
+  void _showReviewChangesDialog(
+      BuildContext context, TaskwarriorColorTheme tColors) {
+    final sentences =
+        SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+            .sentences;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          scrollable: true,
+          title: Text(
+            '${sentences.reviewChanges}:',
+            style: TextStyle(color: tColors.primaryTextColor),
+          ),
+          content: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              controller.modify.changes.entries
+                  .map((entry) => '${entry.key}:\n'
+                      '  ${sentences.oldChanges}: ${entry.value['old']}\n'
+                      '  ${sentences.newChanges}: ${entry.value['new']}')
+                  .toList()
+                  .join('\n'),
+              style: TextStyle(color: tColors.primaryTextColor),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Get.back(),
+              child: Text(
+                sentences.cancel,
+                style: TextStyle(color: tColors.primaryTextColor),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Get.back();
+                controller.saveChanges();
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(sentences.taskUpdated),
+                    behavior: SnackBarBehavior.floating,
+                    duration: const Duration(seconds: 2),
+                  ),
+                );
+              },
+              child: Text(
+                sentences.submit,
+                style: const TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
