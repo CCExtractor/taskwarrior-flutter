@@ -103,7 +103,7 @@ class UrduSentences extends Sentences {
   @override
   String get navDrawerProfile => 'پروفائل';
   @override
-  String get navDrawerReports => 'رپورٹس';
+  String get navDrawerStatistics => 'اعداد و شمار';
   @override
   String get navDrawerAbout => 'کے بارے میں';
   @override
@@ -187,7 +187,7 @@ class UrduSentences extends Sentences {
   String get filterDrawerNoProjectsAvailable => 'کوئی پراجیکٹ دستیاب نہیں۔';
 
   @override
-  String get reportsPageTitle => 'رپورٹس';
+  String get reportsPageTitle => 'اعداد و شمار';
   @override
   String get reportsPageCompleted => 'مکمل';
   @override
@@ -537,6 +537,42 @@ class UrduSentences extends Sentences {
   String get reportsError => 'خرابی';
   @override
   String get reportsLoading => 'لوڈ ہو رہا ہے...';
+
+  // Statistics dashboard
+  @override
+  String get reportsRange7d => '7دن';
+  @override
+  String get reportsRange30d => '30دن';
+  @override
+  String get reportsRange3m => '3ماہ';
+  @override
+  String get reportsRange1y => '1سال';
+  @override
+  String get reportsRangeAll => 'سب';
+  @override
+  String get reportsCreated => 'بنائے گئے';
+  @override
+  String get reportsCompletionRate => 'تکمیل کی شرح';
+  @override
+  String get reportsTrendTitle => 'سرگرمی کا رجحان';
+  @override
+  String get reportsNoActivityInRange => 'اس مدت میں کوئی سرگرمی نہیں';
+  @override
+  String get reportsHeatmapTitle => 'سرگرمی';
+  @override
+  String get reportsByProjectTitle => 'منصوبے کے مطابق';
+  @override
+  String get reportsByPriorityTitle => 'ترجیح کے مطابق';
+  @override
+  String get reportsNoProject => 'کوئی منصوبہ نہیں';
+  @override
+  String get reportsNoPriority => 'کوئی ترجیح نہیں';
+  @override
+  String get reportsHeatmapLess => 'کم';
+  @override
+  String get reportsHeatmapMore => 'زیادہ';
+  @override
+  String get reportsVsPrevious => 'پچھلے کے مقابلے';
 
   // Settings strings
   @override

@@ -1,180 +1,66 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:get/get.dart';
-import 'package:taskwarrior/app/modules/reports/controllers/reports_controller.dart';
-import 'package:taskwarrior/app/modules/reports/burn_down_data.dart';
-import 'package:taskwarrior/app/modules/reports/views/burn_down_chart.dart';
+import 'package:taskwarrior/app/modules/reports/analytics_data.dart';
+import 'package:taskwarrior/app/modules/reports/views/reports_dashboard.dart';
+import 'package:taskwarrior/app/modules/reports/views/reports_page_app_bar.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
-import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
-import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:taskwarrior/app/v3/champion/models/task_for_replica.dart';
 import 'package:taskwarrior/app/v3/champion/replica.dart';
 
 class ReportsHomeReplica extends StatelessWidget {
-  // Assuming ReportsController is a singleton/shared controller
-  final ReportsController reportsController = Get.put(ReportsController());
+  const ReportsHomeReplica({super.key});
 
-  ReportsHomeReplica({super.key});
-
-  // Use the Replica method to fetch tasks
   Future<List<TaskForReplica>> fetchTasks() async {
     return await Replica.getAllTasksFromReplica();
   }
 
+  /// Replica stores `entry`/`modified` as epoch seconds. Completion time is the
+  /// `modified` value, since a completed task's last change is its completion.
+  ///
+  /// TaskChampion's `create_task` (what Add Task uses) does not stamp `entry`,
+  /// so app-created tasks carry only `modified` — fall back to it rather than
+  /// dropping the task from the stats entirely.
+  ActivityEntry? _toEntry(TaskForReplica task) {
+    final int? stamp = task.entry ?? task.modified;
+    if (stamp == null) return null;
+    final bool done = task.status == 'completed';
+    final int? modified = task.modified;
+    return ActivityEntry(
+      created:
+          DateTime.fromMillisecondsSinceEpoch(stamp * 1000, isUtc: true).toLocal(),
+      completed: (done && modified != null)
+          ? DateTime.fromMillisecondsSinceEpoch(modified * 1000, isUtc: true)
+              .toLocal()
+          : null,
+      due: DateTime.tryParse(task.due ?? '')?.toLocal(),
+      isCompleted: done,
+      project: task.project,
+      priority: task.priority,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    // You might want to call initReportsTour and showReportsTour only once
-    // or manage a separate tour for the Replica section if needed.
-    // reportsController.initReportsTour();
-    // reportsController.showReportsTour(context);
-
+    final TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    final sentences =
+        SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences;
     return FutureBuilder<List<TaskForReplica>>(
       future: fetchTasks(),
       builder: (context, snapshot) {
-        List<TaskForReplica> allTasks = snapshot.data ?? [];
-        TaskwarriorColorTheme tColors =
-            Theme.of(context).extension<TaskwarriorColorTheme>()!;
+        final List<ActivityEntry> entries = (snapshot.data ?? [])
+            .map(_toEntry)
+            .whereType<ActivityEntry>()
+            .toList();
         return Scaffold(
-          appBar: AppBar(
-            backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
-            title: Text(
-              // Title adapted for Replica reports
-              SentenceManager(currentLanguage: AppSettings.selectedLanguage)
-                  .sentences
-                  .reportsPageTitle,
-              style: GoogleFonts.poppins(color: TaskWarriorColors.white),
-            ),
-            leading: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Icon(
-                Icons.chevron_left,
-                color: TaskWarriorColors.white,
-              ),
-            ),
-            bottom: PreferredSize(
-              preferredSize: Size.fromHeight(height * 0.1),
-              child: TabBar(
-                controller: reportsController.tabController,
-                labelColor: TaskWarriorColors.white,
-                labelStyle: GoogleFonts.poppins(
-                  fontWeight: TaskWarriorFonts.medium,
-                  fontSize: TaskWarriorFonts.fontSizeSmall,
-                ),
-                unselectedLabelStyle: GoogleFonts.poppins(
-                  fontWeight: TaskWarriorFonts.light,
-                ),
-                tabs: <Widget>[
-                  Tab(
-                    key: reportsController.daily,
-                    icon: const Icon(Icons.schedule),
-                    text: SentenceManager(
-                            currentLanguage: AppSettings.selectedLanguage)
-                        .sentences
-                        .reportsPageDaily,
-                    iconMargin: const EdgeInsets.only(bottom: 0.0),
-                  ),
-                  Tab(
-                    key: reportsController.weekly,
-                    icon: const Icon(Icons.today),
-                    text: SentenceManager(
-                            currentLanguage: AppSettings.selectedLanguage)
-                        .sentences
-                        .reportsPageWeekly,
-                    iconMargin: const EdgeInsets.only(bottom: 0.0),
-                  ),
-                  Tab(
-                    key: reportsController.monthly,
-                    icon: const Icon(Icons.date_range),
-                    text: SentenceManager(
-                            currentLanguage: AppSettings.selectedLanguage)
-                        .sentences
-                        .reportsPageMonthly,
-                    iconMargin: const EdgeInsets.only(bottom: 0.0),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          appBar: ReportsPageAppBar(title: sentences.reportsPageTitle),
           backgroundColor: tColors.primaryBackgroundColor,
           body: snapshot.connectionState == ConnectionState.waiting
               ? const Center(child: CircularProgressIndicator())
-              : allTasks.isEmpty
-                  ? Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.heart_broken,
-                          color: tColors.primaryTextColor,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              SentenceManager(
-                                      currentLanguage:
-                                          AppSettings.selectedLanguage)
-                                  .sentences
-                                  .reportsPageNoTasksFound,
-                              style: GoogleFonts.poppins(
-                                fontWeight: TaskWarriorFonts.medium,
-                                fontSize: TaskWarriorFonts.fontSizeSmall,
-                                color: tColors.primaryTextColor,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              SentenceManager(
-                                      currentLanguage:
-                                          AppSettings.selectedLanguage)
-                                  .sentences
-                                  .reportsPageAddTasksToSeeReports,
-                              style: GoogleFonts.poppins(
-                                fontWeight: TaskWarriorFonts.light,
-                                fontSize: TaskWarriorFonts.fontSizeSmall,
-                                color: tColors.primaryTextColor,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    )
-                  : Builder(builder: (context) {
-                      // Reuse the tasks this screen already fetched instead of
-                      // each chart re-fetching them. Replica charts bucket by
-                      // `modified` (epoch seconds), as they did before.
-                      final entries = allTasks
-                          .where((t) => t.modified != null)
-                          .map((t) => BurnDownEntry(
-                                date: DateTime.fromMillisecondsSinceEpoch(
-                                        t.modified! * 1000,
-                                        isUtc: true)
-                                    .toLocal(),
-                                status: t.status ?? '',
-                              ))
-                          .toList();
-                      return TabBarView(
-                        controller: reportsController.tabController,
-                        children: [
-                          for (final period in BurnDownPeriod.values)
-                            BurnDownChart(
-                              entries: entries,
-                              period: period,
-                              titleSuffix: ' (Replica)',
-                              dateAxisSuffix: ' (Modified Date)',
-                            ),
-                        ],
-                      );
-                    }),
+              : entries.isEmpty
+                  ? const ReportsEmptyState()
+                  : ReportsDashboard(entries: entries),
         );
       },
     );

@@ -92,7 +92,7 @@ class BengaliSentences extends Sentences {
   @override
   String get navDrawerProfile => 'প্রোফাইল';
   @override
-  String get navDrawerReports => 'রিপোর্টস';
+  String get navDrawerStatistics => 'পরিসংখ্যান';
   @override
   String get navDrawerAbout => 'সম্পর্কে';
   @override
@@ -171,7 +171,7 @@ class BengaliSentences extends Sentences {
   @override
   String get filterDrawerStatus => 'অবস্থা';
   @override
-  String get reportsPageTitle => 'রিপোর্টস';
+  String get reportsPageTitle => 'পরিসংখ্যান';
   @override
   String get reportsPageCompleted => 'সম্পন্ন';
   @override
@@ -549,6 +549,42 @@ class BengaliSentences extends Sentences {
   String get reportsError => 'ত্রুটি';
   @override
   String get reportsLoading => 'লোড হচ্ছে...';
+
+  // Statistics dashboard
+  @override
+  String get reportsRange7d => '৭দিন';
+  @override
+  String get reportsRange30d => '৩০দিন';
+  @override
+  String get reportsRange3m => '৩মাস';
+  @override
+  String get reportsRange1y => '১বছর';
+  @override
+  String get reportsRangeAll => 'সব';
+  @override
+  String get reportsCreated => 'তৈরি করা';
+  @override
+  String get reportsCompletionRate => 'সম্পূর্ণতার হার';
+  @override
+  String get reportsTrendTitle => 'কার্যকলাপের প্রবণতা';
+  @override
+  String get reportsNoActivityInRange => 'এই সময়ে কোনো কার্যকলাপ নেই';
+  @override
+  String get reportsHeatmapTitle => 'কার্যকলাপ';
+  @override
+  String get reportsByProjectTitle => 'প্রকল্প অনুসারে';
+  @override
+  String get reportsByPriorityTitle => 'অগ্রাধিকার অনুসারে';
+  @override
+  String get reportsNoProject => 'কোনো প্রকল্প নেই';
+  @override
+  String get reportsNoPriority => 'কোনো অগ্রাধিকার নেই';
+  @override
+  String get reportsHeatmapLess => 'কম';
+  @override
+  String get reportsHeatmapMore => 'বেশি';
+  @override
+  String get reportsVsPrevious => 'আগের তুলনায়';
 
 // Settings strings
   @override

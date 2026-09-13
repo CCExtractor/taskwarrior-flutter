@@ -103,7 +103,7 @@ class HindiSentences extends Sentences {
   @override
   String get navDrawerProfile => 'प्रोफ़ाइल';
   @override
-  String get navDrawerReports => 'रिपोर्ट्स';
+  String get navDrawerStatistics => 'आंकड़े';
   @override
   String get navDrawerAbout => 'के बारे में';
   @override
@@ -186,7 +186,7 @@ class HindiSentences extends Sentences {
   @override
   String get filterDrawerNoProjectsAvailable => 'कोई परियोजना उपलब्ध नहीं।';
   @override
-  String get reportsPageTitle => 'रिपोर्ट्स';
+  String get reportsPageTitle => 'आंकड़े';
   @override
   String get reportsPageCompleted => 'पूर्ण';
   @override
@@ -534,6 +534,42 @@ class HindiSentences extends Sentences {
   String get reportsError => 'त्रुटि';
   @override
   String get reportsLoading => 'लोड हो रहा है...';
+
+  // Statistics dashboard
+  @override
+  String get reportsRange7d => '7दि';
+  @override
+  String get reportsRange30d => '30दि';
+  @override
+  String get reportsRange3m => '3म';
+  @override
+  String get reportsRange1y => '1व';
+  @override
+  String get reportsRangeAll => 'सभी';
+  @override
+  String get reportsCreated => 'बनाए गए';
+  @override
+  String get reportsCompletionRate => 'पूर्णता दर';
+  @override
+  String get reportsTrendTitle => 'गतिविधि रुझान';
+  @override
+  String get reportsNoActivityInRange => 'इस अवधि में कोई गतिविधि नहीं';
+  @override
+  String get reportsHeatmapTitle => 'गतिविधि';
+  @override
+  String get reportsByProjectTitle => 'प्रोजेक्ट अनुसार';
+  @override
+  String get reportsByPriorityTitle => 'प्राथमिकता अनुसार';
+  @override
+  String get reportsNoProject => 'कोई प्रोजेक्ट नहीं';
+  @override
+  String get reportsNoPriority => 'कोई प्राथमिकता नहीं';
+  @override
+  String get reportsHeatmapLess => 'कम';
+  @override
+  String get reportsHeatmapMore => 'अधिक';
+  @override
+  String get reportsVsPrevious => 'पिछले की तुलना में';
 
   @override
   String get settingsResetToDefault => 'डिफ़ॉल्ट पर रीसेट करें';

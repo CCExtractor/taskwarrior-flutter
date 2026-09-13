@@ -50,7 +50,7 @@ void main() {
     expect(hindi.settingsPageChangeDirectory, 'निर्देशिका बदलें');
     expect(hindi.settingsPageSetToDefault, 'डिफॉल्ट पर सेट करें');
     expect(hindi.navDrawerProfile, 'प्रोफ़ाइल');
-    expect(hindi.navDrawerReports, 'रिपोर्ट्स');
+    expect(hindi.navDrawerStatistics, 'आंकड़े');
     expect(hindi.navDrawerAbout, 'के बारे में');
     expect(hindi.navDrawerSettings, 'सेटिंग्स');
     expect(hindi.navDrawerExit, 'बाहर जाओ');
@@ -87,7 +87,7 @@ void main() {
     expect(hindi.filterDrawerUrgency, 'तत्कालता');
     expect(hindi.filterDrawerResetSort, 'सॉर्ट रीसेट करें');
     expect(hindi.filterDrawerStatus, 'स्थिती');
-    expect(hindi.reportsPageTitle, 'रिपोर्ट्स');
+    expect(hindi.reportsPageTitle, 'आंकड़े');
     expect(hindi.reportsPageCompleted, 'पूर्ण');
     expect(hindi.reportsPagePending, 'अपूर्ण');
     expect(hindi.reportsPageTasks, 'कार्य');

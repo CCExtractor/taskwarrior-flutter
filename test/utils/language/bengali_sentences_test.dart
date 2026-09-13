@@ -49,7 +49,7 @@ void main() {
     expect(bengali.settingsPageChangeDirectory, 'ডিরেক্টরি পরিবর্তন করুন');
     expect(bengali.settingsPageSetToDefault, 'ডিফল্টে সেট করুন');
     expect(bengali.navDrawerProfile, 'প্রোফাইল');
-    expect(bengali.navDrawerReports, 'রিপোর্টস');
+    expect(bengali.navDrawerStatistics, 'পরিসংখ্যান');
     expect(bengali.navDrawerAbout, 'সম্পর্কে');
     expect(bengali.navDrawerSettings, 'সেটিংস');
     expect(bengali.navDrawerExit, 'বাহির যান');
@@ -86,7 +86,7 @@ void main() {
     expect(bengali.filterDrawerUrgency, 'জরুরি');
     expect(bengali.filterDrawerResetSort, 'সাজানো রিসেট করুন');
     expect(bengali.filterDrawerStatus, 'অবস্থা');
-    expect(bengali.reportsPageTitle, 'রিপোর্টস');
+    expect(bengali.reportsPageTitle, 'পরিসংখ্যান');
     expect(bengali.reportsPageCompleted, 'সম্পন্ন');
     expect(bengali.reportsPagePending, 'মুলতুবি');
     expect(bengali.reportsPageTasks, 'টাস্ক');
