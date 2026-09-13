@@ -182,7 +182,7 @@ class HomeController extends GetxController {
   Future<void> refreshReplicaTaskList() async {
     if (!taskReplica.value) return;
     tasksFromReplica.value = await Replica.getAllTasksFromReplica();
-    debugPrint("Tasks from Replica: ${tasks.length}");
+    debugPrint("Tasks from Replica: ${tasksFromReplica.length}");
   }
 
   Future<void> fetchTasksFromDB() async {
@@ -190,7 +190,7 @@ class HomeController extends GetxController {
     await _loadTaskChampion();
     if (taskReplica.value) {
       tasksFromReplica.value = await Replica.getAllTasksFromReplica();
-      debugPrint("Tasks from Replica: ${tasks.length}");
+      debugPrint("Tasks from Replica: ${tasksFromReplica.length}");
       return;
     }
     if (taskchampion.value == false) {
@@ -212,7 +212,7 @@ class HomeController extends GetxController {
     if (!taskReplica.value) return;
     await Replica.sync();
     tasksFromReplica.value = await Replica.getAllTasksFromReplica();
-    debugPrint("Tasks from Replica: ${tasks.length}");
+    debugPrint("Tasks from Replica: ${tasksFromReplica.length}");
   }
 
   void addListenerToScrollController() {
