@@ -92,7 +92,7 @@ class FrenchSentences extends Sentences {
   @override
   String get navDrawerProfile => 'Profil';
   @override
-  String get navDrawerReports => 'Rapports';
+  String get navDrawerStatistics => 'Statistiques';
   @override
   String get navDrawerAbout => 'À propos';
   @override
@@ -171,7 +171,7 @@ class FrenchSentences extends Sentences {
   @override
   String get filterDrawerStatus => 'Statut';
   @override
-  String get reportsPageTitle => 'Rapports';
+  String get reportsPageTitle => 'Statistiques';
   @override
   String get reportsPageCompleted => 'Complété';
   @override
@@ -554,6 +554,42 @@ class FrenchSentences extends Sentences {
   String get reportsError => 'Erreur';
   @override
   String get reportsLoading => 'Chargement...';
+
+  // Statistics dashboard
+  @override
+  String get reportsRange7d => '7J';
+  @override
+  String get reportsRange30d => '30J';
+  @override
+  String get reportsRange3m => '3M';
+  @override
+  String get reportsRange1y => '1A';
+  @override
+  String get reportsRangeAll => 'Tout';
+  @override
+  String get reportsCreated => 'Créées';
+  @override
+  String get reportsCompletionRate => "Taux d'achèvement";
+  @override
+  String get reportsTrendTitle => "Tendance d'activité";
+  @override
+  String get reportsNoActivityInRange => 'Aucune activité sur cette période';
+  @override
+  String get reportsHeatmapTitle => 'Activité';
+  @override
+  String get reportsByProjectTitle => 'Par projet';
+  @override
+  String get reportsByPriorityTitle => 'Par priorité';
+  @override
+  String get reportsNoProject => 'Sans projet';
+  @override
+  String get reportsNoPriority => 'Sans priorité';
+  @override
+  String get reportsHeatmapLess => 'Moins';
+  @override
+  String get reportsHeatmapMore => 'Plus';
+  @override
+  String get reportsVsPrevious => 'vs précédent';
 
 // Chaînes des paramètres
   @override

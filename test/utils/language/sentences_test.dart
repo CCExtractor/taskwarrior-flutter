@@ -57,7 +57,7 @@ void main() {
         expect(sentences.settingsPageSelectDirectoryTitle, isA<String>());
         expect(sentences.settingsPageSelectDirectoryDescription, isA<String>());
         expect(sentences.navDrawerProfile, isA<String>());
-        expect(sentences.navDrawerReports, isA<String>());
+        expect(sentences.navDrawerStatistics, isA<String>());
         expect(sentences.navDrawerAbout, isA<String>());
         expect(sentences.navDrawerSettings, isA<String>());
         expect(sentences.syncServerCredentials, isA<String>());

@@ -48,7 +48,7 @@ void main() {
     expect(english.settingsPageChangeDirectory, 'Change Directory');
     expect(english.settingsPageSetToDefault, 'Set To Default');
     expect(english.navDrawerProfile, 'Profile');
-    expect(english.navDrawerReports, 'Reports');
+    expect(english.navDrawerStatistics, 'Statistics');
     expect(english.navDrawerAbout, 'About');
     expect(english.navDrawerSettings, 'Settings');
     expect(english.navDrawerExit, 'Exit');
@@ -85,7 +85,7 @@ void main() {
     expect(english.filterDrawerUrgency, 'Urgency');
     expect(english.filterDrawerResetSort, 'Reset Sort');
     expect(english.filterDrawerStatus, 'Status');
-    expect(english.reportsPageTitle, 'Reports');
+    expect(english.reportsPageTitle, 'Statistics');
     expect(english.reportsPageCompleted, 'Completed');
     expect(english.reportsPagePending, 'Pending');
     expect(english.reportsPageTasks, 'Tasks');

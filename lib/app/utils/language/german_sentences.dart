@@ -103,7 +103,7 @@ class GermanSentences extends Sentences {
   @override
   String get navDrawerProfile => 'Profile';
   @override
-  String get navDrawerReports => 'Berichte';
+  String get navDrawerStatistics => 'Statistiken';
   @override
   String get navDrawerAbout => 'Über';
   @override
@@ -186,7 +186,7 @@ class GermanSentences extends Sentences {
   @override
   String get filterDrawerNoProjectsAvailable => 'Keine Projekte verfügbar.';
   @override
-  String get reportsPageTitle => 'Berichte';
+  String get reportsPageTitle => 'Statistiken';
   @override
   String get reportsPageCompleted => 'Erledigt';
   @override
@@ -538,6 +538,42 @@ class GermanSentences extends Sentences {
   String get reportsError => 'Fehler';
   @override
   String get reportsLoading => 'Lädt…';
+
+  // Statistics dashboard
+  @override
+  String get reportsRange7d => '7T';
+  @override
+  String get reportsRange30d => '30T';
+  @override
+  String get reportsRange3m => '3M';
+  @override
+  String get reportsRange1y => '1J';
+  @override
+  String get reportsRangeAll => 'Alle';
+  @override
+  String get reportsCreated => 'Erstellt';
+  @override
+  String get reportsCompletionRate => 'Abschlussquote';
+  @override
+  String get reportsTrendTitle => 'Aktivitätstrend';
+  @override
+  String get reportsNoActivityInRange => 'Keine Aktivität in diesem Zeitraum';
+  @override
+  String get reportsHeatmapTitle => 'Aktivität';
+  @override
+  String get reportsByProjectTitle => 'Nach Projekt';
+  @override
+  String get reportsByPriorityTitle => 'Nach Priorität';
+  @override
+  String get reportsNoProject => 'Kein Projekt';
+  @override
+  String get reportsNoPriority => 'Keine Priorität';
+  @override
+  String get reportsHeatmapLess => 'Weniger';
+  @override
+  String get reportsHeatmapMore => 'Mehr';
+  @override
+  String get reportsVsPrevious => 'vs. vorher';
 
   // Settings strings
   @override

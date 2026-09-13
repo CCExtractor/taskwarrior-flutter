@@ -49,7 +49,7 @@ void main() {
     expect(marathi.settingsPageChangeDirectory, 'डिरेक्टरी बदला');
     expect(marathi.settingsPageSetToDefault, 'डीफॉल्टवर सेट करा');
     expect(marathi.navDrawerProfile, 'प्रोफ़ाइल');
-    expect(marathi.navDrawerReports, 'अहवाल');
+    expect(marathi.navDrawerStatistics, 'आकडेवारी');
     expect(marathi.navDrawerAbout, 'चरित्र');
     expect(marathi.navDrawerSettings, 'सेटिंग्स');
     expect(marathi.navDrawerExit, 'बाहेर पडा');
@@ -86,7 +86,7 @@ void main() {
     expect(marathi.filterDrawerUrgency, 'तातडी');
     expect(marathi.filterDrawerResetSort, 'क्रमवारी रीसेट करा');
     expect(marathi.filterDrawerStatus, 'स्थिति');
-    expect(marathi.reportsPageTitle, 'अहवाल');
+    expect(marathi.reportsPageTitle, 'आकडेवारी');
     expect(marathi.reportsPageCompleted, 'पूर्ण');
     expect(marathi.reportsPagePending, 'प्रलंबित');
     expect(marathi.reportsPageTasks, 'काम');

@@ -61,7 +61,7 @@ abstract class Sentences {
   String get settingsPageSelectDirectoryDescription;
 
   String get navDrawerProfile;
-  String get navDrawerReports;
+  String get navDrawerStatistics;
   String get navDrawerAbout;
   String get navDrawerSettings;
   String get syncServerCredentials;
@@ -280,6 +280,25 @@ abstract class Sentences {
   String get reportsYear;
   String get reportsError;
   String get reportsLoading;
+
+  // Statistics dashboard
+  String get reportsRange7d;
+  String get reportsRange30d;
+  String get reportsRange3m;
+  String get reportsRange1y;
+  String get reportsRangeAll;
+  String get reportsCreated;
+  String get reportsCompletionRate;
+  String get reportsTrendTitle;
+  String get reportsNoActivityInRange;
+  String get reportsHeatmapTitle;
+  String get reportsByProjectTitle;
+  String get reportsByPriorityTitle;
+  String get reportsNoProject;
+  String get reportsNoPriority;
+  String get reportsHeatmapLess;
+  String get reportsHeatmapMore;
+  String get reportsVsPrevious;
 
   // Settings strings
   String get settingsResetToDefault;

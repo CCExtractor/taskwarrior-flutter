@@ -50,7 +50,7 @@ void main() {
     expect(french.settingsPageChangeDirectory, 'Changer de répertoire');
     expect(french.settingsPageSetToDefault, 'Définir par défaut');
     expect(french.navDrawerProfile, 'Profil');
-    expect(french.navDrawerReports, 'Rapports');
+    expect(french.navDrawerStatistics, 'Statistiques');
     expect(french.navDrawerAbout, 'À propos');
     expect(french.navDrawerSettings, 'Paramètres');
     expect(french.navDrawerExit, 'Quitter');
@@ -87,7 +87,7 @@ void main() {
     expect(french.filterDrawerUrgency, 'Urgence');
     expect(french.filterDrawerResetSort, 'Réinitialiser le tri');
     expect(french.filterDrawerStatus, 'Statut');
-    expect(french.reportsPageTitle, 'Rapports');
+    expect(french.reportsPageTitle, 'Statistiques');
     expect(french.reportsPageCompleted, 'Complété');
     expect(french.reportsPagePending, 'En attente');
     expect(french.reportsPageTasks, 'Tâches');
