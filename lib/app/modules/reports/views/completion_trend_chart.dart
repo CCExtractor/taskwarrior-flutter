@@ -53,10 +53,11 @@ class CompletionTrendChart extends StatelessWidget {
         SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences;
 
     final Color createdColor =
-        tColors.purpleShade ?? TaskWarriorColors.deepPurpleAccent;
+        tColors.primaryTextColor ?? TaskWarriorColors.white;
     final Color completedColor = TaskWarriorColors.green;
-    final Color textColor = tColors.primaryTextColor ?? Colors.white;
-    final Color gridColor = (tColors.dividerColor ?? Colors.grey).withValues(alpha: 0.15);
+    final Color textColor = tColors.primaryTextColor ?? TaskWarriorColors.white;
+    final Color gridColor = (tColors.dividerColor ?? TaskWarriorColors.grey)
+        .withValues(alpha: 0.15);
 
     if (points.isEmpty) {
       return const SizedBox(height: 220);
@@ -98,7 +99,7 @@ class CompletionTrendChart extends StatelessWidget {
         tooltipBehavior: TooltipBehavior(
           enable: true,
           format: 'point.x : point.y',
-          textStyle: GoogleFonts.poppins(color: Colors.black),
+          textStyle: GoogleFonts.poppins(color: TaskWarriorColors.black),
         ),
         zoomPanBehavior: ZoomPanBehavior(
           enablePanning: true,

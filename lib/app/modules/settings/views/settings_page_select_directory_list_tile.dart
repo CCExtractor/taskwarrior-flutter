@@ -16,8 +16,6 @@ import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 import '../controllers/settings_controller.dart';
 
-import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
-
 class SettingsPageSelectDirectoryListTile extends StatelessWidget {
   final SettingsController controller;
   const SettingsPageSelectDirectoryListTile(
@@ -42,9 +40,9 @@ class SettingsPageSelectDirectoryListTile extends StatelessWidget {
         children: [
           Obx(
             () => Text(
-              '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.settingsPageSelectDirectoryTitle}: ${controller.baseDirectory.value}',
+              controller.baseDirectory.value,
               style: GoogleFonts.poppins(
-                color: TaskWarriorColors.grey,
+                color: tColors.greyShade,
                 fontSize: TaskWarriorFonts.fontSizeSmall,
               ),
             ),
@@ -61,7 +59,7 @@ class SettingsPageSelectDirectoryListTile extends StatelessWidget {
                   child: TextButton(
                     style: ButtonStyle(
                       backgroundColor: WidgetStateProperty.all<Color>(
-                        tColors.secondaryBackgroundColor!,
+                        tColors.primaryBackgroundColor!,
                       ),
                     ),
                     onPressed: () async {
@@ -103,7 +101,7 @@ class SettingsPageSelectDirectoryListTile extends StatelessWidget {
                                     .sentences
                                     .settingsConfirmReset,
                                 style: GoogleFonts.poppins(
-                                  color: TaskWarriorColors.grey,
+                                  color: tColors.greyShade,
                                   fontSize: TaskWarriorFonts.fontSizeMedium,
                                 ),
                               ),
@@ -179,7 +177,7 @@ class SettingsPageSelectDirectoryListTile extends StatelessWidget {
                       softWrap: true,
                       maxLines: 2,
                       style: TextStyle(
-                        color: tColors.purpleShade,
+                        color: tColors.primaryTextColor,
                       ),
                     ),
                   ),
@@ -191,7 +189,7 @@ class SettingsPageSelectDirectoryListTile extends StatelessWidget {
                   child: TextButton(
                     style: ButtonStyle(
                       backgroundColor: WidgetStateProperty.all<Color>(
-                        tColors.secondaryBackgroundColor!,
+                        tColors.primaryBackgroundColor!,
                       ),
                     ),
                     onPressed: () => controller.pickDirectory(context),
@@ -205,7 +203,7 @@ class SettingsPageSelectDirectoryListTile extends StatelessWidget {
                       softWrap: true,
                       maxLines: 2,
                       overflow: TextOverflow.visible,
-                      style: TextStyle(color: tColors.purpleShade),
+                      style: TextStyle(color: tColors.primaryTextColor),
                     ),
                   ),
                 ),

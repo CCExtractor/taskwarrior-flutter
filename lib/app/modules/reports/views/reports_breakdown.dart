@@ -24,7 +24,7 @@ class ProjectBreakdown extends StatelessWidget {
     final sentences =
         SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences;
     final Color barColor =
-        tColors.purpleShade ?? TaskWarriorColors.deepPurpleAccent;
+        tColors.primaryTextColor ?? TaskWarriorColors.white;
     final int max = projects.isEmpty
         ? 1
         : projects.map((e) => e.count).reduce((a, b) => a > b ? a : b);
@@ -70,7 +70,8 @@ class ProjectBreakdown extends StatelessWidget {
                     value: project.count / max,
                     minHeight: 6,
                     backgroundColor:
-                        (tColors.secondaryBackgroundColor ?? Colors.grey)
+                        (tColors.secondaryBackgroundColor ??
+                                TaskWarriorColors.grey)
                             .withValues(alpha: 0.6),
                     valueColor: AlwaysStoppedAnimation<Color>(barColor),
                   ),
