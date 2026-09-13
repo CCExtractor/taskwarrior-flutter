@@ -653,6 +653,15 @@ class BengaliSentences extends Sentences {
 
   @override
   String get tourReportsMonthly => "মাসিক প্রতিবেদন দেখুন";
+  @override
+  String get tourStatisticsRange =>
+      'আপনার পরিসংখ্যানের জন্য সময়সীমা বেছে নিন';
+  @override
+  String get tourStatisticsKpi =>
+      'আপনার মূল সংখ্যা: সম্পন্ন, তৈরি, সম্পূর্ণতার হার এবং অপেক্ষমান';
+  @override
+  String get tourStatisticsTrend =>
+      'সময়ের সাথে তৈরি ও সম্পন্ন কাজ দেখুন';
 
   @override
   String get tourReportsWeekly => "সাপ্তাহিক প্রতিবেদন দেখুন";
@@ -673,8 +682,6 @@ class BengaliSentences extends Sentences {
   String get descriprtionCannotBeEmpty => "বর্ণনা খালি হতে পারে না";
   @override
   String get enterTaskDescription => "টাস্কের বর্ণনা লিখুন";
-  @override
-  String get canNotHaveWhiteSpace => "সাদা স্থান থাকতে পারে না";
   @override
   String get high => "উচ্চ";
   @override

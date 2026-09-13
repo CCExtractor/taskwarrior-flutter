@@ -203,15 +203,6 @@ class AddTaskBottomSheet extends StatelessWidget {
         ),
         onChanged: (value) => homeController.projectcontroller.text = value,
         focusNode: focusNode,
-        validator: (value) {
-          if (value != null && value.contains(" ")) {
-            return SentenceManager(
-                    currentLanguage: homeController.selectedLanguage.value)
-                .sentences
-                .canNotHaveWhiteSpace;
-          }
-          return null;
-        },
       ),
     );
   }

@@ -599,6 +599,15 @@ class GermanSentences extends Sentences {
   String get tourReportsWeekly => "Greife auf deine aktuellen wöchentlichen Berichte hier zu";
   @override
   String get tourReportsMonthly => "Greife auf deine aktuellen monatlichen Berichte hier zu";
+  @override
+  String get tourStatisticsRange =>
+      'Wählen Sie den Zeitraum für Ihre Statistiken';
+  @override
+  String get tourStatisticsKpi =>
+      'Ihre Kennzahlen: erledigt, erstellt, Abschlussquote und ausstehend';
+  @override
+  String get tourStatisticsTrend =>
+      'Verfolgen Sie erstellte und erledigte Aufgaben im Zeitverlauf';
 
   // Tour strings - profile
   @override
@@ -662,8 +671,6 @@ class GermanSentences extends Sentences {
   String get descriprtionCannotBeEmpty => "Beschreibung kann nicht leer sein";
   @override
   String get enterTaskDescription => "Aufgabenbeschreibung eingeben";
-  @override
-  String get canNotHaveWhiteSpace => "Kann keine Leerzeichen haben";
   @override
   String get high => "Hoch";
   @override

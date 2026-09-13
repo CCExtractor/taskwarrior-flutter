@@ -599,6 +599,14 @@ class EnglishSentences extends Sentences {
   String get tourReportsWeekly => "Access your weekly task reports here";
   @override
   String get tourReportsMonthly => "Access your monthly task reports here";
+  @override
+  String get tourStatisticsRange => 'Choose the time range for your statistics';
+  @override
+  String get tourStatisticsKpi =>
+      'Your key numbers: completed, created, completion rate and pending';
+  @override
+  String get tourStatisticsTrend =>
+      'Track created vs completed tasks over time';
 
   // Tour strings - profile
   @override
@@ -662,8 +670,6 @@ class EnglishSentences extends Sentences {
   String get descriprtionCannotBeEmpty => "Description cannot be empty";
   @override
   String get enterTaskDescription => "Enter Task Description";
-  @override
-  String get canNotHaveWhiteSpace => "Can not have white space";
   @override
   String get high => "High";
   @override

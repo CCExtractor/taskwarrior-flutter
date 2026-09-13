@@ -618,6 +618,15 @@ class FrenchSentences extends Sentences {
   @override
   String get tourReportsMonthly =>
       "Accédez à vos rapports mensuels des tâches ici";
+  @override
+  String get tourStatisticsRange =>
+      'Choisissez la période de vos statistiques';
+  @override
+  String get tourStatisticsKpi =>
+      "Vos chiffres clés : terminées, créées, taux d'achèvement et en attente";
+  @override
+  String get tourStatisticsTrend =>
+      'Suivez les tâches créées et terminées dans le temps';
 
 // Chaînes du tour - profil
   @override
@@ -687,8 +696,6 @@ class FrenchSentences extends Sentences {
       "La description ne peut pas être vide";
   @override
   String get enterTaskDescription => "Entrez la description de la tâche";
-  @override
-  String get canNotHaveWhiteSpace => "Ne peut pas contenir d'espaces blancs";
   @override
   String get high => "Élevée";
   @override

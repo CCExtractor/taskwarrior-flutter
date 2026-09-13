@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:taskwarrior/app/modules/reports/analytics_data.dart';
 import 'package:taskwarrior/app/modules/reports/views/activity_heatmap.dart';
 import 'package:taskwarrior/app/modules/reports/views/completion_trend_chart.dart';
 import 'package:taskwarrior/app/modules/reports/views/reports_breakdown.dart';
+import 'package:taskwarrior/app/tour/safe_tour.dart';
+import 'package:taskwarrior/app/tour/statistics_page_tour.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
@@ -27,6 +30,43 @@ class ReportsDashboard extends StatefulWidget {
 class _ReportsDashboardState extends State<ReportsDashboard> {
   ReportRange _range = ReportRange.d30;
 
+  final GlobalKey _rangeKey = GlobalKey();
+  final GlobalKey _kpiKey = GlobalKey();
+  final GlobalKey _trendKey = GlobalKey();
+  late final TutorialCoachMark _tour;
+
+  @override
+  void initState() {
+    super.initState();
+    _tour = TutorialCoachMark(
+      targets: statisticsTargets(
+        rangeKey: _rangeKey,
+        kpiKey: _kpiKey,
+        trendKey: _trendKey,
+      ),
+      colorShadow: TaskWarriorColors.black,
+      paddingFocus: 10,
+      opacityShadow: 0.8,
+      hideSkip: true,
+      onFinish: () => SaveTourStatus.saveStatisticsTourStatus(true),
+    );
+    WidgetsBinding.instance.addPostFrameCallback((_) => _showTour());
+  }
+
+  /// Shows the first-run tour once. Marked seen on finish, skip, or if a target
+  /// is not laid out (see [safeShowTour]).
+  Future<void> _showTour() async {
+    if (!mounted) return;
+    if (await SaveTourStatus.getStatisticsTourStatus()) return;
+    if (!mounted) return;
+    await safeShowTour(
+      tutorialCoachMark: _tour,
+      context: context,
+      targetKeys: [_rangeKey, _kpiKey, _trendKey],
+      markSeen: () => SaveTourStatus.saveStatisticsTourStatus(true),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final TaskwarriorColorTheme tColors =
@@ -43,60 +83,72 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
     return ListView(
       padding: const EdgeInsets.fromLTRB(12, 12, 12, 24),
       children: [
-        _rangeSelector(sentences, tColors),
+        KeyedSubtree(
+          key: _rangeKey,
+          child: _rangeSelector(sentences, tColors),
+        ),
         const SizedBox(height: 16),
-        Row(
+        Column(
+          key: _kpiKey,
           children: [
-            Expanded(
-              child: _KpiTile(
-                label: sentences.reportsCompleted,
-                value: '${summary.completed}',
-                delta: summary.completedDelta,
-                deltaNote: sentences.reportsVsPrevious,
-                accent: TaskWarriorColors.green,
-              ),
+            Row(
+              children: [
+                Expanded(
+                  child: _KpiTile(
+                    label: sentences.reportsCompleted,
+                    value: '${summary.completed}',
+                    delta: summary.completedDelta,
+                    deltaNote: sentences.reportsVsPrevious,
+                    accent: TaskWarriorColors.green,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: _KpiTile(
+                    label: sentences.reportsCreated,
+                    value: '${summary.created}',
+                    delta: summary.createdDelta,
+                    deltaNote: sentences.reportsVsPrevious,
+                    accent:
+                        tColors.purpleShade ?? TaskWarriorColors.deepPurpleAccent,
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: _KpiTile(
-                label: sentences.reportsCreated,
-                value: '${summary.created}',
-                delta: summary.createdDelta,
-                deltaNote: sentences.reportsVsPrevious,
-                accent: tColors.purpleShade ?? TaskWarriorColors.deepPurpleAccent,
-              ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                Expanded(
+                  child: _KpiTile(
+                    label: sentences.reportsCompletionRate,
+                    value: '${(summary.completionRate * 100).round()}%',
+                    accent: TaskWarriorColors.green,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: _KpiTile(
+                    label: sentences.reportsPending,
+                    value: '${summary.pending}',
+                    accent: TaskWarriorColors.yellow,
+                  ),
+                ),
+              ],
             ),
           ],
         ),
-        const SizedBox(height: 10),
-        Row(
-          children: [
-            Expanded(
-              child: _KpiTile(
-                label: sentences.reportsCompletionRate,
-                value: '${(summary.completionRate * 100).round()}%',
-                accent: TaskWarriorColors.green,
-              ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: _KpiTile(
-                label: sentences.reportsPending,
-                value: '${summary.pending}',
-                accent: TaskWarriorColors.yellow,
-              ),
-            ),
-          ],
-        ),
         const SizedBox(height: 16),
-        _Section(
-          title: sentences.reportsTrendTitle,
-          child: hasActivity
-              ? CompletionTrendChart(
-                  points: summary.trend,
-                  granularity: summary.granularity,
-                )
-              : _EmptyRange(sentences: sentences, tColors: tColors),
+        KeyedSubtree(
+          key: _trendKey,
+          child: _Section(
+            title: sentences.reportsTrendTitle,
+            child: hasActivity
+                ? CompletionTrendChart(
+                    points: summary.trend,
+                    granularity: summary.granularity,
+                  )
+                : _EmptyRange(sentences: sentences, tColors: tColors),
+          ),
         ),
         _Section(
           title: sentences.reportsHeatmapTitle,

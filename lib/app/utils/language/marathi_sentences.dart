@@ -606,6 +606,14 @@ class MarathiSentences extends Sentences {
   String get tourReportsWeekly => "येथे तुमचा साप्ताहिक अहवाल पहा";
   @override
   String get tourReportsMonthly => "येथे तुमचा मासिक अहवाल पहा";
+  @override
+  String get tourStatisticsRange => 'तुमच्या आकडेवारीसाठी कालावधी निवडा';
+  @override
+  String get tourStatisticsKpi =>
+      'तुमचे मुख्य आकडे: पूर्ण, तयार केलेले, पूर्णता दर आणि प्रलंबित';
+  @override
+  String get tourStatisticsTrend =>
+      'वेळेनुसार तयार केलेली आणि पूर्ण केलेली कार्ये पहा';
 
 // टूर - प्रोफाइल
   @override
@@ -673,8 +681,6 @@ class MarathiSentences extends Sentences {
   String get descriprtionCannotBeEmpty => "वर्णन रिक्त असू शकत नाही";
   @override
   String get enterTaskDescription => "कार्याचे वर्णन प्रविष्ट करा";
-  @override
-  String get canNotHaveWhiteSpace => "रिक्त जागा असू शकत नाही";
   @override
   String get high => "उच्च";
   @override

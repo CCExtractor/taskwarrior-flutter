@@ -592,6 +592,14 @@ class HindiSentences extends Sentences {
   String get tourReportsWeekly => "यहाँ अपनी साप्ताहिक कार्य रिपोर्ट देखें";
   @override
   String get tourReportsMonthly => "यहाँ अपनी मासिक कार्य रिपोर्ट देखें";
+  @override
+  String get tourStatisticsRange => 'अपने आंकड़ों के लिए समय अवधि चुनें';
+  @override
+  String get tourStatisticsKpi =>
+      'आपके मुख्य आंकड़े: पूर्ण, बनाए गए, पूर्णता दर और लंबित';
+  @override
+  String get tourStatisticsTrend =>
+      'समय के साथ बनाए गए और पूर्ण किए गए कार्यों को देखें';
 
   @override
   String get tourProfileCurrent => "यहाँ अपनी वर्तमान प्रोफ़ाइल देखें";
@@ -650,8 +658,6 @@ class HindiSentences extends Sentences {
   String get descriprtionCannotBeEmpty => "विवरण खाली नहीं हो सकता";
   @override
   String get enterTaskDescription => "कार्य विवरण दर्ज करें";
-  @override
-  String get canNotHaveWhiteSpace => "सफेद स्थान नहीं हो सकता";
   @override
   String get high => "उच्च";
   @override
