@@ -812,6 +812,7 @@ class HomeController extends GetxController {
       paddingFocus: 10,
       opacityShadow: 1.00,
       hideSkip: true,
+      beforeFocus: scrollTargetIntoView,
       onFinish: () {
         SaveTourStatus.saveFilterTourStatus(true);
       },
@@ -834,7 +835,8 @@ class HomeController extends GetxController {
             // Only the column actually on screen; the other key is never laid
             // out, so requiring it would suppress the tour permanently.
             usesTaskchampionProjects ? projectsKeyTaskc : projectsKey,
-            filterTagKey,
+            // The tag-filter block is hidden in taskc/replica mode.
+            if (!usesTaskchampionProjects) filterTagKey,
             sortByKey,
           ],
           markSeen: () => SaveTourStatus.saveFilterTourStatus(true),

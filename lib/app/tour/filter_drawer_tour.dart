@@ -92,42 +92,45 @@ List<TargetFocus> filterDrawer({
     ),
   );
 
-
-  // filterTagByKey
-  targets.add(
-    TargetFocus(
-      keyTarget: filterTagKey,
-      alignSkip: Alignment.topRight,
-      radius: 10,
-      shape: ShapeLightFocus.RRect,
-      contents: [
-        TargetContent(
-          align: ContentAlign.top,
-          builder: (context, controller) {
-            return Container(
-              alignment: Alignment.center,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    SentenceManager(
-                            currentLanguage: AppSettings.selectedLanguage)
-                        .sentences
-                        .tourFilterTagUnion,
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.poppins(
-                      color: TaskWarriorColors.white,
+  // filterTagByKey — the tag-filter block is only mounted in local/legacy
+  // mode, so skip it entirely in taskc/replica rather than targeting a key
+  // that is never laid out.
+  if (!useTaskchampionProjects) {
+    targets.add(
+      TargetFocus(
+        keyTarget: filterTagKey,
+        alignSkip: Alignment.topRight,
+        radius: 10,
+        shape: ShapeLightFocus.RRect,
+        contents: [
+          TargetContent(
+            align: ContentAlign.top,
+            builder: (context, controller) {
+              return Container(
+                alignment: Alignment.center,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      SentenceManager(
+                              currentLanguage: AppSettings.selectedLanguage)
+                          .sentences
+                          .tourFilterTagUnion,
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.poppins(
+                        color: TaskWarriorColors.white,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
-      ],
-    ),
-  );
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
 
   // sortByKey
   targets.add(

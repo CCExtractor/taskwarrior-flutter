@@ -1,6 +1,30 @@
 import 'package:flutter/widgets.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
+/// Scrolls [target]'s widget into view, for use as a coach mark's `beforeFocus`.
+///
+/// A target below the fold is highlighted off-screen, which also puts its
+/// "next" tap area off-screen — the tour then appears stuck. `TutorialCoachMark`
+/// awaits `beforeFocus` before measuring the target, so scrolling here means the
+/// highlight and its tap area land on the visible target.
+Future<void> scrollTargetIntoView(TargetFocus target) async {
+  final BuildContext? context = target.keyTarget?.currentContext;
+  if (context == null) return;
+  try {
+    await Scrollable.ensureVisible(
+      context,
+      duration: const Duration(milliseconds: 350),
+      curve: Curves.easeInOut,
+      alignment: 0.5,
+    );
+    // Let the scrolled layout settle before the package reads the position.
+    await WidgetsBinding.instance.endOfFrame;
+  } catch (_) {
+    // No enclosing scrollable (or it was disposed mid-scroll): leave the
+    // target where it is rather than failing the whole tour.
+  }
+}
+
 /// Safely shows a coach-mark tour.
 ///
 /// `tutorial_coach_mark` throws

@@ -598,6 +598,15 @@ class UrduSentences extends Sentences {
   String get tourReportsWeekly => "یہاں اپنے ہفتہ وار کاموں کی رپورٹس دیکھیں";
   @override
   String get tourReportsMonthly => "یہاں اپنے ماہانہ کاموں کی رپورٹس دیکھیں";
+  @override
+  String get tourStatisticsRange =>
+      'اپنے اعداد و شمار کے لیے مدت منتخب کریں';
+  @override
+  String get tourStatisticsKpi =>
+      'آپ کے اہم اعداد: مکمل، بنائے گئے، تکمیل کی شرح اور زیر التواء';
+  @override
+  String get tourStatisticsTrend =>
+      'وقت کے ساتھ بنائے گئے اور مکمل کیے گئے کام دیکھیں';
 
   // Tour strings - profile
   @override
@@ -664,8 +673,6 @@ class UrduSentences extends Sentences {
   String get descriprtionCannotBeEmpty => "تفصیل خالی نہیں ہو سکتی";
   @override
   String get enterTaskDescription => "کام کی تفصیل درج کریں";
-  @override
-  String get canNotHaveWhiteSpace => "خالی جگہ نہیں ہو سکتی";
   @override
   String get high => "زیادہ";
   @override

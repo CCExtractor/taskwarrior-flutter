@@ -321,6 +321,11 @@ abstract class Sentences {
   String get tourReportsWeekly;
   String get tourReportsMonthly;
 
+  // Tour strings - statistics dashboard
+  String get tourStatisticsRange;
+  String get tourStatisticsKpi;
+  String get tourStatisticsTrend;
+
   // Tour strings - profile
   String get tourProfileCurrent;
   String get tourProfileManage;
@@ -354,7 +359,6 @@ abstract class Sentences {
   // Dialogue for adding new task
   String get descriprtionCannotBeEmpty;
   String get enterTaskDescription;
-  String get canNotHaveWhiteSpace;
   String get high;
   String get medium;
   String get low;

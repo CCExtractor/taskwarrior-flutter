@@ -611,6 +611,15 @@ class SpanishSentences extends Sentences {
   String get tourReportsWeekly => "Accede a tus informes semanales aquí";
   @override
   String get tourReportsMonthly => "Accede a tus informes mensuales aquí";
+  @override
+  String get tourStatisticsRange =>
+      'Elige el rango de tiempo de tus estadísticas';
+  @override
+  String get tourStatisticsKpi =>
+      'Tus cifras clave: completadas, creadas, tasa de finalización y pendientes';
+  @override
+  String get tourStatisticsTrend =>
+      'Sigue las tareas creadas y completadas a lo largo del tiempo';
 
 // Tour strings - profile
   @override
@@ -676,8 +685,6 @@ class SpanishSentences extends Sentences {
   String get descriprtionCannotBeEmpty => "La descripción no puede estar vacía";
   @override
   String get enterTaskDescription => "Ingresar descripción de la tarea";
-  @override
-  String get canNotHaveWhiteSpace => "No puede tener espacios en blanco";
   @override
   String get high => "Alta";
   @override
