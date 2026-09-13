@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
+import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 
 /// First-run coach marks for the Statistics dashboard: the range selector, the
@@ -26,7 +27,7 @@ List<TargetFocus> statisticsTargets({
             return Text(
               text,
               textAlign: TextAlign.center,
-              style: GoogleFonts.poppins(color: Colors.white),
+              style: GoogleFonts.poppins(color: TaskWarriorColors.white),
             );
           },
         ),

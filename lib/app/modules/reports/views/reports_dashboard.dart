@@ -110,7 +110,7 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
                     delta: summary.createdDelta,
                     deltaNote: sentences.reportsVsPrevious,
                     accent:
-                        tColors.purpleShade ?? TaskWarriorColors.deepPurpleAccent,
+                        tColors.primaryTextColor ?? TaskWarriorColors.white,
                   ),
                 ),
               ],
@@ -185,11 +185,11 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
               fontSize: TaskWarriorFonts.fontSizeSmall,
               fontWeight: TaskWarriorFonts.medium,
               color: _range == range
-                  ? TaskWarriorColors.white
+                  ? (tColors.primaryBackgroundColor ?? TaskWarriorColors.black)
                   : tColors.primaryTextColor,
             ),
             selectedColor:
-                tColors.purpleShade ?? TaskWarriorColors.deepPurpleAccent,
+                tColors.primaryTextColor ?? TaskWarriorColors.white,
             backgroundColor: tColors.secondaryBackgroundColor,
             showCheckmark: false,
           ),
@@ -239,7 +239,7 @@ class ReportsEmptyState extends StatelessWidget {
               child: Icon(
                 Icons.insights_outlined,
                 size: 44,
-                color: tColors.purpleShade ?? TaskWarriorColors.deepPurpleAccent,
+                color: tColors.primaryTextColor ?? TaskWarriorColors.white,
               ),
             ),
             const SizedBox(height: 20),

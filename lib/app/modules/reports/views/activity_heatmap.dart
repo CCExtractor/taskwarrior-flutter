@@ -71,8 +71,10 @@ class _ActivityHeatmapState extends State<ActivityHeatmap> {
     final sentences =
         SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences;
     final Color empty =
-        (tColors.secondaryBackgroundColor ?? Colors.grey).withValues(alpha: 0.6);
-    final Color labelColor = tColors.secondaryTextColor ?? Colors.grey;
+        (tColors.secondaryBackgroundColor ?? TaskWarriorColors.grey)
+            .withValues(alpha: 0.6);
+    final Color labelColor =
+        tColors.secondaryTextColor ?? TaskWarriorColors.grey;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -202,7 +204,8 @@ class _ActivityHeatmapState extends State<ActivityHeatmap> {
           borderRadius: BorderRadius.circular(3),
           border: selected
               ? Border.all(
-                  color: tColors.primaryTextColor ?? Colors.white, width: 1)
+                  color: tColors.primaryTextColor ?? TaskWarriorColors.white,
+                  width: 1)
               : null,
         ),
       ),

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:taskwarrior/app/modules/settings/controllers/settings_controller.dart';
-import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 import 'package:taskwarrior/app/utils/language/supported_language.dart';
-import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
 class SettingsPageSelectTheLanguageTrailing extends StatelessWidget {
@@ -35,9 +33,7 @@ class SettingsPageSelectTheLanguageTrailing extends StatelessWidget {
             ),
           );
         }).toList(),
-        dropdownColor: AppSettings.isDarkMode
-            ? TaskWarriorColors.kprimaryBackgroundColor
-            : TaskWarriorColors.kLightPrimaryBackgroundColor,
+        dropdownColor: tColors.primaryBackgroundColor,
       ),
     );
   }

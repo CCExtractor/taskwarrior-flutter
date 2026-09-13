@@ -11,7 +11,6 @@ import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 
 import '../controllers/settings_controller.dart';
 
-import 'package:taskwarrior/app/utils/constants/palette.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 
 class SettingsPageAppBar extends StatelessWidget
@@ -23,7 +22,7 @@ class SettingsPageAppBar extends StatelessWidget
   Widget build(BuildContext context) {
     return AppBar(
       centerTitle: false,
-      backgroundColor: Palette.kToDark.shade200,
+      backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
       title: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
