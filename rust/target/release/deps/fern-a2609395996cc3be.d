@@ -1,0 +1,12 @@
+/home/runner/work/taskwarrior-flutter/taskwarrior-flutter/rust/target/release/deps/fern-a2609395996cc3be.d: /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fern-0.6.2/src/lib.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fern-0.6.2/src/builders.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fern-0.6.2/src/errors.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fern-0.6.2/src/log_impl.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fern-0.6.2/src/colors.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fern-0.6.2/src/meta.rs
+
+/home/runner/work/taskwarrior-flutter/taskwarrior-flutter/rust/target/release/deps/libfern-a2609395996cc3be.rlib: /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fern-0.6.2/src/lib.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fern-0.6.2/src/builders.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fern-0.6.2/src/errors.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fern-0.6.2/src/log_impl.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fern-0.6.2/src/colors.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fern-0.6.2/src/meta.rs
+
+/home/runner/work/taskwarrior-flutter/taskwarrior-flutter/rust/target/release/deps/libfern-a2609395996cc3be.rmeta: /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fern-0.6.2/src/lib.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fern-0.6.2/src/builders.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fern-0.6.2/src/errors.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fern-0.6.2/src/log_impl.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fern-0.6.2/src/colors.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fern-0.6.2/src/meta.rs
+
+/home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fern-0.6.2/src/lib.rs:
+/home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fern-0.6.2/src/builders.rs:
+/home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fern-0.6.2/src/errors.rs:
+/home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fern-0.6.2/src/log_impl.rs:
+/home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fern-0.6.2/src/colors.rs:
+/home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/fern-0.6.2/src/meta.rs:
