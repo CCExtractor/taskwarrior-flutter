@@ -25,10 +25,10 @@ jobs:
       # `flutter build apk`.
       - uses: ./.github/actions/setup-rust-android
 
-      # Step 3: Setup Flutter with version 3.7.11
-      - uses: subosito/flutter-action@v1
+      # Step 3: Setup Flutter — keep in sync with .fvmrc
+      - uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.29.2"
+          flutter-version: "3.44.9"
 
       # Step 4: Get dependencies using pub get
       - run: flutter pub get

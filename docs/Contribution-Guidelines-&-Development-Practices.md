@@ -29,11 +29,11 @@ When opening PRs, **please specify the commit type** using the following convent
 
 **Flutter Version**
 
-Use **Flutter 3.29.2** or later for development (documentation updated 23 Feb 2026):
+Use **Flutter 3.44.9** or later for development (documentation updated 14 Sep 2026):
 ```text
-Flutter 3.29.2 • channel stable
-Framework • revision 90673a4eef • 2026-02-18 (framework revision date)
-Dart 3.7.2 • DevTools 2.42.3 • released 2025-03-12
+Flutter 3.44.9 • channel stable
+Framework • revision 6b182d2c75 • 2026-08-05
+Dart 3.12.2 • DevTools 2.57.0
 ```
 
 **File Naming Convention**
