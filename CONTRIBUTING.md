@@ -1,80 +1,123 @@
 <!-- CONTRIBUTING -->
 
-<!-- GETTING STARTED -->
+# Contributing to Taskwarrior Mobile App
 
-# Getting Started
+Thanks for your interest in contributing! By participating you agree to follow
+our [Code of Conduct](CODE_OF_CONDUCT.md).
 
-You can setup taskserver to sync your tasks across clients.
-You can find the steps to setup one [here](https://github.com/CCExtractor/taskwarrior-flutter?tab=readme-ov-file#taskserver-setup)
+## Setup
 
+Get the app building and running locally first. Full instructions (FVM, the
+pinned Flutter SDK, Android/iOS, optional Rust, and files you should not edit)
+are in **[SETUP.md](SETUP.md)**.
 
-## Steps
+If you get stuck or need help, ask on the
+[Zulip community](https://ccextractor.org/public/general/support/).
 
-### Installation 
-1. Clone the repository from GitHub:
+## Ways to Contribute
 
-```bash
-git clone https://github.com/CCExtractor/taskwarrior-flutter.git
+Bug reports, feature ideas, docs, translations, tests, UI/UX feedback, and code
+are all welcome.
+
+## Issue-First Policy
+
+> **Do not open a pull request unless there is an issue for it, and a
+> maintainer has validated and assigned it to you.**
+
+1. Open an issue (or find the existing one).
+2. Wait for a maintainer to validate it and assign it to you.
+3. Only then open a PR, linked to that issue.
+
+Unsolicited PRs, especially large ones with no linked issue, may be closed
+without review. Maintainers are listed in [AUTHORS.md](AUTHORS.md).
+
+## Raising an Issue
+
+Search existing issues first to avoid duplicates. Questions and general
+discussion belong on [Zulip](https://ccextractor.org/public/general/support/),
+not the issue tracker.
+
+Open an issue using the matching template:
+
+| Template | Use it for | Label |
+| --- | --- | --- |
+| **Bug Report 🐛** | Something is broken | `bug` |
+| **Feature Request 🚀** | A new feature or improvement | `enhancement` |
+
+**Bug Report:** describe the issue, steps to reproduce, expected result,
+screenshots (optional), contact, and whether you want to work on it.
+
+**Feature Request:** describe the idea, how you would implement it, mockups
+(optional), contact, and whether you want to work on it.
+
+Fill the template completely. Incomplete, duplicate, or out-of-scope issues may
+be closed.
+
+## Submitting a Pull Request
+
+Once your issue is assigned to you:
+
+1. Branch off the latest `main`:
+   ```bash
+   git checkout main && git pull
+   git checkout -b fix/short-descriptive-name
+   ```
+2. Make your changes, then run the checks (see below).
+3. Commit using the prefixes in [Commit Conventions](#commit-conventions).
+4. Push and open the PR against **`main`**, filling in the
+   [PR template](.github/pull_request_template.md). Link the issue with
+   `Fixes #<issue_no>`; a linked issue is mandatory.
+5. Respond to review. Stale or unassigned PRs may be closed.
+
+PR template checklist:
+
+- [ ] Tests have been added or updated to cover the changes
+- [ ] Documentation has been updated to reflect the changes
+- [ ] Code follows the established coding style guidelines
+- [ ] All tests are passing
+
+## Rules
+
+- **Issue first, always.** No PR without an approved, assigned issue.
+- **One issue, one PR.** Raise a separate issue for unrelated fixes.
+- **Don't self-assign.** Wait for a maintainer to assign you.
+- **Keep PRs small and focused.** Large "while I was in there" PRs will be
+  asked to split.
+- **Don't spam PRs.** Low-quality, trivial, or duplicate PRs will be closed.
+- **Don't reformat unrelated code.** Keep the diff about the issue.
+- **Don't commit generated files or build output** (see [SETUP.md](SETUP.md)).
+- **No AI-generated spam.** You are responsible for every line you submit.
+- **Test your change.** Run the app; "it compiles" is not enough.
+- **Be civil and on-topic.** Prefer the issue/PR over DMs.
+
+## Commit Conventions
+
+Prefix commits and PR titles:
+
+```
+feat: a new feature
+fix:  a bug fix
+test: testing changes
+docs: documentation changes
 ```
 
-2. Navigate to project's root directory:
+Branch names: `feature/<name>`, `fix/<name>`, or `docs/<name>`.
+
+## Checks Before Pushing
 
 ```bash
-cd taskwarrior-flutter
+fvm flutter analyze --no-fatal-warnings --no-fatal-infos
+fvm flutter test
 ```
 
-3. Check for Flutter setup and connected devices:
+Match the surrounding code style. The project uses the GetX pattern (bindings /
+controllers / views); see [docs/Architecture.md](docs/Architecture.md).
 
-```bash
-flutter doctor
-```
+## Review Process
 
-4. Get the dependancies
+A maintainer triages and assigns the issue, reviews the PR once CI is green,
+and merges it into `main`. Reviewers are volunteers, so please be patient.
 
-```bash
-flutter pub get
-```
+---
 
-5. Run the app:
-
-```bash
-flutter run --flavor production
-```
-Also Check if it's working with nightly with
-```bash
-flutter run --flavor nightly
-```
-
-### Check out the app
-___
-
-
-1. Open mobile app
-   1. Check out the app
-   2. Make Profile
-   3. Connect with TaskServer
-   4. Sync Tasks with it
-
-
-## Prerequisites
-
-* Flutter
-* VSCode / Android Studio
-
-## Contributing
-
-1. Fork the Project
-2. Clone the Forked Repo. `git clone https://github.com/[username]/taskwarrior-flutter.git`
-3. Create a branch
-	- For your Feature Branch (`git checkout -b feature/AmazingFeature`)
-	- For your Fix Branch (`git checkout -b fix/BugFix`)
-4. Do the changes in that branch
-5. Add all files (`git add .`)
-	- Do Not add files generated by code editor of Android Studio IDE
-	- Only add files that related to your feature
-6. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-7. Make sure branch is synced with main branch of `CCExtractor/taskwarrior-flutter`
-	- If not, please sync it and test again
-	- If any conflict, resolve according to feature and test again
-7. Push to the Branch (`git push origin feature/AmazingFeature`)
-8. Open a Pull Request for the `main` branch.
+Thank you for contributing! 💜
