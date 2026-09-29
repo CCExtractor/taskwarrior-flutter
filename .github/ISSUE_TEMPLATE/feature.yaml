@@ -37,7 +37,7 @@ body:
     attributes:
       label: How can we contact you (optional)
       placeholder: |
-        Leave your slack .
+        Leave your Zulip handle.
     validations:
       required: false
   - type: dropdown

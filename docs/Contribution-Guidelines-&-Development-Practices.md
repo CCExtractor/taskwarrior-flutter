@@ -38,7 +38,7 @@ Dart 3.12.2 • DevTools 2.57.0
 
 **File Naming Convention**
 
-The project follows [snake_case](https://en.wikipedia.org/wiki/Snake_case) naming — this must be followed without fail.
+The project follows [snake_case](https://en.wikipedia.org/wiki/Snake_case) naming; this must be followed without fail.
 
 **Examples** :
 * File names   : services_info.dart, dev_api_service.dart, home_view.dart

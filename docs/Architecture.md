@@ -4,11 +4,11 @@ The architecture used in this project is [GetX Architecture](https://pub.dev/pac
 
 Each module in the project follows a consistent three-layer structure:
 
-**Bindings** — Handles dependency injection. Each screen has a binding class that registers its controller before the view is loaded, ensuring everything is available when needed.
+**Bindings**: Handles dependency injection. Each screen has a binding class that registers its controller before the view is loaded, ensuring everything is available when needed.
 
-**Controllers** — The brain of each screen. Controllers manage state, business logic, and interactions with services. They extend `GetxController` and expose reactive variables that the view observes.
+**Controllers**: The brain of each screen. Controllers manage state, business logic, and interactions with services. They extend `GetxController` and expose reactive variables that the view observes.
 
-**Views** — Pure UI. Views observe the controller's state and rebuild only when relevant data changes. They contain no business logic.
+**Views**: Pure UI. Views observe the controller's state and rebuild only when relevant data changes. They contain no business logic.
 
 Every module under `lib/app/modules/` follows this pattern:
 ```
@@ -20,8 +20,8 @@ module_name/
 
 ## Key Rules
 
-- Views should **never** directly call services — always go through the controller.
-- Views should contain **zero business logic** — only render what the controller exposes.
+- Views should **never** directly call services; always go through the controller.
+- Views should contain **zero business logic**; only render what the controller exposes.
 - Controllers should **not** depend on other controllers.
 - Controllers **may be reused** across views if they share the same functionality.
 - Services are **globally accessible** and shared across all controllers.

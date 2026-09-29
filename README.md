@@ -9,9 +9,11 @@
 </p>
 
 <p align="center">
-  <a href="https://slackinvite.ccextractor.org/"><img src="https://img.shields.io/badge/chat-on%20slack-purple.svg?style=for-the-badge&logo=slack" alt="Slack"></a>
+  <a href="https://ccextractor.org/public/general/support/"><img src="https://img.shields.io/badge/chat-on%20Zulip-blue.svg?style=for-the-badge" alt="Zulip"></a>
+  <a href="https://play.google.com/store/apps/details?id=com.ccextractor.taskwarriorflutter&hl=en_IN"><img src="https://img.shields.io/badge/Google%20Play-Download-green.svg?style=for-the-badge&logo=google-play&logoColor=white" alt="Get it on Google Play"></a>
   <img src="https://img.shields.io/badge/License-GPLv3-blue.svg?style=for-the-badge" alt="License: GPL v3">
   <img src="https://img.shields.io/badge/Flutter-3.44.9-02569B.svg?style=for-the-badge&logo=flutter" alt="Flutter">
+  <img src="https://img.shields.io/badge/GSoC-2022-orange.svg?style=for-the-badge" alt="Google Summer of Code 2022">
 </p>
 
 ---
@@ -21,15 +23,16 @@
 - [About](#about)
 - [Screenshots](#screenshots)
 - [Built With](#built-with)
-- [Getting Started](#getting-started)
+- [Setup](#setup)
 - [Syncing](#syncing)
   - [TaskChampion (recommended)](#taskchampion-recommended)
   - [Legacy TaskServer](#legacy-taskserver)
 - [Contributing](#contributing)
+- [Google Summer of Code](#google-summer-of-code)
 - [Community](#community)
-- [Project Timeline](#project-timeline)
+- [Contributors](#contributors)
+- [Maintainers](#maintainers)
 - [License](#license)
-- [Contact](#contact)
 
 ---
 
@@ -66,18 +69,15 @@ This project brings that workflow to mobile and desktop: manage your tasks, filt
 
 - [Dart](https://dart.dev/)
 - [Flutter](https://flutter.dev/)
-- [Rust](https://www.rust-lang.org/) — TaskChampion storage/sync via [`flutter_rust_bridge`](https://cjycode.com/flutter_rust_bridge/)
-- [GetX](https://pub.dev/packages/get) — state management and routing
+- [Rust](https://www.rust-lang.org/): TaskChampion storage/sync via [`flutter_rust_bridge`](https://cjycode.com/flutter_rust_bridge/)
+- [GetX](https://pub.dev/packages/get): state management and routing
 
-## Getting Started
+## Setup
 
-### Prerequisites
+Full local setup instructions (FVM, the pinned Flutter SDK, Android/iOS,
+optional Rust, and which files not to touch) live in **[SETUP.md](SETUP.md)**.
 
-- [Flutter](https://flutter.dev/) — this repo pins the SDK with [FVM](https://fvm.app/) in `.fvmrc`.
-- Android Studio (Android) and/or Xcode (iOS/macOS).
-- Optional: a Rust toolchain with [`cargo-ndk`](https://github.com/bbqsrc/cargo-ndk) if you want to rebuild the native `libtc_helper.so` yourself. Android builds fall back to the committed libraries under `android/app/src/main/jniLibs/`.
-
-### Run the app
+Quick start:
 
 ```bash
 # Clone
@@ -91,12 +91,12 @@ fvm flutter pub get
 # Check your setup
 fvm flutter doctor
 
-# Run (production or nightly flavor)
+# Run (the Android flavor is required)
 fvm flutter run --flavor production
-fvm flutter run --flavor nightly
 ```
 
-If you are not using FVM, run the same commands with `flutter` and make sure your SDK matches the version in `.fvmrc`.
+If you are not using FVM, run the same commands with `flutter` and make sure
+your SDK matches the version in `.fvmrc`. See [SETUP.md](SETUP.md) for details.
 
 ## Syncing
 
@@ -119,38 +119,40 @@ TaskServer lets you share tasks across clients and devices, and keeps an automat
 
 ## Contributing
 
-Contributions of every kind are welcome — features, fixes, refactors, performance work, and documentation. See [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide, and the [Contribution Guidelines & Development Practices](https://github.com/CCExtractor/taskwarrior-flutter/wiki/Contribution-Guidelines-&-Development-Practices) wiki page.
+Contributions of every kind are welcome: features, fixes, refactors, performance work, and documentation.
 
-Found a bug? Open an [issue](https://github.com/CCExtractor/taskwarrior-flutter/issues/new).
+- Read **[CONTRIBUTING.md](CONTRIBUTING.md)** for the full workflow, including how to raise an issue and open a pull request.
+- Read **[SETUP.md](SETUP.md)** to get the project running locally.
+- Maintainers are listed in **[AUTHORS.md](AUTHORS.md)**.
+- Found a bug? Open an [issue](https://github.com/CCExtractor/taskwarrior-flutter/issues/new).
 
-Please prefix commits and pull requests with a type:
+We follow an **issue-first** policy: please open an issue and wait for a maintainer to validate and assign it before starting work on a pull request.
 
-```
-feat: a new feature
-fix:  a bug fix
-test: everything related to testing
-docs: everything related to documentation
-```
+## Google Summer of Code
+
+This project is supported by [Google Summer of Code](https://summerofcode.withgoogle.com/). It started in 2022 as a [GSoC 2022 project](https://summerofcode.withgoogle.com/programs/2022/projects/8pYfxjXv) under the [CCExtractor Development](https://ccextractor.org/) umbrella organization, and has taken part in several GSoC editions since. Other than this generous sponsorship, the project has no relationship with Google.
+
+We welcome future GSoC contributors. See the [CCExtractor GSoC ideas page](https://ccextractor.org/public/gsoc/) for current project ideas and application guidance.
 
 ## Community
 
-Join the `gsoc-taskwarrior` channel of the CCExtractor community on Slack:
+Join the CCExtractor community on Zulip for questions, discussions, and contributions:
 
-[![Slack](https://img.shields.io/badge/chat-on_slack-purple.svg?style=for-the-badge&logo=slack)](https://ccextractor.org/public/general/support/)
+[![Zulip](https://img.shields.io/badge/chat-on%20Zulip-blue.svg?style=for-the-badge)](https://ccextractor.org/public/general/support/)
 
-## Project Timeline
+## Contributors
 
-This project started as a Google Summer of Code project. See the [GSoC project page](https://summerofcode.withgoogle.com/programs/2022/projects/8pYfxjXv).
+<a href="https://github.com/CCExtractor/taskwarrior-flutter/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=CCExtractor/taskwarrior-flutter" alt="Contributors" />
+</a>
 
-For help getting started with Flutter, see the [online documentation](https://flutter.dev/docs).
+## Maintainers
+
+- [Shubham Ingale](https://github.com/SGI-CAPP-AT2) ([@SGI-CAPP-AT2](https://github.com/SGI-CAPP-AT2))
+- [Chinmay Chaudhari](https://github.com/BrawlerXull) ([@BrawlerXull](https://github.com/BrawlerXull))
+- [Carlos Fernandez Sanz](https://github.com/cfsmp3) ([@cfsmp3](https://github.com/cfsmp3))
+- [Mabud Alam](https://github.com/MabudAlam401) ([@MabudAlam401](https://github.com/MabudAlam401))
 
 ## License
 
 Distributed under the GNU General Public License v3.0. See [`LICENSE`](LICENSE) for the full text.
-
-## Contact
-
-- [Nishant Singhal](https://www.linkedin.com/in/nishant-singhal19/)
-- [Mabud Alam](https://www.linkedin.com/in/mabud/)
-
-Project link: [CCExtractor/taskwarrior-flutter](https://github.com/CCExtractor/taskwarrior-flutter)

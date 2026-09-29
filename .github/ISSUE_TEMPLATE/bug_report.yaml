@@ -44,7 +44,7 @@ body:
     id: contact
     attributes:
       label: How can we contact you (optional)
-      placeholder: Leave your slack for clarifications or updates.
+      placeholder: Leave your Zulip handle for clarifications or updates.
     validations:
       required: false
 
