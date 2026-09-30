@@ -345,6 +345,9 @@ class BengaliSentences extends Sentences {
   String get aboutPageGitHubLink =>
       "এই প্রকল্পটিকে উন্নত করতে আগ্রহী? আমাদের GitHub রিপোজিটরিতে যান।";
   @override
+  String get aboutPageSupport =>
+      "আপনার কোনও পরামর্শ থাকলে, বাগ পেলে বা অ্যাপে সহায়তা প্রয়োজন হলে GitHub-এ একটি ইস্যু তৈরি করুন বা Zulip-এ আমাদের বার্তা পাঠান।";
+  @override
   String get aboutPageProjectDescription =>
       "এই প্রকল্পের লক্ষ্য Taskwarrior-এর জন্য একটি অ্যাপ তৈরি করা। এটি আপনার সকল প্ল্যাটফর্মে একটি টাস্ক ম্যানেজমেন্ট অ্যাপ। এটি আপনাকে আপনার কাজগুলি পরিচালনা করতে এবং আপনার প্রয়োজন অনুসারে সেগুলি ফিল্টার করতে সাহায্য করে।";
   @override

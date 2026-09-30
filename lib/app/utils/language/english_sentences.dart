@@ -353,6 +353,9 @@ class EnglishSentences extends Sentences {
   String get aboutPageGitHubLink =>
       "Eager to enhance this project? Visit our GitHub repository.";
   @override
+  String get aboutPageSupport =>
+      "If you have any suggestions, found a bug, or need help with the app, create an issue on GitHub or message us on Zulip.";
+  @override
   String get aboutPageProjectDescription =>
       "This project aims to build an app for Taskwarrior. It is your task management app across all platforms. It helps you manage your tasks and filter them as per your needs.";
   @override

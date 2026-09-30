@@ -343,6 +343,9 @@ class MarathiSentences extends Sentences {
   String get aboutPageGitHubLink =>
       "या प्रकल्पाला सुधारण्यासाठी उत्सुक आहात का? आमच्या GitHub रिपॉझिटरीला भेट द्या.";
   @override
+  String get aboutPageSupport =>
+      "तुमच्याकडे काही सूचना असतील, बग आढळला असेल किंवा अ‍ॅपसाठी मदत हवी असेल, तर GitHub वर इश्यू तयार करा किंवा Zulip वर आम्हाला संदेश पाठवा.";
+  @override
   String get aboutPageProjectDescription =>
       "या प्रकल्पाचे उद्दिष्ट Taskwarrior साठी एक अॅप तयार करणे आहे. हे आपल्या सर्व प्लॅटफॉर्मवरील कार्य व्यवस्थापन अॅप आहे. हे आपल्याला आपल्या कार्यांचे व्यवस्थापन करण्यात आणि त्यांना आपल्या गरजेनुसार फिल्टर करण्यात मदत करते.";
   @override

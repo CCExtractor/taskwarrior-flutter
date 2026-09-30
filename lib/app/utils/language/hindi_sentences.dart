@@ -358,6 +358,9 @@ class HindiSentences extends Sentences {
   String get aboutPageGitHubLink =>
       "इस परियोजना को बढ़ाने के लिए उत्सुक हैं? हमारे GitHub रिपॉज़िटरी पर जाएं।";
   @override
+  String get aboutPageSupport =>
+      "यदि आपके पास कोई सुझाव है, कोई बग मिला है, या ऐप में किसी सहायता की आवश्यकता है, तो GitHub पर एक इश्यू बनाएं या Zulip पर हमें संदेश भेजें।";
+  @override
   String get aboutPageProjectDescription =>
       "यह परियोजना Taskwarrior के लिए एक ऐप बनाने का लक्ष्य रखती है। यह आपके सभी प्लेटफार्मों पर कार्य प्रबंधन ऐप है। यह आपको अपने कार्यों को प्रबंधित करने और उन्हें अपनी आवश्यकताओं के अनुसार छानने में मदद करता है।";
   @override

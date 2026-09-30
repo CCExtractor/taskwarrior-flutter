@@ -178,6 +178,7 @@ abstract class Sentences {
   String get addTaskTaskAddedSuccessfully;
 
   String get aboutPageGitHubLink;
+  String get aboutPageSupport;
   String get aboutPageProjectDescription;
   String get aboutPageAppBarTitle;
 

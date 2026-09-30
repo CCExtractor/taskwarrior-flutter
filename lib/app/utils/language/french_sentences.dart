@@ -348,6 +348,9 @@ class FrenchSentences extends Sentences {
   String get aboutPageGitHubLink =>
       "Enthousiaste à l'idée d'améliorer ce projet ? Visitez notre dépôt GitHub.";
   @override
+  String get aboutPageSupport =>
+      "Si vous avez des suggestions, avez trouvé un bug ou avez besoin d'aide avec l'application, créez un ticket sur GitHub ou écrivez-nous sur Zulip.";
+  @override
   String get aboutPageProjectDescription =>
       "Ce projet vise à créer une application pour Taskwarrior. C'est votre application de gestion des tâches sur toutes les plateformes. Elle vous aide à gérer vos tâches et à les filtrer selon vos besoins.";
   @override

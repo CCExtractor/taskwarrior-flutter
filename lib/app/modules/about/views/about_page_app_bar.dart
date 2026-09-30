@@ -12,25 +12,27 @@ class AboutPageAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       centerTitle: true,
+      elevation: 0,
+      scrolledUnderElevation: 0,
       backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
       title: Text(
         SentenceManager(currentLanguage: aboutController.selectedLanguage.value)
             .sentences
             .aboutPageAppBarTitle,
-        // style: GoogleFonts.poppins(color: TaskWarriorColors.white),
         style: TextStyle(
           fontFamily: FontFamily.poppins,
+          fontWeight: FontWeight.w600,
+          fontSize: 18,
           color: TaskWarriorColors.white,
         ),
       ),
-      leading: GestureDetector(
-        onTap: () {
-          Navigator.pop(context);
-        },
-        child: Icon(
-          Icons.chevron_left,
+      leading: IconButton(
+        splashRadius: 22,
+        onPressed: () => Navigator.pop(context),
+        icon: Icon(
+          Icons.arrow_back_ios_new,
           color: TaskWarriorColors.white,
-          size: 35,
+          size: 18,
         ),
       ),
     );

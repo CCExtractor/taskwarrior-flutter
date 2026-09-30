@@ -356,6 +356,9 @@ class UrduSentences extends Sentences {
   String get aboutPageGitHubLink =>
       "اس پراجیکٹ کو بہتر بنانے کے لیے پرجوش ہیں؟ ہمارے GitHub repository پر جائیں۔";
   @override
+  String get aboutPageSupport =>
+      "اگر آپ کی کوئی تجویز ہے، کوئی بگ ملا ہے، یا ایپ میں مدد کی ضرورت ہے، تو GitHub پر ایک issue بنائیں یا Zulip پر ہمیں پیغام بھیجیں۔";
+  @override
   String get aboutPageProjectDescription =>
       "اس پراجیکٹ کا مقصد ٹاسکواریر کے لیے ایپ بنانا ہے۔ یہ آپ کا کross-platform کام management ایپ ہے۔ یہ آپ کو اپنے کاموں کو اپنی ضروریات کے مطابق filter اور manage کرنے میں مدد کرتا ہے۔";
   @override

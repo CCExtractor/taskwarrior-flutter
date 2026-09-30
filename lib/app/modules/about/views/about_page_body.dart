@@ -12,250 +12,297 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 
+const String _githubUrl = "https://github.com/CCExtractor/taskwarrior-flutter";
+const String _zulipUrl = "https://ccextractor.org/public/general/support/";
+const String _ccextractorUrl = "https://ccextractor.org/";
+
 class AboutPageBody extends StatelessWidget {
   final AboutController aboutController;
   const AboutPageBody({required this.aboutController, super.key});
 
   @override
   Widget build(BuildContext context) {
-    TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
-    String introduction =
-        SentenceManager(currentLanguage: aboutController.selectedLanguage.value)
-            .sentences
-            .aboutPageProjectDescription;
+    final TaskwarriorColorTheme tColors =
+        Theme.of(context).extension<TaskwarriorColorTheme>()!;
+    final sentences = SentenceManager(
+      currentLanguage: aboutController.selectedLanguage.value,
+    ).sentences;
 
-    return Padding(
-      padding: EdgeInsets.only(
-          top: Get.height * 0.01,
-          left: Get.width * 0.02,
-          right: Get.width * 0.02),
+    final double horizontalPadding = Get.width * 0.06;
+
+    return SafeArea(
       child: SingleChildScrollView(
+        padding: EdgeInsets.fromLTRB(
+          horizontalPadding,
+          Get.height * 0.05,
+          horizontalPadding,
+          Get.height * 0.05,
+        ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox(
-              height: Get.height * 0.02,
-            ),
-            SizedBox(
-                child: SvgPicture.asset(
-              Assets.svg.logo.path,
-              height: Get.height * 0.2,
-              width: Get.width * 1,
-            )),
-            SizedBox(
-              height: Get.height * 0.02,
-            ),
+            _AboutHeader(tColors: tColors),
+            SizedBox(height: Get.height * 0.03),
             Text(
-              "Taskwarrior",
+              sentences.aboutPageProjectDescription,
+              textAlign: TextAlign.center,
               style: TextStyle(
                 fontFamily: FontFamily.poppins,
-                fontWeight: TaskWarriorFonts.bold,
-                fontSize: TaskWarriorFonts.fontSizeExtraLarge,
+                fontWeight: TaskWarriorFonts.regular,
+                fontSize: TaskWarriorFonts.fontSizeSmall + 1,
+                height: 1.6,
                 color: tColors.primaryTextColor,
               ),
             ),
-            SizedBox(
-              height: Get.height * 0.02,
+            SizedBox(height: Get.height * 0.035),
+            _SupportCard(
+              tColors: tColors,
+              message: sentences.aboutPageSupport,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                FutureBuilder<String>(
-                  future: getAppInfo(),
-                  builder:
-                      (BuildContext context, AsyncSnapshot<String> snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    } else if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
-                    } else {
-                      final appInfoLines = snapshot.data!.split(' ');
-
-                      return Column(
-                        children: [
-                          RichText(
-                            text: TextSpan(
-                              children: <TextSpan>[
-                                TextSpan(
-                                  text: SentenceManager(
-                                          currentLanguage: aboutController
-                                              .selectedLanguage.value)
-                                      .sentences
-                                      .version,
-                                  style: TextStyle(
-                                    fontFamily: FontFamily.poppins,
-                                    fontWeight: TaskWarriorFonts.bold,
-                                    fontSize: TaskWarriorFonts.fontSizeMedium,
-                                    color: tColors.primaryTextColor,
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: appInfoLines[1],
-                                  style: TextStyle(
-                                    fontFamily: FontFamily.poppins,
-                                    fontSize: TaskWarriorFonts.fontSizeMedium,
-                                    color: tColors.primaryTextColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            width: Get.width * 0.85,
-                            child: FittedBox(
-                              fit: BoxFit.fitWidth,
-                              child: RichText(
-                                text: TextSpan(
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                      text: SentenceManager(
-                                              currentLanguage: aboutController
-                                                  .selectedLanguage.value)
-                                          .sentences
-                                          .package,
-                                      style: TextStyle(
-                                        fontFamily: FontFamily.poppins,
-                                        fontWeight: TaskWarriorFonts.bold,
-                                        fontSize:
-                                            TaskWarriorFonts.fontSizeMedium,
-                                        color: tColors.primaryTextColor,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text: appInfoLines[0],
-                                      style: TextStyle(
-                                        fontFamily: FontFamily.poppins,
-                                        fontSize:
-                                            TaskWarriorFonts.fontSizeMedium,
-                                        color: tColors.primaryTextColor,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      );
-                    }
-                  },
-                ),
-              ],
+            SizedBox(height: Get.height * 0.03),
+            _LinkTile(
+              tColors: tColors,
+              label: "GitHub",
+              svgPath: Assets.svg.github.path,
+              url: _githubUrl,
             ),
-            SizedBox(
-              height: Get.height * 0.05,
+            const SizedBox(height: 12),
+            _LinkTile(
+              tColors: tColors,
+              label: "Zulip",
+              svgPath: Assets.svg.link.path,
+              url: _zulipUrl,
             ),
+            const SizedBox(height: 12),
+            _LinkTile(
+              tColors: tColors,
+              label: "CCExtractor",
+              svgPath: Assets.svg.link.path,
+              url: _ccextractorUrl,
+            ),
+            SizedBox(height: Get.height * 0.04),
             Text(
-              introduction,
+              sentences.aboutPageGitHubLink,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontFamily: FontFamily.poppins,
                 fontWeight: TaskWarriorFonts.medium,
                 fontSize: TaskWarriorFonts.fontSizeSmall,
-                color: tColors.primaryTextColor,
+                height: 1.5,
+                color: tColors.greyShade,
               ),
-            ),
-            SizedBox(
-              height: Get.height * 0.06,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                SizedBox(
-                  width: Get.width * 0.4,
-                  height: Get.height * 0.05,
-                  child: ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: tColors.secondaryTextColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    onPressed: () async {
-                      // Launch GitHub URL.
-
-                      String url =
-                          "https://github.com/CCExtractor/taskwarrior-flutter";
-                      if (!await launchUrl(Uri.parse(url))) {
-                        throw Exception('Could not launch $url');
-                      }
-                    },
-                    icon: SvgPicture.asset(Assets.svg.github.path,
-                        width: 20,
-                        height: 20,
-                        colorFilter: ColorFilter.mode(
-                            tColors.secondaryBackgroundColor!,
-                            BlendMode.srcIn)),
-                    label: Text(
-                      "GitHub",
-                      style: TextStyle(
-                        fontFamily: FontFamily.poppins,
-                        fontWeight: TaskWarriorFonts.medium,
-                        fontSize: TaskWarriorFonts.fontSizeSmall,
-                        color: tColors.secondaryBackgroundColor,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: Get.width * 0.4,
-                  height: Get.height * 0.05,
-                  child: ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: tColors.secondaryTextColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    onPressed: () async {
-                      String url = "https://ccextractor.org/";
-                      if (!await launchUrl(Uri.parse(url))) {
-                        throw Exception('Could not launch $url');
-                      }
-                    },
-                    icon: SvgPicture.asset(Assets.svg.link.path,
-                        width: 20,
-                        height: 20,
-                        colorFilter: ColorFilter.mode(
-                            tColors.secondaryBackgroundColor!,
-                            BlendMode.srcIn
-                            )
-                        ),
-                    label: Text(
-                      "CCExtractor",
-                      style: TextStyle(
-                        fontFamily: FontFamily.poppins,
-                        fontWeight: TaskWarriorFonts.medium,
-                        fontSize: TaskWarriorFonts.fontSizeSmall,
-                        color: tColors.secondaryBackgroundColor,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: Get.height * 0.04,
-            ),
-            Text(
-              SentenceManager(
-                      currentLanguage: aboutController.selectedLanguage.value)
-                  .sentences
-                  .aboutPageGitHubLink,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: FontFamily.poppins,
-                fontWeight: TaskWarriorFonts.semiBold,
-                fontSize: TaskWarriorFonts.fontSizeMedium,
-                color: tColors.primaryTextColor,
-              ),
-            ),
-            SizedBox(
-              height: Get.height * 0.02,
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _AboutHeader extends StatelessWidget {
+  final TaskwarriorColorTheme tColors;
+  const _AboutHeader({required this.tColors});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          height: 96,
+          width: 96,
+          padding: const EdgeInsets.all(22),
+          decoration: BoxDecoration(
+            color: tColors.secondaryBackgroundColor,
+            shape: BoxShape.circle,
+          ),
+          child: SvgPicture.asset(Assets.svg.logo.path),
+        ),
+        const SizedBox(height: 16),
+        Text(
+          "Taskwarrior",
+          style: TextStyle(
+            fontFamily: FontFamily.poppins,
+            fontWeight: TaskWarriorFonts.bold,
+            fontSize: TaskWarriorFonts.fontSizeExtraLarge,
+            color: tColors.primaryTextColor,
+          ),
+        ),
+        const SizedBox(height: 10),
+        FutureBuilder<String>(
+          future: getAppInfo(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const SizedBox(
+                height: 28,
+                width: 28,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              );
+            }
+            if (snapshot.hasError || !snapshot.hasData) {
+              return const SizedBox.shrink();
+            }
+            final appInfoLines = snapshot.data!.split(' ');
+            final packageName = appInfoLines.isNotEmpty ? appInfoLines[0] : '';
+            final version = appInfoLines.length > 1 ? appInfoLines[1] : '';
+
+            return Column(
+              children: [
+                _Pill(
+                  tColors: tColors,
+                  label: "Version $version",
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  packageName,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: FontFamily.poppins,
+                    fontWeight: TaskWarriorFonts.regular,
+                    fontSize: TaskWarriorFonts.fontSizeSmall,
+                    color: tColors.greyShade,
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+      ],
+    );
+  }
+}
+
+class _Pill extends StatelessWidget {
+  final TaskwarriorColorTheme tColors;
+  final String label;
+  const _Pill({required this.tColors, required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+      decoration: BoxDecoration(
+        color: tColors.secondaryBackgroundColor,
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontFamily: FontFamily.poppins,
+          fontWeight: TaskWarriorFonts.medium,
+          fontSize: TaskWarriorFonts.fontSizeSmall,
+          color: tColors.primaryTextColor,
+        ),
+      ),
+    );
+  }
+}
+
+class _SupportCard extends StatelessWidget {
+  final TaskwarriorColorTheme tColors;
+  final String message;
+  const _SupportCard({required this.tColors, required this.message});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: tColors.secondaryBackgroundColor,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(
+            Icons.forum_outlined,
+            size: 22,
+            color: tColors.primaryTextColor,
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              message,
+              style: TextStyle(
+                fontFamily: FontFamily.poppins,
+                fontWeight: TaskWarriorFonts.regular,
+                fontSize: TaskWarriorFonts.fontSizeSmall + 0.5,
+                height: 1.5,
+                color: tColors.primaryTextColor,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _LinkTile extends StatelessWidget {
+  final TaskwarriorColorTheme tColors;
+  final String label;
+  final String svgPath;
+  final String url;
+  const _LinkTile({
+    required this.tColors,
+    required this.label,
+    required this.svgPath,
+    required this.url,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final BorderRadius radius = BorderRadius.circular(14);
+    return Material(
+      color: tColors.secondaryBackgroundColor,
+      borderRadius: radius,
+      child: InkWell(
+        borderRadius: radius,
+        onTap: () => _openLink(context, url),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          child: Row(
+            children: [
+              SvgPicture.asset(
+                svgPath,
+                width: 20,
+                height: 20,
+                colorFilter: ColorFilter.mode(
+                  tColors.primaryTextColor!,
+                  BlendMode.srcIn,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    fontFamily: FontFamily.poppins,
+                    fontWeight: TaskWarriorFonts.medium,
+                    fontSize: TaskWarriorFonts.fontSizeMedium,
+                    color: tColors.primaryTextColor,
+                  ),
+                ),
+              ),
+              Icon(
+                Icons.arrow_forward_ios,
+                size: 14,
+                color: tColors.greyShade,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+Future<void> _openLink(BuildContext context, String url) async {
+  final Uri uri = Uri.parse(url);
+  final bool launched =
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+  if (!launched && context.mounted) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Could not open $url')),
     );
   }
 }
