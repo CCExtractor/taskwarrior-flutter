@@ -13,7 +13,7 @@ inputs:
   ndk-version:
     description: NDK version to install. Must satisfy the ring/taskchampion build.
     required: false
-    default: "26.1.10909125"
+    default: "30.0.16248370"
   cargo-ndk-version:
     description: cargo-ndk version requirement.
     required: false

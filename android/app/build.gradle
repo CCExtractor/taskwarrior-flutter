@@ -38,6 +38,11 @@ android {
 	namespace "com.ccextractor.taskwarriorflutter"
     compileSdkVersion 36
 
+    // Plugins in this project require NDK 27.0.12077973; NDKs are backward
+    // compatible, so we use the highest one available locally to avoid a large
+    // NDK download on every fresh machine. See .github/actions/setup-rust-android.
+    ndkVersion "30.0.16248370"
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -126,12 +131,16 @@ def rustJniOut = "${projectDir}/src/main/jniLibs"
 def cargoBinDir = "${System.getenv('HOME')}/.cargo/bin"
 
 def resolveNdkDir = {
-    try {
-        if (android.ndkDirectory != null) return android.ndkDirectory.absolutePath
-    } catch (ignored) { /* no ndkVersion configured; fall through */ }
+    // Look only at the SDK filesystem and ANDROID_NDK_HOME. Deliberately do NOT
+    // touch android.ndkDirectory: resolving it at configuration time makes AGP
+    // validate and auto-install its default NDK on every build, even when Rust
+    // is not being built. Only complete NDKs (those with a source.properties)
+    // are considered, so a half-finished download is ignored.
     def ndkRoot = new File(android.sdkDirectory, "ndk")
     if (ndkRoot.isDirectory()) {
-        def versions = ndkRoot.listFiles()?.findAll { it.isDirectory() }?.sort { it.name }
+        def versions = ndkRoot.listFiles()?.findAll {
+            it.isDirectory() && new File(it, "source.properties").exists()
+        }?.sort { it.name }
         if (versions) return versions.last().absolutePath
     }
     return System.getenv("ANDROID_NDK_HOME")
@@ -139,11 +148,13 @@ def resolveNdkDir = {
 
 tasks.register("cargoBuildTcHelper", Exec) {
     workingDir rustCrateDir
-    def ndkDir = resolveNdkDir()
     def cargoPath = "${cargoBinDir}:/opt/homebrew/bin:/usr/local/bin:${System.getenv('PATH')}"
     environment "PATH", cargoPath
-    if (ndkDir != null) environment "ANDROID_NDK_HOME", ndkDir
-    doFirst { new File(rustJniOut).mkdirs() }
+    doFirst {
+        new File(rustJniOut).mkdirs()
+        def ndkDir = resolveNdkDir()
+        if (ndkDir != null) environment "ANDROID_NDK_HOME", ndkDir
+    }
     // If cargo/cargo-ndk aren't on PATH, skip (the committed .so is used as a
     // fallback) rather than failing the whole build. When they are present, a
     // real compile error DOES fail the build, so problems surface loudly.
