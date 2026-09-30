@@ -724,4 +724,11 @@ class GermanSentences extends Sentences {
   String get storageAndData => 'Speicher und Daten';
   @override
   String get advanced => 'Fortgeschritten';
+  // Detail page
+  @override
+  String get taskUpdateFailed => 'Aufgabe konnte nicht aktualisiert werden';
+  @override
+  String get taskNotFound => 'Aufgabe nicht gefunden';
+  @override
+  String get pleaseEnterATag => 'Bitte gib einen Tag ein';
 }

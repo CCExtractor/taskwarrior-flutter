@@ -728,4 +728,11 @@ class UrduSentences extends Sentences {
   String get storageAndData => 'اسٹوریج اور ڈیٹا';
   @override
   String get advanced => 'ایڈوانس';
+  // Detail page
+  @override
+  String get taskUpdateFailed => 'کام اپ ڈیٹ نہیں ہو سکا';
+  @override
+  String get taskNotFound => 'کام نہیں ملا';
+  @override
+  String get pleaseEnterATag => 'براہ کرم ایک ٹیگ درج کریں';
 }

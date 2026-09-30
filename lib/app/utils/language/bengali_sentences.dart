@@ -735,4 +735,11 @@ class BengaliSentences extends Sentences {
   String get storageAndData => 'স্টোরেজ এবং ডাটা';
   @override
   String get advanced => 'উন্নত';
+  // Detail page
+  @override
+  String get taskUpdateFailed => 'টাস্ক আপডেট করা যায়নি';
+  @override
+  String get taskNotFound => 'টাস্ক পাওয়া যায়নি';
+  @override
+  String get pleaseEnterATag => 'অনুগ্রহ করে একটি ট্যাগ লিখুন';
 }

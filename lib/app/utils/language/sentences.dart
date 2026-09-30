@@ -383,4 +383,8 @@ abstract class Sentences {
   String get profilePageChangeProfileMode;
   String get profilePageSelectProfileMode;
   String get profilePageSuccessfullyChangedProfileModeTo;
+  // Detail page
+  String get taskUpdateFailed;
+  String get taskNotFound;
+  String get pleaseEnterATag;
 }
