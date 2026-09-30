@@ -1,0 +1,10 @@
+AuthorName: 'CCExtractor Development'
+Categories:
+- taskwarrior-flutter
+- todo
+CurrentVersionCode: 2147483647
+IssueTracker: 'https://github.com/CCExtractor/taskwarrior-flutter/issues'
+Name: Taskwarrior Nightly
+SourceCode: 'https://github.com/CCExtractor/taskwarrior-flutter'
+Summary: 'Taskwarrior is Free and Open Source Software that manages your TODO list from the command line. It is flexible, fast, and unobtrusive. It does its job then gets out of your way. The CLI tool and other relevant documentation can be found at Taskwarrior. This project aims to build an app for Taskwarrior. It is your task management app across all platforms. It helps you manage your tasks and filter them as per your needs.'
+WebSite: 'https://ccextractor.org/projects/tw_f'
