@@ -23,6 +23,12 @@ runs:
   using: composite
   steps:
     - uses: android-actions/setup-android@v3
+      with:
+        # The action installs "tools platform-tools" by default, but Google
+        # removed the legacy "tools" package from its SDK repository in
+        # Sept 2026, so sdkmanager fails with "Failed to find package 'tools'".
+        # cmdline-tools (already on the runner) replaces it.
+        packages: platform-tools
 
     - name: Install NDK ${{ inputs.ndk-version }}
       shell: bash
