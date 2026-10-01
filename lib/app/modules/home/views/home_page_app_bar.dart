@@ -136,8 +136,11 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
                           var c = await CredentialsStorage.getClientId();
                           var e =
                               await CredentialsStorage.getEncryptionSecret();
-                          debugPrint(
-                              "controller.taskReplica.value ${controller.taskReplica.value} Replica Credentials: c=$c e=$e");
+                          // Never log the credentials themselves; debugPrint
+                          // is persisted to the in-app Logs page.
+                          debugPrint("Replica refresh "
+                              "(clientId set: ${c != null}, "
+                              "encryptionSecret set: ${e != null})");
                           if (c == null || e == null) {
                             _showResultSnackBar(
                                 context,
