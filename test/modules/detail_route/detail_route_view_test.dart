@@ -182,6 +182,49 @@ void main() {
     expect(find.text('work 3'), findsOneWidget);
   });
 
+  testWidgets('dialog buttons use the readable text colour', (tester) async {
+    await openDetailPage(tester);
+    final tColors = theme().extension<TaskwarriorColorTheme>()!;
+    Color? colorOf(String label) =>
+        tester.widget<Text>(find.text(label)).style?.color;
+
+    controller.setAttribute(TaskAttribute.description, 'Changed');
+    await tester.pump();
+
+    await tester.tap(find.byType(FloatingActionButton));
+    await tester.pumpAndSettle();
+    for (final label in ['Cancel', 'Submit']) {
+      expect(colorOf(label), tColors.primaryTextColor, reason: label);
+    }
+    await tester.tap(find.text('Cancel'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byType(BackButton));
+    await tester.pumpAndSettle();
+    for (final label in ['Yes', 'No', 'Cancel']) {
+      expect(colorOf(label), tColors.primaryTextColor, reason: label);
+    }
+  });
+
+  testWidgets('every attribute card is styled the same', (tester) async {
+    await openDetailPage(tester);
+    final tColors = theme().extension<TaskwarriorColorTheme>()!;
+    final listView = find.byType(ListView);
+    // Scroll through so the lazily built cards (tags is last) get checked.
+    for (var i = 0; i < 4; i++) {
+      for (final card in tester.widgetList<Card>(
+          find.descendant(of: listView, matching: find.byType(Card)))) {
+        expect(card.color, tColors.secondaryBackgroundColor);
+      }
+      for (final tile in tester.widgetList<ListTile>(
+          find.descendant(of: listView, matching: find.byType(ListTile)))) {
+        expect(tile.tileColor, isNull);
+      }
+      await tester.drag(listView, const Offset(0, -400));
+      await tester.pumpAndSettle();
+    }
+  });
+
   testWidgets('back with unsaved edits asks first; cancel stays',
       (tester) async {
     await openDetailPage(tester);

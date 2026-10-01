@@ -110,6 +110,19 @@ void main() {
       expect(controller.changesSummary, contains('description'));
     });
 
+    test('changesSummary formats values like the cards', () {
+      final controller = createController();
+      controller.setAttribute(
+          TaskAttribute.due, DateTime.utc(2026, 10, 20, 15, 44));
+      final summary = controller.changesSummary;
+      final s = controller.sentences;
+
+      expect(summary, contains('${s.oldChanges}: ${s.notSelected}'));
+      expect(summary, isNot(contains('null')));
+      expect(summary, contains('2026-10-20'));
+      expect(summary, isNot(contains('.000')));
+    });
+
     test('reverting an edit clears the pending changes', () {
       final controller = createController();
       controller.setAttribute(TaskAttribute.description, 'Changed');

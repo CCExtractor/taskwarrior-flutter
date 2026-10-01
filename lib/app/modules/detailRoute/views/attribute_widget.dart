@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:taskwarrior/app/models/task_attribute.dart';
 import 'package:taskwarrior/app/modules/detailRoute/controllers/detail_route_controller.dart';
 import 'package:taskwarrior/app/modules/detailRoute/views/attribute_card.dart';
@@ -10,6 +9,7 @@ import 'package:taskwarrior/app/modules/detailRoute/views/project_widget.dart';
 import 'package:taskwarrior/app/modules/detailRoute/views/start_widget.dart';
 import 'package:taskwarrior/app/modules/detailRoute/views/status_widget.dart';
 import 'package:taskwarrior/app/modules/detailRoute/views/tags_widget.dart';
+import 'package:taskwarrior/app/utils/taskfunctions/format_attribute_value.dart';
 
 /// Picks the editor widget for a single task attribute.
 class AttributeWidget extends StatelessWidget {
@@ -28,25 +28,14 @@ class AttributeWidget extends StatelessWidget {
   final bool isEditable;
   final bool use24HourFormat;
 
-  String? _formatValue() {
-    final value = this.value;
-    if (value == null) return null;
-    if (value is DateTime) {
-      return DateFormat(use24HourFormat
-              ? 'EEE, yyyy-MM-dd HH:mm:ss'
-              : 'EEE, yyyy-MM-dd hh:mm:ss a')
-          .format(value.toLocal());
-    }
-    return value.toString();
-  }
-
   void _onChanged(dynamic newValue) =>
       controller.setAttribute(attribute, newValue);
 
   @override
   Widget build(BuildContext context) {
     final String name = attribute.name;
-    final String? displayValue = _formatValue();
+    final String? displayValue =
+        formatAttributeValue(value, use24HourFormat: use24HourFormat);
 
     switch (attribute) {
       case TaskAttribute.description:

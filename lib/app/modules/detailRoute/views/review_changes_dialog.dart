@@ -24,6 +24,7 @@ class ReviewChangesDialog extends StatelessWidget {
         Theme.of(context).extension<TaskwarriorColorTheme>()!;
     final sentences = controller.sentences;
     return AlertDialog(
+      backgroundColor: tColors.dialogBackgroundColor,
       scrollable: true,
       title: Text(
         '${sentences.reviewChanges}:',
@@ -48,7 +49,7 @@ class ReviewChangesDialog extends StatelessWidget {
         ),
         DetailRouteDialogAction(
           label: sentences.submit,
-          color: tColors.primaryBackgroundColor,
+          color: tColors.primaryTextColor,
           onPressed: () => Navigator.of(context).pop(controller.saveChanges()),
         ),
       ],

@@ -15,8 +15,6 @@ class AttributeCard extends StatelessWidget {
     this.onTap,
     this.onLongPress,
     this.cardKey,
-    this.cardColor,
-    this.tileColor,
     super.key,
   });
 
@@ -31,10 +29,6 @@ class AttributeCard extends StatelessWidget {
   /// Key placed on the [Card], e.g. a tour anchor.
   final Key? cardKey;
 
-  /// Defaults to the theme's secondary background colour.
-  final Color? cardColor;
-  final Color? tileColor;
-
   @override
   Widget build(BuildContext context) {
     TaskwarriorColorTheme tColors =
@@ -45,10 +39,9 @@ class AttributeCard extends StatelessWidget {
 
     return Card(
       key: cardKey,
-      color: cardColor ?? tColors.secondaryBackgroundColor,
+      color: tColors.secondaryBackgroundColor,
       child: ListTile(
         enabled: isEditable,
-        tileColor: tileColor,
         textColor: textColor,
         title: SingleChildScrollView(
           scrollDirection: Axis.horizontal,

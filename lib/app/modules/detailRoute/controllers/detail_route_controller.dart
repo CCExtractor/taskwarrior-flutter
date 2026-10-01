@@ -13,6 +13,7 @@ import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/debug_logger/app_logger.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/language/sentences.dart';
+import 'package:taskwarrior/app/utils/taskfunctions/format_attribute_value.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/modify.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/urgency.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
@@ -139,12 +140,19 @@ class DetailRouteController extends GetxController {
     return '${sentences.detailPageID}: ${(id == null || id == 0) ? '-' : id}';
   }
 
-  /// Human-readable old/new summary of every pending change.
-  String get changesSummary => modify.changes.entries
-      .map((entry) => '${entry.key}:\n'
-          '  ${sentences.oldChanges}: ${entry.value['old']}\n'
-          '  ${sentences.newChanges}: ${entry.value['new']}')
-      .join('\n');
+  /// Human-readable old/new summary of every pending change, formatted the
+  /// same way as the attribute cards.
+  String get changesSummary {
+    String show(Object? value) =>
+        formatAttributeValue(value,
+            use24HourFormat: AppSettings.use24HourFormatRx.value) ??
+        sentences.notSelected;
+    return modify.changes.entries
+        .map((entry) => '${entry.key}:\n'
+            '  ${sentences.oldChanges}: ${show(entry.value['old'])}\n'
+            '  ${sentences.newChanges}: ${show(entry.value['new'])}')
+        .join('\n');
+  }
 
   /// Current value of every attribute, in display order. Reads the reactive
   /// values, so calling this inside an [Obx] rebuilds on every edit.
