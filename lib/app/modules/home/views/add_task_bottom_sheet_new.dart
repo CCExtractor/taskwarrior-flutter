@@ -391,7 +391,9 @@ class AddTaskBottomSheet extends StatelessWidget {
               ..priority = homeController.priority.value == 'X'
                   ? null
                   : homeController.priority.value)
-            .rebuild((t) => t..project = homeController.projectcontroller.text)
+            .rebuild((t) => t
+              ..project = resolveProject(
+                  homeController.projectcontroller.text, t.project))
             .rebuild((t) =>
                 t..wait = getWaitDate(homeController.selectedDates)?.toUtc())
             .rebuild((t) =>
