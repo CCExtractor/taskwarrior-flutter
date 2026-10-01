@@ -712,4 +712,11 @@ class HindiSentences extends Sentences {
   String get storageAndData => 'स्टोरेज और डेटा';
   @override
   String get advanced => 'अड्वांस्ड';
+  // Detail page
+  @override
+  String get taskUpdateFailed => 'कार्य अपडेट नहीं हो सका';
+  @override
+  String get taskNotFound => 'कार्य नहीं मिला';
+  @override
+  String get pleaseEnterATag => 'कृपया एक टैग दर्ज करें';
 }

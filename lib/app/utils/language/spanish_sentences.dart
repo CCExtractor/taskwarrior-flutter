@@ -741,4 +741,11 @@ class SpanishSentences extends Sentences {
   String get storageAndData => 'Almacenamiento y datos';
   @override
   String get advanced => 'Avanzado';
+  // Detail page
+  @override
+  String get taskUpdateFailed => 'No se pudo actualizar la tarea';
+  @override
+  String get taskNotFound => 'Tarea no encontrada';
+  @override
+  String get pleaseEnterATag => 'Introduce una etiqueta';
 }

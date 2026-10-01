@@ -754,4 +754,11 @@ class FrenchSentences extends Sentences {
   String get storageAndData => 'Stockage et données';
   @override
   String get advanced => 'Avancé';
+  // Detail page
+  @override
+  String get taskUpdateFailed => 'Impossible de mettre à jour la tâche';
+  @override
+  String get taskNotFound => 'Tâche introuvable';
+  @override
+  String get pleaseEnterATag => 'Veuillez saisir une étiquette';
 }

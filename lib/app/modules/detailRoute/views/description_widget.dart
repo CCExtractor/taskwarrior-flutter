@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import 'package:loggy/loggy.dart';
-import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
-import 'package:taskwarrior/app/utils/constants/constants.dart';
-import 'package:taskwarrior/app/utils/constants/utilites.dart';
-import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
-import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
-import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/modules/detailRoute/controllers/detail_route_controller.dart';
+import 'package:taskwarrior/app/modules/detailRoute/views/attribute_card.dart';
+import 'package:taskwarrior/app/modules/detailRoute/views/detail_route_dialog_action.dart';
+import 'package:taskwarrior/app/utils/constants/utilites.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 
+/// Edits the description in a dialog; an empty description is rejected.
 class DescriptionWidget extends StatelessWidget {
   const DescriptionWidget({
+    required this.controller,
     required this.name,
     required this.value,
     required this.callback,
@@ -19,283 +17,71 @@ class DescriptionWidget extends StatelessWidget {
     super.key,
   });
 
+  final DetailRouteController controller;
   final String name;
-  final dynamic value;
+  final String? value;
   final void Function(dynamic) callback;
   final bool isEditable;
 
-  @override
-  Widget build(BuildContext context) {
-    final controller = Get.find<DetailRouteController>();
+  void _showEditDialog(BuildContext context) {
     TaskwarriorColorTheme tColors =
         Theme.of(context).extension<TaskwarriorColorTheme>()!;
-    return Card(
-      color: tColors.secondaryBackgroundColor,
-      child: ListTile(
-        enabled: isEditable,
-        textColor: isEditable
-            ? tColors.primaryTextColor
-            : tColors.primaryDisabledTextColor,
-        title: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              RichText(
-                text: TextSpan(
-                  children: <TextSpan>[
-                    TextSpan(
-                      text: '$name:'.padRight(13),
-                      // style: GoogleFonts.poppins(
-                      //   fontWeight: TaskWarriorFonts.bold,
-                      //   fontSize: TaskWarriorFonts.fontSizeMedium,
-                      //   color: AppSettings.isDarkMode
-                      //       ? Colors.white
-                      //       : Colors.black,
-                      // ),
-                      style: TextStyle(
-                        fontFamily: FontFamily.poppins,
-                        fontWeight: TaskWarriorFonts.bold,
-                        fontSize: TaskWarriorFonts.fontSizeMedium,
-                        color: isEditable
-                            ? tColors.primaryTextColor
-                            : tColors.primaryDisabledTextColor,
-                      ),
-                    ),
-                    TextSpan(
-                      text: value ??
-                          SentenceManager(
-                                  currentLanguage: AppSettings.selectedLanguage)
-                              .sentences
-                              .notSelected,
-                      // style: GoogleFonts.poppins(
-                      //   fontSize: TaskWarriorFonts.fontSizeMedium,
-                      //   color: AppSettings.isDarkMode
-                      //       ? Colors.white
-                      //       : Colors.black,
-                      // ),
-                      style: TextStyle(
-                        fontFamily: FontFamily.poppins,
-                        fontSize: TaskWarriorFonts.fontSizeMedium,
-                        color: isEditable
-                            ? tColors.primaryTextColor
-                            : tColors.primaryDisabledTextColor,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+    final sentences = controller.sentences;
+    controller.prepareDescriptionEdit(value ?? '');
+    showDialog(
+      context: context,
+      builder: (context) => Obx(
+        () => Utils.showAlertDialog(
+          scrollable: true,
+          title: Text(
+            sentences.editDescription,
+            style: TextStyle(
+              color: tColors.primaryTextColor,
+            ),
           ),
-        ),
-        onTap: () {
-          controller.prepareDescriptionEdit(value ?? '');
-          showDialog(
-            context: context,
-            builder: (context) => Obx(
-              () => Utils.showAlertDialog(
-                scrollable: true,
-                title: Text(
-                  SentenceManager(currentLanguage: AppSettings.selectedLanguage)
-                      .sentences
-                      .editDescription,
-                  style: TextStyle(
-                    color: tColors.primaryTextColor,
-                  ),
-                ),
-                content: TextField(
-                  style: TextStyle(
-                    color: tColors.primaryTextColor,
-                  ),
-                  decoration: InputDecoration(
-                    errorText: controller.descriptionErrorText.value,
-                    errorStyle: const TextStyle(
-                      color: Colors.red,
-                    ),
-                  ),
-                  autofocus: true,
-                  maxLines: null,
-                  controller: controller.descriptionController,
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () => Get.back(),
-                    child: Text(
-                      SentenceManager(
-                              currentLanguage: AppSettings.selectedLanguage)
-                          .sentences
-                          .cancel,
-                      style: TextStyle(
-                        color: tColors.primaryTextColor,
-                      ),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      if (controller.validateDescription()) {
-                        callback(controller.descriptionController.text);
-                        Get.back();
-                      }
-                    },
-                    child: Text(
-                      SentenceManager(
-                              currentLanguage: AppSettings.selectedLanguage)
-                          .sentences
-                          .submit,
-                      style: TextStyle(
-                        color: tColors.primaryTextColor,
-                      ),
-                    ),
-                  ),
-                ],
+          content: TextField(
+            style: TextStyle(
+              color: tColors.primaryTextColor,
+            ),
+            decoration: InputDecoration(
+              errorText: controller.descriptionErrorText.value,
+              errorStyle: const TextStyle(
+                color: Colors.red,
               ),
             ),
-          );
-        },
+            autofocus: true,
+            maxLines: null,
+            controller: controller.descriptionController,
+          ),
+          actions: [
+            DetailRouteDialogAction(
+              label: sentences.cancel,
+              color: tColors.primaryTextColor,
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            DetailRouteDialogAction(
+              label: sentences.submit,
+              color: tColors.primaryTextColor,
+              onPressed: () {
+                if (controller.validateDescription()) {
+                  callback(controller.descriptionController.text);
+                  Navigator.of(context).pop();
+                }
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
-}
-
-class ProjectWidget extends StatelessWidget {
-  const ProjectWidget({
-    required this.name,
-    required this.value,
-    required this.callback,
-    this.isEditable = true,
-    super.key,
-  });
-
-  final String name;
-  final dynamic value;
-  final void Function(dynamic) callback;
-  final bool isEditable;
 
   @override
   Widget build(BuildContext context) {
-    TaskwarriorColorTheme tColors =
-        Theme.of(context).extension<TaskwarriorColorTheme>()!;
-    return Card(
-      color: tColors.secondaryBackgroundColor,
-      child: ListTile(
-        enabled: isEditable,
-        textColor: isEditable
-            ? tColors.primaryTextColor
-            : tColors.primaryDisabledTextColor,
-        title: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              RichText(
-                text: TextSpan(
-                  children: <TextSpan>[
-                    TextSpan(
-                      text: '$name:'.padRight(13),
-                      // style: GoogleFonts.poppins(
-                      //   fontWeight: TaskWarriorFonts.bold,
-                      //   fontSize: TaskWarriorFonts.fontSizeMedium,
-                      //   color: AppSettings.isDarkMode
-                      //       ? Colors.white
-                      //       : Colors.black,
-                      // ),
-                      style: TextStyle(
-                        fontFamily: FontFamily.poppins,
-                        fontWeight: TaskWarriorFonts.bold,
-                        fontSize: TaskWarriorFonts.fontSizeMedium,
-                        color: isEditable
-                            ? tColors.primaryTextColor
-                            : tColors.primaryDisabledTextColor,
-                      ),
-                    ),
-                    TextSpan(
-                      text: value ??
-                          SentenceManager(
-                                  currentLanguage: AppSettings.selectedLanguage)
-                              .sentences
-                              .notSelected,
-                      // style: GoogleFonts.poppins(
-                      //   fontSize: TaskWarriorFonts.fontSizeMedium,
-                      //   color: AppSettings.isDarkMode
-                      //       ? Colors.white
-                      //       : Colors.black,
-                      // ),
-                      style: TextStyle(
-                        fontFamily: FontFamily.poppins,
-                        fontSize: TaskWarriorFonts.fontSizeMedium,
-                        color: isEditable
-                            ? tColors.primaryTextColor
-                            : tColors.primaryDisabledTextColor,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        onTap: () {
-          var controller = TextEditingController(
-            text: value,
-          );
-          showDialog(
-            context: context,
-            builder: (context) => Utils.showAlertDialog(
-              scrollable: true,
-              title: Text(
-                SentenceManager(currentLanguage: AppSettings.selectedLanguage)
-                    .sentences
-                    .editProject,
-                style: TextStyle(
-                  color: tColors.primaryTextColor,
-                ),
-              ),
-              content: TextField(
-                style: TextStyle(
-                  color: tColors.primaryTextColor,
-                ),
-                autofocus: true,
-                maxLines: null,
-                controller: controller,
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Get.back();
-                  },
-                  child: Text(
-                    SentenceManager(
-                            currentLanguage: AppSettings.selectedLanguage)
-                        .sentences
-                        .cancel,
-                    style: TextStyle(
-                      color: tColors.primaryTextColor,
-                    ),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    try {
-                      callback(
-                          (controller.text == '') ? null : controller.text);
-                      Get.back();
-                    } on FormatException catch (e, trace) {
-                      logError(e, trace);
-                    }
-                  },
-                  child: Text(
-                    SentenceManager(
-                            currentLanguage: AppSettings.selectedLanguage)
-                        .sentences
-                        .submit,
-                    style: TextStyle(
-                      color: tColors.primaryTextColor,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
-      ),
+    return AttributeCard(
+      name: name,
+      value: value,
+      isEditable: isEditable,
+      onTap: () => _showEditDialog(context),
     );
   }
 }

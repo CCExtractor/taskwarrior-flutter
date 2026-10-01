@@ -723,4 +723,11 @@ class EnglishSentences extends Sentences {
   String get storageAndData => 'Storage and Data';
   @override
   String get advanced => 'Advanced';
+  // Detail page
+  @override
+  String get taskUpdateFailed => "Couldn't update the task";
+  @override
+  String get taskNotFound => 'Task not found';
+  @override
+  String get pleaseEnterATag => 'Please enter a tag';
 }

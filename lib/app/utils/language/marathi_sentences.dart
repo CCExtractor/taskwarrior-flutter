@@ -736,4 +736,11 @@ class MarathiSentences extends Sentences {
   String get storageAndData => 'स्टोरेज आणि डेटा';
   @override
   String get advanced => 'अड्वांस्ड';
+  // Detail page
+  @override
+  String get taskUpdateFailed => 'कार्य अद्यतनित करता आले नाही';
+  @override
+  String get taskNotFound => 'कार्य सापडले नाही';
+  @override
+  String get pleaseEnterATag => 'कृपया एक टॅग प्रविष्ट करा';
 }
