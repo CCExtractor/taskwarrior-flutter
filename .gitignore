@@ -49,3 +49,9 @@ app.*.map.json
 # FVM Version Cache
 .fvm/
 .vscode/settings.json
+
+# Native libraries compiled from the rust/ crate (tc_helper).
+# These are build outputs and must be regenerated locally, not committed.
+# See rust/README.md for how to build them.
+/android/app/src/main/jniLibs/
+/ios/tc_helper.xcframework/
