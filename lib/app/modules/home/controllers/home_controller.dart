@@ -29,6 +29,7 @@ import 'package:taskwarrior/app/utils/taskfunctions/comparator.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/projects.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/query.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/tags.dart';
+import 'package:taskwarrior/app/utils/taskfunctions/waiting.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/v3/champion/replica.dart';
 import 'package:taskwarrior/app/v3/champion/models/task_for_replica.dart';
@@ -43,6 +44,7 @@ class HomeController extends GetxController {
   final SplashController splashController = Get.find<SplashController>();
   late Storage storage;
   final RxBool pendingFilter = false.obs;
+
   /// Which status the list is filtered to: pending / completed / deleted /
   /// recurring.
   /// Supersedes [pendingFilter], which can only express the first two; that
@@ -263,11 +265,12 @@ class HomeController extends GetxController {
       queriedTasks.value = storage.data.completedData();
     }
 
+    // The switch is labelled "Hide Waiting" while on, so on means waiting
+    // tasks are left out (Taskwarrior's default), not that only they show.
     if (waitingFilter.value) {
       var currentTime = DateTime.now();
-      queriedTasks.value = queriedTasks
-          .where((task) => task.wait != null && task.wait!.isAfter(currentTime))
-          .toList();
+      queriedTasks.value =
+          queriedTasks.where((task) => !isWaiting(task, currentTime)).toList();
     }
 
     if (projectFilter.value.isNotEmpty) {
@@ -795,8 +798,7 @@ class HomeController extends GetxController {
   /// Which projects column the filter drawer is currently showing. The two sit
   /// behind mutually exclusive `Visibility` widgets, so only one of
   /// [projectsKey] / [projectsKeyTaskc] is ever laid out.
-  bool get usesTaskchampionProjects =>
-      taskchampion.value || taskReplica.value;
+  bool get usesTaskchampionProjects => taskchampion.value || taskReplica.value;
 
   void initFilterDrawerTour() {
     tutorialCoachMark = TutorialCoachMark(
