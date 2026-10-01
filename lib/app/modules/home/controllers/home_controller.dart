@@ -739,8 +739,12 @@ class HomeController extends GetxController {
     HomeWidget.saveWidgetData(
         "themeMode", AppSettings.isDarkMode ? "dark" : "light");
     HomeWidget.updateWidget(
-        androidName: "TaskWarriorWidgetProvider",
-        iOSName: "TaskWarriorWidgets");
+            qualifiedAndroidName: kAndroidWidgetProvider,
+            iOSName: "TaskWarriorWidgets")
+        .catchError((Object e) {
+      debugPrint('Error updating widget theme: $e');
+      return null;
+    });
     // print("called and value is${isDarkModeOn.value}");
   }
 
