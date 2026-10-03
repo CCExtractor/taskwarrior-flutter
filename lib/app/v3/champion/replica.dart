@@ -25,6 +25,20 @@ class Replica {
     // interprets. The desktop CLI is what acts on it.
     "recur",
   ];
+
+  /// Format a map value for the FFI string map.
+  ///
+  /// Dart's [DateTime.toString] uses a space (`2026-10-03 12:00:00.000Z`),
+  /// which Rust `parse_datetime` rejects. RFC3339 via [DateTime.toIso8601String]
+  /// keeps due/wait/start intact on create.
+  @visibleForTesting
+  static String attributeValueToString(dynamic value) {
+    if (value is DateTime) {
+      return value.toUtc().toIso8601String();
+    }
+    return value.toString();
+  }
+
   /// Create a task, returning null on success or the reason it was refused.
   ///
   /// This used to answer with a success/failure sentinel that no caller read —
@@ -46,7 +60,7 @@ class Replica {
       if (newTask.containsKey(attr) &&
           newTask[attr] != null &&
           attrs.contains(attr)) {
-        map[attr] = newTask[attr].toString();
+        map[attr] = attributeValueToString(newTask[attr]);
       }
     }
     map['uuid'] = UuidV4().generate();

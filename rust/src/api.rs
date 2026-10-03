@@ -11,10 +11,21 @@ use crate::storage::open_replica;
 use crate::utils::error::TcHelperError;
 
 fn parse_datetime(input: &str) -> Option<DateTime<Utc>> {
-    if input.trim().is_empty() {
+    let input = input.trim();
+    if input.is_empty() {
         return None;
     }
-    input.parse::<DateTime<Utc>>().ok()
+    if let Ok(dt) = input.parse::<DateTime<Utc>>() {
+        return Some(dt);
+    }
+    // Dart's DateTime.toString() emits a space instead of 'T'
+    // (`2026-10-03 12:00:00.000Z`). That is not RFC3339, so accept it as a
+    // fallback — otherwise set_due/set_wait silently clear the field.
+    if let Some((date, rest)) = input.split_once(' ') {
+        format!("{date}T{rest}").parse::<DateTime<Utc>>().ok()
+    } else {
+        None
+    }
 }
 
 /// Return every task in the replica as a JSON array string.
@@ -1501,6 +1512,42 @@ mod add_task_attribute_tests {
         assert_eq!(field(&path, &uuid, "description").as_deref(), Some("full sweep"));
         assert_eq!(field(&path, &uuid, "project").as_deref(), Some("home"));
         assert_eq!(field(&path, &uuid, "recur").as_deref(), Some("monthly"));
+        fs::remove_dir_all(&tmp).ok();
+    }
+
+    #[test]
+    fn dart_datetime_tostring_due_and_wait_are_stored() {
+        // Regression for #662: Dart DateTime.toString() uses a space, not 'T'.
+        // parse_datetime used to return None and set_due/set_wait cleared the
+        // field while add_task still reported success.
+        let (tmp, path) = dir();
+        let (uuid, res) = add(
+            &path,
+            &[
+                ("due", "2026-10-03 12:00:00.000Z"),
+                ("wait", "2026-10-04 08:30:00.000Z"),
+            ],
+        );
+        res.expect("add_task");
+
+        let json = get_all_tasks_json(path.clone()).expect("get_all_tasks_json");
+        let tasks: Vec<Value> = serde_json::from_str(&json).expect("parse json");
+        let task = tasks
+            .into_iter()
+            .find(|t| t.get("uuid").and_then(|u| u.as_str()) == Some(uuid.as_str()))
+            .expect("task not found");
+
+        // Serializer emits due/wait as epoch-second numbers.
+        let due = task
+            .get("due")
+            .and_then(|v| v.as_i64().or_else(|| v.as_str().and_then(|s| s.parse().ok())))
+            .expect("due must be stored");
+        let wait = task
+            .get("wait")
+            .and_then(|v| v.as_i64().or_else(|| v.as_str().and_then(|s| s.parse().ok())))
+            .expect("wait must be stored");
+        assert_eq!(due, 1_791_028_800); // 2026-10-03T12:00:00Z
+        assert_eq!(wait, 1_791_102_600); // 2026-10-04T08:30:00Z
         fs::remove_dir_all(&tmp).ok();
     }
 }
