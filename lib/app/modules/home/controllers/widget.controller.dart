@@ -16,6 +16,15 @@ import 'package:taskwarrior/app/modules/splash/controllers/splash_controller.dar
 import 'package:taskwarrior/app/utils/taskfunctions/urgency.dart';
 // import 'package:taskwarrior/widgets/taskfunctions/datetime_differences.dart';
 
+/// Fully qualified home-screen widget provider class.
+///
+/// home_widget otherwise prefixes the provider name with the application id,
+/// which is `com.ccextractor.taskwarriorflutter.nightly` for the nightly
+/// flavor, while the Kotlin class always lives in the base package; the
+/// lookup then fails with ClassNotFoundException.
+const String kAndroidWidgetProvider =
+    'com.ccextractor.taskwarriorflutter.TaskWarriorWidgetProvider';
+
 class WidgetController extends GetxController {
   final HomeController storageWidget = Get.find<HomeController>();
   late Storage storage;
@@ -181,8 +190,11 @@ class WidgetController extends GetxController {
 
   Future updateWidget() async {
     try {
-      return HomeWidget.updateWidget(
-          name: 'TaskWarriorWidgetProvider', iOSName: 'TaskWarriorWidgets');
+      // Awaited so a failure is caught here instead of surfacing as an
+      // unhandled exception.
+      return await HomeWidget.updateWidget(
+          qualifiedAndroidName: kAndroidWidgetProvider,
+          iOSName: 'TaskWarriorWidgets');
     } on PlatformException catch (exception) {
       debugPrint('Error Updating Widget. $exception');
     }
