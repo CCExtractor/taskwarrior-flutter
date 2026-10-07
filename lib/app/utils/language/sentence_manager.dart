@@ -31,7 +31,6 @@ class SentenceManager {
       case SupportedLanguage.urdu:
         return UrduSentences();
       case SupportedLanguage.english:
-      default:
         return EnglishSentences();
     }
   }

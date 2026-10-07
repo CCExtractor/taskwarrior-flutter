@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
-import 'package:get/get.dart';
 
 void main() {
   setUp(() {

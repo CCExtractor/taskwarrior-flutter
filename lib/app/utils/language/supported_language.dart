@@ -30,8 +30,6 @@ extension SupportedLanguageExtension on SupportedLanguage {
         return 'de';
       case SupportedLanguage.urdu:
         return 'ur';
-      default:
-        return '';
     }
   }
 

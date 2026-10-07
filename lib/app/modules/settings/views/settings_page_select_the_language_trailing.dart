@@ -56,8 +56,6 @@ class SettingsPageSelectTheLanguageTrailing extends StatelessWidget {
         return 'German';
       case SupportedLanguage.urdu:
         return 'اردو';
-      default:
-        return '';
     }
   }
 }

@@ -6,7 +6,6 @@ import 'package:taskwarrior/app/modules/home/views/tas_list_item.dart';
 import 'package:taskwarrior/app/utils/language/supported_language.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/modify.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
-import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 
 class MockModify extends Mock implements Modify {}
 

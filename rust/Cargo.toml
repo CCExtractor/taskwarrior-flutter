@@ -26,3 +26,10 @@ flutter_rust_bridge_macros = "2.11.1"    # Procedural macros support
 
 [build-dependencies]
 flutter_rust_bridge_codegen = "2.11.1"  # Code generator CLI
+
+[lints.rust]
+# flutter_rust_bridge's `#[frb]` macro expands to code gated on the `frb_expand`
+# cfg (it distinguishes codegen-time expansion from the compiled build). check-cfg
+# (Rust 1.80+) otherwise reports every `#[frb]` use as an unexpected cfg. Declaring
+# it here keeps builds warning-free.
+unexpected_cfgs = { level = "warn", check-cfg = ["cfg(frb_expand)"] }
