@@ -74,7 +74,10 @@ android {
 
     defaultConfig {
         minSdkVersion flutter.minSdkVersion
-        targetSdkVersion 33
+        // Google Play requires new apps and updates to target API 36
+        // (Android 16) as of Aug 31, 2026. This is the *behavior* level, not a
+        // floor: minSdkVersion (Flutter default 24) still governs reach.
+        targetSdkVersion 36
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
