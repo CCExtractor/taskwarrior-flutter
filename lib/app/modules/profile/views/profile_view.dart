@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:taskwarrior/app/models/storage/savefile.dart';
 import 'package:taskwarrior/app/modules/profile/views/deleteprofiledialog.dart';
 import 'package:taskwarrior/app/modules/profile/views/profiles_list.dart';
 import 'package:taskwarrior/app/modules/profile/views/renameprofiledialog.dart';
 import 'package:taskwarrior/app/routes/app_pages.dart';
-import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
 
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
@@ -15,6 +13,7 @@ import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:taskwarrior/app/v3/champion/replica.dart';
 import 'package:taskwarrior/app/v3/db/task_database.dart';
+import 'package:taskwarrior/app/widgets/taskwarrior_page_app_bar.dart';
 
 import '../controllers/profile_controller.dart';
 
@@ -28,39 +27,28 @@ class ProfileView extends GetView<ProfileController> {
     TaskwarriorColorTheme tColors =
         Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: TaskWarriorColors.appBarColor,
-        title: Obx(() => Text(
-              controller.profilesMap.length == 1
-                  ? SentenceManager(
-                          currentLanguage: AppSettings.selectedLanguage)
-                      .sentences
-                      .profilePageProfile
-                  : SentenceManager(
-                          currentLanguage: AppSettings.selectedLanguage)
-                      .sentences
-                      .profilePageProfiles,
-              style: GoogleFonts.poppins(
-                color: TaskWarriorColors.white,
-              ),
-            )),
-        leading: IconButton(
-          onPressed: () {
-            Get.back();
-          },
-          icon: Icon(
-            Icons.chevron_left,
-            color: TaskWarriorColors.white,
-            size: 35,
+      appBar: TaskWarriorPageAppBar(
+        title: Obx(
+          () => TaskWarriorPageAppBar.titleText(
+            controller.profilesMap.length == 1
+                ? SentenceManager(
+                        currentLanguage: AppSettings.selectedLanguage)
+                    .sentences
+                    .profilePageProfile
+                : SentenceManager(
+                        currentLanguage: AppSettings.selectedLanguage)
+                    .sentences
+                    .profilePageProfiles,
           ),
         ),
+        onLeadingPressed: () => Get.back(),
         actions: [
           TextButton(
             onPressed: controller.profilesWidget.addProfile,
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
+                const Icon(
                   Icons.add,
                   color: Colors.white,
                 ),
@@ -72,7 +60,7 @@ class ProfileView extends GetView<ProfileController> {
                             currentLanguage: AppSettings.selectedLanguage)
                         .sentences
                         .profilePageAddNewProfile,
-                    style: TextStyle(color: Colors.white)),
+                    style: const TextStyle(color: Colors.white)),
               ],
             ),
           ),

@@ -6,12 +6,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
 import 'package:taskwarrior/app/modules/taskc_details/views/tag_editor.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
-import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
-import 'package:taskwarrior/app/utils/home_path/impl/home.dart';
-import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
+import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:taskwarrior/app/v3/champion/models/task_for_replica.dart';
+import 'package:taskwarrior/app/widgets/taskwarrior_page_app_bar.dart';
 import '../controllers/taskc_details_controller.dart';
 
 class TaskcDetailsView extends GetView<TaskcDetailsController> {
@@ -25,12 +24,9 @@ class TaskcDetailsView extends GetView<TaskcDetailsController> {
       onWillPop: controller.handleWillPop,
       child: Scaffold(
         backgroundColor: tColors.primaryBackgroundColor,
-        appBar: AppBar(
-          foregroundColor: TaskWarriorColors.lightGrey,
-          backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
-          title: Text(
+        appBar: TaskWarriorPageAppBar(
+          title: TaskWarriorPageAppBar.titleText(
             '${SentenceManager(currentLanguage: AppSettings.selectedLanguage).sentences.task}: ${controller.initialTask.description}',
-            style: GoogleFonts.poppins(color: TaskWarriorColors.white),
           ),
         ),
         body: Padding(

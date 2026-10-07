@@ -9,14 +9,12 @@ import 'package:get/get.dart';
 import 'package:loggy/loggy.dart';
 import 'package:taskwarrior/app/models/storage/client.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
-import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
-
-import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
+import 'package:taskwarrior/app/widgets/taskwarrior_page_app_bar.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
@@ -30,37 +28,16 @@ class ManageTaskServerPageAppBar extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     TaskwarriorColorTheme tColors = Theme.of(context).extension<TaskwarriorColorTheme>()!;
-    return AppBar(
-      backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
-      titleSpacing: 0,
-      title: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            SentenceManager(currentLanguage: AppSettings.selectedLanguage)
-                .sentences
-                .manageTaskServerPageConfigureTaskserver,
-            style: TextStyle(
-              fontFamily: FontFamily.poppins,
-              color: TaskWarriorColors.white,
-              fontSize: TaskWarriorFonts.fontSizeLarge,
-            ),
-          ),
-          Text(
-            controller.alias.value == ''
-                ? controller.profile.value
-                : controller.alias.value,
-            // style: GoogleFonts.poppins(
-            //   color: TaskWarriorColors.white,
-            //   fontSize: TaskWarriorFonts.fontSizeSmall,
-            // ),
-            style: TextStyle(
-              fontFamily: FontFamily.poppins,
-              color: TaskWarriorColors.white,
-              fontSize: TaskWarriorFonts.fontSizeSmall,
-            ),
-          ),
-        ],
+    return TaskWarriorPageAppBar(
+      title: TaskWarriorPageAppBar.titleText(
+        SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+            .sentences
+            .manageTaskServerPageConfigureTaskserver,
+      ),
+      subtitle: TaskWarriorPageAppBar.subtitleText(
+        controller.alias.value == ''
+            ? controller.profile.value
+            : controller.alias.value,
       ),
       actions: [
         IconButton(

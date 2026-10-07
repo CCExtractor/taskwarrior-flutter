@@ -3,16 +3,14 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
-
-import 'package:taskwarrior/app/utils/constants/taskwarrior_fonts.dart';
 
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
+import 'package:taskwarrior/app/widgets/taskwarrior_page_app_bar.dart';
 
 import '../controllers/settings_controller.dart';
 
-import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
-
+/// The reference app bar style. It now delegates to the shared
+/// [TaskWarriorPageAppBar], which is what every other page uses too.
 class SettingsPageAppBar extends StatelessWidget
     implements PreferredSizeWidget {
   final SettingsController controller;
@@ -20,54 +18,29 @@ class SettingsPageAppBar extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      centerTitle: false,
-      backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
-      title: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Obx(
-            () => Text(
-              SentenceManager(
-                      currentLanguage: controller.selectedLanguage.value)
-                  .sentences
-                  .settingsPageTitle,
-              style: GoogleFonts.poppins(
-                color: TaskWarriorColors.white,
-                fontSize: TaskWarriorFonts.fontSizeLarge,
-              ),
-            ),
-          ),
-          Obx(
-            () => Text(
-              SentenceManager(
-                      currentLanguage: controller.selectedLanguage.value)
-                  .sentences
-                  .settingsPageSubtitle,
-              style: GoogleFonts.poppins(
-                color: TaskWarriorColors.white,
-                fontSize: TaskWarriorFonts.fontSizeSmall,
-              ),
-            ),
-          ),
-        ],
-      ),
-      leading: GestureDetector(
-        onTap: () {
-          //   Get.toNamed(Routes.b)
-          // ;
-          if (Get.isSnackbarOpen == true) {
-            Get.closeCurrentSnackbar();
-          }
-          Navigator.of(context).pop();
-        },
-        child: Icon(
-          Icons.chevron_left,
-          color: TaskWarriorColors.white,
-          size: 35,
+    return TaskWarriorPageAppBar(
+      title: Obx(
+        () => TaskWarriorPageAppBar.titleText(
+          SentenceManager(
+                  currentLanguage: controller.selectedLanguage.value)
+              .sentences
+              .settingsPageTitle,
         ),
       ),
+      subtitle: Obx(
+        () => TaskWarriorPageAppBar.subtitleText(
+          SentenceManager(
+                  currentLanguage: controller.selectedLanguage.value)
+              .sentences
+              .settingsPageSubtitle,
+        ),
+      ),
+      onLeadingPressed: () {
+        if (Get.isSnackbarOpen == true) {
+          Get.closeCurrentSnackbar();
+        }
+        Navigator.of(context).pop();
+      },
     );
   }
 

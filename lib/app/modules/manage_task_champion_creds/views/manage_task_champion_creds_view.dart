@@ -5,6 +5,7 @@ import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/constants/constants.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
+import 'package:taskwarrior/app/widgets/taskwarrior_page_app_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../controllers/manage_task_champion_creds_controller.dart';
 
@@ -19,28 +20,13 @@ class ManageTaskChampionCredsView
         Theme.of(context).extension<TaskwarriorColorTheme>()!;
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
-        titleSpacing: 0,
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              SentenceManager(currentLanguage: AppSettings.selectedLanguage)
-                  .sentences
-                  .configureTaskchampion,
-              style: GoogleFonts.poppins(
-                color: TaskWarriorColors.white,
-                fontSize: TaskWarriorFonts.fontSizeLarge,
-              ),
-            ),
-          ],
+      appBar: TaskWarriorPageAppBar(
+        title: TaskWarriorPageAppBar.titleText(
+          SentenceManager(currentLanguage: AppSettings.selectedLanguage)
+              .sentences
+              .configureTaskchampion,
         ),
-        actions: const [],
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: TaskWarriorColors.white),
-          onPressed: () => Get.back(),
-        ),
+        onLeadingPressed: () => Get.back(),
       ),
       backgroundColor: tColors.primaryBackgroundColor,
       body: Padding(

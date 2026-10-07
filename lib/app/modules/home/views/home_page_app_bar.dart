@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:taskwarrior/app/routes/app_pages.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
-import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 import 'package:taskwarrior/app/utils/taskchampion/credentials_storage.dart';
 import 'package:taskwarrior/app/utils/taskserver/taskserver.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
+import 'package:taskwarrior/app/widgets/taskwarrior_page_app_bar.dart';
 
 import '../controllers/home_controller.dart';
 
@@ -88,18 +88,12 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
-      surfaceTintColor: TaskWarriorColors.kprimaryBackgroundColor,
-      title: Center(
-        child: Obx(
-          () => Text(
-            SentenceManager(currentLanguage: controller.selectedLanguage.value)
-                .sentences
-                .homePageTitle,
-            style: TextStyle(
-                fontFamily: FontFamily.poppins, color: TaskWarriorColors.white),
-          ),
+    return TaskWarriorPageAppBar(
+      title: Obx(
+        () => TaskWarriorPageAppBar.titleText(
+          SentenceManager(currentLanguage: controller.selectedLanguage.value)
+              .sentences
+              .homePageTitle,
         ),
       ),
       actions: [

@@ -199,7 +199,7 @@ void main() {
     await tester.tap(find.text('Cancel'));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byType(BackButton));
+    await tester.tap(find.byIcon(Icons.chevron_left));
     await tester.pumpAndSettle();
     for (final label in ['Yes', 'No', 'Cancel']) {
       expect(colorOf(label), tColors.primaryTextColor, reason: label);
@@ -231,7 +231,7 @@ void main() {
     controller.setAttribute(TaskAttribute.description, 'Changed');
     await tester.pump();
 
-    await tester.tap(find.byType(BackButton));
+    await tester.tap(find.byIcon(Icons.chevron_left));
     await tester.pumpAndSettle();
     expect(find.byType(AlertDialog), findsOneWidget);
 
@@ -243,7 +243,7 @@ void main() {
 
   testWidgets('back without edits leaves immediately', (tester) async {
     await openDetailPage(tester);
-    await tester.tap(find.byType(BackButton));
+    await tester.tap(find.byIcon(Icons.chevron_left));
     await tester.pumpAndSettle();
     expect(find.byType(DetailRouteView), findsNothing);
   });

@@ -8,6 +8,7 @@ import 'package:taskwarrior/app/routes/app_pages.dart';
 import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
 import 'package:taskwarrior/app/v3/champion/models/task_for_replica.dart';
+import 'package:taskwarrior/app/widgets/taskwarrior_page_app_bar.dart';
 
 class ReportEngineView extends GetView<ReportEngineController> {
   const ReportEngineView({super.key});
@@ -37,24 +38,15 @@ class ReportEngineView extends GetView<ReportEngineController> {
       },
       child: Scaffold(
         backgroundColor: tColors.primaryBackgroundColor,
-        appBar: AppBar(
-          backgroundColor: tColors.primaryBackgroundColor,
-          foregroundColor: tColors.primaryTextColor,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              if (_handleBack()) Get.back();
-            },
-          ),
+        appBar: TaskWarriorPageAppBar(
           title: Obx(() {
             final ReportDefinition? sel = controller.selectedReport.value;
-            return Text(
-              sel == null ? 'Reports' : sel.name,
-              style: GoogleFonts.poppins(
-                  color: tColors.primaryTextColor,
-                  fontWeight: FontWeight.w600),
-            );
+            return TaskWarriorPageAppBar.titleText(
+                sel == null ? 'Reports' : sel.name);
           }),
+          onLeadingPressed: () {
+            if (_handleBack()) Get.back();
+          },
         ),
         body: Obx(() {
           if (controller.isLoading.value) {

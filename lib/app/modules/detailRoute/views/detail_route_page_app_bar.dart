@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:taskwarrior/app/modules/detailRoute/controllers/detail_route_controller.dart';
-import 'package:taskwarrior/app/utils/constants/constants.dart';
+import 'package:taskwarrior/app/widgets/taskwarrior_page_app_bar.dart';
 
 class DetailRoutePageAppBar extends StatelessWidget
     implements PreferredSizeWidget {
@@ -9,15 +9,8 @@ class DetailRoutePageAppBar extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      leading: BackButton(color: TaskWarriorColors.white),
-      backgroundColor: Palette.kToDark,
-      title: Text(
-        controller.appBarTitle,
-        style: TextStyle(
-          color: TaskWarriorColors.white,
-        ),
-      ),
+    return TaskWarriorPageAppBar(
+      title: TaskWarriorPageAppBar.titleText(controller.appBarTitle),
     );
   }
 

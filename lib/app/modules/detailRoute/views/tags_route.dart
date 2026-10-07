@@ -6,6 +6,7 @@ import 'package:taskwarrior/app/utils/constants/constants.dart';
 import 'package:taskwarrior/app/utils/constants/utilites.dart';
 import 'package:taskwarrior/app/utils/gen/fonts.gen.dart';
 import 'package:taskwarrior/app/utils/themes/theme_extension.dart';
+import 'package:taskwarrior/app/widgets/taskwarrior_page_app_bar.dart';
 
 /// Full-screen tag editor: tap a chip to remove it, tap a known tag to add
 /// it, or add new ones with the button. All state lives in [controller].
@@ -68,18 +69,8 @@ class TagsRoute extends StatelessWidget {
     TaskwarriorColorTheme tColors =
         Theme.of(context).extension<TaskwarriorColorTheme>()!;
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: TaskWarriorColors.kprimaryBackgroundColor,
-        title: Text(
-          controller.sentences.tags,
-          style: TextStyle(
-            fontFamily: FontFamily.poppins,
-            color: TaskWarriorColors.white,
-          ),
-        ),
-        leading: BackButton(
-          color: TaskWarriorColors.white,
-        ),
+      appBar: TaskWarriorPageAppBar(
+        title: TaskWarriorPageAppBar.titleText(controller.sentences.tags),
       ),
       backgroundColor: tColors.secondaryBackgroundColor,
       body: SafeArea(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:taskwarrior/app/utils/debug_logger/log_databse_helper.dart';
+import 'package:taskwarrior/app/widgets/taskwarrior_page_app_bar.dart';
 import '../controllers/logs_controller.dart';
 
 class LogsView extends GetView<LogsController> {
@@ -9,8 +10,8 @@ class LogsView extends GetView<LogsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Debug Logs'),
+      appBar: TaskWarriorPageAppBar(
+        title: TaskWarriorPageAppBar.titleText('Debug Logs'),
         actions: [
           Obx(
             () => IconButton(
