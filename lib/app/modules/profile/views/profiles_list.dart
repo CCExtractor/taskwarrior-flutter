@@ -65,38 +65,36 @@ class ProfilesList extends StatelessWidget {
                 title: Row(
                   children: [
                     Expanded(
-                      child: Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment
-                              .start, // Aligns text to the left
-                          children: [
-                            Text(
-                              item,
-                              style: TextStyle(
-                                decoration: profileId == currentProfile
-                                    ? TextDecoration.underline
-                                    : TextDecoration.none,
-                                fontSize: 16.0, // Standard list tile title size
-                                color: AppSettings.isDarkMode
-                                    ? TaskWarriorColors.kprimaryTextColor
-                                    : TaskWarriorColors.kLightPrimaryTextColor,
-                              ),
+                      child: Column(
+                        crossAxisAlignment:
+                            CrossAxisAlignment.start, // Aligns text to the left
+                        children: [
+                          Text(
+                            item,
+                            style: TextStyle(
+                              decoration: profileId == currentProfile
+                                  ? TextDecoration.underline
+                                  : TextDecoration.none,
+                              fontSize: 16.0, // Standard list tile title size
+                              color: AppSettings.isDarkMode
+                                  ? TaskWarriorColors.kprimaryTextColor
+                                  : TaskWarriorColors.kLightPrimaryTextColor,
                             ),
-                            const SizedBox(
-                                height:
-                                    2.0), // Adds a small space between the texts
-                            Text(
-                              profileId,
-                              style: TextStyle(
-                                fontSize:
-                                    10.0, // Smaller font size for the subtitle
-                                color: AppSettings.isDarkMode
-                                    ? Colors.grey[400]
-                                    : Colors.grey[700],
-                              ),
+                          ),
+                          const SizedBox(
+                              height:
+                                  2.0), // Adds a small space between the texts
+                          Text(
+                            profileId,
+                            style: TextStyle(
+                              fontSize:
+                                  10.0, // Smaller font size for the subtitle
+                              color: AppSettings.isDarkMode
+                                  ? Colors.grey[400]
+                                  : Colors.grey[700],
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                     // This Row holds the action buttons, keeping them separate from the tile's default trailing arrow
@@ -137,7 +135,8 @@ class ProfilesList extends StatelessWidget {
                         // Label the config option for the profile's actual sync
                         // mode: a Taskchampion (v3) profile configures
                         // Taskchampion, not the Taskserver.
-                        Get.find<SplashController>().getMode(profileId) == 'TW3C'
+                        Get.find<SplashController>().getMode(profileId) ==
+                                'TW3C'
                             ? SentenceManager(
                                     currentLanguage:
                                         AppSettings.selectedLanguage)
