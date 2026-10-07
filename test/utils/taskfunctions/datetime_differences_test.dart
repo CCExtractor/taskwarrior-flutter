@@ -1,4 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/datetime_differences.dart';
 
@@ -86,6 +88,21 @@ void main() {
       AppSettings.use24HourFormatRx.value = true;
       expect(when(dt), contains('1d'));
       expect(when(dt), matches(r'.*\d{1,2}:\d{2}\)'));
+    });
+  });
+
+  group('time of day is shown in local time', () {
+    // Task dates are stored in UTC. These only distinguish UTC from local
+    // time when the test machine is not itself on UTC.
+    final utc = DateTime.now().toUtc().subtract(const Duration(hours: 3));
+    final local = DateFormat('hh:mm a').format(utc.toLocal());
+
+    test('age', () {
+      expect(age(utc), endsWith('($local)'));
+    });
+
+    test('when', () {
+      expect(when(utc), endsWith('($local)'));
     });
   });
 }

@@ -40,3 +40,10 @@ DateTime? getSchedDate(List<DateTime?> dates) {
 DateTime? getUntilDate(List<DateTime?> dates) {
   return dates[3];
 }
+
+/// The project for a new task: the Project field when it has text, otherwise
+/// whatever the description set (e.g. `project:home`), otherwise none.
+String? resolveProject(String fieldText, String? parsedProject) {
+  final String project = fieldText.trim();
+  return project.isEmpty ? parsedProject : project;
+}

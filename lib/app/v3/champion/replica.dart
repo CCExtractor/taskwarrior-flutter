@@ -23,6 +23,7 @@ class Replica {
     // interprets. The desktop CLI is what acts on it.
     "recur",
   ];
+
   /// Create a task, returning null on success or the reason it was refused.
   ///
   /// This used to answer with a success/failure sentinel that no caller read —
@@ -192,8 +193,11 @@ class Replica {
       var url = await CredentialsStorage.getApiUrl();
       var clientId = await CredentialsStorage.getClientId();
       var encryptionSecret = await CredentialsStorage.getEncryptionSecret();
-      debugPrint(
-          "Syncing Replica with url=$url clientId=$clientId encryptionSecret=$encryptionSecret");
+      // Never log the client id or encryption secret: debugPrint output is
+      // persisted to the debug-log database shown on the Logs page.
+      debugPrint("Syncing Replica with url=$url "
+          "(clientId set: ${clientId?.isNotEmpty ?? false}, "
+          "encryptionSecret set: ${encryptionSecret?.isNotEmpty ?? false})");
       await sync_(
           taskdbDirPath: taskdbDirPath,
           url: url ?? "",

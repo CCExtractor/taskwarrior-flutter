@@ -25,7 +25,8 @@ String age(DateTime dt, {bool? use24HourFormat}) {
 
   // Format the time part according to the format preference
   String timeFormat = format ? 'HH:mm' : 'hh:mm a';
-  String formattedTime = DateFormat(timeFormat).format(dt);
+  // Task dates are stored in UTC; show the clock time the user expects.
+  String formattedTime = DateFormat(timeFormat).format(dt.toLocal());
 
   return '$result ago ($formattedTime)';
 }
@@ -54,7 +55,8 @@ String when(DateTime dt, {bool? use24HourFormat}) {
 
   // Format the time part according to the format preference
   String timeFormat = format ? 'HH:mm' : 'hh:mm a';
-  String formattedTime = DateFormat(timeFormat).format(dt);
+  // Task dates are stored in UTC; show the clock time the user expects.
+  String formattedTime = DateFormat(timeFormat).format(dt.toLocal());
 
   return '$result ($formattedTime)';
 }
