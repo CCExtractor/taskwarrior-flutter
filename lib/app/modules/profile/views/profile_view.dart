@@ -71,11 +71,11 @@ class ProfileView extends GetView<ProfileController> {
             currentProfileKey: controller.currentProfileKey,
             addNewProfileKey: controller.addNewProfileKey,
             manageSelectedProfileKey: controller.manageSelectedProfileKey,
-            controller.profilesMap,
-            controller.currentProfile.value,
-            controller.profilesWidget.addProfile,
-            controller.profilesWidget.selectProfile,
-            (profile) => showDialog(
+            profilesMap: controller.profilesMap,
+            currentProfile: controller.currentProfile.value,
+            onAddProfile: controller.profilesWidget.addProfile,
+            onSelectProfile: controller.profilesWidget.selectProfile,
+            onRename: (profile) => showDialog(
               context: context,
               builder: (context) => Center(
                 child: RenameProfileDialog(
@@ -86,7 +86,7 @@ class ProfileView extends GetView<ProfileController> {
                 ),
               ),
             ),
-            () {
+            onConfigure: () {
               if (controller.profilesWidget
                           .getMode(controller.currentProfile.value) ==
                       'TW3' ||
@@ -98,7 +98,7 @@ class ProfileView extends GetView<ProfileController> {
               }
               Get.toNamed(Routes.MANAGE_TASK_SERVER);
             },
-            (profile) async {
+            onExport: (profile) async {
               String tasks;
               if (controller.profilesWidget.getMode(profile) == "TW2") {
                 tasks =
@@ -178,7 +178,7 @@ class ProfileView extends GetView<ProfileController> {
                 },
               );
             },
-            (profile) async {
+            onCopy: (profile) async {
               try {
                 await controller.profilesWidget.copyConfigToNewProfile(
                   profile,
@@ -210,20 +210,22 @@ class ProfileView extends GetView<ProfileController> {
                     duration: const Duration(seconds: 2)));
               }
             },
-            (profile) {
-              String? profileName = controller.profilesMap[profile];
-              controller.profilesMap.remove(profile);
-              showDialog(
-                context: context,
-                builder: (context) => DeleteProfileDialog(
-                  profile: profile,
-                  context: context,
-                  profiles: controller.profilesMap,
-                  profileName: profileName,
-                ),
-              );
+            onDelete: (profile) async {
+              // Do NOT touch profilesMap here. The row is removed only once the
+              // deletion actually succeeds (inside DeleteProfileDialog), so
+              // cancelling or dismissing leaves the profile intact. Returns
+              // true only when the profile was deleted, which is what lets the
+              // swipe gesture decide whether to dismiss the row.
+              final bool deleted = await showDialog<bool>(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) =>
+                        DeleteProfileDialog(profile: profile),
+                  ) ??
+                  false;
+              return deleted;
             },
-            (profile) {
+            onChangeMode: (profile) {
               String currentMode = controller.profilesWidget.getMode(profile);
               String? selectedMode = currentMode;
               showDialog(

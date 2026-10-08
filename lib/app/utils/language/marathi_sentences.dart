@@ -528,6 +528,9 @@ class MarathiSentences extends Sentences {
   String get profileDeletionFailed => 'प्रोफाइल हटवण्यात अयशस्वी';
   @override
   String get profileDeleteConfirmation => 'खात्री करा';
+  @override
+  String get profileDeleteWarning =>
+      'हे प्रोफाइल हटवल्यास त्याशी संबंधित सर्व कार्ये आणि सेटिंग्ज कायमची हटवली जातील. ही क्रिया पूर्ववत केली जाऊ शकत नाही.';
 
 // अहवाल
   @override

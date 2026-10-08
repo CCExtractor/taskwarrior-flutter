@@ -518,6 +518,9 @@ class HindiSentences extends Sentences {
   String get profileDeletionFailed => 'हटाने में विफल';
   @override
   String get profileDeleteConfirmation => 'पुष्टि करें';
+  @override
+  String get profileDeleteWarning =>
+      'इस प्रोफ़ाइल को हटाने से इससे जुड़े सभी कार्य और सेटिंग्स स्थायी रूप से हट जाएँगे। यह क्रिया पूर्ववत नहीं की जा सकती।';
 
   @override
   String get reportsDate => 'तारीख';

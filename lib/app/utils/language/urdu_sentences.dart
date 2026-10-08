@@ -520,6 +520,9 @@ class UrduSentences extends Sentences {
   String get profileDeletionFailed => 'حذف کرنے میں ناکام';
   @override
   String get profileDeleteConfirmation => 'تصدیق';
+  @override
+  String get profileDeleteWarning =>
+      'اس پروفائل کو حذف کرنے سے اس سے وابستہ تمام کام اور ترتیبات مستقل طور پر حذف ہو جائیں گی۔ یہ عمل واپس نہیں کیا جا سکتا۔';
 
   // Reports strings
   @override

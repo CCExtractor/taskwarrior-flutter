@@ -271,6 +271,13 @@ abstract class Sentences {
   String get profileDeletionFailed;
   String get profileDeleteConfirmation;
 
+  /// Warning shown in the delete-profile confirmation. The base provides an
+  /// English default so an untranslated language still shows a sensible
+  /// message; language files override it with their own translation.
+  String get profileDeleteWarning =>
+      'Deleting this profile will permanently delete all tasks and settings '
+      'associated with it. This action cannot be undone.';
+
   // Reports strings
   String get reportsDate;
   String get reportsPending;

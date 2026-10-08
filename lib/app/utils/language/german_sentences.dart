@@ -521,6 +521,9 @@ class GermanSentences extends Sentences {
   String get profileDeletionFailed => 'Löschen schlug fehl';
   @override
   String get profileDeleteConfirmation => 'Bestätigen';
+  @override
+  String get profileDeleteWarning =>
+      'Beim Löschen dieses Profils werden alle zugehörigen Aufgaben und Einstellungen dauerhaft entfernt. Diese Aktion kann nicht rückgängig gemacht werden.';
 
   // Reports strings
   @override

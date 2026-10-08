@@ -133,10 +133,9 @@ class HomeController extends GetxController {
       }
     });
     ever(splashController.currentProfile, (_) {
-      if (splashController.getMode(splashController.currentProfile.value) !=
-          "TW3") {
-        refreshTaskWithNewProfile();
-      }
+      // Task reloading now lives in SplashController.switching(), which runs
+      // for both a manual profile switch and profile deletion. This listener
+      // only refreshes the home-screen widget.
       if (Platform.isAndroid || Platform.isIOS) {
         WidgetController widgetController = Get.put(WidgetController());
         widgetController.fetchAllData();
@@ -202,6 +201,22 @@ class HomeController extends GetxController {
     await taskDatabase.open();
     List<TaskForC> fetchedTasks = await taskDatabase.fetchTasksFromDatabase();
     tasks.value = fetchedTasks;
+  }
+
+  /// Reloads whichever task list the current sync mode displays.
+  ///
+  /// TW3C reads the replica, TW3 reads the TaskChampion SQLite DB, and TW2
+  /// (local) reads the legacy storage. [fetchTasksFromDB] alone does nothing
+  /// for TW2 — it returns early — which is why seeding dummy tasks added data
+  /// that the home list never showed until an app restart.
+  Future<void> refreshTaskList() async {
+    if (taskReplica.value) {
+      await refreshReplicaTaskList();
+    } else if (taskchampion.value) {
+      await fetchTasksFromDB();
+    } else {
+      refreshTaskWithNewProfile();
+    }
   }
 
   Future<void> _loadTaskChampion() async {

@@ -533,6 +533,9 @@ class SpanishSentences extends Sentences {
   String get profileDeletionFailed => 'Error al eliminar';
   @override
   String get profileDeleteConfirmation => 'Confirmar';
+  @override
+  String get profileDeleteWarning =>
+      'Eliminar este perfil borrará permanentemente todas las tareas y ajustes asociados. Esta acción no se puede deshacer.';
 
 // Reports strings
   @override

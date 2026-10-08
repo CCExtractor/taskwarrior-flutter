@@ -180,7 +180,10 @@ class NavDrawer extends StatelessWidget {
                   );
                   try {
                     final int n = await seedDummyTasks();
-                    await homeController.fetchTasksFromDB();
+                    // Reload the list for the active sync mode: TW2 (local)
+                    // reads the legacy store, TW3C the replica, TW3 the DB.
+                    // fetchTasksFromDB() alone does nothing in TW2.
+                    await homeController.refreshTaskList();
                     messenger.showSnackBar(
                       SnackBar(content: Text('Seeded $n dummy tasks')),
                     );

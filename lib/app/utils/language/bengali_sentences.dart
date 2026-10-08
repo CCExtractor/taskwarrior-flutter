@@ -532,6 +532,9 @@ class BengaliSentences extends Sentences {
   String get profileDeletionFailed => 'প্রোফাইল মুছে ফেলা ব্যর্থ হয়েছে';
   @override
   String get profileDeleteConfirmation => 'আপনি কি প্রোফাইল মুছে ফেলতে চান?';
+  @override
+  String get profileDeleteWarning =>
+      'এই প্রোফাইল মুছে ফেললে এর সাথে যুক্ত সমস্ত কাজ এবং সেটিংস স্থায়ীভাবে মুছে যাবে। এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।';
 
 // Reports strings
   @override

@@ -5,34 +5,40 @@ import 'package:taskwarrior/app/utils/constants/taskwarrior_colors.dart';
 import 'package:taskwarrior/app/utils/app_settings/app_settings.dart';
 import 'package:taskwarrior/app/utils/language/sentence_manager.dart';
 
+/// The list of profiles. Every action the tile can trigger is passed in as a
+/// named callback, so the call site reads as intent rather than argument order.
 class ProfilesList extends StatelessWidget {
-  const ProfilesList(
-    this.profilesMap,
-    this.currentProfile,
-    this.addProfile,
-    this.selectProfile,
-    this.rename,
-    this.configure,
-    this.export,
-    this.copy,
-    this.delete,
-    this.changeMode, {
+  const ProfilesList({
+    super.key,
+    required this.profilesMap,
+    required this.currentProfile,
+    required this.onAddProfile,
+    required this.onSelectProfile,
+    required this.onRename,
+    required this.onConfigure,
+    required this.onExport,
+    required this.onCopy,
+    required this.onDelete,
+    required this.onChangeMode,
     required this.currentProfileKey,
     required this.addNewProfileKey,
     required this.manageSelectedProfileKey,
-    super.key,
   });
 
   final RxMap<dynamic, dynamic> profilesMap;
   final String currentProfile;
-  final void Function() addProfile;
-  final void Function(String) selectProfile;
-  final void Function(String) rename;
-  final void Function() configure;
-  final void Function(String) export;
-  final void Function(String) copy;
-  final void Function(dynamic) delete;
-  final void Function(String) changeMode;
+  final void Function() onAddProfile;
+  final void Function(String) onSelectProfile;
+  final void Function(String) onRename;
+  final void Function() onConfigure;
+  final void Function(String) onExport;
+  final void Function(String) onCopy;
+
+  /// Deletes the profile. Returns true only when it was actually deleted, which
+  /// lets the swipe gesture decide whether to dismiss the row.
+  final Future<bool> Function(String) onDelete;
+
+  final void Function(String) onChangeMode;
   final GlobalKey currentProfileKey;
   final GlobalKey addNewProfileKey;
   final GlobalKey manageSelectedProfileKey;
@@ -45,15 +51,17 @@ class ProfilesList extends StatelessWidget {
             List pnames = profilesMap.values.toList();
             List pid = profilesMap.keys.toList();
             final item = pnames[index];
-            final profileId =
-                pid[index]; // Store pid[index] in a variable for clarity
+            final String profileId =
+                pid[index] as String; // Store pid[index] for clarity
 
             return Dismissible(
               key: Key(profileId),
               direction: DismissDirection.endToStart,
-              onDismissed: (direction) {
-                delete(profileId);
-              },
+              // Route the swipe through the same confirmation dialog as the
+              // list tile. Returning false (cancel) snaps the row back; true
+              // dismisses it, and by then the deletion has already removed it
+              // from profilesMap.
+              confirmDismiss: (direction) => onDelete(profileId),
               background: Container(
                 color: Colors.red,
                 alignment: Alignment.centerRight,
@@ -106,12 +114,12 @@ class ProfilesList extends StatelessWidget {
                               color: AppSettings.isDarkMode
                                   ? TaskWarriorColors.kprimaryTextColor
                                   : TaskWarriorColors.kLightPrimaryTextColor),
-                          onPressed: () => rename(profileId),
+                          onPressed: () => onRename(profileId),
                         ),
                         if (currentProfile != profileId)
                           IconButton(
                             onPressed: () {
-                              selectProfile(profileId);
+                              onSelectProfile(profileId);
                             },
                             icon: Icon(Icons.check,
                                 color: AppSettings.isDarkMode
@@ -154,7 +162,7 @@ class ProfilesList extends StatelessWidget {
                         ),
                       ),
                       onTap: () {
-                        configure();
+                        onConfigure();
                       },
                     ),
                   ListTile(
@@ -172,7 +180,7 @@ class ProfilesList extends StatelessWidget {
                                 ? TaskWarriorColors.kprimaryTextColor
                                 : TaskWarriorColors.kLightPrimaryTextColor)),
                     onTap: () {
-                      export(profileId);
+                      onExport(profileId);
                     },
                   ),
                   ListTile(
@@ -190,7 +198,7 @@ class ProfilesList extends StatelessWidget {
                                 ? TaskWarriorColors.kprimaryTextColor
                                 : TaskWarriorColors.kLightPrimaryTextColor)),
                     onTap: () {
-                      copy(profileId);
+                      onCopy(profileId);
                     },
                   ),
                   ListTile(
@@ -208,7 +216,7 @@ class ProfilesList extends StatelessWidget {
                                 ? TaskWarriorColors.kprimaryTextColor
                                 : TaskWarriorColors.kLightPrimaryTextColor)),
                     onTap: () {
-                      changeMode(profileId);
+                      onChangeMode(profileId);
                     },
                   ),
                   ListTile(
@@ -226,7 +234,7 @@ class ProfilesList extends StatelessWidget {
                                 ? TaskWarriorColors.kprimaryTextColor
                                 : TaskWarriorColors.kLightPrimaryTextColor)),
                     onTap: () {
-                      delete(profileId);
+                      onDelete(profileId);
                     },
                   ),
                 ],

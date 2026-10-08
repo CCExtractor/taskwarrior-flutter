@@ -537,6 +537,9 @@ class FrenchSentences extends Sentences {
   String get profileDeletionFailed => 'Échec de la suppression';
   @override
   String get profileDeleteConfirmation => 'Confirmer';
+  @override
+  String get profileDeleteWarning =>
+      'Supprimer ce profil effacera définitivement toutes les tâches et tous les paramètres associés. Cette action est irréversible.';
 
 // Chaînes des rapports
   @override
