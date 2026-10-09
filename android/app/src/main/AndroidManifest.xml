@@ -58,6 +58,11 @@
             <meta-data android:name="android.appwidget.provider"
                 android:resource="@xml/taskwarriorconfig" />
         </receiver>
+        <!-- Receives the widget's status-tab taps (pending/completed/deleted/
+             recurring) while the app is closed. Not exported: it only ever
+             gets triggered by this app's own PendingIntents. -->
+        <receiver android:name=".WidgetStatusReceiver"
+            android:exported="false" />
         <receiver android:name="es.antonborri.home_widget.HomeWidgetBackgroundReceiver"
             android:exported="true">
             <intent-filter>

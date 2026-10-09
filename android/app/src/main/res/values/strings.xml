@@ -16,4 +16,12 @@
     <string name="text_task_list">Task List</string>
     <string name="add_task_desc">add_task</string>
     <string name="no_tasks_available">No Tasks available</string>
+    <string name="status_pending">Pending</string>
+    <string name="status_completed">Completed</string>
+    <string name="status_deleted">Deleted</string>
+    <string name="status_recurring">Recurring</string>
+    <string name="empty_pending">No pending tasks</string>
+    <string name="empty_completed">No completed tasks</string>
+    <string name="empty_deleted">No deleted tasks</string>
+    <string name="empty_recurring">No recurring tasks</string>
 </resources>

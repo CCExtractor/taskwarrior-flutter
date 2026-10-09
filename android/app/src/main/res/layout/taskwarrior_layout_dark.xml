@@ -47,6 +47,61 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/status_tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/bar_color_dark"
+        android:paddingHorizontal="6dp"
+        android:paddingBottom="6dp">
+
+        <TextView
+            android:id="@+id/tab_pending"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingVertical="6dp"
+            android:text="@string/status_pending"
+            android:textSize="12sp"
+            android:textColor="@color/fg_dark" />
+
+        <TextView
+            android:id="@+id/tab_completed"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingVertical="6dp"
+            android:text="@string/status_completed"
+            android:textSize="12sp"
+            android:textColor="@color/fg_dark" />
+
+        <TextView
+            android:id="@+id/tab_deleted"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingVertical="6dp"
+            android:text="@string/status_deleted"
+            android:textSize="12sp"
+            android:textColor="@color/fg_dark" />
+
+        <TextView
+            android:id="@+id/tab_recurring"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingVertical="6dp"
+            android:text="@string/status_recurring"
+            android:textSize="12sp"
+            android:textColor="@color/fg_dark" />
+
+    </LinearLayout>
+
     <ListView
         android:id="@+id/list_view"
         android:layout_width="match_parent"

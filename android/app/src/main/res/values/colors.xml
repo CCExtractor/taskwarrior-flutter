@@ -17,4 +17,8 @@
     <color name="mid_priority">#FFF200</color>
     <color name="low_priority">#00FF42</color>
     <color name="no_priority">#A2A2A2</color>
+    <!-- In-widget status toggle (pending/completed/deleted/recurring). -->
+    <color name="widget_tab_selected">#2196F3</color>
+    <color name="widget_tab_selected_dark">#1565C0</color>
+    <color name="widget_tab_selected_fg">#FFFFFF</color>
 </resources>

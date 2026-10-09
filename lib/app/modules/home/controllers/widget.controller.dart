@@ -11,6 +11,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:taskwarrior/app/models/filters.dart';
 import 'package:taskwarrior/app/models/json/task.dart';
 import 'package:taskwarrior/app/models/storage.dart';
+import 'package:taskwarrior/app/models/task_like.dart' show parseTaskDate;
 import 'package:taskwarrior/app/modules/home/controllers/home_controller.dart';
 import 'package:taskwarrior/app/modules/splash/controllers/splash_controller.dart';
 import 'package:taskwarrior/app/utils/taskfunctions/urgency.dart';
@@ -52,139 +53,117 @@ class WidgetController extends GetxController {
     await updateWidget();
   }
 
-  List<Map<String, dynamic>> getTW2Tasks(HomeController taskController) {
-    int lengthBeforeFilters = allData.length;
-    List<Task> tasks = allData;
-    debugPrint(
-        'Tasks: ${tasks.length}, ${taskController.projectFilter}, ${taskController.pendingFilter.value}, ${taskController.selectedSort.value}');
-    if (taskController.projectFilter.value != 'All Projects' &&
-        taskController.projectFilter.toString().isNotEmpty) {
-      tasks = tasks
-          .where((task) => task.project == taskController.projectFilter.value)
-          .toList();
+  /// Orders priorities the way they should appear in the widget: High, then
+  /// Medium, Low, and finally tasks with no priority.
+  int _priorityRank(String? priority) {
+    switch (priority) {
+      case 'H':
+        return 0;
+      case 'M':
+        return 1;
+      case 'L':
+        return 2;
+      default:
+        return 3;
+    }
+  }
+
+  /// One widget row. `status` is the field the in-widget
+  /// pending/completed/deleted/recurring toggle filters on. `due` is stored as
+  /// an ISO-8601 UTC string (or null) so the widget payload is self-describing
+  /// and stays in the same due-first order everywhere it is rendered.
+  Map<String, dynamic> _widgetTask({
+    required String description,
+    required String? uuid,
+    required String? priority,
+    required String? status,
+    required num urgency,
+    DateTime? due,
+  }) {
+    return {
+      "description": description,
+      "urgency": 'urgencyLevel : ${urgency.toStringAsFixed(1)}',
+      "uuid": uuid,
+      "priority": priority ?? "N",
+      "status": status ?? "pending",
+      "due": due?.toUtc().toIso8601String(),
+    };
+  }
+
+  /// Every task across every status, due soonest first, then by priority.
+  ///
+  /// The widget filters by status itself, so the app's current
+  /// pending/completed/deleted/recurring selection is deliberately NOT applied
+  /// here — otherwise the toggle would have nothing to switch to. Project, tag
+  /// and sort filters are likewise skipped: the widget is meant to show all
+  /// tasks. Ships deleted tasks too, which the old payload dropped entirely.
+  List<Map<String, dynamic>> getWidgetTasks(HomeController taskController) {
+    final List<Map<String, dynamic>> l = [];
+
+    if (taskController.taskchampion.value) {
+      for (final task in taskController.tasks) {
+        l.add(_widgetTask(
+          description: task.description,
+          uuid: task.uuid,
+          priority: task.priority,
+          status: task.status,
+          urgency: task.urgency ?? 0,
+          due: parseTaskDate(task.due),
+        ));
+      }
+    } else if (taskController.taskReplica.value) {
+      for (final task in taskController.tasksFromReplica) {
+        l.add(_widgetTask(
+          description: task.description ?? '',
+          uuid: task.uuid,
+          priority: task.priority,
+          status: task.status,
+          urgency: 0,
+          due: parseTaskDate(task.due),
+        ));
+      }
     } else {
-      tasks = List<Task>.from(tasks);
+      for (final task in allData) {
+        l.add(_widgetTask(
+          description: task.description,
+          uuid: task.uuid,
+          priority: task.priority,
+          status: task.status,
+          urgency: urgency(task),
+          due: task.due,
+        ));
+      }
     }
 
-    // Apply other filters and sorting
-    tasks.sort((a, b) => a.id!.compareTo(b.id!));
+    l.sort((a, b) {
+      final DateTime? da = DateTime.tryParse((a['due'] as String?) ?? '')?.toUtc();
+      final DateTime? db = DateTime.tryParse((b['due'] as String?) ?? '')?.toUtc();
 
-    tasks = tasks.where((task) {
-      if (taskController.pendingFilter.value) {
-        return task.status == 'pending';
-      } else {
-        return task.status == 'completed';
+      // Tasks with a due date come first, soonest first (overdue included at the
+      // very top); tasks without one sink below all dated tasks.
+      if (da != null && db != null) {
+        final int byDue = da.compareTo(db);
+        if (byDue != 0) return byDue;
+      } else if (da != null) {
+        return -1;
+      } else if (db != null) {
+        return 1;
       }
-    }).toList();
 
-    tasks = tasks.where((task) {
-      var tags = task.tags?.toSet() ?? {};
-      if (taskController.tagUnion.value) {
-        if (taskController.selectedTags.isEmpty) {
-          return true;
-        }
-        return taskController.selectedTags.any((tag) => (tag.startsWith('+'))
-            ? tags.contains(tag.substring(1))
-            : !tags.contains(tag.substring(1)));
-      } else {
-        return taskController.selectedTags.every((tag) => (tag.startsWith('+'))
-            ? tags.contains(tag.substring(1))
-            : !tags.contains(tag.substring(1)));
-      }
-    }).toList();
-
-    // Apply sorting based on selectedSort
-    tasks.sort((a, b) {
-      switch (taskController.selectedSort.value) {
-        case 'Created+':
-          return a.entry.compareTo(b.entry);
-        case 'Created-':
-          return b.entry.compareTo(a.entry);
-        case 'Modified+':
-          return a.modified!.compareTo(b.modified!);
-        case 'Modified-':
-          return b.modified!.compareTo(a.modified!);
-        case 'Due till+':
-          return a.due!.compareTo(b.due!);
-        case 'Due till-':
-          return b.due!.compareTo(a.due!);
-        case 'Priority-':
-          return a.priority!.compareTo(b.priority!);
-        case 'Priority+':
-          return b.priority!.compareTo(a.priority!);
-        case 'Project+':
-          return a.project!.compareTo(b.project!);
-        case 'Project-':
-          return b.project!.compareTo(a.project!);
-        case 'Urgency-':
-          return b.urgency!.compareTo(a.urgency!);
-        case 'Urgency+':
-          return a.urgency!.compareTo(b.urgency!);
-        default:
-          return 0;
-      }
+      final int byPriority = _priorityRank(a['priority'] as String?)
+          .compareTo(_priorityRank(b['priority'] as String?));
+      if (byPriority != 0) return byPriority;
+      return (a['description'] as String)
+          .toLowerCase()
+          .compareTo((b['description'] as String).toLowerCase());
     });
-    List<Map<String, String>> l = [];
-    for (var task in tasks) {
-      l.add({
-        "description": task.description,
-        "urgency": 'urgencyLevel : ${urgency(task)}',
-        "uuid": task.uuid,
-        "priority": task.priority ?? "N"
-      });
-    }
-    if (l.isEmpty && lengthBeforeFilters > 0) {
-      l.add({
-        "description": "No tasks found because of filter",
-        "urgency": "urgencyLevel : 0",
-        "priority": "2",
-        "uuid": "NO_TASK"
-      });
-    } else if (l.isEmpty && lengthBeforeFilters == 0) {
-      l.add({
-        "description": "No tasks found",
-        "urgency": "urgencyLevel : 0",
-        "priority": "1",
-        "uuid": "NO_TASK"
-      });
-    }
     return l;
   }
 
   Future<void> sendData() async {
     final HomeController taskController = Get.find<HomeController>();
-    List<Map<String, dynamic>> l;
-    if (!taskController.taskchampion.value &&
-        !taskController.taskReplica.value) {
-      l = getTW2Tasks(taskController);
-    } else if (taskController.taskchampion.value) {
-      var tasks = taskController.tasks;
-      l = [];
-      if (tasks.isNotEmpty) {
-        for (var task in tasks) {
-          if (task.status == 'deleted') continue;
-          l.add({
-            "description": task.description,
-            "urgency": 'urgencyLevel : 0',
-            "uuid": task.uuid,
-            "priority": task.priority ?? "N"
-          });
-        }
-      }
-    } else {
-      l = [];
-      var tasks = taskController.tasksFromReplica;
-      if (tasks.isNotEmpty) {
-        for (var task in tasks) {
-          l.add({
-            "description": task.description,
-            "urgency": 'urgencyLevel : 0',
-            "uuid": task.uuid,
-            "priority": task.priority ?? "N"
-          });
-        }
-      }
-    }
+    final List<Map<String, dynamic>> l = getWidgetTasks(taskController);
+    debugPrint('Widget payload: ${l.length} tasks across all statuses');
     await HomeWidget.saveWidgetData("tasks", jsonEncode(l));
   }
 

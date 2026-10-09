@@ -78,6 +78,10 @@ struct TaskWidgetEntryView: View {
     @Environment(\.widgetFamily) var family
     
     // 1. DATA PARSING
+    // The Flutter payload now carries every status (so the Android widget can
+    // offer its own pending/completed/deleted/recurring toggle). iOS has no
+    // toggle yet, so it keeps showing pending tasks — matching this widget's
+    // declared purpose. A task with no status is treated as pending.
     var parsedTasks: [Task] {
         guard let data = entry.tasks.data(using: .utf8) else { return [] }
         do {
@@ -88,6 +92,8 @@ struct TaskWidgetEntryView: View {
                           let uuid = taskDict["uuid"] as? String,
                           let priority = taskDict["priority"] as? String
                     else { return nil }
+                    let status = taskDict["status"] as? String ?? "pending"
+                    guard status == "pending" else { return nil }
                     return Task(description: description, urgency: urgency, uuid: uuid, priority: priority)
                 }
             }
@@ -97,13 +103,11 @@ struct TaskWidgetEntryView: View {
         return []
     }
     
+    // The Flutter payload already arrives in the widget's default order
+    // (due soonest first, then priority, then description). Preserve it rather
+    // than re-sorting, so iOS and Android show the same sequence.
     var sortedTasks: [Task] {
-        return parsedTasks.sorted { task1, task2 in
-            let priorityOrder = ["H": 0, "M": 1, "L": 2, "N": 3]
-            let priority1 = priorityOrder[task1.priority] ?? 3
-            let priority2 = priorityOrder[task2.priority] ?? 3
-            return priority1 < priority2
-        }
+        return parsedTasks
     }
     
     var isDarkMode: Bool {
