@@ -321,6 +321,8 @@ class HomeController extends GetxController {
       int result;
       if (sortColumn == 'id') {
         result = a.id!.compareTo(b.id!);
+      } else if (sortColumn == 'Priority') {
+        return compareTasks(selectedSort.value)(a, b);
       } else {
         result = compareTasks(sortColumn)(a, b);
       }

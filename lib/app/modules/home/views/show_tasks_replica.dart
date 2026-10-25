@@ -84,11 +84,15 @@ class TaskReplicaViewBuilder extends StatelessWidget {
           case 'Due till-':
             return (b.due ?? '').compareTo(a.due ?? '');
           case 'Priority+':
-            return _priorityRank(a.priority)
+            final p = _priorityRank(a.priority)
                 .compareTo(_priorityRank(b.priority));
+            if (p != 0) return p;
+            return _compareDue(a.due, b.due);
           case 'Priority-':
-            return _priorityRank(b.priority)
+            final p = _priorityRank(b.priority)
                 .compareTo(_priorityRank(a.priority));
+            if (p != 0) return p;
+            return _compareDue(a.due, b.due);
           case 'Project+':
             return (a.project ?? '').compareTo(b.project ?? '');
           case 'Project-':
@@ -251,6 +255,19 @@ class TaskReplicaViewBuilder extends StatelessWidget {
   String _tagKey(TaskForReplica task) {
     final tags = [...(task.tags ?? const <String>[])]..sort();
     return tags.join(' ');
+  }
+
+  int _compareDue(String? dueA, String? dueB) {
+    final DateTime? da = dueA != null ? DateTime.tryParse(dueA) : null;
+    final DateTime? db = dueB != null ? DateTime.tryParse(dueB) : null;
+    if (da != null && db != null) {
+      return da.compareTo(db);
+    } else if (da != null) {
+      return -1;
+    } else if (db != null) {
+      return 1;
+    }
+    return 0;
   }
 
   // Rank priorities by severity (H > M > L > none) so Priority sort is
