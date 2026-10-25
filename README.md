@@ -21,12 +21,13 @@
 ## Table of Contents
 
 - [About](#about)
+- [Compatibility](#compatibility)
 - [Screenshots](#screenshots)
 - [Built With](#built-with)
 - [Setup](#setup)
 - [Syncing](#syncing)
-  - [TaskChampion (recommended)](#taskchampion-recommended)
-  - [Legacy TaskServer](#legacy-taskserver)
+  - [TaskChampion (recommended) — Taskwarrior 3.x](#taskchampion-recommended)
+  - [Legacy TaskServer — Taskwarrior 2.6.2](#legacy-taskserver)
 - [Contributing](#contributing)
 - [Google Summer of Code](#google-summer-of-code)
 - [Community](#community)
@@ -41,6 +42,17 @@
 Taskwarrior is free and open-source software that manages your TODO list from the command line. It is flexible, fast, and unobtrusive. The CLI tool and its documentation live at [taskwarrior.org](https://taskwarrior.org/download/).
 
 This project brings that workflow to mobile and desktop: manage your tasks, filter them, and keep them in sync across all your devices.
+
+## Compatibility
+
+This app supports Taskwarrior 2.6.2 and 3.x workflows:
+
+| Taskwarrior CLI | Sync backend in this app | Server |
+| --- | --- | --- |
+| 3.x | TaskChampion (recommended) | Any TaskChampion sync server, e.g. [WingTask](https://app.wingtask.com/) or self-hosted [taskchampion-sync-server](https://github.com/GothenburgBitFactory/taskchampion-sync-server) |
+| 2.6.2 | Legacy TaskServer (`taskd`) | Self-hosted `taskd`, see [Legacy TaskServer](#legacy-taskserver) |
+
+Pick the profile mode that matches your Taskwarrior version: `Taskchampion (v3)` for 3.x, `TaskServer` for 2.6.2.
 
 <p align="center">
   <a href="https://taskwarrior.org/"><img src="https://github.com/Pavel401/taskwarrior-flutter/assets/47685150/65afcc8e-d5df-4b06-9ae5-093d51e20178" alt="Taskwarrior" width="160"></a>
@@ -100,22 +112,22 @@ your SDK matches the version in `.fvmrc`. See [SETUP.md](SETUP.md) for details.
 
 ## Syncing
 
-The app supports two sync backends. TaskChampion is the modern one and is recommended for new setups.
+The app supports two sync backends covering Taskwarrior 2.6.2 and 3.x. TaskChampion is the modern one and is recommended for new setups.
 
 ### TaskChampion (recommended)
 
-The app syncs through TaskChampion. You can use [WingTask](https://app.wingtask.com/) as a hosted TaskChampion sync server to keep your tasks in sync across devices. Point the app at your server URL, client ID, and encryption secret.
+The app syncs through TaskChampion for Taskwarrior 3.x workflows. You can use [WingTask](https://app.wingtask.com/) as a hosted TaskChampion sync server to keep your tasks in sync across devices. Point the app at your server URL, client ID, and encryption secret. You can also self-host [taskchampion-sync-server](https://github.com/GothenburgBitFactory/taskchampion-sync-server).
 
 ### Legacy TaskServer
 
-TaskServer lets you share tasks across clients and devices, and keeps an automatic backup of your data.
+TaskServer sync is for Taskwarrior 2.6.2 workflows. It lets you share tasks across clients and devices, and keeps a server-side copy of your data.
 
 **Self-hosted TaskServer**
 
 - Official setup guide: [taskserver-setup](https://gothenburgbitfactory.github.io/taskserver-setup/)
 - Video tutorial: [Watch on YouTube](https://www.youtube.com/watch?v=6Ci_JyvVIaI&ab_channel=MetaphysicsComputing)
 - Cloud hosting: run it on Azure or any other cloud provider for access from anywhere.
-- Docker: [ogarcia/docker-taskd](https://github.com/ogarcia/docker-taskd)
+- Docker: [ogarcia/docker-taskd](https://github.com/ogarcia/docker-taskd) (archived upstream)
 
 ## Contributing
 
